@@ -2,11 +2,14 @@
 
 #include "stdafx.h"
 
-#include "FileSystemOpenDlg.h"
+#include "file_system_open_dlg.h"
+
 #include "deps/libjpeg/jpeglib.h"
+
 #include "ifilesystemopendialog.h"
+#include "tier1/utldict.h"
+
 #include "resource.h"
-#include "utldict.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,95 +17,92 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-CFileInfo::CFileInfo() : m_pBitmap{nullptr} {}
+FileInfo::FileInfo() : bitmap{nullptr} {}
 
-CFileInfo::~CFileInfo() {}
+FileInfo::~FileInfo() {}
 
 // This caches the thumbnail bitmaps we generate to speed up browsing.
-class CBitmapCache {
+class BitmapCache {
  public:
-  CBitmapCache() {
-    m_CurMemoryUsage = 0;
-    m_MaxMemoryUsage = 1024 * 1024 * 6;
+  BitmapCache() {
+    current_memory_usage_ = 0;
+    max_memory_usage_ = 1024 * 1024 * 16;
   }
 
   void AddToCache(CBitmap *pBitmap, const char *pName, int memoryUsage,
                   bool bLock) {
-    Assert(m_Bitmaps.Find(pName) == -1);
-    m_CurMemoryUsage += memoryUsage;
+    Assert(bitmaps_.Find(pName) == -1);
+    current_memory_usage_ += memoryUsage;
 
-    CBitmapCacheEntry newEntry;
-    newEntry.m_pBitmap = pBitmap;
-    newEntry.m_MemoryUsage = memoryUsage;
-    newEntry.m_bLocked = bLock;
-    m_Bitmaps.Insert(pName, newEntry);
+    BitmapCacheEntry cache_entry{pBitmap, memoryUsage, bLock};
+    bitmaps_.Insert(pName, cache_entry);
 
     EnsureMemoryUsage();
   }
 
   CBitmap *Find(const char *pName) {
-    int i = m_Bitmaps.Find(pName);
-    if (i == -1)
-      return NULL;
-    else
-      return m_Bitmaps[i].m_pBitmap;
+    const int i = bitmaps_.Find(pName);
+    return i == -1 ? nullptr : bitmaps_[i].bitmap;
   }
 
   void UnlockAll() {
-    for (int i = m_Bitmaps.First(); i != m_Bitmaps.InvalidIndex();
-         i = m_Bitmaps.Next(i)) {
-      m_Bitmaps[i].m_bLocked = false;
+    for (int i = bitmaps_.First(); i != bitmaps_.InvalidIndex();
+         i = bitmaps_.Next(i)) {
+      bitmaps_[i].isLocked = false;
     }
   }
 
  private:
   void EnsureMemoryUsage() {
-    while (m_CurMemoryUsage > m_MaxMemoryUsage) {
+    while (current_memory_usage_ > max_memory_usage_) {
       // Free something.
-      bool bFreed = false;
-      for (int i = m_Bitmaps.First(); i != m_Bitmaps.InvalidIndex();
-           i = m_Bitmaps.Next(i)) {
-        if (!m_Bitmaps[i].m_bLocked) {
-          delete m_Bitmaps[i].m_pBitmap;
-          m_CurMemoryUsage -= m_Bitmaps[i].m_MemoryUsage;
-          m_Bitmaps.RemoveAt(i);
+      bool is_freed = false;
+      for (int i = bitmaps_.First(); i != bitmaps_.InvalidIndex();
+           i = bitmaps_.Next(i)) {
+        if (!bitmaps_[i].isLocked) {
+          delete bitmaps_[i].bitmap;
+          current_memory_usage_ -= bitmaps_[i].memoryUsage;
+          bitmaps_.RemoveAt(i);
           break;
         }
       }
 
       // Nothing left to free?
-      if (!bFreed) return;
+      if (!is_freed) return;
     }
   }
 
  private:
-  class CBitmapCacheEntry {
-   public:
-    CBitmap *m_pBitmap;
-    int m_MemoryUsage;
-    bool m_bLocked;
+  struct BitmapCacheEntry {
+    BitmapCacheEntry() = default;
+    BitmapCacheEntry(CBitmap *bitmap_, int memoryUsage_, bool isLocked_)
+        : bitmap{bitmap_}, memoryUsage{memoryUsage_}, isLocked{isLocked_} {}
+
+    CBitmap *bitmap;
+    int memoryUsage;
+    bool isLocked;
   };
 
-  CUtlDict<CBitmapCacheEntry, int> m_Bitmaps;
-  int m_CurMemoryUsage;
-  int m_MaxMemoryUsage;
+  CUtlDict<BitmapCacheEntry, int> bitmaps_;
+  int current_memory_usage_, max_memory_usage_;
 };
 
-CBitmapCache g_BitmapCache;
+BitmapCache g_BitmapCache;
 
-CFileSystemOpenDlg::CFileSystemOpenDlg(CreateInterfaceFn factory, CWnd *pParent)
-    : CDialog(CFileSystemOpenDlg::IDD, pParent) {
+FileSystemOpenDlg::FileSystemOpenDlg(CreateInterfaceFn factory, CWnd *pParent)
+    : CDialog(FileSystemOpenDlg::IDD, pParent),
+      file_system_{
+          (IFileSystem *)factory(FILESYSTEM_INTERFACE_VERSION, nullptr)},
+      enable_mdl_jpg_filter_{false} {
   //{{AFX_DATA_INIT(CFileSystemOpenDlg)
   //}}AFX_DATA_INIT
-  m_pFileSystem = (IFileSystem *)factory(FILESYSTEM_INTERFACE_VERSION, NULL);
-  if (!m_pFileSystem) {
+
+  if (!file_system_) {
     Error("Unable to connect to %s!\n", FILESYSTEM_INTERFACE_VERSION);
   }
-
-  m_bFilterMdlAndJpgFiles = false;
 }
 
-void CFileSystemOpenDlg::DoDataExchange(CDataExchange *pDX) {
+void FileSystemOpenDlg::DoDataExchange(CDataExchange *pDX) {
   CDialog::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CFileSystemOpenDlg)
   DDX_Control(pDX, IDC_FILENAME_LABEL, m_FilenameLabel);
@@ -112,7 +112,7 @@ void CFileSystemOpenDlg::DoDataExchange(CDataExchange *pDX) {
   //}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CFileSystemOpenDlg, CDialog)
+BEGIN_MESSAGE_MAP(FileSystemOpenDlg, CDialog)
 //{{AFX_MSG_MAP(CFileSystemOpenDlg)
 ON_WM_CREATE()
 ON_WM_SIZE()
@@ -123,27 +123,31 @@ ON_WM_KEYDOWN()
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-void CFileSystemOpenDlg::OnOK() {
+void FileSystemOpenDlg::OnOK() {
   // Make sure it's a valid filename.
-  CString testFilename;
-  m_FilenameControl.GetWindowText(testFilename);
+  CString file_name;
+  m_FilenameControl.GetWindowText(file_name);
 
-  CString fullFilename = m_CurrentDir + "\\" + testFilename;
-  if (m_pFileSystem->IsDirectory(fullFilename, GetPathID())) {
-    m_CurrentDir = fullFilename;
+  CString file_path = current_dir_ + "\\" + file_name;
+
+  if (file_system_->IsDirectory(file_path, GetPathID())) {
+    current_dir_ = file_path;
     PopulateListControl();
-  } else if (m_pFileSystem->FileExists(fullFilename, GetPathID())) {
-    m_Filename = fullFilename;
+  } else if (file_system_->FileExists(file_path, GetPathID())) {
+    file_name_ = file_path;
 
     // Translate .jpg to .mdl?
-    if (m_bFilterMdlAndJpgFiles) {
-      char tempFilename[SOURCE_MAX_PATH];
-      Q_strncpy(tempFilename, fullFilename, sizeof(tempFilename));
-      char *pPos = strrchr(tempFilename, '.');
-      if (pPos) {
-        if (Q_stricmp(pPos, ".jpeg") == 0 || Q_stricmp(pPos, ".jpg") == 0) {
-          Q_strncpy(pPos, ".mdl", 5);
-          m_Filename = tempFilename;
+    if (enable_mdl_jpg_filter_) {
+      char temp_file_path[SOURCE_MAX_PATH];
+      strcpy_s(temp_file_path, file_path);
+
+      char *dot = strrchr(temp_file_path, '.');
+      if (dot) {
+        if (_stricmp(dot, ".jpeg") == 0 || _stricmp(dot, ".jpg") == 0) {
+          strncpy_s(dot,
+                    temp_file_path + SOURCE_ARRAYSIZE(temp_file_path) - dot,
+                    ".mdl", 5);
+          file_name_ = temp_file_path;
         }
       }
     }
@@ -152,22 +156,19 @@ void CFileSystemOpenDlg::OnOK() {
   } else {
     // No file or directory here.
     CString str;
-    str.FormatMessage("File %1!s! doesn't exist.", (const char *)fullFilename);
+    str.FormatMessage("File %1!s! doesn't exist.", (const char *)file_path);
     AfxMessageBox(str, MB_OK);
   }
 }
 
-void CFileSystemOpenDlg::SetInitialDir(const char *pDir, const char *pPathID) {
-  m_CurrentDir = pDir;
-  if (pPathID)
-    m_PathIDString = pPathID;
-  else
-    m_PathIDString = "";
+void FileSystemOpenDlg::SetInitialDir(const char *pDir, const char *pPathID) {
+  current_dir_ = pDir;
+  path_id_ = pPathID ? pPathID : "";
 }
 
-CString CFileSystemOpenDlg::GetFilename() const { return m_Filename; }
+CString FileSystemOpenDlg::GetFilename() const { return file_name_; }
 
-BOOL CFileSystemOpenDlg::OnInitDialog() {
+BOOL FileSystemOpenDlg::OnInitDialog() {
   CDialog::OnInitDialog();
 
   // Setup our anchor list.
@@ -199,66 +200,73 @@ BOOL CFileSystemOpenDlg::OnInitDialog() {
   AddAnchor(IDC_UP_BUTTON, 2, 2);
 
   // Setup our image list.
-  m_ImageList.Create(PREVIEW_IMAGE_SIZE, PREVIEW_IMAGE_SIZE, ILC_COLOR32, 0,
-                     512);
+  images_list_.Create(PREVIEW_IMAGE_SIZE, PREVIEW_IMAGE_SIZE, ILC_COLOR32, 0,
+                      512);
 
-  m_BitmapFolder.LoadBitmap(IDB_LABEL_FOLDER);
-  m_iLabel_Folder = m_ImageList.Add(&m_BitmapFolder, (CBitmap *)NULL);
+  bitmap_folder_.LoadBitmap(IDB_LABEL_FOLDER);
+  label_folder_ = images_list_.Add(&bitmap_folder_, (CBitmap *)nullptr);
 
-  m_BitmapMdl.LoadBitmap(IDB_LABEL_MDL);
-  m_iLabel_Mdl = m_ImageList.Add(&m_BitmapMdl, (CBitmap *)NULL);
+  bitmap_mdl_.LoadBitmap(IDB_LABEL_MDL);
+  label_mdl_ = images_list_.Add(&bitmap_mdl_, (CBitmap *)nullptr);
 
-  m_BitmapFile.LoadBitmap(IDB_LABEL_FILE);
-  m_iLabel_File = m_ImageList.Add(&m_BitmapFile, (CBitmap *)NULL);
+  bitmap_file_.LoadBitmap(IDB_LABEL_FILE);
+  label_file_ = images_list_.Add(&bitmap_file_, (CBitmap *)nullptr);
 
-  m_FileList.SetImageList(&m_ImageList, LVSIL_NORMAL);
+  m_FileList.SetImageList(&images_list_, LVSIL_NORMAL);
 
   // Populate the list with the contents of our current directory.
   PopulateListControl();
 
-  return TRUE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+  // return TRUE unless you set the focus to a control
+  // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;
 }
 
-void CFileSystemOpenDlg::GetEntries(const char *pMask,
-                                    CUtlVector<CString> &entries,
-                                    GetEntriesMode_t mode) {
-  CString searchStr = m_CurrentDir + "\\" + pMask;
+void FileSystemOpenDlg::GetEntries(const char *pMask,
+                                   CUtlVector<CString> &entries,
+                                   GetEntriesMode_t mode) {
+  CString searchStr = current_dir_ + "\\" + pMask;
 
   // Workaround Steam bug.
   if (searchStr == ".\\*.*") searchStr = "*.*";
 
   FileFindHandle_t handle;
-  const char *pFile = m_pFileSystem->FindFirst(searchStr, &handle);
-  while (pFile) {
-    bool bIsDir = m_pFileSystem->FindIsDirectory(handle);
-    if ((mode == GETENTRIES_DIRECTORIES_ONLY && bIsDir) ||
-        (mode == GETENTRIES_FILES_ONLY && !bIsDir)) {
-      entries.AddToTail(pFile);
+  const char *file_name = file_system_->FindFirst(searchStr, &handle);
+
+  while (file_name) {
+    const bool is_dir = file_system_->FindIsDirectory(handle);
+    if ((mode == GETENTRIES_DIRECTORIES_ONLY && is_dir) ||
+        (mode == GETENTRIES_FILES_ONLY && !is_dir)) {
+      entries.AddToTail(file_name);
     }
 
-    pFile = m_pFileSystem->FindNext(handle);
+    file_name = file_system_->FindNext(handle);
   }
-  m_pFileSystem->FindClose(handle);
+
+  file_system_->FindClose(handle);
 }
 
-class CJpegSourceMgr : public jpeg_source_mgr {
+class SteamJpegSourceMgr : public jpeg_source_mgr {
  public:
-  CJpegSourceMgr() {
-    this->init_source = &CJpegSourceMgr::imp_init_source;
-    this->fill_input_buffer = &CJpegSourceMgr::imp_fill_input_buffer;
-    this->skip_input_data = &CJpegSourceMgr::imp_skip_input_data;
-    this->resync_to_restart = &CJpegSourceMgr::imp_resync_to_restart;
-    this->term_source = &CJpegSourceMgr::imp_term_source;
+  SteamJpegSourceMgr(IFileSystem *pFileSystem, FileHandle_t fp) {
+    this->init_source = &SteamJpegSourceMgr::imp_init_source;
+    this->fill_input_buffer = &SteamJpegSourceMgr::imp_fill_input_buffer;
+    this->skip_input_data = &SteamJpegSourceMgr::imp_skip_input_data;
+    this->resync_to_restart = &SteamJpegSourceMgr::imp_resync_to_restart;
+    this->term_source = &SteamJpegSourceMgr::imp_term_source;
 
     this->next_input_byte = 0;
     this->bytes_in_buffer = 0;
+
+    the_data.SetSize(pFileSystem->Size(fp));
+    is_success = pFileSystem->Read(the_data.Base(), the_data.Count(), fp) ==
+                 the_data.Count();
   }
 
   bool Init(IFileSystem *pFileSystem, FileHandle_t fp) {
-    m_Data.SetSize(pFileSystem->Size(fp));
-    return pFileSystem->Read(m_Data.Base(), m_Data.Count(), fp) ==
-           m_Data.Count();
+    the_data.SetSize(pFileSystem->Size(fp));
+    return pFileSystem->Read(the_data.Base(), the_data.Count(), fp) ==
+           the_data.Count();
   }
 
   static void imp_init_source(j_decompress_ptr cinfo) {}
@@ -283,32 +291,33 @@ class CJpegSourceMgr : public jpeg_source_mgr {
   static void imp_term_source(j_decompress_ptr cinfo) {}
 
  public:
-  CUtlVector<char> m_Data;
+  CUtlVector<char> the_data;
+  bool is_success;
 };
 
-bool ReadJpeg(IFileSystem *pFileSystem, const char *pFilename,
-              CUtlVector<unsigned char> &buf, int &width, int &height,
-              const char *pPathID) {
+bool ReadJpeg(IFileSystem *file_system, const char *file_name,
+              CUtlVector<unsigned char> &buffer, int &width, int &height,
+              const char *path_id) {
   // Read the data.
-  FileHandle_t fp = pFileSystem->Open(pFilename, "rb", pPathID);
+  FileHandle_t fp = file_system->Open(file_name, "rb", path_id);
   if (fp == FILESYSTEM_INVALID_HANDLE) return false;
 
-  CJpegSourceMgr sourceMgr;
-  bool bRet = sourceMgr.Init(pFileSystem, fp);
-  pFileSystem->Close(fp);
-  if (!bRet) return false;
+  SteamJpegSourceMgr jpeg_source_mgr{file_system, fp};
+  file_system->Close(fp);
+  if (!jpeg_source_mgr.is_success) return false;
 
-  sourceMgr.bytes_in_buffer = sourceMgr.m_Data.Count();
-  sourceMgr.next_input_byte = (unsigned char *)sourceMgr.m_Data.Base();
+  jpeg_source_mgr.bytes_in_buffer = jpeg_source_mgr.the_data.Count();
+  jpeg_source_mgr.next_input_byte =
+      (unsigned char *)jpeg_source_mgr.the_data.Base();
 
   // Load the jpeg.
-  struct jpeg_decompress_struct jpegInfo;
-  struct jpeg_error_mgr jerr;
+  jpeg_decompress_struct jpegInfo;
+  jpeg_error_mgr jerr;
 
   memset(&jpegInfo, 0, sizeof(jpegInfo));
   jpegInfo.err = jpeg_std_error(&jerr);
   jpeg_create_decompress(&jpegInfo);
-  jpegInfo.src = &sourceMgr;
+  jpegInfo.src = &jpeg_source_mgr;
 
   if (jpeg_read_header(&jpegInfo, TRUE) != JPEG_HEADER_OK) {
     return false;
@@ -333,12 +342,12 @@ bool ReadJpeg(IFileSystem *pFileSystem, const char *pFilename,
   height = jpegInfo.output_height;
 
   // allocate the memory to read the image data into.
-  buf.SetSize(mem_required);
+  buffer.SetSize(mem_required);
 
   // read in all the scan lines of the image into our image data buffer.
   bool working = true;
   while (working && (jpegInfo.output_scanline < jpegInfo.output_height)) {
-    row_pointer[0] = &(buf[cur_row * row_stride]);
+    row_pointer[0] = &(buffer[cur_row * row_stride]);
     if (jpeg_read_scanlines(&jpegInfo, row_pointer, 1) != TRUE) {
       working = false;
     }
@@ -408,7 +417,7 @@ CBitmap *SetupJpegLabel(IFileSystem *pFileSystem, CString filename,
   CUtlVector<unsigned char> data;
   int width, height;
   if (!ReadJpeg(pFileSystem, filename, data, width, height, pPathID))
-    return NULL;
+    return nullptr;
 
   CUtlVector<unsigned char> downsampled;
   DownsampleRGBToRGBAImage(data, width, height, downsampled, labelSize,
@@ -420,25 +429,25 @@ CBitmap *SetupJpegLabel(IFileSystem *pFileSystem, CString filename,
     return pBitmap;
   } else {
     delete pBitmap;
-    return NULL;
+    return nullptr;
   }
 }
 
-int CFileSystemOpenDlg::SetupLabelImage(CFileInfo *pInfo, CString name,
-                                        bool bIsDir) {
-  if (bIsDir) return m_iLabel_Folder;
+int FileSystemOpenDlg::SetupLabelImage(FileInfo *pInfo, CString name,
+                                       bool bIsDir) {
+  if (bIsDir) return label_folder_;
 
   CString extension = name.Right(4);
   extension.MakeLower();
   if (extension == ".jpg" || extension == ".jpeg") {
-    pInfo->m_pBitmap = SetupJpegLabel(m_pFileSystem, m_CurrentDir + "\\" + name,
-                                      PREVIEW_IMAGE_SIZE, GetPathID());
-    if (pInfo->m_pBitmap)
-      return m_ImageList.Add(pInfo->m_pBitmap, (CBitmap *)NULL);
+    pInfo->bitmap = SetupJpegLabel(file_system_, current_dir_ + "\\" + name,
+                                   PREVIEW_IMAGE_SIZE, GetPathID());
+    if (pInfo->bitmap)
+      return images_list_.Add(pInfo->bitmap, (CBitmap *)nullptr);
     else
-      return m_iLabel_File;
+      return label_file_;
   } else {
-    return (extension == ".mdl") ? m_iLabel_Mdl : m_iLabel_File;
+    return (extension == ".mdl") ? label_mdl_ : label_file_;
   }
 }
 
@@ -470,12 +479,13 @@ void FilterMdlAndJpgFiles(CUtlVector<CString> &files) {
 
 int CALLBACK FileListSortCallback(LPARAM lParam1, LPARAM lParam2,
                                   LPARAM lParamSort) {
-  CFileSystemOpenDlg *pDlg = (CFileSystemOpenDlg *)lParamSort;
-  CFileInfo *pInfo1 = &pDlg->m_FileInfos[lParam1];
-  CFileInfo *pInfo2 = &pDlg->m_FileInfos[lParam2];
-  if (pInfo1->m_bIsDir != pInfo2->m_bIsDir) return pInfo1->m_bIsDir ? -1 : 1;
+  FileSystemOpenDlg *pDlg = (FileSystemOpenDlg *)lParamSort;
+  FileInfo *pInfo1 = &pDlg->m_FileInfos[lParam1];
+  FileInfo *pInfo2 = &pDlg->m_FileInfos[lParam2];
+  if (pInfo1->isDirectory != pInfo2->isDirectory)
+    return pInfo1->isDirectory ? -1 : 1;
 
-  return Q_stricmp(pInfo1->m_Name, pInfo2->m_Name);
+  return Q_stricmp(pInfo1->fileName, pInfo2->fileName);
 }
 
 void RemoveDuplicates(CUtlVector<CString> &files) {
@@ -491,10 +501,10 @@ void RemoveDuplicates(CUtlVector<CString> &files) {
   }
 }
 
-void CFileSystemOpenDlg::PopulateListControl() {
+void FileSystemOpenDlg::PopulateListControl() {
   m_FileList.DeleteAllItems();
   g_BitmapCache.UnlockAll();
-  m_LookInLabel.SetWindowText(CString("[ROOT]\\") + m_CurrentDir);
+  m_LookInLabel.SetWindowText(CString("[ROOT]\\") + current_dir_);
 
   int iItem = 0;
 
@@ -513,8 +523,8 @@ void CFileSystemOpenDlg::PopulateListControl() {
     item.pszText = directories[i].GetBuffer(0);
 
     item.lParam = m_FileInfos.AddToTail();
-    m_FileInfos[item.lParam].m_bIsDir = true;
-    m_FileInfos[item.lParam].m_Name = directories[i];
+    m_FileInfos[item.lParam].isDirectory = true;
+    m_FileInfos[item.lParam].fileName = directories[i];
     item.iImage =
         SetupLabelImage(&m_FileInfos[item.lParam], directories[i], true);
 
@@ -522,24 +532,24 @@ void CFileSystemOpenDlg::PopulateListControl() {
   }
 
   CUtlVector<CString> files;
-  for (int iMask = 0; iMask < m_FileMasks.Count(); iMask++) {
-    GetEntries(m_FileMasks[iMask], files, GETENTRIES_FILES_ONLY);
+  for (int iMask = 0; iMask < file_name_masks_.Count(); iMask++) {
+    GetEntries(file_name_masks_[iMask], files, GETENTRIES_FILES_ONLY);
   }
 
   RemoveDuplicates(files);
-  if (m_bFilterMdlAndJpgFiles) FilterMdlAndJpgFiles(files);
+  if (enable_mdl_jpg_filter_) FilterMdlAndJpgFiles(files);
 
   for (int i = 0; i < files.Count(); i++) {
     LVITEM item;
     item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     item.iItem = iItem++;
     item.iSubItem = 0;
-    item.iImage = m_iLabel_Mdl;
+    item.iImage = label_mdl_;
     item.pszText = files[i].GetBuffer(0);
 
     item.lParam = m_FileInfos.AddToTail();
-    m_FileInfos[item.lParam].m_bIsDir = false;
-    m_FileInfos[item.lParam].m_Name = files[i];
+    m_FileInfos[item.lParam].isDirectory = false;
+    m_FileInfos[item.lParam].fileName = files[i];
     item.iImage = SetupLabelImage(&m_FileInfos[item.lParam], files[i], false);
 
     m_FileList.InsertItem(&item);
@@ -548,18 +558,18 @@ void CFileSystemOpenDlg::PopulateListControl() {
   m_FileList.SortItems(FileListSortCallback, (DWORD)this);
 }
 
-void CFileSystemOpenDlg::AddFileMask(const char *pMask) {
-  m_FileMasks.AddToTail(pMask);
+void FileSystemOpenDlg::AddFileMask(const char *pMask) {
+  file_name_masks_.AddToTail(pMask);
 }
 
-BOOL CFileSystemOpenDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
-                                DWORD dwStyle, const RECT &rect,
-                                CWnd *pParentWnd, UINT nID,
-                                CCreateContext *pContext) {
+BOOL FileSystemOpenDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
+                               DWORD dwStyle, const RECT &rect,
+                               CWnd *pParentWnd, UINT nID,
+                               CCreateContext *pContext) {
   return CDialog::Create(IDD, pParentWnd);
 }
 
-int CFileSystemOpenDlg::OnCreate(LPCREATESTRUCT lpCreateStruct) {
+int FileSystemOpenDlg::OnCreate(LPCREATESTRUCT lpCreateStruct) {
   if (CDialog::OnCreate(lpCreateStruct) == -1) return -1;
 
   return 0;
@@ -582,39 +592,40 @@ LONG GetSideScreenCoord(CWnd *pWnd, int iSide) {
   return GetSideCoord(rect, iSide);
 }
 
-void CFileSystemOpenDlg::ProcessAnchor(CWindowAnchor *pAnchor) {
+void FileSystemOpenDlg::ProcessAnchor(WindowAnchor *pAnchor) {
   RECT rect, parentRect;
   GetWindowRect(&parentRect);
-  pAnchor->m_pWnd->GetWindowRect(&rect);
+  pAnchor->window->GetWindowRect(&rect);
 
-  GetSideCoord(rect, pAnchor->m_Side) =
-      GetSideCoord(parentRect, pAnchor->m_ParentSide) + pAnchor->m_OriginalDist;
+  GetSideCoord(rect, pAnchor->side) =
+      GetSideCoord(parentRect, pAnchor->parentSide) + pAnchor->originalDist;
 
   ScreenToClient(&rect);
-  pAnchor->m_pWnd->MoveWindow(&rect);
+  pAnchor->window->MoveWindow(&rect);
 }
 
-void CFileSystemOpenDlg::AddAnchor(int iDlgItem, int iSide, int iParentSide) {
+void FileSystemOpenDlg::AddAnchor(int iDlgItem, int iSide, int iParentSide) {
   CWnd *pItem = GetDlgItem(iDlgItem);
   if (!pItem) return;
 
-  CWindowAnchor *pAnchor = &m_Anchors[m_Anchors.AddToTail()];
-  pAnchor->m_pWnd = pItem;
-  pAnchor->m_Side = iSide;
-  pAnchor->m_ParentSide = iParentSide;
-  pAnchor->m_OriginalDist =
+  WindowAnchor *pAnchor = &window_anchors_[window_anchors_.AddToTail()];
+  pAnchor->window = pItem;
+  pAnchor->side = iSide;
+  pAnchor->parentSide = iParentSide;
+  pAnchor->originalDist =
       GetSideScreenCoord(pItem, iSide) - GetSideScreenCoord(this, iParentSide);
 }
 
-void CFileSystemOpenDlg::OnSize(UINT nType, int cx, int cy) {
+void FileSystemOpenDlg::OnSize(UINT nType, int cx, int cy) {
   CDialog::OnSize(nType, cx, cy);
 
-  for (int i = 0; i < m_Anchors.Count(); i++) ProcessAnchor(&m_Anchors[i]);
+  for (int i = 0; i < window_anchors_.Count(); i++)
+    ProcessAnchor(&window_anchors_[i]);
 
   if (m_FileList.GetSafeHwnd()) PopulateListControl();
 }
 
-void CFileSystemOpenDlg::OnDblclkFileList(NMHDR *pNMHDR, LRESULT *pResult) {
+void FileSystemOpenDlg::OnDblclkFileList(NMHDR *pNMHDR, LRESULT *pResult) {
   /*int iSelected = m_FileList.GetNextItem( -1, LVNI_SELECTED );
   if ( iSelected != -1 )
   {
@@ -643,9 +654,9 @@ void CFileSystemOpenDlg::OnDblclkFileList(NMHDR *pNMHDR, LRESULT *pResult) {
   *pResult = 0;
 }
 
-void CFileSystemOpenDlg::OnUpButton() {
+void FileSystemOpenDlg::OnUpButton() {
   char str[SOURCE_MAX_PATH];
-  Q_strncpy(str, m_CurrentDir, sizeof(str));
+  Q_strncpy(str, current_dir_, sizeof(str));
   Q_StripLastDir(str, sizeof(str));
 
   if (str[0] == 0) Q_strncpy(str, ".", sizeof(str));
@@ -653,184 +664,188 @@ void CFileSystemOpenDlg::OnUpButton() {
   if (str[strlen(str) - 1] == '\\' || str[strlen(str) - 1] == '/')
     str[strlen(str) - 1] = 0;
 
-  m_CurrentDir = str;
+  current_dir_ = str;
   PopulateListControl();
 }
 
-void CFileSystemOpenDlg::OnItemchangedFileList(NMHDR *pNMHDR,
-                                               LRESULT *pResult) {
+void FileSystemOpenDlg::OnItemchangedFileList(NMHDR *pNMHDR, LRESULT *pResult) {
   NM_LISTVIEW *pNMListView = (NM_LISTVIEW *)pNMHDR;
 
   DWORD iItem = m_FileList.GetItemData(pNMListView->iItem);
   if (iItem < (DWORD)m_FileInfos.Count()) {
-    CFileInfo *pInfo = &m_FileInfos[iItem];
+    FileInfo *pInfo = &m_FileInfos[iItem];
     if ((pNMListView->uChanged & LVIF_STATE) &&
         (pNMListView->uNewState & LVIS_SELECTED)) {
-      m_FilenameControl.SetWindowText(pInfo->m_Name);
+      m_FilenameControl.SetWindowText(pInfo->fileName);
     }
   }
 
   *pResult = 0;
 }
 
-void CFileSystemOpenDlg::SetFilterMdlAndJpgFiles(bool bFilter) {
-  m_bFilterMdlAndJpgFiles = bFilter;
+void FileSystemOpenDlg::SetFilterMdlAndJpgFiles(bool bFilter) {
+  enable_mdl_jpg_filter_ = bFilter;
 }
 
-const char *CFileSystemOpenDlg::GetPathID() {
-  if (m_PathIDString == "")
-    return NULL;
-  else
-    return (const char *)m_PathIDString;
+const char *FileSystemOpenDlg::GetPathID() {
+  return path_id_ == "" ? nullptr : (const char *)path_id_;
 }
-
-// ------------------------------------------------------------------------------------------------
-// // Implementation of IFileSystemOpenDialog.
-// ------------------------------------------------------------------------------------------------
-// //
 
 // IFileSystemOpenDialog implementation.
-class CFileSystemOpenDialogWrapper : public IFileSystemOpenDialog {
+class FileSystemOpenDialog : public IFileSystemOpenDialog {
  public:
-  CFileSystemOpenDialogWrapper() {
-    m_pDialog = 0;
-    m_bLastModalWasWindowsDialog = false;
+  FileSystemOpenDialog()
+      : file_system_open_dlg_{nullptr},
+        parent_window_{nullptr},
+        is_last_modal_windows_dialog_{false} {
+    relative_file_path_[0] = '\0';
   }
 
-  virtual void Release() {
+  void Release() override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    delete m_pDialog;
+    delete file_system_open_dlg_;
     delete this;
   }
 
   // You must call this first to set the hwnd.
-  virtual void Init(CreateInterfaceFn factory, void *parentHwnd) {
+  void Init(CreateInterfaceFn factory, void *parentHwnd) override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    Assert(!m_pDialog);
+    Assert(!file_system_open_dlg_);
 
-    m_hParentWnd = (HWND)parentHwnd;
-    m_pDialog = new CFileSystemOpenDlg(factory, CWnd::FromHandle(m_hParentWnd));
+    parent_window_ = reinterpret_cast<HWND>(parentHwnd);
+    file_system_open_dlg_ =
+        new FileSystemOpenDlg(factory, CWnd::FromHandle(parent_window_));
   }
 
-  virtual void AddFileMask(const char *pMask) {
+  void AddFileMask(const char *pMask) override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    Assert(m_pDialog);
-    m_pDialog->AddFileMask(pMask);
+    Assert(file_system_open_dlg_);
+
+    file_system_open_dlg_->AddFileMask(pMask);
   }
 
-  virtual void SetInitialDir(const char *pDir, const char *pPathID) {
+  void SetInitialDir(const char *pDir, const char *pPathID) override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    Assert(m_pDialog);
-    m_pDialog->SetInitialDir(pDir, pPathID);
+    Assert(file_system_open_dlg_);
+
+    file_system_open_dlg_->SetInitialDir(pDir, pPathID);
   }
 
-  virtual void SetFilterMdlAndJpgFiles(bool bFilter) {
+  void SetFilterMdlAndJpgFiles(bool bFilter) override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    Assert(m_pDialog);
-    m_pDialog->SetFilterMdlAndJpgFiles(bFilter);
+    Assert(file_system_open_dlg_);
+
+    file_system_open_dlg_->SetFilterMdlAndJpgFiles(bFilter);
   }
 
-  virtual void GetFilename(char *pOut, int outLen) const {
+  void GetFilename(char *pOut, int outLen) const override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    Assert(m_pDialog);
+    Assert(file_system_open_dlg_);
 
-    if (m_bLastModalWasWindowsDialog) {
-      Q_strncpy(pOut, m_RelativeFilename, outLen);
-    } else {
-      Q_strncpy(pOut, m_pDialog->GetFilename(), outLen);
-    }
+    strcpy_s(pOut, outLen,
+             is_last_modal_windows_dialog_
+                 ? relative_file_path_
+                 : file_system_open_dlg_->GetFilename().operator LPCSTR());
   }
 
-  virtual bool DoModal() {
+  bool DoModal() override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    Assert(m_pDialog);
+    Assert(file_system_open_dlg_);
 
-    m_bLastModalWasWindowsDialog = false;
-    return m_pDialog->DoModal() == IDOK;
+    is_last_modal_windows_dialog_ = false;
+    return file_system_open_dlg_->DoModal() == IDOK;
   }
 
-  virtual bool DoModal_WindowsDialog() {
+  bool DoModal_WindowsDialog() override {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    Assert(file_system_open_dlg_);
 
-    Assert(m_pDialog);
-
-    m_bLastModalWasWindowsDialog = true;
+    is_last_modal_windows_dialog_ = true;
 
     // Get the full filename, then make sure it's a relative path.
-    char defExt[SOURCE_MAX_PATH] = {0};
-    if (m_pDialog->m_FileMasks.Count() > 0) {
-      CString ext =
-          m_pDialog->m_FileMasks[m_pDialog->m_FileMasks.Count() - 1].Right(4);
-      const char *pStr = ext;
-      if (pStr[0] == '.') Q_strncpy(defExt, pStr + 1, sizeof(defExt));
+    char file_path[SOURCE_MAX_PATH] = {0};
+    if (file_system_open_dlg_->file_name_masks_.Count() > 0) {
+      CString extension =
+          file_system_open_dlg_
+              ->file_name_masks_
+                  [file_system_open_dlg_->file_name_masks_.Count() - 1]
+              .Right(4);
+      const char *extension_ptr = extension;
+
+      if (extension_ptr[0] == '.') strcpy_s(file_path, extension_ptr + 1);
     }
 
-    char pFileNameBuf[SOURCE_MAX_PATH];
-    const char *pFileName = m_pDialog->m_pFileSystem->RelativePathToFullPath(
-        m_pDialog->m_CurrentDir, m_pDialog->m_PathIDString, pFileNameBuf,
-        SOURCE_MAX_PATH);
-    Q_strcat(pFileNameBuf, "\\", sizeof(pFileNameBuf));
+    const char *full_file_path =
+        file_system_open_dlg_->file_system_->RelativePathToFullPath(
+            file_system_open_dlg_->current_dir_,
+            file_system_open_dlg_->path_id_, file_path,
+            SOURCE_ARRAYSIZE(file_path));
+    strcat_s(file_path, "\\");
 
     // Build the list of file filters.
     char filters[1024];
-    if (m_pDialog->m_FileMasks.Count() == 0) {
-      Q_strncpy(filters, "All Files (*.*)|*.*||", sizeof(filters));
+    if (file_system_open_dlg_->file_name_masks_.Count() == 0) {
+      strcpy_s(filters, "All Files (*.*)|*.*||");
     } else {
-      filters[0] = 0;
-      for (int i = 0; i < m_pDialog->m_FileMasks.Count(); i++) {
-        if (i > 0)
-          Q_strncat(filters, "|", sizeof(filters), COPY_ALL_CHARACTERS);
+      filters[0] = '\0';
 
-        Q_strncat(filters, m_pDialog->m_FileMasks[i], sizeof(filters),
-                  COPY_ALL_CHARACTERS);
-        Q_strncat(filters, "|", sizeof(filters), COPY_ALL_CHARACTERS);
-        Q_strncat(filters, m_pDialog->m_FileMasks[i], sizeof(filters),
-                  COPY_ALL_CHARACTERS);
-        if (pFileName) {
-          Q_strncat(pFileNameBuf, m_pDialog->m_FileMasks[i], sizeof(filters),
-                    COPY_ALL_CHARACTERS);
-          Q_strcat(pFileNameBuf, ";", sizeof(pFileNameBuf));
+      for (int i = 0; i < file_system_open_dlg_->file_name_masks_.Count();
+           i++) {
+        if (i > 0) strcat_s(filters, "|");
+
+        strcat_s(filters, file_system_open_dlg_->file_name_masks_[i]);
+        strcat_s(filters, "|");
+        strcat_s(filters, file_system_open_dlg_->file_name_masks_[i]);
+
+        if (full_file_path) {
+          strcat_s(file_path, file_system_open_dlg_->file_name_masks_[i]);
+          strcat_s(file_path, ";");
         }
       }
+
       Q_strncat(filters, "||", sizeof(filters), COPY_ALL_CHARACTERS);
     }
 
-    CFileDialog dlg(true,                            // open dialog?
-                    defExt[0] == 0 ? NULL : defExt,  // default file extension
-                    pFileName,                       // initial filename
-                    OFN_ENABLESIZING,                // flags
-                    filters, CWnd::FromHandle(m_hParentWnd));
+    CFileDialog file_dialog{
+        true,                                     // open dialog?
+        file_path[0] == 0 ? nullptr : file_path,  // default file extension
+        full_file_path,                           // initial filename
+        OFN_ENABLESIZING,                         // flags
+        filters,
+        CWnd::FromHandle(parent_window_)};
 
-    while (dlg.DoModal() == IDOK) {
+    while (file_dialog.DoModal() == IDOK) {
       // Make sure we can make this into a relative path.
-      if (m_pDialog->m_pFileSystem->FullPathToRelativePath(
-              dlg.GetPathName(), m_RelativeFilename,
-              sizeof(m_RelativeFilename))) {
+      if (file_system_open_dlg_->file_system_->FullPathToRelativePath(
+              file_dialog.GetPathName(), relative_file_path_,
+              SOURCE_ARRAYSIZE(relative_file_path_))) {
         // Replace .jpg or .jpeg extension with .mdl?
-        char *pEnd = m_RelativeFilename;
-        while (Q_stristr(pEnd + 1, ".jpeg") || Q_stristr(pEnd + 1, ".jpg"))
-          pEnd = std::max(Q_stristr(pEnd, ".jpeg"), Q_stristr(pEnd, ".jpg"));
+        char *end = relative_file_path_;
 
-        if (pEnd && pEnd != m_RelativeFilename)
-          Q_strncpy(pEnd, ".mdl",
-                    sizeof(m_RelativeFilename) - (pEnd - m_RelativeFilename));
+        while (Q_stristr(end + 1, ".jpeg") || Q_stristr(end + 1, ".jpg"))
+          end = std::max(Q_stristr(end, ".jpeg"), Q_stristr(end, ".jpg"));
+
+        if (end && end != relative_file_path_) {
+          Q_strncpy(end, ".mdl",
+                    sizeof(relative_file_path_) - (end - relative_file_path_));
+        }
 
         return true;
-      } else {
-        AfxMessageBox(IDS_NO_RELATIVE_PATH);
       }
+
+      AfxMessageBox(IDS_NO_RELATIVE_PATH);
     }
 
     return false;
   }
 
  private:
-  CFileSystemOpenDlg *m_pDialog;
-  HWND m_hParentWnd;
+  FileSystemOpenDlg *file_system_open_dlg_;
+  HWND parent_window_;
 
-  char m_RelativeFilename[SOURCE_MAX_PATH];
-  bool m_bLastModalWasWindowsDialog;
+  char relative_file_path_[SOURCE_MAX_PATH];
+  bool is_last_modal_windows_dialog_;
 };
 
-EXPOSE_INTERFACE(CFileSystemOpenDialogWrapper, IFileSystemOpenDialog,
+EXPOSE_INTERFACE(FileSystemOpenDialog, IFileSystemOpenDialog,
                  FILESYSTEMOPENDIALOG_VERSION);

@@ -44,11 +44,11 @@ CGameSavePanel::CGameSavePanel(CSaveGameBrowserDialog *parent,
   char *chapter_name = Q_stristr(m_SaveInfo.szComment, "chapter");
   if (chapter_name) {
     char chapter_image[SOURCE_MAX_PATH];
-    Q_snprintf(
-        chapter_image, SOURCE_ARRAYSIZE(chapter_image), "chapters/%s",
+    sprintf_s(
+        chapter_image, "chapters/%s",
         Q_strlower(chapter_name, SOURCE_ARRAYSIZE(m_SaveInfo.szComment) -
                                      (chapter_name - m_SaveInfo.szComment)));
-    char *ext = Q_strrchr(chapter_image, '_');
+    char *ext = strrchr(chapter_image, '_');
     if (ext) *ext = '\0';
 
     m_pLevelPic->SetImage(chapter_image);
@@ -140,8 +140,8 @@ void CGameSavePanel::SetDescription(SaveGameDescription_t *pDesc) {
     char chapter_image[SOURCE_MAX_PATH];
     Q_strlower(chapter_name, SOURCE_ARRAYSIZE(m_SaveInfo.szComment) -
                                  (chapter_name - m_SaveInfo.szComment));
-    Q_snprintf(chapter_image, SOURCE_ARRAYSIZE(chapter_image), "chapters/%s",
-               chapter_name);
+    sprintf_s(chapter_image, "chapters/%s", chapter_name);
+
     char *ext = Q_strrchr(chapter_image, '_');
     if (ext) *ext = '\0';
 
@@ -176,28 +176,28 @@ CSaveGameBrowserDialog::CSaveGameBrowserDialog(vgui::Panel *parent)
   m_pFooter = new CFooterPanel(parent, "SaveGameFooter");
 
   // Load our res files from the keyvalue we're holding
-  KeyValues *pKeys = NULL;
+  KeyValues *pKeys = nullptr;
   if (GameUI().IsConsoleUI()) {
     pKeys =
         BasePanel()->GetConsoleControlSettings()->FindKey("SaveGameDialog.res");
   }
 
-  LoadControlSettings("Resource/SaveGameDialog.res", NULL, pKeys);
+  LoadControlSettings("Resource/SaveGameDialog.res", nullptr, pKeys);
 }
 
-CSaveGameBrowserDialog::~CSaveGameBrowserDialog(void) {
+CSaveGameBrowserDialog::~CSaveGameBrowserDialog() {
   // Release all elements
   m_SavePanels.PurgeAndDeleteElements();
 
   // Kill the footer
   if (m_pFooter) {
     delete m_pFooter;
-    m_pFooter = NULL;
+    m_pFooter = nullptr;
   }
 
   if (m_pCenterBg) {
     delete m_pCenterBg;
-    m_pCenterBg = NULL;
+    m_pCenterBg = nullptr;
   }
 }
 
@@ -400,7 +400,6 @@ void CSaveGameBrowserDialog::UpdateMenuComponents(EScrollDirection dir) {
 }
 
 // Purpose: sets a chapter as selected
-
 void CSaveGameBrowserDialog::SetSelectedSaveIndex(int index) {
   m_iSelectedSave = index;
 
@@ -429,7 +428,6 @@ void CSaveGameBrowserDialog::SetSelectedSaveIndex(int index) {
 
 // Purpose: Remove the currently selected animation from the list with proper
 // animations
-
 void CSaveGameBrowserDialog::RemoveActivePanel(void) {
   // Kill the current panel
   m_nDeletedPanel = m_PanelIndex[SLOT_CENTER];
@@ -445,13 +443,9 @@ void CSaveGameBrowserDialog::RemoveActivePanel(void) {
   PostMessage(this, new KeyValues("FinishDelete"), m_ScrollSpeed);
 }
 
-// Purpose:
-
 void CSaveGameBrowserDialog::CloseAfterSave(void) {
   OnCommand("CloseAndSelectResume");
 }
-
-// Purpose:
 
 void CSaveGameBrowserDialog::FinishInsert(void) {
   CGameSavePanel *panel = m_SavePanels[m_nAddedPanel];
@@ -474,7 +468,6 @@ void CSaveGameBrowserDialog::FinishInsert(void) {
 }
 
 // Purpose: Insert a new panel at the desired location
-
 void CSaveGameBrowserDialog::AnimateInsertNewPanel(
     const SaveGameDescription_t *pDesc) {
   // This is the panel that's going to move
@@ -525,7 +518,6 @@ void CSaveGameBrowserDialog::AnimateInsertNewPanel(
 }
 
 // Purpose: Pop in the new description
-
 void CSaveGameBrowserDialog::FinishOverwriteFadeDown(void) {
   const float flFadeInTime = 0.25f;
 
@@ -549,7 +541,6 @@ void CSaveGameBrowserDialog::FinishOverwriteFadeDown(void) {
 // Purpose: Animate an overwrite event by fading out the old panel and bringing
 // it back with a new description Input  : *pNewDesc - The new description to
 // display
-
 void CSaveGameBrowserDialog::AnimateOverwriteActivePanel(
     const SaveGameDescription_t *pNewDesc) {
   // Save a copy of this description
@@ -571,7 +562,6 @@ void CSaveGameBrowserDialog::AnimateOverwriteActivePanel(
 }
 
 // Purpose: Called before a panel scroll starts.
-
 void CSaveGameBrowserDialog::PreScroll(EScrollDirection dir) {
   int hideIdx = INVALID_INDEX;
   if (m_nDeletedPanel != INVALID_INDEX) {
@@ -590,13 +580,11 @@ void CSaveGameBrowserDialog::PreScroll(EScrollDirection dir) {
 }
 
 // Purpose: Called after a panel scroll finishes.
-
 void CSaveGameBrowserDialog::PostScroll(EScrollDirection dir) {
   // TODO(d.rattman): Nothing to do here...
 }
 
 // Purpose: Initiates a panel scroll and starts the animation.
-
 void CSaveGameBrowserDialog::ScrollSelectionPanels(EScrollDirection dir) {
   // Only initiate a scroll if panels aren't currently scrolling
   if (!m_bScrolling) {
@@ -622,7 +610,6 @@ void CSaveGameBrowserDialog::ScrollSelectionPanels(EScrollDirection dir) {
 // Purpose: Do all slide animation work here
 // Input  : nPanelIndex - Panel we're currently operating on
 //			nNextPanelIndex - Panel we're going to be moving over
-
 void CSaveGameBrowserDialog::PerformSlideAction(int nPanelIndex,
                                                 int nNextPanelIndex) {
   CGameSavePanel *panel = m_SavePanels[m_PanelIndex[nPanelIndex]];
@@ -643,7 +630,6 @@ void CSaveGameBrowserDialog::PerformSlideAction(int nPanelIndex,
 
 // Purpose: Initiates the scripted scroll and fade effects of all five slotted
 // panels
-
 void CSaveGameBrowserDialog::AnimateSelectionPanels(void) {
   int idxOffset = 0;
   int startIdx = SLOT_LEFT;
@@ -706,7 +692,6 @@ void CSaveGameBrowserDialog::AnimateSelectionPanels(void) {
 //			scrolled to an adjacent slot. This function updates each
 // slot so 			it holds the index of the panel that is actually
 // in that slot's position.
-
 void CSaveGameBrowserDialog::ShiftPanelIndices(int offset) {
   // Shift all the elements over one slot, then calculate what the last slot's
   // index should be.
@@ -767,7 +752,6 @@ void CSaveGameBrowserDialog::ShiftPanelIndices(int offset) {
 }
 
 // Purpose: Validates an index into the selection panels vector
-
 bool CSaveGameBrowserDialog::IsValidPanel(const int idx) {
   if (idx < 0 || idx >= m_SavePanels.Count()) return false;
 
@@ -775,7 +759,6 @@ bool CSaveGameBrowserDialog::IsValidPanel(const int idx) {
 }
 
 // Purpose: Sets up a panel's properties before it is displayed
-
 void CSaveGameBrowserDialog::InitPanelIndexForDisplay(const int idx) {
   CGameSavePanel *panel = m_SavePanels[m_PanelIndex[idx]];
   if (panel) {
@@ -790,13 +773,11 @@ void CSaveGameBrowserDialog::InitPanelIndexForDisplay(const int idx) {
 }
 
 // Purpose: Sets which scroll speed should be used
-
 void CSaveGameBrowserDialog::SetFastScroll(bool fast) {
   m_ScrollSpeed = fast ? m_ScrollSpeedFast : m_ScrollSpeedSlow;
 }
 
 // Purpose: Checks if a button is being held down, and speeds up the scroll
-
 void CSaveGameBrowserDialog::ContinueScrolling(void) {
   if (!GameUI().IsConsoleUI()) {
     if (m_PanelIndex[SLOT_CENTER - 1] % 3) {
@@ -818,7 +799,6 @@ void CSaveGameBrowserDialog::ContinueScrolling(void) {
 }
 
 // Purpose: Fade animation has finished, now slide or be done
-
 void CSaveGameBrowserDialog::FinishDelete(void) {
   // Catch the case where all saves are now gone!
   if (m_SavePanels.Count() == 1) {
@@ -839,7 +819,6 @@ void CSaveGameBrowserDialog::FinishDelete(void) {
 }
 
 // Purpose: Called when a scroll distance of one slot has been completed
-
 void CSaveGameBrowserDialog::FinishScroll(void) {
   // Fade the center bg panel back in
   GetAnimationController()->RunAnimationCommand(
@@ -888,8 +867,6 @@ void CSaveGameBrowserDialog::FinishScroll(void) {
   ContinueScrolling();
 }
 
-// Purpose:
-
 void CSaveGameBrowserDialog::OnClose(void) {
   SetControlDisabled(true);
 
@@ -900,7 +877,6 @@ void CSaveGameBrowserDialog::OnClose(void) {
 }
 
 // Purpose: Our save games have changed, so layout our panel again
-
 void CSaveGameBrowserDialog::RefreshSaveGames(void) {
   // Close any pending messages
   BasePanel()->CloseMessageDialog(DIALOG_STACK_IDX_WARNING);
@@ -918,14 +894,10 @@ void CSaveGameBrowserDialog::RefreshSaveGames(void) {
   AnimateDialogStart();
 }
 
-// Purpose:
-
 void CSaveGameBrowserDialog::PerformSelectedAction(void) {
   // By default, do nothing
   m_KeyRepeat.Reset();
 }
-
-// Purpose:
 
 void CSaveGameBrowserDialog::PerformDeletion(void) {
   // By default, do nothing
@@ -933,7 +905,6 @@ void CSaveGameBrowserDialog::PerformDeletion(void) {
 }
 
 // Purpose: Release our key repeater
-
 void CSaveGameBrowserDialog::OnKeyCodeReleased(vgui::KeyCode code) {
   m_KeyRepeat.KeyUp(code);
 
@@ -941,7 +912,6 @@ void CSaveGameBrowserDialog::OnKeyCodeReleased(vgui::KeyCode code) {
 }
 
 // Purpose: Update our keypress repeater
-
 void CSaveGameBrowserDialog::OnThink(void) {
   vgui::KeyCode code = m_KeyRepeat.KeyRepeated();
   if (code) {
@@ -950,8 +920,6 @@ void CSaveGameBrowserDialog::OnThink(void) {
 
   BaseClass::OnThink();
 }
-
-// Purpose:
 
 void CSaveGameBrowserDialog::OnKeyCodePressed(vgui::KeyCode code) {
   // If the console has UI up, then ignore it
@@ -995,8 +963,6 @@ void CSaveGameBrowserDialog::OnKeyCodePressed(vgui::KeyCode code) {
   }
 }
 
-// Purpose:
-
 void CSaveGameBrowserDialog::PaintBackground(void) {
   int wide, tall;
   GetSize(wide, tall);
@@ -1015,80 +981,74 @@ void CSaveGameBrowserDialog::PaintBackground(void) {
 }
 
 // Purpose: Parses the save game info out of the .sav file header
-
 bool CSaveGameBrowserDialog::ParseSaveData(char const *pszFileName,
                                            char const *pszShortName,
                                            SaveGameDescription_t *save) {
-  char szMapName[SAVEGAME_MAPNAME_LEN];
-  char szComment[SAVEGAME_COMMENT_LEN];
-  char szElapsedTime[SAVEGAME_ELAPSED_LEN];
-
   if (!pszFileName || !pszShortName) return false;
 
-  Q_strncpy(save->szShortName, pszShortName, sizeof(save->szShortName));
-  Q_strncpy(save->szFileName, pszFileName, sizeof(save->szFileName));
+  strcpy_s(save->szShortName, pszShortName);
+  strcpy_s(save->szFileName, pszFileName);
 
   FileHandle_t fh = g_pFullFileSystem->Open(pszFileName, "rb", "MOD");
   if (fh == FILESYSTEM_INVALID_HANDLE) return false;
 
   save->iSize = g_pFullFileSystem->Size(fh);
 
-  int readok = SaveReadNameAndComment(fh, szMapName, szComment);
+  char map_name[SAVEGAME_MAPNAME_LEN], save_comment[SAVEGAME_COMMENT_LEN];
+  bool is_save_ok = SaveReadNameAndComment(fh, map_name, save_comment);
   g_pFullFileSystem->Close(fh);
 
-  if (!readok) {
-    return false;
-  }
+  if (!is_save_ok) return false;
 
-  Q_strncpy(save->szMapName, szMapName, sizeof(save->szMapName));
-
+  strcpy_s(save->szMapName, map_name);
   // Elapsed time is the last 6 characters in comment. (mmm:ss)
-  int i;
-  i = strlen(szComment);
-  Q_strncpy(szElapsedTime, "??", sizeof(szElapsedTime));
+  size_t i = strlen(save_comment);
+
+  char elapsed_time[SAVEGAME_ELAPSED_LEN];
+  strcpy_s(elapsed_time, "??");
+
   if (i >= 6) {
-    Q_strncpy(szElapsedTime, (char *)&szComment[i - 6], 7);
-    szElapsedTime[6] = '\0';
+    Q_strncpy(elapsed_time, (char *)&save_comment[i - 6], 7);
+    elapsed_time[6] = '\0';
 
     // parse out
-    int minutes = atoi(szElapsedTime);
-    int seconds = atoi(szElapsedTime + 4);
-    int hours = minutes / 60;
+    int minutes = atoi(elapsed_time);
+    const int seconds = atoi(elapsed_time + 4);
+    const int hours = minutes / 60;
     minutes %= 60;
 
     wchar_t wzHours[6];
+    _snwprintf_s(wzHours, SOURCE_ARRAYSIZE(wzHours), L"%d", hours);
     wchar_t wzMins[4];
+    _snwprintf_s(wzMins, SOURCE_ARRAYSIZE(wzMins), L"%d", minutes);
     wchar_t wzSecs[4];
-
-    _snwprintf(wzHours, sizeof(wzHours), L"%d", hours);
-    _snwprintf(wzMins, sizeof(wzMins), L"%d", minutes);
-    _snwprintf(wzSecs, sizeof(wzSecs), L"%d", seconds);
+    _snwprintf_s(wzSecs, SOURCE_ARRAYSIZE(wzSecs), L"%d", seconds);
 
     wchar_t buf[20];
 
     // reformat
     if (hours) {
       g_pVGuiLocalize->ConstructString(
-          buf, sizeof(buf), g_pVGuiLocalize->Find("#GameUI_LoadDialog_Hr_Min"),
-          2, wzHours, wzMins);
+          buf, SOURCE_ARRAYSIZE(buf),
+          g_pVGuiLocalize->Find("#GameUI_LoadDialog_Hr_Min"), 2, wzHours,
+          wzMins);
     } else if (minutes) {
       g_pVGuiLocalize->ConstructString(
-          buf, sizeof(buf), g_pVGuiLocalize->Find("#GameUI_LoadDialog_Min_Sec"),
-          2, wzMins, wzSecs);
+          buf, SOURCE_ARRAYSIZE(buf),
+          g_pVGuiLocalize->Find("#GameUI_LoadDialog_Min_Sec"), 2, wzMins,
+          wzSecs);
     } else {
       g_pVGuiLocalize->ConstructString(
-          buf, sizeof(buf), g_pVGuiLocalize->Find("#GameUI_LoadDialog_Sec"), 1,
-          wzSecs);
+          buf, SOURCE_ARRAYSIZE(buf),
+          g_pVGuiLocalize->Find("#GameUI_LoadDialog_Sec"), 1, wzSecs);
     }
 
-    g_pVGuiLocalize->ConvertUnicodeToANSI(buf, szElapsedTime,
-                                          sizeof(szElapsedTime));
+    g_pVGuiLocalize->ConvertUnicodeToANSI(buf, elapsed_time,
+                                          sizeof(elapsed_time));
 
     // Chop elapsed out of comment.
-    char *pChop = Q_stristr(szComment, " ");
-    if (pChop != NULL) {
-      (*pChop) = '\0';
-    }
+    char *pChop = Q_stristr(save_comment, " ");
+    if (pChop != nullptr) *pChop = '\0';
   }
 
   // calculate the file name to print
@@ -1099,31 +1059,31 @@ bool CSaveGameBrowserDialog::ParseSaveData(char const *pszFileName,
     pszType = "#GameUI_AutoSave";
   }
 
-  Q_strncpy(save->szType, pszType, sizeof(save->szType));
-  Q_strncpy(save->szComment, szComment, sizeof(save->szComment));
-  Q_strncpy(save->szElapsedTime, szElapsedTime, sizeof(save->szElapsedTime));
+  strcpy_s(save->szType, pszType);
+  strcpy_s(save->szComment, save_comment);
+  strcpy_s(save->szElapsedTime, elapsed_time);
 
   // Now get file time stamp.
   long fileTime = g_pFullFileSystem->GetFileTime(pszFileName);
   char szFileTime[32];
-  g_pFullFileSystem->FileTimeToString(szFileTime, sizeof(szFileTime), fileTime);
+
+  g_pFullFileSystem->FileTimeToString(szFileTime, SOURCE_ARRAYSIZE(szFileTime),
+                                      fileTime);
   char *newline = strstr(szFileTime, "\n");
-  if (newline) {
-    *newline = 0;
-  }
-  Q_strncpy(save->szFileTime, szFileTime, sizeof(save->szFileTime));
+  if (newline) *newline = '\0';
+
+  strcpy_s(save->szFileTime, szFileTime);
   save->iTimestamp = fileTime;
+
   return true;
 }
 
 // Purpose: Update our footer options depending on what we've selected
-
 void CSaveGameBrowserDialog::UpdateFooterOptions(void) {
   // Do nothing
 }
 
 // Purpose: Sort our games by time
-
 void CSaveGameBrowserDialog::SortSaveGames(SaveGameDescription_t *pSaves,
                                            unsigned int nNumSaves) {
   qsort(pSaves, nNumSaves, sizeof(SaveGameDescription_t),
@@ -1131,7 +1091,6 @@ void CSaveGameBrowserDialog::SortSaveGames(SaveGameDescription_t *pSaves,
 }
 
 // Purpose: builds save game list from directory
-
 void CSaveGameBrowserDialog::ScanSavedGames(bool bIgnoreAutosave) {
   // Start with a clean slate
   m_nUsedStorageSpace = 0;
@@ -1149,59 +1108,48 @@ void CSaveGameBrowserDialog::ScanSavedGames(bool bIgnoreAutosave) {
   CUtlVector<SaveGameDescription_t> saveGames;
 
   // Get the search path
-  char szDirectory[SOURCE_MAX_PATH];
+  char save_dir[SOURCE_MAX_PATH];
+  sprintf_s(save_dir, "save/*");
 
-  if (IsX360())
-    Q_snprintf(szDirectory, sizeof(szDirectory), "%s:/*",
-               COM_GetModDirectory());
-  else
-    Q_snprintf(szDirectory, sizeof(szDirectory), "save/*");
-
-  Q_DefaultExtension(szDirectory, IsX360() ? ".360.sav" : ".sav",
-                     sizeof(szDirectory));
-  Q_FixSlashes(szDirectory);
+  Q_DefaultExtension(save_dir, ".sav", SOURCE_ARRAYSIZE(save_dir));
+  Q_FixSlashes(save_dir);
 
   // iterate the saved files
   FileFindHandle_t handle;
-  const char *pFileName = g_pFullFileSystem->FindFirst(szDirectory, &handle);
-  while (pFileName) {
-    if (!Q_strnicmp(pFileName, "HLSave", strlen("HLSave"))) {
-      pFileName = g_pFullFileSystem->FindNext(handle);
+  const char *save_file_name = g_pFullFileSystem->FindFirst(save_dir, &handle);
+
+  while (save_file_name) {
+    if (!_strnicmp(save_file_name, "HLSave", strlen("HLSave"))) {
+      save_file_name = g_pFullFileSystem->FindNext(handle);
       continue;
     }
 
     char szFileName[SOURCE_MAX_PATH];
-
-    if (IsX360())
-      Q_snprintf(szFileName, sizeof(szFileName), "%s:/%s",
-                 COM_GetModDirectory(), pFileName);
-    else
-      Q_snprintf(szFileName, sizeof(szFileName), "save/%s", pFileName);
-
+    sprintf_s(szFileName, "save/%s", save_file_name);
     Q_FixSlashes(szFileName);
 
     // Only load save games from the current mod's save dir
     if (!g_pFullFileSystem->FileExists(szFileName, "MOD")) {
-      pFileName = g_pFullFileSystem->FindNext(handle);
+      save_file_name = g_pFullFileSystem->FindNext(handle);
       continue;
     }
 
     SaveGameDescription_t save;
-    if (ParseSaveData(szFileName, pFileName, &save)) {
+    if (ParseSaveData(szFileName, save_file_name, &save)) {
       // Add on this file's size to the count
       m_nUsedStorageSpace += save.iSize;
 
       // Always ignore autosave dangerous (they're not considered safe until
       // committed)
       if (Q_stristr(save.szShortName, "dangerous")) {
-        pFileName = g_pFullFileSystem->FindNext(handle);
+        save_file_name = g_pFullFileSystem->FindNext(handle);
         continue;
       }
 
       // If we're ignoring autosaves, skip it here
       if (bIgnoreAutosave) {
-        if (!Q_stricmp(save.szType, "#GameUI_Autosave")) {
-          pFileName = g_pFullFileSystem->FindNext(handle);
+        if (!_stricmp(save.szType, "#GameUI_Autosave")) {
+          save_file_name = g_pFullFileSystem->FindNext(handle);
           continue;
         }
       }
@@ -1209,7 +1157,7 @@ void CSaveGameBrowserDialog::ScanSavedGames(bool bIgnoreAutosave) {
       saveGames.AddToTail(save);
     }
 
-    pFileName = g_pFullFileSystem->FindNext(handle);
+    save_file_name = g_pFullFileSystem->FindNext(handle);
   }
 
   g_pFullFileSystem->FindClose(handle);
@@ -1236,7 +1184,7 @@ void CSaveGameBrowserDialog::ScanSavedGames(bool bIgnoreAutosave) {
 // Purpose: Return the currently selected panel
 
 CGameSavePanel *CSaveGameBrowserDialog::GetActivePanel(void) {
-  if (IsValidPanel(m_iSelectedSave) == false) return NULL;
+  if (IsValidPanel(m_iSelectedSave) == false) return nullptr;
 
   return m_SavePanels[m_iSelectedSave];
 }

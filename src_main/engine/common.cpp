@@ -698,7 +698,8 @@ const char *COM_GetModDirectory() {
   static char modDir[SOURCE_MAX_PATH];
   if (Q_strlen(modDir) == 0) {
     const char *gamedir = CommandLine()->ParmValue(
-        "-game", CommandLine()->ParmValue("-defaultgamedir", "hl2"));
+        source::tier0::command_line_switches::kGamePath,
+        CommandLine()->ParmValue("-defaultgamedir", "hl2"));
     Q_strncpy(modDir, gamedir, sizeof(modDir));
     if (strchr(modDir, '/') || strchr(modDir, '\\')) {
       Q_StripLastDir(modDir, sizeof(modDir));
@@ -786,10 +787,8 @@ void COM_InitFilesystem(const char *pFullModPath) {
     long lRegValue;
 
     // Construct registry key path
-    V_strncpy(szAudioLanguageRegKey, "Software\\Valve\\Steam\\Apps\\",
-              sizeof(szAudioLanguageRegKey));
-    itoa(nSteamAppId, &(szAudioLanguageRegKey[strlen(szAudioLanguageRegKey)]),
-         10);
+    sprintf_s(szAudioLanguageRegKey, "Software\\Valve\\Steam\\Apps\\%d",
+              nSteamAppId);
     Sys_GetRegKeyValueInt(szAudioLanguageRegKey, "language", &lRegValue,
                           k_Lang_English);
     eAudioLanguage = (ELanguage)lRegValue;

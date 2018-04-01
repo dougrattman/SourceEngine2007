@@ -31,7 +31,6 @@
 #include "tier0/include/vprof.h"
 #include "tier1/utlstack.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar r_waterforceexpensive;
@@ -1116,12 +1115,10 @@ void DrawLightmapPage(int lightmapPageID) {
 extern void DebugDrawLightmapAtCrossHair();
 
 void R_DrawLightmaps(IWorldRenderList *pList, int pageId) {
-#ifdef USE_CONVARS
   if (pageId != -1) {
     DrawLightmapPage(pageId);
     Shader_DrawLightmapPageChains(pList, pageId);
   }
-#endif
 }
 
 void R_CheckForLightingConfigChanges() {

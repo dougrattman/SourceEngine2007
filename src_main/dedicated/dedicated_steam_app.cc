@@ -162,7 +162,9 @@ int DedicatedSteamApp::Main() {
       // Find the gameinfo.txt for our mod and mount it's caches
       char gameInfoFilename[SOURCE_MAX_PATH];
       Q_snprintf(gameInfoFilename, sizeof(gameInfoFilename) - 1,
-                 "%s\\gameinfo.txt", CommandLine()->ParmValue("-game", "hl2"));
+                 "%s\\gameinfo.txt",
+                 CommandLine()->ParmValue(
+                     source::tier0::command_line_switches::kGamePath, "hl2"));
       KeyValues *gameData = new KeyValues("GameInfo");
       if (gameData->LoadFromFile(g_pFullFileSystem, gameInfoFilename)) {
         KeyValues *pFileSystem = gameData->FindKey("FileSystem");
@@ -184,10 +186,12 @@ int DedicatedSteamApp::Main() {
   ModInfo_t info;
   info.m_pInstance = GetAppInstance();
   info.m_pBaseDirectory = GetBaseDirectory();
-  info.m_pInitialMod = CommandLine()->ParmValue("-game", "hl2");
+  info.m_pInitialMod = CommandLine()->ParmValue(
+      source::tier0::command_line_switches::kGamePath, "hl2");
   info.m_pInitialGame = CommandLine()->ParmValue("-defaultgamedir", "hl2");
   info.m_pParentAppSystemGroup = this;
-  info.m_bTextMode = CommandLine()->CheckParm("-textmode");
+  info.m_bTextMode =
+      CommandLine()->CheckParm(source::tier0::command_line_switches::textMode);
 
   if (engine->ModInit(info)) engine->ModShutdown();
 

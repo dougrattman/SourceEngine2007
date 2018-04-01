@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cmodel_engine.h"
 
@@ -20,7 +20,6 @@ extern IMaterialSystem *materials;
 #include "tier2/tier2.h"
 #include "vphysics_interface.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern bool g_bServerGameDLLGreaterThanV4;
@@ -205,6 +204,8 @@ void CollisionBSPData_PreLoad(CCollisionBSPData *pBSPData) {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 bool CollisionBSPData_Load(const char *pName, CCollisionBSPData *pBSPData) {
+  Plat_TimestampedLog("Engine::CollisionBSPData_Load start.");
+
   // This is a table that maps texinfo references to csurface_t
   // It is freed after the map has been loaded
   CUtlVector<unsigned short> map_texinfo;
@@ -212,53 +213,53 @@ bool CollisionBSPData_Load(const char *pName, CCollisionBSPData *pBSPData) {
   // copy map name
   Q_strncpy(pBSPData->map_name, pName, sizeof(pBSPData->map_name));
 
-  //
   // load bsp file data
-  //
-  COM_TimestampedLog("  CollisionBSPData_LoadTextures");
+  Plat_TimestampedLog("  CollisionBSPData_LoadTextures");
   CollisionBSPData_LoadTextures(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadTexinfo");
+  Plat_TimestampedLog("  CollisionBSPData_LoadTexinfo");
   CollisionBSPData_LoadTexinfo(pBSPData, map_texinfo);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadLeafs");
+  Plat_TimestampedLog("  CollisionBSPData_LoadLeafs");
   CollisionBSPData_LoadLeafs(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadLeafBrushes");
+  Plat_TimestampedLog("  CollisionBSPData_LoadLeafBrushes");
   CollisionBSPData_LoadLeafBrushes(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadPlanes");
+  Plat_TimestampedLog("  CollisionBSPData_LoadPlanes");
   CollisionBSPData_LoadPlanes(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadBrushes");
+  Plat_TimestampedLog("  CollisionBSPData_LoadBrushes");
   CollisionBSPData_LoadBrushes(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadBrushSides");
+  Plat_TimestampedLog("  CollisionBSPData_LoadBrushSides");
   CollisionBSPData_LoadBrushSides(pBSPData, map_texinfo);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadSubmodels");
+  Plat_TimestampedLog("  CollisionBSPData_LoadSubmodels");
   CollisionBSPData_LoadSubmodels(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadPlanes");
+  Plat_TimestampedLog("  CollisionBSPData_LoadPlanes");
   CollisionBSPData_LoadNodes(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadAreas");
+  Plat_TimestampedLog("  CollisionBSPData_LoadAreas");
   CollisionBSPData_LoadAreas(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadAreaPortals");
+  Plat_TimestampedLog("  CollisionBSPData_LoadAreaPortals");
   CollisionBSPData_LoadAreaPortals(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadVisibility");
+  Plat_TimestampedLog("  CollisionBSPData_LoadVisibility");
   CollisionBSPData_LoadVisibility(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadEntityString");
+  Plat_TimestampedLog("  CollisionBSPData_LoadEntityString");
   CollisionBSPData_LoadEntityString(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadPhysics");
+  Plat_TimestampedLog("  CollisionBSPData_LoadPhysics");
   CollisionBSPData_LoadPhysics(pBSPData);
 
-  COM_TimestampedLog("  CollisionBSPData_LoadDispInfo");
+  Plat_TimestampedLog("  CollisionBSPData_LoadDispInfo");
   CollisionBSPData_LoadDispInfo(pBSPData);
+
+  Plat_TimestampedLog("Engine::CollisionBSPData_Load end.");
 
   return true;
 }
@@ -714,7 +715,8 @@ void CollisionBSPData_LoadBrushSides(CCollisionBSPData *pBSPData,
       int firstInputSide = pBrush->firstbrushside;
       pBrush->firstbrushside = outBrushSide;
       for (j = 0; j < pBrush->numsides; j++) {
-        cbrushside_t *SOURCE_RESTRICT pSide = &pBSPData->map_brushsides[outBrushSide];
+        cbrushside_t *SOURCE_RESTRICT pSide =
+            &pBSPData->map_brushsides[outBrushSide];
         dbrushside_t *SOURCE_RESTRICT pInputSide = in + firstInputSide + j;
         pSide->plane = &pBSPData->map_planes[pInputSide->planenum];
         int t = pInputSide->texinfo;

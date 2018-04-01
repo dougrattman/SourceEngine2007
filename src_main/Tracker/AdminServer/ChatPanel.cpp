@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "ChatPanel.h"
 
@@ -58,7 +58,7 @@ void CChatPanel::DoInsertString(const char *str) {
 void CChatPanel::OnSendChat() {
   // build a chat command and send it to the server
   char chat_text[512];
-  strcpy(chat_text, "say ");
+  strcpy_s(chat_text, "say ");
   m_pEnterChatPanel->GetText(chat_text + 4, sizeof(chat_text) - 4);
   if (strlen("say ") != strlen(chat_text)) {
     RemoteServer().SendCommand(chat_text);

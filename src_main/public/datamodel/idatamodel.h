@@ -242,7 +242,7 @@ enum DmNotifyFlags_t {
 
   // Type of change (note
   // NOTIFY_CHANGE_TOPOLOGICAL/NOTIFY_CHANGE_ATTRIBUTE_VALUE/NOTIFY_CHANGE_ATTRIBUTE_ARRAY_SIZE
-  // are set by the Datamodel itself)
+  // are set by the datamodel itself)
   NOTIFY_CHANGE_TOPOLOGICAL =
       (1 << (NOTIFY_SOURCE_BITS + 4)),  // Element created, destroyed, element
                                         // attribute or element array attribute

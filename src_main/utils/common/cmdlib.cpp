@@ -108,7 +108,7 @@ class CExitStopper {
   ~CExitStopper() {
     if (g_bStopOnExit) {
       Warning("\nPress any key to quit.\n");
-      getch();
+      _getch();
     }
   }
 } g_ExitStopper;
@@ -374,7 +374,7 @@ void ExpandWildcards(int *argc, char ***argv) {
     Q_ExtractFilePath(path, filebase, sizeof(filebase));
 
     do {
-      sprintf(filename, "%s%s", filebase, fileinfo.name);
+      sprintf_s(filename, "%s%s", filebase, fileinfo.name);
       ex_argv[ex_argc++] = copystring(filename);
     } while (_findnext(handle, &fileinfo) != -1);
 
@@ -438,14 +438,14 @@ char *ExpandArg(char *path) {
 char *ExpandPath(char *path) {
   static char full[1024];
   if (path[0] == '/' || path[0] == '\\' || path[1] == ':') return path;
-  sprintf(full, "%s%s", qdir, path);
+  sprintf_s(full, "%s%s", qdir, path);
   return full;
 }
 
 char *copystring(const char *s) {
-  char *b;
-  b = (char *)malloc(strlen(s) + 1);
-  strcpy(b, s);
+  size_t size{strlen(s) + 1};
+  char *b = (char *)malloc(size);
+  strcpy_s(b, size, s);
   return b;
 }
 
@@ -576,12 +576,12 @@ void CmdLib_AddBasePath(const char *pPath) {
 }
 
 bool CmdLib_HasBasePath(const char *pFileName_, int &pathLength) {
-  char *pFileName = (char *)_alloca(strlen(pFileName_) + 1);
-  strcpy(pFileName, pFileName_);
+  size_t file_name_size{strlen(pFileName_) + 1};
+  char *pFileName = (char *)_alloca(file_name_size);
+  strcpy_s(pFileName, file_name_size, pFileName_);
   Q_FixSlashes(pFileName);
   pathLength = 0;
-  int i;
-  for (i = 0; i < g_NumBasePaths; i++) {
+  for (int i = 0; i < g_NumBasePaths; i++) {
     // see if we can rip the base off of the filename.
     if (Q_strncasecmp(g_pBasePaths[i], pFileName, strlen(g_pBasePaths[i])) ==
         0) {
@@ -607,8 +607,8 @@ FileHandle_t SafeOpenRead(const char *filename) {
     int i;
     for (i = 0; i < g_NumBasePaths; i++) {
       char tmp[SOURCE_MAX_PATH];
-      strcpy(tmp, g_pBasePaths[i]);
-      strcat(tmp, filename);
+      strcpy_s(tmp, g_pBasePaths[i]);
+      strcat_s(tmp, filename);
       f = g_pFileSystem->Open(tmp, "rb");
       if (f) {
         return f;

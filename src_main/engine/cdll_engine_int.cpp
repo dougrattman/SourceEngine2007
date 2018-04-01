@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -81,7 +81,6 @@
 #include "vphysics_interface.h"
 #include "vstdlib/random.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -807,14 +806,14 @@ bool CEngineClient::CullBox(const Vector &mins, const Vector &maxs) {
 const char *CEngineClient::GetGameDirectory(void) { return com_gamedir; }
 
 const VMatrix &CEngineClient::WorldToScreenMatrix() {
-  // TODO(d.rattman): this is only valid if we're currently rendering.  If not, it should
-  // use the player, or it really should pass one in.
+  // TODO(d.rattman): this is only valid if we're currently rendering.  If not,
+  // it should use the player, or it really should pass one in.
   return g_EngineRenderer->WorldToScreenMatrix();
 }
 
 const VMatrix &CEngineClient::WorldToViewMatrix() {
-  // TODO(d.rattman): this is only valid if we're currently rendering.  If not, it should
-  // use the player, or it really should pass one in.
+  // TODO(d.rattman): this is only valid if we're currently rendering.  If not,
+  // it should use the player, or it really should pass one in.
   return g_EngineRenderer->ViewMatrix();
 }
 
@@ -1372,12 +1371,14 @@ void ClientDLL_Init(void) {
   Assert(g_ClientDLL);
   Assert(g_ClientFactory);
 
+  Plat_TimestampedLog("Engine::ClientDLL_Init start.");
+
   // this will get updated after we load a map, but this gets video info if we
   // sys_error() prior to loading a map
   CL_SetSteamCrashComment();
 
   if (g_ClientDLL) {
-    COM_TimestampedLog("g_ClientDLL->Init");
+    Plat_TimestampedLog("  g_ClientDLL->Init");
 
     if (!g_ClientDLL->Init(g_AppSystemFactory, g_AppSystemFactory,
                            &g_ClientGlobalVariables)) {
@@ -1385,7 +1386,7 @@ void ClientDLL_Init(void) {
     }
 
     if (g_ClientFactory) {
-      COM_TimestampedLog("g_pClientSidePrediction->Init");
+      Plat_TimestampedLog("  g_pClientSidePrediction->Init");
 
       // Load the prediction interface from the client .dll
       g_pClientSidePrediction = (IPrediction *)g_ClientFactory(
@@ -1439,11 +1440,15 @@ void ClientDLL_Init(void) {
     }
   }
 
-  COM_TimestampedLog("ClientDLL_InitRecvTableMgr");
+  Plat_TimestampedLog("  ClientDLL_InitRecvTableMgr");
 
   ClientDLL_InitRecvTableMgr();
 
+  Plat_TimestampedLog("  InitExtraClientCmdCanExecuteVars");
+
   InitExtraClientCmdCanExecuteVars();
+
+  Plat_TimestampedLog("Engine::ClientDLL_Init end.");
 }
 
 //-----------------------------------------------------------------------------

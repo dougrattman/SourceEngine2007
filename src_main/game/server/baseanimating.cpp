@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Base class for all animating characters and objects.
 
@@ -75,12 +75,13 @@ BEGIN_DATADESC(CInfoLightingRelative)
 END_DATADESC()
 
 IMPLEMENT_SERVERCLASS_ST(CInfoLightingRelative, DT_InfoLightingRelative)
-SendPropEHandle(SENDINFO(m_hLightingLandmark)), END_SEND_TABLE()
+  SendPropEHandle(SENDINFO(m_hLightingLandmark)),
+END_SEND_TABLE()
 
-    //-----------------------------------------------------------------------------
-    // Activate!
-    //-----------------------------------------------------------------------------
-    void CInfoLightingRelative::Activate() {
+//-----------------------------------------------------------------------------
+// Activate!
+//-----------------------------------------------------------------------------
+void CInfoLightingRelative::Activate() {
   BaseClass::Activate();
   if (m_strLightingLandmark == NULL_STRING) {
     m_hLightingLandmark = NULL;
@@ -204,66 +205,70 @@ BEGIN_SEND_TABLE_NOBASE(CBaseAnimating, DT_ServerAnimationData)
 // ANIMATION_CYCLE_BITS is defined in shareddefs.h
 SendPropFloat(SENDINFO(m_flCycle), ANIMATION_CYCLE_BITS,
               SPROP_CHANGES_OFTEN | SPROP_ROUNDDOWN, 0.0f, 1.0f)
-    END_SEND_TABLE()
+END_SEND_TABLE
+()
 
-        void *SendProxy_ClientSideAnimation(const SendProp *pProp,
-                                            const void *pStruct,
-                                            const void *pVarData,
-                                            CSendProxyRecipients *pRecipients,
-                                            int objectID);
+    void *SendProxy_ClientSideAnimation(const SendProp *pProp,
+                                        const void *pStruct,
+                                        const void *pVarData,
+                                        CSendProxyRecipients *pRecipients,
+                                        int objectID);
 
 // SendTable stuff.
 IMPLEMENT_SERVERCLASS_ST(CBaseAnimating, DT_BaseAnimating)
-SendPropInt(SENDINFO(m_nForceBone), 8, 0),
-    SendPropVector(SENDINFO(m_vecForce), -1, SPROP_NOSCALE),
+  SendPropInt(SENDINFO(m_nForceBone), 8, 0),
+      SendPropVector(SENDINFO(m_vecForce), -1, SPROP_NOSCALE),
 
-    SendPropInt(SENDINFO(m_nSkin), ANIMATION_SKIN_BITS),
-    SendPropInt(SENDINFO(m_nBody), ANIMATION_BODY_BITS),
+      SendPropInt(SENDINFO(m_nSkin), ANIMATION_SKIN_BITS),
+      SendPropInt(SENDINFO(m_nBody), ANIMATION_BODY_BITS),
 
-    SendPropInt(SENDINFO(m_nHitboxSet), ANIMATION_HITBOXSET_BITS,
-                SPROP_UNSIGNED),
+      SendPropInt(SENDINFO(m_nHitboxSet), ANIMATION_HITBOXSET_BITS,
+                  SPROP_UNSIGNED),
 
-    SendPropFloat(SENDINFO(m_flModelWidthScale), 6, SPROP_ROUNDUP, 0.0f, 1.0f),
+      SendPropFloat(SENDINFO(m_flModelWidthScale), 6, SPROP_ROUNDUP, 0.0f,
+                    1.0f),
 
-    SendPropArray3(SENDINFO_ARRAY3(m_flPoseParameter),
-                   SendPropFloat(SENDINFO_ARRAY(m_flPoseParameter),
-                                 ANIMATION_POSEPARAMETER_BITS, 0, 0.0f, 1.0f)),
+      SendPropArray3(
+          SENDINFO_ARRAY3(m_flPoseParameter),
+          SendPropFloat(SENDINFO_ARRAY(m_flPoseParameter),
+                        ANIMATION_POSEPARAMETER_BITS, 0, 0.0f, 1.0f)),
 
-    SendPropInt(SENDINFO(m_nSequence), ANIMATION_SEQUENCE_BITS, SPROP_UNSIGNED),
-    SendPropFloat(SENDINFO(m_flPlaybackRate), ANIMATION_PLAYBACKRATE_BITS,
-                  SPROP_ROUNDUP, -4.0,
-                  12.0f),  // NOTE: if this isn't a power of 2 than "1.0" can't
-                           // be encoded correctly
+      SendPropInt(SENDINFO(m_nSequence), ANIMATION_SEQUENCE_BITS,
+                  SPROP_UNSIGNED),
+      SendPropFloat(SENDINFO(m_flPlaybackRate), ANIMATION_PLAYBACKRATE_BITS,
+                    SPROP_ROUNDUP, -4.0,
+                    12.0f),  // NOTE: if this isn't a power of 2 than "1.0"
+                             // can't be encoded correctly
 
-    SendPropArray3(SENDINFO_ARRAY3(m_flEncodedController),
-                   SendPropFloat(SENDINFO_ARRAY(m_flEncodedController), 11,
-                                 SPROP_ROUNDDOWN, 0.0f, 1.0f)),
+      SendPropArray3(SENDINFO_ARRAY3(m_flEncodedController),
+                     SendPropFloat(SENDINFO_ARRAY(m_flEncodedController), 11,
+                                   SPROP_ROUNDDOWN, 0.0f, 1.0f)),
 
-    SendPropInt(SENDINFO(m_bClientSideAnimation), 1, SPROP_UNSIGNED),
-    SendPropInt(SENDINFO(m_bClientSideFrameReset), 1, SPROP_UNSIGNED),
+      SendPropInt(SENDINFO(m_bClientSideAnimation), 1, SPROP_UNSIGNED),
+      SendPropInt(SENDINFO(m_bClientSideFrameReset), 1, SPROP_UNSIGNED),
 
-    SendPropInt(SENDINFO(m_nNewSequenceParity), EF_PARITY_BITS,
-                SPROP_UNSIGNED | SPROP_CHANGES_OFTEN),
-    SendPropInt(SENDINFO(m_nResetEventsParity), EF_PARITY_BITS,
-                SPROP_UNSIGNED | SPROP_CHANGES_OFTEN),
-    SendPropInt(SENDINFO(m_nMuzzleFlashParity), EF_MUZZLEFLASH_BITS,
-                SPROP_UNSIGNED | SPROP_CHANGES_OFTEN),
+      SendPropInt(SENDINFO(m_nNewSequenceParity), EF_PARITY_BITS,
+                  SPROP_UNSIGNED | SPROP_CHANGES_OFTEN),
+      SendPropInt(SENDINFO(m_nResetEventsParity), EF_PARITY_BITS,
+                  SPROP_UNSIGNED | SPROP_CHANGES_OFTEN),
+      SendPropInt(SENDINFO(m_nMuzzleFlashParity), EF_MUZZLEFLASH_BITS,
+                  SPROP_UNSIGNED | SPROP_CHANGES_OFTEN),
 
-    SendPropEHandle(SENDINFO(m_hLightingOrigin)),
-    SendPropEHandle(SENDINFO(m_hLightingOriginRelative)),
+      SendPropEHandle(SENDINFO(m_hLightingOrigin)),
+      SendPropEHandle(SENDINFO(m_hLightingOriginRelative)),
 
-    SendPropDataTable("serveranimdata", 0,
-                      &REFERENCE_SEND_TABLE(DT_ServerAnimationData),
-                      SendProxy_ClientSideAnimation),
+      SendPropDataTable("serveranimdata", 0,
+                        &REFERENCE_SEND_TABLE(DT_ServerAnimationData),
+                        SendProxy_ClientSideAnimation),
 
-    // Fading
-    SendPropFloat(SENDINFO(m_fadeMinDist), 0, SPROP_NOSCALE),
-    SendPropFloat(SENDINFO(m_fadeMaxDist), 0, SPROP_NOSCALE),
-    SendPropFloat(SENDINFO(m_flFadeScale), 0, SPROP_NOSCALE),
+      // Fading
+      SendPropFloat(SENDINFO(m_fadeMinDist), 0, SPROP_NOSCALE),
+      SendPropFloat(SENDINFO(m_fadeMaxDist), 0, SPROP_NOSCALE),
+      SendPropFloat(SENDINFO(m_flFadeScale), 0, SPROP_NOSCALE),
 
-    END_SEND_TABLE()
+END_SEND_TABLE()
 
-        CBaseAnimating::CBaseAnimating() {
+CBaseAnimating::CBaseAnimating() {
   m_vecForce.GetForModify().Init();
   m_nForceBone = 0;
 
@@ -1033,8 +1038,8 @@ void CBaseAnimating::HandleAnimEvent(animevent_t *pEvent) {
       char szAttachment[128];
       float flDuration;
       float flSize;
-      if (sscanf(pEvent->options, "%s %f %f", szAttachment, &flDuration,
-                 &flSize) == 3) {
+      if (sscanf_s(pEvent->options, "%s %f %f", szAttachment,
+                   SOURCE_ARRAYSIZE(szAttachment), &flDuration, &flSize) == 3) {
         CHandle<DustTrail> hDustTrail;
 
         hDustTrail = DustTrail::CreateDustTrail();
@@ -1985,9 +1990,9 @@ int CBaseAnimating::RegisterPrivateActivity(const char *pszActivityName) {
 //-----------------------------------------------------------------------------
 // Purpose: Notifies the console that this entity could not retrieve an
 //			animation sequence for the specified activity. This
-//probably
-// means 			there's a typo in the model QC file, or the sequence is
-// missing 			entirely.
+// probably
+// means 			there's a typo in the model QC file, or the
+// sequence is missing 			entirely.
 //
 //
 // Input  : iActivity - The activity that failed to resolve to a sequence.
@@ -1996,9 +2001,9 @@ int CBaseAnimating::RegisterPrivateActivity(const char *pszActivityName) {
 // NOTE   :	IMPORTANT - Something needs to be done so that private
 // activities
 //			(which are allowed to collide in the activity list)
-//remember
-// each 			entity that registered an activity there, and the
-// activity name 			each character registered.
+// remember
+// each 			entity that registered an activity there, and
+// the activity name 			each character registered.
 //-----------------------------------------------------------------------------
 void CBaseAnimating::ReportMissingActivity(int iActivity) {
   Msg("%s has no sequence for act:%s\n", GetClassname(),
@@ -2578,7 +2583,7 @@ void CBaseAnimating::GetInputDispatchEffectPosition(const char *sInputString,
                                                     QAngle &pAngles) {
   // See if there's a specified attachment point
   int iAttachment;
-  if (GetModelPtr() && sscanf(sInputString, "%d", &iAttachment)) {
+  if (GetModelPtr() && sscanf_s(sInputString, "%d", &iAttachment)) {
     if (!GetAttachment(iAttachment, pOrigin, pAngles)) {
       Msg("ERROR: Mapmaker tried to spawn DispatchEffect %s, but %s has no "
           "attachment %d\n",

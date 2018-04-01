@@ -1,8 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "datamodel.h"
 
 #include "DmElementFramework.h"
+#include "base/include/macros.h"
 #include "clipboardmanager.h"
 #include "datamodel/dmattributevar.h"
 #include "datamodel/idatamodel.h"
@@ -20,7 +21,6 @@
 #include "undomanager.h"
 #include "vstdlib/iprocessutils.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -747,13 +747,14 @@ bool CDataModel::ReadDMXHeader(CUtlBuffer &inBuf, DmxHeader_t *pHeader) const {
 #ifdef _WIN32
     int nAssigned =
         sscanf_s(headerStr, "encoding %s %d format %s %d\n",
-                 pHeader->encodingName, DMX_MAX_FORMAT_NAME_MAX_LENGTH,
+                 pHeader->encodingName, SOURCE_ARRAYSIZE(pHeader->encodingName),
                  &(pHeader->nEncodingVersion), pHeader->formatName,
                  DMX_MAX_FORMAT_NAME_MAX_LENGTH, &(pHeader->nFormatVersion));
 #else
-    int nAssigned = sscanf(headerStr, "encoding %s %d format %s %d\n",
-                           pHeader->encodingName, &(pHeader->nEncodingVersion),
-                           pHeader->formatName, &(pHeader->nFormatVersion));
+    int nAssigned = sscanf_s(
+        headerStr, "encoding %s %d format %s %d\n", pHeader->encodingName,
+        SOURCE_ARRAYSIZE(pHeader->encodingName), &(pHeader->nEncodingVersion),
+        pHeader->formatName, &(pHeader->nFormatVersion));
 #endif
     bOk = nAssigned == 4;
   }

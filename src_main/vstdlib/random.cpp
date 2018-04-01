@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Random number generator
 
@@ -18,9 +18,8 @@
 // fran1 -- return a random floating-point number on the interval [0,1)
 //
 #define AM (1.0 / IM)
-#define EPS 1.2e-7
-#define RNMX (1.0 - EPS)
-
+#define EPS 1.2e-7f
+#define RNMX (1.0f - EPS)
 
 // globals
 
@@ -28,14 +27,12 @@ static CUniformRandomStream s_UniformStream;
 static CGaussianRandomStream s_GaussianStream;
 static IUniformRandomStream *s_pUniformStream = &s_UniformStream;
 
-
 // Installs a global random number generator, which will affect the Random
 // functions above
 
 void InstallUniformRandomStream(IUniformRandomStream *pStream) {
   s_pUniformStream = pStream ? pStream : &s_UniformStream;
 }
-
 
 // A couple of convenience functions to access the library's global uniform
 // stream
@@ -57,7 +54,6 @@ int RandomInt(int iMinVal, int iMaxVal) {
 float RandomGaussianFloat(float flMean, float flStdDev) {
   return s_GaussianStream.RandomFloat(flMean, flStdDev);
 }
-
 
 //
 // Implementation of the uniform random number stream
@@ -148,7 +144,6 @@ int CUniformRandomStream::RandomInt(int iLow, int iHigh) {
   return iLow + (n % x);
 }
 
-
 //
 // Implementation of the gaussian random number stream
 // We're gonna use the Box-Muller method (which actually generates 2
@@ -160,7 +155,6 @@ CGaussianRandomStream::CGaussianRandomStream(
   AttachToStream(pUniformStream);
 }
 
-
 // Attaches to a random uniform stream
 
 void CGaussianRandomStream::AttachToStream(
@@ -169,7 +163,6 @@ void CGaussianRandomStream::AttachToStream(
   m_pUniformStream = pUniformStream;
   m_bHaveValue = false;
 }
-
 
 // Generates random numbers
 
@@ -202,6 +195,4 @@ float CGaussianRandomStream::RandomFloat(float flMean, float flStdDev) {
   }
 }
 
-
 // Creates a histogram (for testing)
-

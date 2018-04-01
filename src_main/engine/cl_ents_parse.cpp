@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Parsing of entity network packets.
 
@@ -18,7 +18,6 @@
 #include "net_synctags.h"
 #include "netmessages.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static ConVar cl_flushentitypacket(
@@ -140,30 +139,30 @@ void CL_DeleteDLLEntity(int iEnt, const char *reason,
 //			iClass -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-IClientNetworkable *CL_CreateDLLEntity(int iEnt, int iClass, int iSerialNum) {
-#if defined(_DEBUG)
+IClientNetworkable *CL_CreateDLLEntity(int entity_id, int class_id,
+                                       int serial_number) {
+#ifndef NDEBUG
   IClientNetworkable *pOldNetworkable = entitylist->GetClientNetworkable(iEnt);
   Assert(!pOldNetworkable);
 #endif
 
-  ClientClass *pClientClass;
-  if ((pClientClass = cl.m_pServerClasses[iClass].m_pClientClass) != NULL) {
+  ClientClass *client_class{cl.m_pServerClasses[class_id].m_pClientClass};
+  if (client_class != nullptr) {
     TRACE_DELTA(
-        va("Trace %i (%s): create\n", iEnt, pClientClass->m_pNetworkName));
-#ifndef _XBOX
-    CL_RecordAddEntity(iEnt);
-#endif
+        va("Trace %i (%s): create\n", entity_id, client_class->m_pNetworkName));
+    CL_RecordAddEntity(entity_id);
 
     if (!cl.IsActive()) {
-      COM_TimestampedLog("cl:  create '%s'", pClientClass->m_pNetworkName);
+      Plat_TimestampedLog("Engine::CL_CreateDLLEntity: Create '%s'",
+                          client_class->m_pNetworkName);
     }
 
     // Create the entity.
-    return pClientClass->m_pCreateFn(iEnt, iSerialNum);
+    return client_class->m_pCreateFn(entity_id, serial_number);
   }
 
   Assert(false);
-  return NULL;
+  return nullptr;
 }
 
 void SpewBitStream(unsigned char *pMem, int bit, int lastbit) {

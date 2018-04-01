@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "MapCycleEditDialog.h"
 
@@ -58,7 +58,7 @@ void CMapCycleEditDialog::Activate(vgui::Panel *updateTarget,
     // only add to the available maps list if it's not in mapCycle
     bool inMapCycle = false;
     for (int j = 0; j < mapCycle.Count(); j++) {
-      if (!stricmp(mapCycle[j].String(), availableMaps[i].String())) {
+      if (!_stricmp(mapCycle[j].String(), availableMaps[i].String())) {
         inMapCycle = true;
         break;
       }
@@ -129,7 +129,7 @@ void CMapCycleEditDialog::OnItemSelected(vgui::Panel *panel) {
 // Purpose: Button command handler
 //-----------------------------------------------------------------------------
 void CMapCycleEditDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "ArrowLeft")) {
+  if (!_stricmp(command, "ArrowLeft")) {
     // move map from mapcycle to available list
     while (m_pMapCycleList->GetSelectedItemsCount() > 0) {
       int itemID = m_pMapCycleList->GetSelectedItem(0);
@@ -141,7 +141,7 @@ void CMapCycleEditDialog::OnCommand(const char *command) {
                                    true, false);
       m_pMapCycleList->RemoveItem(itemID);
     }
-  } else if (!stricmp(command, "ArrowRight")) {
+  } else if (!_stricmp(command, "ArrowRight")) {
     // move map from available list to mapcycle
     while (m_pAvailableMapList->GetSelectedItemsCount() > 0) {
       int itemID = m_pAvailableMapList->GetSelectedItem(0);
@@ -153,7 +153,7 @@ void CMapCycleEditDialog::OnCommand(const char *command) {
                                false);
       m_pAvailableMapList->RemoveItem(itemID);
     }
-  } else if (!stricmp(command, "ArrowUp")) {
+  } else if (!_stricmp(command, "ArrowUp")) {
     int itemID = m_pMapCycleList->GetSelectedItem(0);
     int row = m_pMapCycleList->GetItemCurrentRow(itemID);
     int prevRow = row - 1;
@@ -174,7 +174,7 @@ void CMapCycleEditDialog::OnCommand(const char *command) {
     m_pMapCycleList->ApplyItemChanges(itemID);
     m_pMapCycleList->ApplyItemChanges(prevItemID);
     PostMessage(m_pMapCycleList, new KeyValues("KeyCodeTyped", "code", KEY_UP));
-  } else if (!stricmp(command, "ArrowDown")) {
+  } else if (!_stricmp(command, "ArrowDown")) {
     int itemID = m_pMapCycleList->GetSelectedItem(0);
     int row = m_pMapCycleList->GetItemCurrentRow(itemID);
     int nextRow = row + 1;
@@ -196,9 +196,9 @@ void CMapCycleEditDialog::OnCommand(const char *command) {
     m_pMapCycleList->ApplyItemChanges(nextItemID);
     PostMessage(m_pMapCycleList,
                 new KeyValues("KeyCodeTyped", "code", KEY_DOWN));
-  } else if (!stricmp(command, "Cancel")) {
+  } else if (!_stricmp(command, "Cancel")) {
     Close();
-  } else if (!stricmp(command, "OK")) {
+  } else if (!_stricmp(command, "OK")) {
     // write out the data
     CUtlBuffer msg(0, 1024, CUtlBuffer::TEXT_BUFFER);
 

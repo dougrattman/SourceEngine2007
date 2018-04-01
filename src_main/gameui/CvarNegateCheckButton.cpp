@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "CvarNegateCheckButton.h"
 
@@ -8,7 +8,6 @@
 #include "tier1/convar.h"
 #include "vgui/IVGui.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -18,7 +17,7 @@ CCvarNegateCheckButton::CCvarNegateCheckButton(Panel *parent,
                                                const char *text,
                                                const char *cvarname)
     : CheckButton(parent, panelName, text) {
-  m_pszCvarName = cvarname ? strdup(cvarname) : NULL;
+  m_pszCvarName = cvarname ? _strdup(cvarname) : NULL;
   Reset();
   AddActionSignalTarget(this);
 }

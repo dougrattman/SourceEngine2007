@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bsplib.h"
 
@@ -2230,8 +2230,7 @@ void ExtractZipFileFromBSP(char *pBSPFileName, char *pZipFileName) {
                                        (void **)&pakbuffer);
   if (paksize > 0) {
     FILE *fp;
-    fp = fopen(pZipFileName, "wb");
-    if (!fp) {
+    if (fopen_s(&fp, pZipFileName, "wb")) {
       fprintf(stderr, "can't open %s\n", pZipFileName);
       return;
     }
@@ -2251,12 +2250,15 @@ Only loads the texinfo lump, so qdata can scan for textures
 =============
 */
 void LoadBSPFileTexinfo(const char *filename) {
-  FILE *f;
   int length, ofs;
 
   g_pBSPHeader = (dheader_t *)malloc(sizeof(dheader_t));
 
-  f = fopen(filename, "rb");
+  FILE *f;
+  if (fopen_s(&f, filename, "rb")) {
+    fprintf(stderr, "Can't open %s\n", filename);
+    return;
+  }
   fread(g_pBSPHeader, sizeof(dheader_t), 1, f);
 
   ValidateHeader(filename, g_pBSPHeader);
@@ -2801,12 +2803,12 @@ void UnparseEntities(void) {
     buffer.PutString("{\n");
 
     for (ep = entities[i].epairs; ep; ep = ep->next) {
-      strcpy(key, ep->key);
+      strcpy_s(key, ep->key);
       StripTrailing(key);
-      strcpy(value, ep->value);
+      strcpy_s(value, ep->value);
       StripTrailing(value);
 
-      sprintf(line, "\"%s\" \"%s\"\n", key, value);
+      sprintf_s(line, "\"%s\" \"%s\"\n", key, value);
       buffer.PutString(line);
     }
     buffer.PutString("}\n");
@@ -2855,7 +2857,7 @@ f32 FloatForKey(entity_t *ent, const char *key) {
 }
 
 f32 FloatForKeyWithDefault(entity_t *ent, const char *key,
-                             float default_value) {
+                           float default_value) {
   for (epair_t *ep = ent->epairs; ep; ep = ep->next)
     if (!Q_stricmp(ep->key, key)) return atof(ep->value);
   return default_value;
@@ -2871,7 +2873,7 @@ void GetVectorForKey(entity_t *ent, const char *key, Vector &vec) {
   // scanf into doubles, then assign, so it is f32 size independent
   double v1, v2, v3;
   v1 = v2 = v3 = 0;
-  sscanf(k, "%lf %lf %lf", &v1, &v2, &v3);
+  sscanf_s(k, "%lf %lf %lf", &v1, &v2, &v3);
   vec[0] = v1;
   vec[1] = v2;
   vec[2] = v3;
@@ -2883,7 +2885,7 @@ void GetVector2DForKey(entity_t *ent, const char *key, Vector2D &vec) {
   const char *k = ValueForKey(ent, key);
   // scanf into doubles, then assign, so it is f32 size independent
   v1 = v2 = 0;
-  sscanf(k, "%lf %lf", &v1, &v2);
+  sscanf_s(k, "%lf %lf", &v1, &v2);
   vec[0] = v1;
   vec[1] = v2;
 }
@@ -2894,7 +2896,7 @@ void GetAnglesForKey(entity_t *ent, const char *key, QAngle &angle) {
   const char *k = ValueForKey(ent, key);
   // scanf into doubles, then assign, so it is f32 size independent
   v1 = v2 = v3 = 0;
-  sscanf(k, "%lf %lf %lf", &v1, &v2, &v3);
+  sscanf_s(k, "%lf %lf %lf", &v1, &v2, &v3);
   angle[0] = v1;
   angle[1] = v2;
   angle[2] = v3;
@@ -2971,8 +2973,8 @@ void CalcFaceExtents(dface_t *s, int lightmapTextureMinsInLuxels[2],
   dvertex_t *v = NULL;
   texinfo_t *tex = NULL;
 
-  mins[0] = mins[1] = 1e24;
-  maxs[0] = maxs[1] = -1e24;
+  mins[0] = mins[1] = 1e24f;
+  maxs[0] = maxs[1] = -1e24f;
 
   tex = &texinfo[s->texinfo];
 
@@ -3489,7 +3491,7 @@ const char *ResolveStaticPropToModel(const char *pPropName) {
   }
   const char *pPropNumber = V_strrchr(pPropName, '_');
   if (pPropNumber) {
-    sscanf(pPropNumber + 1, "%d.vhv", &iProp);
+    sscanf_s(pPropNumber + 1, "%d.vhv", &iProp);
   } else {
     return NULL;
   }
@@ -3636,7 +3638,7 @@ void ConvertPakFileContents(const char *pInFilename) {
   for (int i = 0; i < hdrFiles.Count(); i++) {
     char ldrFileName[SOURCE_MAX_PATH];
 
-    strcpy(ldrFileName, hdrFiles[i].String());
+    strcpy_s(ldrFileName, hdrFiles[i].String());
 
     char *pHDRExtension = V_stristr(ldrFileName, ".hdr");
     if (!pHDRExtension) {

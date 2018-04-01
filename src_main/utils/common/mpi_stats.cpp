@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 // Nasty headers!
 #include "mpi_stats.h"
@@ -72,7 +72,7 @@ create table job_worker_start (
         JobWorkerID				INTEGER UNSIGNED NOT NULL
 AUTO_INCREMENT, index index_jobid( JobID ), index index_jobworkerid( JobWorkerID
 ),
-        
+        
 
 
 
@@ -715,15 +715,14 @@ void StatsDB_InitStatsDatabase(int argc, char **argv,
   } else {
     // Wait to get DB info so we can connect to the MySQL database.
     CDBInfo dbInfo;
-    unsigned long jobPrimaryID;
-    RecvDBInfo(&dbInfo, &jobPrimaryID);
+    unsigned long job_id;
+    RecvDBInfo(&dbInfo, &job_id);
 
     if (dbInfo.m_HostName[0] != 0) {
       if (!VMPI_Stats_Init_Worker(dbInfo.m_HostName, dbInfo.m_DBName,
-                                  dbInfo.m_UserName, jobPrimaryID))
+                                  dbInfo.m_UserName, job_id))
         Error("VMPI_Stats_Init_Worker( %s, %s, %d ) failed.\n",
-              dbInfo.m_HostName, dbInfo.m_DBName, dbInfo.m_UserName,
-              jobPrimaryID);
+              dbInfo.m_HostName, dbInfo.m_DBName, dbInfo.m_UserName, job_id);
     }
   }
 }

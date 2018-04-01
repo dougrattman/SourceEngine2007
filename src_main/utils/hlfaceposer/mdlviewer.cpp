@@ -263,7 +263,7 @@ void LoadFileSystemDialogModule() {
   Assert(!g_pFSDialogModule);
 
   // Load the module with the file system open dialog.
-  const char *pDLLName = "FileSystemOpenDialog.dll";
+  const char *pDLLName = "filesystemopendialog.dll";
   g_pFSDialogModule = Sys_LoadModule(pDLLName);
   if (g_pFSDialogModule) {
     g_FSDialogFactory = Sys_GetFactory(g_pFSDialogModule);

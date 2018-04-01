@@ -6,7 +6,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tier0", "tier0\tier0.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vstdlib", "vstdlib\vstdlib.vcxproj", "{7477716C-91C5-47D1-9821-61C61C066E8C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vmpi", "utils\vmpi\vmpi.vcxproj", "{1315511F-4885-4916-94B3-A4348EE5413A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vmpi", "utils\vmpi\vmpi.vcxproj", "{1315511F-4885-4916-94B3-A4348EE5413A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shadercompile_launcher", "utils\shadercompile_launcher\shadercompile_launcher.vcxproj", "{3CC28EC2-9E4E-468A-A161-55890DFDD84E}"
 	ProjectSection(ProjectDependencies) = postProject

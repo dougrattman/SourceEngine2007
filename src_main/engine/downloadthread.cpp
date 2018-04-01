@@ -91,9 +91,10 @@ static const char *StateString(DWORD dwStatus) {
  * Callback function to update status information for a download (connecting to
  * server, etc)
  */
-void SOURCE_STDCALL DownloadStatusCallback(HINTERNET hOpenResource, DWORD dwContext,
-                                      DWORD dwStatus, LPVOID pStatusInfo,
-                                      DWORD dwStatusInfoLength) {
+void SOURCE_STDCALL DownloadStatusCallback(HINTERNET hOpenResource,
+                                           DWORD dwContext, DWORD dwStatus,
+                                           LPVOID pStatusInfo,
+                                           DWORD dwStatusInfoLength) {
   RequestContext *rc = (RequestContext *)pStatusInfo;
 
   switch (dwStatus) {
@@ -157,8 +158,8 @@ void ReadData(RequestContext &rc) {
       struct stat buf;
       int rt = stat(path, &buf);
       if (rt == -1) {
-        FILE *fp = fopen(path, "wb");
-        if (fp) {
+        FILE *fp;
+        if (!fopen_s(&fp, path, "wb")) {
           fwrite(rc.data, rc.nBytesTotal, 1, fp);
           fclose(fp);
         }

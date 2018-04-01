@@ -1,10 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IVRADDLL_H
 #define IVRADDLL_H
 
 #include "bspfile.h"
-#include "interface.h"
+#include "tier1/interface.h"
 
 class CBSPInfo {
  public:

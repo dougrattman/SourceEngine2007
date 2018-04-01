@@ -2296,7 +2296,7 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
     pFace->texture.rotate = atof(szValue);
   } else if (!_stricmp(szKey, "plane")) {
     int nRead =
-        sscanf(szValue, "(%f %f %f) (%f %f %f) (%f %f %f)",
+        sscanf_s(szValue, "(%f %f %f) (%f %f %f) (%f %f %f)",
                &pFace->plane.planepts[0][0], &pFace->plane.planepts[0][1],
                &pFace->plane.planepts[0][2], &pFace->plane.planepts[1][0],
                &pFace->plane.planepts[1][1], &pFace->plane.planepts[1][2],
@@ -2310,7 +2310,7 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
   } else if (!_stricmp(szKey, "material")) {
     strcpy(pLoadFace->szTexName, szValue);
   } else if (!_stricmp(szKey, "uaxis")) {
-    int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pFace->texture.UAxis[0],
+    int nRead = sscanf_s(szValue, "[%f %f %f %f] %f", &pFace->texture.UAxis[0],
                        &pFace->texture.UAxis[1], &pFace->texture.UAxis[2],
                        &pFace->texture.UAxis[3], &pFace->texture.scale[0]);
 
@@ -2319,7 +2319,7 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
       return (ChunkFile_Fail);
     }
   } else if (!_stricmp(szKey, "vaxis")) {
-    int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pFace->texture.VAxis[0],
+    int nRead = sscanf_s(szValue, "[%f %f %f %f] %f", &pFace->texture.VAxis[0],
                        &pFace->texture.VAxis[1], &pFace->texture.VAxis[2],
                        &pFace->texture.VAxis[3], &pFace->texture.scale[1]);
 

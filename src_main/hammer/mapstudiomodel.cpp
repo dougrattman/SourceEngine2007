@@ -308,7 +308,7 @@ void CMapStudioModel::OnParentKeyChanged(const char* szKey, const char* szValue)
 {
 	if (!_stricmp(szKey, "angles"))
 	{
-		sscanf(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
+		sscanf_s(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
 		PostUpdate(Notify_Changed);
 	}
 	else if (!_stricmp(szKey, "pitch"))

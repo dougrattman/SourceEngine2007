@@ -53,9 +53,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bitmap", "bitmap\bitmap.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "choreoobjects", "choreoobjects\choreoobjects.vcxproj", "{DF73ED14-5C01-4B79-916B-1C6AC39E90F9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Particles", "particles\Particles.vcxproj", "{10DD36FB-AA3F-4B0B-A5ED-F11C1D5B6BD0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "particles", "particles\particles.vcxproj", "{10DD36FB-AA3F-4B0B-A5ED-F11C1D5B6BD0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dmxloader", "dmxloader\dmxloader.vcxproj", "{5F5B0FBE-D3E6-4653-A23F-E8B6B8A5FC0E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dmxloader", "dmxloader\dmxloader.vcxproj", "{5F5B0FBE-D3E6-4653-A23F-E8B6B8A5FC0E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vguimatsurface", "vguimatsurface\vguimatsurface.vcxproj", "{34F3258C-13AF-4A09-8BF6-2E333ABB5516}"
 EndProject
@@ -109,17 +109,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "launcher_main", "launcher_m
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "valve_avi", "avi\valve_avi.vcxproj", "{07EFA44C-15F6-4CC9-87D6-5EF8C6F65356}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Datamodel", "datamodel\datamodel.vcxproj", "{935148AD-A283-4210-A6B2-DCC6A97E783A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "datamodel", "datamodel\datamodel.vcxproj", "{935148AD-A283-4210-A6B2-DCC6A97E783A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Actbusy", "tools\actbusy\actbusy.vcxproj", "{2406266D-7641-4D64-A34E-D192DC2CEF5A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dme_controls", "vgui2\dme_controls\dme_controls.vcxproj", "{E3F8062A-F88C-40F9-BEB0-279E2C993479}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dme_controls", "vgui2\dme_controls\dme_controls.vcxproj", "{E3F8062A-F88C-40F9-BEB0-279E2C993479}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Movieobjects", "movieobjects\movieobjects.vcxproj", "{135490B9-324A-4BB4-BFFA-7C306B919D74}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "movieobjects", "movieobjects\movieobjects.vcxproj", "{135490B9-324A-4BB4-BFFA-7C306B919D74}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Toolutils", "tools\toolutils\toolutils.vcxproj", "{38CDAA95-5D87-4A2D-AE9D-1D82647A0A9F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dmserializers", "dmserializers\dmserializers.vcxproj", "{E800D21E-DD8C-4CFA-9CCB-AE3C841DC975}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dmserializers", "dmserializers\dmserializers.vcxproj", "{E800D21E-DD8C-4CFA-9CCB-AE3C841DC975}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bspzip", "utils\bspzip\bspzip.vcxproj", "{21088AC2-BD24-4CED-A3DE-379BE28B7DE1}"
 EndProject
@@ -156,7 +156,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dumpmatsyshelp", "utils\dum
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Elementviewer", "utils\elementviewer\elementviewer.vcxproj", "{26DFF07B-BD1E-4C91-BF31-5315FF61B364}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fgdlib", "fgdlib\fgdlib.vcxproj", "{1EAC6F73-F82C-4324-8411-302D3D029E5F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fgdlib", "fgdlib\fgdlib.vcxproj", "{1EAC6F73-F82C-4324-8411-302D3D029E5F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fileSystemOpenDialog", "utils\fileSystemOpenDialog\fileSystemOpenDialog.vcxproj", "{42C8CA32-3A3E-4DFC-BCDE-B32B5FC41D01}"
 EndProject
@@ -172,7 +172,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Height2normal", "utils\heig
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Height2ssbump", "utils\height2ssbump\height2ssbump.vcxproj", "{E277CCAA-88C8-4B6C-AA14-02212BBB8D60}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Raytrace", "raytrace\raytrace.vcxproj", "{7F99BCE2-19C2-497B-B70D-F65BAA17294C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raytrace", "raytrace\raytrace.vcxproj", "{7F99BCE2-19C2-497B-B70D-F65BAA17294C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hlfaceposer", "utils\hlfaceposer\hlfaceposer.vcxproj", "{90D9EE81-57FD-4440-97EB-38960BC0FB7E}"
 EndProject
@@ -252,7 +252,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdkLauncher", "sdklauncher\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serverplugin_empty", "utils\serverplugin_sample\serverplugin_empty.vcxproj", "{22C8BD3E-C23B-4A0D-824E-46287F444B45}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vmpi", "utils\vmpi\vmpi.vcxproj", "{1315511F-4885-4916-94B3-A4348EE5413A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vmpi", "utils\vmpi\vmpi.vcxproj", "{1315511F-4885-4916-94B3-A4348EE5413A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shadercompile_launcher", "utils\shadercompile_launcher\shadercompile_launcher.vcxproj", "{3CC28EC2-9E4E-468A-A161-55890DFDD84E}"
 EndProject
@@ -296,7 +296,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unittest", "utils\unittest\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unusedcontent", "utils\unusedcontent\unusedcontent.vcxproj", "{E79BA120-0E4B-4E6C-94D3-52F54711110F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vbsp", "utils\vbsp\vbsp.vcxproj", "{07F7E23C-EF7E-4EE5-8EE2-9B13C8FDD492}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vbsp", "utils\vbsp\vbsp.vcxproj", "{07F7E23C-EF7E-4EE5-8EE2-9B13C8FDD492}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vbspinfo", "utils\vbspinfo\vbspinfo.vcxproj", "{0187DF1E-3B47-433F-8FE4-54D99A5ACEDF}"
 EndProject
@@ -328,7 +328,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vtfdiff", "utils\vtfdiff\vt
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vtfscrew", "utils\vtfscrew\vtfscrew.vcxproj", "{87447F2A-7555-46DA-9170-D200A4A1F9E3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vvis_launcher", "utils\vvis_launcher\vvis_launcher.vcxproj", "{A709ECE2-1FBE-4598-9420-88F4D88991B1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vvis_launcher", "utils\vvis_launcher\vvis_launcher.vcxproj", "{A709ECE2-1FBE-4598-9420-88F4D88991B1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "adminserver", "Tracker\AdminServer\adminserver.vcxproj", "{26AB60E3-AFCE-4D26-A8F3-76B178DEE942}"
 EndProject
@@ -356,7 +356,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VsVmfIO_Maya7", "sdktools\m
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VsVmfIO_Maya8", "sdktools\maya\vsVmfIO\vsvmfio_maya8.vcxproj", "{0B7DAC64-5971-4D3E-A3BC-2FB4FEA054AB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vrad_launcher", "utils\vrad_launcher\vrad_launcher.vcxproj", "{55392CA2-C58E-42F2-BFBA-8DB8C02D4352}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vrad_launcher", "utils\vrad_launcher\vrad_launcher.vcxproj", "{55392CA2-C58E-42F2-BFBA-8DB8C02D4352}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VstUtils_Maya7", "sdktools\maya\vstUtils\vstutils_maya7.vcxproj", "{04E7FEAE-3EA8-4CCE-9FF4-7252983597FC}"
 EndProject
@@ -444,9 +444,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Texturecompile_dll", "utils
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shadercompile_dll", "utils\shadercompile\shadercompile_dll.vcxproj", "{F4C643D0-8DD2-4F95-B217-610CDB6375DF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vrad_dll", "utils\vrad\vrad_dll.vcxproj", "{20687755-2C37-4315-B62B-A2D92EE2FFF9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vrad_dll", "utils\vrad\vrad_dll.vcxproj", "{20687755-2C37-4315-B62B-A2D92EE2FFF9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vvis_dll", "utils\vvis\vvis_dll.vcxproj", "{CA00401A-83CD-4480-B852-59FF3ABF933E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vvis_dll", "utils\vvis\vvis_dll.vcxproj", "{CA00401A-83CD-4480-B852-59FF3ABF933E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vtex_launcher", "utils\vtex\vtex_launcher.vcxproj", "{BE0C5142-855D-4D4F-9303-5A9B95D5241B}"
 EndProject

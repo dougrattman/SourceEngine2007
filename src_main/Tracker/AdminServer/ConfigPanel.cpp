@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "ConfigPanel.h"
 
@@ -62,11 +62,11 @@ CConfigPanel::CConfigPanel(vgui::Panel *parent, bool autorefresh, bool savercon,
   m_pGraphsRefreshTimeTextEntry->SetEditable(m_pGraphsButton->IsSelected());
 
   char refreshText[20];
-  _snprintf(refreshText, 20, "%i", refreshtime);
+  _snprintf_s(refreshText, 20, "%i", refreshtime);
 
   m_pRefreshTextEntry->SetText(refreshText);
 
-  _snprintf(refreshText, 20, "%i", graphsrefreshtime);
+  _snprintf_s(refreshText, 20, "%i", graphsrefreshtime);
 
   m_pGraphsRefreshTimeTextEntry->SetText(refreshText);
 
@@ -125,16 +125,16 @@ void CConfigPanel::SetControlText(const char *textEntryName, const char *text) {
 //
 //-----------------------------------------------------------------------------
 void CConfigPanel::OnCommand(const char *command) {
-  if (!stricmp(command, "okay")) {  // save away the new settings
+  if (!_stricmp(command, "okay")) {  // save away the new settings
     char timeText[20];
     int time, timeGraphs;
 
     m_pRefreshTextEntry->GetText(timeText, 20);
-    sscanf(timeText, "%i", &time);
+    sscanf_s(timeText, "%i", &time);
 
     memset(timeText, 0x0, sizeof(timeText));
     m_pGraphsRefreshTimeTextEntry->GetText(timeText, 20);
-    sscanf(timeText, "%i", &timeGraphs);
+    sscanf_s(timeText, "%i", &timeGraphs);
 
     if (time > 0 && time < 9999 && timeGraphs > 0 && timeGraphs < 9999) {
       OnClose();
@@ -143,7 +143,7 @@ void CConfigPanel::OnCommand(const char *command) {
       MessageBox *dlg = new MessageBox("#Config_Panel", "#Config_Time_Error");
       dlg->DoModal();
     }
-  } else if (!stricmp(command, "close")) {
+  } else if (!_stricmp(command, "close")) {
     Close();
   }
 }

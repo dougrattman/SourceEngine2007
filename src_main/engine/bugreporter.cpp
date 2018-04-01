@@ -860,15 +860,15 @@ void CBugUIPanel::GetDataFileBase(char const *suffix, char *buf, int bufsize) {
   VCRHook_LocalTime(&t);
 
   char who[128];
-  Q_strncpy(who, suffix, sizeof(who));
-  _strlwr(who);
+  strcpy_s(who, suffix);
+  _strlwr_s(who);
 
   if (m_pBugReporter && m_pBugReporter->IsPublicUI()) {
-    Q_snprintf(buf, bufsize, "%i_%02i_%02i", t.tm_year + 1900, t.tm_mon + 1,
-               t.tm_mday);
+    sprintf_s(buf, bufsize, "%i_%02i_%02i", t.tm_year + 1900, t.tm_mon + 1,
+              t.tm_mday);
   } else {
-    Q_snprintf(buf, bufsize, "%i_%02i_%02i_%s", t.tm_year + 1900, t.tm_mon + 1,
-               t.tm_mday, who);
+    sprintf_s(buf, bufsize, "%i_%02i_%02i_%s", t.tm_year + 1900, t.tm_mon + 1,
+              t.tm_mday, who);
   }
 }
 
@@ -1888,8 +1888,8 @@ bool CBugUIPanel::UploadFile(char const *local, char const *remote,
     g_pFileSystem->Close(hLocal);
     bResult = CopyFile(local, remote, false);
   } else {
-    FILE *r = fopen(va("%s", remote), "wb");
-    if (!r) {
+    FILE *r;
+    if (fopen_s(&r, va("%s", remote), "wb")) {
       Warning("CBugUIPanel::UploadFile:  Unable to open remote path '%s'\n",
               remote);
       g_pFileSystem->Close(hLocal);
@@ -1929,7 +1929,7 @@ bool CBugUIPanel::UploadFile(char const *local, char const *remote,
   if (!bResult) {
     Warning("Failed to upload %s, error %d\n", local, GetLastError());
   } else if (bDeleteLocal) {
-    unlink(local);
+    _unlink(local);
   }
   return bResult;
 }
@@ -2120,8 +2120,8 @@ void CBugUIPanel::DetermineSubmitterName() {
                REPOSITORY_VALIDATION_FILE);
     Q_FixSlashes(fn);
 
-    FILE *fp = fopen(fn, "rb");
-    if (fp) {
+    FILE *fp;
+    if (!fopen_s(&fp, fn, "rb")) {
       ConColorMsg(clr, "Bug Repository '%s'\n", GetRepositoryURL());
       fclose(fp);
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/utlbuffer.h"
 #include "vmpi_filesystem_internal.h"
@@ -105,7 +105,7 @@ void CVMPIFile_Memory::Flush() {}
 
 int CVMPIFile_Memory::Read(void *pOutput, int size) {
   Assert(m_iCurPos >= 0);
-  int nToRead = std::min(m_DataLen - m_iCurPos, size);
+  int nToRead = std::min(m_DataLen - m_iCurPos, (long)size);
 
   if (m_chMode != 't') {
     memcpy(pOutput, &m_pData[m_iCurPos], nToRead);

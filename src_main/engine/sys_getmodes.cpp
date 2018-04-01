@@ -293,7 +293,7 @@ class CVideoMode_Common : public IVideoMode {
     m_pLoadingTexture = NULL;
   }
   virtual bool CreateGameWindow(int nWidth, int nHeight, bool bWindowed) {
-    COM_TimestampedLog("CVideoMode_Common::Init  CreateGameWindow");
+    Plat_TimestampedLog("Engine::CVideoMode_Common: CreateGameWindow");
 
     // This allows you to have a window of any size.
     // Requires you to set both width and height for the window and
@@ -535,7 +535,7 @@ class CVideoMode_Common : public IVideoMode {
  private:
   // Purpose: Loads the startup graphic
   void SetupStartupGraphic() {
-    COM_TimestampedLog("CVideoMode_Common::Init  SetupStartupGraphic");
+    Plat_TimestampedLog("Engine::CVideoMode_Common: SetupStartupGraphic");
 
     char szBackgroundName[SOURCE_MAX_PATH];
     CL_GetBackgroundLevelName(szBackgroundName, sizeof(szBackgroundName),
@@ -876,7 +876,8 @@ void CVideoMode_Common::BlitGraphicToHDC(HDC hdc, uint8_t *rgba, int imageWidth,
 
   double elapsed = Plat_FloatTime() - st;
 
-  COM_TimestampedLog("BlitGraphicToHDC: new ver took %.4f", elapsed);
+  Plat_TimestampedLog("Engine::CVideoMode_Common: BlitGraphicToHDC (%.4f s).",
+                      elapsed);
 }
 
 // Purpose: This is called in response to a WM_MOVE message
@@ -1394,7 +1395,7 @@ void VideoMode_AdjustForModeChange();
 // The version of the VideoMode class for the material system
 class CVideoMode_MaterialSystem : public CVideoMode_Common {
  public:
-  typedef CVideoMode_Common BaseClass;
+  using BaseClass = CVideoMode_Common;
 
   CVideoMode_MaterialSystem() {}
 
@@ -1625,7 +1626,7 @@ class CVideoMode_MaterialSystem : public CVideoMode_Common {
   }
 };
 
-static void VideoMode_AdjustForModeChange() {
+void VideoMode_AdjustForModeChange() {
   ((CVideoMode_MaterialSystem *)videomode)->AdjustForModeChange();
 }
 

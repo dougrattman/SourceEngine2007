@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <conio.h>
 #include "base/include/windows/windows_light.h"
@@ -11,6 +11,7 @@
 #include "pacifier.h"
 #include "physdll.h"
 #include "radial.h"
+#include "tier0/include/fasttimer.h"
 #include "tier1/strtools.h"
 #include "utlbuffer.h"
 #include "utllinkedlist.h"

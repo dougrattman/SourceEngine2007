@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "interval.h"
 
@@ -6,7 +6,6 @@
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -23,10 +22,11 @@ interval_t ReadInterval(const char *pString) {
   char tempString[128];
   Q_strncpy(tempString, pString, sizeof(tempString));
 
-  char *token = strtok(tempString, ",");
+  char *context;
+  char *token = strtok_s(tempString, ",", &context);
   if (token) {
     tmp.start = atof(token);
-    token = strtok(NULL, ",");
+    token = strtok_s(NULL, ",", &context);
     if (token) {
       tmp.range = atof(token) - tmp.start;
     }

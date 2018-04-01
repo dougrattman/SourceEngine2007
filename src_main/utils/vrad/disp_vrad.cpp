@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "disp_vrad.h"
 
@@ -37,7 +37,9 @@ int FindNeighborCornerVert(CCoreDispInfo *pDisp, const Vector &vTest) {
     return -1;
 }
 
-int GetAllNeighbors(const CCoreDispInfo *pDisp, int iNeighbors[512]) {
+template <size_t neighbors_size>
+int GetAllNeighbors(const CCoreDispInfo *pDisp,
+                    int (&iNeighbors)[neighbors_size]) {
   int nNeighbors = 0;
 
   // Check corner neighbors.

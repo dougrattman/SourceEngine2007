@@ -595,11 +595,11 @@ void CMapSprite::OnParentKeyChanged(const char* szKey, const char* szValue)
 	//
 	else if (!_stricmp(szKey, "_light"))
 	{
-		sscanf(szValue, "%d %d %d", &m_RenderColor.r, &m_RenderColor.g, &m_RenderColor.b);
+		sscanf_s(szValue, "%d %d %d", &m_RenderColor.r, &m_RenderColor.g, &m_RenderColor.b);
 	}
 	else if (!_stricmp(szKey, "angles"))
 	{
-		sscanf(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
+		sscanf_s(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
 		PostUpdate(Notify_Changed);
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vrad.h"
 #include "byteswap.h"
@@ -65,8 +65,8 @@ float dlight_threshold = 0.1;  // was DIRECT_LIGHT constant
 
 char source[SOURCE_MAX_PATH] = "";
 char platformPath[SOURCE_MAX_PATH] = "";
-
-char level_name[SOURCE_MAX_PATH] = "";  // map filename, without extension or path info
+// map filename, without extension or path info
+char level_name[SOURCE_MAX_PATH] = "";
 
 char global_lights[SOURCE_MAX_PATH] = "";
 char designer_lights[SOURCE_MAX_PATH] = "";
@@ -206,13 +206,15 @@ void ReadLightFile(char *filename) {
 
     scan += strspn(scan, " \t");
     char NoShadName[1024];
-    if (sscanf(scan, "noshadow %s", NoShadName) == 1) {
+    if (sscanf_s(scan, "noshadow %s", NoShadName,
+                 SOURCE_ARRAYSIZE(NoShadName)) == 1) {
       char *dot = strchr(NoShadName, '.');
       if (dot)  // if they specify .vmt, kill it
         *dot = 0;
       // printf("add %s as a non shadow casting material\n",NoShadName);
       g_NonShadowCastingMaterialStrings.AddToTail(strdup(NoShadName));
-    } else if (sscanf(scan, "forcetextureshadow %s", NoShadName) == 1) {
+    } else if (sscanf_s(scan, "forcetextureshadow %s", NoShadName,
+                        SOURCE_ARRAYSIZE(NoShadName)) == 1) {
       // printf("add %s as a non shadow casting material\n",NoShadName);
       ForceTextureShadowsOnModel(NoShadName);
     } else {
@@ -221,7 +223,8 @@ void ReadLightFile(char *filename) {
       if (num_texlights == MAX_TEXLIGHTS)
         Error("Too many texlights, max = %d", MAX_TEXLIGHTS);
 
-      int argCnt = sscanf(scan, "%s ", szTexlight);
+      int argCnt =
+          sscanf_s(scan, "%s ", szTexlight, SOURCE_ARRAYSIZE(szTexlight));
 
       if (argCnt != 1) {
         if (strlen(scan) > 4)
@@ -568,8 +571,8 @@ void MakePatchForFace(int fn, winding_t *w) {
     patch->chop = maxchop;
   }
 
-  // TODO(d.rattman): If we wanted to add a dependency from vrad to the material system,
-  // we could do this. It would add a bunch of file accesses, though:
+  // TODO(d.rattman): If we wanted to add a dependency from vrad to the material
+  // system, we could do this. It would add a bunch of file accesses, though:
 
   /*
   // Check for a material var which would override the patch chop
@@ -582,7 +585,7 @@ void MakePatchForFace(int fn, winding_t *w) {
           if ( pChopValue )
           {
                   float flChopValue;
-                  if ( sscanf( pChopValue, "%f", &flChopValue ) > 0 )
+                  if ( sscanf_s( pChopValue, "%f", &flChopValue ) > 0 )
                   {
                           patch->chop = flChopValue;
                   }
@@ -806,8 +809,8 @@ void SubdividePatch(int ndxPatch) {
   int ndxChild1Patch = CreateChildPatch(ndxPatch, o1, area1, center1);
   int ndxChild2Patch = CreateChildPatch(ndxPatch, o2, area2, center2);
 
-  // TODO(d.rattman): This could go into CreateChildPatch if child1, child2 were stored in
-  // the patch as child[0], child[1]
+  // TODO(d.rattman): This could go into CreateChildPatch if child1, child2 were
+  // stored in the patch as child[0], child[1]
   patch = &g_Patches.Element(ndxPatch);
   patch->child1 = ndxChild1Patch;
   patch->child2 = ndxChild2Patch;
@@ -1598,8 +1601,8 @@ void RadWorld_Start() {
         float scale = VectorNormalize(tmp);
         // only rescale them if the current scale is "tighter" than the desired
         // scale
-        // TODO(d.rattman): since this writes out to the BSP file every run, once it's set
-        // high it can't be reset to a lower value.
+        // TODO(d.rattman): since this writes out to the BSP file every run,
+        // once it's set high it can't be reset to a lower value.
         if (fabs(scale) > luxeldensity) {
           if (scale < 0) {
             scale = -luxeldensity;
@@ -1723,9 +1726,9 @@ void MakeAllScales(void) {
   // release visibility matrix
   FreeVisMatrix();
 
-  Msg("transfers %d, max %d\n", total_transfer, max_transfer);
+  Msg("Transfers %d, max %d.\n", total_transfer, max_transfer);
 
-  qprintf("transfer lists: %5.1f megs\n",
+  qprintf("Transfer lists: %5.1f MB.\n",
           (float)total_transfer * sizeof(transfer_t) / (1024 * 1024));
 }
 
@@ -2461,13 +2464,8 @@ void PrintUsage(int argc, char **argv) {
 }
 
 int RunVRAD(int argc, char **argv) {
-#if defined(_MSC_VER) && (_MSC_VER >= 1310)
   Msg("Valve Software - vrad.exe SSE (" __DATE__ ")\n");
-#else
-  Msg("Valve Software - vrad.exe (" __DATE__ ")\n");
-#endif
-
-  Msg("\n      Valve Radiosity Simulator     \n");
+  Msg("vrad for Valve Radiosity Simulator\n");
 
   verbose = true;  // Originally FALSE
 

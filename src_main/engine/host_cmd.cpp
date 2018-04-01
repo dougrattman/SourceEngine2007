@@ -308,7 +308,7 @@ static void Host_Map_Helper(const CCommand &args, bool is_edit_mode,
   char map_path[SOURCE_MAX_PATH];
   GetPlatformMapPath(args[1], map_path, SOURCE_ARRAYSIZE(map_path));
 
-  COM_TimestampedLog("*** Map Load: %s", map_path);
+  Plat_TimestampedLog("Engine::Host_Map_Helper: Map %s load.", map_path);
 
   // If I was in edit mode reload config file
   // to overwrite WC edit key bindings
@@ -746,14 +746,14 @@ CON_COMMAND(kickid, "Kick a player by userid or uniqueid, with a message.") {
     kick_message = args.ArgS();
 
     for (int j = 1; j <= args_start_count; j++) {
-      length += Q_strlen(args[j]) + 1;  // +1 for the space between args
+      length += strlen(args[j]) + 1;  // +1 for the space between args
     }
 
     // SteamIDs don't have spaces between the args values
     if (is_steam_id) length -= 5;
 
     // safety check
-    if (length > Q_strlen(kick_message)) {
+    if (length > strlen(kick_message)) {
       kick_message = nullptr;
     } else {
       kick_message += length;
@@ -1158,11 +1158,8 @@ ConCommand quit("quit", Host_Quit_f, "Exit the engine.");
 static ConCommand cmd_exit("exit", Host_Quit_f, "Exit the engine.");
 
 #ifndef SWDS
-#ifdef VOICE_OVER_IP
 static ConCommand startvoicerecord("+voicerecord", Host_VoiceRecordStart_f);
 static ConCommand endvoicerecord("-voicerecord", Host_VoiceRecordStop_f);
-#endif  // VOICE_OVER_IP
-
 #endif
 
 #ifdef _DEBUG

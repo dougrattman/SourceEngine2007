@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "collisionutils.h"
 #include "vbsp.h"
@@ -281,8 +281,8 @@ void WritePortalFile(tree_t *tree) {
 
   qprintf("--- WritePortalFile ---\n");
 
-  sprintf(filename, "%s.prt", the_source);
-  Msg("writing %s...", filename);
+  sprintf_s(filename, "%s.prt", the_source);
+  Msg("Writing %s...\n", filename);
 
   headnode = tree->headnode;
 
@@ -302,19 +302,22 @@ void WritePortalFile(tree_t *tree) {
   portalList.SetCount(num_visclusters);
   num_visportals = BuildPortalList(portalList, leaves);
   // write the file
-  FILE *pf = fopen(filename, "w");
-  if (!pf) Error("Error opening %s", filename);
+  FILE *fp;
+  if (fopen_s(&fp, filename, "w")) {
+    Error("Error opening %s", filename);
+    return;
+  }
 
-  fprintf(pf, "%s\n", PORTALFILE);
-  fprintf(pf, "%i\n", num_visclusters);
-  fprintf(pf, "%i\n", num_visportals);
+  fprintf(fp, "%s\n", PORTALFILE);
+  fprintf(fp, "%i\n", num_visclusters);
+  fprintf(fp, "%i\n", num_visportals);
 
   qprintf("%5i visclusters\n", num_visclusters);
   qprintf("%5i visportals\n", num_visportals);
 
-  WritePortalFile(pf, portalList);
+  WritePortalFile(fp, portalList);
 
-  fclose(pf);
+  fclose(fp);
 
   // we need to store the clusters out now because ordering
   // issues made us do this after writebsp...

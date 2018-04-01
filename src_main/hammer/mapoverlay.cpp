@@ -1450,43 +1450,43 @@ void CMapOverlay::OnParentKeyChanged( const char* szKey, const char* szValue )
 	float flDummy;
 	if ( !_stricmp( szKey, "uv0" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[0].x, &m_Handles.m_vecBasisCoords[0].y, &flDummy ); 
+		sscanf_s( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[0].x, &m_Handles.m_vecBasisCoords[0].y, &flDummy ); 
 		m_Basis.m_nAxesFlip[0] = ( int )flDummy;
 	}
 	if ( !_stricmp( szKey, "uv1" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[1].x, &m_Handles.m_vecBasisCoords[1].y, &flDummy ); 
+		sscanf_s( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[1].x, &m_Handles.m_vecBasisCoords[1].y, &flDummy ); 
 		m_Basis.m_nAxesFlip[1] = ( int )flDummy; 
 	}
 	if ( !_stricmp( szKey, "uv2" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[2].x, &m_Handles.m_vecBasisCoords[2].y, &flDummy ); 
+		sscanf_s( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[2].x, &m_Handles.m_vecBasisCoords[2].y, &flDummy ); 
 		m_Basis.m_nAxesFlip[2] = ( int )flDummy; 
 	}
 	if ( !_stricmp( szKey, "uv3" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[3].x, &m_Handles.m_vecBasisCoords[3].y, &flDummy ); 
+		sscanf_s( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[3].x, &m_Handles.m_vecBasisCoords[3].y, &flDummy ); 
 	}
 
 	// Read basis data.
 	if ( !_stricmp( szKey, "BasisOrigin" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Basis.m_vecOrigin.x, &m_Basis.m_vecOrigin.y, &m_Basis.m_vecOrigin.z ); 
+		sscanf_s( szValue, "%f %f %f", &m_Basis.m_vecOrigin.x, &m_Basis.m_vecOrigin.y, &m_Basis.m_vecOrigin.z ); 
 	}
 
 	if ( !_stricmp( szKey, "BasisU" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_U].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_U].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_U].z ); 
+		sscanf_s( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_U].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_U].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_U].z ); 
 	}
 
 	if ( !_stricmp( szKey, "BasisV" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_V].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_V].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_V].z ); 
+		sscanf_s( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_V].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_V].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_V].z ); 
 	}
 
 	if ( !_stricmp( szKey, "BasisNormal" ) )     
 	{ 
-		sscanf( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].z ); 
+		sscanf_s( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].z ); 
 	}
 
 	// Read material data.

@@ -604,7 +604,7 @@ void CMaster::InitConnection(void) {
 #ifdef _WIN32
     m_hSteamDLL = Sys_LoadModule("steam.dll");
 #elif OS_POSIX
-    m_hSteamDLL = Sys_LoadModule("libsteamvalidateuseridtickets_i486.so");
+    m_hSteamDLL = Sys_LoadModule("libsteamvalidateuseridtickets.so.1");
 #else
 #error "Define the steam.dll I should load!"
 #endif

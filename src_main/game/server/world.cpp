@@ -385,11 +385,11 @@ SendPropFloat(SENDINFO(m_flWaveHeight), 8, SPROP_ROUNDUP, 0.0f, 8.0f),
     }
   } else if (FStrEq(szKeyName, "world_mins")) {
     Vector vec;
-    sscanf(szValue, "%f %f %f", &vec.x, &vec.y, &vec.z);
+    sscanf_s(szValue, "%f %f %f", &vec.x, &vec.y, &vec.z);
     m_WorldMins = vec;
   } else if (FStrEq(szKeyName, "world_maxs")) {
     Vector vec;
-    sscanf(szValue, "%f %f %f", &vec.x, &vec.y, &vec.z);
+    sscanf_s(szValue, "%f %f %f", &vec.x, &vec.y, &vec.z);
     m_WorldMaxs = vec;
   } else
     return BaseClass::KeyValue(szKeyName, szValue);

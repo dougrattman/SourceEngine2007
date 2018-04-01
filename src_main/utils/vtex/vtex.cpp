@@ -100,7 +100,7 @@ static const char *g_CubemapFacingNames[7] = {"rt", "lf", "bk", "ft",
 static void Pause(void) {
   if (!g_NoPause) {
     printf("Hit a key to continue\n");
-    getch();
+    _getch();
   }
 }
 
@@ -260,7 +260,7 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
   int iValue = atoi(
       pKeyValue);  // To properly have "clamps 0" and not enable the clamping
 
-  if (!stricmp(pKeyName, "skybox")) {
+  if (!_stricmp(pKeyName, "skybox")) {
     // We're going to treat it like a cubemap until the very end, so it'll load
     // the other skybox faces and match their edges with the texture compression
     // and mipmapping.
@@ -269,11 +269,11 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
     if (!g_Quiet && iValue)
       Msg("'skybox' detected. Treating skybox like a cubemap for edge-matching "
           "purposes.\n");
-  } else if (!stricmp(pKeyName, "startframe")) {
+  } else if (!_stricmp(pKeyName, "startframe")) {
     m_nStartFrame = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "endframe")) {
+  } else if (!_stricmp(pKeyName, "endframe")) {
     m_nEndFrame = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "volumetexture")) {
+  } else if (!_stricmp(pKeyName, "volumetexture")) {
     m_nVolumeTextureDepth = atoi(pKeyValue);
 
     // TODO(d.rattman): Volume textures don't currently support DXT compression
@@ -281,122 +281,122 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
 
     // TODO(d.rattman): Volume textures don't currently support NICE filtering
     m_vtfProcOptions.flags0 &= ~VtfProcessingOptions::OPT_FILTER_NICE;
-  } else if (!stricmp(pKeyName, "spheremap_x")) {
+  } else if (!_stricmp(pKeyName, "spheremap_x")) {
     if (iValue) m_LookDir = LOOK_DOWN_X;
-  } else if (!stricmp(pKeyName, "spheremap_negx")) {
+  } else if (!_stricmp(pKeyName, "spheremap_negx")) {
     if (iValue) m_LookDir = LOOK_DOWN_NEGX;
-  } else if (!stricmp(pKeyName, "spheremap_y")) {
+  } else if (!_stricmp(pKeyName, "spheremap_y")) {
     if (iValue) m_LookDir = LOOK_DOWN_Y;
-  } else if (!stricmp(pKeyName, "spheremap_negy")) {
+  } else if (!_stricmp(pKeyName, "spheremap_negy")) {
     if (iValue) m_LookDir = LOOK_DOWN_NEGY;
-  } else if (!stricmp(pKeyName, "spheremap_z")) {
+  } else if (!_stricmp(pKeyName, "spheremap_z")) {
     if (iValue) m_LookDir = LOOK_DOWN_Z;
-  } else if (!stricmp(pKeyName, "spheremap_negz")) {
+  } else if (!_stricmp(pKeyName, "spheremap_negz")) {
     if (iValue) m_LookDir = LOOK_DOWN_NEGZ;
-  } else if (!stricmp(pKeyName, "bumpscale")) {
+  } else if (!_stricmp(pKeyName, "bumpscale")) {
     m_flBumpScale = atof(pKeyValue);
-  } else if (!stricmp(pKeyName, "pointsample")) {
+  } else if (!_stricmp(pKeyName, "pointsample")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_POINTSAMPLE, iValue);
-  } else if (!stricmp(pKeyName, "trilinear")) {
+  } else if (!_stricmp(pKeyName, "trilinear")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_TRILINEAR, iValue);
-  } else if (!stricmp(pKeyName, "clamps")) {
+  } else if (!_stricmp(pKeyName, "clamps")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_CLAMPS, iValue);
-  } else if (!stricmp(pKeyName, "clampt")) {
+  } else if (!_stricmp(pKeyName, "clampt")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_CLAMPT, iValue);
-  } else if (!stricmp(pKeyName, "clampu")) {
+  } else if (!_stricmp(pKeyName, "clampu")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_CLAMPU, iValue);
-  } else if (!stricmp(pKeyName, "border")) {
+  } else if (!_stricmp(pKeyName, "border")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_BORDER, iValue);
     // Gets applied to s, t and u   We currently assume black border color
-  } else if (!stricmp(pKeyName, "anisotropic")) {
+  } else if (!_stricmp(pKeyName, "anisotropic")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_ANISOTROPIC, iValue);
-  } else if (!stricmp(pKeyName, "dxt5")) {
+  } else if (!_stricmp(pKeyName, "dxt5")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_HINT_DXT5, iValue);
-  } else if (!stricmp(pKeyName, "nocompress")) {
+  } else if (!_stricmp(pKeyName, "nocompress")) {
     SetFlagValue(m_vtfProcOptions.flags0, VtfProcessingOptions::OPT_NOCOMPRESS,
                  iValue);
-  } else if (!stricmp(pKeyName, "normal")) {
+  } else if (!_stricmp(pKeyName, "normal")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_NORMAL, iValue);
-  } else if (!stricmp(pKeyName, "ssbump")) {
+  } else if (!_stricmp(pKeyName, "ssbump")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_SSBUMP, iValue);
-  } else if (!stricmp(pKeyName, "nomip")) {
+  } else if (!_stricmp(pKeyName, "nomip")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_NOMIP, iValue);
-  } else if (!stricmp(pKeyName, "allmips")) {
+  } else if (!_stricmp(pKeyName, "allmips")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_ALL_MIPS, iValue);
-  } else if (!stricmp(pKeyName, "nonice")) {
+  } else if (!_stricmp(pKeyName, "nonice")) {
     SetFlagValue(m_vtfProcOptions.flags0, VtfProcessingOptions::OPT_FILTER_NICE,
                  !iValue);
-  } else if (!stricmp(pKeyName, "nolod")) {
+  } else if (!_stricmp(pKeyName, "nolod")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_NOLOD, iValue);
-  } else if (!stricmp(pKeyName, "procedural")) {
+  } else if (!_stricmp(pKeyName, "procedural")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_PROCEDURAL, iValue);
-  } else if (!stricmp(pKeyName, "alphatest")) {
+  } else if (!_stricmp(pKeyName, "alphatest")) {
     SetFlagValue(m_vtfProcOptions.flags0,
                  VtfProcessingOptions::OPT_MIP_ALPHATEST, iValue);
-  } else if (!stricmp(pKeyName, "alphatest_threshhold")) {
+  } else if (!_stricmp(pKeyName, "alphatest_threshhold")) {
     m_flAlphaThreshhold = atof(pKeyValue);
-  } else if (!stricmp(pKeyName, "alphatest_hifreq_threshhold")) {
+  } else if (!_stricmp(pKeyName, "alphatest_hifreq_threshhold")) {
     m_flAlphaHiFreqThreshhold = atof(pKeyValue);
-  } else if (!stricmp(pKeyName, "rendertarget")) {
+  } else if (!_stricmp(pKeyName, "rendertarget")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_RENDERTARGET, iValue);
-  } else if (!stricmp(pKeyName, "numchannels")) {
+  } else if (!_stricmp(pKeyName, "numchannels")) {
     m_numChannelsMax = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "nodebug")) {
+  } else if (!_stricmp(pKeyName, "nodebug")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_NODEBUGOVERRIDE, iValue);
-  } else if (!stricmp(pKeyName, "singlecopy")) {
+  } else if (!_stricmp(pKeyName, "singlecopy")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_SINGLECOPY, iValue);
-  } else if (!stricmp(pKeyName, "oneovermiplevelinalpha")) {
+  } else if (!_stricmp(pKeyName, "oneovermiplevelinalpha")) {
     SetFlagValue(m_vtfProcOptions.flags0,
                  VtfProcessingOptions::OPT_SET_ALPHA_ONEOVERMIP, iValue);
-  } else if (!stricmp(pKeyName, "premultcolorbyoneovermiplevel")) {
+  } else if (!_stricmp(pKeyName, "premultcolorbyoneovermiplevel")) {
     SetFlagValue(m_vtfProcOptions.flags0,
                  VtfProcessingOptions::OPT_PREMULT_COLOR_ONEOVERMIP, iValue);
-  } else if (!stricmp(pKeyName, "normaltodudv")) {
+  } else if (!_stricmp(pKeyName, "normaltodudv")) {
     m_bNormalToDuDv = iValue ? true : false;
     SetFlagValue(m_vtfProcOptions.flags0, VtfProcessingOptions::OPT_NORMAL_DUDV,
                  iValue);
-  } else if (!stricmp(pKeyName, "stripalphachannel")) {
+  } else if (!_stricmp(pKeyName, "stripalphachannel")) {
     m_bStripAlphaChannel = iValue ? true : false;
-  } else if (!stricmp(pKeyName, "stripcolorchannel")) {
+  } else if (!_stricmp(pKeyName, "stripcolorchannel")) {
     m_bStripColorChannel = iValue ? true : false;
-  } else if (!stricmp(pKeyName, "normalalphatodudvluminance")) {
+  } else if (!_stricmp(pKeyName, "normalalphatodudvluminance")) {
     m_bAlphaToLuminance = iValue ? true : false;
-  } else if (!stricmp(pKeyName, "dudv")) {
+  } else if (!_stricmp(pKeyName, "dudv")) {
     m_bDuDv = iValue ? true : false;
-  } else if (!stricmp(pKeyName, "reduce")) {
+  } else if (!_stricmp(pKeyName, "reduce")) {
     m_nReduceX = atoi(pKeyValue);
     m_nReduceY = m_nReduceX;
-  } else if (!stricmp(pKeyName, "reducex")) {
+  } else if (!_stricmp(pKeyName, "reducex")) {
     m_nReduceX = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "reducey")) {
+  } else if (!_stricmp(pKeyName, "reducey")) {
     m_nReduceY = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "maxwidth")) {
+  } else if (!_stricmp(pKeyName, "maxwidth")) {
     m_nMaxDimensionX = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "maxwidth_360")) {
+  } else if (!_stricmp(pKeyName, "maxwidth_360")) {
     m_nMaxDimensionX_360 = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "maxheight")) {
+  } else if (!_stricmp(pKeyName, "maxheight")) {
     m_nMaxDimensionY = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "maxheight_360")) {
+  } else if (!_stricmp(pKeyName, "maxheight_360")) {
     m_nMaxDimensionY_360 = atoi(pKeyValue);
-  } else if (!stricmp(pKeyName, "alphatodistance")) {
+  } else if (!_stricmp(pKeyName, "alphatodistance")) {
     m_bAlphaToDistance = iValue ? true : false;
-  } else if (!stricmp(pKeyName, "distancespread")) {
+  } else if (!_stricmp(pKeyName, "distancespread")) {
     m_flDistanceSpread = atof(pKeyValue);
-  } else if (!stricmp(pKeyName, "pfmscale")) {
+  } else if (!_stricmp(pKeyName, "pfmscale")) {
     m_pfmscale = atof(pKeyValue);
     printf("******pfm scale=%f\n", m_pfmscale);
-  } else if (!stricmp(pKeyName, "pfm")) {
+  } else if (!_stricmp(pKeyName, "pfm")) {
     if (iValue) g_eMode = eModePFM;
-  } else if (!stricmp(pKeyName, "specvar")) {
+  } else if (!_stricmp(pKeyName, "specvar")) {
     int iDecayChannel = -1;
 
-    if (!stricmp(pKeyValue, "red") || !stricmp(pKeyValue, "r"))
+    if (!_stricmp(pKeyValue, "red") || !_stricmp(pKeyValue, "r"))
       iDecayChannel = 0;
-    if (!stricmp(pKeyValue, "green") || !stricmp(pKeyValue, "g"))
+    if (!_stricmp(pKeyValue, "green") || !_stricmp(pKeyValue, "g"))
       iDecayChannel = 1;
-    if (!stricmp(pKeyValue, "blue") || !stricmp(pKeyValue, "b"))
+    if (!_stricmp(pKeyValue, "blue") || !_stricmp(pKeyValue, "b"))
       iDecayChannel = 2;
-    if (!stricmp(pKeyValue, "alpha") || !stricmp(pKeyValue, "a"))
+    if (!_stricmp(pKeyValue, "alpha") || !_stricmp(pKeyValue, "a"))
       iDecayChannel = 3;
 
     if (iDecayChannel >= 0 && iDecayChannel < 4) {
@@ -408,11 +408,11 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
       m_vtfProcOptions.fDecayExponentBase[iDecayChannel] = 0.75;
       SetFlagValue(m_nFlags, TEXTUREFLAGS_ALL_MIPS, 1);
     }
-  } else if (!stricmp(pKeyName, "mipblend")) {
+  } else if (!_stricmp(pKeyName, "mipblend")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_ALL_MIPS, 1);
 
     // Possible values
-    if (!stricmp(
+    if (!_stricmp(
             pKeyValue,
             "detail"))  // Skip 2 mips and fade to gray -> (128, 128, 128, -)
     {
@@ -425,7 +425,7 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
       }
     }
     /*
-    else if ( !stricmp( pKeyValue, "additive" ) ) // Skip 2 mips and fade to
+    else if ( !_stricmp( pKeyValue, "additive" ) ) // Skip 2 mips and fade to
     black -> (0, 0, 0, -)
     {
             for( int ch = 0; ch < 3; ++ ch )
@@ -436,7 +436,7 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
                     m_vtfProcOptions.clrDecayGoal[ch] = 0;
             }
     }
-    else if ( !stricmp( pKeyValue, "alphablended" ) ) // Skip 2 mips and fade
+    else if ( !_stricmp( pKeyValue, "alphablended" ) ) // Skip 2 mips and fade
     out alpha to 0
     {
             for( int ch = 3; ch < 4; ++ ch )
@@ -500,7 +500,7 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
         }
       }
     }
-  } else if (!stricmp(pKeyName, "srgb")) {
+  } else if (!_stricmp(pKeyName, "srgb")) {
     SetFlagValue(m_nFlags, TEXTUREFLAGS_SRGB, iValue);
   } else {
     VTexError("unrecognized option in text file - %s\n", pKeyName);
@@ -658,7 +658,8 @@ static void CreateLowResImage(IVTFTexture *pVTFTexture) {
 //-----------------------------------------------------------------------------
 // Computes the source file name
 //-----------------------------------------------------------------------------
-void MakeSrcFileName(char *pSrcName, unsigned int flags,
+template <size_t scr_name_size>
+void MakeSrcFileName(char (&pSrcName)[scr_name_size], unsigned int flags,
                      const char *pFullNameWithoutExtension, int frameID,
                      int faceID, int z, bool isCubeMap, int startFrame,
                      int endFrame, bool bNormalToDUDV) {
@@ -680,30 +681,30 @@ void MakeSrcFileName(char *pSrcName, unsigned int flags,
   if (bAnimated) {
     if (isCubeMap) {
       Assert(z == -1);
-      sprintf(pSrcName, "%s%s%03d%s", pFullNameWithoutExtension,
-              g_CubemapFacingNames[faceID], frameID + startFrame,
-              GetSourceExtension());
+      sprintf_s(pSrcName, "%s%s%03d%s", pFullNameWithoutExtension,
+                g_CubemapFacingNames[faceID], frameID + startFrame,
+                GetSourceExtension());
     } else {
       if (z == -1) {
-        sprintf(pSrcName, "%s%03d%s", pFullNameWithoutExtension,
-                frameID + startFrame, GetSourceExtension());
+        sprintf_s(pSrcName, "%s%03d%s", pFullNameWithoutExtension,
+                  frameID + startFrame, GetSourceExtension());
       } else {
-        sprintf(pSrcName, "%s%03d_z%03d%s", pFullNameWithoutExtension, z,
-                frameID + startFrame, GetSourceExtension());
+        sprintf_s(pSrcName, "%s%03d_z%03d%s", pFullNameWithoutExtension, z,
+                  frameID + startFrame, GetSourceExtension());
       }
     }
   } else {
     if (isCubeMap) {
       Assert(z == -1);
-      sprintf(pSrcName, "%s%s%s", pFullNameWithoutExtension,
-              g_CubemapFacingNames[faceID], GetSourceExtension());
+      sprintf_s(pSrcName, "%s%s%s", pFullNameWithoutExtension,
+                g_CubemapFacingNames[faceID], GetSourceExtension());
     } else {
       if (z == -1) {
-        sprintf(pSrcName, "%s%s", pFullNameWithoutExtension,
-                GetSourceExtension());
+        sprintf_s(pSrcName, "%s%s", pFullNameWithoutExtension,
+                  GetSourceExtension());
       } else {
-        sprintf(pSrcName, "%s_z%03d%s", pFullNameWithoutExtension, z,
-                GetSourceExtension());
+        sprintf_s(pSrcName, "%s_z%03d%s", pFullNameWithoutExtension, z,
+                  GetSourceExtension());
       }
     }
   }
@@ -720,8 +721,8 @@ static void ComputeBufferHash(void const *pvBuffer, size_t numBytes,
 //-----------------------------------------------------------------------------
 static bool LoadFile(const char *pFileName, CUtlBuffer &buf, bool bFailOnError,
                      CRC32_t *puiHash) {
-  FILE *fp = fopen(pFileName, "rb");
-  if (!fp) {
+  FILE *fp;
+  if (fopen_s(&fp, pFileName, "rb")) {
     if (bFailOnError) VTexError("Can't open: \"%s\"\n", pFileName);
 
     return false;
@@ -959,7 +960,7 @@ static bool LoadFaceFromPSD(IVTFTexture *pTexture, CUtlBuffer &psdBuffer, int z,
                 bmPsdData.m_pBits[3 + 4 * (nOrig_x + nWidth * nOrig_y)];
             bool bInOrOut = nOrigAlpha > DISTANCE_CODE_ALPHA_INOUT_THRESHOLD;
 
-            float flClosest_Dist = 1.0e23;
+            float flClosest_Dist = 1.0e23f;
             for (int iy = -nSearchRad; iy <= nSearchRad; iy++) {
               for (int ix = -nSearchRad; ix <= nSearchRad; ix++) {
                 int cx = std::max(0, std::min(nWidth - 1, ix + nOrig_x));
@@ -1095,7 +1096,7 @@ static bool LoadFaceFromTGA(IVTFTexture *pTexture, CUtlBuffer &tgaBuffer, int z,
             uint8_t nOrigAlpha = tmpImage[3 + 4 * (nOrig_x + nWidth * nOrig_y)];
             bool bInOrOut = nOrigAlpha > DISTANCE_CODE_ALPHA_INOUT_THRESHOLD;
 
-            float flClosest_Dist = 1.0e23;
+            float flClosest_Dist = 1.0e23f;
             for (int iy = -nSearchRad; iy <= nSearchRad; iy++) {
               for (int ix = -nSearchRad; ix <= nSearchRad; ix++) {
                 int cx = std::max(0, std::min(nWidth - 1, ix + nOrig_x));
@@ -1276,11 +1277,12 @@ static bool LoadSourceImages(IVTFTexture *pTexture,
 
   bool bGenerateSpheremaps = false;
 
+  size_t input_file_name_size{strlen(pFullNameWithoutExtension) +
+                              strlen(GetSourceExtension()) + 1};
   // The input file name here is simply for error reporting
-  char *pInputFileName = (char *)stackalloc(strlen(pFullNameWithoutExtension) +
-                                            strlen(GetSourceExtension()) + 1);
-  strcpy(pInputFileName, pFullNameWithoutExtension);
-  strcat(pInputFileName, GetSourceExtension());
+  char *pInputFileName = (char *)stackalloc(input_file_name_size);
+  strcpy_s(pInputFileName, input_file_name_size, pFullNameWithoutExtension);
+  strcat_s(pInputFileName, input_file_name_size, GetSourceExtension());
 
   int nFrameCount;
   bool bAnimated = !(info.m_nStartFrame == -1 || info.m_nEndFrame == -1);
@@ -1333,9 +1335,9 @@ static bool LoadSourceImages(IVTFTexture *pTexture,
           tgaBuffer.SeekGet(CUtlBuffer::SEEK_HEAD, 0);
         }
 
-        strcpy(info.m_SrcName, pSrcName);
+        strcpy_s(info.m_SrcName, pSrcName);
         // NOTE: This here will generate all mip levels of the source image
-        if (!LoadFace(pTexture, tgaBuffer, z, iFrame, iFace, 2.2, info)) {
+        if (!LoadFace(pTexture, tgaBuffer, z, iFrame, iFace, 2.2f, info)) {
           Error("Error loading texture %s\n", pInputFileName);
         }
       }
@@ -1362,7 +1364,7 @@ void PreprocessSkyBox(char *pFullNameWithoutExtension, int *iSkyboxFace) {
     char *pEnd = &pFullNameWithoutExtension[len - 2];
     *iSkyboxFace = -1;
     for (int i = 0; i < SOURCE_ARRAYSIZE(g_CubemapFacingNames); i++) {
-      if (stricmp(pEnd, g_CubemapFacingNames[i]) == 0) {
+      if (_stricmp(pEnd, g_CubemapFacingNames[i]) == 0) {
         *iSkyboxFace = i;
         break;
       }
@@ -1427,11 +1429,11 @@ void MakeDirHier(const char *pPath) {
   for (size_t i = 0; i < temp_length; i++) {
     if (temp[i] == '/' || temp[i] == '\\') {
       temp[i] = '\0';
-      mkdir(temp);
+      _mkdir(temp);
       temp[i] = '\\';
     }
   }
-  mkdir(temp);
+  _mkdir(temp);
 }
 
 static uint8_t GetClampingValue(int nClampSize) {
@@ -1531,8 +1533,8 @@ bool ProcessFiles(const char *pFullNameWithoutExtension, const char *pOutputDir,
 
   // Name of the destination file
   char dstFileName[1024];
-  sprintf(dstFileName, "%s/%s%s.vtf", pOutputDir, pBaseName,
-          ((eModePFM == g_eMode) && isCubeMap) ? ".hdr" : "");
+  sprintf_s(dstFileName, "%s/%s%s.vtf", pOutputDir, pBaseName,
+            ((eModePFM == g_eMode) && isCubeMap) ? ".hdr" : "");
 
   // Now if we are only validating the CRC
   if (CommandLine()->FindParm("-crcvalidate")) {
@@ -1651,9 +1653,10 @@ bool ProcessFiles(const char *pFullNameWithoutExtension, const char *pOutputDir,
 
   {
     CP4AutoEditAddFile autop4(dstFileName);
-    FILE *fp = fopen(dstFileName, "wb");
-    if (!fp) {
+    FILE *fp;
+    if (fopen_s(&fp, dstFileName, "wb")) {
       VTexError("Can't open: %s\n", dstFileName);
+      return false;
     }
     fwrite(outputBuf.Base(), 1, outputBuf.TellPut(), fp);
     fclose(fp);
@@ -1690,8 +1693,9 @@ const char *GetPossiblyQuotedWord(const char *pInBuf, char *pOutbuf) {
 // succeeds. 		returns false if:
 //			a) end-of-buffer is reached (then "val" is empty)
 //			b) error occurs (then "val" is the error message)
-//
-static bool GetKeyValueFromBuffer(CUtlBuffer &buffer, char *key, char *val) {
+template <size_t key_size, size_t val_size>
+static bool GetKeyValueFromBuffer(CUtlBuffer &buffer, char (&key)[key_size],
+                                  char (&val)[val_size]) {
   char buf[2048];
 
   while (buffer.GetBytesRemaining()) {
@@ -1711,7 +1715,7 @@ static bool GetKeyValueFromBuffer(CUtlBuffer &buffer, char *key, char *val) {
       if (scan)
         return true;
       else {
-        sprintf(val, "parameter %s has no value", key);
+        sprintf_s(val, "parameter %s has no value", key);
         return false;
       }
     }
@@ -1729,10 +1733,11 @@ static bool LoadConfigFile(const char *pFileBaseName, VTexConfigInfo_t &info,
                            bool *isCubeMap) {
   // Tries to load .txt, then .psd
 
-  int lenBaseName = strlen(pFileBaseName);
-  char *pFileName = (char *)stackalloc(lenBaseName + strlen(".tga") + 1);
-  strcpy(pFileName, pFileBaseName);
-  strcat(pFileName, ".tga");
+  size_t lenBaseName = strlen(pFileBaseName);
+  size_t file_name_size{lenBaseName + strlen(".tga") + 1};
+  char *pFileName = (char *)stackalloc(file_name_size);
+  strcpy_s(pFileName, file_name_size, pFileBaseName);
+  strcat_s(pFileName, file_name_size, ".tga");
 
   bool bOK = false;
 
@@ -1740,7 +1745,7 @@ static bool LoadConfigFile(const char *pFileBaseName, VTexConfigInfo_t &info,
 
   // Try TGA file with config
   memcpy(pFileName + lenBaseName, ".tga", 4);
-  if (!bOK && !g_bNoTga && (00 == access(pFileName, 00)))  // TGA file exists
+  if (!bOK && !g_bNoTga && (00 == _access(pFileName, 00)))  // TGA file exists
   {
     g_eMode = eModeTGA;
 
@@ -1769,7 +1774,7 @@ static bool LoadConfigFile(const char *pFileBaseName, VTexConfigInfo_t &info,
     }
   }
   memcpy(pFileName + lenBaseName, ".tga", 4);
-  if (g_bNoTga && (00 == access(pFileName, 00))) {
+  if (g_bNoTga && (00 == _access(pFileName, 00))) {
     printf("Warning: -notga disables \"%s\"\n", pFileName);
   }
 
@@ -1813,7 +1818,7 @@ static bool LoadConfigFile(const char *pFileBaseName, VTexConfigInfo_t &info,
         }
       }
     }
-  } else if (00 == access(pFileName, 00)) {
+  } else if (00 == _access(pFileName, 00)) {
     if (!bOK)
       printf("Warning: -nopsd disables \"%s\"\n", pFileName);
     else
@@ -1954,9 +1959,10 @@ void Usage(void) {
       "e.g. materialsrc/monster1/*.tga materialsrc/monster2/*.tga\n");
 }
 
-bool GetOutputDir(const char *inputName, char *outputDir) {
+template <size_t out_dir_size>
+bool GetOutputDir(const char *inputName, char (&outputDir)[out_dir_size]) {
   if (g_ForcedOutputDir[0]) {
-    strcpy(outputDir, g_ForcedOutputDir);
+    strcpy_s(outputDir, g_ForcedOutputDir);
   } else {
     // Is inputName a relative path?
     char buf[SOURCE_MAX_PATH];
@@ -1968,9 +1974,9 @@ bool GetOutputDir(const char *inputName, char *outputDir) {
       return false;
     }
     pTmp += strlen("materialsrc/");
-    strcpy(outputDir, gamedir);
-    strcat(outputDir, "materials/");
-    strcat(outputDir, pTmp);
+    strcpy_s(outputDir, gamedir);
+    strcat_s(outputDir, "materials/");
+    strcat_s(outputDir, pTmp);
     Q_StripFilename(outputDir);
   }
   if (!g_Quiet) {
@@ -2011,7 +2017,7 @@ int Find_Files(WIN32_FIND_DATA &wfd, HANDLE &hResult, const char *basedir,
     // If it's a subdirectory, just recurse down it
     if ((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
       char subdir[SOURCE_MAX_PATH];
-      sprintf(subdir, "%s\\%s", basedir, wfd.cFileName);
+      sprintf_s(subdir, "%s\\%s", basedir, wfd.cFileName);
 
       // Recurse
       Find_Files(wfd, hResult, basedir, extension);
@@ -2024,15 +2030,16 @@ int Find_Files(WIN32_FIND_DATA &wfd, HANDLE &hResult, const char *basedir,
     char fname[_MAX_FNAME] = {0};
     char ext[_MAX_EXT] = {0};
 
-    _splitpath(wfd.cFileName, NULL, NULL, fname, ext);
+    _splitpath_s(wfd.cFileName, NULL, 0, NULL, 0, fname,
+                 SOURCE_ARRAYSIZE(fname), ext, SOURCE_ARRAYSIZE(ext));
 
     // Not the type we want.
-    if (stricmp(ext, extension)) return FF_DONTPROCESS;
+    if (_stricmp(ext, extension)) return FF_DONTPROCESS;
 
     // Check for .vmt
-    sprintf(filename, "%s\\%s.vmt", basedir, fname);
+    sprintf_s(filename, "%s\\%s.vmt", basedir, fname);
     // Exists, so don't overwrite it
-    if (access(filename, 0) != -1) return FF_TRYAGAIN;
+    if (_access(filename, 0) != -1) return FF_TRYAGAIN;
 
     char texturename[SOURCE_MAX_PATH] = {0};
     char *p = (char *)basedir;
@@ -2041,11 +2048,11 @@ int Find_Files(WIN32_FIND_DATA &wfd, HANDLE &hResult, const char *basedir,
     // p += strlen( wfd.cFileName ) + 1;
 
     // Construct texture name
-    sprintf(texturename, "%s\\%s", p, fname);
+    sprintf_s(texturename, "%s\\%s", p, fname);
 
     // Convert all to lower case
-    strlwr(texturename);
-    strlwr(filename);
+    _strlwr_s(texturename);
+    _strlwr_s(filename);
   }
 
   return bMoreFiles;
@@ -2057,12 +2064,12 @@ bool Process_File(char *pInputBaseName, int maxlen) {
   Q_StripExtension(pInputBaseName, pInputBaseName, maxlen);
 
   if (CommandLine()->FindParm("-deducepath")) {
-    strcpy(outputDir, pInputBaseName);
+    strcpy_s(outputDir, pInputBaseName);
 
     // If it is not a full path, try making it a full path
     if (pInputBaseName[0] != '/' && pInputBaseName[1] != ':') {
       // Convert to full path
-      getcwd(outputDir, sizeof(outputDir));
+      _getcwd(outputDir, sizeof(outputDir));
       Q_FixSlashes(outputDir, '/');
       Q_strncat(outputDir, "/", sizeof(outputDir));
       Q_strncat(outputDir, pInputBaseName, sizeof(outputDir));
@@ -2099,7 +2106,7 @@ bool Process_File(char *pInputBaseName, int maxlen) {
     VTexWarning("Problem figuring out outputdir for %s\n", pInputBaseName);
     return FALSE;
   } else if (!g_UseGameDir) {
-    strcpy(outputDir, pInputBaseName);
+    strcpy_s(outputDir, pInputBaseName);
     Q_StripFilename(outputDir);
   }
 
@@ -2112,7 +2119,7 @@ bool Process_File(char *pInputBaseName, int maxlen) {
     printf("Quick convert of '%s'...\n", pInputBaseName);
 
     char chFileNameConvert[512];
-    sprintf(chFileNameConvert, "%s.vtf", pInputBaseName);
+    sprintf_s(chFileNameConvert, "%s.vtf", pInputBaseName);
 
     IVTFTexture *pVtf = CreateVTFTexture();
     CUtlBuffer bufFile;
@@ -2143,7 +2150,8 @@ bool Process_File(char *pInputBaseName, int maxlen) {
 
     DestroyVTFTexture(pVtf);
 
-    if (FILE *fw = fopen(chFileNameConvert, "wb")) {
+    FILE *fw;
+    if (!fopen_s(&fw, chFileNameConvert, "wb")) {
       fwrite(bufFile.Base(), 1, bufFile.TellPut(), fw);
       fclose(fw);
     } else
@@ -2184,28 +2192,26 @@ bool Process_File(char *pInputBaseName, int maxlen) {
   // create vmts if necessary
   if (g_ShaderName) {
     char buf[1024];
-    sprintf(buf, "%s/%s.vmt", outputDir, pBaseName);
+    sprintf_s(buf, "%s/%s.vmt", outputDir, pBaseName);
     const char *tmp = Q_stristr(outputDir, "materials");
     FILE *fp;
     if (tmp) {
       // check if the file already exists.
-      fp = fopen(buf, "r");
-      if (fp) {
+      if (!fopen_s(&fp, buf, "r")) {
         if (!g_Quiet) fprintf(stderr, "vmt file \"%s\" already exists\n", buf);
 
         fclose(fp);
       } else {
-        fp = fopen(buf, "w");
-        if (fp) {
+        if (!fopen_s(&fp, buf, "w")) {
           if (!g_Quiet)
             fprintf(stderr, "Creating vmt file: %s/%s\n", tmp, pBaseName);
+
           tmp += strlen("materials/");
           fprintf(fp, "\"%s\"\n", g_ShaderName);
           fprintf(fp, "{\n");
           fprintf(fp, "\t\"$baseTexture\" \"%s/%s\"\n", tmp, pBaseName);
 
-          int i;
-          for (i = 0; i < g_NumVMTParams; i++) {
+          for (int i = 0; i < g_NumVMTParams; i++) {
             fprintf(fp, "\t\"%s\" \"%s\"\n", g_VMTParams[i].m_szParam,
                     g_VMTParams[i].m_szValue);
           }
@@ -2295,12 +2301,9 @@ bool CSuggestGameDirHelper::MySuggestFn(
 
   if (pbBubbleDirectories) *pbBubbleDirectories = true;
 
-  for (size_t k = 0; k < m_numInputFiles; ++k) {
-    Q_MakeAbsolutePath(pchPathBuffer, nBufferLength, m_pszInputFiles[k]);
-    return true;
-  }
+  Q_MakeAbsolutePath(pchPathBuffer, nBufferLength, m_pszInputFiles[0]);
 
-  return false;
+  return true;
 }
 
 int CVTex::VTex(int argc, char **argv) {
@@ -2320,53 +2323,54 @@ int CVTex::VTex(int argc, char **argv) {
   int i;
   i = 1;
   while (i < argc) {
-    if (stricmp(argv[i], "-quiet") == 0) {
+    if (_stricmp(argv[i], "-quiet") == 0) {
       i++;
       g_Quiet = true;
       g_NoPause = true;  // no point in pausing if we aren't going to print
                          // anything out.
-    } else if (stricmp(argv[i], "-nopause") == 0) {
+    } else if (_stricmp(argv[i], "-nopause") == 0) {
       i++;
       g_NoPause = true;
-    } else if (stricmp(argv[i], "-WarningsAsErrors") == 0) {
+    } else if (_stricmp(argv[i], "-WarningsAsErrors") == 0) {
       i++;
       g_bWarningsAsErrors = true;
-    } else if (stricmp(argv[i], "-UseStandardError") == 0) {
+    } else if (_stricmp(argv[i], "-UseStandardError") == 0) {
       i++;
       g_bUseStandardError = true;
-    } else if (stricmp(argv[i], "-nopsd") == 0) {
+    } else if (_stricmp(argv[i], "-nopsd") == 0) {
       i++;
       g_bNoPsd = true;
-    } else if (stricmp(argv[i], "-notga") == 0) {
+    } else if (_stricmp(argv[i], "-notga") == 0) {
       i++;
       g_bNoTga = true;
-    } else if (stricmp(argv[i], "-nomkdir") == 0) {
+    } else if (_stricmp(argv[i], "-nomkdir") == 0) {
       i++;
       g_CreateDir = false;
-    } else if (stricmp(argv[i], "-mkdir") == 0) {
+    } else if (_stricmp(argv[i], "-mkdir") == 0) {
       i++;
       g_CreateDir = true;
-    } else if (stricmp(argv[i], "-game") == 0) {
+    } else if (_stricmp(argv[i],
+                        source::tier0::command_line_switches::kGamePath) == 0) {
       i += 2;
-    } else if (stricmp(argv[i], "-outdir") == 0) {
-      strcpy(g_ForcedOutputDir, argv[i + 1]);
+    } else if (_stricmp(argv[i], "-outdir") == 0) {
+      strcpy_s(g_ForcedOutputDir, argv[i + 1]);
       i += 2;
-    } else if (stricmp(argv[i], "-dontusegamedir") == 0) {
+    } else if (_stricmp(argv[i], "-dontusegamedir") == 0) {
       ++i;
       g_UseGameDir = false;
-    } else if (stricmp(argv[i], "-shader") == 0) {
+    } else if (_stricmp(argv[i], "-shader") == 0) {
       i++;
       if (i < argc) {
         g_ShaderName = argv[i];
         i++;
       }
-    } else if (stricmp(argv[i], "-vproject") == 0) {
+    } else if (_stricmp(argv[i], "-vproject") == 0) {
       // skip this one. . we dont' use it internally.
       i += 2;
-    } else if (stricmp(argv[i], "-allowdebug") == 0) {
+    } else if (_stricmp(argv[i], "-allowdebug") == 0) {
       // skip this one. . we dont' use it internally.
       i++;
-    } else if (stricmp(argv[i], "-vmtparam") == 0) {
+    } else if (_stricmp(argv[i], "-vmtparam") == 0) {
       if (g_NumVMTParams < MAX_VMT_PARAMS) {
         i++;
         if (i < argc - 1) {
@@ -2394,19 +2398,19 @@ int CVTex::VTex(int argc, char **argv) {
             "Exceeded max number of vmt parameters, extra ignored ( max %d )\n",
             MAX_VMT_PARAMS);
       }
-    } else if (stricmp(argv[i], "-nop4") == 0) {
+    } else if (_stricmp(argv[i], "-nop4") == 0) {
       // Just here to signify that -nop4 is a valid flag
       ++i;
-    } else if (stricmp(argv[i], "-deducepath") == 0) {
+    } else if (_stricmp(argv[i], "-deducepath") == 0) {
       // Just here to signify that -deducepath is a valid flag
       ++i;
-    } else if (stricmp(argv[i], "-quickconvert") == 0) {
+    } else if (_stricmp(argv[i], "-quickconvert") == 0) {
       // Just here to signify that -quickconvert is a valid flag
       ++i;
-    } else if (stricmp(argv[i], "-crcvalidate") == 0) {
+    } else if (_stricmp(argv[i], "-crcvalidate") == 0) {
       // Just here to signify that -crcvalidate is a valid flag
       ++i;
-    } else if (stricmp(argv[i], "-crcforce") == 0) {
+    } else if (_stricmp(argv[i], "-crcforce") == 0) {
       // Just here to signify that -crcforce is a valid flag
       ++i;
     } else {
@@ -2486,12 +2490,13 @@ int CVTex::VTex(int argc, char **argv) {
     char ext[_MAX_EXT];
     char filename[_MAX_FNAME];
 
-    _splitpath(pInputBaseName, NULL, NULL, NULL, ext);  // find extension wanted
+    _splitpath_s(pInputBaseName, NULL, 0, NULL, 0, NULL, 0, ext,
+                 SOURCE_ARRAYSIZE(ext));  // find extension wanted
 
     if (!Q_ExtractFilePath(pInputBaseName, basedir, sizeof(basedir)))
-      strcpy(basedir, ".\\");
+      strcpy_s(basedir, ".\\");
 
-    sprintf(search, "%s\\*.*", basedir);
+    sprintf_s(search, "%s\\*.*", basedir);
 
     WIN32_FIND_DATA wfd;
     HANDLE hResult;
@@ -2500,14 +2505,14 @@ int CVTex::VTex(int argc, char **argv) {
     hResult = FindFirstFile(search, &wfd);
 
     if (hResult != INVALID_HANDLE_VALUE) {
-      sprintf(filename, "%s%s", basedir, wfd.cFileName);
+      sprintf_s(filename, "%s%s", basedir, wfd.cFileName);
 
       if (wfd.cFileName[0] != '.') Process_File(filename, sizeof(filename));
 
       int iFFType = Find_Files(wfd, hResult, basedir, ext);
 
       while (iFFType) {
-        sprintf(filename, "%s%s", basedir, wfd.cFileName);
+        sprintf_s(filename, "%s%s", basedir, wfd.cFileName);
 
         if (wfd.cFileName[0] != '.' && iFFType != FF_DONTPROCESS)
           Process_File(filename, sizeof(filename));

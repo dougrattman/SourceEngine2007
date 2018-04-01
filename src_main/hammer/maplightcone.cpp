@@ -461,7 +461,7 @@ void CMapLightCone::OnParentKeyChanged(const char *szKey, const char *szValue)
 
 	if (!_stricmp(szKey, "angles"))
 	{
-		sscanf(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
+		sscanf_s(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
 	}
 	else if (!_stricmp(szKey, m_szColorKeyName))
 	{
@@ -469,7 +469,7 @@ void CMapLightCone::OnParentKeyChanged(const char *szKey, const char *szValue)
 		int nGreen;
 		int nBlue;
 		int nBrightness;
-		sscanf(szValue, "%d %d %d %d", &nRed, &nGreen, &nBlue, &nBrightness);
+		sscanf_s(szValue, "%d %d %d %d", &nRed, &nGreen, &nBlue, &nBrightness);
 
 		r = m_LightColor.x = nRed;
 		g = m_LightColor.y = nGreen;

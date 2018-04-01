@@ -35,8 +35,6 @@ the_interface ISaveRestore {
 
   virtual void RestoreClientState(char const *fileName, bool adjacent) = 0;
   virtual void RestoreAdjacenClientState(char const *map) = 0;
-  virtual int SaveReadNameAndComment(FileHandle_t f, char *name,
-                                     char *comment) = 0;
   virtual int GetMostRecentElapsedMinutes(void) = 0;
   virtual int GetMostRecentElapsedSeconds(void) = 0;
   virtual int GetMostRecentElapsedTimeSet(void) = 0;

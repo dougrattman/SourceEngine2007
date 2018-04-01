@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: BSP Building tool
 
@@ -543,7 +543,7 @@ static void EmitOccluderBrushes() {
     // NOTE: If you change the algorithm by which occluder numbers are
     // allocated, then you must also change FixupOnlyEntsOccluderEntities()
     // below
-    sprintf(str, "%i", nOccluder);
+    sprintf_s(str, "%i", nOccluder);
     SetKeyValue(&entities[entity_num], "occludernumber", str);
 
     int nIndex = g_OccluderInfo.AddToTail();
@@ -681,7 +681,7 @@ void FixupOnlyEntsOccluderEntities() {
 
     // NOTE: If you change the algorithm by which occluder numbers are allocated
     // above, then you must also change this
-    sprintf(str, "%i", nOccluder);
+    sprintf_s(str, "%i", nOccluder);
     SetKeyValue(&entities[entity_num], "occludernumber", str);
     ++nOccluder;
   }
@@ -782,24 +782,23 @@ void PrintCommandLine(int argc, char **argv) {
 }
 
 int RunVBSP(int argc, char **argv) {
-  int i;
-  char path[1024];
-
   CommandLine()->CreateCmdLine(argc, argv);
-  MathLib_Init(2.2f, 2.2f, 0.0f, OVERBRIGHT, false, false, false, false);
+
   InstallSpewFunction();
   SpewActivate("developer", 1);
 
+  MathLib_Init(GAMMA, TEXGAMMA, 0.0f, OVERBRIGHT, false, false, false, false);
   CmdLib_InitFileSystem(argv[argc - 1]);
 
   Q_StripExtension(ExpandArg(argv[argc - 1]), the_source, sizeof(the_source));
   Q_FileBase(the_source, mapbase, sizeof(mapbase));
-  strlwr(mapbase);
+  _strlwr_s(mapbase);
 
   LoadCmdLineFromFile(argc, argv, mapbase, "vbsp");
 
   Msg("Valve Software - vbsp.exe (%s)\n", __DATE__);
 
+  int i;
   for (i = 1; i < argc; i++) {
     if (!_stricmp(argv[i], "-threads")) {
       numthreads = atoi(argv[i + 1]);
@@ -886,7 +885,7 @@ int RunVBSP(int argc, char **argv) {
       Msg("Enabled vis in 3d skybox\n");
       g_bSkyVis = true;
     } else if (!Q_stricmp(argv[i], "-tmpout")) {
-      strcpy(outbase, "/tmp");
+      strcpy_s(outbase, "/tmp");
     } else if (!Q_stricmp(argv[i], "-luxelscale")) {
       g_luxelScale = atof(argv[i + 1]);
       i++;
@@ -1058,8 +1057,8 @@ int RunVBSP(int argc, char **argv) {
   numthreads = 1;  // multiple threads aren't helping...
 
   // Setup the logfile.
-  char logFile[512];
-  _snprintf(logFile, sizeof(logFile), "%s.log", the_source);
+  char logFile[SOURCE_MAX_PATH];
+  sprintf_s(logFile, "%s.log", the_source);
   SetSpewFunctionLogFile(logFile);
 
   LoadPhysicsDLL();
@@ -1071,17 +1070,18 @@ int RunVBSP(int argc, char **argv) {
 	Msg( "basegamedir: %s This is the base engine + base game directory (e.g. e:/hl2/hl2/, or d:/tf2/tf2/ )\n", basegamedir );
 #endif
 
-  sprintf(materialPath, "%smaterials", gamedir);
+  sprintf_s(materialPath, "%smaterials", gamedir);
   InitMaterialSystem(materialPath, CmdLib_GetFileSystemFactory());
-  Msg("materialPath: %s\n", materialPath);
+  Msg("Using path to materials: %s\n", materialPath);
 
   // delete portal and line files
-  sprintf(path, "%s.prt", the_source);
+  char path[SOURCE_MAX_PATH];
+  sprintf_s(path, "%s.prt", the_source);
   remove(path);
-  sprintf(path, "%s.lin", the_source);
+  sprintf_s(path, "%s.lin", the_source);
   remove(path);
 
-  strcpy(name, ExpandArg(argv[i]));
+  strcpy_s(name, ExpandArg(argv[i]));
   Q_DefaultExtension(name, ".vmf", sizeof(name));
 
   char platformBSPFileName[1024];

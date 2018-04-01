@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "IOcclusionSystem.h"
 
@@ -1990,8 +1990,8 @@ inline void COcclusionSystem::IntersectWithNearPlane(const Vector &vecStart,
 
 //-----------------------------------------------------------------------------
 // Clips a surface to the near clip plane
-// TODO(d.rattman): This blows: a *third* S-H clipper in the engine! All because the
-// vertex formats are different owing to different goals of the 3 clippers
+// TODO(d.rattman): This blows: a *third* S-H clipper in the engine! All because
+// the vertex formats are different owing to different goals of the 3 clippers
 //-----------------------------------------------------------------------------
 static Vector s_TempVertMemory[256];
 
@@ -2134,7 +2134,7 @@ void COcclusionSystem::StitchClippedVertices(Vector *pVertices, int nCount) {
 
     int j;
     for (j = m_ClippedVerts.Count(); --j >= 0;) {
-      if (VectorsAreEqual(pVertices[i], m_ClippedVerts[j], 1e-3)) {
+      if (VectorsAreEqual(pVertices[i], m_ClippedVerts[j], 1e-3f)) {
         pVertices[i] = m_ClippedVerts[j];
         break;
       }

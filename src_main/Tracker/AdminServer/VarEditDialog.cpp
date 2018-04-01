@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "VarEditDialog.h"
 
@@ -46,7 +46,7 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
   m_pRules = rules->MakeCopy();
 
   const char *type = m_pRules->GetString("type");
-  if (!stricmp(type, "enumeration")) {
+  if (!_stricmp(type, "enumeration")) {
     LoadControlSettings("Admin/VarEditDialog_ComboBox.res", "PLATFORM");
     m_pStringEdit->SetVisible(false);
 
@@ -61,7 +61,7 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
 
     // activate the current item
     m_pComboEdit->ActivateItemByRow(m_pRules->GetInt("enum"));
-  } else if (!stricmp(type, "customlist")) {
+  } else if (!_stricmp(type, "customlist")) {
     LoadControlSettings("Admin/VarEditDialog_ComboBox.res", "PLATFORM");
     m_pStringEdit->SetVisible(false);
 
@@ -87,7 +87,7 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
       }
 
       // copy in the name
-      strncpy(customString, parse, nameSize);
+      strncpy_s(customString, parse, nameSize);
       customString[nameSize] = 0;
       parse = end;
 
@@ -96,7 +96,7 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
       index++;
 
       // activate the current item
-      if (!stricmp(customString, currentValue)) {
+      if (!_stricmp(customString, currentValue)) {
         m_pComboEdit->ActivateItem(itemID);
       }
     }
@@ -110,7 +110,8 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
 
   // set value
   char title[256];
-  _snprintf(title, sizeof(title) - 1, "Change %s", m_pRules->GetString("name"));
+  _snprintf_s(title, sizeof(title) - 1, "Change %s",
+              m_pRules->GetString("name"));
   SetTitle(title, false);
 
   // bring to front
@@ -123,11 +124,11 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
 // Purpose: button command handler
 //-----------------------------------------------------------------------------
 void CVarEditDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "OK")) {
+  if (!_stricmp(command, "OK")) {
     // change the value
     ApplyChanges();
     Close();
-  } else if (!stricmp(command, "Cancel")) {
+  } else if (!_stricmp(command, "Cancel")) {
     Close();
   } else {
     BaseClass::OnCommand(command);
@@ -139,14 +140,14 @@ void CVarEditDialog::OnCommand(const char *command) {
 //-----------------------------------------------------------------------------
 void CVarEditDialog::ApplyChanges() {
   const char *type = m_pRules->GetString("type");
-  if (!stricmp(type, "enumeration")) {
+  if (!_stricmp(type, "enumeration")) {
     // get the enumeration position from the combo box
     int iVal = m_pComboEdit->GetActiveItem();
     char value[32];
-    _snprintf(value, sizeof(value) - 1, "%d", iVal);
+    _snprintf_s(value, sizeof(value) - 1, "%d", iVal);
     RemoteServer().SetValue(m_pRules->GetName(), value);
 
-  } else if (!stricmp(type, "customlist")) {
+  } else if (!_stricmp(type, "customlist")) {
     char value[512];
     m_pComboEdit->GetText(value, sizeof(value));
     RemoteServer().SetValue(m_pRules->GetName(), value);

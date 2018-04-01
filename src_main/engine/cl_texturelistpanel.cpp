@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -43,7 +43,6 @@
 // For character manipulations isupper/tolower
 #include <ctype.h>
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define KEYNAME_NAME "Name"
@@ -470,22 +469,25 @@ static bool ShallWarnTx(KeyValues *kv, ITexture *tx) {
   return false;
 }
 
-static void FmtCommaNumber(char *pchBuffer, unsigned int uiNumber) {
+template <size_t buffer_size>
+static void FmtCommaNumber(char (&pchBuffer)[buffer_size],
+                           unsigned int uiNumber) {
   pchBuffer[0] = 0;
   for (unsigned int uiDivisor = 1000 * 1000 * 1000; uiDivisor > 0;
        uiDivisor /= 1000) {
     if (uiNumber > uiDivisor) {
       unsigned int uiPrint = (uiNumber / uiDivisor) % 1000;
-      sprintf(pchBuffer + strlen(pchBuffer),
-              (uiNumber / uiDivisor < 1000) ? "%d," : "%03d,", uiPrint);
+      sprintf_s((char *)((char *)(&pchBuffer[0]) + strlen(pchBuffer)),
+                (size_t)(pchBuffer + buffer_size - strlen(pchBuffer)),
+                (uiNumber / uiDivisor < 1000) ? "%d," : "%03d,", uiPrint);
     }
   }
 
-  int len = strlen(pchBuffer);
+  size_t len = strlen(pchBuffer);
   if (!len)
-    sprintf(pchBuffer, "0");
+    sprintf_s(pchBuffer, "0");
   else if (pchBuffer[len - 1] == ',')
-    pchBuffer[len - 1] = 0;
+    pchBuffer[len - 1] = '\0';
 }
 
 namespace {
@@ -643,7 +645,8 @@ void DisplaySelectedTextures() {
         int numParams = pMat->ShaderParamCount();
         IMaterialVar **arrVars = pMat->GetShaderParams();
         for (int idxParam = 0; idxParam < numParams; ++idxParam) {
-          // 					if ( !_stricmp( arrVars[ idxParam
+          // 					if ( !_stricmp( arrVars[
+          // idxParam
           // ]->GetName(),
           // "$ignorez" ) )
           // 					{
@@ -758,7 +761,7 @@ void CVmtTextEntry::OpenVmtSelected() {
 
   CUtlVector<char> buf;
   buf.SetCount(x1 - x0 + 1);
-  GetTextRange(buf.Base(), x0, x1 - x0);
+  GetTextRange(buf.Base(), buf.Size(), x0, x1 - x0);
 
   for (char *pchName = buf.Base(), *pchNext = NULL; pchName;
        pchName = pchNext) {
@@ -925,7 +928,10 @@ void CRenderTextureEditor::SetDispInfo(KeyValues *kv, int iHint) {
                   *rUnderscore = 0;
               }
 
-              sprintf(szMatName + strlen(szMatName), " (cubemap)");
+              sprintf_s(szMatName + strlen(szMatName),
+                        chName + SOURCE_ARRAYSIZE(chName) - szMatName -
+                            strlen(szMatName),
+                        " (cubemap)");
               arrMaterials[szMatName] = true;
             }
             arrMaterialsFullNames[pMat->GetName()] = true;
@@ -1268,18 +1274,26 @@ void CRenderTextureEditor::Paint() {
     // Line 1
     //
     if (iTxSize > g_warn_texkbytes)
-      sprintf(chLine1 + strlen(chLine1), "  Size(%s Kb)", chSizeBuf);
+      sprintf_s(chLine1 + strlen(chLine1),
+                SOURCE_ARRAYSIZE(chLine1) - strlen(chLine1), "  Size(%s Kb)",
+                chSizeBuf);
     if ((iTxWidth > g_warn_texdimensions) || (iTxHeight > g_warn_texdimensions))
-      sprintf(chLine1 + strlen(chLine1), "  Dimensions(%dx%d)", iTxWidth,
-              iTxHeight);
+      sprintf_s(chLine1 + strlen(chLine1),
+                SOURCE_ARRAYSIZE(chLine1) - strlen(chLine1),
+                "  Dimensions(%dx%d)", iTxWidth, iTxHeight);
     if (_stricmp(szTxFormat, "DXT1") && _stricmp(szTxFormat, "DXT5"))
-      sprintf(chLine1 + strlen(chLine1), "  Format(%s)", szTxFormat);
+      sprintf_s(chLine1 + strlen(chLine1),
+                SOURCE_ARRAYSIZE(chLine1) - strlen(chLine1), "  Format(%s)",
+                szTxFormat);
     if (pMatTexture->GetFlags() & TEXTUREFLAGS_NOLOD)
-      sprintf(chLine1 + strlen(chLine1), "  NoLod");
+      sprintf_s(chLine1 + strlen(chLine1),
+                SOURCE_ARRAYSIZE(chLine1) - strlen(chLine1), "  NoLod");
     if (pMatTexture->GetFlags() & TEXTUREFLAGS_NOMIP)
-      sprintf(chLine1 + strlen(chLine1), "  NoMip");
+      sprintf_s(chLine1 + strlen(chLine1),
+                SOURCE_ARRAYSIZE(chLine1) - strlen(chLine1), "  NoMip");
     if (pMatTexture->GetFlags() & TEXTUREFLAGS_ONEBITALPHA)
-      sprintf(chLine1 + strlen(chLine1), "  OneBitAlpha");
+      sprintf_s(chLine1 + strlen(chLine1),
+                SOURCE_ARRAYSIZE(chLine1) - strlen(chLine1), "  OneBitAlpha");
 
     //
     // Line 2
@@ -1296,24 +1310,29 @@ void CRenderTextureEditor::Paint() {
 
       if (wact > 4 || hact > 4) {
         char chbuf[50];
-        int mem = ImageLoader::GetMemRequired(std::max(std::min(wact, 4), wact / 2),
-                                              std::max(std::min(hact, 4), hact / 2),
-                                              std::max(1, dact / 2), fmt, true);
+        int mem =
+            ImageLoader::GetMemRequired(std::max(std::min(wact, 4), wact / 2),
+                                        std::max(std::min(hact, 4), hact / 2),
+                                        std::max(1, dact / 2), fmt, true);
         mem = (mem + 511) / 1024;
         FmtCommaNumber(chbuf, mem);
 
-        sprintf(chLine2 + strlen(chLine2), "  %s Kb @ lower mip", chbuf);
+        sprintf_s(chLine2 + strlen(chLine2),
+                  SOURCE_ARRAYSIZE(chLine2) - strlen(chLine2),
+                  "  %s Kb @ lower mip", chbuf);
       }
 
       if (wmap > wact || hmap > hact || dmap > dact) {
         char chbuf[50];
-        int mem = ImageLoader::GetMemRequired(std::min(wmap, wact * 2),
-                                              std::min(hmap, hact * 2),
-                                              std::min(dmap, dact * 2), fmt, true);
+        int mem = ImageLoader::GetMemRequired(
+            std::min(wmap, wact * 2), std::min(hmap, hact * 2),
+            std::min(dmap, dact * 2), fmt, true);
         mem = (mem + 511) / 1024;
         FmtCommaNumber(chbuf, mem);
 
-        sprintf(chLine2 + strlen(chLine2), "      %s Kb @ higher mip", chbuf);
+        sprintf_s(chLine2 + strlen(chLine2),
+                  SOURCE_ARRAYSIZE(chLine2) - strlen(chLine2),
+                  "      %s Kb @ higher mip", chbuf);
       }
     }
 
@@ -1669,12 +1688,13 @@ void CRenderTexturesListViewPanel::RenderTile(int iTile, int x, int y) {
       x - TILE_BORDER / 2, y, x + TILE_BORDER / 2 + TILE_SIZE, y + TILE_TEXT);
 
   char chInfoText[256] = {0};
-  sprintf(chInfoText, "%s Kb  %dx%d  %.*s%s  %s", chSizeBuf, iTxWidth,
-          iTxHeight, iTxFormatLen, szTxFormat, szTxFormatSuffix,
-          (pMatTexture->GetFlags() &
-           (TEXTUREFLAGS_NOLOD | TEXTUREFLAGS_NOMIP | TEXTUREFLAGS_ONEBITALPHA))
-              ? "***"
-              : "");
+  sprintf_s(
+      chInfoText, "%s Kb  %dx%d  %.*s%s  %s", chSizeBuf, iTxWidth, iTxHeight,
+      iTxFormatLen, szTxFormat, szTxFormatSuffix,
+      (pMatTexture->GetFlags() &
+       (TEXTUREFLAGS_NOLOD | TEXTUREFLAGS_NOMIP | TEXTUREFLAGS_ONEBITALPHA))
+          ? "***"
+          : "");
   int iTextMargins[4] = {0};
   int iTextHeight = g_pMatSystemSurface->GetFontTall(GetFont());
   {

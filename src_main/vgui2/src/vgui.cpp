@@ -552,11 +552,9 @@ void CVGui::AddTickSignal(VPANEL panel, int intervalMilliseconds /*=0*/) {
   t->nexttick = g_pSystem->GetTimeMillis() + t->interval;
 
   if (strlen(((VPanel *)panel)->Client()->GetName()) > 0) {
-    strncpy(t->panelname, ((VPanel *)panel)->Client()->GetName(),
-            sizeof(t->panelname));
+    strcpy_s(t->panelname, ((VPanel *)panel)->Client()->GetName());
   } else {
-    strncpy(t->panelname, ((VPanel *)panel)->Client()->GetClassName(),
-            sizeof(t->panelname));
+    strcpy_s(t->panelname, ((VPanel *)panel)->Client()->GetClassName());
   }
 
   // simply add the element to the list

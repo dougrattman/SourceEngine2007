@@ -1,4 +1,6 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
+
+#define _CRT_SECURE_NO_WARNINGS 1
 
 #include <cassert>
 #include <cstdio>
@@ -32,7 +34,6 @@
 
 #include "tier0/include/vprof.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -120,8 +121,6 @@ class CDragDropHelperPanel : public Panel {
 
 vgui::DHANDLE<CDragDropHelperPanel> s_DragDropHelper;
 #endif
-
-#if defined(VGUI_USEKEYBINDINGMAPS)
 
 BoundKey_t::BoundKey_t()
     : isbuiltin(true), bindingname(0), keycode(KEY_NONE), modifiers(0) {}
@@ -355,7 +354,7 @@ static void BufPrint(CUtlBuffer &buf, int level, char const *fmt, ...) {
   char string[2048];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf(string, sizeof(string) - 1, fmt, argptr);
+  _vsnprintf_s(string, sizeof(string) - 1, fmt, argptr);
   va_end(argptr);
   string[sizeof(string) - 1] = 0;
 
@@ -495,7 +494,6 @@ void Panel::ReloadKeyBindings(KeyBindingContextHandle_t handle) {
   }
   kv->deleteThis();
 }
-#endif  // VGUI_USEKEYBINDINGMAPS
 
 DECLARE_BUILD_FACTORY(Panel);
 
@@ -549,9 +547,7 @@ void Panel::Init(int x, int y, int wide, int tall) {
                  NEEDS_DEFAULT_SETTINGS_APPLIED);
   _flags.SetFlag(AUTODELETE_ENABLED | PAINT_BORDER_ENABLED |
                  PAINT_BACKGROUND_ENABLED | PAINT_ENABLED);
-#if defined(VGUI_USEKEYBINDINGMAPS)
   _flags.SetFlag(ALLOW_CHAIN_KEYBINDING_TO_PARENT);
-#endif
   m_nPinDeltaX = m_nPinDeltaY = 0;
   m_nResizeDeltaX = m_nResizeDeltaY = 0;
   _autoResizeDirection = AUTORESIZE_NO;
@@ -581,20 +577,16 @@ void Panel::Init(int x, int y, int wide, int tall) {
 
   m_lLastDoublePressTime = 0L;
 
-#if defined(VGUI_USEKEYBINDINGMAPS)
   m_hKeyBindingsContext = INVALID_KEYBINDINGCONTEXT_HANDLE;
-#endif
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor
 //-----------------------------------------------------------------------------
 Panel::~Panel() {
-#if defined(VGUI_USEKEYBINDINGMAPS)
   if (IsValidKeyBindingsContext()) {
     g_KBMgr.OnPanelDeleted(m_hKeyBindingsContext, this);
   }
-#endif  // VGUI_USEKEYBINDINGMAPS
 #if defined(VGUI_USEDRAGDROP)
   if (m_pDragDrop->m_bDragging) {
     OnFinishDragging(false, (MouseCode)-1);
@@ -1021,7 +1013,8 @@ void Panel::PaintBuildOverlay() {
 // Purpose: Returns true if the panel's draw code will fully cover it's area
 //-----------------------------------------------------------------------------
 bool Panel::IsOpaque() {
-  // TODO(d.rattman): Add code to account for the 'SkipChild' functionality in Frame
+  // TODO(d.rattman): Add code to account for the 'SkipChild' functionality in
+  // Frame
   if (IsVisible() && _flags.IsFlagSet(PAINT_BACKGROUND_ENABLED) &&
       (_bgColor[3] == 255))
     return true;
@@ -1541,7 +1534,6 @@ void Panel::InternalKeyCodePressed(int code) {
   }
 }
 
-#if defined(VGUI_USEKEYBINDINGMAPS)
 //-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *bindingName -
@@ -1854,8 +1846,8 @@ wchar_t const *Panel::KeyCodeModifiersToDisplayString(KeyCode code,
   }
 
   static wchar_t unicode[256];
-  _snwprintf(unicode, 255, L"%S%s", sz,
-             Panel::KeyCodeToDisplayString((KeyCode)code));
+  _snwprintf_s(unicode, SOURCE_ARRAYSIZE(unicode) - 1, L"%S%s", sz,
+               Panel::KeyCodeToDisplayString((KeyCode)code));
   return unicode;
 }
 
@@ -2086,7 +2078,6 @@ bool Panel::IsKeyRebound(KeyCode code, int modifiers) {
 }
 
 static bool s_bSuppressRebindChecks = false;
-#endif  // VGUI_USEKEYBINDINGMAPS
 
 void Panel::InternalKeyCodeTyped(int code) {
   if (!ShouldHandleInputMessage()) {
@@ -3418,8 +3409,8 @@ MessageMapItem_t Panel::m_MessageMap[] = {
     MAP_MESSAGE_INT(Panel, "RequestFocus", RequestFocus, "direction")};
 
 // IMPLEMENT_PANELMAP( Panel, NULL )
-PanelMap_t Panel::m_PanelMap = {Panel::m_MessageMap,
-                                SOURCE_ARRAYSIZE(Panel::m_MessageMap), "Panel", NULL};
+PanelMap_t Panel::m_PanelMap = {
+    Panel::m_MessageMap, SOURCE_ARRAYSIZE(Panel::m_MessageMap), "Panel", NULL};
 PanelMap_t *Panel::GetPanelMap(void) { return &m_PanelMap; }
 
 //-----------------------------------------------------------------------------
@@ -5382,7 +5373,8 @@ void Panel::OnDraggablePanelPaint() {
     surface()->DrawSetTextPos(x + 5, y + 2);
 
     wchar_t sz[64];
-    _snwprintf(sz, 64, L"[ %i ]", m_pDragDrop->m_DragPanels.Count());
+    _snwprintf_s(sz, SOURCE_ARRAYSIZE(sz) - 1, L"[ %i ]",
+                 m_pDragDrop->m_DragPanels.Count());
 
     surface()->DrawPrintText(sz, wcslen(sz));
   }
@@ -5421,8 +5413,9 @@ void Panel::OnDroppablePanelPaint(CUtlVector<KeyValues *> &msglist,
 Color Panel::GetDropFrameColor() {
 #if defined(VGUI_USEDRAGDROP)
   return m_clrDropFrame;
-#endif
+#else
   return Color(0, 0, 0, 0);
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -5433,8 +5426,9 @@ Color Panel::GetDropFrameColor() {
 Color Panel::GetDragFrameColor() {
 #if defined(VGUI_USEDRAGDROP)
   return m_clrDragFrame;
-#endif
+#else
   return Color(0, 0, 0, 0);
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -5625,9 +5619,7 @@ char const *CPanelMessageMapDictionary::StripNamespace(char const *className) {
   return className;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Find but don't add mapping
-//-----------------------------------------------------------------------------
 PanelMessageMap *CPanelMessageMapDictionary::FindPanelMessageMap(
     char const *className) {
   int lookup = m_MessageMaps.Find(StripNamespace(className));
@@ -5638,9 +5630,7 @@ PanelMessageMap *CPanelMessageMapDictionary::FindPanelMessageMap(
 }
 
 #include "tier0/include/memdbgoff.h"
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
+
 PanelMessageMap *CPanelMessageMapDictionary::FindOrAddPanelMessageMap(
     char const *className) {
   PanelMessageMap *map = FindPanelMessageMap(className);
@@ -5656,10 +5646,7 @@ PanelMessageMap *CPanelMessageMapDictionary::FindOrAddPanelMessageMap(
 }
 #include "tier0/include/memdbgon.h"
 
-#if defined(VGUI_USEKEYBINDINGMAPS)
-//-----------------------------------------------------------------------------
 // Purpose: Utility class for handling keybinding map allocation
-//-----------------------------------------------------------------------------
 class CPanelKeyBindingMapDictionary {
  public:
   CPanelKeyBindingMapDictionary()
@@ -5691,9 +5678,7 @@ char const *CPanelKeyBindingMapDictionary::StripNamespace(
   return className;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Find but don't add mapping
-//-----------------------------------------------------------------------------
 PanelKeyBindingMap *CPanelKeyBindingMapDictionary::FindPanelKeyBindingMap(
     char const *className) {
   int lookup = m_MessageMaps.Find(StripNamespace(className));
@@ -5704,9 +5689,7 @@ PanelKeyBindingMap *CPanelKeyBindingMapDictionary::FindPanelKeyBindingMap(
 }
 
 #include "tier0/include/memdbgoff.h"
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
+
 PanelKeyBindingMap *CPanelKeyBindingMapDictionary::FindOrAddPanelKeyBindingMap(
     char const *className) {
   PanelKeyBindingMap *map = FindPanelKeyBindingMap(className);
@@ -5728,48 +5711,33 @@ CPanelKeyBindingMapDictionary &GetPanelKeyBindingMapDictionary() {
   return dictionary;
 }
 
-#endif  // VGUI_USEKEYBINDINGMAPS
-
 CPanelMessageMapDictionary &GetPanelMessageMapDictionary() {
   static CPanelMessageMapDictionary dictionary;
   return dictionary;
 }
 
 namespace vgui {
-
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 PanelMessageMap *FindOrAddPanelMessageMap(char const *className) {
   return GetPanelMessageMapDictionary().FindOrAddPanelMessageMap(className);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Find but don't add mapping
-//-----------------------------------------------------------------------------
 PanelMessageMap *FindPanelMessageMap(char const *className) {
   return GetPanelMessageMapDictionary().FindPanelMessageMap(className);
 }
 
-#if defined(VGUI_USEKEYBINDINGMAPS)
 CPanelKeyBindingMapDictionary &GetPanelKeyBindingMapDictionary() {
   static CPanelKeyBindingMapDictionary dictionary;
   return dictionary;
 }
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
+
 PanelKeyBindingMap *FindOrAddPanelKeyBindingMap(char const *className) {
   return GetPanelKeyBindingMapDictionary().FindOrAddPanelKeyBindingMap(
       className);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Find but don't add mapping
-//-----------------------------------------------------------------------------
 PanelKeyBindingMap *FindPanelKeyBindingMap(char const *className) {
   return GetPanelKeyBindingMapDictionary().FindPanelKeyBindingMap(className);
 }
-#endif  // VGUI_USEKEYBINDINGMAPS
-
 }  // namespace vgui

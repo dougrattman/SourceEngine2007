@@ -49,10 +49,7 @@
 #include "tier0/include/platform.h"
 
 // All interfaces derive from this.
-class IBaseInterface {
- public:
-  virtual ~IBaseInterface() {}
-};
+the_interface IBaseInterface{};
 
 #define CREATEINTERFACE_PROCNAME "CreateInterface"
 
@@ -185,8 +182,6 @@ extern BOOL Sys_UnloadModule(CSysModule *pModule);
 bool Sys_LoadInterface(const char *module_name,
                        const char *interface_version_name,
                        CSysModule **out_module, void **out_interface);
-
-bool Sys_IsDebuggerPresent();
 
 // Purpose: Place this as a singleton at module scope (e.g.) and use it to get
 // the factory from the specified module name.

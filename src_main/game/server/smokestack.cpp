@@ -170,7 +170,7 @@ bool CSmokeStack::KeyValue( const char *szKeyName, const char *szValue )
 {
 	if( stricmp( szKeyName, "Wind" ) == 0 )
 	{
-		sscanf( szValue, "%f %f %f", &m_vWind.GetForModify().x, &m_vWind.GetForModify().y, &m_vWind.GetForModify().z );
+		sscanf_s( szValue, "%f %f %f", &m_vWind.GetForModify().x, &m_vWind.GetForModify().y, &m_vWind.GetForModify().z );
 		return true;
 	}
 	else if( stricmp( szKeyName, "WindAngle" ) == 0 )

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_VGUI_IINPUT_H_
 #define SOURCE_VGUI_IINPUT_H_
@@ -87,19 +87,19 @@ class IInput : public IBaseInterface {
   struct LanguageItem {
     wchar_t shortname[4];
     wchar_t menuname[128];
-    int handleValue;
+    intptr_t handleValue;
     bool active;  // true if this is the active language
   };
 
   struct ConversionModeItem {
     wchar_t menuname[128];
-    int handleValue;
+    intptr_t handleValue;
     bool active;  // true if this is the active conversion mode
   };
 
   struct SentenceModeItem {
     wchar_t menuname[128];
-    int handleValue;
+    intptr_t handleValue;
     bool active;  // true if this is the active sentence mode
   };
 

@@ -251,16 +251,8 @@ void R_Shutdown();
 bool g_bAbortServerSet = false;
 
 CON_COMMAND(mem_dump, "Dump memory stats to text file.") {
-  ConMsg("Writing memory stats to file memstats.txt\n");
+  ConMsg("Writing memory stats to file %s\n", kMemoryStatsDumpFileName);
 
-#if defined(_MEMTEST)
-  const char *pTest = sv.GetMapName();
-  if (!pTest || !pTest[0]) {
-    // possibly at menu
-    pTest = "unknown";
-  }
-  g_pMemAlloc->SetStatsExtraInfo(pTest, "");
-#endif
   g_pMemAlloc->DumpStats();
 }
 
@@ -1346,7 +1338,7 @@ bool Host_ShouldRun(void) {
 
 static ConVar mem_periodicdumps(
     "mem_periodicdumps", "0", 0,
-    "Write periodic memstats dumps every n seconds.");
+    "Write periodic memory statistic dumps every n seconds.");
 static double g_flLastPeriodicMemDump = -1.0f;
 
 //-----------------------------------------------------------------------------
@@ -1381,9 +1373,6 @@ void Host_CheckDumpMemoryStats(void) {
 
       char mapname[256];
       Q_FileBase(pTest, mapname, sizeof(mapname));
-#if defined(_MEMTEST)
-      g_pMemAlloc->SetStatsExtraInfo(pTest, "");
-#endif
       g_pMemAlloc->DumpStatsFileBase(mapname);
       g_flLastPeriodicMemDump = curtime;
     }
@@ -1509,10 +1498,10 @@ void _Host_RunFrame_Client(bool framefinished) {
   // Get any current state update from server, etc.
   CL_ReadPackets(framefinished);
 
-#if defined(VOICE_OVER_IP) && defined(_WIN32)
+#if defined(_WIN32)
   // Send any enqueued voice data to the server
   CL_ProcessVoiceData();
-#endif  // VOICE_OVER_IP
+#endif
 
   cl.CheckUpdatingSteamResources();
   cl.CheckFileCRCsWithServer();
@@ -2965,17 +2954,11 @@ void GetPlatformMapPath(const char *pMapPath, char *pPlatformMapPath,
   }
 }
 
-/*
-===============================================================================
-
-SERVER TRANSITIONS
-
-===============================================================================
-*/
+/* SERVER TRANSITIONS */
 bool Host_NewGame(char *mapName, bool loadGame, bool bBackgroundLevel,
                   const char *pszOldMap, const char *pszLandmark) {
   VPROF("Host_NewGame");
-  COM_TimestampedLog("Host_NewGame");
+  Plat_TimestampedLog("Engine::Host_NewGame start.");
 
   char previousMapName[SOURCE_MAX_PATH];
   char dxMapName[SOURCE_MAX_PATH];
@@ -3027,7 +3010,7 @@ bool Host_NewGame(char *mapName, bool loadGame, bool bBackgroundLevel,
   // make sure the time is set
   g_ServerGlobalVariables.curtime = sv.GetTime();
 
-  COM_TimestampedLog("serverGameDLL->LevelInit");
+  Plat_TimestampedLog("  serverGameDLL->LevelInit");
 
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_LEVELINIT);
@@ -3050,7 +3033,7 @@ bool Host_NewGame(char *mapName, bool loadGame, bool bBackgroundLevel,
 
   // Connect the local client when a "map" command is issued.
   if (!sv.IsDedicated()) {
-    COM_TimestampedLog("Stuff 'connect localhost' to console");
+    Plat_TimestampedLog("  Stuff 'connect localhost' to console");
 
     char str[512];
     Q_snprintf(str, sizeof(str), "connect localhost:%d", sv.GetUDPPort());
@@ -3075,6 +3058,9 @@ bool Host_NewGame(char *mapName, bool loadGame, bool bBackgroundLevel,
     MapReslistGenerator().OnLevelLoadEnd();
   }
   DownloadListGenerator().OnLevelLoadEnd();
+
+  Plat_TimestampedLog("Engine::Host_NewGame end.");
+
   return true;
 }
 
@@ -3164,10 +3150,9 @@ void Host_Shutdown(void) {
   scr_disabled_for_loading = true;
 #endif
 
-#if defined VOICE_OVER_IP && !defined SWDS && \
-    !defined(NO_VOICE)  //! defined(_XBOX)
+#if !defined SWDS && !defined(NO_VOICE)
   Voice_Deinit();
-#endif  // VOICE_OVER_IP
+#endif  // NO_VOICE
 
   // TODO, Trace this
   CM_FreeMap();

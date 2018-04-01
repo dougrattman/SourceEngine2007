@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cmdlib.h"
 #include "mathlib/mathlib.h"
@@ -338,11 +338,12 @@ class CDistributor_DefaultMaster : public IWorkUnitDistributorMaster {
       // Allocate room for upcoming work units lookup
       WUIndexType iBegin = vlkup.PastVisibleIndex();
       WUIndexType iEnd = std::min(iBegin + g_nMaxWorkerCount * numWusToDeal,
-                             vlkup.PastPossibleIndex());
+                                  vlkup.PastPossibleIndex());
       vlkup.ExpandWindow(iEnd - 1);
 
       // Allocate a partition
-      size_t numPartitions = (size_t)std::min(iEnd - iBegin, g_nMaxWorkerCount);
+      size_t numPartitions =
+          (size_t)std::min(iEnd - iBegin, (uint64_t)g_nMaxWorkerCount);
       CArrayAutoPtr<CPartitionInfo *> spArrPartitions(
           new CPartitionInfo *[numPartitions]);
       CPartitionInfo **arrPartitions = spArrPartitions.Get();

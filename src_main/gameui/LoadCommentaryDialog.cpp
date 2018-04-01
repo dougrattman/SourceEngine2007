@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "LoadCommentaryDialog.h"
 
@@ -21,7 +21,6 @@
 #include "vgui_controls/PanelListPanel.h"
 #include "vgui_controls/QueryBox.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -80,11 +79,11 @@ class CCommentaryItemPanel : public vgui::EditablePanel {
   void SetCommentaryInfo(CommentaryItem_t &item) {
     // set the bitmap to display
     char tga[SOURCE_MAX_PATH];
-    Q_strncpy(tga, item.szMapFileName, sizeof(tga));
+    strcpy_s(tga, item.szMapFileName);
+
     char *ext = strstr(tga, ".txt");
-    if (ext) {
-      strcpy(ext, ".tga");
-    }
+    if (ext) strcpy_s(ext, tga + SOURCE_ARRAYSIZE(tga) - ext, ".tga");
+
     m_pCommentaryScreenshot->SetTGA(tga);
 
     // set the title text

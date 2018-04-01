@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 #include <stdlib.h>
+#include "base/include/compiler_specific.h"
 #include "fragment_channel.h"
 #include "iphelpers.h"
 #include "reliable_channel.h"
@@ -16,7 +17,7 @@
 #endif
 
 #define assert(x) \
-  if (!x) __asm int 3;
+  if (!x) DebuggerBreak();
 #else
 #define assert(x)
 #endif

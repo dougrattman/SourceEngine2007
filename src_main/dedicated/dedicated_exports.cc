@@ -81,10 +81,6 @@ class DedicatedExports : public CBaseAppSystem<IDedicatedExports> {
         DispatchMessage(&msg);
       }
 
-      // NOTE: Under some implementations of Win9x,
-      // dispatching messages can cause the FPU control word to change
-      SetupFPUControlWord();
-
       if (bDone /*|| gbAppHasBeenTerminated*/) break;
 #endif  // OS_WIN
 

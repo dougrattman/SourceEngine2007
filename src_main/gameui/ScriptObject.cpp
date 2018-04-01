@@ -1,12 +1,5 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//
-//===========================================================================//
-// CScriptObject and CDescription class definitions
-//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
+
 #include "ScriptObject.h"
 #include <vgui_controls/Label.h>
 #include <cstdio>
@@ -15,7 +8,6 @@
 #include "FileSystem.h"
 #include "tier1/convar.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -837,9 +829,9 @@ void CDescription::TransferCurrentValues(const char *pszConfigFile) {
 }
 
 void CDescription::setDescription(const char *pszDesc) {
-  m_pszDescriptionType = strdup(pszDesc);
+  m_pszDescriptionType = _strdup(pszDesc);
 }
 
 void CDescription::setHint(const char *pszHint) {
-  m_pszHintText = strdup(pszHint);
+  m_pszHintText = _strdup(pszHint);
 }

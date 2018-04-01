@@ -113,7 +113,7 @@ bool CColorCorrectionVolume::KeyValue(const char *szKeyName,
     return true;
   } else if (FStrEq(szKeyName, "maxweight")) {
     float max_weight;
-    sscanf(szValue, "%f", &max_weight);
+    sscanf_s(szValue, "%f", &max_weight);
     m_MaxWeight = max_weight;
 
     return true;

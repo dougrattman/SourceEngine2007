@@ -66,9 +66,9 @@ class DownloadCache {
   KeyValues *m_cache;
 
   void GetCacheFilename(const RequestContext *rc,
-                        char cachePath[SOURCE_MAX_PATH]);
+                        char (&cachePath)[SOURCE_MAX_PATH]);
   void GenerateCacheFilename(const RequestContext *rc,
-                             char cachePath[SOURCE_MAX_PATH]);
+                             char (&cachePath)[SOURCE_MAX_PATH]);
 
   void BuildKeyNames(const char *gamePath);  ///< Convenience function to build
                                              ///< the keys to index into m_cache
@@ -141,8 +141,8 @@ void DownloadCache::GetCachedData(RequestContext *rc) {
   } else {
     BuildKeyNames(rc->gamePath);
     rc->nBytesCached = size;
-    strncpy(rc->cachedTimestamp, m_cache->GetString(m_timestampKey, ""),
-            BufferSize);
+    strncpy_s(rc->cachedTimestamp, m_cache->GetString(m_timestampKey, ""),
+              BufferSize);
   }
 }
 
@@ -296,20 +296,19 @@ void DownloadCache::PersistToCache(const RequestContext *rc) {
 
 //--------------------------------------------------------------------------------------------------------------
 void DownloadCache::GetCacheFilename(const RequestContext *rc,
-                                     char cachePath[SOURCE_MAX_PATH]) {
+                                     char (&cachePath)[SOURCE_MAX_PATH]) {
   BuildKeyNames(rc->gamePath);
   const char *path = m_cache->GetString(m_cachefileKey, NULL);
   if (!path || strncmp(path, CacheDirectory, strlen(CacheDirectory))) {
     cachePath[0] = 0;
     return;
   }
-  strncpy(cachePath, path, SOURCE_MAX_PATH);
-  cachePath[SOURCE_MAX_PATH - 1] = 0;
+  strcpy_s(cachePath, path);
 }
 
 //--------------------------------------------------------------------------------------------------------------
 void DownloadCache::GenerateCacheFilename(const RequestContext *rc,
-                                          char cachePath[SOURCE_MAX_PATH]) {
+                                          char (&cachePath)[SOURCE_MAX_PATH]) {
   GetCacheFilename(rc, cachePath);
   BuildKeyNames(rc->gamePath);
 
@@ -325,8 +324,8 @@ void DownloadCache::GenerateCacheFilename(const RequestContext *rc,
       gameFilename = std::max(lastSlash, lastBackslash) + 1;
     }
     for (int i = 0; i < 1000; ++i) {
-      Q_snprintf(cachePath, SOURCE_MAX_PATH, "%s/%s%4.4d", CacheDirectory,
-                 gameFilename, i);
+      sprintf_s(cachePath, SOURCE_MAX_PATH, "%s/%s%4.4d", CacheDirectory,
+                gameFilename, i);
       if (!g_pFileSystem->FileExists(cachePath)) {
         m_cache->SetString(m_cachefileKey, cachePath);
         // ConDColorMsg( DownloadColor,"DownloadCache::GenerateCacheFilename()
@@ -335,7 +334,7 @@ void DownloadCache::GenerateCacheFilename(const RequestContext *rc,
       }
     }
     // all 1000 were invalid?!?
-    Q_snprintf(cachePath, SOURCE_MAX_PATH, "%s/overflow", CacheDirectory);
+    sprintf_s(cachePath, SOURCE_MAX_PATH, "%s/overflow", CacheDirectory);
     // ConDColorMsg( DownloadColor,"DownloadCache::GenerateCacheFilename() set
     // %s = %s\n", m_cachefileKey, cachePath );
     m_cache->SetString(m_cachefileKey, cachePath);
@@ -813,7 +812,7 @@ void DownloadManager::UpdateProgressBar() {
     progress = (float)(received) / (float)(total);
   }
 
-  _snwprintf(filenameBuf, 256, L"Downloading %hs", m_activeRequest->gamePath);
+  swprintf_s(filenameBuf, L"Downloading %hs", m_activeRequest->gamePath);
   EngineVGui()->UpdateCustomProgressBar(progress, filenameBuf);
 }
 

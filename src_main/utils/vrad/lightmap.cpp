@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "lightmap.h"
 
@@ -43,7 +43,7 @@ class CNormalList {
 
  private:
   // This represents a grid from (-1,-1,-1) to (1,1,1).
-  enum { NUM_SUBDIVS = 8 };
+  enum : int { NUM_SUBDIVS = 8 };
   CUtlVector<int> m_NormalGrid[NUM_SUBDIVS][NUM_SUBDIVS][NUM_SUBDIVS];
 };
 
@@ -76,7 +76,7 @@ int CNormalList::FindOrAddNormal(Vector const &vNormal) {
   // See which grid element it's in.
   for (int iDim = 0; iDim < 3; iDim++) {
     gi[iDim] = (int)(((vNormal[iDim] + 1.0f) * 0.5f) * NUM_SUBDIVS - 0.000001f);
-    gi[iDim] = std::min(gi[iDim], NUM_SUBDIVS);
+    gi[iDim] = std::min(gi[iDim], (int)NUM_SUBDIVS);
     gi[iDim] = std::max(gi[iDim], 0);
   }
 
@@ -961,8 +961,8 @@ int LightForString(const char *pLight, Vector &intensity) {
   // scanf into doubles, then assign, so it is f32 size independent
   r = g = b = scaler = 0;
   double r_hdr, g_hdr, b_hdr, scaler_hdr;
-  argCnt = sscanf(pLight, "%lf %lf %lf %lf %lf %lf %lf %lf", &r, &g, &b,
-                  &scaler, &r_hdr, &g_hdr, &b_hdr, &scaler_hdr);
+  argCnt = sscanf_s(pLight, "%lf %lf %lf %lf %lf %lf %lf %lf", &r, &g, &b,
+                    &scaler, &r_hdr, &g_hdr, &b_hdr, &scaler_hdr);
 
   if (argCnt == 8)  // 2 4-tuples
   {
@@ -1312,8 +1312,8 @@ void BuildVisForLightEnvironment(void) {
       // to sky may have been culled.  Try tracing to find sky.
       if (dleafs[iLeaf].flags & LEAF_FLAGS_RADIAL) {
         if (CanLeafTraceToSky(iLeaf)) {
-          // TODO(d.rattman): Should make a version that checks if we hit 2D skyboxes.. oh
-          // well.
+          // TODO(d.rattman): Should make a version that checks if we hit 2D
+          // skyboxes.. oh well.
           dleafs[iLeaf].flags |= LEAF_FLAGS_SKY;
         }
       }
@@ -2239,8 +2239,8 @@ static void ComputeIlluminationPointAndNormalsSSE(lightinfo_t const &l,
   bool computeNormals =
       (pInfo->m_NormalCount > 1 && (pInfo->m_IsDispFace || !l.isflat));
 
-  // TODO(d.rattman): move sample point off the surface a bit, this is done so that
-  // light sampling will not be affected by a bug	where raycasts will
+  // TODO(d.rattman): move sample point off the surface a bit, this is done so
+  // that light sampling will not be affected by a bug	where raycasts will
   // intersect with the face being lit. We really should just have that
   // logic in GatherSampleLight
   FourVectors faceNormal;
@@ -2585,26 +2585,30 @@ static void ComputeLightmapGradients(SSE_SampleInfo_t &info,
 
       if (sample.t > 0) {
         if (sample.s > 0)
-          gradient[i] =
-              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1 - w]));
-        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - w]));
+          gradient[i] = std::max(gradient[i],
+                                 fabs(pIntensity[j] - pIntensity[j - 1 - w]));
+        gradient[i] =
+            std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - w]));
         if (sample.s < w - 1)
-          gradient[i] =
-              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1 - w]));
+          gradient[i] = std::max(gradient[i],
+                                 fabs(pIntensity[j] - pIntensity[j + 1 - w]));
       }
       if (sample.t < h - 1) {
         if (sample.s > 0)
-          gradient[i] =
-              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1 + w]));
-        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + w]));
+          gradient[i] = std::max(gradient[i],
+                                 fabs(pIntensity[j] - pIntensity[j - 1 + w]));
+        gradient[i] =
+            std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + w]));
         if (sample.s < w - 1)
-          gradient[i] =
-              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1 + w]));
+          gradient[i] = std::max(gradient[i],
+                                 fabs(pIntensity[j] - pIntensity[j + 1 + w]));
       }
       if (sample.s > 0)
-        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1]));
+        gradient[i] =
+            std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1]));
       if (sample.s < w - 1)
-        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1]));
+        gradient[i] =
+            std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1]));
     }
   }
 }
@@ -2842,8 +2846,8 @@ void BuildFacelights(int iThread, int facenum) {
 
   if (g_bInterrupt) return;
 
-  // TODO(d.rattman): Is there a better way to do this? Like, in RunThreadsOn, for
-  // instance? Don't pay this cost unless we have to; this is super
+  // TODO(d.rattman): Is there a better way to do this? Like, in RunThreadsOn,
+  // for instance? Don't pay this cost unless we have to; this is super
   // perf-critical code.
   if (g_pIncremental) {
     // Both threads will be accessing this so it needs to be protected or else
@@ -3148,64 +3152,6 @@ void PrecompLightmapOffsets() {
   if (g_pIncremental && pdlightdata->Count()) return;
 
   pdlightdata->SetSize(lightdatasize);
-}
-
-// Clamp the three values for bumped lighting such that we trade off
-// directionality for brightness.
-static void ColorClampBumped(Vector &color1, Vector &color2, Vector &color3) {
-  Vector maxs;
-  Vector *colors[3] = {&color1, &color2, &color3};
-  maxs[0] = VectorMaximum(color1);
-  maxs[1] = VectorMaximum(color2);
-  maxs[2] = VectorMaximum(color3);
-
-  // HACK!  Clean this up, and add some else statements
-#define CONDITION(a, b, c)                          \
-  do {                                              \
-    if (maxs[a] >= maxs[b] && maxs[b] >= maxs[c]) { \
-      order[0] = a;                                 \
-      order[1] = b;                                 \
-      order[2] = c;                                 \
-    }                                               \
-  } while (0)
-
-  int order[3];
-  CONDITION(0, 1, 2);
-  CONDITION(0, 2, 1);
-  CONDITION(1, 0, 2);
-  CONDITION(1, 2, 0);
-  CONDITION(2, 0, 1);
-  CONDITION(2, 1, 0);
-
-  int i;
-  for (i = 0; i < 3; i++) {
-    float max = VectorMaximum(*colors[order[i]]);
-    if (max <= 1.0f) {
-      continue;
-    }
-    // This channel is too bright. . take half of the amount that we are over
-    // and add it to the other two channel.
-    float factorToRedist = (max - 1.0f) / max;
-    Vector colorToRedist = factorToRedist * *colors[order[i]];
-    *colors[order[i]] -= colorToRedist;
-    colorToRedist *= 0.5f;
-    *colors[order[(i + 1) % 3]] += colorToRedist;
-    *colors[order[(i + 2) % 3]] += colorToRedist;
-  }
-
-  ColorClamp(color1);
-  ColorClamp(color2);
-  ColorClamp(color3);
-
-  if (color1[0] < 0.f) color1[0] = 0.f;
-  if (color1[1] < 0.f) color1[1] = 0.f;
-  if (color1[2] < 0.f) color1[2] = 0.f;
-  if (color2[0] < 0.f) color2[0] = 0.f;
-  if (color2[1] < 0.f) color2[1] = 0.f;
-  if (color2[2] < 0.f) color2[2] = 0.f;
-  if (color3[0] < 0.f) color3[0] = 0.f;
-  if (color3[1] < 0.f) color3[1] = 0.f;
-  if (color3[2] < 0.f) color3[2] = 0.f;
 }
 
 //-----------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cvar.h"
 
@@ -239,26 +239,25 @@ void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
   // We'll fill in "empty" if nothing is left
   if (var->IsFlagSet(FCVAR_PRINTABLEONLY)) {
     wchar_t unicode[512];
+    size_t converted_chars_num;
 #ifndef SWDS
     if (sv.IsDedicated()) {
       // Dedicated servers don't have g_pVGuiLocalize, so fall back
-      mbstowcs(unicode, pszValue, SOURCE_ARRAYSIZE(unicode));
+      mbstowcs_s(&converted_chars_num, unicode, pszValue,
+                 SOURCE_ARRAYSIZE(unicode));
     } else {
       g_pVGuiLocalize->ConvertANSIToUnicode(pszValue, unicode, sizeof(unicode));
     }
 #else
-    mbstowcs(unicode, pszValue, SOURCE_ARRAYSIZE(unicode));
+    mbstowcs(&converted_chars_num, unicode, pszValue,
+             SOURCE_ARRAYSIZE(unicode));
 #endif
     wchar_t newUnicode[512];
-
-    const wchar_t *pS;
-    wchar_t *pD;
-
     // Clear out new string
     newUnicode[0] = L'\0';
 
-    pS = unicode;
-    pD = newUnicode;
+    const wchar_t *pS = unicode;
+    wchar_t *pD = newUnicode;
 
     // Step through the string, only copying back in characters that are
     // printable
@@ -276,19 +275,18 @@ void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
 
     // If it's empty or all spaces, then insert a marker string
     if (!wcslen(newUnicode) || IsAllSpaces(newUnicode)) {
-      wcsncpy(newUnicode, L"#empty",
-              (sizeof(newUnicode) / sizeof(wchar_t)) - 1);
-      newUnicode[(sizeof(newUnicode) / sizeof(wchar_t)) - 1] = L'\0';
+      wcscpy_s(newUnicode, L"#empty");
     }
 
+    size_t converted_chars_num2;
 #ifndef SWDS
     if (sv.IsDedicated()) {
-      wcstombs(szNew, newUnicode, sizeof(szNew));
+      wcstombs_s(&converted_chars_num2, szNew, newUnicode, sizeof(szNew));
     } else {
       g_pVGuiLocalize->ConvertUnicodeToANSI(newUnicode, szNew, sizeof(szNew));
     }
 #else
-    wcstombs(szNew, newUnicode, sizeof(szNew));
+    wcstombs_s(&converted_chars_num2, szNew, newUnicode, sizeof(szNew));
 #endif
     // Point the value here.
     pszValue = szNew;
@@ -642,7 +640,8 @@ static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
       Q_snprintf(csvf, SOURCE_ARRAYSIZE(csvf), ",");
     }
 
-    Q_strncat(csvflagstr, csvf, SOURCE_ARRAYSIZE(csvflagstr), COPY_ALL_CHARACTERS);
+    Q_strncat(csvflagstr, csvf, SOURCE_ARRAYSIZE(csvflagstr),
+              COPY_ALL_CHARACTERS);
   }
 
   char valstr[32];
@@ -656,9 +655,9 @@ static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
   }
 
   // Print to console
-  ConMsg(
-      "%-40s : %-8s : %-16s : %s\n", var->GetName(), valstr, flagstr,
-      StripTabsAndReturns(var->GetHelpText(), tempbuff, SOURCE_ARRAYSIZE(tempbuff)));
+  ConMsg("%-40s : %-8s : %-16s : %s\n", var->GetName(), valstr, flagstr,
+         StripTabsAndReturns(var->GetHelpText(), tempbuff,
+                             SOURCE_ARRAYSIZE(tempbuff)));
   if (logging) {
     g_pFileSystem->FPrintf(
         f, "\"%s\",\"%s\",%s,\"%s\"\n", var->GetName(), valstr, csvflagstr,

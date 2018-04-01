@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "GraphPanel.h"
 
@@ -153,12 +153,12 @@ void CGraphPanel::PerformLayout() {
 //-----------------------------------------------------------------------------
 void CGraphPanel::OnServerDataResponse(const char *value,
                                        const char *response) {
-  if (!stricmp(value, "stats")) {
+  if (!_stricmp(value, "stats")) {
     // parse the stats out of the response
     Points_t p;
     float uptime, users;
-    sscanf(response, "%f %f %f %f %f %f %f", &p.cpu, &p.in, &p.out, &uptime,
-           &users, &p.fps, &p.players);
+    sscanf_s(response, "%f %f %f %f %f %f %f", &p.cpu, &p.in, &p.out, &uptime,
+             &users, &p.fps, &p.players);
     p.cpu = p.cpu / 100;  // its given as a value between 0<x<100, we want 0<x<1
     p.ping = 0;
     p.time = (float)system()->GetCurrentTime();
@@ -166,7 +166,7 @@ void CGraphPanel::OnServerDataResponse(const char *value,
 
     // days:hours:minutes:seconds
     char timeText[64];
-    _snprintf(timeText, sizeof(timeText), "%i", (int)p.players);
+    _snprintf_s(timeText, sizeof(timeText), "%i", (int)p.players);
     SetControlString("TotalUsersLabel", timeText);
 
     // mark the vert combo has changed to force it to update graph ranges
@@ -579,34 +579,34 @@ void CGraphPanel::OnTextChanged(Panel *panel, const char *text) {
       SetAxisLabels(m_pGraphs->GetCPUColor(), "100%", "50%", "0%");
     } else if (strstr(text, "FPS")) {
       m_pGraphs->GetFPSLimits(maxVal, minVal);
-      sprintf(maxText, "%0.2f", maxVal);
-      sprintf(midText, "%0.2f", (maxVal - minVal) / 2);
-      sprintf(minText, "%0.2f", minVal);
+      sprintf_s(maxText, "%0.2f", maxVal);
+      sprintf_s(midText, "%0.2f", (maxVal - minVal) / 2);
+      sprintf_s(minText, "%0.2f", minVal);
       SetAxisLabels(m_pGraphs->GetFPSColor(), maxText, midText, minText);
     } else if (strstr(text, "In")) {
       m_pGraphs->GetInLimits(maxVal, minVal);
-      sprintf(maxText, "%0.2f", maxVal);
-      sprintf(midText, "%0.2f", (maxVal - minVal) / 2);
-      sprintf(minText, "%0.2f", minVal);
+      sprintf_s(maxText, "%0.2f", maxVal);
+      sprintf_s(midText, "%0.2f", (maxVal - minVal) / 2);
+      sprintf_s(minText, "%0.2f", minVal);
 
       SetAxisLabels(m_pGraphs->GetInColor(), maxText, midText, minText);
     } else if (strstr(text, "Out")) {
       m_pGraphs->GetOutLimits(maxVal, minVal);
-      sprintf(maxText, "%0.2f", maxVal);
-      sprintf(midText, "%0.2f", (maxVal - minVal) / 2);
-      sprintf(minText, "%0.2f", minVal);
+      sprintf_s(maxText, "%0.2f", maxVal);
+      sprintf_s(midText, "%0.2f", (maxVal - minVal) / 2);
+      sprintf_s(minText, "%0.2f", minVal);
       SetAxisLabels(m_pGraphs->GetOutColor(), maxText, midText, minText);
     } else if (strstr(text, "Ping")) {
       m_pGraphs->GetPingLimits(maxVal, minVal);
-      sprintf(maxText, "%0.2f", maxVal);
-      sprintf(midText, "%0.2f", (maxVal - minVal) / 2);
-      sprintf(minText, "%0.2f", minVal);
+      sprintf_s(maxText, "%0.2f", maxVal);
+      sprintf_s(midText, "%0.2f", (maxVal - minVal) / 2);
+      sprintf_s(minText, "%0.2f", minVal);
       SetAxisLabels(m_pGraphs->GetPingColor(), maxText, midText, minText);
     } else if (strstr(text, "Players")) {
       m_pGraphs->GetPlayerLimits(maxVal, minVal);
-      sprintf(maxText, "%0.2f", maxVal);
-      sprintf(midText, "%0.2f", (maxVal - minVal) / 2);
-      sprintf(minText, "%0.2f", minVal);
+      sprintf_s(maxText, "%0.2f", maxVal);
+      sprintf_s(midText, "%0.2f", (maxVal - minVal) / 2);
+      sprintf_s(minText, "%0.2f", minVal);
 
       SetAxisLabels(m_pGraphs->GetPlayersColor(), maxText, midText, minText);
     }

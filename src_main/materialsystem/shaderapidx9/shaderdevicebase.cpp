@@ -581,9 +581,9 @@ bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
       FindVidMemSpecificConfig(dx_config, gpu_memory_in_mb);
   if (gpu_memory_config) {
     if (CommandLine()->FindParm("-debugdxsupport")) {
-      CUtlBuffer tmpBuf;
-      gpu_memory_config->RecursiveSaveToFile(tmpBuf, 0);
-      Warning("gpu memory config\n%s\n", (const char *)tmpBuf.Base());
+      CUtlBuffer buffer;
+      gpu_memory_config->RecursiveSaveToFile(buffer, 0);
+      Warning("gpu memory config\n%s\n", (const char *)buffer.Base());
     }
     KeyValues *gpu_mat_picmip_config =
         gpu_memory_config->FindKey("ConVar.mat_picmip", false);
@@ -606,9 +606,9 @@ bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
   common_config->SetInt("ConVar.mat_dxlevel", nDXLevel);
 
   if (CommandLine()->FindParm("-debugdxsupport")) {
-    CUtlBuffer tmpBuf;
-    common_config->RecursiveSaveToFile(tmpBuf, 0);
-    Warning("final config:\n%s\n", (const char *)tmpBuf.Base());
+    CUtlBuffer buffer;
+    common_config->RecursiveSaveToFile(buffer, 0);
+    Warning("final config:\n%s\n", (const char *)buffer.Base());
   }
 
   return true;

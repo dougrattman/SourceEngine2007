@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -345,7 +345,7 @@ const wchar_t *RichText::ResolveLocalizedTextAndVariables(
         variables ); return outbuf;
         }*/
       }
-      wcsncpy(outbuf, format, outbufsizeinbytes / sizeof(wchar_t));
+      wcscpy_s(outbuf, outbufsizeinbytes / sizeof(wchar_t), format);
       return outbuf;
     }
   }
@@ -1337,8 +1337,8 @@ void RichText::OnCursorEntered() {
 
 //-----------------------------------------------------------------------------
 // Purpose: When the cursor is outside the window, if we are holding the mouse
-//			button down, then we want the window to scroll the text one
-//char at a time using Ticks
+//			button down, then we want the window to scroll the text
+// one char at a time using Ticks
 //-----------------------------------------------------------------------------
 void RichText::OnCursorExited() {
   // outside of window recieve drag scrolling ticks
@@ -1725,8 +1725,8 @@ void RichText::InsertChar(wchar_t wch) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Insert a string into the text buffer, this is just a series
-//			of char inserts because we have to check each char is ok to
-//insert
+//			of char inserts because we have to check each char is ok
+// to insert
 //-----------------------------------------------------------------------------
 void RichText::InsertString(const char *text) {
   if (text[0] == '#') {
@@ -1808,7 +1808,8 @@ void RichText::OpenEditMenu() {
   int x, y;
   // get base panel's postition
   panel->GetPos(x, y);
-  
+  
+
 
   // adjust our cursor position accordingly
   cursorX += x;
@@ -2278,8 +2279,8 @@ void RichText::SetUnderlineFont(HFont font) { m_hFontUnderline = font; }
 // memory
 //			allocations.
 // Input:	validator -		Our global validator object
-//			pchName -		Our name (typically a member var in our
-//container)
+//			pchName -		Our name (typically a member var
+//in our container)
 //-----------------------------------------------------------------------------
 void RichText::Validate(CValidator &validator, char *pchName) {
   validator.Push("vgui::RichText", this, pchName);

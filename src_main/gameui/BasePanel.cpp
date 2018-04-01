@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -40,8 +40,8 @@
 #include "matchmaking/achievementsdialog.h"
 #include "matchmaking/matchmakingbasepanel.h"
 #include "steam/steam_api.h"
-#include "tier0/include/threadtools.h"
 #include "tier0/include/icommandline.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/UtlString.h"
 #include "tier1/bitbuf.h"
 #include "tier1/convar.h"
@@ -64,7 +64,6 @@
 #include "vgui_controls/QueryBox.h"
 #include "xbox/xboxstubs.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // Windows helpfully #define's this to MessageBoxA, we're using vgui::MessageBox
@@ -1392,7 +1391,7 @@ void CBasePanel::RunMenuCommand(const char *command) {
       // Construct Steam URL. Pattern is steam://run/<appid>/<language>. (e.g.
       // Ep1 In French ==> steam://run/380/french)
       V_strcpy(szSteamURL, "steam://run/");
-      itoa(engine->GetAppID(), szAppId, 10);
+      _itoa_s(engine->GetAppID(), szAppId, 10);
       V_strcat(szSteamURL, szAppId, sizeof(szSteamURL));
       V_strcat(szSteamURL, "/", sizeof(szSteamURL));
       V_strcat(szSteamURL, COptionsSubAudio::GetUpdatedAudioLanguage(),
@@ -1687,28 +1686,27 @@ bool CBasePanel::HandleStorageDeviceRequest(const char *command) {
 
     // Do not run the command
     return false;
-  } else {
-    // If the user refused the sign-in and we respect that on this command,
-    // we're done
-    if (m_bUserRefusedStorageDevice && CommandRespectsSignInDenied(command))
-      return true;
+  }
 
-    // If the message is required first, then do that instead
-    if (CommandRequiresStorageDevice(command)) {
-      ShowMessageDialog(MD_PROMPT_STORAGE_DEVICE_REQUIRED);
-      m_strPostPromptCommand = command;
-      return false;
-    }
+  // If the user refused the sign-in and we respect that on this command,
+  // we're done
+  if (m_bUserRefusedStorageDevice && CommandRespectsSignInDenied(command))
+    return true;
 
-    // This is a misnomer of the first order!
-    OnChangeStorageDevice();
+  // If the message is required first, then do that instead
+  if (CommandRequiresStorageDevice(command)) {
+    ShowMessageDialog(MD_PROMPT_STORAGE_DEVICE_REQUIRED);
     m_strPostPromptCommand = command;
-    m_bStorageBladeShown = true;
-    m_bUserRefusedStorageDevice = false;
     return false;
   }
 
-  return true;
+  // This is a misnomer of the first order!
+  OnChangeStorageDevice();
+  m_strPostPromptCommand = command;
+  m_bStorageBladeShown = true;
+  m_bUserRefusedStorageDevice = false;
+
+  return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -2301,8 +2299,8 @@ void CBasePanel::SystemNotification(const int notification) {
     if (m_hLoadGameDialog_Xbox.Get())
       m_hLoadGameDialog_Xbox->OnCommand("RefreshSaveGames");
 
-    // TODO(d.rattman): This code is incorrect, they do NOT need a storage device, it is
-    // only recommended that they do
+    // TODO(d.rattman): This code is incorrect, they do NOT need a storage
+    // device, it is only recommended that they do
     if (GameUI().IsInLevel()) {
       // They wanted to use a storage device and are already playing!
       // They need a storage device now or we're quitting the game!
@@ -2657,7 +2655,7 @@ void CFooterPanel::SetHelpNameAndReset(const char *pName) {
   }
 
   if (pName) {
-    m_pHelpName = strdup(pName);
+    m_pHelpName = _strdup(pName);
   }
 
   ClearButtons();
@@ -2693,7 +2691,7 @@ void CFooterPanel::AddNewButtonLabel(const char *text, const char *icon) {
   // Set the help text
   wchar_t *pText = g_pVGuiLocalize->Find(text);
   if (pText) {
-    wcsncpy(button->text, pText, wcslen(pText) + 1);
+    wcscpy_s(button->text, pText);
   } else {
     button->text[0] = '\0';
   }
@@ -2720,11 +2718,13 @@ void CFooterPanel::SetButtonText(const char *buttonName, const char *text) {
   for (int i = 0; i < m_ButtonLabels.Count(); ++i) {
     if (!Q_stricmp(m_ButtonLabels[i]->name, buttonName)) {
       wchar_t *wtext = g_pVGuiLocalize->Find(text);
+
       if (text) {
-        wcsncpy(m_ButtonLabels[i]->text, wtext, wcslen(wtext) + 1);
+        wcscpy_s(m_ButtonLabels[i]->text, wtext);
       } else {
         m_ButtonLabels[i]->text[0] = '\0';
       }
+
       break;
     }
   }

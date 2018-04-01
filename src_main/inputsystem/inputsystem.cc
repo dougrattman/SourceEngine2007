@@ -330,10 +330,6 @@ void CInputSystem::PollInputState() {
       TranslateMessage(&msg);
       DispatchMessage(&msg);
     }
-
-    // NOTE: Under some implementations of Win9x,
-    // dispatching messages can cause the FPU control word to change
-    SetupFPUControlWord();
   }
 
   // Leave the queued state up-to-date with the current

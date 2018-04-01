@@ -16,6 +16,7 @@
 #define VA_RESERVE_FLAGS MEM_RESERVE
 #endif
 
+#include "base/include/stdio_file_stream.h"
 #include "mem_helpers.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/memalloc.h"
@@ -423,39 +424,17 @@ usize CSmallBlockHeap::GetSize(void *p) {
   return pPool->GetBlockSize();
 }
 
-void CSmallBlockHeap::DumpStats(FILE *pFile) {
-  bool bSpew = true;
+void CSmallBlockHeap::DumpStats(source::stdio_file_stream file) {
+  file.print("Small Block Heap Stats:\n");
 
-  if (pFile) {
-    for (i32 i = 0; i < NUM_POOLS; i++) {
-      // output for vxconsole parsing
-      fprintf(pFile,
-              "Pool %i: Size: %zu Allocated: %zu Free: %zu Committed: %zu "
-              "CommittedSize: %zu\n",
-              i, m_Pools[i].GetBlockSize(), m_Pools[i].CountAllocatedBlocks(),
-              m_Pools[i].CountFreeBlocks(), m_Pools[i].CountCommittedBlocks(),
-              m_Pools[i].GetCommittedSize());
-    }
-    bSpew = false;
-  }
-
-  if (bSpew) {
-    usize bytesCommitted = 0, bytesAllocated = 0;
-
-    for (i32 i = 0; i < NUM_POOLS; i++) {
-      Msg("Pool %i: (size: %zu) blocks: allocated:%zu free:%zu committed:%zu "
-          "(committed size:%zu kb)\n",
-          i, m_Pools[i].GetBlockSize(), m_Pools[i].CountAllocatedBlocks(),
-          m_Pools[i].CountFreeBlocks(), m_Pools[i].CountCommittedBlocks(),
-          m_Pools[i].GetCommittedSize() / 1024);
-
-      bytesCommitted += m_Pools[i].GetCommittedSize();
-      bytesAllocated +=
-          (m_Pools[i].CountAllocatedBlocks() * m_Pools[i].GetBlockSize());
-    }
-
-    Msg("Totals: Committed:%zu kb Allocated:%zu kb\n", bytesCommitted / 1024,
-        bytesAllocated / 1024);
+  for (i32 i = 0; i < NUM_POOLS; i++) {
+    // output for vxconsole parsing
+    file.print(
+        "Pool %i: Size: %zu Allocated: %zu Free: %zu Committed: %zu "
+        "CommittedSize: %zu\n",
+        i, m_Pools[i].GetBlockSize(), m_Pools[i].CountAllocatedBlocks(),
+        m_Pools[i].CountFreeBlocks(), m_Pools[i].CountCommittedBlocks(),
+        m_Pools[i].GetCommittedSize());
   }
 }
 
@@ -619,18 +598,15 @@ i32 CStdMemAlloc::heapchk() {
 #endif
 }
 
-void CStdMemAlloc::DumpStats() { DumpStatsFileBase("memstats"); }
+void CStdMemAlloc::DumpStats() { DumpStatsFileBase(kMemoryStatsDumpFileName); }
 
-void CStdMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
+void CStdMemAlloc::DumpStatsFileBase(ch const *file_name) {
 #ifdef OS_WIN
-  ch filename[512];
-  _snprintf_s(filename, SOURCE_ARRAYSIZE(filename) - 1, "%s.txt", pchFileBase);
-
-  FILE *pFile;
-  if (!fopen_s(&pFile, filename, "wt")) {
-    fprintf(pFile, "\nSBH:\n");
-    m_SmallBlockHeap.DumpStats(pFile);  // Dump statistics to small block heap
-    fclose(pFile);
+  auto [file, errno_info] =
+      source::stdio_file_stream_factory::open(file_name, "wt");
+  if (errno_info.is_success()) {
+    // Dump statistics to small block heap
+    m_SmallBlockHeap.DumpStats(std::move(file));
   }
 #endif
 }
@@ -650,11 +626,6 @@ MemAllocFailHandler_t CStdMemAlloc::SetAllocFailHandler(
 }
 
 usize CStdMemAlloc::DefaultFailHandler(usize nBytes) { return 0; }
-
-#if defined(_MEMTEST)
-void CStdMemAlloc::void SetStatsExtraInfo(const ch *pMapName,
-                                          const ch *pComment) {}
-#endif
 
 void CStdMemAlloc::SetCRTAllocFailed(usize nSize) {
   m_sMemoryAllocFailed = nSize;

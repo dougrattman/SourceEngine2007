@@ -341,7 +341,8 @@ void CCreateMultiplayerGameServerPage::OnCommand(const char *cmd) {
 
     // create the command to execute
     bool isLanOnly = (m_pNetworkCombo->GetActiveItem() != 0);
-    CommandLine()->AppendParm("-game", m_szMod);
+    CommandLine()->AppendParm(source::tier0::command_line_switches::kGamePath,
+                              m_szMod);
     CommandLine()->AppendParm("-maxplayers", ToString(m_iMaxPlayers));
     CommandLine()->AppendParm("+sv_lan", ToString(isLanOnly));
     CommandLine()->AppendParm("+map", GetMapName());

@@ -2014,7 +2014,7 @@ void KeyValues::UnpackIntoStructure(
           else
             dest_v->Init(0, 0, 0);
         }
-        *(dest_v) *= (1.0 / 255);
+        *(dest_v) *= (1.0f / 255);
       }
     }
     pUnpackTable++;

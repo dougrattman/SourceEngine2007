@@ -1,15 +1,5 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose:
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// ProcessWnd.h : header file
-//
-
-/////////////////////////////////////////////////////////////////////////////
 // CProcessWnd window
 
 class CProcessWnd : public CWnd {
@@ -61,5 +51,3 @@ class CProcessWnd : public CWnd {
   //}}AFX_MSG
   DECLARE_MESSAGE_MAP()
 };
-
-/////////////////////////////////////////////////////////////////////////////

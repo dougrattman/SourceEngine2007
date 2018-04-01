@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui/ILocalize.h"
 
@@ -17,7 +17,6 @@
 #include "vgui/ISystem.h"
 #include "vgui_internal.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -224,7 +223,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
     // always load the file to make sure we're not missing any strings
     // copy out the initial part of the string
     offs = langptr - szFileName;
-    strncpy(fileName, szFileName, offs);
+    strncpy_s(fileName, szFileName, offs);
     fileName[offs] = 0;
 
     if (vgui::g_pSystem->CommandLineParamExists("-all_languages")) {
@@ -258,7 +257,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
       if (strlen(language) != 0 && _stricmp(language, ENGLISH_STRING) != 0) {
         // copy out the initial part of the string
         offs = langptr - szFileName;
-        strncpy(fileName, szFileName, offs);
+        strncpy_s(fileName, szFileName, offs);
         fileName[offs] = 0;
 
         Q_strncat(fileName, language, sizeof(fileName), COPY_ALL_CHARACTERS);
@@ -309,10 +308,11 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
     CUtlSymbol sym = pathStrings.AddString(fileName);
     searchList.AddToHead(sym);
   } else {
+    char *context;
     // We want to walk them in reverse order so newer files are "overrides" for
     // older ones, so we add them to a list in reverse order
-    for (char *path = strtok(searchPaths, ";"); path;
-         path = strtok(NULL, ";")) {
+    for (char *path = strtok_s(searchPaths, ";", &context); path;
+         path = strtok_s(NULL, ";", &context)) {
       char fullpath[SOURCE_MAX_PATH];
       Q_snprintf(fullpath, sizeof(fullpath), "%s%s", path, fileName);
       Q_FixSlashes(fullpath);
@@ -430,7 +430,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
           // copy out our language setting
           char value[MAX_LOCALIZED_CHARS];
           ConvertUnicodeToANSI(valuetoken, value, sizeof(value));
-          strncpy(m_szLanguage, value, sizeof(m_szLanguage) - 1);
+          strcpy_s(m_szLanguage, value);
         } else if (!_stricmp(key, "Tokens")) {
           state = STATE_TOKENS;
         } else if (!_stricmp(key, "}")) {
@@ -826,8 +826,8 @@ void CLocalizedStringTable::SetValueByIndex(StringIndex_t index,
   wchar_t *wstr = &m_Values[lstr.valueIndex];
 
   // see if the new string will fit within the old memory
-  int newLen = wcslen(newValue);
-  int oldLen = wcslen(wstr);
+  size_t newLen = wcslen(newValue);
+  size_t oldLen = wcslen(wstr);
 
   if (newLen > oldLen) {
     // it won't fit, so allocate new memory - this is wasteful, but only happens
@@ -837,7 +837,7 @@ void CLocalizedStringTable::SetValueByIndex(StringIndex_t index,
            (newLen + 1) * sizeof(wchar_t));
   } else {
     // copy the string into the old position
-    wcscpy(wstr, newValue);
+    wcscpy_s(wstr, oldLen + 1, newValue);
   }
 }
 
@@ -945,15 +945,7 @@ void CLocalizedStringTable::ConstructString(wchar_t *unicodeOutput,
       }
 
       if (argindex < numFormatParameters) {
-        wchar_t *param = NULL;
-        if (IsPC()) {
-          param = va_argByIndex(argList, wchar_t *, argindex);
-        } else {
-          // X360TBD: convert string to new %var% format if this assert hits
-          Assert(argindex == curArgIdx++);
-          param = va_arg(argList, wchar_t *);
-        }
-
+        wchar_t *param = va_argByIndex(argList, wchar_t *, argindex);
         if (!param) {
           Assert(
               !("CLocalizedStringTable::ConstructString - Found a %s# escape "
@@ -966,7 +958,10 @@ void CLocalizedStringTable::ConstructString(wchar_t *unicodeOutput,
           paramSize = unicodeBufferSize;
         }
 
-        wcsncpy(outputPos, param, paramSize);
+        wcsncpy_s(outputPos,
+                  unicodeBufferSizeInBytes / sizeof(wchar_t) -
+                      (outputPos - unicodeOutput),
+                  param, paramSize);
 
         unicodeBufferSize -= paramSize;
         outputPos += paramSize;
@@ -1029,8 +1024,8 @@ void CLocalizedStringTable::ConstructString(wchar_t *unicodeOutput,
   unicodeOutput[0] = 0;
   const wchar_t *searchPos = GetValueByIndex(unlocalizedTextSymbol);
   if (!searchPos) {
-    wcsncpy(unicodeOutput, L"[unknown string]",
-            unicodeBufferSizeInBytes / sizeof(wchar_t));
+    wcscpy_s(unicodeOutput, unicodeBufferSizeInBytes / sizeof(wchar_t),
+             L"[unknown string]");
     return;
   }
 
@@ -1077,7 +1072,10 @@ void CLocalizedStringTable::ConstructString(wchar_t *unicodeOutput,
             paramSize = unicodeBufferSize;
           }
 
-          wcsncpy(outputPos, value, paramSize);
+          wcsncpy_s(outputPos,
+                    unicodeBufferSizeInBytes / sizeof(wchar_t) -
+                        (outputPos - unicodeOutput),
+                    value, paramSize);
 
           unicodeBufferSize -= paramSize;
           outputPos += paramSize;

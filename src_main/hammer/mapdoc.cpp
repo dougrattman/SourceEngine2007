@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: The document. Exposes functions for object creation, deletion, and
 // manipulation. Holds the current tool. Handles GUI messages that are
@@ -65,19 +65,18 @@
 #include "hammer.h"
 #include "ibsplighting.h"
 
- 
 #include ".\mapdoc.h"
 #include "tier0/include/memdbgon.h"
 
 #define KeyInt(key, dest)                       \
-  if (_stricmp(szKey, key) != 0)                 \
+  if (_stricmp(szKey, key) != 0)                \
     ;                                           \
   else {                                        \
     CChunkFile::ReadKeyValueInt(szValue, dest); \
   }
 
 #define KeyBool(key, dest)                       \
-  if (_stricmp(szKey, key) != 0)                  \
+  if (_stricmp(szKey, key) != 0)                 \
     ;                                            \
   else {                                         \
     CChunkFile::ReadKeyValueBool(szValue, dest); \
@@ -306,8 +305,8 @@ struct ReplaceTexInfo_t {
 
 struct FindEntity_t {
   char szClassName[SOURCE_MAX_PATH];  //
-  Vector Pos;                  //
-  CMapEntity *pEntityFound;    // Points to object found, NULL if unsuccessful.
+  Vector Pos;                         //
+  CMapEntity *pEntityFound;  // Points to object found, NULL if unsuccessful.
 };
 
 struct SelectBoxInfo_t {
@@ -1021,7 +1020,7 @@ void CMapDoc::OnViewGotoCoords() {
     char setangString[255];
     char semicolonString[2];
 
-    if (sscanf(dlg.m_string, "%f %f %f", &posVec.x, &posVec.y, &posVec.z) ==
+    if (sscanf_s(dlg.m_string, "%f %f %f", &posVec.x, &posVec.y, &posVec.z) ==
         3) {
       // SILLY:
       if ((posVec.x == 200) && (posVec.y == -4096) && (posVec.z == 1154)) {
@@ -1033,9 +1032,12 @@ void CMapDoc::OnViewGotoCoords() {
       CenterViewsOn(posVec);
       return;
     }
-    if (sscanf(dlg.m_string, "%s %f %f %f%s %s %f %f %f", setposString,
-               &posVec.x, &posVec.y, &posVec.z, semicolonString, setangString,
-               &angVec.x, &angVec.y, &angVec.z) == 9) {
+
+    if (sscanf_s(dlg.m_string, "%s %f %f %f%s %s %f %f %f", setposString,
+                 SOURCE_ARRAYSIZE(setposString), &posVec.x, &posVec.y,
+                 &posVec.z, semicolonString, SOURCE_ARRAYSIZE(semicolonString),
+                 setangString, SOURCE_ARRAYSIZE(setangString), &angVec.x,
+                 &angVec.y, &angVec.z) == 9) {
       posVec.z += HALF_LIFE_2_EYE_HEIGHT;
       CenterViewsOn(posVec);
       Set3DViewsPosAng(posVec, angVec);
@@ -2569,9 +2571,9 @@ static BOOL SelectInBox(CMapClass *pObject, SelectBoxInfo_t *pInfo) {
     return TRUE;
   }
 
-  // TODO(d.rattman): We're calling PrepareSelection on nearly everything in the world,
-  // then doing the box test against the object that we get back from that!
-  // We should use the octree to cull out most of the world up front.
+  // TODO(d.rattman): We're calling PrepareSelection on nearly everything in the
+  // world, then doing the box test against the object that we get back from
+  // that! We should use the octree to cull out most of the world up front.
   CMapClass *pSelObject = pObject->PrepareSelection(pInfo->eSelectMode);
   if (pSelObject) {
     if (Options.view2d.bSelectbyhandles) {
@@ -2628,9 +2630,9 @@ static BOOL SelectInLogicalBox(CMapClass *pObject,
   // Skip clutter helpers.
   if (pObject->IsClutter()) return TRUE;
 
-  // TODO(d.rattman): We're calling PrepareSelection on nearly everything in the world,
-  // then doing the box test against the object that we get back from that!
-  // We should use the octree to cull out most of the world up front.
+  // TODO(d.rattman): We're calling PrepareSelection on nearly everything in the
+  // world, then doing the box test against the object that we get back from
+  // that! We should use the octree to cull out most of the world up front.
   CMapClass *pSelObject = pObject->PrepareSelection(pInfo->eSelectMode);
   if (pSelObject) {
     Vector2D mins, maxs;
@@ -5439,20 +5441,21 @@ bool CMapDoc::DoExpandKeywords(CMapClass *pObject, CMapWorld *pWorld,
 //-----------------------------------------------------------------------------
 // Gets this object's name if it has one. Returns false if it has none.
 //-----------------------------------------------------------------------------
-static bool GetName(CMapClass *pObject, char *szName) {
+template <size_t name_size>
+static bool GetName(CMapClass *pObject, char (&szName)[name_size]) {
   CEditGameClass *pEditGameClass = dynamic_cast<CEditGameClass *>(pObject);
   if (pEditGameClass == NULL) return false;
 
   const char *pszName = pEditGameClass->GetKeyValue("targetname");
   if (!pszName) return false;
 
-  Q_strcpy(szName, pszName);
+  strcpy_s(szName, name_size, pszName);
 
   return true;
 }
 
 static const char *CopyName(const char *pszString) {
-  int length = Q_strlen(pszString) + 1;
+  size_t length = strlen(pszString) + 1;
   char *pNewString = new char[length];
   Q_memcpy(pNewString, pszString, length);
   return pNewString;
@@ -5881,8 +5884,8 @@ void CMapDoc::OnViewShowModelsIn2D(void) {
 }
 
 void CMapDoc::OnViewShowHelpers(void) {
-  // TODO(d.rattman): this only sets the handle mode for the active document's selection
-  // tool!
+  // TODO(d.rattman): this only sets the handle mode for the active document's
+  // selection tool!
   Options.SetShowHelpers(!Options.GetShowHelpers());
   UpdateVisibilityAll();
   UpdateAllViews(MAPVIEW_UPDATE_OBJECTS);
@@ -7270,7 +7273,7 @@ void CMapDoc::OnMapLoadpointfile(void) {
     file.getline(szLine, 256);
 
     Vector v;
-    if (sscanf(szLine, "%f %f %f", &v.x, &v.y, &v.z) == 3) {
+    if (sscanf_s(szLine, "%f %f %f", &v.x, &v.y, &v.z) == 3) {
       m_PFPoints.AddToTail(v);
     } else {
       break;
@@ -7713,7 +7716,8 @@ CMapWorld *CMapDoc::CordonCreateWorld() {
 
   // make bigger box
   for (int i = 0; i < 3; i++) {
-    // dvs: TODO(d.rattman): vbsp barfs if I go all the way out to the full mins & maxs
+    // dvs: TODO(d.rattman): vbsp barfs if I go all the way out to the full mins
+    // & maxs
     bigbounds.bmins[i] = g_MIN_MAP_COORD + 8;
     if (bigbounds.bmins[i] > m_vCordonMins[i]) {
       bigbounds.bmins[i] = g_MIN_MAP_COORD;

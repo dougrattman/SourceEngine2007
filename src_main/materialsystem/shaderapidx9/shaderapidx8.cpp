@@ -7059,7 +7059,7 @@ void CShaderAPIDx8::SetLight(int lightNum, const LightDesc_t &desc_) {
 
     case MATERIAL_LIGHT_DIRECTIONAL:
       light.Type = D3DLIGHT_DIRECTIONAL;
-      light.Range = 1e12;  // This is supposed to be ignored
+      light.Range = 1e12f;  // This is supposed to be ignored
       break;
 
     case MATERIAL_LIGHT_SPOT:

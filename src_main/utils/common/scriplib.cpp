@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "scriplib.h"
 
@@ -111,8 +111,8 @@ int nummacros;
 
 void DefineMacro(char *macroname) {
   script_t *pmacro = (script_t *)malloc(sizeof(script_t));
+  strcpy_s(pmacro->filename, macroname);
 
-  strcpy(pmacro->filename, macroname);
   pmacro->line = script->line;
   pmacro->nummacroparams = 0;
 
@@ -129,7 +129,9 @@ void DefineMacro(char *macroname) {
 
     pmacro->macroparam[pmacro->nummacroparams++] = mp;
 
-    strcpy(mp, token);
+    strcpy_s(mp,
+             pmacro->macrobuffer + SOURCE_ARRAYSIZE(pmacro->macrobuffer) - mp,
+             token);
     mp += strlen(token) + 1;
 
     if (mp >= pmacro->macrobuffer + sizeof(pmacro->macrobuffer))
@@ -171,11 +173,11 @@ void DefineMacro(char *macroname) {
 void DefineVariable(char *variablename) {
   variable_t v;
 
-  v.param = strdup(variablename);
+  v.param = _strdup(variablename);
 
   GetToken(false);
 
-  v.value = strdup(token);
+  v.value = _strdup(token);
 
   g_definevariable.AddToTail(v);
 }
@@ -213,7 +215,8 @@ bool AddMacroToStack(char *macroname) {
   for (i = 0; i < pnext->nummacroparams; i++) {
     GetToken(false);
 
-    strcpy(cp, token);
+    strcpy_s(cp, pnext->macrobuffer + SOURCE_ARRAYSIZE(pnext->macrobuffer) - cp,
+             token);
     pnext->macroparam[i] = pmacro->macroparam[i];
     pnext->macrovalue[i] = cp;
 
@@ -224,9 +227,9 @@ bool AddMacroToStack(char *macroname) {
   }
 
   script = pnext;
-  strcpy(script->filename, pmacro->filename);
+  strcpy_s(script->filename, pmacro->filename);
 
-  int size = pmacro->end_p - pmacro->buffer;
+  ptrdiff_t size = pmacro->end_p - pmacro->buffer;
   script->buffer = (char *)malloc(size + 1);
   memcpy(script->buffer, pmacro->buffer, size);
   pmacro->buffer[size] = '\0';
@@ -237,7 +240,7 @@ bool AddMacroToStack(char *macroname) {
   return true;
 }
 
-bool ExpandMacroToken(char *&token_p) {
+bool ExpandMacroToken(char *&token_p, size_t size) {
   if (script->nummacroparams && *script->script_p == '$') {
     char *cp = script->script_p + 1;
 
@@ -250,7 +253,7 @@ bool ExpandMacroToken(char *&token_p) {
 
     // get token pointer
     char *tp = script->script_p + 1;
-    int len = (cp - tp);
+    ptrdiff_t len = (cp - tp);
     *(tp + len) = '\0';
 
     // lookup macro parameter
@@ -264,7 +267,7 @@ bool ExpandMacroToken(char *&token_p) {
 
     // paste token into
     len = strlen(script->macrovalue[index]);
-    strcpy(token_p, script->macrovalue[index]);
+    strcpy_s(token_p, size, script->macrovalue[index]);
     token_p += len;
 
     script->script_p = cp + 1;
@@ -283,9 +286,9 @@ bool ExpandMacroToken(char *&token_p) {
 ==============
 ==============
 */
-// TODO(d.rattman): this should create a new script context so the individual tokens in
-// the variable can be parsed
-bool ExpandVariableToken(char *&token_p) {
+// TODO(d.rattman): this should create a new script context so the individual
+// tokens in the variable can be parsed
+bool ExpandVariableToken(char *&token_p, size_t size) {
   if (*script->script_p == '$') {
     char *cp = script->script_p + 1;
 
@@ -314,7 +317,7 @@ bool ExpandVariableToken(char *&token_p) {
 
     // paste token into
     len = strlen(g_definevariable[index].value);
-    strcpy(token_p, g_definevariable[index].value);
+    strcpy_s(token_p, size, g_definevariable[index].value);
     token_p += len;
 
     script->script_p = cp + 1;
@@ -339,7 +342,7 @@ void ParseFromMemory(char *buffer, int size) {
   script++;
   if (script == &scriptstack[MAX_INCLUDES])
     Error("script file exceeded MAX_INCLUDES");
-  strcpy(script->filename, "memory buffer");
+  strcpy_s(script->filename, "memory buffer");
 
   script->buffer = buffer;
   script->line = 1;
@@ -392,10 +395,8 @@ GetToken
 ==============
 */
 bool GetToken(bool crossline) {
-  char *token_p;
-
-  if (tokenready)  // is a token allready waiting?
-  {
+  // is a token allready waiting?
+  if (tokenready) {
     tokenready = false;
     return true;
   }
@@ -460,7 +461,7 @@ skipspace:
   }
 
   // copy token to buffer
-  token_p = token;
+  char *token_p = token;
 
   if (*script->script_p == '"') {
     // quoted token
@@ -474,8 +475,10 @@ skipspace:
     script->script_p++;
   } else  // regular token
     while (*script->script_p > 32 && *script->script_p != ';') {
-      if (!ExpandMacroToken(token_p)) {
-        if (!ExpandVariableToken(token_p)) {
+      if (!ExpandMacroToken(token_p,
+                            token + SOURCE_ARRAYSIZE(token) - token_p)) {
+        if (!ExpandVariableToken(token_p,
+                                 token + SOURCE_ARRAYSIZE(token) - token_p)) {
           *token_p++ = *script->script_p++;
           if (script->script_p == script->end_p) break;
           if (token_p == &token[MAXTOKEN])
@@ -701,8 +704,10 @@ bool CScriptLib::ReadFileToBuffer(const char *pSourceName, CUtlBuffer &buffer,
 
   if (!g_pFullFileSystem->ReadFile(pSourceName, NULL, buffer)) {
     if (!bNoOpenFailureWarning) {
-      Msg("ReadFileToBuffer(): Error opening %s: %s\n", pSourceName,
-          strerror(errno));
+      char error[96];
+      strerror_s(error, errno);
+
+      Msg("ReadFileToBuffer(): Error opening %s: %s\n", pSourceName, error);
     }
     return false;
   }
@@ -729,13 +734,13 @@ bool CScriptLib::WriteBufferToFile(const char *pTargetName, CUtlBuffer &buffer,
 
   // create path
   // prime and skip to first seperator
-  strcpy(dirPath, pTargetName);
+  strcpy_s(dirPath, pTargetName);
   ptr = strchr(dirPath, '\\');
   while (ptr) {
     ptr = strchr(ptr + 1, '\\');
     if (ptr) {
       *ptr = '\0';
-      mkdir(dirPath);
+      _mkdir(dirPath);
       *ptr = '\\';
     }
   }
@@ -805,19 +810,23 @@ char *CScriptLib::MakeTemporaryFilename(char const *pchModPath, char *pPath,
 // Delete temporary files
 //-----------------------------------------------------------------------------
 void CScriptLib::DeleteTemporaryFiles(const char *pFileMask) {
-  const char *pEnv = getenv("temp");
-  if (!pEnv) {
-    pEnv = getenv("tmp");
+  char temp_env[SOURCE_MAX_PATH];
+  size_t temp_env_size;
+  int error_code = getenv_s(&temp_env_size, temp_env, "temp");
+
+  if (error_code || temp_env_size == 0) {
+    error_code = getenv_s(&temp_env_size, temp_env, "tmp");
   }
 
-  if (pEnv) {
+  if (!error_code && temp_env_size > 0) {
     char tempPath[SOURCE_MAX_PATH];
-    strcpy(tempPath, pEnv);
+    strcpy_s(tempPath, temp_env);
     V_AppendSlash(tempPath, sizeof(tempPath));
-    strcat(tempPath, pFileMask);
+    strcat_s(tempPath, pFileMask);
 
     CUtlVector<fileList_t> fileList;
     FindFiles(tempPath, false, fileList);
+
     for (int i = 0; i < fileList.Count(); i++) {
       _unlink(fileList[i].fileName.String());
     }
@@ -835,31 +844,29 @@ int CScriptLib::GetFileList(const char *pDirPath, const char *pPattern,
 
   fileList.Purge();
 
-  strcpy(sourcePath, pDirPath);
-  int len = (int)strlen(sourcePath);
+  strcpy_s(sourcePath, pDirPath);
+  size_t len = strlen(sourcePath);
   if (!len) {
-    strcpy(sourcePath, ".\\");
+    strcpy_s(sourcePath, ".\\");
   } else if (sourcePath[len - 1] != '\\') {
     sourcePath[len] = '\\';
     sourcePath[len + 1] = '\0';
   }
 
-  strcpy(fullPath, sourcePath);
+  strcpy_s(fullPath, sourcePath);
   if (pPattern[0] == '\\' && pPattern[1] == '\0') {
     // find directories only
     bFindDirs = true;
-    strcat(fullPath, "*");
+    strcat_s(fullPath, "*");
   } else {
     // find files, use provided pattern
     bFindDirs = false;
-    strcat(fullPath, pPattern);
+    strcat_s(fullPath, pPattern);
   }
 
   struct _finddata_t findData;
   intptr_t h = _findfirst(fullPath, &findData);
-  if (h == -1) {
-    return 0;
-  }
+  if (h == -1) return 0;
 
   do {
     // dos attribute complexities i.e. _A_NORMAL is 0
@@ -876,8 +883,8 @@ int CScriptLib::GetFileList(const char *pDirPath, const char *pPattern,
     if (!_stricmp(findData.name, "..")) continue;
 
     char fileName[SOURCE_MAX_PATH];
-    strcpy(fileName, sourcePath);
-    strcat(fileName, findData.name);
+    strcpy_s(fileName, sourcePath);
+    strcat_s(fileName, findData.name);
 
     int j = fileList.AddToTail();
     fileList[j].fileName.Set(fileName);
@@ -923,15 +930,15 @@ int CScriptLib::FindFiles(char *pFileMask, bool bRecurse,
   char extension[SOURCE_MAX_PATH];
 
   // get path only
-  strcpy(dirPath, pFileMask);
+  strcpy_s(dirPath, pFileMask);
   V_StripFilename(dirPath);
 
   // get pattern only
   V_FileBase(pFileMask, pattern, sizeof(pattern));
   V_ExtractFileExtension(pFileMask, extension, sizeof(extension));
   if (extension[0]) {
-    strcat(pattern, ".");
-    strcat(pattern, extension);
+    strcat_s(pattern, ".");
+    strcat_s(pattern, extension);
   }
 
   if (!bRecurse) {

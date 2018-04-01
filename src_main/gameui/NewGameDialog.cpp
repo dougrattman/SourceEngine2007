@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "NewGameDialog.h"
 
@@ -27,7 +27,6 @@
 #include "vgui_controls/ImagePanel.h"
 #include "vgui_controls/RadioButton.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -72,7 +71,7 @@ class CSelectionOverlayPanel : public vgui::Panel {
  public:
   CSelectionOverlayPanel(Panel *parent, CNewGameDialog *selectionTarget,
                          int chapterIndex)
-      : BaseClass(parent, NULL) {
+      : BaseClass(parent, nullptr) {
     m_iChapterIndex = chapterIndex;
     m_pSelectionTarget = selectionTarget;
     SetPaintEnabled(false);
@@ -131,15 +130,15 @@ class CGameChapterPanel : public vgui::EditablePanel {
 
     m_pLevelPicBorder = SETUP_PANEL(new ImagePanel(this, "LevelPicBorder"));
     m_pLevelPic = SETUP_PANEL(new ImagePanel(this, "LevelPic"));
-    m_pCommentaryIcon = NULL;
+    m_pCommentaryIcon = nullptr;
     m_bCommentaryMode = bCommentary;
 
     wchar_t text[32];
     wchar_t num[32];
     wchar_t *chapter = g_pVGuiLocalize->Find("#GameUI_Chapter");
     g_pVGuiLocalize->ConvertANSIToUnicode(chapterNumber, num, sizeof(num));
-    _snwprintf(text, sizeof(text), L"%s %s", chapter ? chapter : L"CHAPTER",
-               num);
+    _snwprintf_s(text, sizeof(text), L"%s %s", chapter ? chapter : L"CHAPTER",
+                 num);
 
     if (ModInfo().IsSinglePlayerOnly()) {
       m_pChapterLabel = new Label(this, "ChapterLabel", text);
@@ -162,12 +161,12 @@ class CGameChapterPanel : public vgui::EditablePanel {
     }
     m_pLevelPic->SetImage(szMaterial);
 
-    KeyValues *pKeys = NULL;
+    KeyValues *pKeys = nullptr;
     if (GameUI().IsConsoleUI()) {
       pKeys = BasePanel()->GetConsoleControlSettings()->FindKey(
           "NewGameChapterPanel.res");
     }
-    LoadControlSettings("Resource/NewGameChapterPanel.res", NULL, pKeys);
+    LoadControlSettings("Resource/NewGameChapterPanel.res", nullptr, pKeys);
 
     int px, py;
     m_pLevelPicBorder->GetPos(px, py);
@@ -253,7 +252,8 @@ const char *COM_GetModDirectory() {
   static char modDir[SOURCE_MAX_PATH];
   if (Q_strlen(modDir) == 0) {
     const char *gamedir = CommandLine()->ParmValue(
-        "-game", CommandLine()->ParmValue("-defaultgamedir", "hl2"));
+        source::tier0::command_line_switches::kGamePath,
+        CommandLine()->ParmValue("-defaultgamedir", "hl2"));
     Q_strncpy(modDir, gamedir, sizeof(modDir));
     if (strchr(modDir, '/') || strchr(modDir, '\\')) {
       Q_StripLastDir(modDir, sizeof(modDir));
@@ -283,7 +283,7 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
   m_ScrollSpeed = 0.f;
   m_ButtonPressed = SCROLL_NONE;
   m_ScrollDirection = SCROLL_NONE;
-  m_pCommentaryLabel = NULL;
+  m_pCommentaryLabel = nullptr;
 
   m_iBonusSelection = 0;
   m_bScrollToFirstBonusMap = false;
@@ -330,7 +330,7 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
     m_pFooter->AddNewButtonLabel("#GameUI_Play", "#GameUI_Icons_A_BUTTON");
     m_pFooter->AddNewButtonLabel("#GameUI_Close", "#GameUI_Icons_B_BUTTON");
   } else {
-    m_pFooter = NULL;
+    m_pFooter = nullptr;
   }
 
   // parse out the chapters off disk
@@ -341,23 +341,23 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
   int chapterIndex = 0;
 
   FileFindHandle_t findHandle = FILESYSTEM_INVALID_FIND_HANDLE;
-  const char *fileName = "cfg/chapter*.cfg";
-  fileName = g_pFullFileSystem->FindFirst(fileName, &findHandle);
-  while (fileName && chapterIndex < MAX_CHAPTERS) {
+  const char *chapter_name = "cfg/chapter*.cfg";
+  chapter_name = g_pFullFileSystem->FindFirst(chapter_name, &findHandle);
+  while (chapter_name && chapterIndex < MAX_CHAPTERS) {
     // Only load chapter configs from the current mod's cfg dir
     // or else chapters appear that we don't want!
-    Q_snprintf(szFullFileName, sizeof(szFullFileName), "cfg/%s", fileName);
+    Q_snprintf(szFullFileName, sizeof(szFullFileName), "cfg/%s", chapter_name);
     FileHandle_t f = g_pFullFileSystem->Open(szFullFileName, "rb", "MOD");
     if (f) {
       // don't load chapter files that are empty, used in the demo
       if (g_pFullFileSystem->Size(f) > 0) {
-        Q_strncpy(chapters[chapterIndex].filename, fileName,
+        Q_strncpy(chapters[chapterIndex].filename, chapter_name,
                   sizeof(chapters[chapterIndex].filename));
         ++chapterIndex;
       }
       g_pFullFileSystem->Close(f);
     }
-    fileName = g_pFullFileSystem->FindNext(findHandle);
+    chapter_name = g_pFullFileSystem->FindNext(findHandle);
   }
 
   bool bBonusesUnlocked = false;
@@ -387,7 +387,7 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
   for (int i = 0; i < chapterIndex; i++) {
     const char *fileName = chapters[i].filename;
     char chapterID[32] = {0};
-    sscanf(fileName, "chapter%s", chapterID);
+    sscanf_s(fileName, "chapter%s", chapterID, SOURCE_ARRAYSIZE(chapterID));
     // strip the extension
     char *ext = V_stristr(chapterID, ".cfg");
     if (ext) {
@@ -401,9 +401,9 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
                pGameDir, chapterID);
 
     Q_snprintf(szFullFileName, sizeof(szFullFileName), "%s", fileName);
-    CGameChapterPanel *chapterPanel =
-        SETUP_PANEL(new CGameChapterPanel(this, NULL, chapterName, i, chapterID,
-                                          szFullFileName, m_bCommentaryMode));
+    CGameChapterPanel *chapterPanel = SETUP_PANEL(
+        new CGameChapterPanel(this, nullptr, chapterName, i, chapterID,
+                              szFullFileName, m_bCommentaryMode));
     chapterPanel->SetVisible(false);
 
     UpdatePanelLockedStatus(iUnlockedChapter, i + 1, chapterPanel);
@@ -427,12 +427,12 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
     m_ChapterPanels.AddToTail(chapterPanel);
   }
 
-  KeyValues *pKeys = NULL;
+  KeyValues *pKeys = nullptr;
   if (GameUI().IsConsoleUI()) {
     pKeys =
         BasePanel()->GetConsoleControlSettings()->FindKey("NewGameDialog.res");
   }
-  LoadControlSettings("Resource/NewGameDialog.res", NULL, pKeys);
+  LoadControlSettings("Resource/NewGameDialog.res", nullptr, pKeys);
 
   // Reset all properties
   for (int i = 0; i < NUM_SLOTS; ++i) {
@@ -473,7 +473,7 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
 
 CNewGameDialog::~CNewGameDialog() {
   delete m_pFooter;
-  m_pFooter = NULL;
+  m_pFooter = nullptr;
 }
 
 void CNewGameDialog::Activate(void) {
@@ -538,7 +538,7 @@ void CNewGameDialog::ApplySchemeSettings(vgui::IScheme *pScheme) {
   if (m_pFooter) {
     KeyValues *pFooterControlSettings =
         BasePanel()->GetConsoleControlSettings()->FindKey("NewGameFooter.res");
-    m_pFooter->LoadControlSettings("0", NULL, pFooterControlSettings);
+    m_pFooter->LoadControlSettings("0", nullptr, pFooterControlSettings);
   }
 
   UpdateMenuComponents(SCROLL_NONE);
@@ -617,7 +617,7 @@ void CNewGameDialog::UpdateMenuComponents(EScrollDirection dir) {
           break;
       }
     } else {
-      m_pBonusMapDescription = NULL;
+      m_pBonusMapDescription = nullptr;
     }
 
     vgui::Panel *upArrow = this->FindChildByName("UpArrow");
@@ -697,7 +697,7 @@ void CNewGameDialog::UpdateBonusSelection(void) {
                  m_pBonusMapDescription->szMapFileName);
     }
 
-    BonusMapDescription_t *pAdvancedDescription = NULL;
+    BonusMapDescription_t *pAdvancedDescription = nullptr;
 
     // Find the bonus description for this panel
     for (int iBonus = 0; iBonus < BonusMapsDatabase()->BonusCount(); ++iBonus) {
@@ -1275,7 +1275,7 @@ void CNewGameDialog::OnCommand(const char *command) {
     ScrollBonusSelection(SCROLL_RIGHT);
     bReset = false;
   } else if (!Q_stricmp(command, "ReleaseModalWindow")) {
-    vgui::surface()->RestrictPaintToSinglePanel(NULL);
+    vgui::surface()->RestrictPaintToSinglePanel(0);
   } else {
     BaseClass::OnCommand(command);
   }

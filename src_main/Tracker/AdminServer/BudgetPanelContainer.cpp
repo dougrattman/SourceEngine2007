@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "BudgetPanelContainer.h"
 
@@ -49,7 +49,7 @@ void CBudgetPanelAdmin::DrawColoredText(vgui::HFont font, int x, int y, int r,
   char msg[4096];
   va_list marker;
   va_start(marker, pText);
-  _vsnprintf(msg, sizeof(msg), pText, marker);
+  _vsnprintf_s(msg, sizeof(msg), pText, marker);
   va_end(marker);
 
   wchar_t unicodeStr[4096];

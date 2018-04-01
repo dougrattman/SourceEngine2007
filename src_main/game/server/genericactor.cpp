@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 //=========================================================
 // Generic NPC - purely for scripted sequence work.
@@ -14,7 +14,6 @@
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 ConVar flex_looktime("flex_looktime", "5");
@@ -302,7 +301,8 @@ void CFlextalkActor::ProcessSceneEvents(void) {
             Msg("\n");
             flex_expression.SetValue("");
           } else {
-            if (sscanf(pszExpression, "%31s", szTemp) == 1) {
+            if (sscanf_s(pszExpression, "%31s", szTemp,
+                         SOURCE_ARRAYSIZE(szTemp)) == 1) {
               m_flexnum = LookupFlex(szTemp);
 
               if (m_flexnum != -1 && m_flextarget[m_flexnum] != 1) {

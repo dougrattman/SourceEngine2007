@@ -94,7 +94,7 @@ void CBitmapPanel::ApplySettings(KeyValues *pInitData) {
     // Try and scan them in
     int r, g, b, a;
     int scanned;
-    scanned = sscanf(pColorString, "%i %i %i %i", &r, &g, &b, &a);
+    scanned = sscanf_s(pColorString, "%i %i %i %i", &r, &g, &b, &a);
     if (scanned == 4) {
       m_r = r;
       m_g = g;

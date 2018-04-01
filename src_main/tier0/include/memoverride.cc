@@ -28,7 +28,9 @@
 #include <cstring>
 
 #ifdef OS_WIN
+#include <cstdlib>
 #include "base/include/windows/windows_light.h"
+#include "tier0/include/minidump.h"
 #endif
 
 #include "tier0/include/memdbgoff.h"
@@ -153,7 +155,8 @@ size_t __cdecl _msize_base(void *pMem) { return g_pMemAlloc->GetSize(pMem); }
 
 size_t __cdecl _msize(void *pMem) { return _msize_base(pMem); }
 
-size_t __cdecl msize(void *pMem) { return g_pMemAlloc->GetSize(pMem); }  //-V524
+size_t __cdecl msize(void *pMem) { return g_pMemAlloc->GetSize(pMem); }
+//-V524
 
 void *__cdecl _heap_alloc(size_t nSize) { return AllocUnattributed(nSize); }
 
@@ -219,7 +222,8 @@ void __cdecl _heap_term() {}
 #endif
 
 // Prevents us from using an inappropriate new or delete method,
-// ensures they are here even when linking against debug or release static libs
+// ensures they are here even when linking against debug or release static
+// libs
 
 #ifndef NO_MEMOVERRIDE_NEW_DELETE
 #ifdef OSX
@@ -550,74 +554,66 @@ int __cdecl _CrtDbgReport(int nRptType, const char *szFile, int nLine,
   return g_pMemAlloc->CrtDbgReport(nRptType, szFile, nLine, szModule, output);
 }
 
-#if _MSC_VER >= 1400
-
 // Configure VS so that it will record crash dumps on pure-call violations
 // and invalid parameter handlers.
-// If you manage to call a pure-virtual function (easily done if you indirectly
-// call a pure-virtual function from the base-class constructor or destructor)
-// or if you invoke the invalid parameter handler (printf(NULL); is one way)
-// then no crash dump will be created.
-// This crash redirects the handlers for these two events so that crash dumps
-// are created.
+// If you manage to call a pure-virtual function (easily done if you
+// indirectly / call a pure-virtual function from the base-class constructor or
+// destructor) / or if you invoke the invalid parameter handler (printf(NULL);
+// is one way) / then no crash dump will be created. / This crash redirects the
+// handlers for these two events so that crash dumps / are created.
 //
 // The ErrorHandlerRegistrar object must be in memoverride.cc so that it will
 // be placed in every DLL and EXE. This is required because each DLL and EXE
-// gets its own copy of the C run-time and these overrides are set on a per-CRT
-// basis.
-
+// gets its own copy of the C run-time and these overrides are set on a
+// per-CRT / basis.
 /*
 // This sample code will cause pure-call and invalid_parameter violations and
 // was used for testing:
-class Base
+ class Base
 {
-public:
-virtual void PureFunction() = 0;
+ public:
+ virtual void PureFunction() = 0;
 
-Base()
+ Base()
 {
-NonPureFunction();
+ NonPureFunction();
 }
 
-void NonPureFunction()
+ void NonPureFunction()
 {
-PureFunction();
-}
-};
-
-class Derived : public Base
-{
-public:
-void PureFunction() OVERRIDE
-{
+ PureFunction();
 }
 };
 
-void PureCallViolation()
+ class Derived : public Base
 {
-Derived derived;
+ public:
+ void PureFunction() OVERRIDE
+{
+}
+};
+
+ void PureCallViolation()
+{
+ Derived derived;
 }
 
-void InvalidParameterViolation()
+ void InvalidParameterViolation()
 {
-printf( NULL );
+ printf( NULL );
 }
 */
 
-#include <cstdlib>
-#include "tier0/include/minidump.h"
-
-// Disable compiler optimizations. If we don't do this then VC++ generates code
-// that confuses the Visual Studio debugger and causes it to display completely
-// random call stacks. That makes the minidumps excruciatingly hard to
-// understand.
+// Disable compiler optimizations. If we don't do this then VC++
+// generates code that confuses the Visual Studio debugger and causes it to
+// display completely random call stacks.That makes the minidumps excruciatingly
+// hard to understand.
 #pragma optimize("", off)
 
-// Write a minidump file, unless running under the debugger in which case break
-// into the debugger.
-// The "int dummy" parameter is so that the callers can be unique so that the
-// linker won't use its /opt:icf optimization to collapse them together. This
-// makes reading the call stack easier.
+// Write a minidump file, unless running under the debugger in which
+// case break into the debugger. The "int dummy" parameter is so that the
+// callers can be unique so that the linker won't use its opt:icf optimization
+// to collapse them together.This makes reading the call stack easier.
 [[noreturn]] void __cdecl WriteMiniDumpOrBreak(int dummy,
                                                const wchar_t *pchName) {
   if (Plat_IsInDebugSession()) {
@@ -730,7 +726,6 @@ extern "C" void *__cdecl _recalloc_dbg(void *memblock, size_t count,
 }
 
 _CRT_REPORT_HOOK __cdecl _CrtGetReportHook() { return NULL; }
-#endif
 int __cdecl _CrtReportBlockType(const void *pUserData) { return 0; }
 
 }  // end extern "C"

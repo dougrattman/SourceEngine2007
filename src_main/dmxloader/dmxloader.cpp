@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dmxloader/dmxloader.h"
 
@@ -519,9 +519,9 @@ bool ReadDMXHeader(CUtlBuffer &buf, char *pEncodingName, int nEncodingNameLen,
                              pEncodingName, nEncodingNameLen, &nEncodingVersion,
                              pFormatName, nFormatNameLen, &nFormatVersion);
 #else
-    int nAssigned =
-        sscanf(header, "encoding %s %d format %s %d\n", pEncodingName,
-               &nEncodingVersion, pFormatName, &nFormatVersion);
+    int nAssigned = sscanf_s(header, "encoding %s %d format %s %d\n",
+                             pEncodingName, nEncodingNameLen, &nEncodingVersion,
+                             pFormatName, nFormatNameLen, &nFormatVersion);
 #endif
     bOk = nAssigned == 4;
     if (bOk) {
@@ -582,7 +582,7 @@ bool UnserializeDMX(CUtlBuffer &buf, CDmxElement **ppRoot,
       0)  // legacy formats store format version in their format name string
   {
     Warning(
-        "reading file '%s' of legacy format '%s' - dmxconvert this file to a "
+        "Reading file '%s' of legacy format '%s' - dmxconvert this file to a "
         "newer format!\n",
         pFileName ? pFileName : "<no file>", pFormatName);
   }

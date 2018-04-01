@@ -11,6 +11,7 @@
 #include <ctime>
 
 #define PROTECTED_THINGS_DISABLE
+#include "base/include/compiler_specific.h"
 #include "extendedtrace.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/vcrmode.h"
@@ -41,7 +42,7 @@ int g_bVCREnabled = 0;
 // Internal functions.
 static void VCR_Error(const char *pFormat, ...) {
 #ifdef _DEBUG
-  __asm { int 3 }
+  DebuggerBreak();
 #endif
 
   char str[256];

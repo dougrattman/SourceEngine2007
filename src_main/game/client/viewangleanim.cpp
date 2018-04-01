@@ -195,7 +195,7 @@ void CViewAngleAnimation::LoadViewAnimFile( const char *pKeyFrameFileName )
 	{
 		// angles
 		const char *pszAngles = pKey->GetString( "angles", "0 0 0" );
-		sscanf( pszAngles, "%f %f %f", &angles[0], &angles[1], &angles[2] );
+		sscanf_s( pszAngles, "%f %f %f", &angles[0], &angles[1], &angles[2] );
 
 		// time
 		flTime = pKey->GetFloat( "time", 0.001 );

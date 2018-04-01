@@ -4,8 +4,8 @@
 #define BASE_INCLUDE_WINDOWS_SCOPED_SE_TRANSLATOR_H_
 
 #include <eh.h>
-#include <cassert>
 
+#include "base/include/check.h"
 #include "base/include/windows/windows_light.h"
 
 namespace source::windows {
@@ -18,21 +18,12 @@ class ScopedSeTranslator {
       const _se_translator_function scoped_se_translator)
       : old_se_translator_{_set_se_translator(scoped_se_translator)},
         scoped_se_translator_{scoped_se_translator},
-#ifndef NDEBUG
-
-        thread_id_ {
-    GetCurrentThreadId()
-  }
-#endif
-  {}
+        thread_id_{GetCurrentThreadId()} {}
 
   ~ScopedSeTranslator() {
-#ifndef NDEBUG
-    const u32 this_thread_id{GetCurrentThreadId()};
-
+    const DWORD this_thread_id{GetCurrentThreadId()};
     // Se translator should be reset on the same thread as it was initialized.
-    assert(this_thread_id == thread_id_);
-#endif
+    CHECK(this_thread_id == thread_id_, EINVAL);
 
     // No _get_se_translator :(, but we need to know old one.
     const auto current_se_translator = _set_se_translator(nullptr);
@@ -45,9 +36,7 @@ class ScopedSeTranslator {
  private:
   // Structured exceptions translators.
   const _se_translator_function old_se_translator_, scoped_se_translator_;
-#ifndef NDEBUG
-  const u32 thread_id_;
-#endif
+  const DWORD thread_id_;
 };
 }  // namespace source::windows
 

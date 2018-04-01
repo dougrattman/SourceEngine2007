@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>Movieobjects</ProjectName>
+    <ProjectName>movieobjects</ProjectName>
     <ProjectGuid>{135490B9-324A-4BB4-BFFA-7C306B919D74}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>

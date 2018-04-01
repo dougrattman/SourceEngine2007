@@ -3,10 +3,10 @@
 #ifndef SOURCE_BASE_WINDOWS_INCLUDE_SCOPED_WINSOCK_INITIALIZER_H_
 #define SOURCE_BASE_WINDOWS_INCLUDE_SCOPED_WINSOCK_INITIALIZER_H_
 
+#include "base/include/check.h"
 #include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
-#include <cassert>
 #include <type_traits>
 #include "base/include/base_types.h"
 
@@ -23,8 +23,8 @@ class ScopedWinsockInitializer {
 
   ~ScopedWinsockInitializer() {
     if (error_code_ == NOERROR) {
-      [[maybe_unused]] const int return_code { WSACleanup() };
-      assert(return_code == NOERROR);
+      const int errno_code{WSACleanup()};
+      CHECK(errno_code == 0, WSAGetLastError());
     }
   }
 
@@ -40,20 +40,24 @@ class ScopedWinsockInitializer {
   int error_code_;
 
   // Initializes |me| with winsock version |version|.
-  static WSAData Initialize(ScopedWinsockInitializer* me, WinsockVersion version) noexcept {
-    assert(me != nullptr);
+  static WSAData Initialize(ScopedWinsockInitializer* me,
+                            WinsockVersion version) noexcept {
+    DCHECK(me != nullptr, EINVAL);
 
     WSAData wsa_data;
-    static_assert(std::is_same_v<WORD, std::underlying_type<decltype(version)>::type>,
-                  "Winsock version should be WORD.");
+    static_assert(
+        std::is_same_v<WORD, std::underlying_type<decltype(version)>::type>,
+        "Winsock version should be WORD.");
 
-    me->error_code_ =
-        WSAStartup(static_cast<std::underlying_type<decltype(version)>::type>(version), &wsa_data);
+    me->error_code_ = WSAStartup(
+        static_cast<std::underlying_type<decltype(version)>::type>(version),
+        &wsa_data);
     return wsa_data;
   }
 
   ScopedWinsockInitializer(const ScopedWinsockInitializer& s) = delete;
-  ScopedWinsockInitializer& operator=(const ScopedWinsockInitializer& s) = delete;
+  ScopedWinsockInitializer& operator=(const ScopedWinsockInitializer& s) =
+      delete;
 };
 }  // namespace source::windows
 

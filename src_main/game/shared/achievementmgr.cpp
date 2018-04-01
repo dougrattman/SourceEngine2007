@@ -10,9 +10,9 @@
 
 #include "filesystem.h"
 #include "fmtstr.h"
-#include "tier0/include/icommandline.h"
 #include "inputsystem/InputEnums.h"
 #include "steam/steam_api.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/keyvalues.h"
 #include "usermessages.h"
 #ifdef CLIENT_DLL
@@ -97,7 +97,7 @@ class CAchievementSaveThread : public CWorkerThread {
 
 static CAchievementSaveThread g_AchievementSaveThread;
 
-#endif  //OS_POSIX
+#endif  // OS_POSIX
 //-----------------------------------------------------------------------------
 // Purpose: constructor
 //-----------------------------------------------------------------------------
@@ -169,7 +169,7 @@ void CAchievementMgr::PostInit() {
   if (!g_AchievementSaveThread.IsAlive()) {
     g_AchievementSaveThread.Start();
   }
-#endif  //OS_POSIX
+#endif  // OS_POSIX
 
   // get current game dir
   const char *pGameDir = COM_GetModDirectory();
@@ -364,7 +364,8 @@ const char *COM_GetModDirectory() {
   static char modDir[SOURCE_MAX_PATH];
   if (Q_strlen(modDir) == 0) {
     const char *gamedir = CommandLine()->ParmValue(
-        "-game", CommandLine()->ParmValue("-defaultgamedir", "hl2"));
+        source::tier0::command_line_switches::kGamePath,
+        CommandLine()->ParmValue("-defaultgamedir", "hl2"));
     Q_strncpy(modDir, gamedir, sizeof(modDir));
     if (strchr(modDir, '/') || strchr(modDir, '\\')) {
       Q_StripLastDir(modDir, sizeof(modDir));
@@ -815,8 +816,8 @@ void CAchievementMgr::PrintAchievementStatus() {
       Msg("%-20s", "FAILED");
     } else {
       char szBuf[255];
-      Q_snprintf(szBuf, SOURCE_ARRAYSIZE(szBuf), "(%d/%d)%s", pAchievement->GetCount(),
-                 pAchievement->GetGoal(),
+      Q_snprintf(szBuf, SOURCE_ARRAYSIZE(szBuf), "(%d/%d)%s",
+                 pAchievement->GetCount(), pAchievement->GetGoal(),
                  pAchievement->IsActive() ? "" : " (inactive)");
       Msg("%-20s", szBuf);
     }

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "RemoteServer.h"
 
@@ -112,8 +112,8 @@ void CRemoteServer::SendCommand(const char *commandString) {
 
 //-----------------------------------------------------------------------------
 // Purpose: changes the current password on the server
-//			responds with "PasswordChange" "true" or "PasswordChange"
-//"false"
+//			responds with "PasswordChange" "true" or
+//"PasswordChange" "false"
 //-----------------------------------------------------------------------------
 void CRemoteServer::ChangeAccessPassword(IServerDataResponse *requester,
                                          const char *newPassword) {}
@@ -176,7 +176,7 @@ bool CRemoteServer::ProcessServerResponse() {
         // find all the people watching for this message
         for (int i = m_MessageHandlers.Head();
              m_MessageHandlers.IsValidIndex(i); i = m_MessageHandlers.Next(i)) {
-          if (!stricmp(m_MessageHandlers[i].messageName, variable)) {
+          if (!_stricmp(m_MessageHandlers[i].messageName, variable)) {
             // found, call
             m_MessageHandlers[i].handler->OnServerDataResponse(variable, "");
 
@@ -201,10 +201,8 @@ void CRemoteServer::AddServerMessageHandler(IServerDataResponse *handler,
                                             const char *watch) {
   // add to the server message handling table
   int i = m_MessageHandlers.AddToTail();
-  strncpy(m_MessageHandlers[i].messageName, watch,
-          sizeof(m_MessageHandlers[i].messageName) - 1);
-  m_MessageHandlers[i]
-      .messageName[sizeof(m_MessageHandlers[i].messageName) - 1] = 0;
+  strcpy_s(m_MessageHandlers[i].messageName, watch);
+
   m_MessageHandlers[i].handler = handler;
 }
 

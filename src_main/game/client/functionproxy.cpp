@@ -29,7 +29,7 @@ bool CFloatInput::Init( IMaterial *pMaterial, KeyValues *pKeyValues, const char 
 
 			// Look for numbers...
 			float flValue;
-			int nCount = sscanf( pVarName, "%f", &flValue );
+			int nCount = sscanf_s( pVarName, "%f", &flValue );
 			if (nCount == 1)
 			{
 				m_flValue = flValue;

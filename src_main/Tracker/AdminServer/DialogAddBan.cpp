@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "DialogAddBan.h"
 
@@ -117,7 +117,7 @@ bool CDialogAddBan::IsIPCheck() {
 void CDialogAddBan::OnCommand(const char *command) {
   bool bClose = false;
 
-  if (!stricmp(command, "Okay")) {
+  if (!_stricmp(command, "Okay")) {
     KeyValues *msg = new KeyValues("AddBanValue");
     char buf[64], idbuf[64];
     float time;
@@ -136,7 +136,7 @@ void CDialogAddBan::OnCommand(const char *command) {
       if (m_pPermBanRadio->IsSelected()) {
         time = 0;
       } else {
-        sscanf(buf, "%f", &time);
+        sscanf_s(buf, "%f", &time);
         m_pTimeCombo->GetText(buf, 64);
         if (strstr(buf, "hour")) {
           time *= 60;
@@ -163,7 +163,7 @@ void CDialogAddBan::OnCommand(const char *command) {
       }
     }
 
-  } else if (!stricmp(command, "Close")) {
+  } else if (!_stricmp(command, "Close")) {
     bClose = true;
   } else {
     BaseClass::OnCommand(command);

@@ -1,12 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//===========================================================================//
 
 #include "shadersystem.h"
 
 #include <cstdlib>
+#include <memory>
 #include "IHardwareConfigInternal.h"
 #include "filesystem.h"
 #include "imaterialinternal.h"
@@ -26,21 +23,16 @@
 #include "tier1/utldict.h"
 #include "tier1/utlstack.h"
 
-// NOTE: This must be the last file included!
 #include "tier0/include/memdbgon.h"
 
 //#define DEBUG_DEPTH 1
 
-//-----------------------------------------------------------------------------
-// Lovely convars
-//-----------------------------------------------------------------------------
+// Lovely convars.
 static ConVar mat_showenvmapmask("mat_showenvmapmask", "0");
 static ConVar mat_debugdepth("mat_debugdepth", "0");
 extern ConVar mat_supportflashlight;
 
-//-----------------------------------------------------------------------------
-// Implementation of the shader system
-//-----------------------------------------------------------------------------
+// Implementation of the shader system.
 class CShaderSystem : public IShaderSystemInternal {
  public:
   CShaderSystem();
@@ -227,48 +219,28 @@ class CShaderSystem : public IShaderSystemInternal {
   bool m_bForceUsingGraphicsReturnTrue;
 };
 
-//-----------------------------------------------------------------------------
 // Singleton
-//-----------------------------------------------------------------------------
 static CShaderSystem s_ShaderSystem;
 IShaderSystemInternal *g_pShaderSystem = &s_ShaderSystem;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShaderSystem, IShaderSystem,
                                   SHADERSYSTEM_INTERFACE_VERSION,
                                   s_ShaderSystem);
 
-//-----------------------------------------------------------------------------
 // Debugging shader names
-//-----------------------------------------------------------------------------
 const char *CShaderSystem::s_pDebugShaderName[MATERIAL_DEBUG_COUNT] = {
-    "FillRate",      "FillRate_Dx6", "DebugNormalMap", "DebugDrawEnvmapMask",
-    "DebugDepth",    "DebugDepth",
-#if !defined(_X360)
-    "Wireframe_DX6",
-#else
-    "Wireframe_DX9",
-#endif
-};
+    "FillRate",   "FillRate_Dx6", "DebugNormalMap", "DebugDrawEnvmapMask",
+    "DebugDepth", "DebugDepth",   "Wireframe_DX6"};
 
-//-----------------------------------------------------------------------------
-// Constructor
-//-----------------------------------------------------------------------------
 CShaderSystem::CShaderSystem()
-    : m_StoredSpew(0, 512, 0), m_bForceUsingGraphicsReturnTrue(false) {}
+    : m_StoredSpew{0, 512, 0}, m_bForceUsingGraphicsReturnTrue{false} {}
 
-//-----------------------------------------------------------------------------
-// Initialization, shutdown
-//-----------------------------------------------------------------------------
 void CShaderSystem::Init() {
-  m_SaveSpewOutput = NULL;
-
-  m_bForceUsingGraphicsReturnTrue = false;
-  if (CommandLine()->FindParm("-noshaderapi") ||
-      CommandLine()->FindParm("-makereslists")) {
-    m_bForceUsingGraphicsReturnTrue = true;
-  }
+  m_SaveSpewOutput = nullptr;
+  m_bForceUsingGraphicsReturnTrue = CommandLine()->FindParm("-noshaderapi") ||
+                                    CommandLine()->FindParm("-makereslists");
 
   for (int i = 0; i < MATERIAL_DEBUG_COUNT; ++i) {
-    m_pDebugMaterials[i] = NULL;
+    m_pDebugMaterials[i] = nullptr;
   }
 
   LoadAllShaderDLLs();
@@ -276,16 +248,14 @@ void CShaderSystem::Init() {
 
 void CShaderSystem::Shutdown() { UnloadAllShaderDLLs(); }
 
-//-----------------------------------------------------------------------------
-// Load/unload mod-specific shader DLLs
-//-----------------------------------------------------------------------------
+// Load/unload mod-specific shader DLLs.
 void CShaderSystem::ModInit() {
   // Load up standard shader DLLs...
-  int dxSupportLevel = HardwareConfig()->GetMaxDXSupportLevel();
-  Assert(dxSupportLevel >= 60);
-  dxSupportLevel /= 10;
+  int max_dx_level = HardwareConfig()->GetMaxDXSupportLevel();
+  Assert(max_dx_level >= 60);
+  max_dx_level /= 10;
 
-  LoadModShaderDLLs(dxSupportLevel);
+  LoadModShaderDLLs(max_dx_level);
 }
 
 void CShaderSystem::ModShutdown() {
@@ -299,9 +269,7 @@ void CShaderSystem::ModShutdown() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Load up the shader DLLs...
-//-----------------------------------------------------------------------------
+// Load up the shader DLLs.
 void CShaderSystem::LoadAllShaderDLLs() {
   UnloadAllShaderDLLs();
 
@@ -311,15 +279,15 @@ void CShaderSystem::LoadAllShaderDLLs() {
   int i = m_ShaderDLLs.AddToHead();
 
   m_ShaderDLLs[i].m_pFileName = new char[1];
-  m_ShaderDLLs[i].m_pFileName[0] = 0;
-  m_ShaderDLLs[i].m_hInstance = NULL;
+  m_ShaderDLLs[i].m_pFileName[0] = '\0';
+  m_ShaderDLLs[i].m_hInstance = nullptr;
   m_ShaderDLLs[i].m_pShaderDLL = GetShaderDLLInternal();
   m_ShaderDLLs[i].m_bModShaderDLL = false;
 
   // Add the shaders to the dictionary of shaders...
   SetupShaderDictionary(i);
 
-#if defined(_WIN32)
+#ifdef OS_WIN
   // Always need the debug shaders
   LoadShaderDLL("stdshader_dbg");
 
@@ -330,55 +298,53 @@ void CShaderSystem::LoadAllShaderDLLs() {
 
   char shader_dll_name[32];
   for (i = 6; i <= dx_support_level; ++i) {
-    Q_snprintf(shader_dll_name, SOURCE_ARRAYSIZE(shader_dll_name),
-               "stdshader_dx%d", i);
+    sprintf_s(shader_dll_name, "stdshader_dx%d", i);
+
     LoadShaderDLL(shader_dll_name);
   }
 
-  const char *hw_shader_dll_name = nullptr;
-#ifdef _DEBUG
+  const char *hw_shader_dll_name{nullptr};
+
+#ifndef NDEBUG
   hw_shader_dll_name = CommandLine()->ParmValue("-shader");
 #endif
+
   if (!hw_shader_dll_name) {
     hw_shader_dll_name = HardwareConfig()->GetHWSpecificShaderDLLName();
   }
-  if (hw_shader_dll_name) {
-    LoadShaderDLL(hw_shader_dll_name);
-  }
 
-#ifdef _DEBUG
+  if (hw_shader_dll_name) LoadShaderDLL(hw_shader_dll_name);
+
+#ifndef NDEBUG
   // For fast-iteration debugging
-  if (CommandLine()->FindParm("-testshaders")) {
-    LoadShaderDLL("shader_test");
-  }
+  if (CommandLine()->FindParm("-testshaders")) LoadShaderDLL("shader_test");
 #endif
-#endif  // _WIN32
+#endif  // OS_WIN
 }
 
-void CShaderSystem::LoadModShaderDLLs(int dxSupportLevel) {
-  if (IsX360()) return;
-
-  const char *pModShaderPathID = "GAMEBIN";
+void CShaderSystem::LoadModShaderDLLs(int max_dx_level) {
+  const char *mod_shader_path_id{"GAMEBIN"};
 
   // First load the ones with dx_ prefix.
-  char buf[256];
+  char game_shader_dll_name[SOURCE_MAX_PATH];
 
-  int dxStart = 6;
-  for (int i = dxStart; i <= dxSupportLevel; ++i) {
-    Q_snprintf(buf, sizeof(buf), "game_shader_dx%d", i);
-    LoadShaderDLL(buf, pModShaderPathID, true);
+  for (int i = 6; i <= max_dx_level; ++i) {
+    sprintf_s(game_shader_dll_name, "game_shader_dx%d", i);
+    LoadShaderDLL(game_shader_dll_name, mod_shader_path_id, true);
   }
 
   // Now load the ones with any dx_ prefix.
-  FileFindHandle_t findHandle;
-  const char *pFilename = g_pFullFileSystem->FindFirstEx(
-      "game_shader_generic*", pModShaderPathID, &findHandle);
-  while (pFilename) {
-    Q_snprintf(buf, sizeof(buf), "%s", pFilename);
-    LoadShaderDLL(buf, pModShaderPathID, true);
+  FileFindHandle_t find_handle;
+  const char *generic_shader_dll_name{g_pFullFileSystem->FindFirstEx(
+      "game_shader_generic*", mod_shader_path_id, &find_handle)};
 
-    pFilename = g_pFullFileSystem->FindNext(findHandle);
+  while (generic_shader_dll_name) {
+    LoadShaderDLL(generic_shader_dll_name, mod_shader_path_id, true);
+
+    generic_shader_dll_name = g_pFullFileSystem->FindNext(find_handle);
   }
+
+  g_pFullFileSystem->FindClose(find_handle);
 }
 
 //-----------------------------------------------------------------------------
@@ -396,58 +362,53 @@ void CShaderSystem::UnloadAllShaderDLLs() {
 }
 
 bool CShaderSystem::LoadShaderDLL(const char *pFullPath) {
-  return LoadShaderDLL(pFullPath, NULL, false);
+  return LoadShaderDLL(pFullPath, nullptr, false);
 }
 
 // HACKHACK: remove me when VAC2 is online.
-#if defined(_WIN32) && !defined(_X360)
+#ifdef OS_WIN
 // Instead of including windows.h
-extern "C" {
-extern void *SOURCE_STDCALL GetProcAddress(void *hModule,
-                                           const char *pszProcName);
-};
+extern "C" void *__stdcall GetProcAddress(void *module, const char *proc_name);
 #endif
 
 void CShaderSystem::VerifyBaseShaderDLL(CSysModule *pModule) {
-#if defined(_WIN32) && !defined(_X360)
-  const char *pErrorStr = "Corrupt save data settings.";
+#ifdef OS_WIN
+  const char *error{"Corrupt shader dll."};
+  auto verify_data{std::make_unique<u8[]>(SHADER_DLL_VERIFY_DATA_LEN1)};
 
-  unsigned char *testData1 = new unsigned char[SHADER_DLL_VERIFY_DATA_LEN1];
+  auto fn = (ShaderDLLVerifyFn)GetProcAddress(pModule, SHADER_DLL_FNNAME_1);
+  if (!fn) Error(error);
 
-  ShaderDLLVerifyFn fn =
-      (ShaderDLLVerifyFn)GetProcAddress((void *)pModule, SHADER_DLL_FNNAME_1);
-  if (!fn) Error(pErrorStr);
-
-  IShaderDLLVerification *pVerify;
-  char *pPtr = (char *)(void *)&pVerify;
-  pPtr -= SHADER_DLL_VERIFY_DATA_PTR_OFFSET;
-  fn(pPtr);
+  IShaderDLLVerification *shader_dll_verification;
+  char *ptr = (char *)(void *)&shader_dll_verification;
+  fn(ptr - SHADER_DLL_VERIFY_DATA_PTR_OFFSET);
 
   // Test the first CRC.
-  CRC32_t testCRC;
-  CRC32_Init(&testCRC);
-  CRC32_ProcessBuffer(&testCRC, testData1, SHADER_DLL_VERIFY_DATA_LEN1);
-  CRC32_ProcessBuffer(&testCRC, &pModule, 4);
-  CRC32_ProcessBuffer(&testCRC, &pVerify, 4);
-  CRC32_Final(&testCRC);
-  if (testCRC !=
-      pVerify->Function1(testData1 - SHADER_DLL_VERIFY_DATA_PTR_OFFSET))
-    Error(pErrorStr);
+  CRC32_t verify_crc;
+  CRC32_Init(&verify_crc);
+  CRC32_ProcessBuffer(&verify_crc, verify_data.get(),
+                      SHADER_DLL_VERIFY_DATA_LEN1);
+  CRC32_ProcessBuffer(&verify_crc, &pModule, 4);
+  CRC32_ProcessBuffer(&verify_crc, &shader_dll_verification, 4);
+  CRC32_Final(&verify_crc);
+  if (verify_crc != shader_dll_verification->Function1(
+                        verify_data.get() - SHADER_DLL_VERIFY_DATA_PTR_OFFSET))
+    Error(error);
 
   // Test the next one.
-  unsigned char digest[MD5_DIGEST_LENGTH];
+  u8 digest[MD5_DIGEST_LENGTH];
   MD5Context_t md5Context;
   MD5Init(&md5Context);
-  MD5Update(&md5Context, testData1 + SHADER_DLL_VERIFY_DATA_PTR_OFFSET,
+  MD5Update(&md5Context, verify_data.get() + SHADER_DLL_VERIFY_DATA_PTR_OFFSET,
             SHADER_DLL_VERIFY_DATA_LEN1 - SHADER_DLL_VERIFY_DATA_PTR_OFFSET);
   MD5Final(digest, &md5Context);
-  pVerify->Function2(2, 3,
-                     3);  // fn2 is supposed to place the result in testData1.
-  if (memcmp(digest, testData1, MD5_DIGEST_LENGTH) != 0) Error(pErrorStr);
 
-  pVerify->Function5();
+  // fn2 is supposed to place the result in testData1.
+  shader_dll_verification->Function2(2, 3, 3);
 
-  delete[] testData1;
+  if (memcmp(digest, verify_data.get(), MD5_DIGEST_LENGTH) != 0) Error(error);
+
+  shader_dll_verification->Function5();
 #endif
 }
 
@@ -462,33 +423,33 @@ bool CShaderSystem::LoadShaderDLL(const char *pFullPath, const char *pPathID,
   bool bValidatedDllOnly = true;
   if (bModShaderDLL) bValidatedDllOnly = false;
 
-  CSysModule *hInstance =
+  CSysModule *module =
       g_pFullFileSystem->LoadModule(pFullPath, pPathID, bValidatedDllOnly);
-  if (!hInstance) return false;
+  if (!module) return false;
 
   // Get at the shader DLL interface
-  CreateInterfaceFn factory = Sys_GetFactory(hInstance);
+  CreateInterfaceFn factory = Sys_GetFactory(module);
   if (!factory) {
-    g_pFullFileSystem->UnloadModule(hInstance);
+    g_pFullFileSystem->UnloadModule(module);
     return false;
   }
 
-  IShaderDLLInternal *pShaderDLL =
-      (IShaderDLLInternal *)factory(SHADER_DLL_INTERFACE_VERSION, NULL);
+  auto *pShaderDLL =
+      (IShaderDLLInternal *)factory(SHADER_DLL_INTERFACE_VERSION, nullptr);
   if (!pShaderDLL) {
-    g_pFullFileSystem->UnloadModule(hInstance);
+    g_pFullFileSystem->UnloadModule(module);
     return false;
   }
 
   // Make sure it's a valid base shader DLL if necessary.
   // HACKHACK get rid of this when VAC2 comes online.
   if (!bModShaderDLL) {
-    VerifyBaseShaderDLL(hInstance);
+    VerifyBaseShaderDLL(module);
   }
 
   // Allow the DLL to try to connect to interfaces it needs
   if (!pShaderDLL->Connect(Sys_GetFactoryThis(), false)) {
-    g_pFullFileSystem->UnloadModule(hInstance);
+    g_pFullFileSystem->UnloadModule(module);
     return false;
   }
 
@@ -501,13 +462,13 @@ bool CShaderSystem::LoadShaderDLL(const char *pFullPath, const char *pPathID,
     UnloadShaderDLL(nShaderDLLIndex);
   } else {
     nShaderDLLIndex = m_ShaderDLLs.AddToTail();
-    int nLen = Q_strlen(pFullPath) + 1;
+    usize nLen = strlen(pFullPath) + 1;
     m_ShaderDLLs[nShaderDLLIndex].m_pFileName = new char[nLen];
-    Q_strncpy(m_ShaderDLLs[nShaderDLLIndex].m_pFileName, pFullPath, nLen);
+    strcpy_s(m_ShaderDLLs[nShaderDLLIndex].m_pFileName, nLen, pFullPath);
   }
 
   // Ok, the shader DLL's good!
-  m_ShaderDLLs[nShaderDLLIndex].m_hInstance = hInstance;
+  m_ShaderDLLs[nShaderDLLIndex].m_hInstance = module;
   m_ShaderDLLs[nShaderDLLIndex].m_pShaderDLL = pShaderDLL;
   m_ShaderDLLs[nShaderDLLIndex].m_bModShaderDLL = bModShaderDLL;
 
@@ -525,7 +486,7 @@ bool CShaderSystem::LoadShaderDLL(const char *pFullPath, const char *pPathID,
 //-----------------------------------------------------------------------------
 int CShaderSystem::FindShaderDLL(const char *pFullPath) {
   for (int i = m_ShaderDLLs.Count(); --i >= 0;) {
-    if (!Q_stricmp(pFullPath, m_ShaderDLLs[i].m_pFileName)) return i;
+    if (!_stricmp(pFullPath, m_ShaderDLLs[i].m_pFileName)) return i;
   }
 
   return -1;

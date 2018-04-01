@@ -96,8 +96,6 @@ static void *Sys_GetProcAddress(const char *module_name,
   return Sys_GetProcAddress(module, proc_name);
 }
 
-bool Sys_IsDebuggerPresent() { return Plat_IsInDebugSession(); }
-
 struct ThreadedLoadLibraryContext_t {
   ThreadedLoadLibraryContext_t(const char *the_library_name,
                                HMODULE the_library_module)
@@ -242,7 +240,7 @@ CSysModule *Sys_LoadModule(const char *module_name) {
   // If running in the debugger, assume debug binaries are okay, otherwise they
   // must run with -allowdebug
   if (module && !CommandLine()->FindParm("-allowdebug") &&
-      !Sys_IsDebuggerPresent()) {
+      !Plat_IsInDebugSession()) {
     if (Sys_GetProcAddress(module, "BuiltDebug")) {
       Error("Module %s is a debug build\n", module_name);
     }

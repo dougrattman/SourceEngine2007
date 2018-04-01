@@ -376,7 +376,7 @@ void CMapSweptPlayerHull::OnParentKeyChanged(const char *szKey,
                                              const char *szValue) {
   if (!_stricmp(szKey, "point0")) {
     Vector vecOrigin;
-    sscanf(szValue, "%f %f %f", &vecOrigin.x, &vecOrigin.y, &vecOrigin.z);
+    sscanf_s(szValue, "%f %f %f", &vecOrigin.x, &vecOrigin.y, &vecOrigin.z);
 
     vecOrigin += playerFixup;
 
@@ -384,7 +384,7 @@ void CMapSweptPlayerHull::OnParentKeyChanged(const char *szKey,
     PostUpdate(Notify_Changed);
   } else if (!_stricmp(szKey, "point1")) {
     Vector vecOrigin;
-    sscanf(szValue, "%f %f %f", &vecOrigin.x, &vecOrigin.y, &vecOrigin.z);
+    sscanf_s(szValue, "%f %f %f", &vecOrigin.x, &vecOrigin.y, &vecOrigin.z);
 
     vecOrigin += playerFixup;
 

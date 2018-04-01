@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "OptionsSubVideo.h"
 
@@ -402,7 +402,7 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
 
     // append the recommended flag
     wchar_t newText[512];
-    _snwprintf(newText, sizeof(newText) / sizeof(wchar_t), L"%s *", text);
+    _snwprintf_s(newText, sizeof(newText) / sizeof(wchar_t), L"%s *", text);
 
     // reset
     combo->UpdateItem(iItem, newText, NULL);
@@ -761,8 +761,8 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
         "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\DirectX\\Version", szVersion,
         sizeof(szVersion));
     int os = 0, majorVersion = 0, minorVersion = 0, subVersion = 0;
-    sscanf(szVersion, "%d.%d.%d.%d", &os, &majorVersion, &minorVersion,
-           &subVersion);
+    sscanf_s(szVersion, "%d.%d.%d.%d", &os, &majorVersion, &minorVersion,
+             &subVersion);
     Q_snprintf(dxVer, sizeof(dxVer), "DirectX v%d.%d", majorVersion,
                minorVersion);
     SetControlString("dxinstalledlabel", dxVer);
@@ -906,7 +906,7 @@ void COptionsSubVideo::PrepareResolutionList() {
   m_pMode->GetText(mode_name, SOURCE_ARRAYSIZE(mode_name));
 
   int current_Width = 0, current_height = 0;
-  sscanf(mode_name, "%i x %i", &current_Width, &current_height);
+  sscanf_s(mode_name, "%i x %i", &current_Width, &current_height);
 
   // Clean up before filling the info again.
   m_pMode->DeleteAllItems();
@@ -965,8 +965,8 @@ void COptionsSubVideo::PrepareResolutionList() {
     m_pMode->ActivateItem(selectedItemID);
   } else {
     char sz[256];
-    sprintf(sz, "%d x %d", config.m_VideoMode.m_Width,
-            config.m_VideoMode.m_Height);
+    sprintf_s(sz, "%d x %d", config.m_VideoMode.m_Width,
+              config.m_VideoMode.m_Height);
     m_pMode->SetText(sz);
   }
 }
@@ -1045,7 +1045,7 @@ void COptionsSubVideo::OnApplyChanges() {
   }
 
   int width = 0, height = 0;
-  sscanf(sz, "%i x %i", &width, &height);
+  sscanf_s(sz, "%i x %i", &width, &height);
 
   // windowed
   bool windowed = (m_pWindowed->GetActiveItem() > 0) ? true : false;
@@ -1085,7 +1085,7 @@ void COptionsSubVideo::OnTextChanged(Panel *pPanel, const char *pszText) {
     m_nSelectedMode = m_pMode->GetActiveItem();
 
     int w = 0, h = 0;
-    sscanf(pszText, "%i x %i", &w, &h);
+    sscanf_s(pszText, "%i x %i", &w, &h);
     if (config.m_VideoMode.m_Width != w || config.m_VideoMode.m_Height != h) {
       OnDataChanged();
     }

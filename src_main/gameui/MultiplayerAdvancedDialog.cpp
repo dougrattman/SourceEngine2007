@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "MultiplayerAdvancedDialog.h"
 
@@ -18,7 +18,6 @@
 #include "vgui_controls/MessageBox.h"
 #include "vgui_controls/TextEntry.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -139,17 +138,17 @@ void CMultiplayerAdvancedDialog::GatherCurrentValues() {
     switch (pObj->type) {
       case O_BOOL:
         pBox = (CheckButton *)pList->pControl;
-        sprintf(szValue, "%s", pBox->IsSelected() ? "1" : "0");
+        sprintf_s(szValue, "%s", pBox->IsSelected() ? "1" : "0");
         break;
       case O_NUMBER:
         pEdit = (TextEntry *)pList->pControl;
         pEdit->GetText(strValue, sizeof(strValue));
-        sprintf(szValue, "%s", strValue);
+        sprintf_s(szValue, "%s", strValue);
         break;
       case O_STRING:
         pEdit = (TextEntry *)pList->pControl;
         pEdit->GetText(strValue, sizeof(strValue));
-        sprintf(szValue, "%s", strValue);
+        sprintf_s(szValue, "%s", strValue);
         break;
       case O_LIST:
         pCombo = (ComboBox *)pList->pControl;
@@ -166,11 +165,11 @@ void CMultiplayerAdvancedDialog::GatherCurrentValues() {
         }
 
         if (pItem) {
-          sprintf(szValue, "%s", pItem->szValue);
+          sprintf_s(szValue, "%s", pItem->szValue);
         } else  // Couln't find index
         {
           // assert(!("Couldn't find string in list, using default value"));
-          sprintf(szValue, "%s", pObj->defValue);
+          sprintf_s(szValue, "%s", pObj->defValue);
         }
         break;
     }
@@ -178,7 +177,7 @@ void CMultiplayerAdvancedDialog::GatherCurrentValues() {
     // Remove double quotes and % characters
     UTIL_StripInvalidCharacters(szValue, sizeof(szValue));
 
-    strcpy(strValue, szValue);
+    strcpy_s(strValue, szValue);
 
     pObj->SetCurValue(strValue);
 
@@ -278,15 +277,10 @@ void CMultiplayerAdvancedDialog::CreateControls() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CMultiplayerAdvancedDialog::DestroyControls() {
-  mpcontrol_t *p, *n;
-
-  p = m_pList;
+  mpcontrol_t *p = m_pList;
   while (p) {
-    n = p->next;
+    mpcontrol_t *n = p->next;
     //
     delete p->pControl;
     delete p->pPrompt;
@@ -297,22 +291,18 @@ void CMultiplayerAdvancedDialog::DestroyControls() {
   m_pList = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CMultiplayerAdvancedDialog::SaveValues() {
   // Get the values from the controls:
   GatherCurrentValues();
 
   // Create the game.cfg file
   if (m_pDescription) {
-    FileHandle_t fp;
-
     // Add settings to config.cfg
     m_pDescription->WriteToConfig();
 
     g_pFullFileSystem->CreateDirHierarchy(OPTIONS_DIR);
-    fp = g_pFullFileSystem->Open(OPTIONS_FILE, "wb");
+    FileHandle_t fp = g_pFullFileSystem->Open(OPTIONS_FILE, "wb");
+
     if (fp) {
       m_pDescription->WriteToScriptFile(fp);
       g_pFullFileSystem->Close(fp);
@@ -320,9 +310,6 @@ void CMultiplayerAdvancedDialog::SaveValues() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor, load/save client settings object
-//-----------------------------------------------------------------------------
 CInfoDescription::CInfoDescription(CPanelListPanel *panel)
     : CDescription(panel) {
   setHint(
@@ -362,41 +349,53 @@ CInfoDescription::CInfoDescription(CPanelListPanel *panel)
   setDescription("INFO_OPTIONS");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CInfoDescription::WriteScriptHeader(FileHandle_t fp) {
-  char am_pm[] = "AM";
   tm newtime;
   VCRHook_LocalTime(&newtime);
 
-  g_pFullFileSystem->FPrintf(fp, (char *)getHint());
+  const char *am_pm = (newtime.tm_hour > 12) ? "PM" : "AM";
+
+  if (newtime.tm_hour > 12) /* Convert from 24-hour */
+    newtime.tm_hour -= 12;  /*   to 12-hour clock.  */
+  if (newtime.tm_hour == 0) /*Set hour to 12 if midnight. */
+    newtime.tm_hour = 12;
+
+  g_pFullFileSystem->FPrintf(fp, "%s", getHint());
 
   // Write out the comment and Cvar Info:
   g_pFullFileSystem->FPrintf(fp,
                              "// Half-Life User Info Configuration Layout "
                              "Script (stores last settings chosen, too)\r\n");
-  g_pFullFileSystem->FPrintf(fp, "// File generated:  %.19s %s\r\n",
-                             asctime(&newtime), am_pm);
+
+  char file_time[32];
+  asctime_s(file_time, &newtime);
+
+  g_pFullFileSystem->FPrintf(fp, "// File generated:  %.19s %s\r\n", file_time,
+                             am_pm);
   g_pFullFileSystem->FPrintf(fp, "//\r\n//\r\n// Cvar\t-\tSetting\r\n\r\n");
   g_pFullFileSystem->FPrintf(fp, "VERSION %.1f\r\n\r\n", SCRIPT_VERSION);
   g_pFullFileSystem->FPrintf(fp, "DESCRIPTION INFO_OPTIONS\r\n{\r\n");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CInfoDescription::WriteFileHeader(FileHandle_t fp) {
-  char am_pm[] = "AM";
   tm newtime;
   VCRHook_LocalTime(&newtime);
+
+  const char *am_pm = (newtime.tm_hour > 12) ? "PM" : "AM";
+
+  if (newtime.tm_hour > 12) /* Convert from 24-hour */
+    newtime.tm_hour -= 12;  /*   to 12-hour clock.  */
+  if (newtime.tm_hour == 0) /*Set hour to 12 if midnight. */
+    newtime.tm_hour = 12;
 
   g_pFullFileSystem->FPrintf(
       fp, "// Half-Life User Info Configuration Settings\r\n");
   g_pFullFileSystem->FPrintf(fp, "// DO NOT EDIT, GENERATED BY HALF-LIFE\r\n");
-  g_pFullFileSystem->FPrintf(fp, "// File generated:  %.19s %s\r\n",
-                             asctime(&newtime), am_pm);
+
+  char file_time[32];
+  asctime_s(file_time, &newtime);
+
+  g_pFullFileSystem->FPrintf(fp, "// File generated:  %.19s %s\r\n", file_time,
+                             am_pm);
   g_pFullFileSystem->FPrintf(fp, "//\r\n//\r\n// Cvar\t-\tSetting\r\n\r\n");
 }
-
-//-----------------------------------------------------------------------------

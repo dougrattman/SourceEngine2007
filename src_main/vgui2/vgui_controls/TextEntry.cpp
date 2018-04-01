@@ -1,11 +1,11 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <vgui_controls/TextEntry.h>
 
-#include "tier1/UtlVector.h"
 #include <ctype.h>
 #include <cassert>
 #include <cstdio>
+#include "tier1/UtlVector.h"
 
 #include <vgui/Cursor.h>
 #include <vgui/IInput.h>
@@ -589,7 +589,7 @@ void TextEntry::PaintBackground() {
   if (m_bAllowNonAsciiCharacters) {
     input()->GetIMELanguageShortCode(shortcode, sizeof(shortcode));
 
-    if (shortcode[0] != L'\0' && wcsicmp(shortcode, L"EN")) {
+    if (shortcode[0] != L'\0' && _wcsicmp(shortcode, L"EN")) {
       m_nLangInset = 0;
       langlen = wcslen(shortcode);
       for (int i = 0; i < langlen; ++i) {
@@ -1236,7 +1236,7 @@ void TextEntry::OnCursorEntered() {
 //-----------------------------------------------------------------------------
 // Purpose: When the cursor is outside the window, if we are holding the mouse
 //			button down, then we want the window to scroll the text
-//one  char at a time 			using Ticks
+// one  char at a time 			using Ticks
 //-----------------------------------------------------------------------------
 void TextEntry::OnCursorExited()  // outside of window recieve drag scrolling
                                   // ticks
@@ -2065,8 +2065,9 @@ void TextEntry::SetHorizontalScrolling(bool status) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Horizontal scrolling function, not used in multiline windows
-//			Function will scroll the buffer to the left if the cursor
-//is  not in the window 			scroll left if we need to
+//			Function will scroll the buffer to the left if the
+// cursor is  not in the window 			scroll left if we need
+// to
 //-----------------------------------------------------------------------------
 void TextEntry::ScrollLeft() {
   if (_multiline)  // early out
@@ -2524,7 +2525,7 @@ void TextEntry::CalcBreakIndex() {
 //-----------------------------------------------------------------------------
 // Purpose: Insert a string into the text buffer, this is just a series
 //			of char inserts because we have to check each char is ok
-//to  insert
+// to  insert
 //-----------------------------------------------------------------------------
 void TextEntry::InsertString(wchar_t *wszText) {
   SaveUndoState();
@@ -2561,7 +2562,7 @@ void TextEntry::InsertString(const char *text) {
 //-----------------------------------------------------------------------------
 // Purpose: Handle the effect of user hitting backspace key
 //			we delete the char before the cursor and reformat the
-//text  so it 			behaves like in windows.
+// text  so it 			behaves like in windows.
 //-----------------------------------------------------------------------------
 void TextEntry::Backspace() {
   if (!IsEditable()) return;
@@ -2761,9 +2762,7 @@ void TextEntry::OpenEditMenu() {
   int x, y;
   // get base panel's postition
   panel->GetPos(x, y);
-  
-
-
+  
   // adjust our cursor position accordingly
   cursorX += x;
   cursorY += y;
@@ -3081,31 +3080,39 @@ void TextEntry::GetText(char *buf, int bufLen) {
 //			bufLen - length of string
 //-----------------------------------------------------------------------------
 void TextEntry::GetText(wchar_t *wbuf, int bufLenInBytes) {
-  int len = m_TextStream.Count();
+  usize len = m_TextStream.Count();
   if (m_TextStream.Count()) {
-    int terminator = std::min(len, (bufLenInBytes / (int)sizeof(wchar_t)) - 1);
-    wcsncpy(wbuf, m_TextStream.Base(), terminator);
+    usize terminator = std::min(len, bufLenInBytes / sizeof(wchar_t) - 1);
+    wcsncpy_s(wbuf, bufLenInBytes / sizeof(wchar_t), m_TextStream.Base(),
+              terminator);
     wbuf[terminator] = 0;
   } else {
     wbuf[0] = 0;
   }
 }
 
-void TextEntry::GetTextRange(wchar_t *buf, int from, int numchars) {
-  int len = m_TextStream.Count();
-  int cpChars = std::max(0, std::min(numchars, len - from));
+void TextEntry::GetTextRange(wchar_t *buf, usize buf_size, int from,
+                             int numchars) {
+  if (buf_size == 0) return;
 
-  wcsncpy(buf, m_TextStream.Base() + std::max(0, std::min(len, from)), cpChars);
-  buf[cpChars] = 0;
+  int len = m_TextStream.Count();
+  usize cpChars = std::max(0, std::min(numchars, len - from));
+
+  wcsncpy_s(buf, buf_size,
+            m_TextStream.Base() + std::max(0, std::min(len, from)), cpChars);
+  buf[std::min(cpChars, buf_size - 1)] = 'L\0';
 }
 
-void TextEntry::GetTextRange(char *buf, int from, int numchars) {
+void TextEntry::GetTextRange(char *buf, usize buf_size, int from,
+                             int numchars) {
+  if (buf_size == 0) return;
+
   int len = m_TextStream.Count();
-  int cpChars = std::max(0, std::min(numchars, len - from));
+  usize cpChars = std::max(0, std::min(numchars, len - from));
 
   g_pVGuiLocalize->ConvertUnicodeToANSI(
       m_TextStream.Base() + std::max(0, std::min(len, from)), buf, cpChars + 1);
-  buf[cpChars] = 0;
+  buf[std::min(cpChars, buf_size - 1)] = '\0';
 }
 
 //-----------------------------------------------------------------------------
@@ -3371,9 +3378,7 @@ void TextEntry::SentenceModeChanged(int handleValue) {
 // Input  : *compstr -
 //-----------------------------------------------------------------------------
 void TextEntry::CompositionString(const wchar_t *compstr) {
-  wcsncpy(m_szComposition, compstr,
-          sizeof(m_szComposition) / sizeof(wchar_t) - 1);
-  m_szComposition[sizeof(m_szComposition) / sizeof(wchar_t) - 1] = L'\0';
+  wcscpy_s(m_szComposition, compstr);
 }
 
 void TextEntry::ShowIMECandidates() {
@@ -3406,9 +3411,7 @@ void TextEntry::ShowIMECandidates() {
     input()->GetCandidate(i, unicode, sizeof(unicode));
 
     wchar_t label[64];
-    _snwprintf(label, sizeof(label) / sizeof(wchar_t) - 1, L"%i %s",
-               i - pageStart + startAtOne, unicode);
-    label[sizeof(label) / sizeof(wchar_t) - 1] = L'\0';
+    swprintf_s(label, L"%i %s", i - pageStart + startAtOne, unicode);
 
     int id = m_pIMECandidates->AddMenuItem("Candidate", label,
                                            (KeyValues *)NULL, this);
@@ -3516,9 +3519,8 @@ void TextEntry::UpdateIMECandidates() {
     input()->GetCandidate(i, unicode, sizeof(unicode));
 
     wchar_t label[64];
-    _snwprintf(label, sizeof(label) / sizeof(wchar_t) - 1, L"%i %s",
-               i - pageStart + startAtOne, unicode);
-    label[sizeof(label) / sizeof(wchar_t) - 1] = L'\0';
+    swprintf_s(label, L"%i %s", i - pageStart + startAtOne, unicode);
+
     item->SetText(label);
     if (isSelected) {
       m_pIMECandidates->SetCurrentlyHighlightedItem(id);
@@ -3584,28 +3586,26 @@ void TextEntry::OnPanelDropped(CUtlVector<KeyValues *> &msglist) {
     _dataChanged = true;
     FireActionSignal();
   } else if (!Q_stricmp(cmd, "append")) {
-    int newLen = wcslen(newText);
-    int curLen = m_TextStream.Count();
+    usize newLen = wcslen(newText);
+    usize curLen = m_TextStream.Count();
 
     size_t outsize = sizeof(wchar_t) * (newLen + curLen + 1);
     wchar_t *out = (wchar_t *)_alloca(outsize);
     Q_memset(out, 0, outsize);
-    wcsncpy(out, m_TextStream.Base(), curLen);
-    wcsncat(out, newText, wcslen(newText));
-    out[newLen + curLen] = L'\0';
+    wcsncpy_s(out, outsize / sizeof(wchar_t), m_TextStream.Base(), curLen);
+    wcscat_s(out, outsize / sizeof(wchar_t), newText);
     SetText(out);
     _dataChanged = true;
     FireActionSignal();
   } else if (!Q_stricmp(cmd, "prepend")) {
-    int newLen = wcslen(newText);
-    int curLen = m_TextStream.Count();
+    usize newLen = wcslen(newText);
+    usize curLen = m_TextStream.Count();
 
     size_t outsize = sizeof(wchar_t) * (newLen + curLen + 1);
     wchar_t *out = (wchar_t *)_alloca(outsize);
     Q_memset(out, 0, outsize);
-    wcsncpy(out, newText, wcslen(newText));
-    wcsncat(out, m_TextStream.Base(), curLen);
-    out[newLen + curLen] = L'\0';
+    wcscpy_s(out, outsize / sizeof(wchar_t), newText);
+    wcsncat_s(out, outsize / sizeof(wchar_t), m_TextStream.Base(), curLen);
     SetText(out);
     _dataChanged = true;
     FireActionSignal();

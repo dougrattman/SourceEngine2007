@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "CvarTextEntry.h"
 
@@ -8,7 +8,6 @@
 #include "tier1/convar.h"
 #include "vgui/IVGui.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -18,7 +17,7 @@ static const int MAX_CVAR_TEXT = 64;
 CCvarTextEntry::CCvarTextEntry(Panel *parent, const char *panelName,
                                char const *cvarname)
     : TextEntry(parent, panelName) {
-  m_pszCvarName = cvarname ? strdup(cvarname) : NULL;
+  m_pszCvarName = cvarname ? _strdup(cvarname) : NULL;
   m_pszStartValue[0] = 0;
 
   if (m_pszCvarName) {
@@ -55,7 +54,7 @@ void CCvarTextEntry::ApplyChanges(bool immediate) {
     newCvar.SetValue(szText);
   } else {
     char szCommand[256];
-    sprintf(szCommand, "%s \"%s\"\n", m_pszCvarName, szText);
+    sprintf_s(szCommand, "%s \"%s\"\n", m_pszCvarName, szText);
     engine->ClientCmd_Unrestricted(szCommand);
   }
 

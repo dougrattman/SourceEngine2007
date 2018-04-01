@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements an interface for reading and writing heirarchical
 // text files of key value pairs. The format of the file is
@@ -45,7 +45,6 @@
 #include "mathlib/vector4d.h"
 #include "tier1/strtools.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -230,31 +229,29 @@ const char *CChunkFile::GetErrorText(ChunkFileResult_t eResult) {
 
   switch (eResult) {
     case ChunkFile_UnexpectedEOF: {
-      Q_strncpy(szError, "unexpected end of file", sizeof(szError));
+      strcpy_s(szError, "unexpected end of file");
       break;
     }
 
     case ChunkFile_UnexpectedSymbol: {
-      Q_snprintf(szError, sizeof(szError), "unexpected symbol '%s'",
-                 m_szErrorToken);
+      sprintf_s(szError, "unexpected symbol '%s'", m_szErrorToken);
       break;
     }
 
     case ChunkFile_OpenFail: {
-      Q_snprintf(szError, sizeof(szError), "%s", strerror(errno));
+      strerror_s(szError, errno);
       break;
     }
 
     case ChunkFile_StringTooLong: {
-      Q_strncpy(szError, "unterminated string or string too long",
-                sizeof(szError));
+      strcpy_s(szError, "unterminated string or string too long");
       break;
     }
 
-    default: { Q_snprintf(szError, sizeof(szError), "error %d", eResult); }
+    default: { sprintf_s(szError, "error %d", eResult); }
   }
 
-  return (m_TokenReader.Error(szError));
+  return m_TokenReader.Error(szError);
 }
 
 //-----------------------------------------------------------------------------
@@ -348,19 +345,15 @@ ChunkFileResult_t CChunkFile::Open(const char *pszFileName,
     if (m_TokenReader.Open(pszFileName)) {
       m_nCurrentDepth = 0;
     } else {
-      return (ChunkFile_OpenFail);
+      return ChunkFile_OpenFail;
     }
   } else if (eMode == ChunkFile_Write) {
-    m_hFile = fopen(pszFileName, "wb");
-
-    if (m_hFile == NULL) {
-      return (ChunkFile_OpenFail);
-    }
+    if (fopen_s(&m_hFile, pszFileName, "wb")) return ChunkFile_OpenFail;
 
     m_nCurrentDepth = 0;
   }
 
-  return (ChunkFile_Ok);
+  return ChunkFile_Ok;
 }
 
 //-----------------------------------------------------------------------------
@@ -589,7 +582,7 @@ bool CChunkFile::ReadKeyValueColor(const char *pszValue, unsigned char &chRed,
     int g;
     int b;
 
-    if (sscanf(pszValue, "%d %d %d", &r, &g, &b) == 3) {
+    if (sscanf_s(pszValue, "%d %d %d", &r, &g, &b) == 3) {
       chRed = r;
       chGreen = g;
       chBlue = b;
@@ -609,7 +602,8 @@ bool CChunkFile::ReadKeyValueColor(const char *pszValue, unsigned char &chRed,
 //-----------------------------------------------------------------------------
 bool CChunkFile::ReadKeyValuePoint(const char *pszValue, Vector &Point) {
   if (pszValue != NULL) {
-    return (sscanf(pszValue, "(%f %f %f)", &Point.x, &Point.y, &Point.z) == 3);
+    return (sscanf_s(pszValue, "(%f %f %f)", &Point.x, &Point.y, &Point.z) ==
+            3);
   }
 
   return (false);
@@ -623,7 +617,7 @@ bool CChunkFile::ReadKeyValuePoint(const char *pszValue, Vector &Point) {
 //-----------------------------------------------------------------------------
 bool CChunkFile::ReadKeyValueVector2(const char *pszValue, Vector2D &vec) {
   if (pszValue != NULL) {
-    return (sscanf(pszValue, "[%f %f]", &vec.x, &vec.y) == 2);
+    return (sscanf_s(pszValue, "[%f %f]", &vec.x, &vec.y) == 2);
   }
 
   return (false);
@@ -637,7 +631,7 @@ bool CChunkFile::ReadKeyValueVector2(const char *pszValue, Vector2D &vec) {
 //-----------------------------------------------------------------------------
 bool CChunkFile::ReadKeyValueVector3(const char *pszValue, Vector &vec) {
   if (pszValue != NULL) {
-    return (sscanf(pszValue, "[%f %f %f]", &vec.x, &vec.y, &vec.z) == 3);
+    return (sscanf_s(pszValue, "[%f %f %f]", &vec.x, &vec.y, &vec.z) == 3);
   }
 
   return (false);
@@ -651,8 +645,8 @@ bool CChunkFile::ReadKeyValueVector3(const char *pszValue, Vector &vec) {
 //-----------------------------------------------------------------------------
 bool CChunkFile::ReadKeyValueVector4(const char *pszValue, Vector4D &vec) {
   if (pszValue != NULL) {
-    return (sscanf(pszValue, "[%f %f %f %f]", &vec[0], &vec[1], &vec[2],
-                   &vec[3]) == 4);
+    return (sscanf_s(pszValue, "[%f %f %f %f]", &vec[0], &vec[1], &vec[2],
+                     &vec[3]) == 4);
   }
 
   return false;

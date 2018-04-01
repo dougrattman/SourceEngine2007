@@ -727,7 +727,7 @@ static bool LightForString(char const *pLight, Vector &intensity) {
   // scanf into doubles, then assign, so it is f32 size independent
   r = g = b = scaler = 0;
   double r_hdr, g_hdr, b_hdr, scaler_hdr;
-  int argCnt = sscanf(pLight, "%lf %lf %lf %lf %lf %lf %lf %lf", &r, &g, &b,
+  int argCnt = sscanf_s(pLight, "%lf %lf %lf %lf %lf %lf %lf %lf", &r, &g, &b,
                       &scaler, &r_hdr, &g_hdr, &b_hdr, &scaler_hdr);
 
   // This is a special case for HDR lights.  If we have a vector of [-1, -1, -1,
@@ -792,7 +792,7 @@ static void GetVectorForKey(CMapEntity *e, char const *kname, Vector *out) {
   Vector ret(-1, -1, -1);
   char const *pk = e->GetKeyValue(kname);
   if (pk) {
-    sscanf(pk, "%f %f %f", &(ret.x), &(ret.y), &(ret.z));
+    sscanf_s(pk, "%f %f %f", &(ret.x), &(ret.y), &(ret.z));
   }
   *out = ret;
 }

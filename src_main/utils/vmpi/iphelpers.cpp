@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -10,6 +10,7 @@
 
 #include "iphelpers.h"
 #include "tier0/include/basetypes.h"
+#include "tier0/include/fasttimer.h"
 #include "tier1/strtools.h"
 #include "utllinkedlist.h"
 #include "utlvector.h"
@@ -423,14 +424,13 @@ bool ConvertStringToIPAddr(const char *pStr, CIPAddr *pOut) {
 
     pOut->port = (unsigned short)atoi(pColon + 1);
   } else {
-    strncpy(ipStr, pStr, sizeof(ipStr));
-    ipStr[sizeof(ipStr) - 1] = 0;
+    strcpy_s(ipStr, pStr);
   }
 
   if (ipStr[0] >= '0' && ipStr[0] <= '9') {
     // It's numbers.
     int ip[4];
-    sscanf(ipStr, "%d.%d.%d.%d", &ip[0], &ip[1], &ip[2], &ip[3]);
+    sscanf_s(ipStr, "%d.%d.%d.%d", &ip[0], &ip[1], &ip[2], &ip[3]);
     pOut->ip[0] = (unsigned char)ip[0];
     pOut->ip[1] = (unsigned char)ip[1];
     pOut->ip[2] = (unsigned char)ip[2];

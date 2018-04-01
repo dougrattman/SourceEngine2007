@@ -78,7 +78,6 @@ extern ConVar sv_sendtables;
 #define MAX_IDENTICAL_CDKEYS 5
 
 CGameServer sv;
-
 CGlobalVars g_ServerGlobalVariables(false);
 
 static int current_skill;
@@ -96,10 +95,7 @@ static void SV_CheatsChanged_f(IConVar *pConVar, const char *pOldString,
 
 static int g_sv_pure_mode = 0;
 static void SV_Pure_f(const CCommand &args) {
-  int pure_mode = -1;
-  if (args.ArgC() == 2) {
-    pure_mode = atoi(args[1]);
-  }
+  int pure_mode = args.ArgC() == 2 ? atoi(args[1]) : -1;
 
   Msg("--------------------------------------------------------\n");
   if (pure_mode == 0 || pure_mode == 1 || pure_mode == 2) {
@@ -241,11 +237,7 @@ ConVar sv_deltatrace(
 #endif
 
 #if defined(DEBUG_NETWORKING)
-
-//-----------------------------------------------------------------------------
 // Opens the recording file
-//-----------------------------------------------------------------------------
-
 static FILE *OpenRecordingFile() {
   FILE *fp = 0;
   static bool s_CantOpenFile = false;
@@ -259,51 +251,7 @@ static FILE *OpenRecordingFile() {
   }
   return fp;
 }
-
-//-----------------------------------------------------------------------------
-// Records an argument for a command, flushes when the command is done
-//-----------------------------------------------------------------------------
-/*
-void SpewToFile( char const* pFmt, ... )
-static void SpewToFile( const char* pFmt, ... )
-{
-        static CUtlVector<unsigned char> s_RecordingBuffer;
-
-        char temp[2048];
-        va_list args;
-
-        va_start( args, pFmt );
-        int len = Q_vsnprintf( temp, sizeof( temp ), pFmt, args );
-        va_end( args );
-        Assert( len < 2048 );
-
-        int idx = s_RecordingBuffer.AddMultipleToTail( len );
-        memcpy( &s_RecordingBuffer[idx], temp, len );
-        if ( 1 ) //s_RecordingBuffer.Size() > 8192)
-        {
-                FILE* fp = OpenRecordingFile();
-                fwrite( s_RecordingBuffer.Base(), 1, s_RecordingBuffer.Size(),
-fp ); fclose( fp );
-
-                s_RecordingBuffer.RemoveAll();
-        }
-}
-*/
-
 #endif  // #if defined( DEBUG_NETWORKING )
-
-/*void SV_Init(bool isDedicated)
-{
-        sv.Init( isDedicated );
-}
-
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void SV_Shutdown( void )
-{
-        sv.Shutdown();
-}*/
 
 void CGameServer::Clear(void) {
   m_pModelPrecacheTable = NULL;
@@ -673,7 +621,9 @@ void ServerDLL_Unload() { UnloadEntityDLLs(); }
 //-----------------------------------------------------------------------------
 // Purpose: Loads the game .dll
 //-----------------------------------------------------------------------------
-void SV_InitGameDLL(void) {
+void SV_InitGameDLL() {
+  Plat_TimestampedLog("Engine::SV_InitGameDLL start.");
+
   // Clear out the command buffer.
   Cbuf_Execute();
 
@@ -734,8 +684,6 @@ void SV_InitGameDLL(void) {
 #endif  // NO_STEAM
 #endif
 
-  COM_TimestampedLog("SV_InitGameDLL");
-
   if (!serverGameDLL) {
     Warning("Failed to load server binary\n");
     return;
@@ -744,7 +692,7 @@ void SV_InitGameDLL(void) {
   // Flag that we've started the game .dll
   sv.dll_initialized = true;
 
-  COM_TimestampedLog("serverGameDLL->DLLInit");
+  Plat_TimestampedLog("  serverGameDLL->DLLInit");
 
   // Tell the game DLL to start up
   if (!serverGameDLL->DLLInit(g_AppSystemFactory, g_AppSystemFactory,
@@ -761,7 +709,7 @@ void SV_InitGameDLL(void) {
 
   sv_noclipduringpause = (ConVar *)g_pCVar->FindVar("sv_noclipduringpause");
 
-  COM_TimestampedLog("SV_InitSendTables");
+  Plat_TimestampedLog("  SV_InitSendTables");
 
   // Make extra copies of data tables if they have SendPropExcludes.
   SV_InitSendTables(serverGameDLL->GetAllServerClasses());
@@ -781,6 +729,8 @@ void SV_InitGameDLL(void) {
 
   // Execute and server commands the game .dll added at startup
   Cbuf_Execute();
+
+  Plat_TimestampedLog("Engine::SV_InitGameDLL end.");
 }
 
 //
@@ -1556,12 +1506,12 @@ void SV_CreateBaseline(void) {
 // Input  : runPhysics -
 //-----------------------------------------------------------------------------
 bool SV_ActivateServer() {
-  COM_TimestampedLog("SV_ActivateServer");
+  Plat_TimestampedLog("Engine::SV_ActivateServer start.");
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_ACTIVATESERVER);
 #endif
 
-  COM_TimestampedLog("serverGameDLL->ServerActivate");
+  Plat_TimestampedLog("  serverGameDLL->ServerActivate");
 
   bool bPrevState = networkStringTableContainerServer->Lock(false);
   // Activate the DLL server code
@@ -1571,7 +1521,7 @@ bool SV_ActivateServer() {
   // all setup is completed, any further precache statements are errors
   sv.m_State = ss_active;
 
-  COM_TimestampedLog("SV_CreateBaseline");
+  Plat_TimestampedLog("  SV_CreateBaseline");
 
   // create a baseline for more efficient communications
   SV_CreateBaseline();
@@ -1587,7 +1537,7 @@ bool SV_ActivateServer() {
     Q_strncpy(sv.m_szSkyname, "unknown", sizeof(sv.m_szSkyname));
   }
 
-  COM_TimestampedLog("Send Reconnects");
+  Plat_TimestampedLog("  sv.ReconnectClients()");
 
   // Tell connected clients to reconnect
   sv.ReconnectClients();
@@ -1649,7 +1599,7 @@ bool SV_ActivateServer() {
     SteamMasterServerUpdater()->ForceHeartbeat();
 #endif
 
-  COM_TimestampedLog("SV_ActivateServer(finished)");
+  Plat_TimestampedLog("Engine::SV_ActivateServer end.");
 
   return true;
 }
@@ -1747,14 +1697,13 @@ This is called at the start of each level
 ================
 */
 bool CGameServer::SpawnServer(char *mapname, char *startspot) {
-  int i;
-  char szDllName[MAX_QPATH];
-
   Assert(serverGameClients);
+
+  Plat_TimestampedLog("Engine::CGameServer::SV_SpawnServer(%s) begin.",
+                      mapname);
 
   ReloadWhitelist(mapname);
 
-  COM_TimestampedLog("SV_SpawnServer(%s)", mapname);
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_SPAWNSERVER);
 #endif
@@ -1792,7 +1741,7 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
 
   skill.SetValue((float)current_skill);
 
-  COM_TimestampedLog("StaticPropMgr()->LevelShutdown()");
+  Plat_TimestampedLog("  StaticPropMgr()->LevelShutdown()");
 
 #if !defined(SWDS)
   g_pShadowMgr->LevelShutdown();
@@ -1804,16 +1753,16 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
     hltv->Shutdown();
   }
 
-  COM_TimestampedLog("Host_FreeToLowMark");
+  Plat_TimestampedLog("  Host_FreeToLowMark");
 
   Host_FreeStateAndWorld(true);
   Host_FreeToLowMark(true);
 
-  COM_TimestampedLog("sv.Clear()");
+  Plat_TimestampedLog("  Clear()");
 
   Clear();
 
-  COM_TimestampedLog("framesnapshotmanager->LevelChanged()");
+  Plat_TimestampedLog("  framesnapshotmanager->LevelChanged()");
 
   // Clear out the state of the most recently sent packed entities from
   // the snapshot manager
@@ -1862,7 +1811,7 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
   // Assume no entities beyond world and client slots
   num_edicts = GetMaxClients() + 1;
 
-  COM_TimestampedLog("SV_AllocateEdicts");
+  Plat_TimestampedLog("  SV_AllocateEdicts");
 
   SV_AllocateEdicts();
 
@@ -1878,10 +1827,10 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
   //  if needed
   AssignClassIds();
 
-  COM_TimestampedLog("Set up players");
+  Plat_TimestampedLog("  Set up players begin.");
 
   // allocate player data, and assign the values into the edicts
-  for (i = 0; i < GetClientCount(); i++) {
+  for (int i = 0; i < GetClientCount(); i++) {
     CGameClient *cl = Client(i);
 
     // edict for a player is slot + 1, world = 0
@@ -1891,14 +1840,14 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
     InitializeEntityDLLFields(cl->edict);
   }
 
-  COM_TimestampedLog("Set up players(done)");
+  Plat_TimestampedLog("Set up players end.");
 
   m_State = ss_loading;
 
   // Set initial time values.
   m_flTickInterval = host_state.interval_per_tick;
-  m_nTickCount =
-      (int)(1.0 / host_state.interval_per_tick) + 1;  // Start at appropriate 1
+  // Start at appropriate 1
+  m_nTickCount = 1.0f / host_state.interval_per_tick + 1;
 
   g_ServerGlobalVariables.tickcount = m_nTickCount;
   g_ServerGlobalVariables.curtime = GetTime();
@@ -1919,7 +1868,7 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
     }
   }
 
-  COM_TimestampedLog("modelloader->GetModelForName(%s) -- Start", szModelName);
+  Plat_TimestampedLog("  modelloader->GetModelForName(%s) begin.", szModelName);
 
   host_state.SetWorldModel(modelloader->GetModelForName(
       szModelName, IModelLoader::FMODELLOADER_SERVER));
@@ -1930,10 +1879,11 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
     return false;
   }
 
-  COM_TimestampedLog("modelloader->GetModelForName(%s) -- Finished",
-                     szModelName);
+  Plat_TimestampedLog("  modelloader->GetModelForName(%s) end.", szModelName);
 
-  if (IsMultiplayer() && !IsX360()) {
+  char szDllName[MAX_QPATH];
+
+  if (IsMultiplayer()) {
 #ifndef SWDS
     EngineVGui()->UpdateProgressBar(PROGRESS_CRCMAP);
 #endif
@@ -1963,7 +1913,7 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
 
   m_StringTables = networkStringTableContainerServer;
 
-  COM_TimestampedLog("SV_CreateNetworkStringTables");
+  Plat_TimestampedLog("SV_CreateNetworkStringTables");
 
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_CREATENETWORKSTRINGTABLES);
@@ -1977,7 +1927,7 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
   PrecacheGeneric("", 0);
   PrecacheSound("", 0);
 
-  COM_TimestampedLog("Precache world model (%s)", szModelName);
+  Plat_TimestampedLog("  Precache world model (%s)", szModelName);
 
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_PRECACHEWORLD);
@@ -1986,10 +1936,10 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
   PrecacheModel(szModelName, RES_FATALIFMISSING | RES_PRELOAD,
                 host_state.worldmodel);
 
-  COM_TimestampedLog("Precache brush models");
+  Plat_TimestampedLog("  Precache brush models");
 
   // Add world submodels to the model cache
-  for (i = 1; i < host_state.worldbrush->numsubmodels; i++) {
+  for (int i = 1; i < host_state.worldbrush->numsubmodels; i++) {
     // Add in world brush models
     char localmodel[5];  // inline model names "*1", "*2" etc
     Q_snprintf(localmodel, sizeof(localmodel), "*%i", i);
@@ -2002,7 +1952,7 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_CLEARWORLD);
 #endif
-  COM_TimestampedLog("SV_ClearWorld");
+  Plat_TimestampedLog("  SV_ClearWorld");
 
   // Clear world interaction links
   // Loads and inserts static props
@@ -2012,7 +1962,7 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
   // load the rest of the entities
   //
 
-  COM_TimestampedLog("InitializeEntityDLLFields");
+  Plat_TimestampedLog("  InitializeEntityDLLFields");
 
   InitializeEntityDLLFields(edicts);
   edicts->ClearFree();
@@ -2038,17 +1988,20 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
     event->SetString("mapname", GetMapName());
     event->SetInt("maxplayers", GetMaxClients());
     event->SetInt("password", 0);  // TODO
-#if defined(_WIN32)
-    event->SetString("os", "WIN32");
+
+    event->SetString("os",
+#ifdef OS_WIN
+                     "WIN32"
 #else
-    event->SetString("os", "LINUX");
+                     "LINUX"
 #endif
+    );
     event->SetInt("dedicated", IsDedicated() ? 1 : 0);
 
     g_GameEventManager.FireEvent(event);
   }
 
-  COM_TimestampedLog("SV_SpawnServer -- Finished");
+  Plat_TimestampedLog("Engine::CGameServer::SV_SpawnServer end.");
 
   g_pFileSystem->EndMapAccess();
   return true;

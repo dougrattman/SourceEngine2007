@@ -63,9 +63,9 @@ extern ConVar r_avglightmap;
 =================
 V_CheckGamma
 
-TODO(d.rattman):  Define this as a change function to the ConVar's below rather than
-polling it every frame.  Note, still need to make sure it gets called very first
-time through frame loop.
+TODO(d.rattman):  Define this as a change function to the ConVar's below rather
+than polling it every frame.  Note, still need to make sure it gets called very
+first time through frame loop.
 =================
 */
 bool V_CheckGamma(void) {
@@ -266,9 +266,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
   void DrawLights(void) {
     DrawLightSprites();
 
-#ifdef USE_CONVARS
     DrawLightDebuggingInfo();
-#endif
   }
 
   void DrawMaskEntities(void) {

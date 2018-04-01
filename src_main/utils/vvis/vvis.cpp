@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -171,44 +171,44 @@ Merges the portal visibility for a leaf
 ===============
 */
 void ClusterMerge(int clusternum) {
-  leaf_t *leaf;
   //	byte		portalvector[MAX_PORTALS/8];
   byte portalvector[MAX_PORTALS / 4];  // 4 because portal bytes is * 2
-  byte uncompressed[MAX_MAP_LEAFS / 8];
-  int i, j;
-  int numvis;
-  portal_t *p;
-  int pnum;
+  byte uncompressed_data[MAX_MAP_LEAFS / 8];
 
   // OR together all the portalvis bits
 
   memset(portalvector, 0, portalbytes);
-  leaf = &leafs[clusternum];
-  for (i = 0; i < leaf->portals.Count(); i++) {
-    p = leaf->portals[i];
+  leaf_t *leaf = &leafs[clusternum];
+
+  for (int i = 0; i < leaf->portals.Count(); i++) {
+    portal_t *p = leaf->portals[i];
+
     if (p->status != stat_done)
       Error("portal not done %d %d %d\n", i, p, portals);
-    for (j = 0; j < portallongs; j++)
+
+    for (int j = 0; j < portallongs; j++)
       ((long *)portalvector)[j] |= ((long *)p->portalvis)[j];
-    pnum = p - portals;
+
+    int pnum = p - portals;
     SetBit(portalvector, pnum);
   }
 
   // convert portal bits to leaf bits
-  numvis = LeafVectorFromPortalVector(portalvector, uncompressed);
+  int numvis = LeafVectorFromPortalVector(portalvector, uncompressed_data);
 
 #if 0
 	// func_viscluster makes this happen all the time because it allows a non-convex set of portals
 	// My analysis says this is ok, but it does make this check for errors in vis kind of useless
-	if ( CheckBit( uncompressed, clusternum ) )
+	if ( CheckBit(uncompressed_data, clusternum ) )
 		Warning("WARNING: Cluster portals saw into cluster\n");
 #endif
 
-  SetBit(uncompressed, clusternum);
+  SetBit(uncompressed_data, clusternum);
   numvis++;  // count the leaf itself
 
-  // save uncompressed for PHS calculation
-  memcpy(uncompressedvis + clusternum * leafbytes, uncompressed, leafbytes);
+  // save uncompressed_data for PHS calculation
+  memcpy(uncompressedvis + clusternum * leafbytes, uncompressed_data,
+         leafbytes);
 
   qprintf("cluster %4i : %4i visible\n", clusternum, numvis);
   totalvis += numvis;
@@ -220,19 +220,19 @@ static int CompressAndCrosscheckClusterVis(int clusternum) {
   //
   // compress the bit string
   //
-  byte *uncompressed = uncompressedvis + clusternum * leafbytes;
+  byte *uncompressed_data = uncompressedvis + clusternum * leafbytes;
   for (int i = 0; i < portalclusters; i++) {
     if (i == clusternum) continue;
 
-    if (CheckBit(uncompressed, i)) {
+    if (CheckBit(uncompressed_data, i)) {
       byte *other = uncompressedvis + i * leafbytes;
       if (!CheckBit(other, clusternum)) {
-        ClearBit(uncompressed, i);
+        ClearBit(uncompressed_data, i);
         optimized++;
       }
     }
   }
-  int numbytes = CompressVis(uncompressed, compressed);
+  int numbytes = CompressVis(uncompressed_data, compressed);
 
   byte *dest = vismap_p;
   vismap_p += numbytes;
@@ -504,7 +504,7 @@ void CalcPAS(void) {
   long *dest, *src;
   byte *scan;
   int count;
-  byte uncompressed[MAX_MAP_LEAFS / 8];
+  byte uncompressed_data[MAX_MAP_LEAFS / 8];
   byte compressed[MAX_MAP_LEAFS / 8];
 
   Msg("Building PAS...\n");
@@ -512,7 +512,7 @@ void CalcPAS(void) {
   count = 0;
   for (i = 0; i < portalclusters; i++) {
     scan = uncompressedvis + i * leafbytes;
-    memcpy(uncompressed, scan, leafbytes);
+    memcpy(uncompressed_data, scan, leafbytes);
     for (j = 0; j < leafbytes; j++) {
       bitbyte = scan[j];
       if (!bitbyte) continue;
@@ -523,20 +523,19 @@ void CalcPAS(void) {
         if (index >= portalclusters)
           Error("Bad bit in PVS");  // pad bits should be 0
         src = (long *)(uncompressedvis + index * leafbytes);
-        dest = (long *)uncompressed;
-        for (l = 0; l < leaflongs; l++) ((long *)uncompressed)[l] |= src[l];
+        dest = (long *)uncompressed_data;
+        for (l = 0; l < leaflongs; l++)
+          ((long *)uncompressed_data)[l] |= src[l];
       }
     }
     for (j = 0; j < portalclusters; j++) {
-      if (CheckBit(uncompressed, j)) {
+      if (CheckBit(uncompressed_data, j)) {
         count++;
       }
     }
 
-    //
     // compress the bit string
-    //
-    j = CompressVis(uncompressed, compressed);
+    j = CompressVis(uncompressed_data, compressed);
 
     dest = (long *)vismap_p;
     vismap_p += j;
@@ -598,7 +597,7 @@ static float GetMinDistanceBetweenBoundingBoxes(const Vector &min1,
 }
 
 static float CalcDistanceFromLeafToWater(int leafNum) {
-  byte uncompressed[MAX_MAP_LEAFS / 8];
+  byte uncompressed_data[MAX_MAP_LEAFS / 8];
 
   int j, k;
 
@@ -612,7 +611,7 @@ static float CalcDistanceFromLeafToWater(int leafNum) {
   int cluster = dleafs[leafNum].cluster;
   if (cluster < 0) return 65535;  // TODO(d.rattman): make a define for this.
 
-  DecompressVis(&dvisdata[dvis->bitofs[cluster][DVIS_PVS]], uncompressed);
+  DecompressVis(&dvisdata[dvis->bitofs[cluster][DVIS_PVS]], uncompressed_data);
 
   float minDist = 65535.0f;  // TODO(d.rattman): make a define for this.
 
@@ -631,7 +630,7 @@ static float CalcDistanceFromLeafToWater(int leafNum) {
     if (j == cluster) continue;
 
     // If the cluster isn't in our current pvs, then get out of here.
-    if (!CheckBit(uncompressed, j)) continue;
+    if (!CheckBit(uncompressed_data, j)) continue;
 
     // Found a visible cluster, now iterate over all leaves
     // inside that cluster
@@ -659,8 +658,8 @@ static float CalcDistanceFromLeafToWater(int leafNum) {
           // compare the bounding box of the face with the bounding
           // box of the leaf that we are looking from and see
           // what the closest distance is.
-          // TODO(d.rattman): this could be a face/face distance between the water
-          // face and the bounding volume of the leaf.
+          // TODO(d.rattman): this could be a face/face distance between the
+          // water face and the bounding volume of the leaf.
 
           // Get the bounding box of the face
           Vector faceMin, faceMax;
@@ -688,7 +687,7 @@ static void CalcDistanceFromLeavesToWater(void) {
 // Using the PVS, compute the visible fog volumes from each leaf
 //-----------------------------------------------------------------------------
 static void CalcVisibleFogVolumes() {
-  byte uncompressed[MAX_MAP_LEAFS / 8];
+  byte uncompressed_data[MAX_MAP_LEAFS / 8];
 
   int i, j, k;
 
@@ -721,14 +720,15 @@ static void CalcVisibleFogVolumes() {
     int cluster = dleafs[i].cluster;
     if (cluster < 0) continue;
 
-    DecompressVis(&dvisdata[dvis->bitofs[cluster][DVIS_PVS]], uncompressed);
+    DecompressVis(&dvisdata[dvis->bitofs[cluster][DVIS_PVS]],
+                  uncompressed_data);
 
     // Iterate over all potentially visible clusters from this leaf
     for (j = 0; j < dvis->numclusters; ++j) {
       // Don't need to bother if this is the same as the current cluster
       if (j == cluster) continue;
 
-      if (!CheckBit(uncompressed, j)) continue;
+      if (!CheckBit(uncompressed_data, j)) continue;
 
       // Found a visible cluster, now iterate over all leaves
       // inside that cluster
@@ -957,7 +957,7 @@ int RunVVis(int argc, char **argv) {
 
   char targetPath[1024];
   GetPlatformMapPath(source, targetPath, 0, 1024);
-  Msg("reading %s\n", targetPath);
+  Msg("Reading %s\n", targetPath);
   LoadBSPFile(targetPath);
   if (numnodes == 0 || numfaces == 0) Error("Empty map");
   ParseEntities();
@@ -983,7 +983,7 @@ int RunVVis(int argc, char **argv) {
   }
   strcat(portalfile, ".prt");
 
-  Msg("reading %s\n", portalfile);
+  Msg("Reading %s\n", portalfile);
   LoadPortals(portalfile);
 
   // don't write out results when simply doing a trace
@@ -999,10 +999,10 @@ int RunVVis(int argc, char **argv) {
     CalcDistanceFromLeavesToWater();
 
     visdatasize = vismap_p - dvisdata;
-    Msg("visdatasize:%i  compressed from %i\n", visdatasize,
+    Msg("Vvis data size:%i compressed from %i\n", visdatasize,
         originalvismapsize * 2);
 
-    Msg("writing %s\n", targetPath);
+    Msg("Writing %s\n", targetPath);
     WriteBSPFile(targetPath);
   } else {
     if (g_TraceClusterStart < 0 || g_TraceClusterStart >= portalclusters ||
@@ -1021,7 +1021,7 @@ int RunVVis(int argc, char **argv) {
 
   char str[512];
   GetHourMinuteSecondsString((int)(end - start), str, sizeof(str));
-  Msg("%s elapsed\n", str);
+  Msg("Vvis: %s elapsed.\n", str);
 
   ReleasePakFileLumps();
   DeleteCmdLine(argc, argv);

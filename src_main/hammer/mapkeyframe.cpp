@@ -353,7 +353,7 @@ void CMapKeyFrame::OnParentKeyChanged( const char* key, const char* value )
 	}
 	else if (!_stricmp(key, "angles"))
 	{
-		sscanf(value, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
+		sscanf_s(value, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
 		AngleQuaternion(m_Angles, m_qAngles);
 	}
 

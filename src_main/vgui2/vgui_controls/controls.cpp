@@ -1,10 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui_controls/Controls.h"
 
 #include <locale.h>
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern int
@@ -32,8 +31,8 @@ bool VGui_InitInterfacesList(const char *moduleName,
   }
 #endif
   // keep a record of this module name
-  strncpy(g_szControlsModuleName, moduleName,
-          SOURCE_ARRAYSIZE(g_szControlsModuleName));
+  strncpy_s(g_szControlsModuleName, moduleName,
+            SOURCE_ARRAYSIZE(g_szControlsModuleName));
   g_szControlsModuleName[SOURCE_ARRAYSIZE(g_szControlsModuleName) - 1] = 0;
 
   // initialize our locale (must be done for every vgui dll/exe)

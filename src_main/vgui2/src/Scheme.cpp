@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui/IScheme.h"
 
@@ -17,7 +17,6 @@
 #include "vgui_internal.h"
 #include "vstdlib/IKeyValuesSystem.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -631,8 +630,8 @@ void CScheme::ReloadFontGlyphs() {
          fontdata = fontdata->GetNextKey()) {
       // skip over fonts not meant for this resolution
       int fontYResMin = 0, fontYResMax = 0;
-      sscanf(fontdata->GetString("yres", ""), "%d %d", &fontYResMin,
-             &fontYResMax);
+      sscanf_s(fontdata->GetString("yres", ""), "%d %d", &fontYResMin,
+               &fontYResMax);
       if (fontYResMin) {
         if (!fontYResMax) {
           fontYResMax = fontYResMin;
@@ -1004,7 +1003,7 @@ HFont CScheme::FindFontInAliasList(const char *fontName) {
   for (int i = m_FontAliases.Count(); --i >= 0;) {
     //		const char *name = m_FontAliases[i]._fontName.String();
     if (!_strnicmp(fontName, m_FontAliases[i]._fontName.String(),
-                  FONT_ALIAS_NAME_LENGTH))
+                   FONT_ALIAS_NAME_LENGTH))
       return m_FontAliases[i]._font;
   }
 
@@ -1061,7 +1060,7 @@ Color CScheme::GetColor(const char *colorName, Color defaultColor) {
   if (!pchT) return defaultColor;
 
   int r, g, b, a = 0;
-  if (sscanf(pchT, "%d %d %d %d", &r, &g, &b, &a) >= 3)
+  if (sscanf_s(pchT, "%d %d %d %d", &r, &g, &b, &a) >= 3)
     return Color(r, g, b, a);
 
   return defaultColor;
@@ -1073,7 +1072,7 @@ Color CScheme::GetColor(const char *colorName, Color defaultColor) {
 const char *CScheme::LookupSchemeSetting(const char *pchSetting) {
   // try parse out the color
   int r, g, b, a = 0;
-  int res = sscanf(pchSetting, "%d %d %d %d", &r, &g, &b, &a);
+  int res = sscanf_s(pchSetting, "%d %d %d %d", &r, &g, &b, &a);
   if (res >= 3) {
     return pchSetting;
   }

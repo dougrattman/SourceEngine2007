@@ -253,7 +253,7 @@ bool Sys_MessageBox(const char *title, const char *info,
 }
 
 // Purpose: Exit engine with error.
-[[noreturn]] void Sys_Error(const char *format, ...) {
+void Sys_Error(const char *format, ...) {
   extern char g_minidumpinfo[4096];
 
   va_list arg_ptr;
@@ -338,9 +338,7 @@ bool Sys_MessageBox(const char *title, const char *info,
 #endif
 }
 
-bool IsInErrorExit() {
-  return g_bInErrorExit;
-}
+bool IsInErrorExit() { return g_bInErrorExit; }
 
 void Sys_Sleep(int msec) {
 #ifdef _WIN32
@@ -588,11 +586,9 @@ int Sys_InitGame(CreateInterfaceFn appSystemFactory, const char *pBaseDir,
   TRACEINIT(Sys_Init(), Sys_Shutdown());
 
 #if defined(_DEBUG)
-  if (IsPC()) {
-    if (!CommandLine()->FindParm("-nodttest") &&
-        !CommandLine()->FindParm("-dti")) {
-      RunDataTableTest();
-    }
+  if (!CommandLine()->FindParm("-nodttest") &&
+      !CommandLine()->FindParm("-dti")) {
+    RunDataTableTest();
   }
 #endif
 
@@ -603,9 +599,7 @@ int Sys_InitGame(CreateInterfaceFn appSystemFactory, const char *pBaseDir,
 
   TRACEINIT(Host_Init(s_bIsDedicated), Host_Shutdown());
 
-  if (!host_initialized) {
-    return 0;
-  }
+  if (!host_initialized) return 0;
 
   TRACEINIT(Sys_InitAuthentication(), Sys_ShutdownAuthentication());
 
@@ -936,7 +930,7 @@ void LoadEntityDLLs(const char *szBaseDir) {
 #ifdef _WIN32
   Q_snprintf(szDllFilename, sizeof(szDllFilename), "server.dll");
 #elif OS_POSIX
-  Q_snprintf(szDllFilename, sizeof(szDllFilename), "server_i486.so");
+  Q_snprintf(szDllFilename, sizeof(szDllFilename), "server.so.1");
 #else
 #error "define server.dll type"
 #endif

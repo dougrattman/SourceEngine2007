@@ -1,9 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
-//
-// Purpose:
-//
-//=============================================================================//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "stdafx.h"
 
@@ -23,7 +18,6 @@
 #include "VisGroup.h"
 #include "hammer.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // ********
@@ -430,7 +424,8 @@ void CMapCheckDlg::OnSelchangeErrors() {
 
   // Figure out which error string we're using.
   int iErrorStr = (int)pError->Type;
-  iErrorStr = std::clamp(iErrorStr, 0, SOURCE_ARRAYSIZE(g_MapErrorStrings) - 1);
+  iErrorStr =
+      std::clamp(iErrorStr, 0, (int)SOURCE_ARRAYSIZE(g_MapErrorStrings) - 1);
   Assert(iErrorStr == (int)pError->Type);
 
   str.LoadString(g_MapErrorStrings[iErrorStr].m_DescriptionResourceID);
@@ -501,7 +496,8 @@ static void AddErrorToListBox(CListBox *pList, MapError *pError) {
 
   // Figure out which error string we're using.
   int iErrorStr = (int)pError->Type;
-  iErrorStr = std::clamp(iErrorStr, 0, SOURCE_ARRAYSIZE(g_MapErrorStrings) - 1);
+  iErrorStr =
+      std::clamp(iErrorStr, 0, (int)SOURCE_ARRAYSIZE(g_MapErrorStrings) - 1);
   Assert(iErrorStr == (int)pError->Type);
 
   str.LoadString(g_MapErrorStrings[iErrorStr].m_StrResourceID);
@@ -837,8 +833,9 @@ static void CheckValidTarget(CMapEntity *pEntity, const char *pFieldName,
   if (!pTargetName) return;
 
   // These procedural names are always assumed to exist.
-  if (!_stricmp(pTargetName, "!activator") || !_stricmp(pTargetName, "!caller") ||
-      !_stricmp(pTargetName, "!player") || !_stricmp(pTargetName, "!self"))
+  if (!_stricmp(pTargetName, "!activator") ||
+      !_stricmp(pTargetName, "!caller") || !_stricmp(pTargetName, "!player") ||
+      !_stricmp(pTargetName, "!self"))
     return;
 
   CMapDoc *pDoc = CMapDoc::GetActiveMapDoc();
@@ -969,8 +966,8 @@ static void CheckSolidContents(CListBox *pList, CMapWorld *pWorld) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Determines if there are any invalid textures or texture axes on any
-//			face of this solid. Adds an error message to the list box
-//for each 			error found.
+//			face of this solid. Adds an error message to the list
+// box for each 			error found.
 // Input  : pSolid - Solid to check.
 //			pList - Pointer to the error list box.
 // Output : Returns TRUE.
@@ -1073,8 +1070,10 @@ static BOOL _CheckBadConnections(CMapEntity *pEntity, CListBox *pList) {
 
   // TODO: Check for a "Kill" input with the same output, target, and delay as
   // another input. This
-  //		 creates a race condition in the game where the order of arrival is
-  //not guaranteed int nConnCount = pEntity->Connections_GetCount(); for (int i
+  //		 creates a race condition in the game where the order of arrival
+  // is not guaranteed int nConnCount = pEntity->Connections_GetCount(); for
+  // (int
+  // i
   // = 0; i < nConnCount; i++)
   //{
   //	CEntityConnection *pConn = pEntity->Connections_Get(i);

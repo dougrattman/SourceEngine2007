@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -34,7 +34,6 @@
 #include "vgui_baseui_interface.h"
 #include "vtf/vtf.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -137,7 +136,7 @@ void CPrecisionSlider::SetValue(int value, bool bTriggerChangeMessage) {
   BaseClass::SetValue(value, bTriggerChangeMessage);
 
   char szValueString[256];
-  sprintf(szValueString, "%d", _value);
+  sprintf_s(szValueString, "%d", _value);
   m_pTextEntry->SetText(szValueString);
 }
 
@@ -157,7 +156,7 @@ void CPrecisionSlider::OnTextNewLine(KeyValues *data) {
   m_pTextEntry->GetText(buf, 256);
 
   int value;
-  sscanf(buf, "%d", &value);
+  sscanf_s(buf, "%d", &value);
 
   SetValue(value);
 }
@@ -1401,8 +1400,8 @@ void CColorHistogramPanel::Paint(void) {
   int w, h;
   GetSize(w, h);
 
-  // TODO(d.rattman): Add method to draw multiple lines DrawPolyLine connects the 1st and
-  // last points... bleah
+  // TODO(d.rattman): Add method to draw multiple lines DrawPolyLine connects
+  // the 1st and last points... bleah
   switch (m_Type) {
     case RED:
       vgui::surface()->DrawSetColor(255, 0, 0, 255);

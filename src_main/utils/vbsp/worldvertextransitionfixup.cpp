@@ -1,4 +1,4 @@
-// Copyright © 1996-2007, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2007, Valve Corporation, All rights reserved.
 
 #include "bsplib.h"
 
@@ -37,7 +37,7 @@ static void GeneratePatchedMaterialName(const char *pMaterialName,
   }
 
   BackSlashToForwardSlash(pBuffer);
-  Q_strlower(pBuffer);
+  Q_strlower(pBuffer, nMaxLen);
 }
 
 static void RemoveKey(KeyValues *kv, const char *pSubKeyName) {

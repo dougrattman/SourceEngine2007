@@ -107,7 +107,7 @@ bool CWin32Font::Create(const char *windowsFontName, int tall, int weight,
   LOGFONT logfont;
   logfont.lfCharSet = DEFAULT_CHARSET;
   logfont.lfPitchAndFamily = 0;
-  strcpy(logfont.lfFaceName, m_szName.String());
+  strcpy_s(logfont.lfFaceName, m_szName.String());
   g_bFontFound = false;
   ::EnumFontFamiliesEx(m_hDC, &logfont, &FontEnumProc, 0, 0);
   if (!g_bFontFound) {

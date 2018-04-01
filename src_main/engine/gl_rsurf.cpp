@@ -1,4 +1,4 @@
-// Copyright © 1996-2007, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2007, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -47,7 +47,6 @@
 #include "overlay.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define BACKFACE_EPSILON -0.01f
@@ -339,17 +338,17 @@ IWorldRenderList *AllocWorldRenderList() {
 }
 
 SOURCE_FORCEINLINE bool VisitSurface(CVisitedSurfs &visitedSurfs,
-                              SurfaceHandle_t surfID) {
+                                     SurfaceHandle_t surfID) {
   return !visitedSurfs.TestAndSet(MSurf_Index(surfID));
 }
 
 SOURCE_FORCEINLINE void MarkSurfaceVisited(CVisitedSurfs &visitedSurfs,
-                                    SurfaceHandle_t surfID) {
+                                           SurfaceHandle_t surfID) {
   visitedSurfs.Set(MSurf_Index(surfID));
 }
 
 SOURCE_FORCEINLINE bool VisitedSurface(CVisitedSurfs &visitedSurfs,
-                                SurfaceHandle_t surfID) {
+                                       SurfaceHandle_t surfID) {
   return visitedSurfs.IsBitSet(MSurf_Index(surfID));
 }
 
@@ -592,9 +591,7 @@ void Shader_DrawSurfaceStatic( SurfaceHandle_t surfID )
 {
         VPROF( "Shader_DrawSurfaceStatic" );
         if (
-#ifdef USE_CONVARS
                 mat_forcedynamic.GetInt() ||
-#endif
                 (MSurf_Flags( surfID ) & SURFDRAW_WATERSURFACE) )
         {
                 Shader_DrawSurfaceDynamic( pRenderContext, surfID );
@@ -994,8 +991,8 @@ void Shader_DrawChainsStatic(const CMSurfaceSortList &sortList, int nSortGroup,
           }
         }
 #ifdef NEWMESH
-        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add a
-        // separate 'SupportsCompression' accessor)
+        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this
+        // stripping (add a separate 'SupportsCompression' accessor)
         VertexFormat_t vertexFormat =
             pBindMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED;
         pRenderContext->BindVertexBuffer(0, mesh.pVertexBuffer, 0,
@@ -1434,12 +1431,7 @@ void Shader_DrawChains(const CWorldRenderList *pRenderList, int nSortGroup,
   Assert(!g_EngineRenderer->InLightmapUpdate());
   VPROF("Shader_DrawChains");
   // Draw chains...
-#ifdef USE_CONVARS
-  if (!mat_forcedynamic.GetInt() && !g_pMaterialSystemConfig->bDrawFlat)
-#else
-  if (1)
-#endif
-  {
+  if (!mat_forcedynamic.GetInt() && !g_pMaterialSystemConfig->bDrawFlat) {
     if (g_VBAllocTracker)
       g_VBAllocTracker->TrackMeshAllocations("Shader_DrawChainsStatic");
     Shader_DrawChainsStatic(pRenderList->m_SortList, nSortGroup, bShadowDepth);
@@ -1465,7 +1457,6 @@ void Shader_DrawChains(const CWorldRenderList *pRenderList, int nSortGroup,
   if (bShadowDepth)  // Skip debug stuff in shadow depth map
     return;
 
-#ifdef USE_CONVARS
   if (g_ShaderDebug.anydebug) {
     const CMSurfaceSortList &sortList = pRenderList->m_SortList;
     // Debugging information
@@ -1476,7 +1467,6 @@ void Shader_DrawChains(const CWorldRenderList *pRenderList, int nSortGroup,
     }
     MSL_FOREACH_GROUP_END()
   }
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -2031,10 +2021,10 @@ static void Shader_WorldEnd(CWorldRenderList *pRenderList, unsigned long flags,
     g_pShadowMgr->RenderFlashlights(bFlashlightMask);
 
     // Render the fragments from the surfaces + displacements.
-    // TODO(d.rattman): Actually, this call is irrelevant (for displacements) because it's
-    // done from within DrawDispChain currently, but that should change. We need
-    // to split out the disp decal rendering from DrawDispChain and do it after
-    // overlays are rendered....
+    // TODO(d.rattman): Actually, this call is irrelevant (for displacements)
+    // because it's done from within DrawDispChain currently, but that should
+    // change. We need to split out the disp decal rendering from DrawDispChain
+    // and do it after overlays are rendered....
     OverlayMgr()->RenderOverlays(nSortGroup);
     g_pShadowMgr->DrawFlashlightOverlays(nSortGroup, bFlashlightMask);
     OverlayMgr()->ClearRenderLists(nSortGroup);
@@ -2214,7 +2204,7 @@ void Shader_DrawTranslucentSurfaces(IWorldRenderList *pRenderListIn,
 //=============================================================
 
 void SOURCE_FASTCALL R_DrawSurface(CWorldRenderList *pRenderList,
-                            SurfaceHandle_t surfID) {
+                                   SurfaceHandle_t surfID) {
   ASSERT_SURF_VALID(surfID);
   Assert(!SurfaceHasDispInfo(surfID));
   if (MSurf_Flags(surfID) & SURFDRAW_SKY) {
@@ -2231,7 +2221,7 @@ void SOURCE_FASTCALL R_DrawSurface(CWorldRenderList *pRenderList,
 // The NoCull flavor of this function calls functions which optimize for shadow
 // depth map rendering
 void SOURCE_FASTCALL R_DrawSurfaceNoCull(CWorldRenderList *pRenderList,
-                                  SurfaceHandle_t surfID) {
+                                         SurfaceHandle_t surfID) {
   ASSERT_SURF_VALID(surfID);
   if (!(MSurf_Flags(surfID) & SURFDRAW_TRANS) &&
       !(MSurf_Flags(surfID) & SURFDRAW_SKY)) {
@@ -2289,23 +2279,20 @@ static inline void UpdateVisibleLeafLists(CWorldRenderList *pRenderList,
 //-----------------------------------------------------------------------------
 // Draws all displacements + surfaces in a leaf
 //-----------------------------------------------------------------------------
-static void SOURCE_FASTCALL R_DrawLeaf(CWorldRenderList *pRenderList, mleaf_t *pleaf) {
+static void SOURCE_FASTCALL R_DrawLeaf(CWorldRenderList *pRenderList,
+                                       mleaf_t *pleaf) {
   // Add this leaf to the list of visible leaves
   UpdateVisibleLeafLists(pRenderList, pleaf);
 
   // Debugging to only draw at a particular leaf
-#ifdef USE_CONVARS
   if ((s_ShaderConvars.m_nDrawLeaf >= 0) &&
       (s_ShaderConvars.m_nDrawLeaf != LeafToIndex(pleaf)))
     return;
-#endif
 
   // add displacement surfaces
   DrawDisplacementsInLeaf(pRenderList, pleaf);
 
-#ifdef USE_CONVARS
   if (!s_ShaderConvars.m_bDrawWorld) return;
-#endif
 
   // Add non-displacement surfaces
   int i;
@@ -2327,9 +2314,7 @@ static void SOURCE_FASTCALL R_DrawLeaf(CWorldRenderList *pRenderList, mleaf_t *p
     MarkSurfaceVisited(visitedSurfs, surfID);
   }
 
-#ifdef USE_CONVARS
   if (!s_ShaderConvars.m_bDrawFuncDetail) return;
-#endif
 
   for (; i < pleaf->nummarksurfaces; i++) {
     SurfaceHandle_t surfID = pSurfID[i];
@@ -2353,7 +2338,7 @@ static void SOURCE_FASTCALL R_DrawLeaf(CWorldRenderList *pRenderList, mleaf_t *p
 static ConVar r_frustumcullworld("r_frustumcullworld", "1");
 
 static void SOURCE_FASTCALL R_DrawLeafNoCull(CWorldRenderList *pRenderList,
-                                      mleaf_t *pleaf) {
+                                             mleaf_t *pleaf) {
   // Add this leaf to the list of visible leaves
   UpdateVisibleLeafLists(pRenderList, pleaf);
 
@@ -2621,9 +2606,7 @@ static void R_DrawTopViewLeaf(CWorldRenderList *pRenderList, mleaf_t *pleaf) {
   // add displacement surfaces
   DrawDisplacementsInLeaf(pRenderList, pleaf);
 
-#ifdef USE_CONVARS
   if (!s_ShaderConvars.m_bDrawWorld) return;
-#endif
 
   // Add non-displacement surfaces
   SurfaceHandle_t *pHandle =
@@ -2683,10 +2666,7 @@ void R_RenderWorldTopView(CWorldRenderList *pRenderList, mnode_t *node) {
       return;
     }
 
-#ifdef USE_CONVARS
-    if (s_ShaderConvars.m_bDrawWorld)
-#endif
-    {
+    if (s_ShaderConvars.m_bDrawWorld) {
       // draw stuff on the node
       SurfaceHandle_t surfID = SurfaceHandleFromIndex(node->firstsurface);
       for (int i = 0; i < node->numsurfaces; i++, surfID++) {
@@ -2761,12 +2741,10 @@ void R_BuildWorldLists(IWorldRenderList *pRenderListIn, WorldListInfo_t *pInfo,
   VPROF("R_BuildWorldLists");
   VectorCopy(g_EngineRenderer->ViewOrigin(), modelorg);
 
-#ifdef USE_CONVARS
   static ConVar r_spewleaf("r_spewleaf", "0");
   if (r_spewleaf.GetInt()) {
     SpewLeaf();
   }
-#endif
 
   Shader_WorldBegin(pRenderList);
 
@@ -3227,7 +3205,8 @@ bool Shader_DrawBrushSurfaceOverride(IMatRenderContext *pRenderContext,
                                                          &brushSurface);
 }
 
-SOURCE_FORCEINLINE void ModulateMaterial(IMaterial *pMaterial, float *pOldColor) {
+SOURCE_FORCEINLINE void ModulateMaterial(IMaterial *pMaterial,
+                                         float *pOldColor) {
   if (g_bIsBlendingOrModulating) {
     pOldColor[3] = pMaterial->GetAlphaModulation();
     pMaterial->GetColorModulation(&pOldColor[0], &pOldColor[1], &pOldColor[2]);
@@ -3236,7 +3215,8 @@ SOURCE_FORCEINLINE void ModulateMaterial(IMaterial *pMaterial, float *pOldColor)
   }
 }
 
-SOURCE_FORCEINLINE void UnModulateMaterial(IMaterial *pMaterial, float *pOldColor) {
+SOURCE_FORCEINLINE void UnModulateMaterial(IMaterial *pMaterial,
+                                           float *pOldColor) {
   if (g_bIsBlendingOrModulating) {
     pMaterial->AlphaModulate(pOldColor[3]);
     pMaterial->ColorModulate(pOldColor[0], pOldColor[1], pOldColor[2]);
@@ -3281,8 +3261,8 @@ void Shader_BrushSurface(SurfaceHandle_t surfID, model_t *model,
   }
 
   // Add overlay fragments to list.
-  // TODO(d.rattman): A little code support is necessary to get overlays working on brush
-  // models
+  // TODO(d.rattman): A little code support is necessary to get overlays working
+  // on brush models
   //	OverlayMgr()->AddFragmentListToRenderList( MSurf_OverlayFragmentList(
   // surfID ), false );
 
@@ -3605,8 +3585,8 @@ class CBrushBatchRender {
 #ifdef NEWMESH
         indexBufferBuilder.End(false);  // haven't tested this one yet (alpha
                                         // blended world geom I think)
-        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add a
-        // separate 'SupportsCompression' accessor)
+        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this
+        // stripping (add a separate 'SupportsCompression' accessor)
         VertexFormat_t vertexFormat =
             pMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED;
         pRenderContext->BindVertexBuffer(0, g_WorldStaticMeshes[batch.sortID],
@@ -3642,8 +3622,8 @@ class CBrushBatchRender {
         // work correctly.
         DecalSurfaceDraw(pRenderContext, BRUSHMODEL_DECAL_SORT_GROUP);
 
-        // TODO(d.rattman): Decals are not being rendered while illuminated by the
-        // flashlight
+        // TODO(d.rattman): Decals are not being rendered while illuminated by
+        // the flashlight
 
         // TODO(d.rattman): Need to draw decals in flashlight rendering mode
         // Retire decals on opaque world surfaces
@@ -3984,8 +3964,8 @@ void CBrushBatchRender::DrawOpaqueBrushModel(IClientEntity *baseentity,
         }
 
         // Add overlay fragments to list.
-        // TODO(d.rattman): A little code support is necessary to get overlays working on
-        // brush models
+        // TODO(d.rattman): A little code support is necessary to get overlays
+        // working on brush models
         //	OverlayMgr()->AddFragmentListToRenderList(
         // MSurf_OverlayFragmentList( surfID ), false );
 
@@ -4251,10 +4231,8 @@ void R_DrawBrushModel(IClientEntity *baseentity, model_t *model,
                       bool bShadowDepth) {
   VPROF("R_DrawBrushModel");
 
-#ifdef USE_CONVARS
-  if (!r_drawbrushmodels.GetInt()) {
-    return;
-  }
+  if (!r_drawbrushmodels.GetInt()) return;
+
   bool bWireframe = false;
   if (r_drawbrushmodels.GetInt() == 2) {
     // save and override
@@ -4262,7 +4240,6 @@ void R_DrawBrushModel(IClientEntity *baseentity, model_t *model,
     g_ShaderDebug.wireframe = true;
     g_ShaderDebug.anydebug = true;
   }
-#endif
 
   CMatRenderContextPtr pRenderContext(materials);
   CBrushModelTransform brushTransform(origin, angles, pRenderContext);
@@ -4295,13 +4272,11 @@ void R_DrawBrushModel(IClientEntity *baseentity, model_t *model,
   Shader_BrushEnd(pRenderContext, brushTransform.GetNonIdentityMatrix(), model,
                   bShadowDepth, baseentity);
 
-#ifdef USE_CONVARS
   if (r_drawbrushmodels.GetInt() == 2) {
     // restore
     g_ShaderDebug.wireframe = bWireframe;
     g_ShaderDebug.TestAnyDebug();
   }
-#endif
 }
 
 //-----------------------------------------------------------------------------

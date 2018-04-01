@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 // NOTE! This should never be called directly from leaf code
 // Just use new, delete, malloc, free etc. They will call into this eventually.
 
@@ -15,6 +15,7 @@
 #include "base/include/windows/windows_light.h"
 #endif
 
+#include "base/include/stdio_file_stream.h"
 #include "mem_helpers.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/memalloc.h"
@@ -28,7 +29,7 @@
 #define MAX_SBH_BLOCK 2048
 #define MAX_POOL_REGION (4 * 1024 * 1024)
 #define PAGE_SIZE (4 * 1024)
-#define COMMIT_SIZE (16 * PAGE_SIZE)
+#define COMMIT_SIZE (32 * PAGE_SIZE)
 #define NUM_POOLS 42
 
 class CSmallBlockPool {
@@ -71,7 +72,7 @@ class CSmallBlockHeap {
   void *Realloc(void *p, usize nBytes);
   void Free(void *p);
   usize GetSize(void *p);
-  void DumpStats(FILE *pFile = nullptr);
+  void DumpStats(source::stdio_file_stream file);
   usize Compact();
 
  private:
@@ -150,10 +151,6 @@ class CStdMemAlloc : public IMemAlloc {
 
 #ifdef OS_WIN
   CSmallBlockHeap m_SmallBlockHeap;
-#endif
-
-#ifdef _MEMTEST
-  virtual void SetStatsExtraInfo(const ch *pMapName, const ch *pComment);
 #endif
 
   virtual usize MemoryAllocFailed();

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vbsp.h"
 
@@ -129,7 +129,7 @@ void WriteGLView(tree_t *tree, char *source) {
   FileHandle_t glview;
 
   c_glfaces = 0;
-  sprintf(name, "%s%s.gl", outbase, source);
+  sprintf_s(name, "%s%s.gl", outbase, source);
   Msg("Writing %s\n", name);
 
   glview = g_pFileSystem->Open(name, "w");
@@ -145,7 +145,7 @@ void WriteGLViewFaces(tree_t *tree, const char *pName) {
   FileHandle_t glview;
 
   c_glfaces = 0;
-  sprintf(name, "%s%s.gl", outbase, pName);
+  sprintf_s(name, "%s%s.gl", outbase, pName);
   Msg("Writing %s\n", name);
 
   glview = g_pFileSystem->Open(name, "w");
@@ -160,7 +160,7 @@ void WriteGLViewBrushList(bspbrush_t *pList, const char *pName) {
   char name[1024];
   FileHandle_t glview;
 
-  sprintf(name, "%s%s.gl", outbase, pName);
+  sprintf_s(name, "%s%s.gl", outbase, pName);
   Msg("Writing %s\n", name);
 
   glview = g_pFileSystem->Open(name, "w");

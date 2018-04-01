@@ -2347,14 +2347,6 @@ void CNPC_Manhack::StartTask(const Task_t *pTask) {
     case TASK_GET_PATH_TO_ENEMY_LKP:
     case TASK_GET_PATH_TO_PLAYER: {
       BaseClass::StartTask(pTask);
-      /*
-      // TODO(d.rattman): why were these tasks considered bad?
-      _asm
-      {
-              int	3;
-              int 5;
-      }
-      */
     } break;
 
     case TASK_FACE_IDEAL: {

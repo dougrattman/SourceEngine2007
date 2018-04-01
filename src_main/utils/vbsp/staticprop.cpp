@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Places "detail" objects which are client-only renderable things
 
@@ -114,7 +114,7 @@ isstaticprop_ret IsStaticProp(studiohdr_t* pHdr) {
 
 static int AddStaticPropDictLump(char const* pModelName) {
   StaticPropDictLump_t dictLump;
-  strncpy(dictLump.m_Name, pModelName, DETAIL_NAME_LENGTH);
+  strcpy_s(dictLump.m_Name, pModelName);
 
   for (int i = s_StaticPropDictLump.Size(); --i >= 0;) {
     if (!memcmp(&s_StaticPropDictLump[i], &dictLump, sizeof(dictLump)))
@@ -215,9 +215,10 @@ CPhysCollide* ComputeConvexHull(studiohdr_t* pStudioHdr) {
 //-----------------------------------------------------------------------------
 static CPhysCollide* GetCollisionModel(char const* pModelName) {
   // Convert to a common string
-  char* pTemp = (char*)_alloca(strlen(pModelName) + 1);
-  strcpy(pTemp, pModelName);
-  _strlwr(pTemp);
+  size_t model_name_size{strlen(pModelName) + 1};
+  char* pTemp = (char*)_alloca(model_name_size);
+  strcpy_s(pTemp, model_name_size, pModelName);
+  _strlwr_s(pTemp, model_name_size);
 
   char* pSlash = strchr(pTemp, '\\');
   while (pSlash) {
@@ -261,7 +262,7 @@ static CPhysCollide* GetCollisionModel(char const* pModelName) {
   if (g_DumpStaticProps) {
     static int propNum = 0;
     char tmp[128];
-    sprintf(tmp, "staticprop%03d.txt", propNum);
+    sprintf_s(tmp, "staticprop%03d.txt", propNum);
     DumpCollideToGlView(lookup.m_pCollide, tmp);
     ++propNum;
   }
@@ -620,10 +621,10 @@ const vertexFileHeader_t* mstudiomodel_t::CacheVertexData(void* pModelData) {
 
   // mandatory callback to make requested data resident
   // load and persist the vertex file
-  strcpy(fileName, "models/");
-  strcat(fileName, g_pActiveStudioHdr->pszName());
+  strcpy_s(fileName, "models/");
+  strcat_s(fileName, g_pActiveStudioHdr->pszName());
   Q_StripExtension(fileName, fileName, sizeof(fileName));
-  strcat(fileName, ".vvd");
+  strcat_s(fileName, ".vvd");
 
   // load the model
   fileHandle = g_pFileSystem->Open(fileName, "rb");

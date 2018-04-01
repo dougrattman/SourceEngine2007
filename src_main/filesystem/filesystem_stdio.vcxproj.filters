@@ -7,6 +7,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{8eaf9233-6e71-4a39-8b81-9c149e34f04e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{29f95fae-e5b6-4bef-b560-d9e6fe7fe628}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="basefilesystem.cpp">
@@ -116,5 +119,13 @@
     <ClInclude Include="..\public\vstdlib\vstdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="filesystem_stdio\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="filesystem_stdio\res\filesystem_stdio.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

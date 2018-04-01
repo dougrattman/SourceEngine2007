@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -45,7 +45,6 @@
 #include "tier0/include/platform.h"
 #include "tier0/include/systeminformation.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static ConVar cl_timeout("cl_timeout", "30", FCVAR_ARCHIVE,
@@ -186,9 +185,8 @@ bool CClientState::SetSignonState(int state, int count) {
     return false;
   }
 
-  // ConDMsg ("Signon state: %i\n", state );
-
-  COM_TimestampedLog("CClientState::SetSignonState: start %i", state);
+  Plat_TimestampedLog("Engine::CClientState::SetSignonState: Start %i state.",
+                      state);
 
   switch (m_nSignonState) {
     case SIGNONSTATE_CHALLENGE:
@@ -248,9 +246,15 @@ bool CClientState::SetSignonState(int state, int count) {
       CL_SetupMapName(modelloader->GetName(host_state.worldmodel), mapname,
                       sizeof(mapname));
 
-      COM_TimestampedLog("LevelInitPreEntity: start", state);
+      Plat_TimestampedLog(
+          "Engine::CClientState::SetSignonState::LevelInitPreEntity(%i, %s) "
+          "start.",
+          state, mapname);
       g_ClientDLL->LevelInitPreEntity(mapname);
-      COM_TimestampedLog("LevelInitPreEntity: end", state);
+      Plat_TimestampedLog(
+          "Engine::CClientState::SetSignonState::LevelInitPreEntity(%i, %s) "
+          "end.",
+          state, mapname);
 
       phonehome->Message(IPhoneHome::PHONE_MSG_MAPSTART, mapname);
 
@@ -285,7 +289,8 @@ bool CClientState::SetSignonState(int state, int count) {
       break;
   }
 
-  COM_TimestampedLog("CClientState::SetSignonState: end %i", state);
+  Plat_TimestampedLog("Engine::CClientState::SetSignonState: End %i state.",
+                      state);
 
   if (state >= SIGNONSTATE_CONNECTED) {
     // tell server that we entered now that state
@@ -476,11 +481,7 @@ float CClientState::GetTime() const {
   float flTickTime = nTickCount * host_state.interval_per_tick;
 
   // Timestamps are rounded to exact tick during simulation
-  if (insimulation) {
-    return flTickTime;
-  }
-
-  return flTickTime + m_tickRemainder;
+  return insimulation ? flTickTime : flTickTime + m_tickRemainder;
 }
 
 float CClientState::GetFrameTime() const {
@@ -1250,8 +1251,8 @@ void CClientState::CheckFileCRCsWithServer() {
   m_flLastCRCBatchTime = flCurTime;
 
   CUnverifiedCRCFile crcFiles[nBatchSize];
-  int count =
-      g_pFileSystem->GetUnverifiedCRCFiles(crcFiles, SOURCE_ARRAYSIZE(crcFiles));
+  int count = g_pFileSystem->GetUnverifiedCRCFiles(crcFiles,
+                                                   SOURCE_ARRAYSIZE(crcFiles));
   if (count == 0) return;
 
   // Send the messages to the server.

@@ -10,7 +10,6 @@
 #include "debug_leafvis.h"
 #include "tier0/include/fasttimer.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 ConVar r_ClipAreaPortals("r_ClipAreaPortals", "1", FCVAR_CHEAT);
@@ -288,11 +287,9 @@ static void R_FlowThroughArea(int area, const Vector &vecVisOrigin,
     if (portalVis) {
       CPortalRect intersection;
       if (GetRectIntersection(&portalRect, pClipRect, &intersection)) {
-#ifdef USE_CONVARS
         if (r_DrawPortals.GetInt()) {
           g_PortalRects.AddToTail(intersection);
         }
-#endif
 
         // Ok, we can see into this area.
         R_FlowThroughArea(pAreaPortal->otherarea, vecVisOrigin, &intersection,

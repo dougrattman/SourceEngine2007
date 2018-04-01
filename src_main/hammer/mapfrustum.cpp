@@ -259,14 +259,14 @@ void CMapFrustum::OnParentKeyChanged(const char *szKey, const char *szValue)
 
 	if (!_stricmp(szKey, "angles"))
 	{
-		sscanf(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
+		sscanf_s(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
 	}
 	else if (!_stricmp(szKey, m_szColorKeyName))
 	{
 		int nRed;
 		int nGreen;
 		int nBlue;
-		sscanf(szValue, "%d %d %d", &nRed, &nGreen, &nBlue);
+		sscanf_s(szValue, "%d %d %d", &nRed, &nGreen, &nBlue);
 
 		r = nRed;
 		g = nGreen;

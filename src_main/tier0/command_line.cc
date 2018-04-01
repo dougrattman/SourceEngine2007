@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "base/include/stdio_file_stream.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 
@@ -139,11 +140,18 @@ void CCommandLine::LoadParametersFromFile(const ch *&file_name_start,
   if (*file_name_start) file_name_start++;
 
   // Now read in parameters from file
-  FILE *file;
-  if (!fopen_s(&file, file_name, "r")) {
-    i32 c = fgetc(file);
+  auto [file, errno_info] =
+      source::stdio_file_stream_factory::open(file_name, "r");
+  bool is_read_success{errno_info.is_success()};
+  i32 c = 0;
 
-    while (c != EOF) {
+  if (is_read_success) {
+    std::tie(c, errno_info) = file.getc();
+    is_read_success = errno_info.is_success();
+  }
+
+  if (is_read_success) {
+    while (is_read_success && c != EOF) {
       // Turn return characters into spaces.
       if (c == '\n') c = ' ';
 
@@ -154,15 +162,17 @@ void CCommandLine::LoadParametersFromFile(const ch *&file_name_start,
       if (destination - destination_start >= max_destination_length - 2) break;
 
       // Get the next character, if there are more.
-      c = fgetc(file);
+      std::tie(c, errno_info) = file.getc();
+      is_read_success = errno_info.is_success();
     }
 
     // Add a terminating space character.
     *destination++ = ' ';
+  }
 
-    fclose(file);
-  } else {
-    fprintf(stderr, "Parameter file '%s' not found, skipping.\n", file_name);
+  if (!is_read_success) {
+    fprintf(stderr, "Can't read cmd line from file '%s': %s.\n", file_name,
+            errno_info.description);
   }
 }
 

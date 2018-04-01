@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -18,10 +18,9 @@
 #include "tier0/include/vcrmode.h"
 #include "zone.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-#define MAXPRINTMSG 8192
+#define MAXPRINTMSG 16384
 
 bool con_debuglog = false;
 bool con_initialized = false;
@@ -56,9 +55,9 @@ static const char *GetTimestampString() {
 
   tm today;
   VCRHook_LocalTime(&today);
-  Q_snprintf(timestamp, SOURCE_ARRAYSIZE(timestamp), "%02i/%02i/%04i - %02i:%02i:%02i",
-             today.tm_mon + 1, today.tm_mday, 1900 + today.tm_year,
-             today.tm_hour, today.tm_min, today.tm_sec);
+  Q_snprintf(timestamp, SOURCE_ARRAYSIZE(timestamp),
+             "%02i/%02i/%04i - %02i:%02i:%02i", today.tm_mon + 1, today.tm_mday,
+             1900 + today.tm_year, today.tm_hour, today.tm_min, today.tm_sec);
 
   return timestamp;
 }
@@ -547,10 +546,7 @@ CConPanel::~CConPanel() {}
 void CConPanel::Con_NPrintf(int idx, const char *msg) {
   if (idx < 0 || idx >= MAX_DBG_NOTIFY) return;
 
-  _snwprintf(da_notify[idx].szNotify,
-             sizeof(da_notify[idx].szNotify) / sizeof(wchar_t) - 1, L"%S", msg);
-  da_notify[idx]
-      .szNotify[sizeof(da_notify[idx].szNotify) / sizeof(wchar_t) - 1] = L'\0';
+  swprintf_s(da_notify[idx].szNotify, L"%S", msg);
 
   // Reset values
   da_notify[idx].expire = realtime + DBG_NOTIFY_TIMEOUT;
@@ -564,19 +560,13 @@ void CConPanel::Con_NXPrintf(const struct con_nprint_s *info, const char *msg) {
 
   if (info->index < 0 || info->index >= MAX_DBG_NOTIFY) return;
 
-  _snwprintf(da_notify[info->index].szNotify,
-             sizeof(da_notify[info->index].szNotify) / sizeof(wchar_t) - 1,
-             L"%S", msg);
-  da_notify[info->index]
-      .szNotify[sizeof(da_notify[info->index].szNotify) / sizeof(wchar_t) - 1] =
-      L'\0';
+  swprintf_s(da_notify[info->index].szNotify, L"%S", msg);
 
   // Reset values
-  if (info->time_to_live == -1)
-    da_notify[info->index].expire =
-        -1;  // special marker means to just draw it once
-  else
-    da_notify[info->index].expire = realtime + info->time_to_live;
+  // -1 is special marker means to just draw it once
+  da_notify[info->index].expire =
+      info->time_to_live == -1 ? -1 : realtime + info->time_to_live;
+
   VectorCopy(info->color, da_notify[info->index].color);
   da_notify[info->index].fixed_width_font = info->fixed_width_font;
   m_bDrawDebugAreas = true;
@@ -682,8 +672,7 @@ int CConPanel::DrawText(vgui::HFont font, int x, int y, wchar_t *fmt, ...) {
   int len;
 
   va_start(argptr, fmt);
-  len = _snwprintf(data, sizeof(data) / sizeof(wchar_t) - 1, fmt, argptr);
-  data[sizeof(data) / sizeof(wchar_t) - 1] = L'\0';
+  len = swprintf_s(data, fmt, argptr);
   va_end(argptr);
 
   len = DrawColoredText(font, x, y, 255, 255, 255, 255, data);
@@ -881,8 +870,9 @@ void CConPanel::PaintBackground() {
     }
 
     wchar_t unicode_map_and_server[200];
-    g_pVGuiLocalize->ConvertANSIToUnicode(version, unicode_map_and_server,
-                                          SOURCE_ARRAYSIZE(unicode_map_and_server));
+    g_pVGuiLocalize->ConvertANSIToUnicode(
+        version, unicode_map_and_server,
+        SOURCE_ARRAYSIZE(unicode_map_and_server));
 
     const int tall = vgui::surface()->GetFontTall(m_hFont);
     const int x = wide - DrawTextLen(m_hFont, unicode_map_and_server) - 2;

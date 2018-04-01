@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This is just a little redirection tool to get all the dls in bin.
 
@@ -10,57 +10,51 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
+#include "base/include/unique_module_ptr.h"
+
+namespace {
+// Print shared library |dl_path| load error to stderr and return error_code.
+int no_dl_load_error(const str &dl_path) {
+  fprintf(stderr, "dlopen for '%s' failed (%s).\n", dl_path.c_str(), dlerror());
+  return -EXIT_FAILURE;
+}
+
+// Print no |address_name| error for shared library |dl_path| to stderr
+// and return error_code.
+int no_dl_address_error(const str &dl_path, const ch *address_name) {
+  fprintf(stderr, "dlsym for '%s' in '%s' failed (%s).\n", address_name,
+          dl_path.c_str(), dlerror());
+  return -EXIT_FAILURE;
+}
+}  // namespace
+
 int main(int argc, char *argv[]) {
-  // Must add 'bin' to the path....
-  char *path_env = getenv("LD_LIBRARY_PATH");
-  char cwd[SOURCE_MAX_PATH];
-  if (!getcwd(cwd, sizeof(cwd))) {
-    fprintf(stderr, "getcwd failed (%s)\n", strerror(errno));
-    return errno;
+  ch cwd[PATH_MAX];
+  if (SOURCE_UNLIKELY(!getcwd(cwd, sizeof(cwd)))) {
+    fprintf(stderr, "getcwd failed (%s).\n", strerror(errno));
+    return -errno;
   }
 
-  char ld_library_path_env[4096];
-  snprintf(ld_library_path_env, sizeof(ld_library_path_env) - 1,
-           "LD_LIBRARY_PATH=%s/bin:%s", cwd, path_env);
+  // All our binaries live in ./bin/.
+  str bin_dir_path{cwd};
+  bin_dir_path += "/bin/";
 
-  if (putenv(ld_library_path_env)) {
-    fprintf(stderr, "putenv for LD_LIBRARY_PATH failed (%s)\n",
-            strerror(errno));
-    return errno;
+  const str launcher_module_path{bin_dir_path + LIBLAUNCHER_SO};
+  const auto launcher_module{source::unique_module_ptr::from_load_library(
+      launcher_module_path, RTLD_LAZY)};
+
+  if (SOURCE_LIKELY(!!launcher_module)) {
+    using LauncherMain = int (*)(int, char *[]);
+    const char *kLauncherMainName{"LauncherMain"};
+    const auto main =
+        launcher_module.get_address_as<LauncherMain>(kLauncherMainName);
+
+    return SOURCE_LIKELY(main != nullptr)
+               ? (*main)(argc, argv)
+               : no_dl_address_error(launcher_module_path, kLauncherMainName);
   }
 
-  void *tier0_dl = dlopen("tier0_i486.so", RTLD_NOW);
-  if (!tier0_dl) {
-    fprintf(stderr, "dlopen for tier0_i486.so failed (%s)\n", dlerror());
-    return EXIT_FAILURE;
-  }
-  void *vstdlib_dl = dlopen("vstdlib_i486.so", RTLD_NOW);
-  if (!vstdlib_dl) {
-    fprintf(stderr, "dlopen for vstdlib_i486.so failed (%s)\n", dlerror());
-    return EXIT_FAILURE;
-  }
-
-  const char *launcher_dl_path = "bin/launcher_i486.so";
-  void *launcher_dl = dlopen(launcher_dl_path, RTLD_NOW);
-  if (!launcher_dl) {
-    fprintf(stderr, "dlopen for %s failed (%s)\n", launcher_dl_path, dlerror());
-    return EXIT_FAILURE;
-  }
-
-  using LauncherMain = int (*)(int argc, char *argv[]);
-  const LauncherMain main =
-      reinterpret_cast<LauncherMain>(dlsym(launcher_dl, "LauncherMain"));
-  if (!main) {
-    fprintf(stderr, "dlsym for LauncherMain in %s failed (%s)\n",
-            launcher_dl_path, dlerror());
-    return EXIT_FAILURE;
-  }
-
-  const int return_code = (*main)(argc, argv);
-
-  dlclose(launcher_dl);
-  dlclose(vstdlib_dl);
-  dlclose(tier0_dl);
-
-  return return_code;
+  return no_dl_load_error(launcher_module_path);
 }

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Dialog for setting customizable game options
 
@@ -10,7 +10,6 @@
 #include "vgui_controls/ImagePanel.h"
 #include "vgui_controls/Label.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //---------------------------------------------------------------------
@@ -236,64 +235,58 @@ void CSessionOptionsDialog::UpdateScenarioDisplay(void) {
   }
 }
 
-//-----------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------
 void CSessionOptionsDialog::OnMenuItemChanged(KeyValues *pData) {
   // which item changed
-  int iItem = pData->GetInt("item", -1);
+  int item_idx = pData->GetInt("item", -1);
 
-  if (iItem >= 0 && iItem < m_Menu.GetItemCount()) {
-    COptionsItem *pActiveOption =
-        dynamic_cast<COptionsItem *>(m_Menu.GetItem(iItem));
-    if (pActiveOption) {
-      const sessionProperty_t &activeOption = pActiveOption->GetActiveOption();
+  if (item_idx >= 0 && item_idx < m_Menu.GetItemCount()) {
+    COptionsItem *active_options_item =
+        dynamic_cast<COptionsItem *>(m_Menu.GetItem(item_idx));
 
-      if (!Q_strncmp(activeOption.szID, "PROPERTY_GAME_SIZE",
+    if (active_options_item) {
+      const sessionProperty_t &active_prop =
+          active_options_item->GetActiveOption();
+
+      if (!Q_strncmp(active_prop.szID, "PROPERTY_GAME_SIZE",
                      sessionProperty_t::MAX_KEY_LEN)) {
         // make sure the private slots is less than prop.szValue
-
-        int iMaxPlayers = atoi(activeOption.szValue);
-        bool bShouldWarnMaxPlayers = (pActiveOption->GetActiveOptionIndex() >
-                                      GetMaxPlayersRecommendedOption());
-        m_pRecommendedLabel->SetVisible(bShouldWarnMaxPlayers);
+        int max_players = atoi(active_prop.szValue);
+        bool should_warn_max_players =
+            active_options_item->GetActiveOptionIndex() >
+            GetMaxPlayersRecommendedOption();
+        m_pRecommendedLabel->SetVisible(should_warn_max_players);
 
         // find the private slots option and repopulate it
         for (int i = 0; i < m_Menu.GetItemCount(); ++i) {
-          COptionsItem *pItem = dynamic_cast<COptionsItem *>(m_Menu.GetItem(i));
-          if (!pItem) {
-            continue;
-          }
+          COptionsItem *options_item =
+              dynamic_cast<COptionsItem *>(m_Menu.GetItem(i));
+          if (!options_item) continue;
 
-          const sessionProperty_t &prop = pItem->GetActiveOption();
+          const sessionProperty_t &prop = options_item->GetActiveOption();
 
           if (!Q_strncmp(prop.szID, "PROPERTY_PRIVATE_SLOTS",
                          sessionProperty_t::MAX_KEY_LEN)) {
-            const sessionProperty_t baseProp = pItem->GetActiveOption();
+            const sessionProperty_t base_prop = options_item->GetActiveOption();
 
             // preserve the selection
-            int iActiveItem = pItem->GetActiveOptionIndex();
+            int active_idx = options_item->GetActiveOptionIndex();
 
             // clear all options
-            pItem->DeleteAllOptions();
+            options_item->DeleteAllOptions();
 
             // re-add the items 0 - maxplayers
-            int nStart = 0;
-            int nEnd = iMaxPlayers;
-            int nInterval = 1;
+            for (int j = 0; j <= max_players; ++j) {
+              sessionProperty_t p;
+              p.nType = SESSION_PROPERTY;
+              strcpy_s(p.szID, base_prop.szID);
+              strcpy_s(p.szValueType, base_prop.szValueType);
+              _itoa_s(j, p.szValue, 10);
 
-            for (int i = nStart; i <= nEnd; i += nInterval) {
-              sessionProperty_t prop;
-              prop.nType = SESSION_PROPERTY;
-              Q_strncpy(prop.szID, baseProp.szID, sizeof(prop.szID));
-              Q_strncpy(prop.szValueType, baseProp.szValueType,
-                        sizeof(prop.szValueType));
-              itoa(i, prop.szValue, 10);
-              pItem->AddOption(prop.szValue, prop);
+              options_item->AddOption(p.szValue, p);
             }
 
             // re-set the focus
-            pItem->SetOptionFocus(std::min(iActiveItem, iMaxPlayers));
+            options_item->SetOptionFocus(std::min(active_idx, max_players));
 
             // fixup the option sizes
             m_Menu.InvalidateLayout();

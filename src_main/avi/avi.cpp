@@ -170,8 +170,8 @@ void CAviFile::Shutdown() {
   Reset();
 }
 
-static unsigned int FormatAviMessage(HRESULT code, char *buf,
-                                     unsigned int len) {
+template <size_t error_size>
+static size_t FormatAviMessage(HRESULT code, char (&error_buffer)[error_size]) {
   const char *msg = "unknown avi result code";
   switch (code) {
     case S_OK:
@@ -240,20 +240,20 @@ static unsigned int FormatAviMessage(HRESULT code, char *buf,
       msg = "AVIERR_ERROR";
       break;
   }
-  unsigned int mlen = (unsigned int)Q_strlen(msg);
-  if (buf == 0 || len == 0) return mlen;
-  unsigned int n = mlen;
-  if (n + 1 > len) {
-    n = len - 1;
-  }
-  strncpy(buf, msg, n);
-  buf[n] = 0;
+
+  size_t mlen = strlen(msg);
+  if (error_buffer == 0 || error_size == 0) return mlen;
+
+  size_t n = mlen;
+  if (n > error_size - 1) n = error_size - 1;
+
+  strcpy_s(error_buffer, msg);
   return mlen;
 }
 
 static void ReportError(HRESULT hr) {
   char buf[512];
-  FormatAviMessage(hr, buf, sizeof(buf));
+  FormatAviMessage(hr, buf);
   Warning("%s\n", buf);
 }
 

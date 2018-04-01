@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "PlayerPanel.h"
 
@@ -137,10 +137,10 @@ static const char *FormatSeconds(int seconds) {
 //-----------------------------------------------------------------------------
 void CPlayerPanel::OnServerDataResponse(const char *value,
                                         const char *response) {
-  if (!stricmp(value, "UpdatePlayers")) {
+  if (!_stricmp(value, "UpdatePlayers")) {
     // server has indicated a change, force an update
     m_flUpdateTime = 0.0f;
-  } else if (!stricmp(value, "playerlist")) {
+  } else if (!_stricmp(value, "playerlist")) {
     // new list of players
     m_pPlayerListPanel->DeleteAllItems();
 
@@ -167,8 +167,10 @@ void CPlayerPanel::OnServerDataResponse(const char *value,
       name[pos] = 0;
       parse++;  // move past end quote
 
-      if (6 != sscanf(parse, " %s %s %d %d %d %d\n", authID, netAdr, &ping,
-                      &packetLoss, &frags, &connectTime))
+      if (6 != sscanf_s(parse, " %s %s %d %d %d %d\n", authID,
+                        SOURCE_ARRAYSIZE(authID), netAdr,
+                        SOURCE_ARRAYSIZE(netAdr), &ping, &packetLoss, &frags,
+                        &connectTime))
         break;
 
       const char *timeStr = FormatSeconds(connectTime);
@@ -256,7 +258,7 @@ void CPlayerPanel::OnBanButtonPressed() {
   char buf[64];
   if (!strcmp(authid, "UNKNOWN")) {
     int s1, s2, s3, s4;
-    if (4 == sscanf(netAdr, "%d.%d.%d.%d", &s1, &s2, &s3, &s4)) {
+    if (4 == sscanf_s(netAdr, "%d.%d.%d.%d", &s1, &s2, &s3, &s4)) {
       Q_snprintf(buf, sizeof(buf), "%d.%d.%d.%d", s1, s2, s3, s4);
       authid = buf;
     }
@@ -279,7 +281,7 @@ void CPlayerPanel::KickSelectedPlayers() {
 
     // kick 'em
     char cmd[512];
-    _snprintf(cmd, sizeof(cmd), "kick \"%s\"", pl->GetString("name"));
+    _snprintf_s(cmd, sizeof(cmd), "kick \"%s\"", pl->GetString("name"));
     RemoteServer().SendCommand(cmd);
   }
 
@@ -304,14 +306,14 @@ void CPlayerPanel::AddBanByID(const char *id, const char *newtime) {
   const char *banCmd = "banid";
   const char *saveCmd = "writeip";
   int s1, s2, s3, s4;
-  if (4 == sscanf(id, "%d.%d.%d.%d", &s1, &s2, &s3, &s4)) {
+  if (4 == sscanf_s(id, "%d.%d.%d.%d", &s1, &s2, &s3, &s4)) {
     banCmd = "addip";
     saveCmd = "writeid";
   }
 
   // send down the ban command
   char cmd[512];
-  _snprintf(cmd, sizeof(cmd) - 1, "%s %s %s\n", banCmd, newtime, id);
+  _snprintf_s(cmd, sizeof(cmd) - 1, "%s %s %s\n", banCmd, newtime, id);
   RemoteServer().SendCommand(cmd);
 
   // force the file to update
@@ -332,7 +334,10 @@ void CPlayerPanel::OnOpenContextMenu(int itemID) {
                   // get the server
                   unsigned int playerID =
      m_pPlayerListPanel->GetDataItem(m_pPlayerListPanel->GetSelectedRow(0))->userData;
-                  
+                  
+
+
+
                   // activate context menu
                   m_pPlayerContextMenu->ShowMenu(this, playerID);
           }

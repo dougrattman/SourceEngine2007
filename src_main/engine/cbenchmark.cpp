@@ -1,9 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
-#include "cbenchmark.h"
 #include "build/include/build_config.h"
+#include "cbenchmark.h"
 
 #ifdef OS_WIN
 #include "base/include/windows/windows_light.h"
@@ -65,7 +65,7 @@ void CBenchmarkResults::StartBenchmark(const CCommand &args) {
   SetResultsFilename(pszFilename);
 
   // set any necessary settings
-  host_framerate.SetValue((float)(1.0f / host_state.interval_per_tick));
+  host_framerate.SetValue(1.0f / host_state.interval_per_tick);
 
   // get the current frame and time
   m_iStartFrame = host_framecount;

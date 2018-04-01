@@ -152,7 +152,7 @@ void CModelBrowser::SaveLoadSettings( bool bSave )
 
 		if (!str.IsEmpty())
 		{
-			sscanf(str, "%d %d %d %d", &rect.left, &rect.top, &rect.right, &rect.bottom);
+			sscanf_s(str, "%d %d %d %d", &rect.left, &rect.top, &rect.right, &rect.bottom);
 
 			if (rect.left < 0)
 			{

@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "GamePanelInfo.h"
 
@@ -173,7 +173,7 @@ void CGamePanelInfo::OnTick() {
 // Purpose: handles button responses
 //-----------------------------------------------------------------------------
 void CGamePanelInfo::OnCommand(const char *command) {
-  if (!stricmp(command, "stop2")) {
+  if (!_stricmp(command, "stop2")) {
     RemoteServer().SendCommand("quit");
     m_bShuttingDown = true;
     Close();
@@ -255,12 +255,12 @@ void CGamePanelInfo::OnMasterOutOfDate(const char *msg) {
 
   // open a dialog informing user that they need to restart the server
   if (!m_hOutOfDateQueryBox.Get()) {
-    char *fullmsg = (char *)_alloca(
-        strlen(msg) + strlen("\n\nDo you wish to shutdown now?\n") + 1);
+    size_t full_msg_size{strlen(msg) +
+                         strlen("\n\nDo you wish to shutdown now?\n") + 1};
+    char *fullmsg = (char *)_alloca(full_msg_size);
 
-    _snprintf(fullmsg,
-              strlen(msg) + strlen("\n\nDo you wish to shutdown now?\n") + 1,
-              "%s\n\nDo you wish to shutdown now?\n", msg);
+    sprintf_s(fullmsg, full_msg_size, "%s\n\nDo you wish to shutdown now?\n",
+              msg);
     m_hOutOfDateQueryBox = new QueryBox("Server restart pending", fullmsg);
     m_hOutOfDateQueryBox->AddActionSignalTarget(this);
     m_hOutOfDateQueryBox->SetOKCommand(new KeyValues("RestartServer"));

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Device Common Base Class.
 
@@ -45,8 +45,8 @@ static float XfadeSpeakerVolToMono(float scale, float xfade, float ispeaker,
 
   if (cspeaker == 4) {
     // mono sound distribution:
-    float scale_targets[] = {0.9, 0.9, 0.9, 0.9};     // RF, LF, RR, LR
-    float scale_targets2ch[] = {0.9, 0.9, 0.0, 0.0};  // RF, LF, RR, LR
+    float scale_targets[] = {0.9f, 0.9f, 0.9f, 0.9f};     // RF, LF, RR, LR
+    float scale_targets2ch[] = {0.9f, 0.9f, 0.0f, 0.0f};  // RF, LF, RR, LR
 
     if (fmix2channels)
       scale_target = scale_targets2ch[(int)std::clamp(ispeaker, 0.0f, 3.0f)];
@@ -58,14 +58,15 @@ static float XfadeSpeakerVolToMono(float scale, float xfade, float ispeaker,
 
   if (cspeaker == 5) {
     // mono sound distribution:
-    float scale_targets[] = {0.9, 0.9, 0.5, 0.5, 0.9};  // RF, LF, RR, LR, FC
+    float scale_targets[] = {0.9f, 0.9f, 0.5f, 0.5f,
+                             0.9f};  // RF, LF, RR, LR, FC
     scale_target = scale_targets[(int)std::clamp(ispeaker, 0.0f, 4.0f)];
     goto XfadeExit;
   }
 
   // if (cspeaker == 2 )
-  scale_target = 0.9;  // front 2 speakers in stereo each get 50% of total
-                       // volume in mono case
+  scale_target = 0.9f;  // front 2 speakers in stereo each get 50% of total
+                        // volume in mono case
 
 XfadeExit:
   scale_out = scale + (scale_target - scale) * xfade;
@@ -83,13 +84,13 @@ XfadeExit:
 
 #define PITCH_ANGLE_THRESHOLD 45.0
 #define REAR_VOL_DROP 0.5
-#define VOLCURVEPOWER \
-  1.5  // 1.0 is a linear crossfade of volume between speakers.
-       // 1.5 provides a smoother, nonlinear volume transition - this is done
-       // because a volume of 255 played in a single speaker is
-       // percieved as louder than 128 + 128 in two speakers
-       // separated by at least 45 degrees.  The nonlinear curve
-       // gives the volume boost needed.
+// 1.0 is a linear crossfade of volume between speakers.
+// 1.5 provides a smoother, nonlinear volume transition - this is done
+// because a volume of 255 played in a single speaker is
+// percieved as louder than 128 + 128 in two speakers
+// separated by at least 45 degrees.  The nonlinear curve
+// gives the volume boost needed.
+#define VOLCURVEPOWER 1.5
 
 static float GetSpeakerVol(float yaw_source, float pitch_source, float mono,
                            float yaw_speaker, int ispeaker, int cspeaker,

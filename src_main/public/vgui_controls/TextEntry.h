@@ -314,10 +314,10 @@ _sendNewLines is true
   void FlipToLastIME();
 
  public:
-  virtual void GetTextRange(wchar_t *buf, int from,
+  virtual void GetTextRange(wchar_t *buf, usize buf_size, int from,
                             int numchars);  // copy a portion of the text to the
                                             // buffer and add zero-termination
-  virtual void GetTextRange(char *buf, int from,
+  virtual void GetTextRange(char *buf, usize buf_size, int from,
                             int numchars);  // copy a portion of the text to the
                                             // buffer and add zero-termination
 

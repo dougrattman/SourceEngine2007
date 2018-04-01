@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 // HDRFIXME: reduce the number of include files here.
 
@@ -40,7 +40,6 @@
 #include "vmodes.h"
 #include "vtf/vtf.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // putting this here so that it is replicated to the client.dll and
@@ -205,7 +204,8 @@ static void TakeCubemapSnapshot(const Vector &origin, const char *pFileNameBase,
                 float texel = ldr_map.Pixel(x, y, c);
                 if (texel > 0.98) bOverExposedTexels = true;
                 texel *= scale;
-                hdr_map.Pixel(x, y, c) = std::max(hdr_map.Pixel(x, y, c), texel);
+                hdr_map.Pixel(x, y, c) =
+                    std::max(hdr_map.Pixel(x, y, c), texel);
               }
           exposure *= 0.75;
           materials->SwapBuffers();
@@ -503,8 +503,9 @@ static bool LoadSrcVTFFiles(IVTFTexture *pSrcVTFTextures[6],
 
   int i;
   for (i = 0; i < 6; i++) {
-    // !!! TODO(d.rattman): This needs to open the vmt (or some other method) to find the
-    // correct LDR or HDR set of skybox textures! Look in vbsp\cubemap.cpp!
+    // !!! TODO(d.rattman): This needs to open the vmt (or some other method) to
+    // find the correct LDR or HDR set of skybox textures! Look in
+    // vbsp\cubemap.cpp!
     char srcVTFFileName[1024];
     Q_snprintf(srcVTFFileName, sizeof(srcVTFFileName),
                "materials/skybox/%s%s.vtf", pSkyboxBaseName, facingName[i]);
@@ -583,24 +584,18 @@ void Cubemap_CreateDefaultCubemap(const char *pMapName, IBSPPack *iBSPPack) {
     for (int iFace = 0; iFace < 6; ++iFace) {
       // Finally, iterate over all mip levels in the *destination*
       for (int iMip = 0; iMip < pDstCubemap->MipCount(); ++iMip) {
-        // Copy the bits from the source images into the cube faces
-        unsigned char *pSrcBits = pSrcVTFTextures[iFace]->ImageData(
-            iFrame, 0, iMip + iMipLevelOffset);
         unsigned char *pDstBits = pDstCubemap->ImageData(iFrame, iFace, iMip);
         int iSize = pDstCubemap->ComputeMipSize(iMip);
-        int iSrcMipSize =
-            pSrcVTFTextures[iFace]->ComputeMipSize(iMip + iMipLevelOffset);
 
-        // !!! TODO(d.rattman): Set this to black until the LDR/HDR issues are fixed on
-        // line ~563 in this file
+        // !!! TODO(d.rattman): Set this to black until the LDR/HDR issues are
+        // fixed on line ~563 in this file
         memset(pDstBits, 0, iSize);
       }
     }
   }
 
   int flagUnion = 0;
-  int i;
-  for (i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; i++) {
     flagUnion |= pSrcVTFTextures[i]->Flags();
   }
   bool bHasAlpha =
@@ -646,7 +641,7 @@ void Cubemap_CreateDefaultCubemap(const char *pMapName, IBSPPack *iBSPPack) {
                             outputBuf.TellPut(), false);
 
   // Clean up the textures
-  for (i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; i++) {
     DestroyVTFTexture(pSrcVTFTextures[i]);
   }
   DestroyVTFTexture(pDstCubemap);

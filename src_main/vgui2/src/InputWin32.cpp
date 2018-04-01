@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui/IInputInternal.h"
 
@@ -23,7 +23,6 @@
 #include "vgui/VGUI.h"
 #include "vgui_internal.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 SHORT System_GetKeyState(int virtualKeyCode);  // in System.cpp, a hack to only
@@ -1848,8 +1847,8 @@ static void SpewIMEInfo(int langid) {
   if (info) {
     wchar_t const *name = info->shortcode ? info->shortcode : L"???";
     wchar_t outstr[512];
-    _snwprintf(outstr, sizeof(outstr) / sizeof(wchar_t),
-               L"IME language changed to:  %s", name);
+    _snwprintf_s(outstr, SOURCE_ARRAYSIZE(outstr),
+                 L"IME language changed to:  %s", name);
     OutputDebugStringW(outstr);
     OutputDebugStringW(L"\n");
   }
@@ -1931,34 +1930,22 @@ void CInputWin32::OnChangeIMEByHandle(int handleValue) {
 // etc.)
 void CInputWin32::GetIMELanguageName(wchar_t *buf,
                                      int unicodeBufferSizeInBytes) {
-#ifndef _X360
   wchar_t const *name = GetLanguageName(LOWORD(GetKeyboardLayout(0)));
-  wcsncpy(buf, name, unicodeBufferSizeInBytes / sizeof(wchar_t) - 1);
-  buf[unicodeBufferSizeInBytes / sizeof(wchar_t) - 1] = L'\0';
-#else
-  buf[0] = L'\0';
-#endif
+  wcscpy_s(buf, unicodeBufferSizeInBytes / sizeof(wchar_t), name);
 }
 // Returns the short code for the language (EN, CH, KO, JP, RU, TH, etc. ).
 void CInputWin32::GetIMELanguageShortCode(wchar_t *buf,
                                           int unicodeBufferSizeInBytes) {
-#ifndef _X360
   LanguageIds *info = GetLanguageInfo(LOWORD(GetKeyboardLayout(0)));
   if (!info) {
     buf[0] = L'\0';
   } else {
-    wcsncpy(buf, info->shortcode,
-            unicodeBufferSizeInBytes / sizeof(wchar_t) - 1);
-    buf[unicodeBufferSizeInBytes / sizeof(wchar_t) - 1] = L'\0';
+    wcscpy_s(buf, unicodeBufferSizeInBytes / sizeof(wchar_t), info->shortcode);
   }
-#else
-  buf[0] = L'\0';
-#endif
 }
 
 // Call with NULL dest to get item count
 int CInputWin32::GetIMELanguageList(LanguageItem *dest, int destcount) {
-#ifndef _X360
   int iret = 0;
 
   UINT numKBs = GetKeyboardLayoutList(0, NULL);
@@ -1986,30 +1973,20 @@ int CInputWin32::GetIMELanguageList(LanguageItem *dest, int destcount) {
 
         LanguageIds *info = GetLanguageInfo(LOWORD(hkl));
 
-        memset(p, 0, sizeof(IInput::LanguageItem));
+        memset(p, 0, sizeof(*p));
 
-        wcsncpy(p->shortname, info->shortcode,
-                sizeof(p->shortname) / sizeof(wchar_t));
-        p->shortname[sizeof(p->shortname) / sizeof(wchar_t) - 1] = L'\0';
+        wcscpy_s(p->shortname, info->shortcode);
+        wcscpy_s(p->menuname, info->displayname);
 
-        wcsncpy(p->menuname, info->displayname,
-                sizeof(p->menuname) / sizeof(wchar_t));
-        p->menuname[sizeof(p->menuname) / sizeof(wchar_t) - 1] = L'\0';
-
-        p->handleValue = (int)hkl;
-        p->active = (hkl == GetKeyboardLayout(0)) ? true : false;
+        p->handleValue = (intptr_t)hkl;
+        p->active = hkl == GetKeyboardLayout(0);
       }
     }
 
     delete[] list;
   }
   return iret;
-#else
-  return 0;
-#endif
 }
-
-#ifndef _X360
 
 struct IMESettingsTransform {
   IMESettingsTransform(unsigned int cmr, unsigned int cma, unsigned int smr,
@@ -2111,8 +2088,6 @@ static IMESettingsTransform g_ConversionMode_JP_HalfwidthAlphanumeric(
         IME_CMODE_FULLSHAPE,
     IME_CMODE_ALPHANUMERIC | IME_CMODE_ROMAN, 0, 0);
 
-#endif  // _X360
-
 int CInputWin32::GetIMEConversionModes(ConversionModeItem *dest,
                                        int destcount) {
   if (dest) {
@@ -2137,15 +2112,13 @@ int CInputWin32::GetIMEConversionModes(ConversionModeItem *dest,
         ConversionModeItem *item;
         int i = 0;
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_Chinese",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_CHT_ToChinese;
+        wcscpy_s(item->menuname, L"#IME_Chinese");
+        item->handleValue = (intptr_t)&g_ConversionMode_CHT_ToChinese;
         item->active = g_ConversionMode_CHT_ToChinese.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_English",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_CHT_ToEnglish;
+        wcscpy_s(item->menuname, L"#IME_English");
+        item->handleValue = (intptr_t)&g_ConversionMode_CHT_ToEnglish;
         item->active = g_ConversionMode_CHT_ToEnglish.ConvMatches(dwConvMode);
       }
       return 2;
@@ -2156,43 +2129,39 @@ int CInputWin32::GetIMEConversionModes(ConversionModeItem *dest,
 
         int i = 0;
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_Hiragana",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_JP_Hiragana;
+        wcscpy_s(item->menuname, L"#IME_Hiragana");
+        item->handleValue = (intptr_t)&g_ConversionMode_JP_Hiragana;
         item->active = g_ConversionMode_JP_Hiragana.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_FullWidthKatakana",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_JP_FullwidthKatakana;
+        wcscpy_s(item->menuname, L"#IME_FullWidthKatakana");
+        item->handleValue = (intptr_t)&g_ConversionMode_JP_FullwidthKatakana;
         item->active =
             g_ConversionMode_JP_FullwidthKatakana.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_FullWidthAlphanumeric",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_JP_FullwidthAlphanumeric;
+        wcscpy_s(item->menuname, L"#IME_FullWidthAlphanumeric");
+        item->handleValue =
+            (intptr_t)&g_ConversionMode_JP_FullwidthAlphanumeric;
         item->active =
             g_ConversionMode_JP_FullwidthAlphanumeric.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_HalfWidthKatakana",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_JP_HalfwidthKatakana;
+        wcscpy_s(item->menuname, L"#IME_HalfWidthKatakana");
+        item->handleValue = (intptr_t)&g_ConversionMode_JP_HalfwidthKatakana;
         item->active =
             g_ConversionMode_JP_HalfwidthKatakana.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_HalfWidthAlphanumeric",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_JP_HalfwidthAlphanumeric;
+        wcscpy_s(item->menuname, L"#IME_HalfWidthAlphanumeric");
+        item->handleValue =
+            (intptr_t)&g_ConversionMode_JP_HalfwidthAlphanumeric;
         item->active =
             g_ConversionMode_JP_HalfwidthAlphanumeric.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_English",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_JP_DirectInput;
+        wcscpy_s(item->menuname, L"#IME_English");
+        item->handleValue = (intptr_t)&g_ConversionMode_JP_DirectInput;
         item->active = g_ConversionMode_JP_DirectInput.ConvMatches(dwConvMode);
       }
       return 6;
@@ -2202,15 +2171,13 @@ int CInputWin32::GetIMEConversionModes(ConversionModeItem *dest,
         ConversionModeItem *item;
         int i = 0;
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_Korean",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_KO_ToKorean;
+        wcscpy_s(item->menuname, L"#IME_Korean");
+        item->handleValue = (intptr_t)&g_ConversionMode_KO_ToKorean;
         item->active = g_ConversionMode_KO_ToKorean.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_English",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_KO_ToEnglish;
+        wcscpy_s(item->menuname, L"#IME_English");
+        item->handleValue = (intptr_t)&g_ConversionMode_KO_ToEnglish;
         item->active = g_ConversionMode_KO_ToEnglish.ConvMatches(dwConvMode);
       }
       return 2;
@@ -2220,22 +2187,18 @@ int CInputWin32::GetIMEConversionModes(ConversionModeItem *dest,
         ConversionModeItem *item;
         int i = 0;
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_Chinese",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_CHS_ToChinese;
+        wcscpy_s(item->menuname, L"#IME_Chinese");
+        item->handleValue = (intptr_t)&g_ConversionMode_CHS_ToChinese;
         item->active = g_ConversionMode_CHS_ToChinese.ConvMatches(dwConvMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_English",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_ConversionMode_CHS_ToChinese;
+        wcscpy_s(item->menuname, L"#IME_English");
+        item->handleValue = (intptr_t)&g_ConversionMode_CHS_ToChinese;
         item->active = g_ConversionMode_CHS_ToChinese.ConvMatches(dwConvMode);
       }
       return 2;
   }
 }
-
-#ifndef _X360
 
 static IMESettingsTransform g_SentenceMode_JP_None(0, 0,
                                                    IME_SMODE_PLAURALCLAUSE |
@@ -2263,8 +2226,6 @@ static IMESettingsTransform g_SentenceMode_JP_BiasSpeech(
         IME_SMODE_AUTOMATIC | IME_SMODE_PLAURALCLAUSE,
     IME_SMODE_CONVERSATION);
 
-#endif  // _X360
-
 int CInputWin32::GetIMESentenceModes(SentenceModeItem *dest, int destcount) {
   if (dest) {
     memset(dest, 0, destcount * sizeof(SentenceModeItem));
@@ -2291,27 +2252,23 @@ int CInputWin32::GetIMESentenceModes(SentenceModeItem *dest, int destcount) {
 
         int i = 0;
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_General",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_SentenceMode_JP_General;
+        wcscpy_s(item->menuname, L"#IME_General");
+        item->handleValue = (intptr_t)&g_SentenceMode_JP_General;
         item->active = g_SentenceMode_JP_General.SentMatches(dwSentMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_BiasNames",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_SentenceMode_JP_BiasNames;
+        wcscpy_s(item->menuname, L"#IME_BiasNames");
+        item->handleValue = (intptr_t)&g_SentenceMode_JP_BiasNames;
         item->active = g_SentenceMode_JP_BiasNames.SentMatches(dwSentMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_BiasSpeech",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_SentenceMode_JP_BiasSpeech;
+        wcscpy_s(item->menuname, L"#IME_BiasSpeech");
+        item->handleValue = (intptr_t)&g_SentenceMode_JP_BiasSpeech;
         item->active = g_SentenceMode_JP_BiasSpeech.SentMatches(dwSentMode);
 
         item = &dest[i++];
-        wcsncpy(item->menuname, L"#IME_NoConversion",
-                sizeof(item->menuname) / sizeof(wchar_t));
-        item->handleValue = (int)&g_SentenceMode_JP_None;
+        wcscpy_s(item->menuname, L"#IME_NoConversion");
+        item->handleValue = (intptr_t)&g_SentenceMode_JP_None;
         item->active = g_SentenceMode_JP_None.SentMatches(dwSentMode);
       }
       return 4;
@@ -2319,12 +2276,10 @@ int CInputWin32::GetIMESentenceModes(SentenceModeItem *dest, int destcount) {
 }
 
 void CInputWin32::OnChangeIMEConversionModeByHandle(int handleValue) {
-#ifndef _X360
   if (handleValue == 0) return;
 
   IMESettingsTransform *txform = (IMESettingsTransform *)handleValue;
   txform->Apply((HWND)GetIMEWindow());
-#endif
 }
 
 void CInputWin32::OnChangeIMESentenceModeByHandle(int handleValue) {}
@@ -2334,15 +2289,12 @@ void CInputWin32::OnInputLanguageChanged() {}
 void CInputWin32::OnIMEStartComposition() {}
 
 void DescribeIMEFlag(char const *string, bool value) {
-  if (value) {
-    Msg("   %s\n", string);
-  }
+  if (value) Msg("   %s\n", string);
 }
 
 #define IMEDesc(x) DescribeIMEFlag(#x, flags &x);
 
 void CInputWin32::OnIMEComposition(int flags) {
-#ifndef _X360
   /*
   Msg( "OnIMEComposition\n" );
 
@@ -2394,7 +2346,6 @@ void CInputWin32::OnIMEComposition(int flags) {
 
     ImmReleaseContext((HWND)GetIMEWindow(), hIMC);
   }
-#endif
 }
 
 void CInputWin32::OnIMEEndComposition() {
@@ -2406,41 +2357,32 @@ void CInputWin32::OnIMEEndComposition() {
 }
 
 void CInputWin32::DestroyCandidateList() {
-#ifndef _X360
   if (_imeCandidates) {
     delete[](char *) _imeCandidates;
     _imeCandidates = 0;
   }
-#endif
 }
 
 void CInputWin32::OnIMEShowCandidates() {
-#ifndef _X360
   DestroyCandidateList();
   CreateNewCandidateList();
 
   InternalShowCandidateWindow();
-#endif
 }
 
 void CInputWin32::OnIMECloseCandidates() {
-#ifndef _X360
   InternalHideCandidateWindow();
   DestroyCandidateList();
-#endif
 }
 
 void CInputWin32::OnIMEChangeCandidates() {
-#ifndef _X360
   DestroyCandidateList();
   CreateNewCandidateList();
 
   InternalUpdateCandidateWindow();
-#endif
 }
 
 void CInputWin32::CreateNewCandidateList() {
-#ifndef _X360
   Assert(!_imeCandidates);
 
   HIMC hImc = ImmGetContext((HWND)GetIMEWindow());
@@ -2464,22 +2406,16 @@ void CInputWin32::CreateNewCandidateList() {
     }
     ImmReleaseContext((HWND)GetIMEWindow(), hImc);
   }
-#endif
 }
 
 int CInputWin32::GetCandidateListCount() {
-#ifndef _X360
   if (!_imeCandidates) return 0;
 
   return (int)_imeCandidates->dwCount;
-#else
-  return 0;
-#endif
 }
 
 void CInputWin32::GetCandidate(int num, wchar_t *dest, int destSizeBytes) {
   dest[0] = L'\0';
-#ifndef _X360
   if (num < 0 || num >= (int)_imeCandidates->dwCount) {
     return;
   }
@@ -2487,67 +2423,44 @@ void CInputWin32::GetCandidate(int num, wchar_t *dest, int destSizeBytes) {
   DWORD offset = *(DWORD *)((char *)(_imeCandidates->dwOffset + num));
   wchar_t *s = (wchar_t *)((char *)_imeCandidates + offset);
 
-  wcsncpy(dest, s, destSizeBytes / sizeof(wchar_t) - 1);
-  dest[destSizeBytes / sizeof(wchar_t) - 1] = L'\0';
-#endif
+  wcscpy_s(dest, destSizeBytes / sizeof(wchar_t), s);
 }
 
 int CInputWin32::GetCandidateListSelectedItem() {
-#ifndef _X360
   if (!_imeCandidates) return 0;
 
   return (int)_imeCandidates->dwSelection;
-#else
-  return 0;
-#endif
 }
 
 int CInputWin32::GetCandidateListPageSize() {
-#ifndef _X360
   if (!_imeCandidates) return 0;
   return (int)_imeCandidates->dwPageSize;
-#else
-  return 0;
-#endif
 }
 
 int CInputWin32::GetCandidateListPageStart() {
-#ifndef _X360
   if (!_imeCandidates) return 0;
   return (int)_imeCandidates->dwPageStart;
-#else
-  return 0;
-#endif
 }
 
 void CInputWin32::SetCandidateListPageStart(int start) {
-#ifndef _X360
   HIMC hImc = ImmGetContext((HWND)GetIMEWindow());
   if (hImc) {
     ImmNotifyIME(hImc, NI_SETCANDIDATE_PAGESTART, 0, start);
     ImmReleaseContext((HWND)GetIMEWindow(), hImc);
   }
-#endif
 }
 
 void CInputWin32::OnIMERecomputeModes() {}
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
 bool CInputWin32::CandidateListStartsAtOne() {
-#ifndef _X360
   DWORD prop = ImmGetProperty(GetKeyboardLayout(0), IGP_PROPERTY);
   if (prop & IME_PROP_CANDLIST_START_FROM_1) {
     return true;
   }
-#endif
   return false;
 }
 
 void CInputWin32::SetCandidateWindowPos(int x, int y) {
-#ifndef _X360
   POINT point;
   CANDIDATEFORM Candidate;
 
@@ -2565,7 +2478,6 @@ void CInputWin32::SetCandidateWindowPos(int x, int y) {
 
     ImmReleaseContext((HWND)GetIMEWindow(), hIMC);
   }
-#endif
 }
 
 void CInputWin32::InternalSetCompositionString(const wchar_t *compstr) {
@@ -2598,15 +2510,11 @@ void CInputWin32::InternalUpdateCandidateWindow() {
 }
 
 bool CInputWin32::GetShouldInvertCompositionString() {
-#ifndef _X360
   LanguageIds *info = GetLanguageInfo(LOWORD(GetKeyboardLayout(0)));
   if (!info) return false;
 
   // Only Chinese (simplified and traditional)
   return info->invertcomposition;
-#else
-  return false;
-#endif
 }
 
 void CInputWin32::RegisterKeyCodeUnhandledListener(VPANEL panel) {

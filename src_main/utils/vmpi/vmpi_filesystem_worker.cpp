@@ -5,6 +5,7 @@
 #include <winsock2.h>
 
 #include "threadhelpers.h"
+#include "tier0/include/fasttimer.h"
 #include "vmpi_filesystem_internal.h"
 #include "zlib.h"
 
@@ -201,10 +202,11 @@ class CWorkerMulticastListener {
     CWorkerFile *pTestFile = new CWorkerFile;
 
     pTestFile->m_Filename.SetSize(strlen(pFilename) + 1);
-    strcpy(pTestFile->m_Filename.Base(), pFilename);
+    strcpy_s(pTestFile->m_Filename.Base(), pTestFile->m_Filename.Size(),
+             pFilename);
 
     pTestFile->m_PathID.SetSize(strlen(pPathID) + 1);
-    strcpy(pTestFile->m_PathID.Base(), pPathID);
+    strcpy_s(pTestFile->m_PathID.Base(), pTestFile->m_PathID.Size(), pPathID);
 
     pTestFile->m_FileID = fileID;
     pTestFile->m_nChunksToReceive = 9999;

@@ -164,12 +164,9 @@ void Shader_DecalDrawPoly(CDecalVert *v, IMaterial *pMaterial,
   int vertexFormat = 0;
   CMatRenderContextPtr pRenderContext(materials);
 
-#ifdef USE_CONVARS
   if (ShouldDrawInWireFrameMode()) {
     pRenderContext->Bind(g_materialDecalWireframe);
-  } else
-#endif
-  {
+  } else {
     Assert(MSurf_MaterialSortID(surfID) >= 0 &&
            MSurf_MaterialSortID(surfID) < g_WorldStaticMeshes.Count());
     pRenderContext->BindLightmapPage(

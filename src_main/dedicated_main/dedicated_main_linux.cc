@@ -32,18 +32,18 @@ int main(int argc, char *argv[]) {
     return errno;
   }
 
-  void *tier0_dl = dlopen("tier0_i486.so", RTLD_NOW);
+  void *tier0_dl = dlopen("tier0.so.1", RTLD_NOW);
   if (!tier0_dl) {
-    fprintf(stderr, "dlopen for tier0_i486.so failed (%s)\n", dlerror());
+    fprintf(stderr, "dlopen for tier0.so.1 failed (%s)\n", dlerror());
     return EXIT_FAILURE;
   }
-  void *vstdlib_dl = dlopen("vstdlib_i486.so", RTLD_NOW);
+  void *vstdlib_dl = dlopen("vstdlib.so.1", RTLD_NOW);
   if (!vstdlib_dl) {
-    fprintf(stderr, "dlopen for vstdlib_i486.so failed (%s)\n", dlerror());
+    fprintf(stderr, "dlopen for vstdlib.so.1 failed (%s)\n", dlerror());
     return EXIT_FAILURE;
   }
 
-  const char *dedicated_dl_path = "bin/dedicated_i486.so";
+  const char *dedicated_dl_path = "bin/dedicated.so.1";
   void *dedicated_dl = dlopen(dedicated_dl_path, RTLD_NOW);
   if (!dedicated_dl) {
     fprintf(stderr, "dlopen for %s failed (%s)\n", dedicated_dl_path,

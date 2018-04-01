@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "CvarToggleCheckButton.h"
 
@@ -8,7 +8,6 @@
 #include "tier1/convar.h"
 #include "vgui/IVGui.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -24,7 +23,7 @@ CCvarToggleCheckButton::CCvarToggleCheckButton(Panel *parent,
                                                const char *text,
                                                char const *cvarname)
     : CheckButton(parent, panelName, text) {
-  m_pszCvarName = cvarname ? strdup(cvarname) : NULL;
+  m_pszCvarName = cvarname ? _strdup(cvarname) : NULL;
 
   if (m_pszCvarName) {
     Reset();
@@ -46,7 +45,7 @@ void CCvarToggleCheckButton::Paint() {
 
   // Look up current value
   //	bool value = engine->pfnGetCvarFloat( m_pszCvarName ) > 0.0f ? true :
-  //false;
+  // false;
   ConVarRef var(m_pszCvarName);
   if (!var.IsValid()) return;
   bool value = var.GetBool();
@@ -71,7 +70,7 @@ void CCvarToggleCheckButton::ApplyChanges() {
 
 void CCvarToggleCheckButton::Reset() {
   //	m_bStartValue = engine->pfnGetCvarFloat( m_pszCvarName ) > 0.0f ? true :
-  //false;
+  // false;
 
   if (!m_pszCvarName || !m_pszCvarName[0]) return;
 
@@ -121,7 +120,7 @@ void CCvarToggleCheckButton::ApplySettings(KeyValues *inResourceData) {
   if (m_pszCvarName)
     free(m_pszCvarName);  // got a "", not a NULL from the create-control call
 
-  m_pszCvarName = cvarName ? strdup(cvarName) : NULL;
+  m_pszCvarName = cvarName ? _strdup(cvarName) : NULL;
 
   if (Q_stricmp(cvarValue, "1") == 0)
     m_bStartValue = true;

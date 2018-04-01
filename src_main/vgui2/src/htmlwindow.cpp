@@ -720,7 +720,7 @@ HtmlWindow::HtmlWindow(vgui::IHTMLEvents *events, vgui::VPANEL c, HWND parent,
   m_bDirectToHWND = DirectToHWND;
   m_hIEWndProc = NULL;
 
-  strcpy(m_currentUrl, "");
+  strcpy_s(m_currentUrl, "");
   m_specificallyOpened = false;
   m_parent = parent;
   m_vcontext = c;
@@ -745,7 +745,7 @@ HtmlWindow::HtmlWindow(vgui::IHTMLEvents *events, vgui::VPANEL c, HWND parent,
 
       // Register it again
       RegisterClass(&wc);
-      strcpy(tmp, "VGUI_HTML");
+      strcpy_s(tmp, "VGUI_HTML");
     }
 
     // create a temp window to contain this object, make it hidden and disabled

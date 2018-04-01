@@ -153,10 +153,10 @@ void CPropFadeUIPanel::OnTextChanged(KeyValues *data) {
     float flMinArea, flMaxArea;
 
     m_pMinScreenArea->GetText(buf, 256);
-    int nReadMin = sscanf(buf, "%f", &flMinArea);
+    int nReadMin = sscanf_s(buf, "%f", &flMinArea);
 
     m_pMaxScreenArea->GetText(buf, 256);
-    int nReadMax = sscanf(buf, "%f", &flMaxArea);
+    int nReadMax = sscanf_s(buf, "%f", &flMaxArea);
 
     if (nReadMin && nReadMax) {
       modelinfoclient->SetLevelScreenFadeRange(flMinArea, flMaxArea);
@@ -336,13 +336,13 @@ void COcclusionUIPanel::OnTextChanged(KeyValues *data) {
     float flMinArea, flMaxArea;
 
     m_pMinOccluderArea->GetText(buf, 256);
-    int nReadMin = sscanf(buf, "%f", &flMinArea);
+    int nReadMin = sscanf_s(buf, "%f", &flMinArea);
     if (nReadMin) {
       r_occluderminarea.SetValue(flMinArea);
     }
 
     m_pMaxOccludeeArea->GetText(buf, 256);
-    int nReadMax = sscanf(buf, "%f", &flMaxArea);
+    int nReadMax = sscanf_s(buf, "%f", &flMaxArea);
     if (nReadMax) {
       r_occludeemaxarea.SetValue(flMaxArea);
     }

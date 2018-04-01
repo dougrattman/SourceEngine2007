@@ -16,9 +16,7 @@
 #include "vgui/Dar.h"
 #include "vgui/VGUI.h"
 #include "vgui_controls/MessageMap.h"
-#if defined(VGUI_USEKEYBINDINGMAPS)
 #include "vgui_controls/KeyBindingMap.h"
-#endif
 #include "Color.h"
 #include "tier1/utlsymbol.h"
 #include "vgui/IClientPanel.h"
@@ -42,13 +40,9 @@ class CUtlBuffer;
 
 namespace vgui {
 
-#if !defined(_X360)
 #define VGUI_USEDRAGDROP 1
-#endif
 
-#if defined(VGUI_USEKEYBINDINGMAPS)
 struct PanelKeyBindingMap;
-#endif
 //-----------------------------------------------------------------------------
 // Purpose: Helper functions to construct vgui panels
 //
@@ -89,11 +83,9 @@ class IPanelAnimationPropertyConverter {
   virtual void InitFromDefault(Panel *panel, PanelAnimationMapEntry *entry) = 0;
 };
 
-#if defined(VGUI_USEKEYBINDINGMAPS)
 enum KeyBindingContextHandle_t {
   INVALID_KEYBINDINGCONTEXT_HANDLE = 0xffffffff,
 };
-#endif
 //-----------------------------------------------------------------------------
 // Purpose: Base interface to all vgui windows
 // All vgui controls that receive message and/or have a physical presence
@@ -415,7 +407,6 @@ class Panel : public IClientPanel {
       KeyCode code, int modifiers);  // L"Ctrl+Alt+Shift+Backspace"
 
   static KeyCode StringToKeyCode(char const *str);
-#if defined(VGUI_USEKEYBINDINGMAPS)
   static KeyBindingContextHandle_t CreateKeyBindingsContext(
       char const *filename, char const *pathID = 0);
   virtual void SetKeyBindingsContext(KeyBindingContextHandle_t handle);
@@ -474,7 +465,6 @@ class Panel : public IClientPanel {
   // Panels...
   void SetAllowKeyBindingChainToParent(bool state);
   bool IsKeyBindingChainToParentAllowed() const;
-#endif  // VGUI_USEKEYBINDINGMAPS
 
   // base implementation forwards Key messages to the Panel's parent
   // - override to 'swallow' the input
@@ -656,9 +646,7 @@ class Panel : public IClientPanel {
     NEEDS_LAYOUT = 0x0080,
     NEEDS_SCHEME_UPDATE = 0x0100,
     NEEDS_DEFAULT_SETTINGS_APPLIED = 0x0200,
-#if defined(VGUI_USEKEYBINDINGMAPS)
     ALLOW_CHAIN_KEYBINDING_TO_PARENT = 0x0400,
-#endif
     IN_PERFORM_LAYOUT = 0x0800,
     IS_PROPORTIONAL = 0x1000,
     TRIPLE_PRESS_ALLOWED = 0x2000,
@@ -734,9 +722,7 @@ class Panel : public IClientPanel {
   long m_lLastDoublePressTime;
   HFont m_infoFont;
 
-#if defined(VGUI_USEKEYBINDINGMAPS)
   KeyBindingContextHandle_t m_hKeyBindingsContext;
-#endif
 
   // data
   VPANEL _vpanel;    // handle to a vgui panel

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bitmap/float_bm.h"
 
@@ -117,7 +117,8 @@ void FloatBitMap_t::CompressTo8Bits(float overbright) {
 #endif
 
   memcpy(RGBAData, TmpFBM.RGBAData, Width * Height * 4 * sizeof(float));
+
   // now, map scale to real value
   for (int y = 0; y < Height; y++)
-    for (int x = 0; x < Width; x++) Pixel(x, y, 3) *= (1.0 / 255.0);
+    for (int x = 0; x < Width; x++) Pixel(x, y, 3) *= (1.0f / 255.0f);
 }

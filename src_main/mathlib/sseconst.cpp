@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "mathlib/ssemath.h"
 #include "mathlib/ssequaternion.h"
@@ -20,7 +20,7 @@ const fltx4 Four_2ToThe23s = {(f32)(1 << 23), (f32)(1 << 23), (f32)(1 << 23),
 const fltx4 Four_2ToThe24s = {(f32)(1 << 24), (f32)(1 << 24), (f32)(1 << 24),
                               (f32)(1 << 24)};
 
-const fltx4 Four_Point225s = {.225, .225, .225, .225};
+const fltx4 Four_Point225s = {.225f, .225f, .225f, .225f};
 const fltx4 Four_Epsilons = {FLT_EPSILON, FLT_EPSILON, FLT_EPSILON,
                              FLT_EPSILON};
 
@@ -33,18 +33,18 @@ const fltx4 g_QuatMultRowSign[4] = {{1.0f, 1.0f, -1.0f, 1.0f},
                                     {-1.0f, -1.0f, -1.0f, 1.0f}};
 
 const i32 alignas(16) g_SIMD_clear_signmask[4] = {0x7fffffff, 0x7fffffff,
-                                              0x7fffffff, 0x7fffffff};
+                                                  0x7fffffff, 0x7fffffff};
 const i32 alignas(16) g_SIMD_signmask[4] = {0x80000000i32, 0x80000000i32,
-                                        0x80000000i32, 0x80000000i32};
+                                            0x80000000i32, 0x80000000i32};
 const i32 alignas(16) g_SIMD_lsbmask[4] = {0xfffffffei32, 0xfffffffei32,
-                                       0xfffffffei32, 0xfffffffei32};
+                                           0xfffffffei32, 0xfffffffei32};
 const i32 alignas(16) g_SIMD_clear_wmask[4] = {0xffffffffi32, 0xffffffffi32,
-                                           0xffffffffi32, 0};
+                                               0xffffffffi32, 0};
 
 const i32 alignas(16) g_SIMD_ComponentMask[4][4] = {{0xFFFFFFFFi32, 0, 0, 0},
-                                                {0, 0xFFFFFFFFi32, 0, 0},
-                                                {0, 0, 0xFFFFFFFFi32, 0},
-                                                {0, 0, 0, 0xFFFFFFFFi32}};
+                                                    {0, 0xFFFFFFFFi32, 0, 0},
+                                                    {0, 0, 0xFFFFFFFFi32, 0},
+                                                    {0, 0, 0, 0xFFFFFFFFi32}};
 
 // FUNCTIONS
 // NOTE: WHY YOU **DO NOT** WANT TO PUT FUNCTIONS HERE
@@ -71,7 +71,8 @@ const i32 alignas(16) g_SIMD_ComponentMask[4][4] = {{0xFFFFFFFFi32, 0, 0, 0},
 /// You can use this to rotate a long array of FourVectors all by the same
 /// matrix. The first parameter is the head of the array. The second is the
 /// number of vectors to rotate. The third is the matrix.
-void FourVectors::RotateManyBy(FourVectors* SOURCE_RESTRICT pVectors, u32 numVectors,
+void FourVectors::RotateManyBy(FourVectors* SOURCE_RESTRICT pVectors,
+                               u32 numVectors,
                                const matrix3x4_t& rotationMatrix) {
   Assert(numVectors > 0);
   if (numVectors == 0) return;

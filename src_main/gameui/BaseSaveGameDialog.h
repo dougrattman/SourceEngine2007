@@ -1,71 +1,59 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASESAVEGAMEDIALOG_H
 #define BASESAVEGAMEDIALOG_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include "vgui_controls/Frame.h"
-#include "vgui/MouseCode.h"
-#include "tier1/keyvalues.h"
+#include "base/include/base_types.h"
 #include "tier1/UtlVector.h"
-
+#include "tier1/keyvalues.h"
+#include "vgui/MouseCode.h"
+#include "vgui_controls/Frame.h"
 
 #define SAVEGAME_MAPNAME_LEN 32
 #define SAVEGAME_COMMENT_LEN 80
 #define SAVEGAME_ELAPSED_LEN 32
 
-
-struct SaveGameDescription_t
-{
-	char szShortName[64];
-	char szFileName[128];
-	char szMapName[SAVEGAME_MAPNAME_LEN];
-	char szComment[SAVEGAME_COMMENT_LEN];
-	char szType[64];
-	char szElapsedTime[SAVEGAME_ELAPSED_LEN];
-	char szFileTime[32];
-	unsigned int iTimestamp;
-	unsigned int iSize;
+struct SaveGameDescription_t {
+  ch szShortName[64];
+  ch szFileName[128];
+  ch szMapName[SAVEGAME_MAPNAME_LEN];
+  ch szComment[SAVEGAME_COMMENT_LEN];
+  ch szType[64];
+  ch szElapsedTime[SAVEGAME_ELAPSED_LEN];
+  ch szFileTime[32];
+  u32 iTimestamp;
+  u32 iSize;
 };
 
+template <usize name_size, usize comment_size>
+bool SaveReadNameAndComment(FileHandle_t f, ch (&name)[name_size],
+                            ch (&comment)[comment_size]);
 
-int SaveReadNameAndComment( FileHandle_t f, char *name, char *comment );
+// Base class for save & load game dialogs.
+class CBaseSaveGameDialog : public vgui::Frame {
+  DECLARE_CLASS_SIMPLE(CBaseSaveGameDialog, vgui::Frame);
 
+ public:
+  CBaseSaveGameDialog(vgui::Panel *parent, const ch *name);
+  static i32 __cdecl SaveGameSortFunc(const void *lhs, const void *rhs);
 
-//-----------------------------------------------------------------------------
-// Purpose: Base class for save & load game dialogs
-//-----------------------------------------------------------------------------
-class CBaseSaveGameDialog : public vgui::Frame
-{
-	DECLARE_CLASS_SIMPLE( CBaseSaveGameDialog, vgui::Frame );
+ protected:
+  CUtlVector<SaveGameDescription_t> m_SaveGames;
+  vgui::PanelListPanel *m_pGameList;
 
-public:
-	CBaseSaveGameDialog( vgui::Panel *parent, const char *name );
-	static int __cdecl SaveGameSortFunc( const void *lhs, const void *rhs );
+  virtual void OnScanningSaveGames() {}
 
-protected:
-	CUtlVector<SaveGameDescription_t> m_SaveGames;
-	vgui::PanelListPanel *m_pGameList;
+  void DeleteSaveGame(const ch *fileName);
+  void ScanSavedGames();
+  void CreateSavedGamesList();
+  i32 GetSelectedItemSaveIndex();
+  void AddSaveGameItemToList(i32 saveIndex);
 
-	virtual void OnScanningSaveGames() {}
+  bool ParseSaveData(ch const *pszFileName, ch const *pszShortName,
+                     SaveGameDescription_t &save);
 
-	void DeleteSaveGame( const char *fileName );
-	void ScanSavedGames();
-	void CreateSavedGamesList();
-	int GetSelectedItemSaveIndex();
-	void AddSaveGameItemToList( int saveIndex );
-
-	bool ParseSaveData( char const *pszFileName, char const *pszShortName, SaveGameDescription_t &save );
-
-private:
-	MESSAGE_FUNC( OnPanelSelected, "PanelSelected" );
+ private:
+  MESSAGE_FUNC(OnPanelSelected, "PanelSelected");
 };
 
-
-#endif // BASESAVEGAMEDIALOG_H
+#endif  // BASESAVEGAMEDIALOG_H

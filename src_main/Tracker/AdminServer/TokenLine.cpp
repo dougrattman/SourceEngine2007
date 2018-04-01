@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 //
 // Purpose: implementation of the TokenLine class.
 
@@ -17,10 +17,10 @@ bool TokenLine::SetLine(const char* newLine) {
     return false;
   }
 
-  strncpy(m_fullLine, newLine, MAX_LINE_CHARS - 1);
+  strncpy_s(m_fullLine, newLine, MAX_LINE_CHARS - 1);
   m_fullLine[MAX_LINE_CHARS - 1] = '\0';
 
-  strncpy(m_tokenBuffer, newLine, MAX_LINE_CHARS - 1);
+  strncpy_s(m_tokenBuffer, newLine, MAX_LINE_CHARS - 1);
   m_tokenBuffer[MAX_LINE_CHARS - 1] = '\0';
 
   // parse tokens

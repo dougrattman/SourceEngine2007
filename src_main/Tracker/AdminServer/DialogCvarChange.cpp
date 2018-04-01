@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "DialogCvarChange.h"
 
@@ -95,7 +95,7 @@ void CDialogCvarChange::SetLabelText(const char *textEntryName,
 void CDialogCvarChange::OnCommand(const char *command) {
   bool bClose = false;
 
-  if (!stricmp(command, "Okay")) {
+  if (!_stricmp(command, "Okay")) {
     KeyValues *msg = new KeyValues("CvarChangeValue");
     char buf[64];
     m_pCvarLabel->GetText(buf, 64);
@@ -108,7 +108,7 @@ void CDialogCvarChange::OnCommand(const char *command) {
     PostActionSignal(msg);
 
     bClose = true;
-  } else if (!stricmp(command, "Close")) {
+  } else if (!_stricmp(command, "Close")) {
     bClose = true;
   } else {
     BaseClass::OnCommand(command);

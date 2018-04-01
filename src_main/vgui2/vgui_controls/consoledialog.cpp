@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui_controls/ConsoleDialog.h"
 
@@ -20,7 +20,6 @@
 #include "vgui_controls/RichText.h"
 #include "vgui_controls/TextEntry.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -808,11 +807,12 @@ void CConsolePanel::AddToHistory(const char *commandText,
   }
 
   // strip the space off the end of the command before adding it to the history
-  char *command =
-      static_cast<char *>(_alloca((strlen(commandText) + 1) * sizeof(char)));
+  usize size{(strlen(commandText) + 1) * sizeof(char)};
+  char *command = static_cast<char *>(_alloca(size));
   if (command) {
     memset(command, 0x0, strlen(commandText) + 1);
-    strncpy(command, commandText, strlen(commandText));
+    strcpy_s(command, size, commandText);
+
     if (command[strlen(command) - 1] == ' ') {
       command[strlen(command) - 1] = '\0';
     }
@@ -822,11 +822,12 @@ void CConsolePanel::AddToHistory(const char *commandText,
   char *extra = NULL;
 
   if (extraText) {
-    extra = static_cast<char *>(malloc((strlen(extraText) + 1) * sizeof(char)));
+    usize extra_size{(strlen(extraText) + 1) * sizeof(char)};
+    extra = static_cast<char *>(malloc(extra_size));
     if (extra) {
       memset(extra, 0x0, strlen(extraText) + 1);
-      strncpy(extra, extraText,
-              strlen(extraText));  // +1 to dodge the starting quote
+      strncpy_s(extra, extra_size, extraText,
+                strlen(extraText));  // +1 to dodge the starting quote
 
       // Strip trailing spaces
       int i = strlen(extra) - 1;
@@ -878,7 +879,7 @@ void CConsolePanel::DumpConsoleTextToFile() {
 
   // we don't want to overwrite other condump.txt files
   for (int i = 0; i < CONDUMP_FILES_MAX_NUM; ++i) {
-    _snprintf(szfile, sizeof(szfile), "condump%03d.txt", i);
+    _snprintf_s(szfile, sizeof(szfile), "condump%03d.txt", i);
     if (!g_pFullFileSystem->FileExists(szfile)) {
       found = true;
       break;

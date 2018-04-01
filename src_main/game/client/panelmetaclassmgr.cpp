@@ -28,7 +28,7 @@ bool ParseRGBA(KeyValues* pValues, const char* pFieldName, uint8_t& r,
   int r_i, g_i, b_i, a_i;
 
   // Try and scan them in
-  int scanned = sscanf(pColorString, "%i %i %i %i", &r_i, &g_i, &b_i, &a_i);
+  int scanned = sscanf_s(pColorString, "%i %i %i %i", &r_i, &g_i, &b_i, &a_i);
   if (scanned != 4) {
     Warning("Couldn't scan four color values from %s\n", pColorString);
     return false;
@@ -57,7 +57,7 @@ bool ParseCoord(KeyValues* pValues, const char* pFieldName, int& x, int& y) {
 
   // Try and scan them in
   int scanned;
-  scanned = sscanf(pCoordString, "%i %i", &x, &y);
+  scanned = sscanf_s(pCoordString, "%i %i", &x, &y);
   if (scanned != 2) {
     Warning("Couldn't scan 2d coordinate values from %s\n", pCoordString);
     return false;
@@ -78,7 +78,7 @@ bool ParseRect(KeyValues* pValues, const char* pFieldName, int& x, int& y,
 
   // Try and scan them in
   int scanned;
-  scanned = sscanf(pRectString, "%i %i %i %i", &x, &y, &w, &h);
+  scanned = sscanf_s(pRectString, "%i %i %i %i", &x, &y, &w, &h);
   if (scanned != 4) {
     Warning("Couldn't scan rectangle values from %s\n", pRectString);
     return false;

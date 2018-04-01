@@ -232,7 +232,7 @@ class CPhoneHome : public IPhoneHome {
     }
 
     int isDebugUser =
-        (Sys_IsDebuggerPresent() || CommandLine()->FindParm("-allowdebug")) ? 1
+        (Plat_IsInDebugSession() || CommandLine()->FindParm("-allowdebug")) ? 1
                                                                             : 0;
 
     encrypted.WriteByte(isDebugUser);

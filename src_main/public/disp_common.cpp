@@ -1,11 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "disp_common.h"
 
 #include "builddisp.h"
 #include "disp_powerinfo.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CNodeVert {
@@ -634,8 +633,8 @@ void ClearNeighborData(CCoreDispInfo *pDisp) {
 //-----------------------------------------------------------------------------
 void GetDispBox(CCoreDispInfo *pDisp, CDispBox &box) {
   // Calculate the bbox for this displacement.
-  Vector vMin(1e24, 1e24, 1e24);
-  Vector vMax(-1e24, -1e24, -1e24);
+  Vector vMin(1e24f, 1e24f, 1e24f);
+  Vector vMax(-1e24f, -1e24f, -1e24f);
 
   for (int iVert = 0; iVert < 4; ++iVert) {
     const Vector &vTest = pDisp->GetSurface()->GetPoint(iVert);

@@ -643,7 +643,7 @@ static matrix3x4_t *ComputeSkinMatrixSSE(mstudioboneweight_t &boneweights,
       matrix3x4_t &boneMat1 = pPoseToWorld[boneweights.bone[1]];
       float *pWeights = boneweights.weight;
 
-      _asm
+      __asm
       {
 				mov		eax, DWORD PTR [pWeights]
 				movss	xmm6, dword ptr[eax]		; boneweights.weight[0]
@@ -690,7 +690,7 @@ static matrix3x4_t *ComputeSkinMatrixSSE(mstudioboneweight_t &boneweights,
       matrix3x4_t &boneMat2 = pPoseToWorld[boneweights.bone[2]];
       float *pWeights = boneweights.weight;
 
-      _asm
+      __asm
       {
 				mov		eax, DWORD PTR [pWeights]
 				movss	xmm5, dword ptr[eax]		; boneweights.weight[0]
@@ -759,7 +759,7 @@ static matrix3x4_t *ComputeSkinMatrixSSE(mstudioboneweight_t &boneweights,
       matrix3x4_t &boneMat3 = pPoseToWorld[boneweights.bone[3]];
       float *pWeights = boneweights.weight;
 
-      _asm
+      __asm
       {
 				mov		eax, DWORD PTR [pWeights]
 				movss	xmm4, dword ptr[eax]		; boneweights.weight[0]

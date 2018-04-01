@@ -1,14 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <conio.h>
 #include <io.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 #include "utllinkedlist.h"
 #include "utlvector.h"
 #include "vmpi.h"
 #include "vmpi_distribute_work.h"
-#include "base/include/windows/windows_light.h"
 
 #define EVENT_TYPE_SEND_WORK_UNIT 0
 #define EVENT_TYPE_WU_STARTED 1
@@ -359,8 +359,8 @@ void VMPITracker_End() {
 }
 
 bool VMPITracker_WriteDebugFile(const char *pFilename) {
-  FILE *fp = fopen(pFilename, "wt");
-  if (fp) {
+  FILE *fp;
+  if (fopen_s(&fp, pFilename, "wt")) {
     fprintf(fp, "# work units: %d\n", g_WorkUnits.Count());
     fprintf(fp, "# active work units: %d\n", CountActiveWorkUnits());
 
@@ -403,19 +403,18 @@ bool VMPITracker_WriteDebugFile(const char *pFilename) {
 
     fclose(fp);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 void VMPITracker_HandleDebugKeypresses() {
   if (!g_bTrackWorkUnitEvents) return;
 
-  if (!kbhit()) return;
+  if (!_kbhit()) return;
 
   static int iState = 0;
 
-  int key = toupper(getch());
+  int key = toupper(_getch());
   if (iState == 0) {
     if (key == 'D') {
       iState = 1;

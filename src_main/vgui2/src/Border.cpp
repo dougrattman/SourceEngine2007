@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui_border.h"
 
@@ -11,7 +11,6 @@
 #include "vgui/ISurface.h"
 #include "vgui_internal.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -163,7 +162,7 @@ void Border::ApplySchemeSettings(IScheme *pScheme, KeyValues *inResourceData) {
 
   int left, top, right, bottom;
   GetInset(left, top, right, bottom);
-  sscanf(insetString, "%d %d %d %d", &left, &top, &right, &bottom);
+  sscanf_s(insetString, "%d %d %d %d", &left, &top, &right, &bottom);
   SetInset(left, top, right, bottom);
 
   // get the border information from the scheme
@@ -208,9 +207,8 @@ void Border::ParseSideSettings(int side_index, KeyValues *inResourceData,
 
     col = kv->GetString("offset", NULL);
     int Start = 0, end = 0;
-    if (col) {
-      sscanf(col, "%d %d", &Start, &end);
-    }
+    if (col) sscanf_s(col, "%d %d", &Start, &end);
+
     line->startOffset = Start;
     line->endOffset = end;
 

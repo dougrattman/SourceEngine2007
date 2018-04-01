@@ -1,8 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef FILETRACKER_H
 #define FILETRACKER_H
@@ -44,10 +40,10 @@ enum EFileFlags {
 
 class CPathIDFileList;
 
-class CFileInfo {
+class FileInfo {
  public:
-  CFileInfo();
-  ~CFileInfo();
+  FileInfo();
+  ~FileInfo();
 
   const char *GetFilename();
   const char *GetPathIDString();
@@ -68,15 +64,15 @@ class CPathIDFileList {
  public:
   CPathIDFileList();
   ~CPathIDFileList();
-  CFileInfo *FindFileInfo(const char *pFilename);
-  CFileInfo *AddFileInfo(const char *pFilename);
+  FileInfo *FindFileInfo(const char *pFilename);
+  FileInfo *AddFileInfo(const char *pFilename);
 
  public:
   CUtlSymbol m_PathID;  // "" for a 0 path ID.
-  CUtlDict<CFileInfo *, int> m_Files;
-  CUtlLinkedList<CFileInfo *, int> m_UnverifiedCRCFiles;  // These are the files
-                                                          // whose CRCs have not
-                                                          // been verified yet.
+  CUtlDict<FileInfo *, int> m_Files;
+  CUtlLinkedList<FileInfo *, int> m_UnverifiedCRCFiles;  // These are the files
+                                                         // whose CRCs have not
+                                                         // been verified yet.
   // These just point at entries in m_Files.
 };
 
@@ -134,10 +130,10 @@ class CFileTracker {
   void NoteFileFailedToLoad(const char *pFilename, const char *pPathID);
 
   // Get a file info from a specific path ID.
-  CFileInfo *GetFileInfo(const char *pFilename, const char *pPathID);
+  FileInfo *GetFileInfo(const char *pFilename, const char *pPathID);
 
   // Get all file infos with the specified filename (i.e. in all path IDs).
-  int GetFileInfos(CFileInfo **ppFileInfos, int nMaxFileInfos,
+  int GetFileInfos(FileInfo **ppFileInfos, int nMaxFileInfos,
                    const char *pFilename);
 
   // Clear everything.
@@ -150,18 +146,18 @@ class CFileTracker {
   CRC32_t CalculateCRCForFile(FileHandle_t fp);
 
  private:
-  CUtlLinkedList<CFileInfo *>
+  CUtlLinkedList<FileInfo *>
       m_NeedsVerificationList;  // The list of files that need CRCs verified.
   CUtlDict<CPathIDFileList *, int> m_PathIDs;
   CBaseFileSystem *m_pFileSystem;
   CThreadMutex m_Mutex;  // Threads call into here, so we need to be safe.
 };
 
-inline const char *CFileInfo::GetFilename() {
+inline const char *FileInfo::GetFilename() {
   return m_pPathIDFileList->m_Files.GetElementName(m_PathIDFileListDictIndex);
 }
 
-inline const char *CFileInfo::GetPathIDString() {
+inline const char *FileInfo::GetPathIDString() {
   return m_pPathIDFileList->m_PathID.String();
 }
 

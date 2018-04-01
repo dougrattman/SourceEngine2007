@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implmentation of IEngineTool callback interface
 //  Tool .dlls can call back through this interface to talk to the engine
@@ -464,7 +464,7 @@ void CEngineTool::Con_NPrintf(int pos, const char *fmt, ...) {
   char buf[1024];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf(buf, sizeof(buf) - 1, fmt, argptr);
+  _vsnprintf_s(buf, sizeof(buf) - 1, fmt, argptr);
   va_end(argptr);
 
   return ::Con_NPrintf(pos, "%s", buf);
@@ -475,7 +475,7 @@ void CEngineTool::Con_NXPrintf(const struct con_nprint_s *info, const char *fmt,
   char buf[1024];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf(buf, sizeof(buf) - 1, fmt, argptr);
+  _vsnprintf_s(buf, sizeof(buf) - 1, fmt, argptr);
   va_end(argptr);
 
   ::Con_NXPrintf(info, "%s", buf);

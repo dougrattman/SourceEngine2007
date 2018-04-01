@@ -3,6 +3,7 @@
 #ifndef SOURCE_TIER1_MEMPOOL_H_
 #define SOURCE_TIER1_MEMPOOL_H_
 
+#include "base/include/compiler_specific.h"
 #include "tier0/include/memalloc.h"
 #include "tier0/include/platform.h"
 #include "tier0/include/tslist.h"
@@ -111,7 +112,6 @@ class CMemoryPoolMT : public CMemoryPool {
   CThreadFastMutex m_mutex;  // @TODO: Rework to use tslist (toml 7/6/2007)
 };
 
-
 // Wrapper macro to make an allocator that returns particular typed allocations
 // and construction and destruction of objects.
 
@@ -129,7 +129,6 @@ class CClassMemoryPool : public CMemoryPool {
 
   void Clear();
 };
-
 
 // Specialized pool for aligned data management (e.g., Xbox cubemaps)
 
@@ -175,7 +174,6 @@ class CAlignedMemPool {
   float m_TimeLastCompact;
 };
 
-
 // Pool variant using standard allocation
 
 template <typename T, int nInitialCount = 0, bool bDefCreateNewIfEmpty = true>
@@ -212,8 +210,6 @@ class CObjectPool {
  private:
   CTSList<T *> m_AvailableObjects;
 };
-
-
 
 template <class T>
 inline T *CClassMemoryPool<T>::Alloc() {
@@ -280,7 +276,6 @@ inline void CClassMemoryPool<T>::Clear() {
   CMemoryPool::Clear();
 }
 
-
 // Macros that make it simple to make a class use a fixed-size allocator
 // Put DECLARE_FIXEDSIZE_ALLOCATOR in the private section of a class,
 // Put DEFINE_FIXEDSIZE_ALLOCATOR in the CPP file
@@ -338,12 +333,10 @@ inline void CClassMemoryPool<T>::Clear() {
   CMemoryPoolMT _class::s_Allocator(sizeof(_class), _initsize, _grow, \
                                     #_class " pool")
 
-
 // Macros that make it simple to make a class use a fixed-size allocator
 // This version allows us to use a memory pool which is externally defined...
 // Put DECLARE_FIXEDSIZE_ALLOCATOR_EXTERNAL in the private section of a class,
 // Put DEFINE_FIXEDSIZE_ALLOCATOR_EXTERNAL in the CPP file
-
 
 #define DECLARE_FIXEDSIZE_ALLOCATOR_EXTERNAL(_class)                           \
  public:                                                                       \
@@ -371,7 +364,7 @@ inline CAlignedMemPool<ITEM_SIZE, ALIGNMENT, CHUNK_SIZE, CAllocator,
     : m_pFirstFree(0), m_nFree(0), m_TimeLastCompact(0) {
   static_assert(sizeof(FreeBlock_t) >= BLOCK_SIZE);
   static_assert(AlignValue(sizeof(FreeBlock_t), ALIGNMENT) ==
-                      sizeof(FreeBlock_t));
+                sizeof(FreeBlock_t));
 }
 
 template <int ITEM_SIZE, int ALIGNMENT, int CHUNK_SIZE, class CAllocator,
@@ -457,7 +450,7 @@ inline void CAlignedMemPool<ITEM_SIZE, ALIGNMENT, CHUNK_SIZE, CAllocator,
     FreeBlock_t *p = m_pFirstFree;
     while (p) {
       if (p->pNext && p > p->pNext) {
-        __asm { int 3 }
+        DebuggerBreak();
       }
       p = p->pNext;
     }
@@ -465,7 +458,7 @@ inline void CAlignedMemPool<ITEM_SIZE, ALIGNMENT, CHUNK_SIZE, CAllocator,
     for (int i = 0; i < m_Chunks.Count(); i++) {
       if (i + 1 < m_Chunks.Count()) {
         if (m_Chunks[i] > m_Chunks[i + 1]) {
-          __asm { int 3 }
+          DebuggerBreak();
         }
       }
     }

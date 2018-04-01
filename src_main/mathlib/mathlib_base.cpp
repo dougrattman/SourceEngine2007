@@ -1159,20 +1159,20 @@ bool SolveInverseQuadraticMonotonic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
   // non-monotonic, slowly shifts the center point closer to the linear line
   // between the endpoints. Should anyone need htis function to be actually
   // fast, it would be fairly easy to change it to be so.
-  for (f32 blend_to_linear_factor = 0.0; blend_to_linear_factor <= 1.0;
-       blend_to_linear_factor += 0.05) {
+  for (f32 blend_to_linear_factor = 0.0f; blend_to_linear_factor <= 1.0f;
+       blend_to_linear_factor += 0.05f) {
     f32 tempy2 = (1 - blend_to_linear_factor) * y2 +
                  blend_to_linear_factor * FLerp(y1, y3, x1, x3, x2);
     if (!SolveInverseQuadratic(x1, y1, x2, tempy2, x3, y3, a, b, c))
       return false;
-    f32 derivative = 2.0 * a + b;
+    f32 derivative = 2.0f * a + b;
     if ((y1 < y2) && (y2 < y3))  // monotonically increasing
     {
-      if (derivative >= 0.0) return true;
+      if (derivative >= 0.0f) return true;
     } else {
       if ((y1 > y2) && (y2 > y3))  // monotonically decreasing
       {
-        if (derivative <= 0.0) return true;
+        if (derivative <= 0.0f) return true;
       } else
         return true;
     }
@@ -1187,7 +1187,7 @@ bool SolveInverseReciprocalQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
   f32 det = (x1 - x2) * (x1 - x3) * (x2 - x3) * y1 * y2 * y3;
 
   // TODO(d.rattman): check with some sort of epsilon
-  if (det == 0.0) return false;
+  if (det == 0.0f) return false;
 
   a = (x1 * y1 * (y2 - y3) + x3 * (y1 - y2) * y3 + x2 * y2 * (-y1 + y3)) / det;
 

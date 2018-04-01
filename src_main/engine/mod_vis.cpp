@@ -12,7 +12,6 @@
 #include "tier1/UtlLinkedList.h"
 #include "view_shared.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static ConVar r_novis("r_novis", "0", FCVAR_CHEAT, "Turn off the PVS.");
@@ -225,7 +224,6 @@ void Map_VisMark(bool forcenovis, model_t *worldmodel) {
     }
   }
 
-#ifdef USE_CONVARS
   if (r_novis.GetInt() || forcenovis || outsideWorld) {
     // mark everything
     for (i = 0; i < worldmodel->brush.pShared->numleafs; i++) {
@@ -236,7 +234,6 @@ void Map_VisMark(bool forcenovis, model_t *worldmodel) {
     }
     return;
   }
-#endif
 
   // There should always be at least one origin and that's the default render
   // origin in most cases

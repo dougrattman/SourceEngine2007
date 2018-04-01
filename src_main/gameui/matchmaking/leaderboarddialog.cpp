@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:  Displays a leaderboard
 //
@@ -9,7 +9,6 @@
 #include "vgui/ILocalize.h"
 #include "vgui_controls/Label.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define NUM_ROWS_PER_QUERY 100
@@ -331,12 +330,7 @@ bool CLeaderboardDialog::GetPlayerStats(int rank, bool bFriends) {
 // Return true if the update has been handled, false otherwise
 //----------------------------------------------------------
 void CLeaderboardDialog::UpdateLeaderboard(int iNewRank) {
-  // Clamp the input
-  if (iNewRank < 1) {
-    iNewRank = 1;
-  } else if (iNewRank > m_iMaxRank) {
-    iNewRank = m_iMaxRank;
-  }
+  iNewRank = std::clamp(iNewRank, 1, m_iMaxRank);
 
   // No action necessary?
   if (iNewRank == m_iActiveRank) return;
@@ -375,7 +369,6 @@ void CLeaderboardDialog::UpdateLeaderboard(int iNewRank) {
     iNewActiveItemIndex = nBaseToActiveInterval;
     iNewBaseItemIndex = nBaseToActiveInterval;
   } else if (iNewActiveItemIndex >= m_Menu.GetBaseRowIndex() + nVisibleItems) {
-    int nHiddenItems = NUM_ROWS_PER_QUERY - nVisibleItems;
     int iTopRank = iNewRank + nHiddenItems;
     if (iTopRank > m_iMaxRank) {
       iTopRank = m_iMaxRank;

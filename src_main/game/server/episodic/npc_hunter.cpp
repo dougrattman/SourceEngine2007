@@ -4716,12 +4716,6 @@ CBaseEntity *CNPC_Hunter::MeleeAttack(float flDist, int iDamage,
       {
               // Spray some of the player's blood on the hunter.
               trace_t tr;
-              
-
-
-
-
-
 
               Vector vecHunterEyePos; // = EyePosition();
               QAngle angDiscard;
@@ -4729,16 +4723,14 @@ CBaseEntity *CNPC_Hunter::MeleeAttack(float flDist, int iDamage,
 vecHunterEyePos, angDiscard );
 
               Vector vecPlayerEyePos = pPlayer->EyePosition();
-              
-
-
-
-
-
-
               Vector vecDir = vecHunterEyePos - vecPlayerEyePos;
               float flLen = VectorNormalize( vecDir );
-              
+              
+
+
+
+
+
 
 
 
@@ -4747,7 +4739,12 @@ vecHunterEyePos, angDiscard );
 
               Vector vecStart = vecPlayerEyePos - ( vecDir * 64 );
               Vector vecEnd = vecPlayerEyePos + ( vecDir * ( flLen + 64 ) );
-              
+              
+
+
+
+
+
 
 
 
@@ -4756,7 +4753,12 @@ vecHunterEyePos, angDiscard );
 
               NDebugOverlay::HorzArrow( vecStart, vecEnd, 16, 255, 255, 0, 255,
 false, 10 );
-              
+              
+
+
+
+
+
 
 
 

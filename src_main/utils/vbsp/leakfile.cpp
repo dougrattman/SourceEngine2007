@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "color.h"
 #include "vbsp.h"
@@ -23,7 +23,6 @@ occupied leaf
 */
 void LeakFile(tree_t *tree) {
   Vector mid;
-  FILE *linefile;
   char filename[1024];
   node_t *node;
   int count;
@@ -36,9 +35,12 @@ void LeakFile(tree_t *tree) {
   //
   // write the points to the file
   //
-  sprintf(filename, "%s.lin", the_source);
-  linefile = fopen(filename, "w");
-  if (!linefile) Error("Couldn't open %s\n", filename);
+  sprintf_s(filename, "%s.lin", the_source);
+  FILE *linefile;
+  if (fopen_s(&linefile, filename, "w")) {
+    Error("Couldn't open %s\n", filename);
+    return;
+  }
 
   count = 0;
   node = &tree->outside_node;
@@ -82,7 +84,6 @@ void LeakFile(tree_t *tree) {
 void AreaportalLeakFile(tree_t *tree, portal_t *pStartPortal,
                         portal_t *pEndPortal, node_t *pStart) {
   Vector mid;
-  FILE *linefile;
   char filename[1024];
   node_t *node;
   int count;
@@ -97,9 +98,12 @@ void AreaportalLeakFile(tree_t *tree, portal_t *pStartPortal,
   //
   // write the points to the file
   //
-  sprintf(filename, "%s.lin", the_source);
-  linefile = fopen(filename, "w");
-  if (!linefile) Error("Couldn't open %s\n", filename);
+  sprintf_s(filename, "%s.lin", the_source);
+  FILE *linefile;
+  if (fopen_s(&linefile, filename, "w")) {
+    Error("Couldn't open %s\n", filename);
+    return;
+  }
 
   count = 2;
   WindingCenter(pEndPortal->winding, mid);

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: The VTF file format I/O class to help simplify access to VTF files
 
@@ -15,7 +15,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // byteswap data descriptions
@@ -1827,7 +1826,7 @@ void CVTFTexture::GenerateSpheremap(LookDir_t lookDir) {
         ImageData(iFrame, CUBEMAP_FACE_SPHEREMAP, 0);
     ImageLoader::GenerateMipmapLevels(pSphereMapBits, pFinalSphereMapBits,
                                       m_nWidth, m_nHeight, m_nDepth, m_Format,
-                                      2.2, 2.2, m_nMipCount);
+                                      2.2f, 2.2f, m_nMipCount);
   }
 
   // Free memory
@@ -1958,8 +1957,8 @@ void CVTFTexture::GenerateMipmaps() {
   Assert(m_Format == IMAGE_FORMAT_RGBA8888 ||
          m_Format == IMAGE_FORMAT_RGB323232F);
 
-  // TODO(d.rattman): Should we be doing anything special for normalmaps other than a
-  // final normalization pass?
+  // TODO(d.rattman): Should we be doing anything special for normalmaps other
+  // than a final normalization pass?
   ImageLoader::ResampleInfo_t info;
   info.m_nSrcWidth = m_nWidth;
   info.m_nSrcHeight = m_nHeight;
@@ -2004,9 +2003,9 @@ void CVTFTexture::GenerateMipmaps() {
           (TextureLODControlSettings_t const *)GetResourceData(
               VTF_RSRC_TEXTURE_LOD_SETTINGS, NULL)) {
     int iClampX = 1 << std::min(pLodSettings->m_ResolutionClampX,
-                           pLodSettings->m_ResolutionClampX_360);
+                                pLodSettings->m_ResolutionClampX_360);
     int iClampY = 1 << std::min(pLodSettings->m_ResolutionClampX,
-                           pLodSettings->m_ResolutionClampX_360);
+                                pLodSettings->m_ResolutionClampX_360);
 
     while (iClampX < m_nWidth || iClampY < m_nHeight) {
       ++numMipsClampedLod;

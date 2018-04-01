@@ -7,8 +7,9 @@
 #include <cstdio>   // _vsnprintf_s
 
 #include "base/include/base_types.h"
-#include "build/include/build_config.h"
+#include "base/include/compiler_specific.h"
 #include "base/include/macros.h"  // SOURCE_ARRAYSIZE
+#include "build/include/build_config.h"
 #include "tier0/include/dbgflag.h"
 #include "tier0/include/tier0_api.h"
 
@@ -153,29 +154,12 @@ SOURCE_TIER0_API void SpewActivate(const ch *group_name, i32 level);
 SOURCE_TIER0_API bool IsSpewActive(const ch *group_name, i32 level);
 
 // Used to display messages, should never be called directly.
-SOURCE_TIER0_API[[deprecated(
-    "Use SpewInfo_. This violates SEI CERT C++ Coding Standard rule 'Do not declare or define a "
-    "reserved identifier'")]] void
-_SpewInfo(SpewType_t spew_type, const ch *file, i32 line);
 SOURCE_TIER0_API void SpewInfo_(SpewType_t spew_type, const ch *file, i32 line);
-SOURCE_TIER0_API[[deprecated(
-    "Use SpewMessage_. This violates SEI CERT C++ Coding Standard rule 'Do not declare or define a "
-    "reserved identifier'")]] SpewRetval_t
-_SpewMessage(const ch *format, ...);
 SOURCE_TIER0_API SpewRetval_t SpewMessage_(const ch *format, ...);
-SOURCE_TIER0_API[
-    [deprecated("Use DSpewMessage_. This violates SEI CERT C++ Coding Standard rule 'Do not "
-                "declare or define a "
-                "reserved identifier'")]] SpewRetval_t
-_DSpewMessage(const ch *group_name, i32 level, const ch *format, ...);
 SOURCE_TIER0_API SpewRetval_t DSpewMessage_(const ch *group_name, i32 level, const ch *format, ...);
 SOURCE_TIER0_API SpewRetval_t ColorSpewMessage(SpewType_t spew_type, const Color *pColor,
                                                const ch *format, ...);
-SOURCE_TIER0_API[
-    [deprecated("Use ExitOnFatalAssert_. This violates SEI CERT C++ Coding Standard rule 'Do not "
-                "declare or define a "
-                "reserved identifier'")]] void
-_ExitOnFatalAssert(const ch *file, i32 line);
+
 SOURCE_TIER0_API void ExitOnFatalAssert_(const ch *file, i32 line);
 SOURCE_TIER0_API bool ShouldUseNewAssertDialog();
 
@@ -364,15 +348,18 @@ SOURCE_TIER0_API bool DoNewAssertDialog(const ch *file, i32 line, const ch *expr
 #endif  // DBGFLAG_ASSERT
 
 // These are always compiled in.
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API void Msg(const ch *pMsg, ...);
 SOURCE_TIER0_API void DMsg(const ch *pGroupName, i32 level, const ch *pMsg, ...);
 
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API void Warning(const ch *pMsg, ...);
 SOURCE_TIER0_API void DWarning(const ch *pGroupName, i32 level, const ch *pMsg, ...);
 
 SOURCE_TIER0_API void Log(const ch *pMsg, ...);
 SOURCE_TIER0_API void DLog(const ch *pGroupName, i32 level, const ch *pMsg, ...);
 
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API void Error(const ch *pMsg, ...);
 
 // You can use this macro like a runtime assert macro.
@@ -389,11 +376,13 @@ SOURCE_TIER0_API void Error(const ch *pMsg, ...);
 
 /* A couple of super-common dynamic spew messages, here for convenience */
 /* These looked at the "developer" group */
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API void DevMsg(i32 level, const ch *pMsg, ...);
 SOURCE_TIER0_API void DevWarning(i32 level, const ch *pMsg, ...);
 SOURCE_TIER0_API void DevLog(i32 level, const ch *pMsg, ...);
 
 /* default level versions (level 1) */
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API_GLOBAL void DevMsg(const ch *pMsg, ...);
 SOURCE_TIER0_API_GLOBAL void DevWarning(const ch *pMsg, ...);
 SOURCE_TIER0_API_GLOBAL void DevLog(const ch *pMsg, ...);
@@ -423,8 +412,6 @@ SOURCE_TIER0_API void NetLog(i32 level, const ch *pMsg, ...);
 
 void ValidateSpew(class CValidator &validator);
 
-SOURCE_TIER0_API void COM_TimestampedLog(ch const *fmt, ...);
-
 // Code macros, debugger interface.
 
 #ifndef NDEBUG
@@ -441,7 +428,7 @@ SOURCE_TIER0_API void COM_TimestampedLog(ch const *fmt, ...);
     code_                        \
   } else {                       \
   }
-#define DBG_BREAK() DebuggerBreak() /* defined in platform.h */
+#define DBG_BREAK() DebuggerBreak() /* defined in compiler_specific.h */
 
 #else  // NDEBUG
 
@@ -490,24 +477,10 @@ inline DEST_POINTER_TYPE assert_cast(SOURCE_POINTER_TYPE *pSource) {
 // These functions are obsolete and should not be used. Despite its names, it
 // does not guarantee that the pointer is valid or that the memory pointed to is
 // safe to use.
-SOURCE_TIER0_API[[deprecated]] void _AssertValidReadPtr(void *ptr, i32 count = 1);
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API[[deprecated]] void _AssertValidWritePtr(void *ptr, i32 count = 1);
-SOURCE_TIER0_API[[deprecated]] void _AssertValidReadWritePtr(void *ptr, i32 count = 1);
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API[[deprecated]] void AssertValidStringPtr(const ch *ptr, i32 maxchar = 0xFFFFFF);
-template <class T>
-[[deprecated]] inline void AssertValidReadPtr(T *ptr, i32 count = 1) {
-  _AssertValidReadPtr((void *)ptr, count);
-}
-template <class T>
-[[deprecated]] inline void AssertValidWritePtr(T *ptr, i32 count = 1) {
-  _AssertValidWritePtr((void *)ptr, count);
-}
-template <class T>
-[[deprecated]] inline void AssertValidReadWritePtr(T *ptr, i32 count = 1) {
-  _AssertValidReadWritePtr((void *)ptr, count);
-}
-
-#define AssertValidThis() AssertValidReadWritePtr(this, sizeof(*this))
 
 // Macro to protect functions that are not reentrant
 

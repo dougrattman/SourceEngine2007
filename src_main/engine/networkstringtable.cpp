@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "networkstringtable.h"
 
@@ -12,7 +12,6 @@
 #include "tier1/bitbuf.h"
 #include "tier1/utlbuffer.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define SUBSTRING_BITS 5
@@ -589,7 +588,9 @@ void CNetworkStringTable::CopyStringTable(CNetworkStringTable *table) {
 void CNetworkStringTable::TriggerCallbacks(int tick_ack) {
   if (m_changeFunc == NULL) return;
 
-  COM_TimestampedLog("Change(%s):Start", GetTableName());
+  Plat_TimestampedLog(
+      "CNetworkStringTable::TriggerCallbacks: Change (%s) start.",
+      GetTableName());
 
   int count = m_pItems->Count();
 
@@ -606,7 +607,8 @@ void CNetworkStringTable::TriggerCallbacks(int tick_ack) {
     (*m_changeFunc)(m_pObject, this, i, GetString(i), pUserData);
   }
 
-  COM_TimestampedLog("Change(%s):End", GetTableName());
+  Plat_TimestampedLog("CNetworkStringTable::TriggerCallbacks: Change (%s) end.",
+                      GetTableName());
 }
 
 //-----------------------------------------------------------------------------

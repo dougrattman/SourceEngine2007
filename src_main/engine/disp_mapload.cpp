@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -20,7 +20,6 @@
 #include "tier2/tier2.h"
 #include "zone.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 void BuildTagData(CCoreDispInfo *pCoreDisp, CDispInfo *pDisp);
@@ -181,8 +180,8 @@ VertexFormat_t ComputeDisplacementStaticMeshVertexFormat(
     const ddispinfo_t *pMapDisps) {
   VertexFormat_t vertexFormat = pMaterial->GetVertexFormat();
 
-  // TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it
-  // saves enough memory (use 'mem_dumpvballocs')
+  // TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and
+  // if it saves enough memory (use 'mem_dumpvballocs')
   vertexFormat &= ~VERTEX_FORMAT_COMPRESSED;
   // TODO(d.rattman): check for and strip unused vertex elements (TANGENT_S/T?)
 
@@ -1042,7 +1041,9 @@ void BlendSubNeighbors(CCoreDispInfo **ppListBase, int nListSize) {
 //			iNeighbors[512] -
 // Output : int
 //-----------------------------------------------------------------------------
-int GetAllNeighbors(const CCoreDispInfo *pDisp, int (&iNeighbors)[512]) {
+template <size_t neighbors_size>
+int GetAllNeighbors(const CCoreDispInfo *pDisp,
+                    int (&iNeighbors)[neighbors_size]) {
   int nNeighbors = 0;
 
   // Check corner neighbors.

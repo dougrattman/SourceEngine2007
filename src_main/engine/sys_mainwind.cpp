@@ -272,9 +272,6 @@ class CGame : public IGame {
         ex_style, kWindowClassName, unicode_window_name, style, 0, 0, width,
         height, nullptr, nullptr, instance_, nullptr);
 
-    // NOTE: On some cards, CreateWindowExW slams the FPU control word
-    SetupFPUControlWord();
-
     if (!hwnd) {
       Error("Unable to create game window");
       return false;

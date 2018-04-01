@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/convar.h"
 
@@ -628,7 +628,7 @@ void ConVar::ChangeStringValue(const char *tempVal, float flOldValue) {
   char *pszOldValue = (char *)stackalloc(m_StringLength);
   memcpy(pszOldValue, m_pszString, m_StringLength);
 
-  int len = Q_strlen(tempVal) + 1;
+  size_t len = strlen(tempVal) + 1;
 
   if (len > m_StringLength) {
     delete[] m_pszString;

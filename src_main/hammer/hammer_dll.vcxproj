@@ -98,7 +98,7 @@
     <ClCompile>
       <AdditionalOptions>/EHa %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;VALVE;PROTECTED_THINGS_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;rpcrt4.lib;nafxcw.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;rpcrt4.lib;nafxcwd.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib\common;..\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -134,7 +134,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <IgnoreSpecificDefaultLibraries>nafxcw.lib;libcmt.lib;libc;libcd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>nafxcwd.lib;libcmt.lib;libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -151,7 +151,7 @@
     <ClCompile>
       <AdditionalOptions>/EHa %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;VALVE;PROTECTED_THINGS_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -177,7 +177,7 @@
       <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;rpcrt4.lib;nafxcw.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;rpcrt4.lib;nafxcwd.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib\common;..\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -185,7 +185,7 @@
       </BaseAddress>
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <IgnoreSpecificDefaultLibraries>nafxcw.lib;libcmt.lib;libc;libcd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>nafxcwd.lib;libcmt.lib;libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -205,7 +205,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;VALVE;PROTECTED_THINGS_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -263,7 +263,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;..\public\tier1;..\common\shaderdll;..\common\iostream;..\dx9sdk\include;..\engine;..\game\shared;..\utils\common;.\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;VALVE;PROTECTED_THINGS_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -491,7 +491,6 @@
     <ClInclude Include="op_input.h" />
     <ClInclude Include="OP_Model.h" />
     <ClInclude Include="op_output.h" />
-    <ClInclude Include="osver.h" />
     <ClInclude Include="pakdoc.h" />
     <ClInclude Include="pakframe.h" />
     <ClInclude Include="pakviewdirec.h" />
@@ -924,7 +923,6 @@
     <ClCompile Include="op_input.cpp" />
     <ClCompile Include="OP_Model.cpp" />
     <ClCompile Include="op_output.cpp" />
-    <ClCompile Include="osver.cpp" />
     <ClCompile Include="pastespecialdlg.cpp" />
     <ClCompile Include="prefab3d.cpp" />
     <ClCompile Include="prefabs.cpp" />

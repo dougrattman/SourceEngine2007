@@ -99,7 +99,7 @@ void CMainPanel::StartServer(const char *cvars) {
   m_pConfigPage->SetVisible(false);
   m_pConfigPage->Close();
 
-  gpszCvars = strdup(cvars);
+  gpszCvars = _strdup(cvars);
 
   // show the basic progress box immediately
   m_pProgressBox = new ProgressBox("#Start_Server_Loading_Title",

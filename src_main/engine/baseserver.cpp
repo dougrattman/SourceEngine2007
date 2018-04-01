@@ -185,7 +185,7 @@ CBaseServer::CBaseServer()
 
   serverclasses = serverclassbits = 0;
   m_nMaxclients = m_nSpawnCount = 0;
-  m_flTickInterval = 0.03;
+  m_flTickInterval = 0.03f;
   m_nUserid = 0;
   m_bIsDedicated = false;
   m_fCPUPercent = 0;
@@ -327,7 +327,7 @@ IClient *CBaseServer::ConnectClient(netadr_t &adr, int protocol, int challenge,
                                     int authProtocol, const char *name,
                                     const char *password,
                                     const char *hashedCDkey, int cdKeyLen) {
-  COM_TimestampedLog("CBaseServer::ConnectClient");
+  Plat_TimestampedLog("Engine::CBaseServer::ConnectClient start.");
 
   if (!IsActive()) {
     return NULL;
@@ -373,7 +373,7 @@ IClient *CBaseServer::ConnectClient(netadr_t &adr, int protocol, int challenge,
     }
   }
 
-  COM_TimestampedLog("CBaseServer::ConnectClient:  GetFreeClient");
+  Plat_TimestampedLog("  GetFreeClient");
 
   CBaseClient *client = GetFreeClient(adr);
 
@@ -396,7 +396,7 @@ IClient *CBaseServer::ConnectClient(netadr_t &adr, int protocol, int challenge,
   }
 #endif
 
-  COM_TimestampedLog("CBaseServer::ConnectClient:  NET_CreateNetChannel");
+  Plat_TimestampedLog("  NET_CreateNetChannel");
 
   // create network channel
   INetChannel *netchan =
@@ -410,7 +410,7 @@ IClient *CBaseServer::ConnectClient(netadr_t &adr, int protocol, int challenge,
   // setup netchannl settings
   netchan->SetChallengeNr(challenge);
 
-  COM_TimestampedLog("CBaseServer::ConnectClient:  client->Connect");
+  Plat_TimestampedLog("  client->Connect");
 
   // make sure client is reset and clear
   client->Connect(name, nNextUserID, netchan, false);
@@ -441,6 +441,8 @@ IClient *CBaseServer::ConnectClient(netadr_t &adr, int protocol, int challenge,
   if (netchan && !netchan->IsLoopback())
     ConMsg("Client \"%s\" connected (%s).\n", client->GetClientName(),
            netchan->GetAddress());
+
+  Plat_TimestampedLog("Engine::CBaseServer::ConnectClient end.");
 
   return client;
 }

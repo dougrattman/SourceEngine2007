@@ -3148,7 +3148,7 @@ bool CBaseFileSystem::ShouldGameReloadFile(const char *pFilename) {
     return true;
   }
 
-  CFileInfo *fileInfos[256];
+  FileInfo *fileInfos[256];
   int nFileInfos = m_FileTracker.GetFileInfos(
       fileInfos, SOURCE_ARRAYSIZE(fileInfos), pFilename);
   if (nFileInfos == 0) {
@@ -3179,7 +3179,7 @@ bool CBaseFileSystem::ShouldGameReloadFile(const char *pFilename) {
   // needed to reload it.
   bool bRet = false;
   for (int i = 0; i < nFileInfos; i++) {
-    CFileInfo *pFileInfo = fileInfos[i];
+    FileInfo *pFileInfo = fileInfos[i];
 
     // See comments above k_eFileFlagsFailedToLoadLastTime for info about this
     // case.

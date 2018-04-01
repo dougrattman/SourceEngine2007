@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "CreateMultiplayerGameServerPage.h"
 
@@ -13,7 +13,6 @@
 #include "vgui_controls/RadioButton.h"
 #include "vstdlib/random.h"  // for SRC
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define RANDOM_MAP "#GameUI_RandomMap"
@@ -86,13 +85,12 @@ void CCreateMultiplayerGameServerPage::EnableBots(KeyValues *data) {
 //-----------------------------------------------------------------------------
 void CCreateMultiplayerGameServerPage::OnApplyChanges() {
   KeyValues *kv = m_pMapList->GetActiveItemUserData();
-  strncpy(m_szMapName, kv->GetString("mapname", ""), DATA_STR_LENGTH);
+  strncpy_s(m_szMapName, kv->GetString("mapname", ""), DATA_STR_LENGTH);
 
   if (m_pSavedData) {
     int quota = GetControlInt("BotQuotaCombo", 0);
-    if (!m_pEnableBotsCheck->IsSelected()) {
-      quota = 0;
-    }
+    if (!m_pEnableBotsCheck->IsSelected()) quota = 0;
+
     m_pSavedData->SetInt("bot_quota", quota);
     ConVarRef bot_quota("bot_quota");
     bot_quota.SetValue(quota);
@@ -133,7 +131,7 @@ void CCreateMultiplayerGameServerPage::LoadMaps(const char *pszPathID) {
 
     // FindFirst ignores the pszPathID, so check it here
     // TODO: this doesn't find maps in fallback dirs
-    _snprintf(map_name, SOURCE_ARRAYSIZE(map_name), "maps/%s", map_path);
+    sprintf_s(map_name, "maps/%s", map_path);
     if (!g_pFullFileSystem->FileExists(map_name, pszPathID)) {
       goto nextFile;
     }
@@ -142,14 +140,14 @@ void CCreateMultiplayerGameServerPage::LoadMaps(const char *pszPathID) {
 
     str = Q_strstr(map_path, "maps");
     if (str) {
-      strncpy(map_name, str + 5, SOURCE_ARRAYSIZE(map_name) - 1);  // maps + \\ = 5
+      strncpy_s(map_name, str + 5,
+                SOURCE_ARRAYSIZE(map_name) - 1);  // maps + \\ = 5
     } else {
-      strncpy(map_name, map_path, SOURCE_ARRAYSIZE(map_name) - 1);
+      strcpy_s(map_name, map_path);
     }
+
     ext = Q_strstr(map_name, ".bsp");
-    if (ext) {
-      *ext = 0;
-    }
+    if (ext) *ext = 0;
 
     //!! hack: strip out single player HL maps
     // this needs to be specified in a seperate file
@@ -247,7 +245,7 @@ void CCreateMultiplayerGameServerPage::SetMap(const char *mapName) {
     if (!m_pMapList->IsItemIDValid(i)) continue;
 
     if (!_stricmp(m_pMapList->GetItemUserData(i)->GetString("mapname"),
-                 mapName)) {
+                  mapName)) {
       m_pMapList->ActivateItem(i);
       break;
     }

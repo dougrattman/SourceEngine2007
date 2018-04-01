@@ -18,13 +18,13 @@
 #include "FindSteamServers.h"
 #include "blockingudpsocket.h"
 #include "cserserverprotocol_engine.h"
+#include "deps/libice/IceKey.h"
 #include "eiface.h"
 #include "filesystem_engine.h"
 #include "host.h"
 #include "host_phonehome.h"
 #include "iregistry.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
-#include "deps/libice/IceKey.h"
 #include "net.h"
 #include "quakedef.h"
 #include "steam/steam_api.h"
@@ -473,15 +473,14 @@ void UpdateProgress(const TGameStatsParameters& params, char const* fmt, ...) {
   char str[2048];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf(str, sizeof(str) - 1, fmt, argptr);
+  _vsnprintf_s(str, sizeof(str) - 1, fmt, argptr);
   va_end(argptr);
 
   char outstr[2060];
-  Q_snprintf(outstr, sizeof(outstr), "(%u): %s", params.m_uProgressContext,
-             str);
+  sprintf_s(outstr, "(%u): %s", params.m_uProgressContext, str);
 
   TGameStatsProgress progress;
-  Q_strncpy(progress.m_sStatus, outstr, sizeof(progress.m_sStatus));
+  strcpy_s(progress.m_sStatus, outstr);
 
   // Invoke the callback
   (*params.m_pOptionalProgressFunc)(params.m_uProgressContext, progress);

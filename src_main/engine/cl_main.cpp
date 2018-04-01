@@ -837,7 +837,7 @@ void CL_RegisterResources() {
   videomode->InvalidateWindow();
 }
 
-void CL_FullyConnected(void) {
+void CL_FullyConnected() {
   EngineVGui()->UpdateProgressBar(PROGRESS_FULLYCONNECTED);
 
   // This has to happen here, in phase 3, because it is in this phase
@@ -883,10 +883,6 @@ void CL_FullyConnected(void) {
 
   g_pMDLCache->EndMapLoad();
 
-#if defined(_MEMTEST)
-  Cbuf_AddText("mem_dump\n");
-#endif
-
   if (developer.GetInt() > 0) {
     ConDMsg("Signon traffic \"%s\":  incoming %s, outgoing %s\n",
             cl.m_NetChannel->GetName(),
@@ -901,22 +897,22 @@ void CL_FullyConnected(void) {
   // TODO(d.rattman): Please oh please move this out of this spot...
   // It so does not belong here. Instead, we want some phase of the
   // client DLL where it knows its read in all entities
-  size_t i;
-  if ((i = CommandLine()->FindParm("-buildcubemaps")) != 0) {
+  size_t i{CommandLine()->FindParm("-buildcubemaps")};
+  if (i != 0) {
     int numIterations = 1;
+
     if (CommandLine()->ParmCount() > i + 1) {
       numIterations = atoi(CommandLine()->GetParm(i + 1));
     }
-    if (numIterations == 0) {
-      numIterations = 1;
-    }
+    if (numIterations == 0) numIterations = 1;
+
     void R_BuildCubemapSamples(int numIterations);
     R_BuildCubemapSamples(numIterations);
+
     Cbuf_AddText("quit\n");
   }
-  if (CommandLine()->FindParm("-exit")) {
-    Cbuf_AddText("quit\n");
-  }
+
+  if (CommandLine()->FindParm("-exit")) Cbuf_AddText("quit\n");
 
   // background maps are for main menu UI, QMS not needed or used, easier
   // context
@@ -943,28 +939,34 @@ void CL_FullyConnected(void) {
   extern double g_flAccumulatedModelLoadTimeMaterialNamesOnly;
   //	extern double g_flLoadStudioHdr;
 
-  COM_TimestampedLog("Sound Loading time %.4f", g_flAccumulatedSoundLoadTime);
-  COM_TimestampedLog("Model Loading time %.4f", g_flAccumulatedModelLoadTime);
-  COM_TimestampedLog("  Model Loading time studio %.4f",
-                     g_flAccumulatedModelLoadTimeStudio);
-  COM_TimestampedLog("    Model Loading time GetVCollide %.4f -sync",
-                     g_flAccumulatedModelLoadTimeVCollideSync);
-  COM_TimestampedLog("    Model Loading time GetVCollide %.4f -async",
-                     g_flAccumulatedModelLoadTimeVCollideAsync);
-  COM_TimestampedLog("    Model Loading time GetVirtualModel %.4f",
-                     g_flAccumulatedModelLoadTimeVirtualModel);
-  COM_TimestampedLog("    Model loading time Mod_GetModelMaterials only %.4f",
-                     g_flAccumulatedModelLoadTimeMaterialNamesOnly);
-  COM_TimestampedLog("  Model Loading time world %.4f",
-                     g_flAccumulatedModelLoadTimeBrush);
-  COM_TimestampedLog("  Model Loading time sprites %.4f",
-                     g_flAccumulatedModelLoadTimeSprite);
-  COM_TimestampedLog("  Model Loading time meshes %.4f",
-                     g_flAccumulatedModelLoadTimeStaticMesh);
-  //	COM_TimestampedLog( "    Model Loading time meshes studiohdr load %.4f",
-  // g_flLoadStudioHdr );
+  Plat_TimestampedLog("Engine::CL_FullyConnected: Sound Loading time %.4f.",
+                      g_flAccumulatedSoundLoadTime);
+  Plat_TimestampedLog("  Model Loading time %.4f.",
+                      g_flAccumulatedModelLoadTime);
+  Plat_TimestampedLog("  Model Loading time studio %.4f.",
+                      g_flAccumulatedModelLoadTimeStudio);
+  Plat_TimestampedLog(
+      "  Model Loading time GetVCollide %.4f "
+      "-sync.",
+      g_flAccumulatedModelLoadTimeVCollideSync);
+  Plat_TimestampedLog(
+      "  Model Loading time GetVCollide %.4f "
+      "-async.",
+      g_flAccumulatedModelLoadTimeVCollideAsync);
+  Plat_TimestampedLog("  Model Loading time GetVirtualModel %.4f.",
+                      g_flAccumulatedModelLoadTimeVirtualModel);
+  Plat_TimestampedLog(
+      "  Model loading time Mod_GetModelMaterials "
+      "only %.4f.",
+      g_flAccumulatedModelLoadTimeMaterialNamesOnly);
+  Plat_TimestampedLog("Model Loading time world %.4f.",
+                      g_flAccumulatedModelLoadTimeBrush);
+  Plat_TimestampedLog("Model Loading time sprites %.4f.",
+                      g_flAccumulatedModelLoadTimeSprite);
+  Plat_TimestampedLog("Model Loading time meshes %.4f.",
+                      g_flAccumulatedModelLoadTimeStaticMesh);
 
-  COM_TimestampedLog("*** Map Load Complete");
+  Plat_TimestampedLog("Engine::CL_FullyConnected: MAP LOAD COMPLETE.");
 }
 
 /*
@@ -1650,12 +1652,12 @@ void CL_Move(float accumulated_extra_samples, bool bFinalTick) {
   // Request non delta compression if high packet loss, show warning message
   if (hasProblem) {
     con_nprint_t np;
-    np.time_to_live = 1.0;
+    np.time_to_live = 1.0f;
     np.index = 2;
     np.fixed_width_font = false;
-    np.color[0] = 1.0;
-    np.color[1] = 0.2;
-    np.color[2] = 0.2;
+    np.color[0] = 1.0f;
+    np.color[1] = 0.2f;
+    np.color[2] = 0.2f;
 
     float flTimeOut = cl.m_NetChannel->GetTimeoutSeconds();
     Assert(flTimeOut != -1.0f);

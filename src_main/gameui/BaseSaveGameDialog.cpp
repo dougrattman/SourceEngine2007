@@ -1,12 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "BaseSaveGameDialog.h"
 
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include "FileSystem.h"
 #include "MouseMessageForwardingPanel.h"
 #include "TGAImagePanel.h"
+#include "base/include/macros.h"
 #include "savegame_version.h"
 #include "tier1/utlbuffer.h"
 #include "vgui_controls/Button.h"
@@ -14,25 +16,20 @@
 #include "vgui_controls/Label.h"
 #include "vgui_controls/PanelListPanel.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 
 #define TGA_IMAGE_PANEL_WIDTH 180
 #define TGA_IMAGE_PANEL_HEIGHT 100
-
 #define MAX_LISTED_SAVE_GAMES 128
 
-//-----------------------------------------------------------------------------
-// Purpose: Describes the layout of a same game pic
-//-----------------------------------------------------------------------------
+// Purpose: Describes the layout of a same game pic.
 class CSaveGamePanel : public vgui::EditablePanel {
   DECLARE_CLASS_SIMPLE(CSaveGamePanel, vgui::EditablePanel);
 
  public:
-  CSaveGamePanel(PanelListPanel *parent, const char *name,
-                 int saveGameListItemID)
+  CSaveGamePanel(PanelListPanel *parent, const ch *name, i32 saveGameListItemID)
       : BaseClass(parent, name) {
     m_iSaveGameListItemID = saveGameListItemID;
     m_pParent = parent;
@@ -46,7 +43,7 @@ class CSaveGamePanel : public vgui::EditablePanel {
     m_pFileTimeLabel = new Label(this, "FileTimeLabel", "");
 
     CMouseMessageForwardingPanel *panel =
-        new CMouseMessageForwardingPanel(this, NULL);
+        new CMouseMessageForwardingPanel(this, nullptr);
     panel->SetZPos(2);
 
     SetSize(200, 140);
@@ -58,20 +55,20 @@ class CSaveGamePanel : public vgui::EditablePanel {
 
   void SetSaveGameInfo(SaveGameDescription_t &save) {
     // set the bitmap to display
-    char tga[SOURCE_MAX_PATH];
-    Q_strncpy(tga, save.szFileName, sizeof(tga));
-    char *ext = strstr(tga, ".sav");
-    if (ext) {
-      strcpy(ext, ".tga");
+    ch tga[SOURCE_MAX_PATH];
+    strcpy_s(tga, save.szFileName);
+
+    ch *extension = strstr(tga, ".sav");
+    if (extension) {
+      strcpy_s(extension, tga + SOURCE_ARRAYSIZE(tga) - extension, ".tga");
     }
 
     // If a TGA file exists then it is a user created savegame
     if (g_pFullFileSystem->FileExists(tga)) {
       m_pSaveGameImage->SetTGA(tga);
-    }
-    // If there is no TGA then it is either an autosave or the user TGA file has
-    // been deleted
-    else {
+    } else {
+      // If there is no TGA then it is either an autosave or the user TGA file
+      // has been deleted
       m_pSaveGameImage->SetVisible(false);
       m_pAutoSaveImage->SetVisible(true);
       m_pAutoSaveImage->SetImage("resource\\autosave");
@@ -125,7 +122,7 @@ class CSaveGamePanel : public vgui::EditablePanel {
                 new KeyValues("Command", "command", "loadsave"));
   }
 
-  int GetSaveGameListItemID() { return m_iSaveGameListItemID; }
+  i32 GetSaveGameListItemID() { return m_iSaveGameListItemID; }
 
  private:
   vgui::PanelListPanel *m_pParent;
@@ -140,13 +137,10 @@ class CSaveGamePanel : public vgui::EditablePanel {
   Label *m_pFileTimeLabel;
   Color m_TextColor, m_FillColor, m_SelectedColor;
 
-  int m_iSaveGameListItemID;
+  i32 m_iSaveGameListItemID;
 };
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-//-----------------------------------------------------------------------------
-CBaseSaveGameDialog::CBaseSaveGameDialog(vgui::Panel *parent, const char *name)
+CBaseSaveGameDialog::CBaseSaveGameDialog(vgui::Panel *parent, const ch *name)
     : BaseClass(parent, name) {
   CreateSavedGamesList();
   ScanSavedGames();
@@ -155,70 +149,67 @@ CBaseSaveGameDialog::CBaseSaveGameDialog(vgui::Panel *parent, const char *name)
   SetControlEnabled("loadsave", false);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Creates the load game display list
-//-----------------------------------------------------------------------------
+// Creates the load game display list.
 void CBaseSaveGameDialog::CreateSavedGamesList() {
   m_pGameList = new vgui::PanelListPanel(this, "listpanel_loadgame");
   m_pGameList->SetFirstColumnWidth(0);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: returns the save file name of the selected item
-//-----------------------------------------------------------------------------
-int CBaseSaveGameDialog::GetSelectedItemSaveIndex() {
+// Returns the save file name of the selected item.
+i32 CBaseSaveGameDialog::GetSelectedItemSaveIndex() {
   CSaveGamePanel *panel =
       dynamic_cast<CSaveGamePanel *>(m_pGameList->GetSelectedPanel());
   if (panel) {
     // find the panel in the list
-    for (int i = 0; i < m_SaveGames.Count(); i++) {
+    for (i32 i = 0; i < m_SaveGames.Count(); i++) {
       if (i == panel->GetSaveGameListItemID()) {
         return i;
       }
     }
   }
+
   return m_SaveGames.InvalidIndex();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: builds save game list from directory
-//-----------------------------------------------------------------------------
+// Builds save game list from directory
 void CBaseSaveGameDialog::ScanSavedGames() {
   // populate list box with all saved games on record:
-  char szDirectory[SOURCE_MAX_PATH];
-  Q_snprintf(szDirectory, sizeof(szDirectory), "save/*.sav");
+  ch saves_regexp[SOURCE_MAX_PATH];
+  sprintf_s(saves_regexp, "save/*.sav");
 
   // clear the current list
   m_pGameList->DeleteAllItems();
   m_SaveGames.RemoveAll();
 
   // iterate the saved files
-  FileFindHandle_t handle;
-  const char *pFileName = g_pFullFileSystem->FindFirst(szDirectory, &handle);
-  while (pFileName) {
-    if (!Q_strnicmp(pFileName, "HLSave", strlen("HLSave"))) {
-      pFileName = g_pFullFileSystem->FindNext(handle);
+  FileFindHandle_t find_save_handle;
+  const ch *save_path =
+      g_pFullFileSystem->FindFirst(saves_regexp, &find_save_handle);
+
+  while (save_path) {
+    if (!_strnicmp(save_path, "HLSave", SOURCE_ARRAYSIZE("HLSave") - 1)) {
+      save_path = g_pFullFileSystem->FindNext(find_save_handle);
       continue;
     }
 
-    char szFileName[SOURCE_MAX_PATH];
-    Q_snprintf(szFileName, sizeof(szFileName), "save/%s", pFileName);
+    ch save_file_path[SOURCE_MAX_PATH];
+    sprintf_s(save_file_path, "save/%s", save_path);
 
     // Only load save games from the current mod's save dir
-    if (!g_pFullFileSystem->FileExists(szFileName, "MOD")) {
-      pFileName = g_pFullFileSystem->FindNext(handle);
+    if (!g_pFullFileSystem->FileExists(save_file_path, "MOD")) {
+      save_path = g_pFullFileSystem->FindNext(find_save_handle);
       continue;
     }
 
-    SaveGameDescription_t save;
-    if (ParseSaveData(szFileName, pFileName, save)) {
-      m_SaveGames.AddToTail(save);
+    SaveGameDescription_t save_description;
+    if (ParseSaveData(save_file_path, save_path, save_description)) {
+      m_SaveGames.AddToTail(save_description);
     }
 
-    pFileName = g_pFullFileSystem->FindNext(handle);
+    save_path = g_pFullFileSystem->FindNext(find_save_handle);
   }
 
-  g_pFullFileSystem->FindClose(handle);
+  g_pFullFileSystem->FindClose(find_save_handle);
 
   // notify derived classes that save games are being scanned (so they can
   // insert their own)
@@ -229,7 +220,7 @@ void CBaseSaveGameDialog::ScanSavedGames() {
         &SaveGameSortFunc);
 
   // add to the list
-  for (int saveIndex = 0;
+  for (i32 saveIndex = 0;
        saveIndex < m_SaveGames.Count() && saveIndex < MAX_LISTED_SAVE_GAMES;
        saveIndex++) {
     // add the item to the panel
@@ -241,256 +232,252 @@ void CBaseSaveGameDialog::ScanSavedGames() {
     vgui::Label *pNoSavesLabel = SETUP_PANEL(
         new Label(m_pGameList, "NoSavesLabel", "#GameUI_NoSaveGamesToDisplay"));
     pNoSavesLabel->SetTextColorState(vgui::Label::CS_DULL);
-    m_pGameList->AddItem(NULL, pNoSavesLabel);
+    m_pGameList->AddItem(nullptr, pNoSavesLabel);
   }
 
   SetControlEnabled("loadsave", false);
   SetControlEnabled("delete", false);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Adds an item to the list
-//-----------------------------------------------------------------------------
-void CBaseSaveGameDialog::AddSaveGameItemToList(int saveIndex) {
+// Adds an item to the list.
+void CBaseSaveGameDialog::AddSaveGameItemToList(i32 saveIndex) {
   // create the new panel and add to the list
   CSaveGamePanel *saveGamePanel =
       new CSaveGamePanel(m_pGameList, "SaveGamePanel", saveIndex);
   saveGamePanel->SetSaveGameInfo(m_SaveGames[saveIndex]);
-  m_pGameList->AddItem(NULL, saveGamePanel);
+  m_pGameList->AddItem(nullptr, saveGamePanel);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Parses the save game info out of the .sav file header
-//-----------------------------------------------------------------------------
-bool CBaseSaveGameDialog::ParseSaveData(char const *pszFileName,
-                                        char const *pszShortName,
+// Parses the save game info out of the .sav file header.
+bool CBaseSaveGameDialog::ParseSaveData(ch const *save_file_name,
+                                        ch const *short_save_name,
                                         SaveGameDescription_t &save) {
-  char szMapName[SAVEGAME_MAPNAME_LEN];
-  char szComment[SAVEGAME_COMMENT_LEN];
-  char szElapsedTime[SAVEGAME_ELAPSED_LEN];
+  if (!save_file_name || !short_save_name) return false;
 
-  if (!pszFileName || !pszShortName) return false;
+  strcpy_s(save.szShortName, short_save_name);
+  strcpy_s(save.szFileName, save_file_name);
 
-  Q_strncpy(save.szShortName, pszShortName, sizeof(save.szShortName));
-  Q_strncpy(save.szFileName, pszFileName, sizeof(save.szFileName));
-
-  FileHandle_t fh = g_pFullFileSystem->Open(pszFileName, "rb", "MOD");
+  FileHandle_t fh = g_pFullFileSystem->Open(save_file_name, "rb", "MOD");
   if (fh == FILESYSTEM_INVALID_HANDLE) return false;
 
-  int readok = SaveReadNameAndComment(fh, szMapName, szComment);
+  ch map_name[SAVEGAME_MAPNAME_LEN];
+  ch comment[SAVEGAME_COMMENT_LEN];
+
+  bool was_read_ok = SaveReadNameAndComment(fh, map_name, comment);
   g_pFullFileSystem->Close(fh);
 
-  if (!readok) {
-    return false;
-  }
+  if (!was_read_ok) return false;
 
-  Q_strncpy(save.szMapName, szMapName, sizeof(save.szMapName));
+  strcpy_s(save.szMapName, map_name);
+
+  ch elapsed_time[SAVEGAME_ELAPSED_LEN];
+  strcpy_s(elapsed_time, "??");
 
   // Elapsed time is the last 6 characters in comment. (mmm:ss)
-  int i;
-  i = strlen(szComment);
-  Q_strncpy(szElapsedTime, "??", sizeof(szElapsedTime));
+  usize i = strlen(comment);
+
   if (i >= 6) {
-    Q_strncpy(szElapsedTime, (char *)&szComment[i - 6], 7);
-    szElapsedTime[6] = '\0';
+    strncpy_s(elapsed_time, (ch *)&comment[i - 6], 7);
+    elapsed_time[6] = '\0';
 
     // parse out
-    int minutes = atoi(szElapsedTime);
-    int seconds = atoi(szElapsedTime + 4);
+    i32 minutes = atoi(elapsed_time), seconds = atoi(elapsed_time + 4);
 
     // reformat
     if (minutes) {
-      Q_snprintf(szElapsedTime, sizeof(szElapsedTime), "%d %s %d seconds",
-                 minutes, minutes > 1 ? "minutes" : "minute", seconds);
+      sprintf_s(elapsed_time, "%d %s %d %s", minutes,
+                minutes == 1 ? "minute" : "minutes", seconds,
+                seconds == 1 ? "second" : "seconds");
     } else {
-      Q_snprintf(szElapsedTime, sizeof(szElapsedTime), "%d seconds", seconds);
+      sprintf_s(elapsed_time, "%d %s", seconds,
+                seconds == 1 ? "second" : "seconds");
     }
 
     // Chop elapsed out of comment.
-    int n;
-
-    n = i - 6;
-    szComment[n] = '\0';
-
+    usize n = i - 6;
+    comment[n] = '\0';
     n--;
 
     // Strip back the spaces at the end.
-    while ((n >= 1) && szComment[n] && szComment[n] == ' ') {
-      szComment[n--] = '\0';
+    while (n >= 1 && comment[n] && comment[n] == ' ') {
+      comment[n--] = '\0';
     }
   }
 
   // calculate the file name to print
-  const char *pszType = "";
-  if (strstr(pszFileName, "quick")) {
-    pszType = "#GameUI_QuickSave";
-  } else if (strstr(pszFileName, "autosave")) {
-    pszType = "#GameUI_AutoSave";
+  const ch *save_type_ui_id = "";
+  if (strstr(save_file_name, "quick")) {
+    save_type_ui_id = "#GameUI_QuickSave";
+  } else if (strstr(save_file_name, "autosave")) {
+    save_type_ui_id = "#GameUI_AutoSave";
   }
 
-  Q_strncpy(save.szType, pszType, sizeof(save.szType));
-  Q_strncpy(save.szComment, szComment, sizeof(save.szComment));
-  Q_strncpy(save.szElapsedTime, szElapsedTime, sizeof(save.szElapsedTime));
+  strcpy_s(save.szType, save_type_ui_id);
+  strcpy_s(save.szComment, comment);
+  strcpy_s(save.szElapsedTime, elapsed_time);
 
   // Now get file time stamp.
-  long fileTime = g_pFullFileSystem->GetFileTime(pszFileName);
-  char szFileTime[32];
-  g_pFullFileSystem->FileTimeToString(szFileTime, sizeof(szFileTime), fileTime);
-  char *newline = strstr(szFileTime, "\n");
-  if (newline) {
-    *newline = 0;
-  }
-  Q_strncpy(save.szFileTime, szFileTime, sizeof(save.szFileTime));
-  save.iTimestamp = fileTime;
+  long save_file_ticks = g_pFullFileSystem->GetFileTime(save_file_name);
+  ch save_file_time[32];
+
+  g_pFullFileSystem->FileTimeToString(
+      save_file_time, SOURCE_ARRAYSIZE(save_file_time), save_file_ticks);
+
+  ch *new_line = strstr(save_file_time, "\n");
+  if (new_line) *new_line = '\0';
+
+  strcpy_s(save.szFileTime, save_file_time);
+  save.iTimestamp = save_file_ticks;
+
   return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: timestamp sort function for savegames
-//-----------------------------------------------------------------------------
-int CBaseSaveGameDialog::SaveGameSortFunc(const void *lhs, const void *rhs) {
+// Timestamp sort function for savegames.
+i32 CBaseSaveGameDialog::SaveGameSortFunc(const void *lhs, const void *rhs) {
   const SaveGameDescription_t *s1 = (const SaveGameDescription_t *)lhs;
   const SaveGameDescription_t *s2 = (const SaveGameDescription_t *)rhs;
 
-  if (s1->iTimestamp < s2->iTimestamp)
-    return 1;
-  else if (s1->iTimestamp > s2->iTimestamp)
-    return -1;
+  if (s1->iTimestamp < s2->iTimestamp) return 1;
+  if (s1->iTimestamp > s2->iTimestamp) return -1;
 
-  // timestamps are equal, so just sort by filename
+  // timestamps are equal, so just sort by filename.
   return strcmp(s1->szFileName, s2->szFileName);
 }
 
-#define MAKEID(d, c, b, a) \
-  (((int)(a) << 24) | ((int)(b) << 16) | ((int)(c) << 8) | ((int)(d)))
-
-int SaveReadNameAndComment(FileHandle_t f, char *name, char *comment) {
-  int i, tag, size, tokenSize, tokenCount;
-  char *pSaveData, *pFieldName, **pTokenList;
-
-  g_pFullFileSystem->Read(&tag, sizeof(int), f);
-  if (tag != MAKEID('J', 'S', 'A', 'V')) {
-    return 0;
-  }
-
-  g_pFullFileSystem->Read(&tag, sizeof(int), f);
-  if (tag != SAVEGAME_VERSION)  // Enforce version for now
-  {
-    return 0;
-  }
+template <size_t name_size, size_t comment_size>
+bool SaveReadNameAndComment(FileHandle_t f, ch (&name)[name_size],
+                            ch (&comment)[comment_size]) {
+  if (!f || !name_size || !comment_size) return false;
 
   name[0] = '\0';
   comment[0] = '\0';
-  g_pFullFileSystem->Read(&size, sizeof(int), f);
 
-  g_pFullFileSystem->Read(&tokenCount, sizeof(int),
-                          f);  // These two ints are the token list
-  g_pFullFileSystem->Read(&tokenSize, sizeof(int), f);
-  size += tokenSize;
+  u32 tag;
+  g_pFullFileSystem->Read(&tag, sizeof(tag), f);
+  if (tag != MAKEID('J', 'S', 'A', 'V')) {
+    Msg("Save '%s' is not tagged as JSAV, it is not a valid save.\n", name);
+    return false;
+  }
+
+  u32 version;
+  g_pFullFileSystem->Read(&version, sizeof(version), f);
+  // Enforce version for now
+  if (version != SAVEGAME_VERSION) {
+    Msg("Save '%s' has version 0x%4.x, but supported save version is 0x%4.x.\n",
+        name, version, SAVEGAME_VERSION);
+    return false;
+  }
+
+  u32 expected_save_data_size, token_size, tokens_count;
+  g_pFullFileSystem->Read(&expected_save_data_size,
+                          sizeof(expected_save_data_size), f);
+  // These two ints are the token list
+  g_pFullFileSystem->Read(&tokens_count, sizeof(tokens_count), f);
+  g_pFullFileSystem->Read(&token_size, sizeof(token_size), f);
+  expected_save_data_size += token_size;
 
   // Sanity Check.
-  if (tokenCount < 0 || tokenCount > 1024 * 1024 * 32) {
-    return 0;
+  if (tokens_count > 1024 * 1024 * 32) return false;
+  if (token_size > 1024 * 1024 * 32) return false;
+
+  std::unique_ptr<ch[]> save_data{
+      std::make_unique<ch[]>(expected_save_data_size)};
+  u32 actual_save_data_size =
+      g_pFullFileSystem->Read(save_data.get(), expected_save_data_size, f);
+  if (actual_save_data_size != expected_save_data_size) {
+    Msg("Save '%s' has corrupted, expected %u bytes, got %u bytes.\n", name,
+        expected_save_data_size, actual_save_data_size);
+    return false;
   }
 
-  if (tokenSize < 0 || tokenSize > 1024 * 1024 * 32) {
-    return 0;
-  }
-
-  pSaveData = (char *)new char[size];
-  g_pFullFileSystem->Read(pSaveData, size, f);
-
-  int nNumberOfFields;
-
-  char *pData;
-  int nFieldSize;
-
-  pData = pSaveData;
+  ch *data{save_data.get()};
+  std::unique_ptr<ch *[]> tokens_list;
 
   // Allocate a table for the strings, and parse the table
-  if (tokenSize > 0) {
-    pTokenList = new char *[tokenCount];
+  if (token_size > 0) {
+    tokens_list.reset(new ch *[tokens_count]);
 
     // Make sure the token strings pointed to by the pToken hashtable.
-    for (i = 0; i < tokenCount; i++) {
-      pTokenList[i] =
-          *pData ? pData : NULL;  // Point to each string in the pToken table
-      while (*pData++)
-        ;  // Find next token (after next 0)
+    for (u32 i{0};
+         i < tokens_count &&
+         static_cast<usize>(data - save_data.get()) < expected_save_data_size;
+         i++) {
+      // Point to each string in the pToken table
+      tokens_list[i] = *data ? data : nullptr;
+      // Find next token (after next 0)
+      while (static_cast<usize>(data - save_data.get()) <
+                 expected_save_data_size &&
+             *data++)
+        ;
     }
-  } else
-    pTokenList = NULL;
+  } else {
+    tokens_list = nullptr;
+  }
 
   // short, short (size, index of field name)
-  nFieldSize = *(short *)pData;
-  pData += sizeof(short);
-  pFieldName = pTokenList[*(short *)pData];
+  short field_size{*(short *)data};
+  data += sizeof(short);
+  ch *field_name{tokens_list[*(short *)data]};
 
-  if (_stricmp(pFieldName, "GameHeader")) {
-    delete[] pSaveData;
-    return 0;
+  if (_stricmp(field_name, "GameHeader")) {
+    Msg("'GameHeader' field missed in save '%s', it is not valid save.\n",
+        name);
+    return false;
   };
 
-  // int (fieldcount)
-  pData += sizeof(short);
-  nNumberOfFields = *(int *)pData;
-  pData += nFieldSize;
+  // i32 (fieldcount)
+  data += sizeof(short);
+  i32 fields_count{*(i32 *)data};
+  data += field_size;
 
   // Each field is a short (size), short (index of name), binary string of
   // "size" bytes (data)
-  for (i = 0; i < nNumberOfFields; i++) {
+  for (i32 i{0}; i < fields_count; i++) {
     // Data order is:
     // Size
     // szName
     // Actual Data
 
-    nFieldSize = *(short *)pData;
-    pData += sizeof(short);
+    field_size = *(short *)data;
+    data += sizeof(short);
 
-    pFieldName = pTokenList[*(short *)pData];
-    pData += sizeof(short);
+    field_name = tokens_list[*(short *)data];
+    data += sizeof(short);
 
-    if (!_stricmp(pFieldName, "comment")) {
-      strncpy(comment, pData, nFieldSize);
-    } else if (!_stricmp(pFieldName, "mapName")) {
-      strncpy(name, pData, nFieldSize);
-    };
+    if (!_stricmp(field_name, "comment")) {
+      strncpy_s(comment, comment_size, data, field_size);
+    } else if (!_stricmp(field_name, "mapName")) {
+      strncpy_s(name, name_size, data, field_size);
+    }
 
     // Move to Start of next field.
-    pData += nFieldSize;
-  };
+    data += field_size;
+  }
 
-  // Delete the string table we allocated
-  delete[] pTokenList;
-  delete[] pSaveData;
-
-  if (strlen(name) > 0 && strlen(comment) > 0) return 1;
-
-  return 0;
+  return strlen(name) > 0 && strlen(comment) > 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: deletes an existing save game
-//-----------------------------------------------------------------------------
-void CBaseSaveGameDialog::DeleteSaveGame(const char *fileName) {
-  if (!fileName || !fileName[0]) return;
+// Deletes an existing save game.
+void CBaseSaveGameDialog::DeleteSaveGame(const ch *save_path) {
+  if (!save_path || !save_path[0]) return;
 
   // delete the save game file
-  g_pFullFileSystem->RemoveFile(fileName, "MOD");
+  g_pFullFileSystem->RemoveFile(save_path, "MOD");
 
   // delete the associated tga
-  char tga[SOURCE_MAX_PATH];
-  Q_strncpy(tga, fileName, sizeof(tga));
-  char *ext = strstr(tga, ".sav");
-  if (ext) {
-    strcpy(ext, ".tga");
-  }
-  g_pFullFileSystem->RemoveFile(tga, "MOD");
+  ch save_tga_path[SOURCE_MAX_PATH];
+  strcpy_s(save_tga_path, save_path);
+
+  ch *extension = strstr(save_tga_path, ".sav");
+  if (extension)
+    strcpy_s(extension,
+             save_tga_path + SOURCE_ARRAYSIZE(save_tga_path) - extension,
+             ".tga");
+
+  g_pFullFileSystem->RemoveFile(save_tga_path, "MOD");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: One item has been selected
-//-----------------------------------------------------------------------------
+// One item has been selected.
 void CBaseSaveGameDialog::OnPanelSelected() {
   SetControlEnabled("loadsave", true);
   SetControlEnabled("delete", true);

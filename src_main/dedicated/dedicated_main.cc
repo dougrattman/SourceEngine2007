@@ -48,7 +48,8 @@ void GetBaseDirectory(char *base_dir, usize base_dir_size) {
     }
   }
 
-  char const *new_base_dir = CommandLine()->CheckParm("-basedir");
+  char const *new_base_dir = CommandLine()->CheckParm(
+      source::tier0::command_line_switches::baseDirectory);
   if (new_base_dir) {
     strcpy_s(base_dir, base_dir_size, new_base_dir);
   }
@@ -59,14 +60,6 @@ void GetBaseDirectory(char *base_dir, usize base_dir_size) {
 
 // Main entry point for dedicated server, shared between win32 and linux.
 int main(int argc, char **argv) {
-#ifndef OS_POSIX
-  __asm {
-		fninit
-  }
-#endif
-
-  SetupFPUControlWord();
-
 #ifdef OS_POSIX
   strcpy(g_szEXEName, *argv);
   // Store off command line for argument searching

@@ -576,7 +576,9 @@ bool CAssetCache::AddFilesInDirectory(CachedAssetList_t &list,
               }
             }
           }
-          strlwr(pAssetName);
+          _strlwr_s(pAssetName, pRelativeChildPath +
+                                    SOURCE_ARRAYSIZE(pRelativeChildPath) -
+                                    pAssetName);
 
           AddAssetToList(list, pAssetName, nModIndex);
         }

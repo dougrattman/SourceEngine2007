@@ -20,9 +20,6 @@ bool SIMDTest() {
   const Vector MidP(0, 0, 100);
   const Vector EndPnt(100, 0, 50);
 
-  // This app doesn't go through regular engine init, so init FPU/VPU math
-  // behaviour here:
-  SetupFPUControlWord();
   TestVPUFlags();
 
   // Initialize g_XYZ[] and g_CreationTime[]

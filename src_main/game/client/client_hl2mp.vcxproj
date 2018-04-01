@@ -1774,7 +1774,7 @@
       <Project>{8be8d44d-b656-40c7-83d2-d51309021093}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\particles\Particles.vcxproj">
+    <ProjectReference Include="..\..\particles\particles.vcxproj">
       <Project>{10dd36fb-aa3f-4b0b-a5ed-f11c1d5b6bd0}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

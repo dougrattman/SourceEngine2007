@@ -215,4 +215,16 @@
 #define SOURCE_HINT(the_hint) 0
 #endif  // COMPILER_MSVC
 
+// Allow compiler to predict branches. See
+// https://sourceware.org/glibc/wiki/Style_and_Conventions#Branch_Prediction
+#ifdef COMPILER_MSVC
+#define SOURCE_LIKELY(cond) cond
+#define SOURCE_UNLIKELY(cond) cond
+#elif defined COMPILER_GCC || defined COMPILER_CLANG
+#define SOURCE_LIKELY(cond) __glibc_likely(cond)
+#define SOURCE_UNLIKELY(cond) __glibc_unlikely(cond)
+#else  // !(COMPILER_MSVC || COMPILER_GCC || COMPILER_CLANG)
+#error Please, add support of branch prediction for your compiler in base/include/compiler_specific.h
+#endif  // COMPILER_MSVC
+
 #endif  // BASE_INCLUDE_COMPILER_SPECIFIC_H_

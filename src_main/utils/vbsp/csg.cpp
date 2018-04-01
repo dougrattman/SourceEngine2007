@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vbsp.h"
 
@@ -426,14 +426,17 @@ WriteBrushMap
 ==================
 */
 void WriteBrushMap(char *name, bspbrush_t *list) {
-  FILE *f;
+  ;
   side_t *s;
   int i;
   winding_t *w;
 
-  Msg("writing %s\n", name);
-  f = fopen(name, "w");
-  if (!f) Error("Can't write %s\b", name);
+  Msg("Writing %s\n", name);
+  FILE *f;
+  if (fopen_s(&f, name, "w")) {
+    Error("Can't write %s\b", name);
+    return;
+  }
 
   fprintf(f, "{\n\"classname\" \"worldspawn\"\n");
 
@@ -472,7 +475,7 @@ void WriteBrushVMF(char *name, bspbrush_t *list)
 	winding_t	*w;
 	Vector	u, v;
 
-	Msg("writing %s\n", name);
+	Msg("Writing %s\n", name);
 	f = fopen (name, "w");
 	if (!f)
 		Error ("Can't write %s\b", name);

@@ -1,20 +1,20 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
 
-#include "tier1/UtlVector.h"
 #include <ctype.h>
 #include <cstdio>
+#include "tier1/UtlVector.h"
 
-#include "tier1/keyvalues.h"
 #include <vgui/IInput.h>
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
 #include <vgui/KeyCode.h>
 #include <vgui/MouseCode.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/BuildGroup.h>
 #include <vgui_controls/BuildModeDialog.h>
@@ -30,7 +30,6 @@
 #include <vgui_controls/RadioButton.h>
 #include <vgui_controls/TextEntry.h>
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -361,7 +360,7 @@ void BuildModeDialog::CreateControls() {
     for (KeyValues *kv = vars->GetFirstSubKey(); kv != NULL;
          kv = kv->GetNextKey()) {
       char buf[32];
-      _snprintf(buf, sizeof(buf), "%%%s%%", kv->GetName());
+      _snprintf_s(buf, sizeof(buf), "%%%s%%", kv->GetName());
       menu->AddMenuItem(kv->GetName(),
                         new KeyValues("SetClipboardText", "text", buf), this);
     }

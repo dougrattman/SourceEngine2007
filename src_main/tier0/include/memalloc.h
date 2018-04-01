@@ -14,10 +14,6 @@
 // Define this in release to get memory tracking even in release builds
 //#define USE_MEM_DEBUG 1
 
-#if defined(_MEMTEST)
-#define USE_MEM_DEBUG 1
-#endif
-
 // Undefine this if using a compiler lacking threadsafe RTTI (like vc6)
 #define MEM_DEBUG_CLASSNAME 1
 
@@ -33,6 +29,8 @@ struct _CrtMemState;
 #define MEMALLOC_VERSION 1
 
 using MemAllocFailHandler_t = usize (*)(usize);
+
+inline const ch *kMemoryStatsDumpFileName{"momory_stats_dump.txt"};
 
 // NOTE! This should never be called directly from leaf code
 // Just use new,delete,malloc,free etc. They will call into this eventually
@@ -99,15 +97,12 @@ the_interface IMemAlloc {
 
   virtual void DumpBlockStats(void *) = 0;
 
-#if defined(_MEMTEST)
-  virtual void SetStatsExtraInfo(const ch *pMapName, const ch *pComment) = 0;
-#endif
-
   // Returns 0 if no failure, otherwise the usize of the last requested chunk
   virtual usize MemoryAllocFailed() = 0;
 };
 
 // Singleton interface
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API IMemAlloc *g_pMemAlloc;
 
 inline void *MemAlloc_AllocAligned(usize size, usize align) {

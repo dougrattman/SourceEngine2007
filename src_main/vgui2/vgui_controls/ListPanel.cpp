@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <cstdio>
 
@@ -741,7 +741,7 @@ void ListPanel::RemoveColumn(int col) {
 int ListPanel::FindColumn(const char *columnName) {
   for (int i = 0; i < m_CurrentColumns.Count(); i++) {
     if (!_stricmp(columnName,
-                 m_ColumnsData[m_CurrentColumns[i]].m_pHeader->GetName())) {
+                  m_ColumnsData[m_CurrentColumns[i]].m_pHeader->GetName())) {
       return i;
     }
   }
@@ -1163,27 +1163,21 @@ void ListPanel::GetCellText(int itemID, int col, wchar_t *wbuffer,
                             int bufferSize) {
   if (!wbuffer || !bufferSize) return;
 
-  wcscpy(wbuffer, L"");
+  wcscpy_s(wbuffer, bufferSize / sizeof(wchar_t), L"");
 
   KeyValues *itemData = GetItem(itemID);
-  if (!itemData) {
-    return;
-  }
+  if (!itemData) return;
 
   // Look up column header
-  if (col < 0 || col >= m_CurrentColumns.Count()) {
-    return;
-  }
+  if (col < 0 || col >= m_CurrentColumns.Count()) return;
 
   const char *key = m_ColumnsData[m_CurrentColumns[col]].m_pHeader->GetName();
-  if (!key || !key[0]) {
-    return;
-  }
+  if (!key || !key[0]) return;
 
   char const *val = itemData->GetString(key, "");
   if (!val || !key[0]) return;
 
-  const wchar_t *wval = NULL;
+  const wchar_t *wval = nullptr;
 
   if (val[0] == '#') {
     StringIndex_t si = g_pVGuiLocalize->FindIndex(val + 1);
@@ -1192,12 +1186,9 @@ void ListPanel::GetCellText(int itemID, int col, wchar_t *wbuffer,
     }
   }
 
-  if (!wval) {
-    wval = itemData->GetWString(key, L"");
-  }
+  if (!wval) wval = itemData->GetWString(key, L"");
 
-  wcsncpy(wbuffer, wval, bufferSize / sizeof(wchar_t));
-  wbuffer[(bufferSize / sizeof(wchar_t)) - 1] = 0;
+  wcscpy_s(wbuffer, bufferSize / sizeof(wchar_t), wval);
 }
 
 //-----------------------------------------------------------------------------
@@ -2574,7 +2565,7 @@ void ListPanel::ApplyUserConfigSettings(KeyValues *userConfig) {
   // read which columns are hidden
   for (int i = 0; i < m_CurrentColumns.Count(); i++) {
     char name[64];
-    _snprintf(name, sizeof(name), "%d_hidden", i);
+    _snprintf_s(name, sizeof(name), "%d_hidden", i);
 
     int hidden = userConfig->GetInt(name, -1);
     if (hidden == 0) {
@@ -2583,7 +2574,7 @@ void ListPanel::ApplyUserConfigSettings(KeyValues *userConfig) {
       SetColumnVisible(i, false);
     }
 
-    _snprintf(name, sizeof(name), "%d_width", i);
+    _snprintf_s(name, sizeof(name), "%d_width", i);
     int nWidth = userConfig->GetInt(name, -1);
     if (nWidth >= 0) {
       column_t &column = m_ColumnsData[m_CurrentColumns[i]];
@@ -2603,10 +2594,10 @@ void ListPanel::GetUserConfigSettings(KeyValues *userConfig) {
     column_t &column = m_ColumnsData[m_CurrentColumns[i]];
 
     char name[64];
-    _snprintf(name, sizeof(name), "%d_hidden", i);
+    _snprintf_s(name, sizeof(name), "%d_hidden", i);
     userConfig->SetInt(name, column.m_bHidden ? 1 : 0);
 
-    _snprintf(name, sizeof(name), "%d_width", i);
+    _snprintf_s(name, sizeof(name), "%d_width", i);
     userConfig->SetInt(name, column.m_pHeader->GetWide());
   }
 }

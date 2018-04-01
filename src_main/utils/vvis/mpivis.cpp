@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <conio.h>
 #include "base/include/windows/windows_light.h"
@@ -9,6 +9,7 @@
 #include "stdlib.h"
 #include "threadhelpers.h"
 #include "threads.h"
+#include "tier0/include/fasttimer.h"
 #include "vis.h"
 #include "vmpi.h"
 #include "vmpi_dispatch.h"
@@ -328,7 +329,7 @@ DWORD WINAPI PortalMCThreadFn(LPVOID p) {
       waitTime = 20;
     } else {
       // These lengths must match exactly what is sent in ReceivePortalFlow.
-      if (len ==
+      if ((size_t)len ==
           2 + sizeof(g_PortalMCThreadUniqueID) + sizeof(int) + portalbytes) {
         // Perform more validation...
         if (data[0] == VMPI_VVIS_PACKET_ID &&
@@ -336,11 +337,11 @@ DWORD WINAPI PortalMCThreadFn(LPVOID p) {
           if (*((unsigned long *)&data[2]) == g_PortalMCThreadUniqueID) {
             int iWorkUnit = *((int *)&data[6]);
             if (iWorkUnit >= 0 && iWorkUnit < g_numportals * 2) {
-              portal_t *p = sorted_portals[iWorkUnit];
-              if (p) {
+              portal_t *pt = sorted_portals[iWorkUnit];
+              if (pt) {
                 ++g_nMulticastPortalsReceived;
-                memcpy(p->portalvis, &data[10], portalbytes);
-                p->status = stat_done;
+                memcpy(pt->portalvis, &data[10], portalbytes);
+                pt->status = stat_done;
                 waitTime = 0;
               }
             }

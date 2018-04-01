@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #undef fopen
 
@@ -26,8 +26,8 @@ static void WriteWord(FILE *fp, unsigned short val) { fwrite(&val, 2, 1, fp); }
 
 bool ReadWaveFile(const char *pFilename, char *&pData, int &nDataBytes,
                   int &wBitsPerSample, int &nChannels, int &nSamplesPerSec) {
-  FILE *fp = fopen(pFilename, "rb");
-  if (!fp) return false;
+  FILE *fp;
+  if (fopen_s(&fp, pFilename, "rb")) return false;
 
   fseek(fp, 22, SEEK_SET);
 
@@ -52,8 +52,8 @@ bool ReadWaveFile(const char *pFilename, char *&pData, int &nDataBytes,
 
 bool WriteWaveFile(const char *pFilename, const char *pData, int nBytes,
                    int wBitsPerSample, int nChannels, int nSamplesPerSec) {
-  FILE *fp = fopen(pFilename, "wb");
-  if (!fp) return false;
+  FILE *fp;
+  if (fopen_s(&fp, pFilename, "wb")) return false;
 
   // Write the RIFF chunk.
   fwrite("RIFF", 4, 1, fp);

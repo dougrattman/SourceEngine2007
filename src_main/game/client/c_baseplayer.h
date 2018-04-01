@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Client-side CBasePlayer - Manages the player's flashlight effect.
 
@@ -44,6 +44,8 @@ class C_PredictionError {
 #define WALL_OFFSET 6.0f
 
 bool IsInFreezeCam(void);
+
+struct surfacedata_t;
 
 //-----------------------------------------------------------------------------
 // Purpose: Base Player class

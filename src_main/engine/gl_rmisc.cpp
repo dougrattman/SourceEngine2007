@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 // HDRFIXME: reduce the number of include files here.
 #include "render_pch.h"
@@ -30,7 +30,6 @@
 #include "vmodes.h"
 #include "vtf/vtf.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 void Linefile_Read_f();
@@ -156,8 +155,8 @@ CON_COMMAND_F(r_cleardecals, "Usage r_cleardecals <permanent>.",
 //-----------------------------------------------------------------------------
 void R_LoadWorldGeometry(bool bDXChange) {
   // Recreate the sortinfo arrays ( ack, uses new/delete right now ) because
-  // doing it with Hunk_AllocName will
-  //  leak through every connect that doesn't wipe the hunk ( "reconnect" )
+  // doing it with Hunk_AllocName will leak through every connect that doesn't
+  // wipe the hunk ( "reconnect" )
   MaterialSystem_DestroySortinfo();
 
   MaterialSystem_RegisterLightmapSurfaces();
@@ -177,8 +176,9 @@ void R_LoadWorldGeometry(bool bDXChange) {
       // create the displacement surfaces for the map
       modelloader->Map_LoadDisplacements(host_state.worldmodel, false);
       // if( !DispInfo_CreateStaticBuffers( host_state.worldmodel,
-      // materialSortInfoArray, false ) ) 	Sys_Error( "Can't create static meshes
-      //for displacements" );
+      // materialSortInfoArray, false ) ) 	Sys_Error( "Can't create static
+      // meshes
+      // for displacements" );
 
       modelloader->Map_SetRenderInfoAllocated(true);
     }
@@ -212,7 +212,7 @@ R_LevelInit
 void R_LevelInit(void) {
   ConDMsg("Initializing renderer...\n");
 
-  COM_TimestampedLog("R_LevelInit: Start");
+  Plat_TimestampedLog("Engine::R_LevelInit start.");
 
   Assert(g_ClientDLL);
 
@@ -222,8 +222,8 @@ void R_LevelInit(void) {
   R_LoadSkys();
   R_InitStudio();
 
-  // TODO(d.rattman): Is this the best place to initialize the kd tree when we're
-  // client-only?
+  // TODO(d.rattman): Is this the best place to initialize the kd tree when
+  // we're client-only?
   if (!sv.IsActive()) {
     g_pShadowMgr->LevelShutdown();
     StaticPropMgr()->LevelShutdown();
@@ -246,8 +246,7 @@ void R_LevelInit(void) {
 
   // TODO(d.rattman): E3 2003 HACK
   if (mat_levelflush.GetBool()) {
-    bool bOnLevelShutdown = false;
-    materials->ResetTempHWMemory(bOnLevelShutdown);
+    materials->ResetTempHWMemory(false);
   }
 
   // precache any textures that are used in this map.
@@ -263,12 +262,7 @@ void R_LevelInit(void) {
   // Build the overlay fragments.
   OverlayMgr()->CreateFragments();
 
-#ifdef _XBOX
-  extern void CompactTextureHeap();
-  CompactTextureHeap();
-#endif
-
-  COM_TimestampedLog("R_LevelInit: Finish");
+  Plat_TimestampedLog("Engine::R_LevelInit end.");
 }
 
 void R_LevelShutdown() {

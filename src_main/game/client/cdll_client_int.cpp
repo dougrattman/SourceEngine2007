@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -93,7 +93,6 @@
 #include "PortalRender.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern IClientMode *GetClientModeNormal();
@@ -135,18 +134,18 @@ IGameSystem *ToolFrameworkClientSystem();
 
 // Engine player info, no game related infos here
 BEGIN_BYTESWAP_DATADESC(player_info_s)
-DEFINE_ARRAY(name, FIELD_CHARACTER, MAX_PLAYER_NAME_LENGTH),
-    DEFINE_FIELD(userID, FIELD_INTEGER),
-    DEFINE_ARRAY(guid, FIELD_CHARACTER, SIGNED_GUID_LEN + 1),
-    DEFINE_FIELD(friendsID, FIELD_INTEGER),
-    DEFINE_ARRAY(friendsName, FIELD_CHARACTER, MAX_PLAYER_NAME_LENGTH),
-    DEFINE_FIELD(fakeplayer, FIELD_BOOLEAN),
-    DEFINE_FIELD(ishltv, FIELD_BOOLEAN),
-    DEFINE_ARRAY(customFiles, FIELD_INTEGER, MAX_CUSTOM_FILES),
-    DEFINE_FIELD(filesDownloaded, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+  DEFINE_ARRAY(name, FIELD_CHARACTER, MAX_PLAYER_NAME_LENGTH),
+      DEFINE_FIELD(userID, FIELD_INTEGER),
+      DEFINE_ARRAY(guid, FIELD_CHARACTER, SIGNED_GUID_LEN + 1),
+      DEFINE_FIELD(friendsID, FIELD_INTEGER),
+      DEFINE_ARRAY(friendsName, FIELD_CHARACTER, MAX_PLAYER_NAME_LENGTH),
+      DEFINE_FIELD(fakeplayer, FIELD_BOOLEAN),
+      DEFINE_FIELD(ishltv, FIELD_BOOLEAN),
+      DEFINE_ARRAY(customFiles, FIELD_INTEGER, MAX_CUSTOM_FILES),
+      DEFINE_FIELD(filesDownloaded, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        static bool g_bRequestCacheUsedMaterials = false;
+static bool g_bRequestCacheUsedMaterials = false;
 void RequestCacheUsedMaterials() { g_bRequestCacheUsedMaterials = true; }
 
 void ProcessCacheUsedMaterials() {
@@ -693,7 +692,8 @@ int CHLClient::Init(CreateInterfaceFn appSystemFactory,
     return false;
   }
 
-  if (CommandLine()->FindParm("-textmode")) g_bTextMode = true;
+  if (CommandLine()->FindParm(source::tier0::command_line_switches::textMode))
+    g_bTextMode = true;
 
   if (CommandLine()->FindParm("-makedevshots")) g_MakingDevShots = true;
 
@@ -1516,12 +1516,11 @@ void OnRenderStart() {
   MDLCACHE_COARSE_LOCK();
 
 #ifdef PORTAL
-  g_pPortalRender
-      ->UpdatePortalPixelVisibility();  // updating this one or two
-                                        // lines before querying again
-                                        // just isn't cutting it.
-                                        // Update as soon as it's
-                                        // cheap to do so.
+  g_pPortalRender->UpdatePortalPixelVisibility();  // updating this one or two
+                                                   // lines before querying
+                                                   // again just isn't cutting
+                                                   // it. Update as soon as it's
+                                                   // cheap to do so.
 #endif
 
   partition->SuppressLists(PARTITION_ALL_CLIENT_EDICTS, true);
@@ -1584,8 +1583,8 @@ void OnRenderStart() {
   // This must occur prior to SimulatEntities,
   // which is where the client thinks for c_colorcorrection +
   // c_colorcorrectionvolumes update the color correction weights.
-  // TODO(d.rattman): The place where IGameSystem::Update is called should be in here
-  // so we don't have to explicitly call ResetColorCorrectionWeights +
+  // TODO(d.rattman): The place where IGameSystem::Update is called should be in
+  // here so we don't have to explicitly call ResetColorCorrectionWeights +
   // SimulateEntities, etc.
   g_pColorCorrectionMgr->ResetColorCorrectionWeights();
 

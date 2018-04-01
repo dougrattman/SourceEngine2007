@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Launcher for hammer, which is sitting in its own DLL
 
@@ -20,17 +20,6 @@
 #include "vgui/ivgui.h"
 #include "vphysics_interface.h"
 #include "vstdlib/cvar.h"
-
-void __cdecl WriteMiniDumpUsingExceptionInfo(
-    unsigned int uStructuredExceptionCode,
-    EXCEPTION_POINTERS *pExceptionInfo) {
-#ifndef NO_STEAM
-  // TODO: dynamically set the minidump comment from contextual info about the
-  // crash (i.e current VPROF node)?
-  SteamWriteMiniDumpUsingExceptionInfoWithBuildId(uStructuredExceptionCode,
-                                                  pExceptionInfo, 0);
-#endif
-}
 
 // The application object
 class CHammerApp : public CAppSystemGroup {

@@ -52,7 +52,8 @@ const ch *GetExeDirectory() {
 const ch *GetBaseDirectory() {
   static ch base_dir[SOURCE_MAX_PATH];
 
-  const ch *new_base_dir{CommandLine()->CheckParm("-basedir")};
+  const ch *new_base_dir{CommandLine()->CheckParm(
+      source::tier0::command_line_switches::baseDirectory)};
   if (new_base_dir) return new_base_dir;
 
   base_dir[0] = '\0';

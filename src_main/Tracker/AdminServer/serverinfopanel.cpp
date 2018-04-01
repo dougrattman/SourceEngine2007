@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "ServerInfoPanel.h"
 
@@ -49,8 +49,8 @@ void CServerInfoPanel::OnThink() {
   if (time != m_iLastUptimeDisplayed) {
     m_iLastUptimeDisplayed = time;
     char timeText[64];
-    _snprintf(timeText, sizeof(timeText), "%0.1i:%0.2i:%0.2i:%0.2i",
-              (time / 3600) / 24, (time / 3600), (time / 60) % 60, time % 60);
+    _snprintf_s(timeText, sizeof(timeText), "%0.1i:%0.2i:%0.2i:%0.2i",
+                (time / 3600) / 24, (time / 3600), (time / 60) % 60, time % 60);
     SetControlString("UpTimeText", timeText);
   }
 }
@@ -84,38 +84,39 @@ void CServerInfoPanel::OnResetData() {
 //-----------------------------------------------------------------------------
 void CServerInfoPanel::OnServerDataResponse(const char *value,
                                             const char *response) {
-  if (!stricmp(value, "playercount")) {
+  if (!_stricmp(value, "playercount")) {
     m_iPlayerCount = atoi(response);
-  } else if (!stricmp(value, "maxplayers")) {
+  } else if (!_stricmp(value, "maxplayers")) {
     m_iMaxPlayers = atoi(response);
 
     // update control
     char buf[128];
     buf[0] = 0;
     if (m_iMaxPlayers > 0) {
-      sprintf(buf, "%d / %d", m_iPlayerCount, m_iMaxPlayers);
+      sprintf_s(buf, "%d / %d", m_iPlayerCount, m_iMaxPlayers);
     }
     SetControlString("PlayersText", buf);
-  } else if (!stricmp(value, "gamedescription")) {
+  } else if (!_stricmp(value, "gamedescription")) {
     SetControlString("GameText", response);
-  } else if (!stricmp(value, "hostname")) {
+  } else if (!_stricmp(value, "hostname")) {
     PostActionSignal(new KeyValues("UpdateTitle"));
-  } else if (!stricmp(value, "UpdateMap") || !stricmp(value, "UpdatePlayers")) {
+  } else if (!_stricmp(value, "UpdateMap") ||
+             !_stricmp(value, "UpdatePlayers")) {
     // server has indicated a change, force an update
     m_flUpdateTime = 0.0f;
-  } else if (!stricmp(value, "maplist")) {
+  } else if (!_stricmp(value, "maplist")) {
     SetCustomStringList("map", response);
     // save off maplist for use in mapcycle editing
     ParseIntoMapList(response, m_AvailableMaps);
     // don't chain through, not in varlist
     return;
-  } else if (!stricmp(value, "uptime")) {
+  } else if (!_stricmp(value, "uptime")) {
     // record uptime for extrapolation
     m_iLastUptimeReceived = atoi(response);
     m_flLastUptimeReceiveTime = (float)system()->GetFrameTime();
-  } else if (!stricmp(value, "ipaddress")) {
+  } else if (!_stricmp(value, "ipaddress")) {
     SetControlString("ServerIPText", response);
-  } else if (!stricmp(value, "mapcycle")) {
+  } else if (!_stricmp(value, "mapcycle")) {
     ParseIntoMapList(response, m_MapCycle);
     UpdateMapCycleValue();
     // don't chain through, we set the value ourself
@@ -126,7 +127,7 @@ void CServerInfoPanel::OnServerDataResponse(const char *value,
   BaseClass::OnServerDataResponse(value, response);
 
   // post update
-  if (!stricmp(value, "map")) {
+  if (!_stricmp(value, "map")) {
     // map has changed, update map cycle view
     UpdateMapCycleValue();
   }
@@ -136,7 +137,7 @@ void CServerInfoPanel::OnServerDataResponse(const char *value,
 // Purpose: special editing of map cycle list
 //-----------------------------------------------------------------------------
 void CServerInfoPanel::OnEditVariable(KeyValues *rule) {
-  if (!stricmp(rule->GetName(), "mapcycle")) {
+  if (!_stricmp(rule->GetName(), "mapcycle")) {
     CMapCycleEditDialog *dlg =
         new CMapCycleEditDialog(this, "MapCycleEditDialog");
     dlg->Activate(this, m_AvailableMaps, m_MapCycle);
@@ -156,7 +157,7 @@ void CServerInfoPanel::UpdateMapCycleValue() {
   // find it in the map cycle list
   int listPoint = -1;
   for (int i = 0; i < m_MapCycle.Count(); i++) {
-    if (!stricmp(m_MapCycle[i].String(), currentMap.String())) {
+    if (!_stricmp(m_MapCycle[i].String(), currentMap.String())) {
       listPoint = i;
     }
   }
@@ -173,18 +174,18 @@ void CServerInfoPanel::UpdateMapCycleValue() {
 
     if (m_MapCycle.IsValidIndex(point)) {
       if (needComma) {
-        strcat(nextMaps, ", ");
+        strcat_s(nextMaps, ", ");
       }
-      strcat(nextMaps, m_MapCycle[point].String());
+      strcat_s(nextMaps, m_MapCycle[point].String());
       needComma = true;
     }
   }
 
   // add some elipses to show there is more maps
   if (needComma) {
-    strcat(nextMaps, ", ");
+    strcat_s(nextMaps, ", ");
   }
-  strcat(nextMaps, "...");
+  strcat_s(nextMaps, "...");
 
   // show in varlist
   SetVarString("mapcycle", nextMaps);
@@ -216,13 +217,9 @@ void CServerInfoPanel::ParseIntoMapList(const char *maplist,
 
     char customString[64];
     int nameSize = end - parse;
-    if (nameSize >= sizeof(customString)) {
-      nameSize = sizeof(customString) - 1;
-    }
 
     // copy in the name
-    strncpy(customString, parse, nameSize);
-    customString[nameSize] = 0;
+    strcpy_s(customString, parse);
     parse = end;
 
     // add to the list string that aren't comments

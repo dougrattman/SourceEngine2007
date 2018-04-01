@@ -16,6 +16,7 @@
 #include "filesystem.h"
 #include "iphelpers.h"
 #include "threadhelpers.h"
+#include "tier0/include/fasttimer.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/tslist.h"
 #include "tier1/strtools.h"
@@ -376,8 +377,8 @@ bool ReadString(char *pOut, int maxLen, FILE *fp) {
 }
 
 void ParseDependencyFile(CDependencyInfo *pInfo, const char *pDepFilename) {
-  FILE *fp = fopen(pDepFilename, "rt");
-  if (!fp) Error("Can't find %s.", pDepFilename);
+  FILE *fp;
+  if (fopen_s(&fp, pDepFilename, "rt")) Error("Can't find %s.", pDepFilename);
 
   const char *pOptionalPrefix = "optional ";
 
@@ -754,7 +755,7 @@ void CMasterBroadcaster::GetPatchWorkerList(int argc, char **argv) {
 
         int a, b, c, d;
         const char *pArg = argv[iArg];
-        sscanf(pArg, "%d.%d.%d.%d", &a, &b, &c, &d);
+        sscanf_s(pArg, "%d.%d.%d.%d", &a, &b, &c, &d);
 
         CIPAddr addr;
         addr.Init(a, b, c, d, 0);
@@ -1134,7 +1135,7 @@ void VMPI_HandleTimingWait_Worker() {
 void VMPI_HandleTimingWait_Master() {
   if (VMPI_IsParamUsed(mpi_TimingWait)) {
     Msg("-mpi_TimingWait specified. Waiting for a keypress to continue... ");
-    getch();
+    _getch();
     Msg("\n");
 
     unsigned char cPacket[2] = {VMPI_INTERNAL_PACKET_ID,

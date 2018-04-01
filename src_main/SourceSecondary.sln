@@ -192,7 +192,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unusedcontent", "utils\unus
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "valvelib", "utils\valvelib\valvelib.vcxproj", "{B9FDD758-DFA9-4559-99E8-3451FF847972}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vbsp", "utils\vbsp\vbsp.vcxproj", "{07F7E23C-EF7E-4EE5-8EE2-9B13C8FDD492}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vbsp", "utils\vbsp\vbsp.vcxproj", "{07F7E23C-EF7E-4EE5-8EE2-9B13C8FDD492}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vbspinfo", "utils\vbspinfo\vbspinfo.vcxproj", "{0187DF1E-3B47-433F-8FE4-54D99A5ACEDF}"
 EndProject
@@ -218,7 +218,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "socket_stresstest", "utils\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadedTCPSocketTest", "utils\vmpi\ThreadedTCPSocketTest\ThreadedTCPSocketTest.vcproj", "{6973F221-D381-4569-901F-6D5311FB4CD5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vmpi", "utils\vmpi\vmpi.vcxproj", "{1315511F-4885-4916-94B3-A4348EE5413A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vmpi", "utils\vmpi\vmpi.vcxproj", "{1315511F-4885-4916-94B3-A4348EE5413A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vmpi_browser_job_search", "utils\vmpi\vmpi_browser_job_search\vmpi_browser_job_search.vcproj", "{62338736-E5E4-436C-AA57-1E499846F549}"
 EndProject
@@ -248,7 +248,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "voice_tweak", "utils\voice_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vrad", "utils\vrad\vrad.vcproj", "{FC0F5DE3-F09F-4EF6-98F9-BA762FFF268D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vrad_launcher", "utils\vrad_launcher\vrad_launcher.vcxproj", "{55392CA2-C58E-42F2-BFBA-8DB8C02D4352}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vrad_launcher", "utils\vrad_launcher\vrad_launcher.vcxproj", "{55392CA2-C58E-42F2-BFBA-8DB8C02D4352}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vtaexp", "utils\vtaexp\vtaexp.vcxproj", "{018A7CD6-C40A-463D-86B1-2AF2D0F4B2CD}"
 EndProject
@@ -264,7 +264,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vtfscrew", "utils\vtfscrew\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vvis", "utils\vvis\vvis.vcproj", "{5B065E70-6EE0-4B47-BA64-113D2F81220D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vvis_launcher", "utils\vvis_launcher\vvis_launcher.vcxproj", "{A709ECE2-1FBE-4598-9420-88F4D88991B1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vvis_launcher", "utils\vvis_launcher\vvis_launcher.vcxproj", "{A709ECE2-1FBE-4598-9420-88F4D88991B1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vweightexp", "utils\vweightexp\vweightexp.vcxproj", "{6233E118-9880-4484-8243-AB7BE7AF96A1}"
 EndProject

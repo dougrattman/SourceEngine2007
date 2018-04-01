@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Places "detail" objects which are client-only renderable things
 //
@@ -33,7 +33,6 @@
 // at all.
 #define MAX_DETAIL_SPRITES_PER_FACE 65535
 
- 
 #include "tier0/include/memdbgon.h"
 
 // IMPLEMENT_MAPCLASS(DetailObjects)
@@ -118,8 +117,8 @@ void DetailObjects::ParseDetailGroup(int detailId, KeyValues *pGroupKeyValues) {
           model.m_Tex[1].Init();
 
           float x = 0, y = 0, flWidth = 64, flHeight = 64, flTextureSize = 512;
-          int nValid = sscanf(pSpriteData, "%f %f %f %f %f", &x, &y, &flWidth,
-                              &flHeight, &flTextureSize);
+          int nValid = sscanf_s(pSpriteData, "%f %f %f %f %f", &x, &y, &flWidth,
+                                &flHeight, &flTextureSize);
           if ((nValid != 5) || (flTextureSize == 0)) {
             Error(
                 "Invalid arguments to \"sprite\" in detail.vbsp (model %s)!\n",
@@ -136,7 +135,7 @@ void DetailObjects::ParseDetailGroup(int detailId, KeyValues *pGroupKeyValues) {
 
           pSpriteData = pIter->GetString("spritesize", 0);
           if (pSpriteData) {
-            sscanf(pSpriteData, "%f %f %f %f", &x, &y, &flWidth, &flHeight);
+            sscanf_s(pSpriteData, "%f %f %f %f", &x, &y, &flWidth, &flHeight);
 
             float ox = flWidth * x;
             float oy = flHeight * y;
@@ -151,7 +150,7 @@ void DetailObjects::ParseDetailGroup(int detailId, KeyValues *pGroupKeyValues) {
               pIter->GetFloat("spriterandomscale", 0.0f);
 
           // sway is a percent of max sway, cl_detail_max_sway
-          float flSway = std::clamp(pIter->GetFloat("sway", 0.0f), 0.0, 1.0);
+          float flSway = std::clamp(pIter->GetFloat("sway", 0.0f), 0.0f, 1.0f);
           model.m_SwayAmount = (unsigned char)(255.0 * flSway);
 
           // shape angle
@@ -162,7 +161,7 @@ void DetailObjects::ParseDetailGroup(int detailId, KeyValues *pGroupKeyValues) {
           // for the tri shape, this is the distance from the origin to the
           // center of a side
           float flShapeSize =
-              std::clamp(pIter->GetFloat("shape_size", 0.0f), 0.0, 1.0);
+              std::clamp(pIter->GetFloat("shape_size", 0.0f), 0.0f, 1.0f);
           model.m_ShapeSize = (unsigned char)(255.0 * flShapeSize);
         }
       }
@@ -462,8 +461,8 @@ void DetailObjects::EmitDetailObjectsOnFace(CMapFace *pMapFace,
 
     // Calculate the detail prop density based on the expected density and the
     // tesselated triangle area
-    int numSamples = std::clamp(area * detail.m_Density * 0.000001, 0,
-                           MAX_DETAIL_SPRITES_PER_FACE);
+    int numSamples = std::clamp((int)(area * detail.m_Density * 0.000001), 0,
+                                MAX_DETAIL_SPRITES_PER_FACE);
 
     // For each possible sample, attempt to randomly place a detail object there
     for (int i = 0; i < numSamples; ++i) {

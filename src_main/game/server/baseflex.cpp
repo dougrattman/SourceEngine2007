@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -62,50 +62,50 @@ REGISTER_SEND_PROXY_NON_MODIFIED_POINTER(SendProxy_FlexWeights);
 
 // SendTable stuff.
 IMPLEMENT_SERVERCLASS_ST(CBaseFlex, DT_BaseFlex)
-// Note we can't totally disabled flexweights transmission since some things
-// like blink and eye tracking are still done by the server
-SendPropArray3(SENDINFO_ARRAY3(m_flexWeight),
-               SendPropFloat(SENDINFO_ARRAY(m_flexWeight), 12, SPROP_ROUNDDOWN,
-                             0.0f, 1.0f) /*, SendProxy_FlexWeights*/),
-    SendPropInt(SENDINFO(m_blinktoggle), 1, SPROP_UNSIGNED),
-    SendPropVector(SENDINFO(m_viewtarget), -1, SPROP_COORD),
+  // Note we can't totally disabled flexweights transmission since some things
+  // like blink and eye tracking are still done by the server
+  SendPropArray3(
+      SENDINFO_ARRAY3(m_flexWeight),
+      SendPropFloat(SENDINFO_ARRAY(m_flexWeight), 12, SPROP_ROUNDDOWN, 0.0f,
+                    1.0f) /*, SendProxy_FlexWeights*/),
+      SendPropInt(SENDINFO(m_blinktoggle), 1, SPROP_UNSIGNED),
+      SendPropVector(SENDINFO(m_viewtarget), -1, SPROP_COORD),
 #ifdef HL2_DLL
-    SendPropFloat(SENDINFO_VECTORELEM(m_vecViewOffset, 0), 0, SPROP_NOSCALE),
-    SendPropFloat(SENDINFO_VECTORELEM(m_vecViewOffset, 1), 0, SPROP_NOSCALE),
-    SendPropFloat(SENDINFO_VECTORELEM(m_vecViewOffset, 2), 0, SPROP_NOSCALE),
+      SendPropFloat(SENDINFO_VECTORELEM(m_vecViewOffset, 0), 0, SPROP_NOSCALE),
+      SendPropFloat(SENDINFO_VECTORELEM(m_vecViewOffset, 1), 0, SPROP_NOSCALE),
+      SendPropFloat(SENDINFO_VECTORELEM(m_vecViewOffset, 2), 0, SPROP_NOSCALE),
 
-    SendPropVector(SENDINFO(m_vecLean), -1, SPROP_COORD),
-    SendPropVector(SENDINFO(m_vecShift), -1, SPROP_COORD),
+      SendPropVector(SENDINFO(m_vecLean), -1, SPROP_COORD),
+      SendPropVector(SENDINFO(m_vecShift), -1, SPROP_COORD),
 #endif
 
-    END_SEND_TABLE()
+END_SEND_TABLE()
 
-        BEGIN_DATADESC(CBaseFlex)
+BEGIN_DATADESC(CBaseFlex)
 
-    //						m_blinktoggle
-    DEFINE_ARRAY(m_flexWeight, FIELD_FLOAT, MAXSTUDIOFLEXCTRL),
-    DEFINE_FIELD(m_viewtarget, FIELD_POSITION_VECTOR),
-    //						m_SceneEvents
-    //						m_FileList
-    DEFINE_FIELD(m_flAllowResponsesEndTime, FIELD_TIME),
-    //						m_ActiveChoreoScenes
-    // DEFINE_FIELD( m_LocalToGlobal, CUtlRBTree < FS_LocalToGlobal_t , unsigned
-    // short > ),
-    //						m_bUpdateLayerPriorities
-    DEFINE_FIELD(m_flLastFlexAnimationTime, FIELD_TIME),
+  //						m_blinktoggle
+  DEFINE_ARRAY(m_flexWeight, FIELD_FLOAT, MAXSTUDIOFLEXCTRL),
+      DEFINE_FIELD(m_viewtarget, FIELD_POSITION_VECTOR),
+      //						m_SceneEvents
+      //						m_FileList
+      DEFINE_FIELD(m_flAllowResponsesEndTime, FIELD_TIME),
+      //						m_ActiveChoreoScenes
+      // DEFINE_FIELD( m_LocalToGlobal, CUtlRBTree < FS_LocalToGlobal_t ,
+      // unsigned short > ),
+      //						m_bUpdateLayerPriorities
+      DEFINE_FIELD(m_flLastFlexAnimationTime, FIELD_TIME),
 
 #ifdef HL2_DLL
-    // DEFINE_FIELD( m_vecPrevOrigin, FIELD_POSITION_VECTOR ),
-    // DEFINE_FIELD( m_vecPrevVelocity, FIELD_VECTOR ),
-    DEFINE_FIELD(m_vecLean, FIELD_VECTOR),
-    DEFINE_FIELD(m_vecShift, FIELD_VECTOR),
+      // DEFINE_FIELD( m_vecPrevOrigin, FIELD_POSITION_VECTOR ),
+      // DEFINE_FIELD( m_vecPrevVelocity, FIELD_VECTOR ),
+      DEFINE_FIELD(m_vecLean, FIELD_VECTOR),
+      DEFINE_FIELD(m_vecShift, FIELD_VECTOR),
 #endif
 
-END_DATADESC
-()
+END_DATADESC()
 
-    LINK_ENTITY_TO_CLASS(funCBaseFlex,
-                         CBaseFlex);  // meaningless independant class!!
+LINK_ENTITY_TO_CLASS(funCBaseFlex,
+                     CBaseFlex);  // meaningless independant class!!
 
 CBaseFlex::CBaseFlex(void) : m_LocalToGlobal(0, 0, FlexSettingLessFunc) {
 #ifdef _DEBUG
@@ -2334,7 +2334,8 @@ void CFlexCycler::Think(void) {
             Msg("\n");
             flex_expression.SetValue("");
           } else {
-            if (sscanf(pszExpression, "%31s", szTemp) == 1) {
+            if (sscanf_s(pszExpression, "%31s", szTemp,
+                         SOURCE_ARRAYSIZE(szTemp)) == 1) {
               m_flexnum = LookupFlex(szTemp);
 
               if (m_flexnum != -1 && m_flextarget[m_flexnum] != 1) {

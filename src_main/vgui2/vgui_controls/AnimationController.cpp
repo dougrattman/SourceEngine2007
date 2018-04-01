@@ -1,9 +1,8 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 
-#include "tier1/keyvalues.h"
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
@@ -11,19 +10,19 @@
 #include <vgui_controls/AnimationController.h>
 #include "FileSystem.h"
 #include "FileSystem_Helpers.h"
+#include "tier1/keyvalues.h"
 
 #include <cmath>
 #include <cstdio>
 #include "UtlDict.h"
-#include "tier1/characterset.h"
 #include "mathlib/mathlib.h"
+#include "tier1/characterset.h"
 #include "tier1/mempool.h"
 
- 
 #include "tier0/include/dbg.h"
 // for SRC
-#include "tier0/include/memdbgon.h"
 #include <vstdlib/random.h>
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 
@@ -353,9 +352,9 @@ bool AnimationController::ParseScriptFile(char *pMem, int length) {
           SetupPosition(cmdAnimate, &cmdAnimate.target.a, token, screenTall);
         } else {
           // parse the floating point values right out
-          if (0 == sscanf(token, "%f %f %f %f", &cmdAnimate.target.a,
-                          &cmdAnimate.target.b, &cmdAnimate.target.c,
-                          &cmdAnimate.target.d)) {
+          if (0 == sscanf_s(token, "%f %f %f %f", &cmdAnimate.target.a,
+                            &cmdAnimate.target.b, &cmdAnimate.target.c,
+                            &cmdAnimate.target.d)) {
             // could be referencing a value in the scheme file, lookup
             Color col = scheme->GetColor(token, Color(0, 0, 0, 0));
             cmdAnimate.target.a = col[0];
@@ -1213,7 +1212,7 @@ AnimationController::Value_t AnimationController::GetValue(
       }
     } else {
       //	Assert(!("Unhandlable var in
-      //AnimationController::GetValue())"));
+      // AnimationController::GetValue())"));
     }
     outputData->deleteThis();
   }
@@ -1283,7 +1282,7 @@ void AnimationController::SetValue(ActiveAnimation_t &anim, Panel *panel,
     }
     if (!panel->SetInfo(inputData)) {
       //	Assert(!("Unhandlable var in
-      //AnimationController::SetValue())"));
+      // AnimationController::SetValue())"));
     }
     inputData->deleteThis();
   }

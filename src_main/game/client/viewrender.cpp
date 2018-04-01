@@ -1290,7 +1290,7 @@ static void GetFogColor(fogparams_t *pFogParams, float *pColor) {
 
   const char *fogColorString = fog_color.GetString();
   if (fog_override.GetInt() && fogColorString) {
-    sscanf(fogColorString, "%f%f%f", pColor, pColor + 1, pColor + 2);
+    sscanf_s(fogColorString, "%f%f%f", pColor, pColor + 1, pColor + 2);
   } else {
     float flPrimaryColor[3] = {pFogParams->colorPrimary.GetR(),
                                pFogParams->colorPrimary.GetG(),
@@ -1440,7 +1440,7 @@ static void GetSkyboxFogColor(float *pColor) {
 
   const char *fogColorString = fog_colorskybox.GetString();
   if (fog_override.GetInt() && fogColorString) {
-    sscanf(fogColorString, "%f%f%f", pColor, pColor + 1, pColor + 2);
+    sscanf_s(fogColorString, "%f%f%f", pColor, pColor + 1, pColor + 2);
   } else {
     if (local->m_skybox3d.fog.blend) {
       //

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <ctype.h>
 #include "Color.h"
@@ -2596,7 +2596,7 @@ void CDmaDecorator<T, B>::Init(CDmElement *pOwner, const char *pAttributeName,
   this->m_pAttribute = pOwner->AddExternalAttribute(
       pAttributeName, CDmAttributeInfo<CUtlVector<T> >::AttributeType(),
       &this->Value());
-  Assert(m_pAttribute);
+  Assert(this->m_pAttribute);
   if (nFlags) {
     this->m_pAttribute->AddFlag(nFlags);
   }

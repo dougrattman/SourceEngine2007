@@ -99,7 +99,6 @@ extern ConVar commentary;
 
 IUploadGameStats *gamestatsuploader = NULL;
 
- 
 #include "tier0/include/memdbgon.h"
 
 CTimedEventMgr g_NetworkPropertyEventMgr;
@@ -243,7 +242,8 @@ CBasePlayer *UTIL_GetCommandClient(void) {
 
 bool UTIL_GetModDir(char *lpszTextOut, unsigned int nSize) {
   // Must pass in a buffer at least large enough to hold the desired string
-  const char *pGameDir = CommandLine()->ParmValue("-game", "hl2");
+  const char *pGameDir = CommandLine()->ParmValue(
+      source::tier0::command_line_switches::kGamePath, "hl2");
   Assert(strlen(pGameDir) <= nSize);
   if (strlen(pGameDir) > nSize) return false;
 

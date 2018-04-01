@@ -427,9 +427,9 @@ BOOL COP_Entity::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT *pResult) {
       LPNMLISTVIEW pListView = (LPNMLISTVIEW)lParam;
 
       // Now sort by this column.
-      m_iSortColumn =
-          std::max(0, std::min(pListView->iSubItem,
-                               SOURCE_ARRAYSIZE(g_ColumnSortFunctions) - 1));
+      m_iSortColumn = std::max(
+          0, std::min(pListView->iSubItem,
+                      (int)SOURCE_ARRAYSIZE(g_ColumnSortFunctions) - 1));
       ResortItems();
     }
   }
@@ -2081,7 +2081,7 @@ void COP_Entity::OnChangeKeyorValue(void) {
   // overwrite ours later.
   if (V_stricmp(szKey, SPAWNFLAGS_KEYNAME) == 0) {
     unsigned long value;
-    sscanf(szValue, "%lu", &value);
+    sscanf_s(szValue, "%lu", &value);
     m_pFlagsPage->OnUpdateSpawnFlags(value);
   }
 
@@ -2197,7 +2197,7 @@ void COP_Entity::AssignClassDefaults(GDclass *pClass, GDclass *pOldClass) {
     if (!_strcmpi(pVar->GetName(), SPAWNFLAGS_KEYNAME)) {
       unsigned long nOriginalFlagsValue = 0;
       if (p) {
-        sscanf(p, "%lu", &nOriginalFlagsValue);
+        sscanf_s(p, "%lu", &nOriginalFlagsValue);
       }
 
       unsigned long nCurrent = nOriginalFlagsValue;
@@ -2693,7 +2693,7 @@ void LoadFileSystemDialogModule() {
   Assert(!g_pFSDialogModule);
 
   // Load the module with the file system open dialog.
-  const char *pDLLName = "FileSystemOpenDialog.dll";
+  const char *pDLLName = "filesystemopendialog.dll";
   g_pFSDialogModule = Sys_LoadModule(pDLLName);
   if (!g_pFSDialogModule ||
       (g_FSDialogFactory = Sys_GetFactory(g_pFSDialogModule)) == NULL) {
@@ -3670,10 +3670,10 @@ bool COP_Entity::CustomDrawItemValue(const LPDRAWITEMSTRUCT p,
     if (pValue) {
       int r, g, b;
       if (pVar->GetType() == ivColor255) {
-        sscanf(pValue, "%d %d %d", &r, &g, &b);
+        sscanf_s(pValue, "%d %d %d", &r, &g, &b);
       } else {
         float fr, fg, fb;
-        sscanf(pValue, "%f %f %f", &fr, &fg, &fb);
+        sscanf_s(pValue, "%f %f %f", &fr, &fg, &fb);
         r = (int)(fr * 255.0);
         g = (int)(fg * 255.0);
         b = (int)(fb * 255.0);
@@ -3706,7 +3706,7 @@ void COP_Entity::OnUpdateSpawnFlags(unsigned long preserveMask,
   if (!p) return;
 
   unsigned long oldValue = 0;
-  sscanf(p, "%lu", &oldValue);
+  sscanf_s(p, "%lu", &oldValue);
 
   unsigned long newValue =
       (oldValue & preserveMask) | (newValues & ~preserveMask);

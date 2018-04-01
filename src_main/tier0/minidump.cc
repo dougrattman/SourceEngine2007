@@ -5,8 +5,8 @@
 #ifdef OS_WIN
 #include <ctime>
 
+#include "base/include/unique_module_ptr.h"
 #include "base/include/windows/scoped_se_translator.h"
-#include "base/include/windows/unique_module_ptr.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 #include "tier0/include/valve_off.h"
@@ -19,14 +19,13 @@ static i32 g_nMinidumpsWritten = 0;
 static bool g_bInException = false;
 
 // Creates a new file and dumps the exception info into it.
-u32 WriteMiniDumpUsingExceptionInfo(u32 se_code, EXCEPTION_POINTERS *se_info,
-                                    MINIDUMP_TYPE minidump_type,
-                                    wch *dump_file_name,
-                                    usize dump_file_name_size) {
+source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
+    u32 se_code, EXCEPTION_POINTERS *se_info, MINIDUMP_TYPE minidump_type,
+    wch *dump_file_name, usize dump_file_name_size) {
   if (dump_file_name && dump_file_name_size) *dump_file_name = L'\0';
 
-  auto [dbghelp_module, error_code] =
-      source::windows::unique_module_ptr::from_load_library(
+  auto [dbghelp_module, errno_info] =
+      source::unique_module_ptr::from_load_library(
           L"DbgHelp.dll", LOAD_LIBRARY_SEARCH_SYSTEM32);
 
   using MiniDumpWriteDumpFn =
@@ -37,40 +36,40 @@ u32 WriteMiniDumpUsingExceptionInfo(u32 se_code, EXCEPTION_POINTERS *se_info,
                      _In_opt_ PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
   MiniDumpWriteDumpFn mini_dump_write_dump{nullptr};
 
-  if (error_code == NO_ERROR && dbghelp_module) {
-    std::tie(mini_dump_write_dump, error_code) =
+  if (errno_info.is_success() && dbghelp_module) {
+    std::tie(mini_dump_write_dump, errno_info) =
         dbghelp_module.get_address_as<MiniDumpWriteDumpFn>("MiniDumpWriteDump");
   }
 
   // Create a unique filename for the minidump based on the current time and
   // module name.
   time_t time_now{time(nullptr)};
-  tm local_time_now;
+  tm local_time_now{0};
 
-  if (error_code == NO_ERROR) {
-    error_code = localtime_s(&local_time_now, &time_now);
-  }
+  // TODO(d.rattman): Convert POSIX errno => windows errno code.
+  source::windows::windows_errno_code error_code{
+      errno_info.is_success() ? localtime_s(&local_time_now, &time_now) : S_OK};
 
   // Strip off the rest of the path from the .exe name.
   wch module_name[SOURCE_MAX_PATH];
 
-  if (error_code == NO_ERROR) {
+  if (error_code == S_OK) {
     SetLastError(NOERROR);
     GetModuleFileNameW(nullptr, module_name, SOURCE_ARRAYSIZE(module_name));
 
-    error_code = GetLastError();
+    error_code = source::windows::windows_errno_code_last_error();
   }
 
   wch file_name[SOURCE_MAX_PATH];
   HANDLE minidump_file{nullptr};
 
-  if (error_code == NO_ERROR) {
+  if (error_code == S_OK) {
     wch *stripped_module_name = wcsrchr(module_name, L'.');
     if (stripped_module_name) *stripped_module_name = L'\0';
 
     stripped_module_name = wcsrchr(module_name, L'\\');
     // Move past the last slash.
-    if (stripped_module_name) stripped_module_name++;
+    if (stripped_module_name) ++stripped_module_name;
 
     // Can't use the normal string functions since we're in tier0.
     _snwprintf_s(file_name, SOURCE_ARRAYSIZE(file_name),
@@ -88,11 +87,12 @@ u32 WriteMiniDumpUsingExceptionInfo(u32 se_code, EXCEPTION_POINTERS *se_info,
     minidump_file =
         CreateFileW(file_name, GENERIC_WRITE, FILE_SHARE_WRITE, nullptr,
                     CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-    error_code =
-        minidump_file != INVALID_HANDLE_VALUE ? NOERROR : GetLastError();
+    error_code = minidump_file != INVALID_HANDLE_VALUE
+                     ? S_OK
+                     : source::windows::windows_errno_code_last_error();
   }
 
-  if (error_code == NOERROR) {
+  if (error_code == S_OK) {
     // Dump the exception information into the file.
     MINIDUMP_EXCEPTION_INFORMATION ex_info;
     ex_info.ThreadId = GetCurrentThreadId();
@@ -110,12 +110,14 @@ u32 WriteMiniDumpUsingExceptionInfo(u32 se_code, EXCEPTION_POINTERS *se_info,
     // HRESULT_FROM_WIN32(ERROR_CANCELLED).
     // See
     // https://msdn.microsoft.com/en-us/library/windows/desktop/ms680360(v=vs.85).aspx
-    error_code = was_written_minidump ? NOERROR : GetLastError();
+    error_code = was_written_minidump
+                     ? S_OK
+                     : source::windows::windows_errno_code_last_error();
 
     CloseHandle(minidump_file);
   }
 
-  if (error_code == NOERROR) {
+  if (error_code == S_OK) {
     if (dump_file_name) {
       wcscpy_s(dump_file_name, dump_file_name_size, file_name);
     }
@@ -140,8 +142,8 @@ static void Tier0WriteMiniDump(u32 unstructured_exception_code,
   auto minidump_type = static_cast<MINIDUMP_TYPE>(
       MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory);
 
-  if (!WriteMiniDumpUsingExceptionInfo(unstructured_exception_code,
-                                       exception_infos, minidump_type)) {
+  if (!source::windows::succeeded(WriteMiniDumpUsingExceptionInfo(
+          unstructured_exception_code, exception_infos, minidump_type))) {
     minidump_type = MiniDumpWithDataSegs;
     WriteMiniDumpUsingExceptionInfo(unstructured_exception_code,
                                     exception_infos, minidump_type);

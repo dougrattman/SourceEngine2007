@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================//
@@ -10,33 +10,25 @@
 
 #include <assert.h>
 
-#pragma optimize( "", off )
+#pragma optimize("", off)
 
-#pragma pack( push, thing )
-#pragma pack( 4 )
+#pragma pack(push, thing)
+#pragma pack(4)
 static long g_cw, g_single_cw, g_highchop_cw, g_full_cw, g_ceil_cw, g_pushed_cw;
-static struct
-{
-	long dummy[8];
-} g_fpenv;
-#pragma pack( pop, thing )
+static struct { long dummy[8]; } g_fpenv;
+#pragma pack(pop, thing)
 
-	
-void __declspec ( naked ) MaskExceptions()
-{
-	_asm
-	{
+void __declspec(naked) MaskExceptions() {
+  __asm {
 		fnstenv ds:dword ptr[g_fpenv]
 		or ds:dword ptr[g_fpenv],03Fh
 		fldenv ds:dword ptr[g_fpenv]
 		ret
-	}
+  }
 }
 
-void __declspec ( naked ) Sys_SetFPCW()
-{
-	_asm
-	{
+void __declspec(naked) Sys_SetFPCW() {
+  __asm {
 		fnstcw ds:word ptr[g_cw]
 		mov eax,ds:dword ptr[g_cw]
 		and ah,0F0h
@@ -50,205 +42,177 @@ void __declspec ( naked ) Sys_SetFPCW()
 		or ah,008h
 		mov ds:dword ptr[g_ceil_cw],eax
 		ret
-	}
+  }
 }
 
-void __declspec ( naked ) Sys_PushFPCW_SetHigh()
-{
-	_asm
-	{
+void __declspec(naked) Sys_PushFPCW_SetHigh() {
+  __asm {
 		fnstcw ds:word ptr[g_pushed_cw]
 		fldcw ds:word ptr[g_full_cw]
 		ret
-	}
+  }
 }
 
-void __declspec ( naked ) Sys_PopFPCW()
-{
-	_asm
-	{
+void __declspec(naked) Sys_PopFPCW() {
+  __asm {
 		fldcw ds:word ptr[g_pushed_cw]
 		ret
-	}
+  }
 }
 
-#pragma optimize( "", on )
+#pragma optimize("", on)
 
 //-----------------------------------------------------------------------------
 // Purpose: Implements high precision clock
 // TODO:  Make into an interface?
 //-----------------------------------------------------------------------------
-class CSysClock
-{
-public:
-	// Construction
-							CSysClock( void );
+class CSysClock {
+ public:
+  // Construction
+  CSysClock(void);
 
-	// Initialization
-	void					Init( void );
-	void					SetStartTime( void );
+  // Initialization
+  void Init(void);
+  void SetStartTime(void);
 
-	// Sample the clock
-	double					GetTime( void );
+  // Sample the clock
+  double GetTime(void);
 
-private:
-	// High performance clock frequency
-	double					m_dClockFrequency;
-	// Current accumulated time
-	double					m_dCurrentTime;
-	// How many bits to shift raw 64 bit sample count by
-	int						m_nTimeSampleShift;
-	// Previous 32 bit sample count
-	unsigned int			m_uiPreviousTime;
+ private:
+  // High performance clock frequency
+  double m_dClockFrequency;
+  // Current accumulated time
+  double m_dCurrentTime;
+  // How many bits to shift raw 64 bit sample count by
+  int m_nTimeSampleShift;
+  // Previous 32 bit sample count
+  unsigned int m_uiPreviousTime;
 
-	bool					m_bInitialized;
+  bool m_bInitialized;
 };
 
 static CSysClock g_Clock;
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CSysClock::CSysClock( void )
-{
-	m_bInitialized = false;
-}
+CSysClock::CSysClock(void) { m_bInitialized = false; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Initialize the clock
 //-----------------------------------------------------------------------------
-void CSysClock::Init( void )
-{
-	BOOL success;
-	LARGE_INTEGER	PerformanceFreq;
-	unsigned int	lowpart, highpart;
+void CSysClock::Init(void) {
+  BOOL success;
+  LARGE_INTEGER PerformanceFreq;
+  unsigned int lowpart, highpart;
 
-	MaskExceptions ();
-	Sys_SetFPCW ();
+  MaskExceptions();
+  Sys_SetFPCW();
 
-	// Start clock at zero
-	m_dCurrentTime			= 0.0;
+  // Start clock at zero
+  m_dCurrentTime = 0.0;
 
-	success = QueryPerformanceFrequency( &PerformanceFreq );
-	assert( success );
+  success = QueryPerformanceFrequency(&PerformanceFreq);
+  assert(success);
 
-	// get 32 out of the 64 time bits such that we have around
-	// 1 microsecond resolution
-	lowpart		= (unsigned int)PerformanceFreq.LowPart;
-	highpart	= (unsigned int)PerformanceFreq.HighPart;
-	
-	m_nTimeSampleShift	= 0;
+  // get 32 out of the 64 time bits such that we have around
+  // 1 microsecond resolution
+  lowpart = (unsigned int)PerformanceFreq.LowPart;
+  highpart = (unsigned int)PerformanceFreq.HighPart;
 
-	while ( highpart || ( lowpart > 2000000.0 ) )
-	{
-		m_nTimeSampleShift++;
-		lowpart >>= 1;
-		lowpart |= (highpart & 1) << 31;
-		highpart >>= 1;
-	}
-	
-	m_dClockFrequency = 1.0 / (double)lowpart;
+  m_nTimeSampleShift = 0;
 
-	// Get initial sample
-	unsigned int		temp;
-	LARGE_INTEGER		PerformanceCount;
-	QueryPerformanceCounter( &PerformanceCount );
-	if ( !m_nTimeSampleShift )
-	{
-		temp = (unsigned int)PerformanceCount.LowPart;
-	}
-	else
-	{
-		// Rotate counter to right by m_nTimeSampleShift places
-		temp = ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
-			   ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
-	}
+  while (highpart || (lowpart > 2000000.0)) {
+    m_nTimeSampleShift++;
+    lowpart >>= 1;
+    lowpart |= (highpart & 1) << 31;
+    highpart >>= 1;
+  }
 
-	// Set first time stamp
-	m_uiPreviousTime = temp;
+  m_dClockFrequency = 1.0 / (double)lowpart;
 
-	m_bInitialized = true;
+  // Get initial sample
+  unsigned int temp;
+  LARGE_INTEGER PerformanceCount;
+  QueryPerformanceCounter(&PerformanceCount);
+  if (!m_nTimeSampleShift) {
+    temp = (unsigned int)PerformanceCount.LowPart;
+  } else {
+    // Rotate counter to right by m_nTimeSampleShift places
+    temp =
+        ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
+        ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
+  }
 
-	SetStartTime();
+  // Set first time stamp
+  m_uiPreviousTime = temp;
+
+  m_bInitialized = true;
+
+  SetStartTime();
 }
 
-void CSysClock::SetStartTime( void )
-{
-	GetTime();
+void CSysClock::SetStartTime(void) {
+  GetTime();
 
-	m_dCurrentTime = 0.0;
+  m_dCurrentTime = 0.0;
 
-	m_uiPreviousTime = ( unsigned int )m_dCurrentTime;
+  m_uiPreviousTime = (unsigned int)m_dCurrentTime;
 }
 
-double CSysClock::GetTime( void )
-{
-	LARGE_INTEGER		PerformanceCount;
-	unsigned int		temp, t2;
-	double				time;
-	
-	if ( !m_bInitialized )
-	{
-		return 0.0;
-	}
+double CSysClock::GetTime(void) {
+  LARGE_INTEGER PerformanceCount;
+  unsigned int temp, t2;
+  double time;
 
-	Sys_PushFPCW_SetHigh();
+  if (!m_bInitialized) {
+    return 0.0;
+  }
 
-	// Get sample counter
-	QueryPerformanceCounter( &PerformanceCount );
+  Sys_PushFPCW_SetHigh();
 
-	if ( !m_nTimeSampleShift )
-	{
-		temp = (unsigned int)PerformanceCount.LowPart;
-	}
-	else
-	{
-		// Rotate counter to right by m_nTimeSampleShift places
-		temp = ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
-			   ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
-	}
+  // Get sample counter
+  QueryPerformanceCounter(&PerformanceCount);
 
-	// check for turnover or backward time
-	if ( ( temp <= m_uiPreviousTime ) && 
-		( ( m_uiPreviousTime - temp ) < 0x10000000) )
-	{
-		m_uiPreviousTime = temp;	// so we can't get stuck
-	}
-	else
-	{
-		// gap in performance clocks
-		t2 = temp - m_uiPreviousTime;
+  if (!m_nTimeSampleShift) {
+    temp = (unsigned int)PerformanceCount.LowPart;
+  } else {
+    // Rotate counter to right by m_nTimeSampleShift places
+    temp =
+        ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
+        ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
+  }
 
-		// Convert to time using frequencey of clock
-		time = (double)t2 * m_dClockFrequency;
+  // check for turnover or backward time
+  if ((temp <= m_uiPreviousTime) && ((m_uiPreviousTime - temp) < 0x10000000)) {
+    m_uiPreviousTime = temp;  // so we can't get stuck
+  } else {
+    // gap in performance clocks
+    t2 = temp - m_uiPreviousTime;
 
-		// Remember old time
-		m_uiPreviousTime = temp;
+    // Convert to time using frequencey of clock
+    time = (double)t2 * m_dClockFrequency;
 
-		// Increment clock
-		m_dCurrentTime += time;
-	}
+    // Remember old time
+    m_uiPreviousTime = temp;
 
-	Sys_PopFPCW();
+    // Increment clock
+    m_dCurrentTime += time;
+  }
 
-	// Convert to float
-    return m_dCurrentTime;
+  Sys_PopFPCW();
 
+  // Convert to float
+  return m_dCurrentTime;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Sample the high-precision clock
 // Output : double
 //-----------------------------------------------------------------------------
-double Plat_FloatTime( void )
-{
-	return g_Clock.GetTime();
-}
+double Plat_FloatTime(void) { return g_Clock.GetTime(); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Initialize high-precision clock
 //-----------------------------------------------------------------------------
-void Sys_InitFloatTime( void )
-{
-	g_Clock.Init();
-}
+void Sys_InitFloatTime(void) { g_Clock.Init(); }

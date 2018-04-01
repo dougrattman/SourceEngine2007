@@ -320,7 +320,7 @@ void CMapAxisHandle::OnParentKeyChanged(const char *szKey,
     Vector vecOrigin1;
     Vector vecOrigin2;
 
-    sscanf(szValue, "%f %f %f, %f %f %f", &vecOrigin1.x, &vecOrigin1.y,
+    sscanf_s(szValue, "%f %f %f, %f %f %f", &vecOrigin1.x, &vecOrigin1.y,
            &vecOrigin1.z, &vecOrigin2.x, &vecOrigin2.y, &vecOrigin2.z);
 
     m_Point[0].SetOrigin(vecOrigin1);

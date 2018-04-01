@@ -1415,7 +1415,7 @@ void CMaterialSystem::WriteConfigurationInfoToConVars(
     pConfigName += 7;
     // check if legal
     bool bLegalVar = false;
-    for (int i = 0; i < NELEMS(pConvarsAllowedInDXSupport); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(pConvarsAllowedInDXSupport); i++) {
       if (!_stricmp(pConvarsAllowedInDXSupport[i], pConfigName)) {
         bLegalVar = true;
         break;

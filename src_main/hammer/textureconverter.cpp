@@ -462,7 +462,7 @@ void CTextureConverter::RescaleFaceTexture(CMapFace *pFace,
   char line[512];
   int nScanned = 0;
   if (g_pFullFileSystem->ReadLine(line, sizeof(line), fp)) {
-    nScanned = sscanf(line, "%d %d", &nOldWidth, &nOldHeight);
+    nScanned = sscanf_s(line, "%d %d", &nOldWidth, &nOldHeight);
   }
   g_pFileSystem->Close(fp);
   if (nScanned != 2 || nOldWidth < 0 || nOldHeight < 0 || nOldWidth > 5000 ||

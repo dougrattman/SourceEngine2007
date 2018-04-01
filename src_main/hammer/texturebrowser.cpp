@@ -381,7 +381,7 @@ BOOL CTextureBrowser::OnInitDialog()
 	if (!str.IsEmpty())
 	{
 		CRect r;
-		sscanf(str, "%d %d %d %d", &r.left, &r.top, &r.right, &r.bottom);
+		sscanf_s(str, "%d %d %d %d", &r.left, &r.top, &r.right, &r.bottom);
 
 		if (r.left < 0)
 		{

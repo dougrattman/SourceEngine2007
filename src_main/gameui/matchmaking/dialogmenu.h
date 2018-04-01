@@ -1,13 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DIALOGMENU_H
 #define DIALOGMENU_H
 
-#if defined(_WIN32) && !defined(_X360)
+#if defined(_WIN32)
 #include "base/include/windows/windows_light.h"  // FILETIME
 #endif
 

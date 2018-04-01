@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "builddisp.h"
 #include "disp_vbsp.h"
@@ -66,13 +66,16 @@ int Overlay_GetFromEntity(entity_t *pMapEnt) {
           pMaterialName, OVERLAY_MAP_STRLEN);
     return -1;
   }
-  strcpy(pMapOverlay->szMaterialName, pMaterialName);
+  strcpy_s(pMapOverlay->szMaterialName, pMaterialName);
 
   // Convert the sidelist to side id(s).
   const char *pSideList = ValueForKey(pMapEnt, "sides");
-  char *pTmpList = (char *)_alloca(strlen(pSideList) + 1);
-  strcpy(pTmpList, pSideList);
-  const char *pScan = strtok(pTmpList, " ");
+  size_t size{strlen(pSideList) + 1};
+  char *pTmpList = (char *)_alloca(size);
+  strcpy_s(pTmpList, size, pSideList);
+
+  char *context;
+  const char *pScan = strtok_s(pTmpList, " ", &context);
   if (!pScan) return iAccessorID;
 
   pMapOverlay->aSideList.Purge();
@@ -80,10 +83,10 @@ int Overlay_GetFromEntity(entity_t *pMapEnt) {
 
   do {
     int nSideId;
-    if (sscanf(pScan, "%d", &nSideId) == 1) {
+    if (sscanf_s(pScan, "%d", &nSideId) == 1) {
       pMapOverlay->aSideList.AddToTail(nSideId);
     }
-  } while ((pScan = strtok(NULL, " ")));
+  } while ((pScan = strtok_s(NULL, " ", &context)));
 
   return iAccessorID;
 }

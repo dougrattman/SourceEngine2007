@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vbsp.h"
 
@@ -846,10 +846,10 @@ void SetModelNumbers(void) {
     if (!entities[i].numbrushes) continue;
 
     if (!IsFuncOccluder(i)) {
-      sprintf(value, "*%i", models);
+      sprintf_s(value, "*%i", models);
       models++;
     } else {
-      sprintf(value, "");
+      sprintf_s(value, "");
     }
     SetKeyValue(&entities[i], "model", value);
   }
@@ -892,10 +892,10 @@ void SetLightStyles(void) {
       if (stylenum == MAX_SWITCHED_LIGHTS)
         Error("Too many switched lights (error at light %s), max = %d", t,
               MAX_SWITCHED_LIGHTS);
-      strcpy(lighttargets[j], t);
+      strcpy_s(lighttargets[j], t);
       stylenum++;
     }
-    sprintf(value, "%i", 32 + j);
+    sprintf_s(value, "%i", 32 + j);
     const char *pCurrentStyle = ValueForKey(e, "style");
     // the designer has set a default lightstyle as well as making the light
     // switchable
@@ -1356,9 +1356,9 @@ void ComputeBoundsNoSkybox() {
     const char *pEntity = ValueForKey(&entities[i], "classname");
     if (!strcmp(pEntity, "worldspawn")) {
       char string[32];
-      sprintf(string, "%i %i %i", (int)mins[0], (int)mins[1], (int)mins[2]);
+      sprintf_s(string, "%i %i %i", (int)mins[0], (int)mins[1], (int)mins[2]);
       SetKeyValue(&entities[i], "world_mins", string);
-      sprintf(string, "%i %i %i", (int)maxs[0], (int)maxs[1], (int)maxs[2]);
+      sprintf_s(string, "%i %i %i", (int)maxs[0], (int)maxs[1], (int)maxs[2]);
       SetKeyValue(&entities[i], "world_maxs", string);
       break;
     }

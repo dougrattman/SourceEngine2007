@@ -477,13 +477,6 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
 
     is_running_simulation_ = false;
 
-    // Initialize the FPU control word
-#if !defined(SWDS)
-    _asm { fninit }
-#endif
-
-    SetupFPUControlWord();
-
     // This creates the videomode singleton object, it doesn't depend on the
     // registry
     VideoMode_Create();
@@ -690,7 +683,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     // TODO(d.rattman): Turn videomode + game into IAppSystems?
 
     // Try to create the window
-    COM_TimestampedLog("game->Init");
+    Plat_TimestampedLog("Engine::CEngineAPI::OnStartup: game->Init");
 
     // This has to happen before CreateGameWindow to set up the instance
     // for use by the code that creates the window
@@ -699,7 +692,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     }
 
     // Try to create the window
-    COM_TimestampedLog("videomode->Init");
+    Plat_TimestampedLog("Engine::CEngineAPI::OnStartup: videomode->Init");
 
     // This needs to be after Shader_Init and registry->Init
     // This way mods can have different default video settings
@@ -851,10 +844,6 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     // Get input from attached devices
     g_pInputSystem->PollInputState();
 
-    // NOTE: Under some implementations of Win9x,
-    // dispatching messages can cause the FPU control word to change
-    SetupFPUControlWord();
-
     game->DispatchAllStoredGameMessages();
 
     EatTextModeKeyPresses();
@@ -887,10 +876,6 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
         lIdleCount = 0;
       }
     }
-
-    // NOTE: Under some implementations of Win9x,
-    // dispatching messages can cause the FPU control word to change
-    SetupFPUControlWord();
 
     game->DispatchAllStoredGameMessages();
   }
@@ -940,7 +925,7 @@ int CModAppSystemGroup::Main() {
   } else {
     eng->SetQuitting(IEngine::QUIT_NOTQUITTING);
 
-    COM_TimestampedLog("eng->Load");
+    Plat_TimestampedLog("Engine::CEngineAPI::Main: eng->Load");
 
     // Start up the game engine
     if (eng->Load(false, host_parms.basedir)) {

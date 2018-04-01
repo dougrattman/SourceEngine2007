@@ -86,19 +86,6 @@ SpewOutputFunc_t GetSpewOutputFunc() {
   return DefaultSpewFunc;
 }
 
-void _ExitOnFatalAssert(const ch* pFile, i32 line) {
-  SpewMessage_("Fatal assert failed: %s, line %d.  Application exiting.\n",
-               pFile, line);
-
-  // only write out minidumps if we're not in the debugger
-  if (!Plat_IsInDebugSession()) {
-    WriteMiniDump();
-  }
-
-  DevMsg(1, "ExitOnFatalAssert_\n");
-  exit(EXIT_FAILURE);
-}
-
 void ExitOnFatalAssert_(const ch* pFile, i32 line) {  //-V524
   SpewMessage_("Fatal assert failed: %s, line %d.  Application exiting.\n",
                pFile, line);
@@ -114,16 +101,10 @@ void ExitOnFatalAssert_(const ch* pFile, i32 line) {  //-V524
 
 // Templates to assist in validating pointers:
 
-SOURCE_TIER0_API void _AssertValidReadPtr(void* ptr, i32 count /* = 1*/) {}
-
 SOURCE_TIER0_API void _AssertValidWritePtr(void* ptr, i32 count /* = 1*/) {}
 
-SOURCE_TIER0_API void _AssertValidReadWritePtr(void* ptr, i32 count /* = 1*/) {}
-
 SOURCE_TIER0_API void AssertValidStringPtr(const ch* ptr,
-                                           i32 maxchar /* = 0xFFFFFF */) {
-  Assert(ptr);
-}
+                                           i32 maxchar /* = 0xFFFFFF */) {}
 
 // Should be called only inside a SpewOutputFunc_t, returns groupname, level,
 // color
@@ -150,17 +131,6 @@ const Color& GetSpewOutputColor() {
 }
 
 // Spew functions
-
-void _SpewInfo(SpewType_t type, const ch* pFile, i32 line) {
-  // Only grab the file name. Ignore the path.
-  const ch* pSlash = strrchr(pFile, '\\');
-  const ch* pSlash2 = strrchr(pFile, '/');
-  if (pSlash < pSlash2) pSlash = pSlash2;
-
-  s_pFileName = pSlash ? pSlash + 1 : pFile;
-  s_Line = line;
-  s_SpewType = type;
-}
 
 void SpewInfo_(SpewType_t type, const ch* pFile, i32 line) {  //-V524
   // Only grab the file name. Ignore the path.
@@ -285,30 +255,10 @@ inline bool IsSpewActive(StandardSpewGroup_t group, i32 level) {
   return s_DefaultLevel >= level;
 }
 
-SpewRetval_t _SpewMessage(const ch* pMsgFormat, ...) {
-  va_list args;
-  va_start(args, pMsgFormat);
-  SpewRetval_t ret = SpewMessage_(s_SpewType, pMsgFormat, args);
-  va_end(args);
-  return ret;
-}
-
 SpewRetval_t SpewMessage_(const ch* pMsgFormat, ...) {  //-V524
   va_list args;
   va_start(args, pMsgFormat);
   SpewRetval_t ret = SpewMessage_(s_SpewType, pMsgFormat, args);
-  va_end(args);
-  return ret;
-}
-
-SpewRetval_t _DSpewMessage(const ch* pGroupName, i32 level,
-                           const ch* pMsgFormat, ...) {
-  if (!IsSpewActive(pGroupName, level)) return SPEW_CONTINUE;
-
-  va_list args;
-  va_start(args, pMsgFormat);
-  SpewRetval_t ret = SpewMessage_(s_SpewType, pGroupName, level,
-                                  &s_DefaultOutputColor, pMsgFormat, args);
   va_end(args);
   return ret;
 }
@@ -671,16 +621,6 @@ void SpewActivate(const ch* pGroupName, i32 level) {
   s_pSpewGroups[ind].m_Level = level;
 }
 
-bool Plat_SimpleLog(const ch* file, i32 line) {
-  FILE* f;
-  bool ok = !fopen_s(&f, "simple.log", "at+");
-  if (ok) {
-    ok = fprintf(f, "%s:%i\n", file, line) != 0;
-    fclose(f);
-  }
-  return ok;
-}
-
 #ifdef DBGFLAG_VALIDATE
 void ValidateSpew(CValidator& validator) {
   validator.Push(_T("Spew globals"), nullptr, _T("Global"));
@@ -690,42 +630,6 @@ void ValidateSpew(CValidator& validator) {
   validator.Pop();
 }
 #endif  // DBGFLAG_VALIDATE
-
-// For debugging startup times, etc.
-void COM_TimestampedLog(ch const* fmt, ...) {
-  static f64 last_stamp = 0.0;
-  static bool should_log = false;
-  static bool is_checked = false;
-  static bool is_first_time_write = false;
-
-  if (!is_checked) {
-    should_log = CommandLine()->CheckParm("-profile") ? true : false;
-    is_checked = true;
-  }
-  if (!should_log) return;
-
-  ch log_buffer[1024];
-  va_list arg_list;
-  va_start(arg_list, fmt);
-  _vsnprintf_s(log_buffer, SOURCE_ARRAYSIZE(log_buffer), fmt, arg_list);
-  va_end(arg_list);
-
-  const f64 curent_stamp = Plat_FloatTime();
-
-  if (!is_first_time_write) {
-    _unlink("timestamped.log");
-    is_first_time_write = true;
-  }
-
-  FILE* f;
-  if (!fopen_s(&f, "timestamped.log", "at+")) {
-    fprintf(f, "%8.4f / %8.4f:  %s\n", curent_stamp, curent_stamp - last_stamp,
-            log_buffer);
-    fclose(f);
-  }
-
-  last_stamp = curent_stamp;
-}
 
 #ifdef OS_WIN
 bool SetupWin32ConsoleIO() {

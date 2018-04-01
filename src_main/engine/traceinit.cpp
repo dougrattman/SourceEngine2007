@@ -113,9 +113,11 @@ void CInitTracker::Shutdown(const char *shutdown, int listnum) {
 void TraceInit(const char *i, const char *s, int listnum) {
   g_InitTracker.Init(i, s, listnum);
 
-  COM_TimestampedLog("%s", i);
+  Plat_TimestampedLog("TraceInit: %s", i);
 }
 
 void TraceShutdown(const char *s, int listnum) {
   g_InitTracker.Shutdown(s, listnum);
+
+  Plat_TimestampedLog("TraceShutdown: %s", s);
 }

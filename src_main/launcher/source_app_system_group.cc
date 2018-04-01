@@ -43,15 +43,18 @@ bool SourceAppSystemGroup::Create() {
 
   file_system->InstallDirtyDiskReportFunc([]() {});
 
-  if (FAILED(scoped_com_initializer_.hr())) {
-    Error("COM initialization failed (0x%0.8x).", scoped_com_initializer_.hr());
+  if (source::windows::failed(scoped_com_initializer_.errno_code())) {
+    Error("COM initialization failed: %s.",
+          source::windows::make_windows_errno_info(
+              scoped_com_initializer_.errno_code())
+              .description);
     return false;
   }
 
   // Are we running in edit mode?
   is_edit_mode_ = command_line_->CheckParm("-edit");
 
-  const auto start_loading_app_systems_stamp = Plat_FloatTime();
+  const f64 start_loading_app_systems_stamp = Plat_FloatTime();
 
   AppSystemInfo_t app_system_infos[] = {
       // NOTE: This one must be first!!
@@ -116,9 +119,10 @@ bool SourceAppSystemGroup::Create() {
                                         : "shaderapiempty.dll";
   material_system->SetShaderAPI(shader_api_dll_name);
 
-  const double elapsed = Plat_FloatTime() - start_loading_app_systems_stamp;
-  COM_TimestampedLog(
-      "LoadAppSystems:  Took %.4f secs to load libraries and get factories.",
+  const f64 elapsed = Plat_FloatTime() - start_loading_app_systems_stamp;
+  Plat_TimestampedLog(
+      "SourceAppSystemGroup::Create: %.4f seconds to load modules and get "
+      "factories.",
       elapsed);
 
   return true;
@@ -162,7 +166,9 @@ bool SourceAppSystemGroup::PreInit() {
   // This will get called multiple times due to being here, but only the first
   // one will do anything
   reslistgenerator->Init(
-      base_directory_, command_line_->ParmValue("-game", DEFAULT_HL2_GAMEDIR));
+      base_directory_,
+      command_line_->ParmValue(source::tier0::command_line_switches::kGamePath,
+                               DEFAULT_HL2_GAMEDIR));
 
   // This will also get called each time, but will actually fix up the command
   // line as needed
@@ -215,7 +221,9 @@ void SourceAppSystemGroup::Destroy() {
 // will be able to switch mods at runtime because the engine/hammer integration
 // really wants this feature.
 const char *SourceAppSystemGroup::DetermineDefaultMod() {
-  return !is_edit_mode_ ? command_line_->ParmValue("-game", DEFAULT_HL2_GAMEDIR)
+  return !is_edit_mode_ ? command_line_->ParmValue(
+                              source::tier0::command_line_switches::kGamePath,
+                              DEFAULT_HL2_GAMEDIR)
                         : hammer_->GetDefaultMod();
 }
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements all the functions exported by the GameUI dll
 
@@ -81,7 +81,6 @@
 #include "vgui_DebugSystemPanel.h"
 #include "vgui_askconnectpanel.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
@@ -500,7 +499,7 @@ bool CEngineVGui::SetVGUIDirectories() {
   skin[0] = 0;
   Sys_GetRegKeyValue("Software\\Valve\\Steam", "Skin", skin, sizeof(skin), "");
   if (skin[0] != '\0') {
-    sprintf(temp, "%s/platform/skins/%s", GetBaseDirectory(), skin);
+    sprintf_s(temp, "%s/platform/skins/%s", GetBaseDirectory(), skin);
     g_pFileSystem->AddSearchPath(temp, "SKIN");
   }
 #endif
@@ -512,13 +511,13 @@ bool CEngineVGui::SetVGUIDirectories() {
 // Setup the base vgui panels
 //-----------------------------------------------------------------------------
 void CEngineVGui::Init() {
-  COM_TimestampedLog("Loading gameui.dll");
+  Plat_TimestampedLog("CEngineVGui::Init start.");
 
   // load the GameUI dll
   const char *szDllName = "gameui";
-  m_hStaticGameUIModule = g_pFileSystem->LoadModule(
-      szDllName, "EXECUTABLE_PATH",
-      true);  // LoadModule() does a GetLocalCopy() call
+  // LoadModule() does a GetLocalCopy() call
+  m_hStaticGameUIModule =
+      g_pFileSystem->LoadModule(szDllName, "EXECUTABLE_PATH", true);
   m_GameUIFactory = Sys_GetFactory(m_hStaticGameUIModule);
   if (!m_GameUIFactory) {
     Error("Could not load: %s\n", szDllName);
@@ -541,12 +540,12 @@ void CEngineVGui::Init() {
 
   vgui::VGui_InitMatSysInterfacesList("BaseUI", &g_AppSystemFactory, 1);
 
-  COM_TimestampedLog("AttachToWindow");
+  Plat_TimestampedLog("  AttachToWindow");
 
   // Need to be able to play sounds through vgui
   g_pMatSystemSurface->InstallPlaySoundFunc(VGui_PlaySound);
 
-  COM_TimestampedLog("Load Scheme File");
+  Plat_TimestampedLog("  Load Scheme File");
 
   // load scheme
   const char *pStr = "Resource/SourceScheme.res";
@@ -555,7 +554,7 @@ void CEngineVGui::Init() {
     return;
   }
 
-  COM_TimestampedLog("vgui::ivgui()->Start()");
+  Plat_TimestampedLog("  vgui::ivgui()->Start()");
 
   // Start the App running
   vgui::ivgui()->Start();
@@ -567,7 +566,7 @@ void CEngineVGui::Init() {
 
   // Ideal hierarchy:
 
-  COM_TimestampedLog("Building Panels (staticPanel)");
+  Plat_TimestampedLog("  Building Panels (staticPanel)");
 
   // Root -- staticPanel
   //		staticBackgroundImagePanel (from gamui) zpos == 0
@@ -589,7 +588,7 @@ void CEngineVGui::Init() {
   staticPanel->SetVisible(true);
   staticPanel->SetParent(vgui::surface()->GetEmbeddedPanel());
 
-  COM_TimestampedLog("Building Panels (staticClientDLLPanel)");
+  Plat_TimestampedLog("  Building Panels (staticClientDLLPanel)");
 
   staticClientDLLPanel = new CEnginePanel(staticPanel, "staticClientDLLPanel");
   staticClientDLLPanel->SetBounds(0, 0, videomode->GetModeWidth(),
@@ -605,7 +604,7 @@ void CEngineVGui::Init() {
 
   CreateAskConnectPanel(staticPanel->GetVPanel());
 
-  COM_TimestampedLog("Building Panels (staticClientDLLToolsPanel)");
+  Plat_TimestampedLog("  Building Panels (staticClientDLLToolsPanel)");
 
   staticClientDLLToolsPanel =
       new CEnginePanel(staticPanel, "staticClientDLLToolsPanel");
@@ -630,7 +629,7 @@ void CEngineVGui::Init() {
   staticEngineToolsPanel->SetCursor(vgui::dc_none);
   staticEngineToolsPanel->SetZPos(75);
 
-  COM_TimestampedLog("Building Panels (staticGameUIPanel)");
+  Plat_TimestampedLog("  Building Panels (staticGameUIPanel)");
 
   staticGameUIPanel = new CEnginePanel(staticPanel, "GameUI Panel");
   staticGameUIPanel->SetBounds(0, 0, videomode->GetModeWidth(),
@@ -654,7 +653,7 @@ void CEngineVGui::Init() {
   staticGameDLLPanel->SetCursor(vgui::dc_none);
   staticGameDLLPanel->SetZPos(135);
 
-  COM_TimestampedLog("Building Panels (staticDebugSystemPanel)");
+  Plat_TimestampedLog("  Building Panels (staticDebugSystemPanel)");
 
   staticDebugSystemPanel =
       new CDebugSystemPanel(staticPanel, "Engine Debug System");
@@ -667,14 +666,14 @@ void CEngineVGui::Init() {
   // Install texture view panel
   TxViewPanel::Install(staticEngineToolsPanel);
 
-  COM_TimestampedLog("Install bug reporter");
+  Plat_TimestampedLog("  Install bug reporter");
 
   // Create and initialize bug reporting system
   bugreporter->InstallBugReportingUI(staticGameUIPanel,
                                      IEngineBugReporter::BR_AUTOSELECT);
   bugreporter->Init();
 
-  COM_TimestampedLog("Install perf tools");
+  Plat_TimestampedLog("  Install perf tools");
 
   // Create a performance toolkit system
   perftools->InstallPerformanceToolsUI(staticEngineToolsPanel);
@@ -701,21 +700,21 @@ void CEngineVGui::Init() {
 
   staticEngineToolsPanel->LoadControlSettings("scripts/EngineVGuiLayout.res");
 
-  COM_TimestampedLog("materials->CacheUsedMaterials()");
+  Plat_TimestampedLog("  materials->CacheUsedMaterials()");
 
   // Make sure that these materials are in the materials cache
   materials->CacheUsedMaterials();
 
-  COM_TimestampedLog("g_pVGuiLocalize->AddFile");
+  Plat_TimestampedLog("  g_pVGuiLocalize->AddFile");
 
   // load the base localization file
   g_pVGuiLocalize->AddFile("Resource/valve_%language%.txt");
 
-  COM_TimestampedLog("staticGameUIFuncs->Initialize");
+  Plat_TimestampedLog("  staticGameUIFuncs->Initialize");
 
   staticGameUIFuncs->Initialize(g_AppSystemFactory);
 
-  COM_TimestampedLog("staticGameUIFuncs->Start");
+  Plat_TimestampedLog("  staticGameUIFuncs->Start");
   staticGameUIFuncs->Start();
 
   // don't need to load the "valve" localization file twice
@@ -735,7 +734,7 @@ void CEngineVGui::Init() {
   }
 
   // show the game UI
-  COM_TimestampedLog("ActivateGameUI()");
+  Plat_TimestampedLog("  ActivateGameUI()");
   ActivateGameUI();
 
   if (staticGameConsole && !CommandLine()->CheckParm("-forcestartupmenu") &&
@@ -748,6 +747,8 @@ void CEngineVGui::Init() {
   }
 
   m_bNoShaderAPI = CommandLine()->FindParm("-noshaderapi");
+
+  Plat_TimestampedLog("CEngineVGui::Init end.");
 }
 
 void CEngineVGui::PostInit() { staticGameUIFuncs->PostInit(); }

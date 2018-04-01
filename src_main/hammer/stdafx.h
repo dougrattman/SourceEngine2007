@@ -5,6 +5,7 @@
 
 // Windows 7 features.
 #define _WIN32_WINNT 0x0501
+#define NOMINMAX
 
 #define NO_THREAD_LOCAL 1
 

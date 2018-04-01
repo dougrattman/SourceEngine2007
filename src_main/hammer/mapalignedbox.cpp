@@ -308,11 +308,11 @@ void CMapAlignedBox::OnParentKeyChanged( const char* key, const char* value )
 
 	if (_stricmp(key, m_MinsKeyName) == 0)
 	{
-		sscanf(value, "%f %f %f", &m_Mins[0], &m_Mins[1], &m_Mins[2]);
+		sscanf_s(value, "%f %f %f", &m_Mins[0], &m_Mins[1], &m_Mins[2]);
 	}
 	else if (_stricmp(key, m_MaxsKeyName) == 0)
 	{
-		sscanf(value, "%f %f %f", &m_Maxs[0], &m_Maxs[1], &m_Maxs[2]);
+		sscanf_s(value, "%f %f %f", &m_Maxs[0], &m_Maxs[1], &m_Maxs[2]);
 	}
 
 	PostUpdate(Notify_Changed);

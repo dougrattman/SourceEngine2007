@@ -1,7 +1,8 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "pacifier.h"
 
+#include <algorithm>
 #include <cstdio>
 
 #include "tier0/include/basetypes.h"

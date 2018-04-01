@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -17,7 +17,6 @@
 #include "xbox/xbox_win32stubs.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -86,10 +85,10 @@ char *CNetAPI::AdrToString(netadr_t *a) {
 
   if (a) {
     if (a->type == NA_LOOPBACK) {
-      sprintf(s, "loopback");
+      sprintf_s(s, "loopback");
     } else if (a->type == NA_IP) {
-      sprintf(s, "%i.%i.%i.%i:%i", a->ip[0], a->ip[1], a->ip[2], a->ip[3],
-              ntohs(a->port));
+      sprintf_s(s, "%i.%i.%i.%i:%i", a->ip[0], a->ip[1], a->ip[2], a->ip[3],
+                ntohs(a->port));
     }
   }
   return s;
@@ -113,7 +112,7 @@ static bool StringToSockaddr(const char *s, struct sockaddr *sadr) {
   p->sin_family = AF_INET;
   p->sin_port = 0;
 
-  strcpy(copy, s);
+  strcpy_s(copy, s);
 
   // strip off a trailing :port if present
   for (colon = copy; *colon; colon++) {

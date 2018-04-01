@@ -283,7 +283,7 @@ void CAngleBox::SetAngles(const QAngle &vecAngles, bool bRedraw)
 void CAngleBox::SetAngles(const char *szAngles, bool bRedraw)
 {
 	QAngle vecAngles(0, 0, 0);
-	sscanf(szAngles, "%f %f %f", &vecAngles[PITCH], &vecAngles[YAW], &vecAngles[ROLL]);
+	sscanf_s(szAngles, "%f %f %f", &vecAngles[PITCH], &vecAngles[YAW], &vecAngles[ROLL]);
 	SetAngles(vecAngles, bRedraw);
 }
 

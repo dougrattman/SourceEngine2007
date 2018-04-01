@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // This file contains code to allow us to associate client data with bsp leaves.
 
@@ -40,7 +40,6 @@
 #include "tier2/renderutils.h"
 #include "vcollide_parse.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -308,7 +307,8 @@ class CStaticProp : public IClientUnknown,
   unsigned char m_Flags;
   unsigned short m_FirstLeaf;
   unsigned short m_LeafCount;
-  CBaseHandle m_EntHandle;  // TODO(d.rattman): Do I need client + server handles?
+  CBaseHandle
+      m_EntHandle;  // TODO(d.rattman): Do I need client + server handles?
   ClientRenderHandle_t m_RenderHandle;
   unsigned short m_FadeIndex;  // Index into the m_StaticPropFade dictionary
   float m_flForcedFadeScale;
@@ -569,9 +569,9 @@ bool CStaticProp::Init(int index, StaticPropLump_t &lump, model_t *pModel) {
   TransformAABB(m_ModelToWorld, m_RenderBBoxMin, m_RenderBBoxMax,
                 m_WorldRenderBBoxMin, m_WorldRenderBBoxMax);
 
-  // TODO(d.rattman): Sucky, but unless we want to re-read the static prop lump when the
-  // client is initialized (possible, but also gross), we need to cache off the
-  // illum center now
+  // TODO(d.rattman): Sucky, but unless we want to re-read the static prop lump
+  // when the client is initialized (possible, but also gross), we need to cache
+  // off the illum center now
   if (lump.m_Flags & STATIC_PROP_USE_LIGHTING_ORIGIN) {
     m_LightingOrigin = lump.m_LightingOrigin;
   } else {
@@ -1259,21 +1259,21 @@ void CStaticPropMgr::UnserializeStaticProps() {
   int size = Mod_GameLumpSize(GAMELUMP_STATIC_PROPS);
   if (!size) return;
 
-  COM_TimestampedLog("UnserializeStaticProps - start");
+  Plat_TimestampedLog("Engine::CStaticPropMgr::UnserializeStaticProps begin.");
 
   MEM_ALLOC_CREDIT();
   CUtlBuffer buf(0, size);
   if (Mod_LoadGameLump(GAMELUMP_STATIC_PROPS, buf.PeekPut(), size)) {
     buf.SeekPut(CUtlBuffer::SEEK_HEAD, size);
-    COM_TimestampedLog("UnserializeModelDict");
+    Plat_TimestampedLog("  UnserializeModelDict");
     UnserializeModelDict(buf);
-    COM_TimestampedLog("UnserializeLeafList");
+    Plat_TimestampedLog("  UnserializeLeafList");
     UnserializeLeafList(buf);
-    COM_TimestampedLog("UnserializeModels");
+    Plat_TimestampedLog("  UnserializeModels");
     UnserializeModels(buf);
   }
 
-  COM_TimestampedLog("UnserializeStaticProps - end");
+  Plat_TimestampedLog("Engine::CStaticPropMgr::UnserializeStaticProps end.");
 }
 
 //-----------------------------------------------------------------------------
@@ -1565,8 +1565,8 @@ void CStaticPropMgr::GetAllStaticPropsInOBB(
       // if all 6 planes failed to eliminate the extents, the OBB and prop
       // intersect
 
-      // TODO(d.rattman): Halfspace elimination will never remove props that do intersect,
-      // but leaves some false positives in some cases.
+      // TODO(d.rattman): Halfspace elimination will never remove props that do
+      // intersect, but leaves some false positives in some cases.
 
       pOutput->AddToTail(pProp);
     }
@@ -1606,9 +1606,7 @@ bool CStaticPropMgr::PropHasBakedLightingDisabled(
 // Compute static lighting
 //-----------------------------------------------------------------------------
 void CStaticPropMgr::PrecacheLighting() {
-  COM_TimestampedLog("CStaticPropMgr::PrecacheLighting - start");
-
-  int numVerts = 0;
+  Plat_TimestampedLog("Engine::CStaticPropMgr::PrecacheLighting begin.");
 
   int i = m_StaticProps.Count();
   while (--i >= 0) {
@@ -1617,7 +1615,7 @@ void CStaticPropMgr::PrecacheLighting() {
     m_StaticProps[i].PrecacheLighting();
   }
 
-  COM_TimestampedLog("CStaticPropMgr::PrecacheLighting - end");
+  Plat_TimestampedLog("Engine::CStaticPropMgr::PrecacheLighting end.");
 }
 
 void CStaticPropMgr::RecomputeStaticLighting() {
@@ -1881,21 +1879,21 @@ void CStaticPropMgr::ComputePropOpacity(CStaticProp &prop) {
   }
 
 #ifndef SWDS
-    // Fade all props, if we have a default level setting
-    // But only change the fade if it's more translucent than any other fades we
-    // might have
-    unsigned char alpha = modelinfoclient->ComputeLevelScreenFade(
-        prop.GetRenderOrigin(), prop.Radius(), prop.ForcedFadeScale());
-    unsigned char nViewAlpha = modelinfoclient->ComputeViewScreenFade(
-        prop.GetRenderOrigin(), prop.Radius(), prop.ForcedFadeScale());
-    if (nViewAlpha < alpha) {
-      alpha = nViewAlpha;
-    }
+  // Fade all props, if we have a default level setting
+  // But only change the fade if it's more translucent than any other fades we
+  // might have
+  unsigned char alpha = modelinfoclient->ComputeLevelScreenFade(
+      prop.GetRenderOrigin(), prop.Radius(), prop.ForcedFadeScale());
+  unsigned char nViewAlpha = modelinfoclient->ComputeViewScreenFade(
+      prop.GetRenderOrigin(), prop.Radius(), prop.ForcedFadeScale());
+  if (nViewAlpha < alpha) {
+    alpha = nViewAlpha;
+  }
 
-    if (alpha < prop.GetFxBlend()) {
-      prop.SetAlpha(alpha);
-      ChangeRenderGroup(prop);
-    }
+  if (alpha < prop.GetFxBlend()) {
+    prop.SetAlpha(alpha);
+    ChangeRenderGroup(prop);
+  }
 #endif
 }
 

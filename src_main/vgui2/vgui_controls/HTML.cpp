@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This class is a message box that has two buttons, ok and cancel
 // instead of just the ok button of a message box. We use a message box class
@@ -281,30 +281,38 @@ void HTML::CalcScrollBars(int w, int h) {
 //-----------------------------------------------------------------------------
 void HTML::OpenURL(const char *URL, bool force) {
   if (IsSteamInOfflineMode() && !force) {
-    const char *baseDir = getenv("HTML_OFFLINE_DIR");
-    if (baseDir) {
+    char html_offline_dir_env[SOURCE_MAX_PATH];
+    usize html_offline_dir_env_size;
+
+    if (!getenv_s(&html_offline_dir_env_size, html_offline_dir_env,
+                  "HTML_OFFLINE_DIR") &&
+        html_offline_dir_env_size > 0) {
+      char *offline_dir = html_offline_dir_env;
+
       // get the app we need to run
-      char htmlLocation[SOURCE_MAX_PATH];
-      char otherName[128];
-      char fileLocation[SOURCE_MAX_PATH];
+      char html_locatiion[SOURCE_MAX_PATH],
+          steam_html_location[SOURCE_MAX_PATH], html_file_path[SOURCE_MAX_PATH];
 
-      if (!g_pFullFileSystem->FileExists(baseDir)) {
-        _snprintf(otherName, sizeof(otherName), "%senglish.html", OFFLINE_FILE);
-        baseDir = otherName;
+      if (!g_pFullFileSystem->FileExists(offline_dir)) {
+        _snprintf_s(steam_html_location, SOURCE_ARRAYSIZE(steam_html_location),
+                    "%senglish.html", OFFLINE_FILE);
+        offline_dir = steam_html_location;
       }
-      g_pFullFileSystem->GetLocalCopy(
-          baseDir);  // put this file on disk for IE to load
 
-      g_pFullFileSystem->GetLocalPath(baseDir, fileLocation,
-                                      sizeof(fileLocation));
-      _snprintf(htmlLocation, sizeof(htmlLocation), "file://%s", fileLocation);
-      browser->OpenURL(htmlLocation);
-    } else {
-      browser->OpenURL(URL);
+      // put this file on disk for IE to load
+      g_pFullFileSystem->GetLocalCopy(offline_dir);
+      g_pFullFileSystem->GetLocalPath(offline_dir, html_file_path,
+                                      SOURCE_ARRAYSIZE(html_file_path));
+
+      _snprintf_s(html_locatiion, SOURCE_ARRAYSIZE(html_locatiion), "file://%s",
+                  html_file_path);
+      browser->OpenURL(html_locatiion);
+
+      return;
     }
-  } else {
-    browser->OpenURL(URL);
   }
+
+  browser->OpenURL(URL);
 }
 
 //-----------------------------------------------------------------------------
@@ -459,8 +467,7 @@ void HTML::AddCustomURLHandler(const char *customProtocolName,
                                vgui::Panel *target) {
   int index = m_CustomURLHandlers.AddToTail();
   m_CustomURLHandlers[index].hPanel = target;
-  strncpy(m_CustomURLHandlers[index].url, customProtocolName,
-          sizeof(m_CustomURLHandlers[index].url));
+  strcpy_s(m_CustomURLHandlers[index].url, customProtocolName);
 }
 
 //-----------------------------------------------------------------------------
@@ -477,7 +484,7 @@ bool HTML::OnStartURL(const char *url, const char *target, bool first) {
   bool bURLHandled = false;
   for (int i = 0; i < m_CustomURLHandlers.Count(); i++) {
     if (!_strnicmp(m_CustomURLHandlers[i].url, url,
-                  strlen(m_CustomURLHandlers[i].url))) {
+                   strlen(m_CustomURLHandlers[i].url))) {
       // we have a custom handler
       Panel *target = m_CustomURLHandlers[i].hPanel;
       if (target) {

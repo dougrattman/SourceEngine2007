@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "KeyToggleCheckButton.h"
 
@@ -6,7 +6,6 @@
 #include "IGameUIFuncs.h"
 #include "vgui/IVGui.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -16,8 +15,8 @@ CKeyToggleCheckButton::CKeyToggleCheckButton(Panel *parent,
                                              const char *text, char const *key,
                                              char const *cmdname)
     : CheckButton(parent, panelName, text) {
-  m_pszKeyName = key ? strdup(key) : NULL;
-  m_pszCmdName = cmdname ? strdup(cmdname) : NULL;
+  m_pszKeyName = key ? _strdup(key) : NULL;
+  m_pszCmdName = cmdname ? _strdup(cmdname) : NULL;
 
   if (m_pszKeyName) {
     Reset();

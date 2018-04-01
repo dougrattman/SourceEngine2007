@@ -6,8 +6,10 @@
 #include <cassert>
 #include <ctime>
 
+#include "base/include/stdio_file_stream.h"
 #include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier0/include/threadtools.h"
 #include "tier0/include/vcrmode.h"
 
@@ -150,6 +152,55 @@ void Plat_DebugString(const ch *psz) {
 }
 
 const ch *Plat_GetCommandLine() { return GetCommandLine(); }
+
+// For debugging startup times, etc.
+bool Plat_TimestampedLog(ch const *fmt, ...) {
+  static f64 last_stamp{0.0};
+  static bool should_log{false};
+  static bool is_checked{false};
+  static bool is_first_time_write{true};
+
+  if (!is_checked) {
+    should_log = CommandLine()->CheckParm("-profile");
+    is_checked = true;
+  }
+  if (!should_log) return false;
+
+  ch log_buffer[1024];
+  va_list arg_list;
+  va_start(arg_list, fmt);
+  _vsnprintf_s(log_buffer, SOURCE_ARRAYSIZE(log_buffer), fmt, arg_list);
+  va_end(arg_list);
+
+  const f64 current_stamp = Plat_FloatTime();
+  const bool should_show_legend{is_first_time_write};
+
+  if (is_first_time_write) {
+    _unlink("profile_timestamps.log");
+    is_first_time_write = false;
+  }
+
+  auto [log, errno_info] =
+      source::stdio_file_stream_factory::open("profile_timestamps.log", "at+");
+
+  if (errno_info.is_success()) {
+    if (should_show_legend) {
+      log.print("[From (s) | Diff (s)] Profile log message.\n");
+    }
+
+    size_t bytes_written;
+    std::tie(bytes_written, errno_info) =
+        log.print("[%8.4f | %8.4f] %s\n", current_stamp,
+                  current_stamp - last_stamp, log_buffer);
+    last_stamp = current_stamp;
+
+    return errno_info.is_success() && bytes_written > 0;
+  }
+
+  last_stamp = current_stamp;
+
+  return false;
+}
 
 void Plat_SetThreadName(unsigned long dwThreadID, const ch *pszName) {
   ThreadSetDebugName(dwThreadID, pszName);

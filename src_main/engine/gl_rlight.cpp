@@ -11,7 +11,6 @@
 #include "debugoverlay.h"
 #include "tier0/include/vprof.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -375,9 +374,9 @@ static void ComputeLightmapColorFromAverage(msurfacelighting_t *pLighting,
 //-----------------------------------------------------------------------------
 // Tests a particular surface
 //-----------------------------------------------------------------------------
-static bool SOURCE_FASTCALL FindIntersectionAtSurface(SurfaceHandle_t surfID, float f,
-                                               Vector &c,
-                                               LightVecState_t &state) {
+static bool SOURCE_FASTCALL FindIntersectionAtSurface(SurfaceHandle_t surfID,
+                                                      float f, Vector &c,
+                                                      LightVecState_t &state) {
   // no lightmaps on this surface? punt...
   // TODO(d.rattman): should be water surface?
   if (MSurf_Flags(surfID) & SURFDRAW_NOLIGHT) return false;
@@ -452,12 +451,7 @@ static bool SOURCE_FASTCALL FindIntersectionAtSurface(SurfaceHandle_t surfID, fl
   ComputeTextureCoordsAtIntersection(pTex, pt, state.m_pTextureS,
                                      state.m_pTextureT);
 
-#ifdef USE_CONVARS
-  if (r_avglight.GetInt())
-#else
-  if (1)
-#endif
-  {
+  if (r_avglight.GetInt()) {
     // This is the faster path; it looks slightly different though
     ComputeLightmapColorFromAverage(pLighting, state.m_bUseLightStyles, c);
   } else {

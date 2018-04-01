@@ -1379,7 +1379,7 @@ unsigned int CSentence::GetDataCheckSum() const {
 #endif
 }
 
-#define STARTEND_TIMEGAP 0.1
+#define STARTEND_TIMEGAP 0.1f
 
 int CSentence::CountWords(char const *str) {
   if (!str || !str[0]) return 0;

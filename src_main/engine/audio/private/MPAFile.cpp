@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -13,16 +13,16 @@ extern IFileSystem* g_pFullFileSystem;
 CMPAException::CMPAException(ErrorIDs ErrorID, LPCTSTR szFile,
                              LPCTSTR szFunction, bool bGetLastError)
     : m_ErrorID(ErrorID), m_bGetLastError(bGetLastError) {
-  m_szFile = strdup(szFile);
-  m_szFunction = strdup(szFunction);
+  m_szFile = _strdup(szFile);
+  m_szFunction = _strdup(szFunction);
 }
 
 // copy constructor (necessary for exception throwing without pointers)
 CMPAException::CMPAException(const CMPAException& Source) {
   m_ErrorID = Source.m_ErrorID;
   m_bGetLastError = Source.m_bGetLastError;
-  m_szFile = strdup(Source.m_szFile);
-  m_szFunction = strdup(Source.m_szFunction);
+  m_szFile = _strdup(Source.m_szFile);
+  m_szFunction = _strdup(Source.m_szFunction);
 }
 
 // destructor
@@ -46,16 +46,15 @@ void CMPAException::ShowError() {
   TCHAR szErrorMsg[MAX_ERR_LENGTH] = {0};
   TCHAR szHelp[MAX_ERR_LENGTH];
 
-  // this is not buffer-overflow-proof!
   if (m_szFunction) {
-    _snprintf(szHelp, ARRAYSIZE(szHelp), "%s: ", m_szFunction);
-    strcat(szErrorMsg, szHelp);
+    sprintf_s(szHelp, "%s: ", m_szFunction);
+    strcat_s(szErrorMsg, szHelp);
   }
   if (m_szFile) {
-    _snprintf(szHelp, ARRAYSIZE(szHelp), "'%s'\n", m_szFile);
-    strcat(szErrorMsg, szHelp);
+    sprintf_s(szHelp, "'%s'\n", m_szFile);
+    strcat_s(szErrorMsg, szHelp);
   }
-  strcat(szErrorMsg, m_szErrors[m_ErrorID]);
+  strcat_s(szErrorMsg, m_szErrors[m_ErrorID]);
 
   if (m_bGetLastError) {
     // get error message of last system error id
@@ -66,8 +65,8 @@ void CMPAException::ShowError() {
             NULL, GetLastError(),
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Default language
             (LPTSTR)&pMsgBuf, 0, NULL)) {
-      strcat(szErrorMsg, "\n");
-      strcat(szErrorMsg, (LPCTSTR)pMsgBuf);
+      strcat_s(szErrorMsg, "\n");
+      strcat_s(szErrorMsg, (LPCTSTR)pMsgBuf);
       LocalFree(pMsgBuf);
     }
   }
@@ -98,7 +97,7 @@ CMPAFile::CMPAFile(LPCTSTR szFile, DWORD dwFileOffset, FileHandle_t hFile)
     m_bMustReleaseFile = true;
   }
   // save filename
-  m_szFile = strdup(szFile);
+  m_szFile = _strdup(szFile);
 
   // set end of MPEG data (assume file end)
   if (m_dwEnd <= 0) {

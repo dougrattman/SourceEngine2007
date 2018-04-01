@@ -486,13 +486,13 @@ bool CImportVMF::UnserializeCordonKey( IDmAttributeElement *pCordon, KeyValues
         AddBoolAttribute( hCordon, pKeyValues, "active" );
 
         Vector v;
-        if ( sscanf( pKeyValues->GetString( "mins", "" ), "(%f %f %f)", &v.x,
+        if ( sscanf_s( pKeyValues->GetString( "mins", "" ), "(%f %f %f)", &v.x,
 &v.y, &v.z ) == 3 )
         {
                 if ( !DmElementAddAttribute( hCordon, "mins", v ) )
                         return false;
         }
-        if ( sscanf( pKeyValues->GetString( "maxs", "" ), "(%f %f %f)", &v.x,
+        if ( sscanf_s( pKeyValues->GetString( "maxs", "" ), "(%f %f %f)", &v.x,
 &v.y, &v.z ) == 3 )
         {
                 if ( !DmElementAddAttribute( hCordon, "maxs", v ) )

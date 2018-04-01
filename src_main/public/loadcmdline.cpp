@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: loads additional command line options from a config file
 
@@ -15,17 +15,18 @@ static bool sFoundConfigArgs = false;
 //-----------------------------------------------------------------------------
 static void AddArguments(int &argc, char **&argv, const char *str) {
   char **args = 0;
-  char *argList = 0;
   int argCt = argc;
 
-  argList = new char[Q_strlen(str) + 1];
-  Q_strcpy(argList, str);
+  size_t arg_list_size{strlen(str) + 1};
+  char *argList = new char[arg_list_size];
+  strcpy_s(argList, arg_list_size, str);
 
   // Parse the arguments out of the string
-  char *token = strtok(argList, " ");
+  char *context;
+  char *token = strtok_s(argList, " ", &context);
   while (token) {
     ++argCt;
-    token = strtok(NULL, " ");
+    token = strtok_s(nullptr, " ", &context);
   }
 
   // Make sure someting was actually found in the file
@@ -38,22 +39,25 @@ static void AddArguments(int &argc, char **&argv, const char *str) {
     // Copy original arguments, up to the last one
     int i;
     for (i = 0; i < argc - 1; ++i) {
-      args[i] = new char[Q_strlen(argv[i]) + 1];
-      Q_strcpy(args[i], argv[i]);
+      size_t argc_size{strlen(argv[i]) + 1};
+      args[i] = new char[argc_size];
+      strcpy_s(args[i], argc_size, argv[i]);
     }
 
     // copy new arguments
-    Q_strcpy(argList, str);
-    token = strtok(argList, " ");
+    strcpy_s(argList, arg_list_size, str);
+    token = strtok_s(argList, " ", &context);
     for (; i < argCt - 1; ++i) {
-      args[i] = new char[Q_strlen(token) + 1];
-      Q_strcpy(args[i], token);
-      token = strtok(NULL, " ");
+      size_t argc_size{strlen(token) + 1};
+      args[i] = new char[argc_size];
+      strcpy_s(args[i], argc_size, token);
+      token = strtok_s(nullptr, " ", &context);
     }
 
     // Copy the last original argument
-    args[i] = new char[Q_strlen(argv[argc - 1]) + 1];
-    Q_strcpy(args[i], argv[argc - 1]);
+    size_t argc_size{strlen(argv[argc - 1]) + 1};
+    args[i] = new char[argc_size];
+    strcpy_s(args[i], argc_size, argv[argc - 1]);
 
     argc = argCt;
     argv = args;
@@ -66,7 +70,7 @@ static void AddArguments(int &argc, char **&argv, const char *str) {
 // Purpose: Loads additional commandline arguments from a config file for an
 // app.
 //			Filesystem must be initialized before calling this
-//function.
+// function.
 // keyname: Name of the block containing the key/args pairs (ie map or model
 // name) appname: Keyname for the commandline arguments to be loaded - typically
 // the exe name.
@@ -75,7 +79,7 @@ void LoadCmdLineFromFile(int &argc, char **&argv, const char *keyname,
                          const char *appname) {
   sFoundConfigArgs = false;
 
-  assert(g_pFileSystem);
+  Assert(g_pFileSystem);
   if (!g_pFileSystem) return;
 
   // Load the cfg file, and find the keyname

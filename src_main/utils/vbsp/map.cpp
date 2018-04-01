@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "ChunkFile.h"
 #include "builddisp.h"
@@ -698,17 +698,18 @@ ChunkFileResult_t LoadDispDistancesKeyCallback(const char *szKey,
                                                mapdispinfo_t *pMapDispInfo) {
   if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
-    strcpy(szBuf, szValue);
+    strcpy_s(szBuf, szValue);
 
     int nCols = (1 << pMapDispInfo->power) + 1;
     int nRow = atoi(&szKey[3]);
 
-    char *pszNext = strtok(szBuf, " ");
+    char *context;
+    char *pszNext = strtok_s(szBuf, " ", &context);
     int nIndex = nRow * nCols;
 
     while (pszNext != NULL) {
       pMapDispInfo->dispDists[nIndex] = (float)atof(pszNext);
-      pszNext = strtok(NULL, " ");
+      pszNext = strtok_s(NULL, " ", &context);
       nIndex++;
     }
   }
@@ -839,14 +840,15 @@ ChunkFileResult_t LoadDispNormalsKeyCallback(const char *szKey,
                                              mapdispinfo_t *pMapDispInfo) {
   if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
-    strcpy(szBuf, szValue);
+    strcpy_s(szBuf, szValue);
 
     int nCols = (1 << pMapDispInfo->power) + 1;
     int nRow = atoi(&szKey[3]);
 
-    char *pszNext0 = strtok(szBuf, " ");
-    char *pszNext1 = strtok(NULL, " ");
-    char *pszNext2 = strtok(NULL, " ");
+    char *context;
+    char *pszNext0 = strtok_s(szBuf, " ", &context);
+    char *pszNext1 = strtok_s(NULL, " ", &context);
+    char *pszNext2 = strtok_s(NULL, " ", &context);
 
     int nIndex = nRow * nCols;
 
@@ -855,9 +857,9 @@ ChunkFileResult_t LoadDispNormalsKeyCallback(const char *szKey,
       pMapDispInfo->vectorDisps[nIndex][1] = (float)atof(pszNext1);
       pMapDispInfo->vectorDisps[nIndex][2] = (float)atof(pszNext2);
 
-      pszNext0 = strtok(NULL, " ");
-      pszNext1 = strtok(NULL, " ");
-      pszNext2 = strtok(NULL, " ");
+      pszNext0 = strtok_s(NULL, " ", &context);
+      pszNext1 = strtok_s(NULL, " ", &context);
+      pszNext2 = strtok_s(NULL, " ", &context);
 
       nIndex++;
     }
@@ -891,14 +893,15 @@ ChunkFileResult_t LoadDispOffsetsKeyCallback(const char *szKey,
                                              mapdispinfo_t *pMapDispInfo) {
   if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
-    strcpy(szBuf, szValue);
+    strcpy_s(szBuf, szValue);
 
     int nCols = (1 << pMapDispInfo->power) + 1;
     int nRow = atoi(&szKey[3]);
 
-    char *pszNext0 = strtok(szBuf, " ");
-    char *pszNext1 = strtok(NULL, " ");
-    char *pszNext2 = strtok(NULL, " ");
+    char *context;
+    char *pszNext0 = strtok_s(szBuf, " ", &context);
+    char *pszNext1 = strtok_s(NULL, " ", &context);
+    char *pszNext2 = strtok_s(NULL, " ", &context);
 
     int nIndex = nRow * nCols;
 
@@ -907,9 +910,9 @@ ChunkFileResult_t LoadDispOffsetsKeyCallback(const char *szKey,
       pMapDispInfo->vectorOffsets[nIndex][1] = (float)atof(pszNext1);
       pMapDispInfo->vectorOffsets[nIndex][2] = (float)atof(pszNext2);
 
-      pszNext0 = strtok(NULL, " ");
-      pszNext1 = strtok(NULL, " ");
-      pszNext2 = strtok(NULL, " ");
+      pszNext0 = strtok_s(NULL, " ", &context);
+      pszNext1 = strtok_s(NULL, " ", &context);
+      pszNext2 = strtok_s(NULL, " ", &context);
 
       nIndex++;
     }
@@ -982,18 +985,19 @@ ChunkFileResult_t LoadDispAlphasKeyCallback(const char *szKey,
                                             mapdispinfo_t *pMapDispInfo) {
   if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
-    strcpy(szBuf, szValue);
+    strcpy_s(szBuf, szValue);
 
     int nCols = (1 << pMapDispInfo->power) + 1;
     int nRow = atoi(&szKey[3]);
 
-    char *pszNext0 = strtok(szBuf, " ");
+    char *context;
+    char *pszNext0 = strtok_s(szBuf, " ", &context);
 
     int nIndex = nRow * nCols;
 
     while (pszNext0 != NULL) {
       pMapDispInfo->alphaValues[nIndex] = (float)atof(pszNext0);
-      pszNext0 = strtok(NULL, " ");
+      pszNext0 = strtok_s(NULL, " ", &context);
       nIndex++;
     }
   }
@@ -1016,12 +1020,13 @@ ChunkFileResult_t LoadDispTriangleTagsKeyCallback(const char *szKey,
                                                   mapdispinfo_t *pMapDispInfo) {
   if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
-    strcpy(szBuf, szValue);
+    strcpy_s(szBuf, szValue);
 
     int nCols = (1 << pMapDispInfo->power);
     int nRow = atoi(&szKey[3]);
+    char *context;
 
-    char *pszNext = strtok(szBuf, " ");
+    char *pszNext = strtok_s(szBuf, " ", &context);
 
     int nIndex = nRow * nCols;
     int iTri = nIndex * 2;
@@ -1052,7 +1057,7 @@ ChunkFileResult_t LoadDispTriangleTagsKeyCallback(const char *szKey,
       }
 
       pMapDispInfo->triTags[iTri] = nTriTags;
-      pszNext = strtok(NULL, " ");
+      pszNext = strtok_s(NULL, " ", &context);
       iTri++;
     }
   }
@@ -1085,33 +1090,35 @@ void ConvertSideList(entity_t *mapent, const char *key) {
   const char *pszSideList = ValueForKey(mapent, key);
 
   if (pszSideList) {
-    char *pszTmpList = (char *)_alloca(strlen(pszSideList) + 1);
-    strcpy(pszTmpList, pszSideList);
+    size_t size{strlen(pszSideList) + 1};
+    char *pszTmpList = (char *)_alloca(size);
+    strcpy_s(pszTmpList, size, pszSideList);
 
     bool bFirst = true;
     char szNewValue[1024];
     szNewValue[0] = '\0';
+    char *context;
 
-    const char *pszScan = strtok(pszTmpList, " ");
+    const char *pszScan = strtok_s(pszTmpList, " ", &context);
     if (!pszScan) return;
     do {
       int nSideID;
 
-      if (sscanf(pszScan, "%d", &nSideID) == 1) {
+      if (sscanf_s(pszScan, "%d", &nSideID) == 1) {
         int nIndex = SideIDToIndex(nSideID);
         if (nIndex != -1) {
           if (!bFirst) {
-            strcat(szNewValue, " ");
+            strcat_s(szNewValue, " ");
           } else {
             bFirst = false;
           }
 
           char szIndex[15];
-          itoa(nIndex, szIndex, 10);
-          strcat(szNewValue, szIndex);
+          _itoa_s(nIndex, szIndex, 10);
+          strcat_s(szNewValue, szIndex);
         }
       }
-    } while ((pszScan = strtok(NULL, " ")));
+    } while ((pszScan = strtok_s(NULL, " ", &context)));
 
     SetKeyValue(mapent, key, szNewValue);
   }
@@ -1122,19 +1129,21 @@ void ConvertSideList(entity_t *mapent, const char *key) {
 ChunkFileResult_t HandleNoDynamicShadowsEnt(entity_t *pMapEnt) {
   // Get the list of the sides.
   const char *side_list_key = ValueForKey(pMapEnt, "sides");
-  char *side_list = new char[strlen(side_list_key) + 1];
-  strcpy(side_list, side_list_key);
+  size_t size{strlen(side_list_key) + 1};
+  char *side_list = new char[size];
+  strcpy_s(side_list, size, side_list_key);
+  char *context;
 
   // Parse the side list.
-  const char *pScan = strtok(side_list, " ");
+  const char *pScan = strtok_s(side_list, " ", &context);
   if (pScan) {
     do {
       int brushSideID;
-      if (sscanf(pScan, "%d", &brushSideID) == 1) {
+      if (sscanf_s(pScan, "%d", &brushSideID) == 1) {
         if (g_NoDynamicShadowSides.Find(brushSideID) == -1)
           g_NoDynamicShadowSides.AddToTail(brushSideID);
       }
-    } while ((pScan = strtok(NULL, " ")));
+    } while ((pScan = strtok_s(NULL, " ", &context)));
   }
 
   delete[] side_list;
@@ -1159,7 +1168,7 @@ static ChunkFileResult_t LoadOverlayDataTransitionKeyCallback(
             pMaterialName, OVERLAY_MAP_STRLEN);
       return ChunkFile_Fail;
     }
-    strcpy(pOverlay->szMaterialName, pMaterialName);
+    strcpy_s(pOverlay->szMaterialName, pMaterialName);
   } else if (!_stricmp(szKey, "StartU")) {
     CChunkFile::ReadKeyValueFloat(szValue, pOverlay->flU[0]);
   } else if (!_stricmp(szKey, "EndU")) {
@@ -1186,9 +1195,11 @@ static ChunkFileResult_t LoadOverlayDataTransitionKeyCallback(
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecUVPoints[3]);
   } else if (!_stricmp(szKey, "sides")) {
     const char *pSideList = szValue;
-    char *pTmpList = (char *)_alloca(strlen(pSideList) + 1);
-    strcpy(pTmpList, pSideList);
-    const char *pScan = strtok(pTmpList, " ");
+    size_t size{strlen(pSideList) + 1};
+    char *pTmpList = (char *)_alloca(size);
+    strcpy_s(pTmpList, size, pSideList);
+    char *context;
+    const char *pScan = strtok_s(pTmpList, " ", &context);
     if (!pScan) return ChunkFile_Fail;
 
     pOverlay->aSideList.Purge();
@@ -1196,10 +1207,10 @@ static ChunkFileResult_t LoadOverlayDataTransitionKeyCallback(
 
     do {
       int nSideId;
-      if (sscanf(pScan, "%d", &nSideId) == 1) {
+      if (sscanf_s(pScan, "%d", &nSideId) == 1) {
         pOverlay->aSideList.AddToTail(nSideId);
       }
-    } while ((pScan = strtok(NULL, " ")));
+    } while ((pScan = strtok_s(NULL, " ", &context)));
   }
 
   return ChunkFile_Ok;
@@ -1468,7 +1479,7 @@ ChunkFileResult_t LoadEntityCallback(CChunkFile *pFile, int nParam) {
       mapent->areaportalnum = c_areaportals;
 
       // set the portal number as "portalnumber"
-      sprintf(str, "%i", c_areaportals);
+      sprintf_s(str, "%i", c_areaportals);
       SetKeyValue(mapent, "portalnumber", str);
 
       MoveBrushesToWorld(mapent);
@@ -1827,12 +1838,12 @@ ChunkFileResult_t LoadSideCallback(CChunkFile *pFile, LoadSide_t *pSideInfo) {
 ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
                                       LoadSide_t *pSideInfo) {
   if (!_stricmp(szKey, "plane")) {
-    int nRead = sscanf(szValue, "(%f %f %f) (%f %f %f) (%f %f %f)",
-                       &pSideInfo->planepts[0][0], &pSideInfo->planepts[0][1],
-                       &pSideInfo->planepts[0][2], &pSideInfo->planepts[1][0],
-                       &pSideInfo->planepts[1][1], &pSideInfo->planepts[1][2],
-                       &pSideInfo->planepts[2][0], &pSideInfo->planepts[2][1],
-                       &pSideInfo->planepts[2][2]);
+    int nRead = sscanf_s(szValue, "(%f %f %f) (%f %f %f) (%f %f %f)",
+                         &pSideInfo->planepts[0][0], &pSideInfo->planepts[0][1],
+                         &pSideInfo->planepts[0][2], &pSideInfo->planepts[1][0],
+                         &pSideInfo->planepts[1][1], &pSideInfo->planepts[1][2],
+                         &pSideInfo->planepts[2][0], &pSideInfo->planepts[2][1],
+                         &pSideInfo->planepts[2][2]);
 
     if (nRead != 9) {
       g_MapError.ReportError("parsing plane definition");
@@ -1843,7 +1854,7 @@ ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
       szValue = ReplaceMaterialName(szValue);
     }
 
-    strcpy(pSideInfo->td.name, szValue);
+    strcpy_s(pSideInfo->td.name, szValue);
     g_MapError.TextureState(szValue);
 
     // Find default flags and values for this material.
@@ -1855,18 +1866,18 @@ ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
     pSideInfo->pSide->contents = textureref[mt].contents;
     pSideInfo->pSide->surf = pSideInfo->td.flags;
   } else if (!_stricmp(szKey, "uaxis")) {
-    int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pSideInfo->td.UAxis[0],
-                       &pSideInfo->td.UAxis[1], &pSideInfo->td.UAxis[2],
-                       &pSideInfo->td.shift[0],
-                       &pSideInfo->td.textureWorldUnitsPerTexel[0]);
+    int nRead = sscanf_s(szValue, "[%f %f %f %f] %f", &pSideInfo->td.UAxis[0],
+                         &pSideInfo->td.UAxis[1], &pSideInfo->td.UAxis[2],
+                         &pSideInfo->td.shift[0],
+                         &pSideInfo->td.textureWorldUnitsPerTexel[0]);
     if (nRead != 5) {
       g_MapError.ReportError("parsing U axis definition");
     }
   } else if (!_stricmp(szKey, "vaxis")) {
-    int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pSideInfo->td.VAxis[0],
-                       &pSideInfo->td.VAxis[1], &pSideInfo->td.VAxis[2],
-                       &pSideInfo->td.shift[1],
-                       &pSideInfo->td.textureWorldUnitsPerTexel[1]);
+    int nRead = sscanf_s(szValue, "[%f %f %f %f] %f", &pSideInfo->td.VAxis[0],
+                         &pSideInfo->td.VAxis[1], &pSideInfo->td.VAxis[2],
+                         &pSideInfo->td.shift[1],
+                         &pSideInfo->td.textureWorldUnitsPerTexel[1]);
     if (nRead != 5) {
       g_MapError.ReportError("parsing V axis definition");
     }
@@ -1924,11 +1935,13 @@ ChunkFileResult_t LoadConnectionsKeyCallback(const char *szKey,
   //
   epair_t *pOutput = new epair_t;
 
-  pOutput->key = new char[strlen(szKey) + 1];
-  pOutput->value = new char[strlen(szValue) + 1];
+  size_t key_size{strlen(szKey) + 1};
+  pOutput->key = new char[key_size];
+  size_t value_size{strlen(szValue) + 1};
+  pOutput->value = new char[value_size];
 
-  strcpy(pOutput->key, szKey);
-  strcpy(pOutput->value, szValue);
+  strcpy_s(pOutput->key, key_size, szKey);
+  strcpy_s(pOutput->value, value_size, szValue);
 
   //
   // Append it to the end of epairs list.
@@ -2039,8 +2052,8 @@ ChunkFileResult_t LoadSolidCallback(CChunkFile *pFile,
       VectorAdd(b->mins, b->maxs, origin);
       VectorScale(origin, 0.5, origin);
 
-      sprintf(string, "%i %i %i", (int)origin[0], (int)origin[1],
-              (int)origin[2]);
+      sprintf_s(string, "%i %i %i", (int)origin[0], (int)origin[1],
+                (int)origin[2]);
       SetKeyValue(&entities[b->entitynum], "origin", string);
 
       VectorCopy(origin, entities[b->entitynum].origin);
@@ -2106,7 +2119,6 @@ Expands all the brush planes and saves a new map out
 ================
 */
 void TestExpandBrushes(void) {
-  FILE *f;
   side_t *s;
   int i, j, bn;
   winding_t *w;
@@ -2114,9 +2126,12 @@ void TestExpandBrushes(void) {
   mapbrush_t *brush;
   f32 dist;
 
-  Msg("writing %s\n", name);
-  f = fopen(name, "wb");
-  if (!f) Error("Can't write %s\b", name);
+  Msg("Writing %s\n", name);
+  FILE *f;
+  if (fopen_s(&f, name, "wb")) {
+    Error("Can't write %s\b", name);
+    return;
+  }
 
   fprintf(f, "{\n\"classname\" \"worldspawn\"\n");
   fprintf(

@@ -44,11 +44,6 @@
 i32 g_DefaultHeapFlags =
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_ALLOC_MEM_DF);
 
-#if defined(_MEMTEST)
-static ch s_szStatsMapName[32];
-static ch s_szStatsComment[256];
-#endif
-
 #if defined(USE_STACK_WALK) || defined(USE_STACK_WALK_DETAILED)
 #include <dbghelp.h>
 
@@ -446,16 +441,6 @@ class CDbgMemAlloc : public IMemAlloc {
       MemAllocFailHandler_t pfnMemAllocFailHandler) {
     return nullptr;
   }  // debug heap doesn't attempt retries
-
-#if defined(_MEMTEST)
-  void SetStatsExtraInfo(const ch *pMapName, const ch *pComment) {
-    strncpy(s_szStatsMapName, pMapName, sizeof(s_szStatsMapName));
-    s_szStatsMapName[sizeof(s_szStatsMapName) - 1] = '\0';
-
-    strncpy(s_szStatsComment, pComment, sizeof(s_szStatsComment));
-    s_szStatsComment[sizeof(s_szStatsComment) - 1] = '\0';
-  }
-#endif
 
   virtual usize MemoryAllocFailed();
   void SetCRTAllocFailed(usize nMemSize);
@@ -1124,27 +1109,7 @@ void CDbgMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
   if (m_OutputFunc == DefaultHeapReportFunc) {
     const ch *pPath = "";
 
-#if defined(_MEMTEST)
-    ch szXboxName[32];
-    strcpy(szXboxName, "xbox");
-    DWORD numChars = sizeof(szXboxName);
-    DmGetXboxName(szXboxName, &numChars);
-    ch *pXboxName = strstr(szXboxName, "_360");
-    if (pXboxName) {
-      *pXboxName = '\0';
-    }
-
-    SYSTEMTIME systemTime;
-    GetLocalTime(&systemTime);
-    _snprintf_s(szFileName, sizeof(szFileName),
-                "%s%s_%2.2d%2.2d_%2.2d%2.2d%2.2d_%d.txt", pPath,
-                s_szStatsMapName, systemTime.wMonth, systemTime.wDay,
-                systemTime.wHour, systemTime.wMinute, systemTime.wSecond,
-                s_FileCount);
-#else
-    _snprintf_s(szFileName, sizeof(szFileName), "%s%s%d.txt", pPath,
-                pchFileBase, s_FileCount);
-#endif
+    sprintf_s(szFileName, "%s%s%d.txt", pPath, pchFileBase, s_FileCount);
 
     ++s_FileCount;
 
@@ -1173,7 +1138,7 @@ void CDbgMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
 
 // Stat output
 
-void CDbgMemAlloc::DumpStats() { DumpStatsFileBase("memstats"); }
+void CDbgMemAlloc::DumpStats() { DumpStatsFileBase(kMemoryStatsDumpFileName); }
 
 void CDbgMemAlloc::SetCRTAllocFailed(usize nSize) {
   m_sMemoryAllocFailed = nSize;

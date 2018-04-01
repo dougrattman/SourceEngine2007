@@ -1,23 +1,15 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "stdafx.h"
 
 #include <wincon.h>
 #include "ProcessWnd.h"
 #include "hammer.h"
-#include "osver.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define IDC_PROCESSWND_EDIT 1
 #define IDC_PROCESSWND_COPYALL 2
-
-LPCTSTR GetErrorString();
-
-CProcessWnd::CProcessWnd() { Font.CreatePointFont(100, "Courier New"); }
-
-CProcessWnd::~CProcessWnd() {}
 
 BEGIN_MESSAGE_MAP(CProcessWnd, CWnd)
 ON_BN_CLICKED(IDC_PROCESSWND_COPYALL, OnCopyAll)
@@ -29,25 +21,29 @@ ON_WM_SIZE()
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProcessWnd operations
+LPCTSTR GetErrorString();
 
-int CProcessWnd::Execute(LPCTSTR pszCmd, ...) {
-  CString strBuf;
+CProcessWnd::CProcessWnd() { Font.CreatePointFont(90, "Courier New"); }
+
+CProcessWnd::~CProcessWnd() {}
+
+int CProcessWnd::Execute(LPCTSTR command, ...) {
+  CString buffer;
 
   va_list vl;
-  va_start(vl, pszCmd);
+  va_start(vl, command);
 
-  while (1) {
+  while (true) {
     char* p = va_arg(vl, char*);
     if (!p) break;
-    strBuf += p;
-    strBuf += " ";
+
+    buffer += p;
+    buffer += " ";
   }
 
   va_end(vl);
 
-  return Execute(pszCmd, (LPCTSTR)strBuf);
+  return Execute(command, buffer.operator LPCSTR());
 }
 
 void CProcessWnd::Clear() {
@@ -56,113 +52,95 @@ void CProcessWnd::Clear() {
   Edit.RedrawWindow();
 }
 
-void CProcessWnd::Append(CString str) {
-  m_EditText += str;
-  if (getOSVersion() >= eWinNT) {
-    Edit.SetWindowText(m_EditText);
-  } else {
-    DWORD length = m_EditText.GetLength() / sizeof(TCHAR);
+void CProcessWnd::Append(CString message) {
+  m_EditText += message;
 
-    // Gracefully handle 64k edit control display on win9x (display last 64k of
-    // text) Copy to clipboard will work fine, as it copies the m_EditText
-    // contents in its entirety to the clipboard
-    if (length >= 0x0FFFF) {
-      LPTSTR string = m_EditText.GetBuffer(length + 1);
-      LPTSTR offset;
-      offset = string + length - 0x0FFFF;
-      Edit.SetWindowText(offset);
-      m_EditText.ReleaseBuffer();
-    } else {
-      Edit.SetWindowText(m_EditText);
-    }
-  }
+  Edit.SetWindowText(m_EditText);
   Edit.LineScroll(Edit.GetLineCount());
   Edit.RedrawWindow();
 }
 
-int CProcessWnd::Execute(LPCTSTR pszCmd, LPCTSTR pszCmdLine) {
+int CProcessWnd::Execute(LPCTSTR cmd, LPCTSTR cmd_line) {
   int rval = -1;
-  SECURITY_ATTRIBUTES saAttr;
-  HANDLE hChildStdinRd, hChildStdinWr, hChildStdoutRd, hChildStdoutWr,
-      hChildStderrWr;
+  HANDLE cmd_stdin_read_pipe, cmd_stdin_write_pipe, cmd_stdout_read_pipe,
+      cmd_stdout_write_pipe, cmd_stderr_write_pipe;
 
   // Set the bInheritHandle flag so pipe handles are inherited.
-  saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-  saAttr.bInheritHandle = TRUE;
-  saAttr.lpSecurityDescriptor = NULL;
+  SECURITY_ATTRIBUTES security_attrs = {sizeof(SECURITY_ATTRIBUTES)};
+  security_attrs.bInheritHandle = TRUE;
+  security_attrs.lpSecurityDescriptor = nullptr;
 
   // Create a pipe for the child's STDOUT.
-  if (CreatePipe(&hChildStdoutRd, &hChildStdoutWr, &saAttr, 0)) {
-    if (CreatePipe(&hChildStdinRd, &hChildStdinWr, &saAttr, 0)) {
-      if (DuplicateHandle(GetCurrentProcess(), hChildStdoutWr,
-                          GetCurrentProcess(), &hChildStderrWr, 0, TRUE,
+  if (CreatePipe(&cmd_stdout_read_pipe, &cmd_stdout_write_pipe, &security_attrs,
+                 0)) {
+    if (CreatePipe(&cmd_stdin_read_pipe, &cmd_stdin_write_pipe, &security_attrs,
+                   0)) {
+      if (DuplicateHandle(GetCurrentProcess(), cmd_stdout_write_pipe,
+                          GetCurrentProcess(), &cmd_stderr_write_pipe, 0, TRUE,
                           DUPLICATE_SAME_ACCESS)) {
         /* Now create the child process. */
-        STARTUPINFO si;
-        memset(&si, 0, sizeof si);
-        si.cb = sizeof(si);
+        STARTUPINFO si = {sizeof si};
         si.dwFlags = STARTF_USESTDHANDLES;
-        si.hStdInput = hChildStdinRd;
-        si.hStdError = hChildStderrWr;
-        si.hStdOutput = hChildStdoutWr;
+        si.hStdInput = cmd_stdin_read_pipe;
+        si.hStdError = cmd_stderr_write_pipe;
+        si.hStdOutput = cmd_stdout_write_pipe;
+
         PROCESS_INFORMATION pi;
-        CString str;
-        str.Format("%s %s", pszCmd, pszCmdLine);
-        if (CreateProcess(NULL, (char*)LPCTSTR(str), NULL, NULL, TRUE,
-                          DETACHED_PROCESS, NULL, NULL, &si, &pi)) {
-          HANDLE hProcess = pi.hProcess;
+        CString process;
+        process.Format("%s %s", cmd, cmd_line);
+        if (CreateProcess(nullptr, (char*)process.operator LPCSTR(), nullptr,
+                          nullptr, TRUE, DETACHED_PROCESS, nullptr, nullptr,
+                          &si, &pi)) {
+          HANDLE process = pi.hProcess;
 
-#define BUFFER_SIZE 4096
           // read from pipe..
-          char buffer[BUFFER_SIZE];
-          BOOL bDone = FALSE;
+          char buffer[4096];
+          BOOL is_done = FALSE;
 
-          while (1) {
-            DWORD dwCount = 0;
-            DWORD dwRead = 0;
+          while (true) {
+            DWORD dwCount = 0, dwRead = 0;
 
             // read from input handle
-            PeekNamedPipe(hChildStdoutRd, NULL, NULL, NULL, &dwCount, NULL);
+            PeekNamedPipe(cmd_stdout_read_pipe, nullptr, 0, nullptr, &dwCount,
+                          nullptr);
+
             if (dwCount) {
-              dwCount = std::min(dwCount, BUFFER_SIZE - 1);
-              ReadFile(hChildStdoutRd, buffer, dwCount, &dwRead, NULL);
+              dwCount = std::min(dwCount, (DWORD)SOURCE_ARRAYSIZE(buffer) - 1);
+              ReadFile(cmd_stdout_read_pipe, buffer, dwCount, &dwRead, nullptr);
             }
+
             if (dwRead) {
-              buffer[dwRead] = 0;
+              buffer[dwRead] = '\0';
               Append(buffer);
-            }
-            // check process termination
-            else if (WaitForSingleObject(hProcess, 1000) != WAIT_TIMEOUT) {
-              if (bDone) break;
-              bDone = TRUE;  // next time we get it
+            } else if (WaitForSingleObject(process, 1000) != WAIT_TIMEOUT) {
+              // check process termination
+              if (is_done) break;
+
+              is_done = TRUE;  // next time we get it
             }
           }
           rval = 0;
         } else {
           SetForegroundWindow();
-          CString strTmp;
-          strTmp.Format("* Could not execute the command:\r\n   %s\r\n",
-                        str.GetString());
-          Append(strTmp);
-          strTmp.Format("* Windows gave the error message:\r\n   \"%s\"\r\n",
-                        GetErrorString());
-          Append(strTmp);
+          CString message;
+          message.Format("> Could not execute the command:\r\n   %s\r\n",
+                         process.GetString());
+          Append(message);
+          message.Format("> Error: \"%s\"\r\n", GetErrorString());
+          Append(message);
         }
 
-        CloseHandle(hChildStderrWr);
+        CloseHandle(cmd_stderr_write_pipe);
       }
-      CloseHandle(hChildStdinRd);
-      CloseHandle(hChildStdinWr);
+      CloseHandle(cmd_stdin_read_pipe);
+      CloseHandle(cmd_stdin_write_pipe);
     }
-    CloseHandle(hChildStdoutRd);
-    CloseHandle(hChildStdoutWr);
+    CloseHandle(cmd_stdout_read_pipe);
+    CloseHandle(cmd_stdout_write_pipe);
   }
 
   return rval;
 }
-
-/////////////////////////////////////////////////////////////////////////////
-// CProcessWnd message handlers
 
 void CProcessWnd::OnTimer(UINT nIDEvent) { CWnd::OnTimer(nIDEvent); }
 
@@ -212,17 +190,15 @@ void CProcessWnd::OnSize(UINT nType, int cx, int cy) {
   m_btnCopyAll.MoveWindow(rctButton);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Prepare the process window for display. If it has not been created
 //			yet, register the class and create it.
-//-----------------------------------------------------------------------------
-void CProcessWnd::GetReady(void) {
+void CProcessWnd::GetReady() {
   if (!IsWindow(m_hWnd)) {
     CString strClass =
         AfxRegisterWndClass(0, AfxGetApp()->LoadStandardCursor(IDC_ARROW),
                             HBRUSH(GetStockObject(WHITE_BRUSH)));
     CreateEx(0, strClass, "Compile Process Window", WS_OVERLAPPEDWINDOW, 50, 50,
-             600, 400, AfxGetMainWnd()->GetSafeHwnd(), HMENU(NULL));
+             600, 400, AfxGetMainWnd()->GetSafeHwnd(), HMENU(nullptr));
   }
 
   ShowWindow(SW_SHOW);
@@ -241,19 +217,17 @@ BOOL CProcessWnd::PreTranslateMessage(MSG* pMsg) {
 }
 
 static void CopyToClipboard(const CString& text) {
-  if (OpenClipboard(NULL)) {
+  if (OpenClipboard(nullptr)) {
     if (EmptyClipboard()) {
-      HGLOBAL hglbCopy;
-      LPTSTR tstrCopy;
+      HGLOBAL copy_mem =
+          GlobalAlloc(GMEM_DDESHARE, text.GetLength() + sizeof(TCHAR));
 
-      hglbCopy = GlobalAlloc(GMEM_DDESHARE, text.GetLength() + sizeof(TCHAR));
+      if (copy_mem != nullptr) {
+        LPTSTR copy_message = (LPTSTR)GlobalLock(copy_mem);
+        strcpy(copy_message, text.operator LPCSTR());
+        GlobalUnlock(copy_mem);
 
-      if (hglbCopy != NULL) {
-        tstrCopy = (LPTSTR)GlobalLock(hglbCopy);
-        strcpy(tstrCopy, (LPCTSTR)text);
-        GlobalUnlock(hglbCopy);
-
-        SetClipboardData(CF_TEXT, hglbCopy);
+        SetClipboardData(CF_TEXT, copy_mem);
       }
     }
     CloseClipboard();

@@ -308,7 +308,7 @@ void CEditGameClass::GetAngles(QAngle &vecAngles) {
   vecAngles = vec3_angle;
   const char *pszAngles = GetKeyValue("angles");
   if (pszAngles != NULL) {
-    sscanf(pszAngles, "%f %f %f", &vecAngles[PITCH], &vecAngles[YAW],
+    sscanf_s(pszAngles, "%f %f %f", &vecAngles[PITCH], &vecAngles[YAW],
            &vecAngles[ROLL]);
   }
 }
@@ -614,7 +614,7 @@ unsigned long CEditGameClass::GetSpawnFlags(void) {
   }
 
   unsigned long val = 0;
-  sscanf(pszVal, "%lu", &val);
+  sscanf_s(pszVal, "%lu", &val);
   return val;
 }
 

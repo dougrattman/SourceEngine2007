@@ -13,7 +13,7 @@
 #include "base/include/compiler_specific.h"
 
 // In case this ever changes.
-#define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846f
 
 template <typename T>
 constexpr const inline T fsel(T comparand, T high_value, T low_value) {

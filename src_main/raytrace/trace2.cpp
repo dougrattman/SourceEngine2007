@@ -2,7 +2,7 @@
 #include <mathlib/halton.h>
 #include "raytrace.h"
 
-#define IGAMMA (1.0 / 2.2)
+#define IGAMMA (1.0f / 2.2f)
 #define MAGIC_NUMBER (1 << 23)
 
 static fltx4 Four_MagicNumbers = {MAGIC_NUMBER, MAGIC_NUMBER, MAGIC_NUMBER,
@@ -16,7 +16,7 @@ void MapLinearIntensities(FourVectors const &intens, uint32_t *p1, uint32_t *p2,
   // NOTE the _mm_empty macro is voodoo. do not mess with this routine casually
   // - simply throwing anything that ends up generating a fpu stack references
   // in here would be bad news.
-  static fltx4 pixscale = {255.0, 255.0, 255.0, 255.0};
+  static fltx4 pixscale = {255.0f, 255.0f, 255.0f, 255.0f};
   fltx4 r, g, b;
   r = MinSIMD(pixscale, MulSIMD(pixscale, PowSIMD(intens.x, IGAMMA)));
   g = MinSIMD(pixscale, MulSIMD(pixscale, PowSIMD(intens.y, IGAMMA)));
@@ -33,10 +33,10 @@ void MapLinearIntensities(FourVectors const &intens, uint32_t *p1, uint32_t *p2,
 }
 
 static alignas(16) int32_t signmask[4] = {0x80000000i32, 0x80000000i32,
-                                      0x80000000i32, 0x80000000i32};
+                                          0x80000000i32, 0x80000000i32};
 static alignas(16) int32_t all_ones[4] = {-1, -1, -1, -1};
 static fltx4 all_zeros = {0, 0, 0, 0};
-static fltx4 TraceLimit = {1.0e20, 1.0e20, 1.0e20, 1.0e20};
+static fltx4 TraceLimit = {1.0e20f, 1.0e20f, 1.0e20f, 1.0e20f};
 
 void RayTracingEnvironment::RenderScene(
     int width, int height,    // width and height of desired rendering
@@ -138,7 +138,7 @@ void RayTracingEnvironment::RenderScene(
               FourRays shadow_rays;
               shadow_rays.origin = surface_pos;
               FourVectors epsilon = ldir;
-              epsilon *= 0.01;
+              epsilon *= 0.01f;
               shadow_rays.origin += epsilon;
               shadow_rays.direction = ldir;
               RayTracingResult shadowtest;
@@ -225,7 +225,7 @@ void RayTracingEnvironment::ComputeVirtualLightSources(void) {
             surface_pos *= rslt.HitDistance;
             surface_pos += myrays.origin;
             FourVectors delta = rslt.surface_normal;
-            delta *= 0.1;
+            delta *= 0.1f;
             surface_pos += delta;
             LightList[l].ComputeLightAtPoints(surface_pos, rslt.surface_normal,
                                               intens);

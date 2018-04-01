@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
-// Used by FileSystemOpenDialog.rc
+// Used by filesystemopendialog.rc
 //
 #define IDS_NO_RELATIVE_PATH            1
 #define IDD_FILESYSTEM_OPENDIALOG       327

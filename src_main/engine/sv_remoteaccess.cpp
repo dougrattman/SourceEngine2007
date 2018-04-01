@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Handles all the functions for implementing remote access to the
 // engine
@@ -670,12 +670,11 @@ void CServerRemoteAccess::GetStatsString(char *buf, int bufSize) {
 
   // format: CPU percent, Bandwidth in, Bandwidth out, uptime, changelevels,
   // framerate, total players
-  _snprintf(buf, bufSize - 1, "%5.2f %5.2f %5.2f %7i %5i %7.2f %7i",
+  sprintf_s(buf, bufSize, "%5.2f %5.2f %5.2f %7i %5i %7.2f %7i",
             sv.GetCPUUsage() * 100, avgIn, avgOut, (int)(Plat_FloatTime()) / 60,
             sv.GetSpawnCount() - 1,
             1.0 / host_frametime,  // frame rate
             sv.GetNumClients() - sv.GetNumProxies());
-  buf[bufSize - 1] = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -720,21 +719,21 @@ void CServerRemoteAccess::GetMapList(CUtlBuffer &value) {
   // search the directory structure.
   char mapwild[MAX_QPATH];
   char friendly_com_gamedir[MAX_OSPATH];
-  strcpy(mapwild, "maps/*.bsp");
+  strcpy_s(mapwild, "maps/*.bsp");
   Q_strncpy(friendly_com_gamedir, com_gamedir, sizeof(friendly_com_gamedir));
   Q_strlower(friendly_com_gamedir);
 
   char const *findfn = Sys_FindFirst(mapwild, NULL, 0);
   while (findfn) {
     char curDir[SOURCE_MAX_PATH];
-    _snprintf(curDir, SOURCE_MAX_PATH, "maps/%s", findfn);
+    sprintf_s(curDir, "maps/%s", findfn);
     g_pFileSystem->GetLocalPath(curDir, curDir, SOURCE_MAX_PATH);
 
     // limit maps displayed to ones for the mod only
     if (strstr(curDir, friendly_com_gamedir)) {
       // clean up the map name
       char mapName[SOURCE_MAX_PATH];
-      strcpy(mapName, findfn);
+      strcpy_s(mapName, findfn);
       char *extension = strstr(mapName, ".bsp");
       if (extension) {
         *extension = 0;

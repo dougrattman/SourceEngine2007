@@ -1,4 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
+
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
+#include "base/include/windows/windows_light.h"  // for CloseHandle()
+#endif
 
 #include "Session.h"
 
@@ -8,13 +14,7 @@
 #include "tier0/include/dbg.h"
 #include "tier0/include/tslist.h"
 #include "tier1/UtlLinkedList.h"
-#include "build/include/build_config.h"
 
-#ifdef OS_WIN
-#include "base/include/windows/windows_light.h"  // for CloseHandle()
-#endif
-
- 
 #include "tier0/include/memdbgon.h"
 
 extern IXboxSystem *g_pXboxSystem;

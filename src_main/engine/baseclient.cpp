@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:  baseclient.cpp: implementation of the CBaseClient class.
 
@@ -354,21 +354,19 @@ void CBaseClient::SetName(const char *name) {
 }
 
 void CBaseClient::ActivatePlayer() {
-  COM_TimestampedLog("CBaseClient::ActivatePlayer");
+  Plat_TimestampedLog("Engine::CBaseClient::ActivatePlayer");
 
   // tell server to update the user info table (if not already done)
   m_Server->UserInfoChanged(m_nClientSlot);
 
   m_nSignonState = SIGNONSTATE_FULL;
   MapReslistGenerator().OnPlayerSpawn();
-#ifndef _XBOX
   // update the UI
   NotifyDedicatedServerUI("UpdatePlayers");
-#endif
 }
 
 void CBaseClient::SpawnPlayer(void) {
-  COM_TimestampedLog("CBaseClient::SpawnPlayer");
+  Plat_TimestampedLog("Engine::CBaseClient::SpawnPlayer");
 
   if (!IsFakeClient()) {
     // free old baseline snapshot
@@ -390,7 +388,7 @@ void CBaseClient::SpawnPlayer(void) {
 }
 
 bool CBaseClient::SendSignonData(void) {
-  COM_TimestampedLog(" CBaseClient::SendSignonData");
+  Plat_TimestampedLog("Engine::CBaseClient::SendSignonData");
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_SENDSIGNONDATA);
 #endif
@@ -411,7 +409,7 @@ bool CBaseClient::SendSignonData(void) {
 
 void CBaseClient::Connect(const char *szName, int nUserID,
                           INetChannel *pNetChannel, bool bFakePlayer) {
-  COM_TimestampedLog("CBaseClient::Connect");
+  Plat_TimestampedLog("Engine::CBaseClient::Connect");
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_SIGNONCONNECT);
 #endif
@@ -503,7 +501,7 @@ void CBaseClient::FireGameEvent(IGameEvent *event) {
 }
 
 bool CBaseClient::SendServerInfo(void) {
-  COM_TimestampedLog(" CBaseClient::SendServerInfo");
+  Plat_TimestampedLog("Engine::CBaseClient::SendServerInfo begin.");
 
   // supporting smaller stack
   uint8_t *buffer = (uint8_t *)MemAllocScratch(NET_MAX_PAYLOAD);
@@ -567,7 +565,7 @@ bool CBaseClient::SendServerInfo(void) {
     return false;
   }
 
-  COM_TimestampedLog(" CBaseClient::SendServerInfo(finished)");
+  Plat_TimestampedLog("Engine::CBaseClient::SendServerInfo end.");
 
   MemFreeScratch();
 
@@ -1158,24 +1156,23 @@ const char *GetUserIDString(const USERID_t &id) {
 
       if (Steam3Server().BLanOnly() &&
           !Q_memcmp(&id.uid.steamid, &nullID, sizeof(TSteamGlobalUserID))) {
-        strcpy(idstr, "STEAM_ID_LAN");
+        strcpy_s(idstr, "STEAM_ID_LAN");
       } else if (!Q_memcmp(&id.uid.steamid, &nullID,
                            sizeof(TSteamGlobalUserID))) {
-        strcpy(idstr, "STEAM_ID_PENDING");
+        strcpy_s(idstr, "STEAM_ID_PENDING");
       } else {
-        Q_snprintf(idstr, sizeof(idstr) - 1, "STEAM_%u:%u:%u",
-                   (SteamInstanceID_t)id.uid.steamid.m_SteamInstanceID,
-                   (unsigned int)((SteamLocalUserID_t)id.uid.steamid
-                                      .m_SteamLocalUserID.Split.High32bits),
-                   (unsigned int)((SteamLocalUserID_t)id.uid.steamid
-                                      .m_SteamLocalUserID.Split.Low32bits));
-        idstr[sizeof(idstr) - 1] = '\0';
+        sprintf_s(idstr, "STEAM_%u:%u:%u",
+                  (SteamInstanceID_t)id.uid.steamid.m_SteamInstanceID,
+                  (unsigned int)((SteamLocalUserID_t)id.uid.steamid
+                                     .m_SteamLocalUserID.Split.High32bits),
+                  (unsigned int)((SteamLocalUserID_t)id.uid.steamid
+                                     .m_SteamLocalUserID.Split.Low32bits));
       }
     } break;
     case IDTYPE_HLTV: {
-      strcpy(idstr, "HLTV");
+      strcpy_s(idstr, "HLTV");
     } break;
-    default: { strcpy(idstr, "UNKNOWN"); } break;
+    default: { strcpy_s(idstr, "UNKNOWN"); } break;
   }
 
   return idstr;
@@ -1185,9 +1182,7 @@ const char *GetUserIDString(const USERID_t &id) {
 // Purpose: return a string version of the userid
 //-----------------------------------------------------------------------------
 const char *CBaseClient::GetNetworkIDString() const {
-  if (IsFakeClient()) {
-    return "BOT";
-  }
+  if (IsFakeClient()) return "BOT";
 
   return (GetUserIDString(m_NetworkID));
 }

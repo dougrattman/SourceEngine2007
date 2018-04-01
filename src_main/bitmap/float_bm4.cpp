@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bitmap/float_bm.h"
 
@@ -51,7 +51,7 @@ static unsigned SSBumpCalculationThreadFN(void *ctx1) {
       for (int x = 0; x < ctx->ret_bm->Width; x++) {
         Vector surf_pnt(x, y, ctx->bump_scale * ctx->src_bm->Pixel(x, y, 3));
         // move the ray origin up a hair
-        surf_pnt.z += 0.55;
+        surf_pnt.z += 0.55f;
         Vector trace_end = surf_pnt;
         Vector trace_dir = ctx->trace_directions[r];
         trace_dir *= (1 + NREPS_TILE * 2) *
@@ -287,8 +287,8 @@ FloatBitMap_t::ComputeSelfShadowedBumpmapFromHeightInAlphaChannel(
     ThreadJoin(waithandles[t]);
   }
   if (nOptionFlags & SSBUMP_MOD2X_DETAIL_TEXTURE) {
-    const float flOutputScale =
-        0.5 * (1.0 / .57735026);  // normalize so that a flat normal yields 0.5
+    // normalize so that a flat normal yields 0.5
+    const float flOutputScale = 0.5f * (1.0f / .57735026f);
     // scale output weights by color channel
     for (int nY = 0; nY < Height; nY++)
       for (int nX = 0; nX < Width; nX++) {

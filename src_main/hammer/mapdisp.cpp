@@ -3540,7 +3540,7 @@ bool CMapDisp::SerializedLoadMAP( std::fstream &file, CMapFace *pFace, UINT vers
 
 	if( version < 350 )
 	{
-		sscanf( buf, "%d [ %f %f %f ] [ %f %f %f ] %f %d %f",
+		sscanf_s( buf, "%d [ %f %f %f ] [ %f %f %f ] %f %d %f",
 				&power,
 				&m_MapAxes[0][0], &m_MapAxes[0][1], &m_MapAxes[0][2],
 				&m_MapAxes[1][0], &m_MapAxes[1][1], &m_MapAxes[1][2],
@@ -3550,7 +3550,7 @@ bool CMapDisp::SerializedLoadMAP( std::fstream &file, CMapFace *pFace, UINT vers
 	}
 	else
 	{
-		sscanf( buf, "%d [ %f %f %f ] [ %f %f %f ] %d %f",
+		sscanf_s( buf, "%d [ %f %f %f ] [ %f %f %f ] %d %f",
 				&power,
 				&m_MapAxes[0][0], &m_MapAxes[0][1], &m_MapAxes[0][2],
 				&m_MapAxes[1][0], &m_MapAxes[1][1], &m_MapAxes[1][2],

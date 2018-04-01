@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vmpi_tools_shared.h"
 
@@ -138,7 +138,8 @@ void SendDBInfo(const CDBInfo *pInfo, unsigned long jobPrimaryID) {
   const void *pChunks[] = {cPacketInfo, pInfo, &jobPrimaryID};
   int chunkLengths[] = {2, sizeof(CDBInfo), sizeof(jobPrimaryID)};
 
-  VMPI_SendChunks(pChunks, chunkLengths, SOURCE_ARRAYSIZE(pChunks), VMPI_PERSISTENT);
+  VMPI_SendChunks(pChunks, chunkLengths, SOURCE_ARRAYSIZE(pChunks),
+                  VMPI_PERSISTENT);
 }
 
 void RecvDBInfo(CDBInfo *pInfo, unsigned long *pJobPrimaryID) {
@@ -203,10 +204,9 @@ void VMPI_HandleCrash(const char *pMessage, void *pvExceptionInfo,
 
     // Now attempt to create a minidump with the given exception information
     if (pvExceptionInfo) {
-      struct EXCEPTION_POINTERS *pvExPointers =
-          (struct EXCEPTION_POINTERS *)pvExceptionInfo;
+      EXCEPTION_POINTERS *pvExPointers = (EXCEPTION_POINTERS *)pvExceptionInfo;
       wchar_t tchMinidumpFileName[SOURCE_MAX_PATH] = {0};
-      u32 error_code = WriteMiniDumpUsingExceptionInfo(
+      auto error_code = WriteMiniDumpUsingExceptionInfo(
           pvExPointers->ExceptionRecord->ExceptionCode, pvExPointers,
           (MINIDUMP_TYPE)(MiniDumpWithDataSegs |
                           MiniDumpWithIndirectlyReferencedMemory |
@@ -217,7 +217,7 @@ void VMPI_HandleCrash(const char *pMessage, void *pvExceptionInfo,
           // MiniDumpWithProcessThreadData | MiniDumpWithPrivateReadWriteMemory
           // ), ( MINIDUMP_TYPE )( MiniDumpNormal ),
           tchMinidumpFileName, SOURCE_ARRAYSIZE(tchMinidumpFileName));
-      if (error_code == 0) {
+      if (error_code == S_OK) {
         crashMsg[2] = 'f';
         VMPI_SendFileChunk(crashMsg, sizeof(crashMsg), tchMinidumpFileName);
         DeleteFileW(tchMinidumpFileName);
@@ -233,8 +233,8 @@ void VMPI_HandleCrash(const char *pMessage, void *pvExceptionInfo,
 
 // This is called if we crash inside our crash handler. It just terminates the
 // process immediately.
-LONG SOURCE_STDCALL VMPI_SecondExceptionFilter(
-    struct _EXCEPTION_POINTERS *ExceptionInfo) {
+LONG SOURCE_STDCALL
+VMPI_SecondExceptionFilter(struct _EXCEPTION_POINTERS *ExceptionInfo) {
   TerminateProcess(GetCurrentProcess(), 2);
   return EXCEPTION_EXECUTE_HANDLER;  // (never gets here anyway)
 }

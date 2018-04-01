@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: noise() primitives.
 
@@ -6,12 +6,11 @@
 
 #include <memory.h>
 #include <cmath>
-#include "tier0/include/basetypes.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
+#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // generate high quality noise based upon "sparse convolution". HIgher quality
@@ -36,14 +35,14 @@ static inline int Hash4D(int ix, int iy, int iz, int idx) {
 
 #define SQ(x) ((x) * (x))
 
-static f32 CellNoise(int ix, int iy, int iz, f32 xfrac, f32 yfrac,
-                       f32 zfrac, f32 (*pNoiseShapeFunction)(f32)) {
+static f32 CellNoise(int ix, int iy, int iz, f32 xfrac, f32 yfrac, f32 zfrac,
+                     f32 (*pNoiseShapeFunction)(f32)) {
   f32 ret = 0;
   for (int idx = 0; idx < N_IMPULSES_PER_CELL; idx++) {
     int coord_idx = Hash4D(ix, iy, iz, idx);
     f32 dsq = SQ(impulse_xcoords[coord_idx] - xfrac) +
-                SQ(impulse_ycoords[coord_idx] - yfrac) +
-                SQ(impulse_zcoords[coord_idx] - zfrac);
+              SQ(impulse_ycoords[coord_idx] - yfrac) +
+              SQ(impulse_zcoords[coord_idx] - zfrac);
     dsq = sqrt(dsq);
     if (dsq < 1.0) {
       ret += (*pNoiseShapeFunction)(1 - dsq);
@@ -93,8 +92,7 @@ f32 fmin1 = 10000000.0;
 f32 fmax1 = -1000000.0;
 #endif
 
-f32 SparseConvolutionNoise(Vector const &pnt,
-                             f32 (*pNoiseShapeFunction)(f32)) {
+f32 SparseConvolutionNoise(Vector const &pnt, f32 (*pNoiseShapeFunction)(f32)) {
   // computer integer lattice point
   int ix = LatticeCoord(pnt.x);
   int iy = LatticeCoord(pnt.y);
@@ -117,7 +115,7 @@ f32 SparseConvolutionNoise(Vector const &pnt,
   fmin1 = std::min(sum_out, fmin1);
   fmax1 = std::max(sum_out, fmax1);
 #endif
-  return RemapValClamped(sum_out, .544487, 9.219176, 0.0, 1.0);
+  return RemapValClamped(sum_out, .544487f, 9.219176f, 0.0f, 1.0f);
 }
 
 // Improved Perlin Noise
@@ -126,7 +124,7 @@ f32 SparseConvolutionNoise(Vector const &pnt,
 // as available here: http://mrl.nyu.edu/~perlin/noise/
 
 f32 NoiseGradient(int hash, f32 x, f32 y, f32 z) {
-  int h = hash & 15;        // CONVERT LO 4 BITS OF HASH CODE
+  int h = hash & 15;      // CONVERT LO 4 BITS OF HASH CODE
   f32 u = h < 8 ? x : y;  // INTO 12 GRADIENT DIRECTIONS.
   f32 v = h < 4 ? y : (h == 12 || h == 14 ? x : z);
   return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);

@@ -383,7 +383,7 @@ void CBaseGamesPage::UpdateGameFilter() {
 //-----------------------------------------------------------------------------
 // Purpose: Handles incoming server refresh data
 //			updates the server browser with the refreshed
-//information from the server itself
+// information from the server itself
 //-----------------------------------------------------------------------------
 void CBaseGamesPage::ServerResponded(gameserveritem_t &server) {
   int nIndex = -1;  // start at -1 and work backwards to find the next free slot
@@ -410,7 +410,7 @@ void CBaseGamesPage::ServerResponded(int iServer) {
 //-----------------------------------------------------------------------------
 // Purpose: Handles incoming server refresh data
 //			updates the server browser with the refreshed
-//information from the server itself
+// information from the server itself
 //-----------------------------------------------------------------------------
 void CBaseGamesPage::ServerResponded(int iServer,
                                      gameserveritem_t *pServerItem) {
@@ -515,12 +515,11 @@ void CBaseGamesPage::ServerResponded(int iServer,
 
   if (pServerItem->m_ulTimeLastPlayed) {
     // construct a time string for last played time
-    struct tm *now;
-    now = localtime((time_t *)&pServerItem->m_ulTimeLastPlayed);
+    struct tm now;
 
-    if (now) {
+    if (!localtime_s(&now, (time_t *)&pServerItem->m_ulTimeLastPlayed)) {
       char buf[64];
-      strftime(buf, sizeof(buf), "%a %d %b %I:%M%p", now);
+      strftime(buf, sizeof(buf), "%a %d %b %I:%M%p", &now);
       Q_strlower(buf + strlen(buf) - 4,
                  SOURCE_ARRAYSIZE(buf) - strlen(buf) + 4);
       kv->SetString("LastPlayed", buf);
@@ -727,7 +726,7 @@ void CBaseGamesPage::UpdateStatus() {
     wchar_t header[256];
     wchar_t count[128];
 
-    _itow(m_pGameList->GetItemCount(), count, 10);
+    _itow_s(m_pGameList->GetItemCount(), count, 10);
     g_pVGuiLocalize->ConstructString(
         header, sizeof(header),
         g_pVGuiLocalize->Find("#ServerBrowser_ServersCount"), 1, count);
@@ -869,57 +868,60 @@ void CBaseGamesPage::RecalculateFilterString() {
     Q_UTF8ToUnicode(
         ModList().GetModNameForModDir(m_szGameFilter, m_iLimitToAppID),
         tempUnicode, iTempUnicodeSize);
-    wcscat(unicode, tempUnicode);
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode, tempUnicode);
+    wcscat_s(unicode, spacerUnicode);
   }
 
   if (m_iSecureFilter == FILTER_SECURESERVERSONLY) {
-    wcscat(unicode,
-           g_pVGuiLocalize->Find("#ServerBrowser_FilterDescSecureOnly"));
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode,
+             g_pVGuiLocalize->Find("#ServerBrowser_FilterDescSecureOnly"));
+    wcscat_s(unicode, spacerUnicode);
   } else if (m_iSecureFilter == FILTER_INSECURESERVERSONLY) {
-    wcscat(unicode,
-           g_pVGuiLocalize->Find("#ServerBrowser_FilterDescInsecureOnly"));
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode,
+             g_pVGuiLocalize->Find("#ServerBrowser_FilterDescInsecureOnly"));
+    wcscat_s(unicode, spacerUnicode);
   }
 
   if (m_pLocationFilter->GetActiveItem() > 0) {
     m_pLocationFilter->GetText(tempUnicode, sizeof(tempUnicode));
-    wcscat(unicode, tempUnicode);
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode, tempUnicode);
+    wcscat_s(unicode, spacerUnicode);
   }
 
   if (m_iPingFilter) {
     char tmpBuf[16];
-    _itoa(m_iPingFilter, tmpBuf, 10);
+    _itoa_s(m_iPingFilter, tmpBuf, 10);
 
-    wcscat(unicode, g_pVGuiLocalize->Find("#ServerBrowser_FilterDescLatency"));
+    wcscat_s(unicode,
+             g_pVGuiLocalize->Find("#ServerBrowser_FilterDescLatency"));
     Q_UTF8ToUnicode(" < ", tempUnicode, iTempUnicodeSize);
-    wcscat(unicode, tempUnicode);
+    wcscat_s(unicode, tempUnicode);
     Q_UTF8ToUnicode(tmpBuf, tempUnicode, iTempUnicodeSize);
-    wcscat(unicode, tempUnicode);
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode, tempUnicode);
+    wcscat_s(unicode, spacerUnicode);
   }
 
   if (m_bFilterNoFullServers) {
-    wcscat(unicode, g_pVGuiLocalize->Find("#ServerBrowser_FilterDescNotFull"));
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode,
+             g_pVGuiLocalize->Find("#ServerBrowser_FilterDescNotFull"));
+    wcscat_s(unicode, spacerUnicode);
   }
 
   if (m_bFilterNoEmptyServers) {
-    wcscat(unicode, g_pVGuiLocalize->Find("#ServerBrowser_FilterDescNotEmpty"));
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode,
+             g_pVGuiLocalize->Find("#ServerBrowser_FilterDescNotEmpty"));
+    wcscat_s(unicode, spacerUnicode);
   }
 
   if (m_bFilterNoPasswordedServers) {
-    wcscat(unicode,
-           g_pVGuiLocalize->Find("#ServerBrowser_FilterDescNoPassword"));
-    wcscat(unicode, spacerUnicode);
+    wcscat_s(unicode,
+             g_pVGuiLocalize->Find("#ServerBrowser_FilterDescNoPassword"));
+    wcscat_s(unicode, spacerUnicode);
   }
 
   if (m_szMapFilter[0]) {
     Q_UTF8ToUnicode(m_szMapFilter, tempUnicode, iTempUnicodeSize);
-    wcscat(unicode, tempUnicode);
+    wcscat_s(unicode, tempUnicode);
   }
 
   m_pFilterString->SetText(unicode);
@@ -928,7 +930,7 @@ void CBaseGamesPage::RecalculateFilterString() {
 //-----------------------------------------------------------------------------
 // Purpose: Checks to see if the server passes the primary filters
 //			if the server fails the filters, it will not be
-//refreshed again
+// refreshed again
 //-----------------------------------------------------------------------------
 bool CBaseGamesPage::CheckPrimaryFilters(gameserveritem_t &server) {
   if (m_szGameFilter[0] && (server.m_szGameDir[0] || server.m_nPing) &&

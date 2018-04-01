@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "stdafx.h"
 
@@ -58,8 +58,8 @@ int main(int argc, char **argv) {
   // possible.
   CSysModule *module = nullptr;
 
-  FILE *redirect_file = fopen(redirect_file_name, "rt");
-  if (redirect_file) {
+  FILE *redirect_file;
+  if (!fopen_s(&redirect_file, redirect_file_name, "rt")) {
     if (fgets(dll_name, SOURCE_ARRAYSIZE(dll_name), redirect_file)) {
       char *end = strstr(dll_name, "\n");
       if (end) *end = '\0';
@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
 
     // If it didn't load the module above, then use the
     if (!module) {
-      strcpy(dll_name, "vrad_dll.dll");
+      strcpy_s(dll_name, "vrad_dll.dll");
       module = Sys_LoadModule(dll_name);
     }
 
@@ -115,7 +115,9 @@ int main(int argc, char **argv) {
       return 3;
     }
 
-    if (both_arg) strcpy(argv[both_arg], mode ? "-hdr" : "-ldr");
+    if (both_arg)
+      strcpy_s(argv[both_arg], strlen(argv[both_arg]) + 1,
+               mode ? "-hdr" : "-ldr");
 
     result_code = vrad_dll->main(argc, argv);
 

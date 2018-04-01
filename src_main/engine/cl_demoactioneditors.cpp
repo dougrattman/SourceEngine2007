@@ -439,7 +439,7 @@ bool CBaseActionScreenFadeStartDialog::OnSaveChanges(void) {
 
   int rr, gg, bb, aa;
   m_pColor->GetText(sz, sizeof(sz));
-  if (4 == sscanf(sz, "%i %i %i %i", &rr, &gg, &bb, &aa)) {
+  if (4 == sscanf_s(sz, "%i %i %i %i", &rr, &gg, &bb, &aa)) {
     rr = std::clamp(rr, 0, 255);
     gg = std::clamp(gg, 0, 255);
     bb = std::clamp(bb, 0, 255);
@@ -707,7 +707,7 @@ bool CBaseActionTextMessageStartDialog::SaveDifferingColor(
   control->GetText(sz, sizeof(sz));
 
   int rr, gg, bb, aa;
-  if (sscanf(sz, "%i %i %i %i", &rr, &gg, &bb, &aa) == 4) {
+  if (sscanf_s(sz, "%i %i %i %i", &rr, &gg, &bb, &aa) == 4) {
     if (*r != rr) {
       bret = true;
       *r = rr;

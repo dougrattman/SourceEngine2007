@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:  baseclientstate.cpp: implementation of the CBaseClientState class.
 
@@ -361,7 +361,7 @@ bool CBaseClientState::SetSignonState(int state, int count) {
 void CBaseClientState::SendConnectPacket(int challengeNr, int authProtocol,
                                          int keySize, const char *encryptionKey,
                                          uint64_t unGSSteamID, bool bGSSecure) {
-  COM_TimestampedLog("SendConnectPacket");
+  Plat_TimestampedLog("Engine::CBaseClientState::SendConnectPacket");
 
   netadr_t adr;
   char szServerName[MAX_OSPATH];
@@ -501,7 +501,7 @@ void CBaseClientState::ForceFullUpdate(void) {
 void CBaseClientState::FullConnect(netadr_t &adr) {
   // Initiate the network channel
 
-  COM_TimestampedLog("CBaseClientState::FullConnect");
+  Plat_TimestampedLog("Engine::CBaseClientState::FullConnect");
 
   m_NetChannel = NET_CreateNetChannel(m_Socket, &adr, "CLIENT", this);
 
@@ -865,7 +865,7 @@ bool CBaseClientState::ProcessServerInfo(SVC_ServerInfo *msg) {
   EngineVGui()->UpdateProgressBar(PROGRESS_PROCESSSERVERINFO);
 #endif
 
-  COM_TimestampedLog(" CBaseClient::ProcessServerInfo");
+  Plat_TimestampedLog("Engine::CBaseClientState::ProcessServerInfo begin.");
 
   if (msg->m_nProtocol != PROTOCOL_VERSION
 #if defined(DEMO_BACKWARDCOMPATABILITY) && (!defined(SWDS))
@@ -966,7 +966,7 @@ bool CBaseClientState::ProcessServerInfo(SVC_ServerInfo *msg) {
     g_GameEventManager.FireEventClientSide(event);
   }
 
-  COM_TimestampedLog(" CBaseClient::ProcessServerInfo(done)");
+  Plat_TimestampedLog("Engine::CBaseClientState::ProcessServerInfo end.");
 
   return true;
 }
@@ -985,7 +985,7 @@ bool CBaseClientState::ProcessSendTable(SVC_SendTable *msg) {
 bool CBaseClientState::ProcessClassInfo(SVC_ClassInfo *msg) {
   VPROF("ProcessClassInfo");
 
-  COM_TimestampedLog(" CBaseClient::ProcessClassInfo");
+  Plat_TimestampedLog("Engine::CBaseClientState::ProcessClassInfo begin.");
 
   if (msg->m_bCreateOnClient) {
     ConMsg("Can't create class tables.\n");
@@ -1025,7 +1025,7 @@ bool CBaseClientState::ProcessClassInfo(SVC_ClassInfo *msg) {
     Q_strncpy(svclassinfo->m_DatatableName, svclass->datatablename, len);
   }
 
-  COM_TimestampedLog(" CBaseClient::ProcessClassInfo(done)");
+  Plat_TimestampedLog("Engine::CBaseClientState::ProcessClassInfo end.");
 
   return LinkClasses();  // link server and client classes
 }
@@ -1044,8 +1044,9 @@ bool CBaseClientState::ProcessCreateStringTable(SVC_CreateStringTable *msg) {
   EngineVGui()->UpdateProgressBar(PROGRESS_PROCESSSTRINGTABLE);
 #endif
 
-  COM_TimestampedLog(" CBaseClient::ProcessCreateStringTable(%s)",
-                     msg->m_szTableName);
+  Plat_TimestampedLog(
+      "Engine::CBaseClientState::ProcessCreateStringTable(%s) begin.",
+      msg->m_szTableName);
   m_StringTableContainer->AllowCreation(true);
 
   int startbit = msg->m_DataIn.GetNumBitsRead();
@@ -1071,8 +1072,9 @@ bool CBaseClientState::ProcessCreateStringTable(SVC_CreateStringTable *msg) {
 
   int endbit = msg->m_DataIn.GetNumBitsRead();
 
-  COM_TimestampedLog(" CBaseClient::ProcessCreateStringTable(%s)-done",
-                     msg->m_szTableName);
+  Plat_TimestampedLog(
+      "Engine::CBaseClientState::ProcessCreateStringTable(%s) end.",
+      msg->m_szTableName);
 
   return (endbit - startbit) == msg->m_nLength;
 }

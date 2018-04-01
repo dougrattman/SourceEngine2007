@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <cstdio>
 #define PROTECTED_THINGS_DISABLE
@@ -254,8 +254,10 @@ bool BuildGroup::CursorMoved(int x, int y, Panel *panel) {
     input()->GetCursorPos(x, y);
 
     if (_dragMouseCode == MOUSE_RIGHT) {
-      int newW = std::max(1, _dragStartPanelSize[0] + x - _dragStartCursorPos[0]);
-      int newH = std::max(1, _dragStartPanelSize[1] + y - _dragStartCursorPos[1]);
+      int newW =
+          std::max(1, _dragStartPanelSize[0] + x - _dragStartCursorPos[0]);
+      int newH =
+          std::max(1, _dragStartPanelSize[1] + y - _dragStartCursorPos[1]);
 
       bool shift =
           (input()->IsKeyDown(KEY_LSHIFT) || input()->IsKeyDown(KEY_RSHIFT));
@@ -773,13 +775,15 @@ void BuildGroup::LoadControlSettings(const char *controlResourceName,
 
   // save off the resource name
   delete[] m_pResourceName;
-  m_pResourceName = new char[strlen(controlResourceName) + 1];
-  strcpy(m_pResourceName, controlResourceName);
+  usize name_size{strlen(controlResourceName) + 1};
+  m_pResourceName = new char[name_size];
+  strcpy_s(m_pResourceName, name_size, controlResourceName);
 
   if (pathID) {
     delete[] m_pResourcePathID;
-    m_pResourcePathID = new char[strlen(pathID) + 1];
-    strcpy(m_pResourcePathID, pathID);
+    usize path_id_size{strlen(pathID) + 1};
+    m_pResourcePathID = new char[path_id_size];
+    strcpy_s(m_pResourcePathID, path_id_size, pathID);
   }
 
   // delete any controls not in both files
@@ -1125,8 +1129,8 @@ void BuildGroup::GetSettings(KeyValues *resourceData) {
     // do not get setting for ruler labels.
     if (_showRulers)  // rulers are visible
     {
-      for (int i = 0; i < 4; i++) {
-        if (panel == _rulerNumber[i]) {
+      for (int j = 0; j < 4; j++) {
+        if (panel == _rulerNumber[j]) {
           isRuler = true;
           break;
         }

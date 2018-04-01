@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER1_CONVAR_H_
 #define SOURCE_TIER1_CONVAR_H_
@@ -357,7 +357,7 @@ class ConVar : public ConCommandBase, public IConVar {
   // Value
   // Dynamically allocated
   char *m_pszString;
-  int m_StringLength;
+  size_t m_StringLength;
 
   // Values
   float m_fValue;

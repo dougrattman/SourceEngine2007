@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #if defined(STEAM) || defined(HL1)
 #include "stdafx.h"
@@ -43,11 +43,11 @@ void CSteamID::SetFromString(const char *pchSteamID,
       pchSteamID++;  // skip the optional - or :
 
     if (strchr(pchSteamID, '('))
-      sscanf(strchr(pchSteamID, '('), "(%d)", &nInstance);
+      sscanf_s(strchr(pchSteamID, '('), "(%d)", &nInstance);
     if (strchr(pchSteamID, ':')) {
-      sscanf(pchSteamID, "%d:%d", &eUniverse, &nAccountID);
+      sscanf_s(pchSteamID, "%d:%d", &eUniverse, &nAccountID);
     } else {
-      sscanf(pchSteamID, "%d", &nAccountID);
+      sscanf_s(pchSteamID, "%d", &nAccountID);
     }
 
     if (nAccountID == 0) {
@@ -71,10 +71,10 @@ void CSteamID::SetFromString(const char *pchSteamID,
 
   if (strchr(pchSteamID, ':')) {
     if (*pchSteamID == '[') pchSteamID++;  // skip the optional [
-    sscanf(pchSteamID, "%d:%d", &eUniverse, &nAccountID);
+    sscanf_s(pchSteamID, "%d:%d", &eUniverse, &nAccountID);
     if (eUniverse == k_EUniverseInvalid) eUniverse = eDefaultUniverse;
   } else {
-    sscanf(pchSteamID, "%d", &nAccountID);
+    sscanf_s(pchSteamID, "%d", &nAccountID);
   }
 
   Assert((eUniverse > k_EUniverseInvalid) && (eUniverse < k_EUniverseMax));
@@ -110,10 +110,10 @@ bool CSteamID::SetFromSteam2String(const char *pchSteam2ID,
 
   char cExtraCharCheck = 0;
 
-  int cFieldConverted =
-      sscanf(pchTSteam2ID, "%hu:%u:%u%c", &steam2ID.m_SteamInstanceID,
-             &steam2ID.m_SteamLocalUserID.Split.High32bits,
-             &steam2ID.m_SteamLocalUserID.Split.Low32bits, &cExtraCharCheck);
+  int cFieldConverted = sscanf_s(
+      pchTSteam2ID, "%hu:%u:%u%c", &steam2ID.m_SteamInstanceID,
+      &steam2ID.m_SteamLocalUserID.Split.High32bits,
+      &steam2ID.m_SteamLocalUserID.Split.Low32bits, &cExtraCharCheck, 1);
 
   // Validate the conversion ... a special case is steam2 instance ID 1 which is
   // reserved for special DoD handling

@@ -89,31 +89,6 @@
 #define stackfree(_p) 0
 #endif  // OS_WIN
 
-// FP exception handling.
-#ifdef COMPILER_MSVC
-inline void SetupFPUControlWord() {
-#ifndef ARCH_CPU_X86_64
-  // use local to get and store control word.
-  u16 tmpCtrlW;
-  __asm
-  {
-    fnstcw word ptr[tmpCtrlW]  // get current control word
-    and [tmpCtrlW], 0FCC0h  // Keep infinity control + rounding control
-    or [tmpCtrlW], 023Fh  // set to 53-bit, mask only inexact, underflow
-    fldcw word ptr[tmpCtrlW]  // put new control word in FPU
-  }
-#endif  // ARCH_CPU_X86_64
-}
-#else   // !COMPILER_MSVC
-inline void SetupFPUControlWord() {
-  __volatile u16 __cw;
-  __asm __volatile("fnstcw %0" : "=m"(__cw));
-  __cw = __cw & 0x0FCC0;  // keep infinity control, keep rounding mode
-  __cw = __cw | 0x023F;   // set 53-bit, no exceptions
-  __asm __volatile("fldcw %0" : : "m"(__cw));
-}
-#endif  // COMPILER_MSVC
-
 // Standard functions for handling endian-ness
 
 // Basic swaps
@@ -282,6 +257,7 @@ struct CPUInformation {
 };
 
 // Query CPU information.
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API const CPUInformation &GetCPUInformation();
 
 // Thread related functions
@@ -326,11 +302,11 @@ SOURCE_TIER0_API const ch *Plat_GetCommandLine();
 SOURCE_TIER0_API void Plat_SetCommandLine(const ch *cmdLine);
 #endif
 
-// Logs file and line to simple.log.
-SOURCE_TIER0_API bool Plat_SimpleLog(const ch *file, i32 line);
+SOURCE_TIER0_API bool Plat_TimestampedLog(ch const *fmt, ...);
 
 #ifdef OS_WIN
 // Is debugger attached?
+// NOTE: USED BY VPHYSICS!
 SOURCE_TIER0_API bool Plat_IsInDebugSession();
 // Log string to debugger output.
 SOURCE_TIER0_API void Plat_DebugString(const ch *);

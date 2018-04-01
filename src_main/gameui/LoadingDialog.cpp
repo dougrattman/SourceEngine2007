@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "LoadingDialog.h"
 
@@ -19,7 +19,6 @@
 #include "vgui_controls/ProgressBar.h"
 #include "vgui_controls/RichText.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -240,9 +239,7 @@ void CLoadingDialog::HideOtherDialogs(bool bHide) {
 //-----------------------------------------------------------------------------
 void CLoadingDialog::DisplayGenericError(const char *failureReason,
                                          const char *extendedReason) {
-  if (m_bConsoleStyle) {
-    return;
-  }
+  if (m_bConsoleStyle) return;
 
   // In certain race conditions, DisplayGenericError can get called AFTER
   // OnClose() has been called. If that happens and we don't call Activate(),
@@ -253,17 +250,16 @@ void CLoadingDialog::DisplayGenericError(const char *failureReason,
 
   if (extendedReason && strlen(extendedReason) > 0) {
     wchar_t compositeReason[256], finalMsg[512], formatStr[256];
+
     if (extendedReason[0] == '#') {
-      wcsncpy(compositeReason, g_pVGuiLocalize->Find(extendedReason),
-              sizeof(compositeReason) / sizeof(wchar_t));
+      wcscpy_s(compositeReason, g_pVGuiLocalize->Find(extendedReason));
     } else {
       g_pVGuiLocalize->ConvertANSIToUnicode(extendedReason, compositeReason,
                                             sizeof(compositeReason));
     }
 
     if (failureReason[0] == '#') {
-      wcsncpy(formatStr, g_pVGuiLocalize->Find(failureReason),
-              sizeof(formatStr) / sizeof(wchar_t));
+      wcscpy_s(formatStr, g_pVGuiLocalize->Find(failureReason));
     } else {
       g_pVGuiLocalize->ConvertANSIToUnicode(failureReason, formatStr,
                                             sizeof(formatStr));
@@ -308,7 +304,7 @@ void CLoadingDialog::DisplayNoSteamConnectionError() {
 // Purpose: explain to the user they got kicked from a server due to that same
 // account
 //			logging in from another location. This also triggers the
-//refresh login dialog on OK 			being pressed.
+// refresh login dialog on OK 			being pressed.
 //-----------------------------------------------------------------------------
 void CLoadingDialog::DisplayLoggedInElsewhereError() {
   if (m_bConsoleStyle) {

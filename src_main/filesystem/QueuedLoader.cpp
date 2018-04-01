@@ -66,9 +66,9 @@
 // discrete stages in the preload process to tick the progress bar
 #define PROGRESS_START 0.10
 #define PROGRESS_GOTRESLIST 0.12
-#define PROGRESS_PARSEDRESLIST 0.15
-#define PROGRESS_CREATEDRESOURCES 0.20
-#define PROGRESS_PREPURGE 0.22
+#define PROGRESS_PARSEDRESLIST 0.15f
+#define PROGRESS_CREATEDRESOURCES 0.20f
+#define PROGRESS_PREPURGE 0.22f
 #define PROGRESS_IO 0.25f  // up to 1.0
 
 struct FileJob_t {
@@ -1207,9 +1207,8 @@ void CQueuedLoader::PurgeAll() {
 }
 
 // Invoke the loader systems to request i/o jobs, which are batched.
-
 void CQueuedLoader::GetJobRequests() {
-  COM_TimestampedLog("CQueuedLoader::GetJobRequests - Start");
+  Plat_TimestampedLog("Filesystem::CQueuedLoader::GetJobRequests start.");
 
   // causes the batch queue to fill with i/o requests
   m_bCanBatch = true;
@@ -1271,8 +1270,8 @@ void CQueuedLoader::GetJobRequests() {
     f64 newt = Plat_FloatTime();
     if (newt - flLastUpdateT > .03) {
       m_pProgress->UpdateProgress(flProgress);
-      flProgress = std::clamp(flProgress + flDelta, PROGRESS_PARSEDRESLIST,
-                              PROGRESS_CREATEDRESOURCES);
+      flProgress = std::clamp(flProgress + flDelta, (f64)PROGRESS_PARSEDRESLIST,
+                              (f64)PROGRESS_CREATEDRESOURCES);
 
       // Necessary to take into account any waits for vsync
       flLastUpdateT = Plat_FloatTime();
@@ -1293,7 +1292,7 @@ void CQueuedLoader::GetJobRequests() {
 
   m_pProgress->UpdateProgress(PROGRESS_CREATEDRESOURCES);
 
-  COM_TimestampedLog("CQueuedLoader::GetJobRequests - End");
+  Plat_TimestampedLog("Filesystem::CQueuedLoader::GetJobRequests end.");
 }
 
 void CQueuedLoader::AddResourceToTable(const char *pFilename) {

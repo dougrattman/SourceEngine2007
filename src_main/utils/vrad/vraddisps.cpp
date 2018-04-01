@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "BSPTreeData.h"
 #include "CollisionUtils.h"
@@ -197,7 +197,7 @@ bool CBSPDispFaceListEnumerator::EnumerateLeaf(int ndxLeaf, int context) {
 
 // IBSPTreeDataEnumerator
 bool SOURCE_FASTCALL CBSPDispFaceListEnumerator::EnumerateElement(int userId,
-                                                           int context) {
+                                                                  int context) {
   return s_DispMgr.DispFaceList_EnumerateElement(userId, context);
 }
 
@@ -208,7 +208,8 @@ bool CBSPDispRayEnumerator::EnumerateLeaf(int ndxLeaf, int context) {
   return s_DispMgr.DispRay_EnumerateLeaf(ndxLeaf, context);
 }
 
-bool SOURCE_FASTCALL CBSPDispRayEnumerator::EnumerateElement(int userId, int context) {
+bool SOURCE_FASTCALL CBSPDispRayEnumerator::EnumerateElement(int userId,
+                                                             int context) {
   return s_DispMgr.DispRay_EnumerateElement(userId, context);
 }
 
@@ -1375,7 +1376,7 @@ void CVRadDispMgr::EndTimer(void) {
   CCycleCount duration = m_Timer.GetDuration();
   double seconds = duration.GetSeconds();
 
-  Msg("Done<%1.4lf sec>\n", seconds);
+  Msg("Done (%1.4lf seconds)\n", seconds);
 }
 
 //-----------------------------------------------------------------------------
@@ -1404,8 +1405,8 @@ bool CVRadDispMgr::BuildDispSamples(lightinfo_t *pLightInfo,
   int ndxU, ndxV;
 
   // NOTE: These allocations are necessary to avoid stack overflow
-  // TODO(d.rattman): Solve with storing global per-thread temp buffers if there's
-  // a performance problem with this solution...
+  // TODO(d.rattman): Solve with storing global per-thread temp buffers if
+  // there's a performance problem with this solution...
   bool bTempAllocationNecessary =
       ((height + 1) * (width + 1)) > SINGLE_BRUSH_MAP;
 

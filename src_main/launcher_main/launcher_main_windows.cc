@@ -5,8 +5,9 @@
 #include <tuple>
 
 #include "base/include/base_types.h"
+#include "base/include/unique_module_ptr.h"
+#include "base/include/windows/error_notifications.h"
 #include "base/include/windows/scoped_error_mode.h"
-#include "base/include/windows/unique_module_ptr.h"
 #include "base/include/windows/windows_light.h"
 
 namespace {
@@ -29,43 +30,6 @@ inline wstr GetDirectoryFromFilePath(_In_ wstr file_path) {
   return file_path;
 }
 
-// Get system-specific error for |error_code|.
-wstr GetSystemError(_In_ u32 error_code) {
-  wch *system_error;
-  if (!FormatMessageW(
-          FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-              FORMAT_MESSAGE_IGNORE_INSERTS,
-          nullptr, error_code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-          (wch *)&system_error, 0, nullptr)) {
-    return L"N/A";
-  }
-
-  wstr error_message{system_error};
-  LocalFree(system_error);
-
-  return error_message;
-}
-
-// Build error from message |message| and error code |error_code|.
-inline wstr BuildError(_In_ wstr message, _In_ u32 error_code) {
-  message += L"\n\nPrecise error description: ";
-  message += GetSystemError(error_code);
-  return message;
-}
-
-// Show error box with |message|.
-inline void ShowErrorBox(_In_ wstr message) {
-  MessageBoxW(nullptr, message.c_str(), SOURCE_GAME_NAME L" - Startup Error",
-              MB_ICONERROR | MB_OK);
-}
-
-// Show error box with |message| by |error_code|.
-inline u32 NotifyAboutError(_In_ wstr message,
-                            _In_ u32 error_code = GetLastError()) {
-  ShowErrorBox(BuildError(message, error_code));
-  return error_code;
-}
-
 // Show no launcher at path |launcher_dll_path| error box with system-specific
 // error message from error code |error_code|.
 inline u32 NotifyAboutNoLauncherError(_In_ const wstr &launcher_dll_path,
@@ -73,16 +37,19 @@ inline u32 NotifyAboutNoLauncherError(_In_ const wstr &launcher_dll_path,
   wstr user_friendly_message{
       L"Please, contact support. Failed to load the launcher.dll from " +
       launcher_dll_path};
-  return NotifyAboutError(user_friendly_message, error_code);
+  return source::windows::NotifyAboutError(user_friendly_message, error_code);
 }
 
-// Show no launcher at path |launcher_dll_path| entry point error box with
-// system-specific error message from error code |error_code|.
-inline u32 NotifyAboutNoEntryPointError(_In_ const wstr &launcher_dll_path,
-                                        _In_ u32 error_code) {
+// Show no launcher at path |launcher_dll_path| entry point
+// |launcher_dll_entry_point_name| error box with system-specific error message
+// from error code |error_code|.
+inline u32 NotifyAboutNoLauncherEntryPointError(
+    _In_ const wstr &launcher_dll_path,
+    _In_z_ const wch *launcher_dll_entry_point_name, _In_ u32 error_code) {
   wstr user_friendly_message{L"Please, contact support. Failed to find the " +
-                             launcher_dll_path + L" entry point."};
-  return NotifyAboutError(user_friendly_message, error_code);
+                             launcher_dll_path + L" entry point " +
+                             launcher_dll_entry_point_name + L"."};
+  return source::windows::NotifyAboutError(user_friendly_message, error_code);
 }
 
 // Enable termination on heap corruption.
@@ -123,9 +90,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
                       _In_ wchar_t *, _In_ int cmd_show) {
   // Game uses features of Windows 10.
   if (!IsWindows10OrGreater()) {
-    return NotifyAboutError(
+    return source::windows::NotifyAboutError(
         L"Unfortunately, your environment is not supported."
-        L" " SOURCE_GAME_NAME L" requires at least Windows 10 to survive.",
+        L" " SOURCE_APP_NAME L" requires at least Windows 10 to survive.",
         ERROR_EXE_MACHINE_TYPE_MISMATCH);
   }
 
@@ -147,16 +114,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
   // Enable heap corruption detection & app termination.
   u32 error_code = EnableTerminationOnHeapCorruption();
   if (error_code != NOERROR) {
-    return NotifyAboutError(
+    return source::windows::NotifyAboutError(
         L"Please, contact support. Failed to enable termination on heap "
-        L"corruption feature for your environment.");
+        L"corruption feature for your environment.",
+        error_code);
   }
 
   // Use the .exe name to determine the root directory.
   wstr this_module_file_path;
   std::tie(this_module_file_path, error_code) = GetThisModuleFilePath(instance);
   if (error_code != NOERROR) {
-    return NotifyAboutError(
+    return source::windows::NotifyAboutError(
         L"Please, contact support. Can't get current exe file path.",
         error_code);
   }
@@ -166,22 +134,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
   const wstr launcher_dll_path{root_dir + L"\\bin\\launcher.dll"};
 
   // STEAM OK ... file system not mounted yet.
-  source::windows::unique_module_ptr launcher_module;
-  std::tie(launcher_module, error_code) =
-      source::windows::unique_module_ptr::from_load_library(
+  auto [launcher_module, errno_info] =
+      source::unique_module_ptr::from_load_library(
           launcher_dll_path, LOAD_WITH_ALTERED_SEARCH_PATH);
 
-  if (error_code == NOERROR && launcher_module) {
+  if (errno_info.is_success() && launcher_module) {
     using LauncherMain = int (*)(HINSTANCE, int);
     LauncherMain main;
-    std::tie(main, error_code) =
+    std::tie(main, errno_info) =
         launcher_module.get_address_as<LauncherMain>("LauncherMain");
 
     // Go!
-    return error_code == NOERROR && main
+    return errno_info.is_success() && main
                ? (*main)(instance, cmd_show)
-               : NotifyAboutNoEntryPointError(launcher_dll_path, error_code);
+               : NotifyAboutNoLauncherEntryPointError(
+                     launcher_dll_path, L"LauncherMain", errno_info.code);
   }
 
-  return NotifyAboutNoLauncherError(launcher_dll_path, error_code);
+  return NotifyAboutNoLauncherError(launcher_dll_path, errno_info.code);
 }

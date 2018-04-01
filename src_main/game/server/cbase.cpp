@@ -1347,10 +1347,10 @@ bool variant_t::Convert( fieldtype_t newType )
 				case FIELD_VECTOR:
 				{
 					Vector tmpVec = vec3_origin;
-					if (sscanf(STRING(iszVal), "[%f %f %f]", &tmpVec[0], &tmpVec[1], &tmpVec[2]) == 0)
+					if (sscanf_s(STRING(iszVal), "[%f %f %f]", &tmpVec[0], &tmpVec[1], &tmpVec[2]) == 0)
 					{
 						// Try sucking out 3 floats with no []s
-						sscanf(STRING(iszVal), "%f %f %f", &tmpVec[0], &tmpVec[1], &tmpVec[2]);
+						sscanf_s(STRING(iszVal), "%f %f %f", &tmpVec[0], &tmpVec[1], &tmpVec[2]);
 					}
 					SetVector3D( tmpVec );
 					return true;
@@ -1363,7 +1363,7 @@ bool variant_t::Convert( fieldtype_t newType )
 					int nBlue = 0;
 					int nAlpha = 255;
 
-					sscanf(STRING(iszVal), "%d %d %d %d", &nRed, &nGreen, &nBlue, &nAlpha);
+					sscanf_s(STRING(iszVal), "%d %d %d %d", &nRed, &nGreen, &nBlue, &nAlpha);
 					SetColor32( nRed, nGreen, nBlue, nAlpha );
 					return true;
 				}

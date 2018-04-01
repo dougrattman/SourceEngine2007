@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <assert.h>
 #include <malloc.h>
@@ -51,7 +51,7 @@ int FindMiptex(const char *name) {
   }
   if (nummiptex == MAX_MAP_TEXTURES)
     Error("Too many unique textures, max %d", MAX_MAP_TEXTURES);
-  strcpy(textureref[i].name, name);
+  strcpy_s(textureref[i].name, name);
 
   textureref[i].lightmapWorldUnitsPerLuxel = 0.0f;
   textureref[i].flags = 0;
@@ -351,9 +351,11 @@ int GetSurfaceProperties2(MaterialSystemMaterial_t matID,
 // Output : int index into dtexdata array
 //-----------------------------------------------------------------------------
 int FindAliasedTexData(const char *pName_, dtexdata_t *sourceTexture) {
-  char *pName = (char *)_alloca(strlen(pName_) + 1);
-  strcpy(pName, pName_);
-  strlwr(pName);
+  size_t name_size{strlen(pName_) + 1};
+  char *pName = (char *)_alloca(name_size);
+  strcpy_s(pName, name_size, pName_);
+  _strlwr_s(pName, name_size);
+
   int i, output;
   bool found;
   dtexdata_t *pTexData;
@@ -414,8 +416,9 @@ int FindTexData(const char *pName) {
 // Output : int index into dtexdata array
 //-----------------------------------------------------------------------------
 int FindOrCreateTexData(const char *pName_) {
-  char *pName = (char *)_alloca(strlen(pName_) + 1);
-  strcpy(pName, pName_);
+  size_t size{strlen(pName_) + 1};
+  char *pName = (char *)_alloca(size);
+  strcpy_s(pName, size, pName_);
 
   int nOutput = FindTexData(pName);
   if (nOutput >= 0) return nOutput;

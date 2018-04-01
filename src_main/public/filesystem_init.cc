@@ -340,8 +340,9 @@ void LaunchVConfig() {
 }
 
 const ch *GetVProjectCmdLineValue() {
-  return CommandLine()->ParmValue("-vproject",
-                                  CommandLine()->ParmValue("-game"));
+  return CommandLine()->ParmValue(
+      "-vproject", CommandLine()->ParmValue(
+                       source::tier0::command_line_switches::kGamePath));
 }
 
 FSReturnCode_t SetupFileSystemError(bool bRunVConfig, FSReturnCode_t retVal,
@@ -985,7 +986,7 @@ FSReturnCode_t FileSystem_GetFileSystemDLLName(ch *pFileSystemDLL, i32 nMaxLen,
     bSteam = true;
   }
 #elif defined(OS_POSIX)
-  Q_snprintf(pFileSystemDLL, nMaxLen, "%s%cfilesystem_i486.so", executablePath,
+  Q_snprintf(pFileSystemDLL, nMaxLen, "%s%cfilesystem.so.1", executablePath,
              CORRECT_PATH_SEPARATOR);
 #else
 #error "define a filesystem dll name"

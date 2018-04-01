@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "ivp.h"
 
@@ -60,7 +60,7 @@ void CTextBuffer::WriteIntKey(const char *pKeyName, int outputData) {
     Msg("Error writing collision data %s\n", pKeyName);
     return;
   }
-  sprintf(tmp, "\"%s\" \"%d\"\n", pKeyName, outputData);
+  sprintf_s(tmp, "\"%s\" \"%d\"\n", pKeyName, outputData);
   CopyData(tmp, strlen(tmp));
 }
 
@@ -79,7 +79,7 @@ void CTextBuffer::WriteFloatKey(const char *pKeyName, float outputData) {
     Msg("Error writing collision data %s\n", pKeyName);
     return;
   }
-  sprintf(tmp, "\"%s\" \"%f\"\n", pKeyName, outputData);
+  sprintf_s(tmp, "\"%s\" \"%f\"\n", pKeyName, outputData);
   CopyData(tmp, strlen(tmp));
 }
 
@@ -92,14 +92,14 @@ void CTextBuffer::WriteFloatArrayKey(const char *pKeyName,
     Msg("Error writing collision data %s\n", pKeyName);
     return;
   }
-  sprintf(tmp, "\"%s\" \"", pKeyName);
+  sprintf_s(tmp, "\"%s\" \"", pKeyName);
   for (int i = 0; i < count; i++) {
     char buf[80];
 
-    sprintf(buf, "%f ", outputData[i]);
-    strcat(tmp, buf);
+    sprintf_s(buf, "%f ", outputData[i]);
+    strcat_s(tmp, buf);
   }
-  strcat(tmp, "\"\n");
+  strcat_s(tmp, "\"\n");
 
   CopyData(tmp, strlen(tmp));
 }
@@ -128,7 +128,13 @@ void DumpCollideToGlView(CPhysCollide *pCollide, const char *pFilename) {
   Msg("Writing %s...\n", pFilename);
   Vector *outVerts;
   int vertCount = physcollision->CreateDebugMesh(pCollide, &outVerts);
-  FILE *fp = fopen(pFilename, "w");
+
+  FILE *fp;
+  if (fopen_s(&fp, pFilename, "w")) {
+    Msg("Can't open %s\n", pFilename);
+    return;
+  }
+
   int triCount = vertCount / 3;
   int vert = 0;
   for (int i = 0; i < triCount; i++) {
@@ -150,7 +156,11 @@ void DumpCollideToGlView(CPhysCollide *pCollide, const char *pFilename) {
 void DumpCollideToPHY(CPhysCollide *pCollide, CTextBuffer *text,
                       const char *pFilename) {
   Msg("Writing %s...\n", pFilename);
-  FILE *fp = fopen(pFilename, "wb");
+  FILE *fp;
+  if (fopen_s(&fp, pFilename, "wb")) {
+    Msg("Can't open %s\n", pFilename);
+    return;
+  }
   phyheader_t header;
   header.size = sizeof(header);
   header.id = 0;
@@ -184,9 +194,9 @@ unsigned int CPhysCollisionEntry::WriteCollisionBinary(char *pDest) {
 void CPhysCollisionEntry::DumpCollideFileName(const char *pName, int modelIndex,
                                               CTextBuffer *pTextBuffer) {
   char tmp[128];
-  sprintf(tmp, "%s%03d.phy", pName, modelIndex);
+  sprintf_s(tmp, "%s%03d.phy", pName, modelIndex);
   DumpCollideToPHY(m_pCollide, pTextBuffer, tmp);
-  sprintf(tmp, "%s%03d.txt", pName, modelIndex);
+  sprintf_s(tmp, "%s%03d.txt", pName, modelIndex);
   DumpCollideToGlView(m_pCollide, tmp);
 }
 
@@ -256,7 +266,7 @@ void CPhysCollisionEntryStaticSolid::DumpCollide(CTextBuffer *pTextBuffer,
                                                  int modelIndex,
                                                  int collideIndex) {
   char tmp[128];
-  sprintf(tmp, "static%02d", modelIndex);
+  sprintf_s(tmp, "static%02d", modelIndex);
   DumpCollideFileName(tmp, collideIndex, pTextBuffer);
 }
 
@@ -279,7 +289,7 @@ void CPhysCollisionEntryStaticMesh::DumpCollide(CTextBuffer *pTextBuffer,
                                                 int modelIndex,
                                                 int collideIndex) {
   char tmp[128];
-  sprintf(tmp, "mesh%02d", modelIndex);
+  sprintf_s(tmp, "mesh%02d", modelIndex);
   DumpCollideFileName(tmp, collideIndex, pTextBuffer);
 }
 
@@ -319,8 +329,11 @@ CPhysCollisionEntryFluid::CPhysCollisionEntryFluid(CPhysCollide *pCollide,
     : CPhysCollisionEntry(pCollide) {
   m_surfaceNormal = normal;
   m_surfaceDist = dist;
-  m_pSurfaceProp = new char[strlen(pSurfaceProp) + 1];
-  strcpy(m_pSurfaceProp, pSurfaceProp);
+
+  size_t size{strlen(pSurfaceProp) + 1};
+  m_pSurfaceProp = new char[size];
+  strcpy_s(m_pSurfaceProp, size, pSurfaceProp);
+
   m_damping = damping;
   m_contentsMask = nContents;
 }
@@ -332,7 +345,7 @@ CPhysCollisionEntryFluid::~CPhysCollisionEntryFluid() {
 void CPhysCollisionEntryFluid::DumpCollide(CTextBuffer *pTextBuffer,
                                            int modelIndex, int collideIndex) {
   char tmp[128];
-  sprintf(tmp, "water%02d", modelIndex);
+  sprintf_s(tmp, "water%02d", modelIndex);
   DumpCollideFileName(tmp, collideIndex, pTextBuffer);
 }
 
@@ -342,8 +355,9 @@ void CPhysCollisionEntryFluid::WriteToTextBuffer(CTextBuffer *pTextBuffer,
   pTextBuffer->WriteText("fluid {\n");
   pTextBuffer->WriteIntKey("index", collideIndex);
   pTextBuffer->WriteStringKey("surfaceprop",
-                              m_pSurfaceProp);       // write out water material
-  pTextBuffer->WriteFloatKey("damping", m_damping);  // write out water damping
+                              m_pSurfaceProp);  // write out water material
+  pTextBuffer->WriteFloatKey("damping",
+                             m_damping);  // write out water damping
   pTextBuffer->WriteIntKey("contents",
                            m_contentsMask);  // write out water contents
   float array[4];
@@ -721,17 +735,19 @@ float GetSubdivSizeForFogVolume( int fogVolumeID )
 //			waterdepth -
 //			*fullname -
 //-----------------------------------------------------------------------------
+template <size_t full_name_size>
 void GetWaterTextureName(char const *mapname, char const *materialname,
-                         int waterdepth, char *fullname) {
+                         int waterdepth, char (&fullname)[full_name_size]) {
   char temp[512];
 
   // Construct the full name (prepend mapname to reduce name collisions)
-  sprintf(temp, "maps/%s/%s_depth_%i", mapname, materialname, (int)waterdepth);
+  sprintf_s(temp, "maps/%s/%s_depth_%i", mapname, materialname,
+            (int)waterdepth);
 
   // Make sure it's lower case
-  strlwr(temp);
+  _strlwr_s(temp);
 
-  strcpy(fullname, temp);
+  strcpy_s(fullname, temp);
 }
 
 //-----------------------------------------------------------------------------
@@ -749,7 +765,7 @@ void EmitWaterMaterialFile(WaterTexInfo *wti) {
 
   // Convert to string
   char szDepth[32];
-  sprintf(szDepth, "%i", wti->m_nWaterDepth);
+  sprintf_s(szDepth, "%i", wti->m_nWaterDepth);
   CreateMaterialPatch(wti->m_MaterialName.String(), waterTextureName,
                       "$waterdepth", szDepth, PATCH_INSERT);
 }
@@ -786,8 +802,8 @@ int FindOrCreateWaterTexInfo(texinfo_t *pBaseInfo, float depth) {
   // Otherwise, fill in the rest of the data
   lookup.m_nWaterDepth = (int)depth;
   // Remember the current material name
-  sprintf(materialname, "%s", name);
-  strlwr(materialname);
+  sprintf_s(materialname, "%s", name);
+  _strlwr_s(materialname);
   lookup.m_MaterialName = materialname;
 
   texinfo_t ti;
@@ -1109,8 +1125,8 @@ static void ConvertWaterModelToPhysCollide(
     int count = planes.m_convex.Count();
     if (!count) continue;
 
-    // Save off the plane of the surface for this group as well as the collision
-    // model for all convex objects in the group.
+    // Save off the plane of the surface for this group as well as the
+    // collision model for all convex objects in the group.
     CPhysCollide *pCollide =
         physcollision->ConvertConvexToCollide(planes.m_convex.Base(), count);
     if (pCollide) {
@@ -1262,9 +1278,9 @@ static void ConvertModelToPhysCollide(
     }
   }
   // this can be really slow with super-large models and a low error tolerance
-  // Basically you get a ray cast through each square of epsilon surface area on
-  // each OBB side So compute it for 1% error (on the smallest side, less on
-  // larger sides)
+  // Basically you get a ray cast through each square of epsilon surface area
+  // on each OBB side So compute it for 1% error (on the smallest side, less
+  // on larger sides)
   params.dragAreaEpsilon = std::clamp(minSurfaceArea * 1e-2f, 1.0f, 1024.0f);
   CPhysCollide *pCollide = physcollision->ConvertConvexToCollideParams(
       planes.m_convex.Base(), count, params);
@@ -1341,8 +1357,8 @@ static void ConvertModelToPhysCollide(
     if (thickness != 0) {
       mass = totalArea * thickness * density * CUBIC_METERS_PER_CUBIC_INCH;
     } else {
-      // material is completely solid, compute total mass as if constant density
-      // throughout.
+      // material is completely solid, compute total mass as if constant
+      // density throughout.
       mass = planes.m_totalVolume * density * CUBIC_METERS_PER_CUBIC_INCH;
     }
   }

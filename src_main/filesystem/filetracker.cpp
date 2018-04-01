@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "basefilesystem.h"
 
@@ -16,7 +16,7 @@ void CFileTracker::NoteFileLoadedFromDisk(const char *pFilename,
   if (!pPathID) pPathID = "";
 
   CPathIDFileList *pPath = GetPathIDFileList(pPathID);
-  CFileInfo *pInfo = pPath->FindFileInfo(pFilename);
+  FileInfo *pInfo = pPath->FindFileInfo(pFilename);
 
   if (m_pFileSystem->m_WhitelistSpewFlags & WHITELIST_SPEW_WHILE_LOADING) {
     if (pInfo)
@@ -57,7 +57,7 @@ void CFileTracker::NoteFileLoadedFromDisk(const char *pFilename,
 void CFileTracker::NoteFileFailedToLoad(const char *pFilename,
                                         const char *pPathID) {
   CPathIDFileList *pPath = GetPathIDFileList(pPathID);
-  CFileInfo *pInfo = pPath->FindFileInfo(pFilename);
+  FileInfo *pInfo = pPath->FindFileInfo(pFilename);
   if (pInfo) {
     pInfo->m_Flags |= k_eFileFlagsFailedToLoadLastTime;
   }
@@ -96,8 +96,8 @@ CRC32_t CFileTracker::CalculateCRCForFile(FileHandle_t fp) {
   return crc;
 }
 
-CFileInfo *CFileTracker::GetFileInfo(const char *pFilename,
-                                     const char *pPathID) {
+FileInfo *CFileTracker::GetFileInfo(const char *pFilename,
+                                    const char *pPathID) {
   AUTO_LOCK(m_Mutex);
 
   CPathIDFileList *pPath = GetPathIDFileList(pPathID, false);
@@ -106,14 +106,14 @@ CFileInfo *CFileTracker::GetFileInfo(const char *pFilename,
   return pPath->FindFileInfo(pFilename);
 }
 
-int CFileTracker::GetFileInfos(CFileInfo **ppFileInfos, int nMaxFileInfos,
+int CFileTracker::GetFileInfos(FileInfo **ppFileInfos, int nMaxFileInfos,
                                const char *pFilename) {
   AUTO_LOCK(m_Mutex);
 
   int nOut = 0;
   for (int i = m_PathIDs.First(); i != m_PathIDs.InvalidIndex();
        i = m_PathIDs.Next(i)) {
-    CFileInfo *pCur = m_PathIDs[i]->FindFileInfo(pFilename);
+    FileInfo *pCur = m_PathIDs[i]->FindFileInfo(pFilename);
     if (pCur) {
       if (nOut < nMaxFileInfos) {
         ppFileInfos[nOut++] = pCur;
@@ -134,7 +134,7 @@ void CFileTracker::NoteFileLoadedFromSteam(const char *pFilename,
   if (!pPathID) pPathID = "";
 
   CPathIDFileList *pPath = GetPathIDFileList(pPathID);
-  CFileInfo *pInfo = pPath->FindFileInfo(pFilename);
+  FileInfo *pInfo = pPath->FindFileInfo(pFilename);
   if (!pInfo) pInfo = pPath->AddFileInfo(pFilename);
 
   if (m_pFileSystem->m_WhitelistSpewFlags & WHITELIST_SPEW_WHILE_LOADING) {
@@ -148,7 +148,7 @@ void CFileTracker::NoteFileLoadedFromSteam(const char *pFilename,
 void CFileTracker::CalculateMissingCRCs(IFileList *pWantCRCList) {
   // First build a list of files that need a CRC and don't have one.
   m_Mutex.Lock();
-  CUtlLinkedList<CFileInfo *, int> needCRCList;
+  CUtlLinkedList<FileInfo *, int> needCRCList;
 
   for (int i = m_PathIDs.First(); i != m_PathIDs.InvalidIndex();
        i = m_PathIDs.Next(i)) {
@@ -157,7 +157,7 @@ void CFileTracker::CalculateMissingCRCs(IFileList *pWantCRCList) {
     int j;
     for (j = pPath->m_Files.First(); j != pPath->m_Files.InvalidIndex();
          j = pPath->m_Files.Next(j)) {
-      CFileInfo *pInfo = pPath->m_Files[j];
+      FileInfo *pInfo = pPath->m_Files[j];
 
       if (!(pInfo->m_Flags & k_eFileFlagsLoadedFromSteam) &&
           !(pInfo->m_Flags & k_eFileFlagsHasCRC)) {
@@ -174,7 +174,7 @@ void CFileTracker::CalculateMissingCRCs(IFileList *pWantCRCList) {
 
   // Then, when the mutex is not locked, go generate the CRCs for them.
   FOR_EACH_LL(needCRCList, i) {
-    CFileInfo *pInfo = needCRCList[i];
+    FileInfo *pInfo = needCRCList[i];
     CalculateMissingCRC(pInfo->GetFilename(), pInfo->GetPathIDString());
   }
 }
@@ -184,7 +184,7 @@ void CFileTracker::CacheFileCRC(const char *pPathID,
   Assert(ThreadInMainThread());
 
   // Get the file's info. Load the file if necessary.
-  CFileInfo *pInfo = GetFileInfo(pRelativeFilename, pPathID);
+  FileInfo *pInfo = GetFileInfo(pRelativeFilename, pPathID);
   if (!pInfo) {
     CalculateMissingCRC(pRelativeFilename, pPathID);
     pInfo = GetFileInfo(pRelativeFilename, pPathID);
@@ -205,7 +205,7 @@ void CFileTracker::CacheFileCRC_Copy(const char *pPathID,
   Assert(ThreadInMainThread());
 
   // Get the file's info. Load the file if necessary.
-  CFileInfo *pSourceInfo = GetFileInfo(pRelativeFilename, pPathIDToCopyFrom);
+  FileInfo *pSourceInfo = GetFileInfo(pRelativeFilename, pPathIDToCopyFrom);
   if (!pSourceInfo || !(pSourceInfo->m_Flags & k_eFileFlagsGotCRCOnce)) {
     // Strange, we don't have a CRC for the one they wanted to copy from, so
     // calculate that CRC.
@@ -219,7 +219,7 @@ void CFileTracker::CacheFileCRC_Copy(const char *pPathID,
 
   // Setup a CFileInfo for the target..
   CPathIDFileList *pPath = GetPathIDFileList(pPathID);
-  CFileInfo *pDestInfo = pPath->FindFileInfo(pRelativeFilename);
+  FileInfo *pDestInfo = pPath->FindFileInfo(pRelativeFilename);
   if (!pDestInfo) pDestInfo = pPath->AddFileInfo(pRelativeFilename);
 
   pDestInfo->m_CRC = pSourceInfo->m_CRC;
@@ -232,7 +232,7 @@ EFileCRCStatus CFileTracker::CheckCachedFileCRC(const char *pPathID,
   Assert(ThreadInMainThread());
 
   // Get the file's info. Load the file if necessary.
-  CFileInfo *pInfo = GetFileInfo(pRelativeFilename, pPathID);
+  FileInfo *pInfo = GetFileInfo(pRelativeFilename, pPathID);
   if (pInfo && (pInfo->m_Flags & k_eFileFlagsGotCRCOnce)) {
     *pCRC = pInfo->m_CRC;
     return k_eFileCRCStatus_GotCRC;
@@ -248,7 +248,7 @@ void CFileTracker::CalculateMissingCRC(const char *pFilename,
       pFilename, "rb", pPathID, FSOPEN_FORCE_TRACK_CRC, NULL, true);
   if (!fh) return;
 
-  CFileInfo *pInfo = GetFileInfo(pFilename, pPathID);
+  FileInfo *pInfo = GetFileInfo(pFilename, pPathID);
   if (pInfo) {
     // Now we're about to modify the file itself.. lock the mutex.
     AUTO_LOCK(m_Mutex);
@@ -283,7 +283,7 @@ void CFileTracker::MarkAllCRCsUnverified() {
     int j;
     for (j = pPath->m_Files.First(); j != pPath->m_Files.InvalidIndex();
          j = pPath->m_Files.Next(j)) {
-      CFileInfo *pInfo = pPath->m_Files[j];
+      FileInfo *pInfo = pPath->m_Files[j];
 
       if (!(pInfo->m_Flags & k_eFileFlagsLoadedFromSteam) &&
           (pInfo->m_Flags & k_eFileFlagsHasCRC)) {
@@ -318,7 +318,7 @@ int CFileTracker::GetUnverifiedCRCFiles(CUnverifiedCRCFile *pFiles,
        i != m_NeedsVerificationList.InvalidIndex(); i = iNext) {
     iNext = m_NeedsVerificationList.Next(i);
 
-    CFileInfo *pInfo = m_NeedsVerificationList[i];
+    FileInfo *pInfo = m_NeedsVerificationList[i];
 
     // Remove this entry from the list.
     m_NeedsVerificationList.Remove(i);
@@ -378,9 +378,9 @@ CPathIDFileList *CFileTracker::GetPathIDFileList(const char *pPathID,
 // CFileInfo implementation.
 //-----------------------------------------------------------------------------
 
-CFileInfo::CFileInfo() { m_iNeedsVerificationListIndex = -1; }
+FileInfo::FileInfo() { m_iNeedsVerificationListIndex = -1; }
 
-CFileInfo::~CFileInfo() {}
+FileInfo::~FileInfo() {}
 
 //-----------------------------------------------------------------------------
 // CPathIDFileList implementation..
@@ -390,7 +390,7 @@ CPathIDFileList::CPathIDFileList() : m_Files(k_eDictCompareTypeFilenames) {}
 
 CPathIDFileList::~CPathIDFileList() { m_Files.PurgeAndDeleteElements(); }
 
-CFileInfo *CPathIDFileList::FindFileInfo(const char *pFilename) {
+FileInfo *CPathIDFileList::FindFileInfo(const char *pFilename) {
   Assert(!V_IsAbsolutePath(pFilename));
 
   int i = m_Files.Find(pFilename);
@@ -400,11 +400,11 @@ CFileInfo *CPathIDFileList::FindFileInfo(const char *pFilename) {
     return m_Files[i];
 }
 
-CFileInfo *CPathIDFileList::AddFileInfo(const char *pFilename) {
+FileInfo *CPathIDFileList::AddFileInfo(const char *pFilename) {
   Assert(!V_IsAbsolutePath(pFilename));
   Assert(m_Files.Find(pFilename) == m_Files.InvalidIndex());
 
-  CFileInfo *pFileInfo = new CFileInfo;
+  FileInfo *pFileInfo = new FileInfo;
   pFileInfo->m_pPathIDFileList = this;
   pFileInfo->m_PathIDFileListDictIndex = m_Files.Insert(pFilename, pFileInfo);
   return pFileInfo;

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Save game read and write. Any *.hl? files may be stored in memory,
 // so use g_pSaveRestoreFileSystem when accessing them. The .sav
@@ -67,7 +67,6 @@
 #include "ixboxsystem.h"
 extern IXboxSystem *g_pXboxSystem;
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern IBaseClientDLL *g_ClientDLL;
@@ -318,7 +317,6 @@ class CSaveRestore : public ISaveRestore {
 
   CSaveRestoreData *SaveGameStateInit(void);
   void SaveGameStateGlobals(CSaveRestoreData *pSaveData);
-  int SaveReadNameAndComment(FileHandle_t f, char *name, char *comment);
   void BuildRestoredIndexTranslationTable(char const *mapname,
                                           CSaveRestoreData *pSaveData,
                                           bool verbose);
@@ -617,10 +615,6 @@ int CSaveRestore::SaveGameSlot(const char *pSaveName, const char *pSaveComment,
   int tag, i, tokenSize;
   CSaveRestoreData *pSaveData;
   GAME_HEADER gameHeader;
-
-#if defined(_MEMTEST)
-  Cbuf_AddText("mem_dump\n");
-#endif
 
   g_pSaveRestoreFileSystem->AsyncFinishAllWrites();
 
@@ -985,6 +979,125 @@ bool CSaveRestore::SaveFileExists(const char *pName) {
 }
 
 //-----------------------------------------------------------------------------
+// Purpose: Parses and confirms save information. Pulled from PC UI
+//-----------------------------------------------------------------------------
+template <size_t name_size, size_t comment_size>
+int SaveReadNameAndComment(FileHandle_t f, char (&name)[name_size],
+                           char (&comment)[comment_size]) {
+  int i, tag, size, tokenSize, tokenCount;
+  char *pSaveData = NULL;
+  char *pFieldName = NULL;
+  char **pTokenList = NULL;
+
+  // Make sure we can at least read in the first five fields
+  unsigned int tagsize = sizeof(int) * 5;
+  if (g_pSaveRestoreFileSystem->Size(f) < tagsize) return 0;
+
+  int nRead = g_pSaveRestoreFileSystem->Read(&tag, sizeof(int), f);
+  if ((nRead != sizeof(int)) || tag != MAKEID<int>('J', 'S', 'A', 'V'))
+    return 0;
+
+  name[0] = '\0';
+  comment[0] = '\0';
+  if (g_pSaveRestoreFileSystem->Read(&tag, sizeof(int), f) != sizeof(int))
+    return 0;
+
+  if (g_pSaveRestoreFileSystem->Read(&size, sizeof(int), f) != sizeof(int))
+    return 0;
+
+  if (g_pSaveRestoreFileSystem->Read(&tokenCount, sizeof(int), f) !=
+      sizeof(int))  // These two ints are the token list
+    return 0;
+
+  if (g_pSaveRestoreFileSystem->Read(&tokenSize, sizeof(int), f) != sizeof(int))
+    return 0;
+
+  size += tokenSize;
+
+  // Sanity Check.
+  if (tokenCount < 0 || tokenCount > 1024 * 1024 * 32) {
+    return 0;
+  }
+
+  if (tokenSize < 0 || tokenSize > 1024 * 1024 * 10) {
+    return 0;
+  }
+
+  pSaveData = (char *)new char[size];
+  if (g_pSaveRestoreFileSystem->Read(pSaveData, size, f) != size) {
+    delete[] pSaveData;
+    return 0;
+  }
+
+  int nNumberOfFields;
+
+  char *pData;
+  int nFieldSize;
+
+  pData = pSaveData;
+
+  // Allocate a table for the strings, and parse the table
+  if (tokenSize > 0) {
+    pTokenList = new char *[tokenCount];
+
+    // Make sure the token strings pointed to by the pToken hashtable.
+    for (i = 0; i < tokenCount; i++) {
+      pTokenList[i] =
+          *pData ? pData : NULL;  // Point to each string in the pToken table
+      while (*pData++)
+        ;  // Find next token (after next 0)
+    }
+  } else
+    pTokenList = NULL;
+
+  // short, short (size, index of field name)
+  nFieldSize = *(short *)pData;
+  pData += sizeof(short);
+  pFieldName = pTokenList[*(short *)pData];
+
+  if (!pFieldName || Q_stricmp(pFieldName, "GameHeader")) {
+    delete[] pSaveData;
+    delete[] pTokenList;
+    return 0;
+  };
+
+  // int (fieldcount)
+  pData += sizeof(short);
+  nNumberOfFields = *(int *)pData;
+  pData += nFieldSize;
+
+  // Each field is a short (size), short (index of name), binary string of
+  // "size" bytes (data)
+  for (i = 0; i < nNumberOfFields; ++i) {
+    // Data order is:
+    // Size
+    // szName
+    // Actual Data
+
+    nFieldSize = *(short *)pData;
+    pData += sizeof(short);
+
+    pFieldName = pTokenList[*(short *)pData];
+    pData += sizeof(short);
+
+    if (!_stricmp(pFieldName, "comment")) {
+      strncpy_s(comment, pData, nFieldSize);
+    } else if (!_stricmp(pFieldName, "mapName")) {
+      strncpy_s(name, pData, nFieldSize);
+    };
+
+    // Move to Start of next field.
+    pData += nFieldSize;
+  }
+
+  // Delete the string table we allocated
+  delete[] pTokenList;
+  delete[] pSaveData;
+
+  return (name[0] != '\0' && comment[0] != '\0') ? 1 : 0;
+}
+
+//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *pName -
 // Output : int
@@ -1169,11 +1282,8 @@ struct SaveFileHeaderTag_t {
   }
 };
 
-#define MAKEID(d, c, b, a) \
-  (((int)(a) << 24) | ((int)(b) << 16) | ((int)(c) << 8) | ((int)(d)))
-
 const struct SaveFileHeaderTag_t CURRENT_SAVEFILE_HEADER_TAG = {
-    MAKEID('V', 'A', 'L', 'V'), SAVEGAME_VERSION};
+    MAKEID<int>('V', 'A', 'L', 'V'), SAVEGAME_VERSION};
 
 struct SaveFileSectionsInfo_t {
   int nBytesSymbols;
@@ -1474,8 +1584,8 @@ struct clientsectionsold_t : public baseclientsectionsold_t {
   char *decaldata;
 };
 
-// TODO(d.rattman):  Remove the above and replace with this once we update the save
-// format!!
+// TODO(d.rattman):  Remove the above and replace with this once we update the
+// save format!!
 struct baseclientsections_t {
   int entitysize;
   int headersize;
@@ -1935,123 +2045,6 @@ bool CSaveRestore::SaveClientState(const char *name) {
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Parses and confirms save information. Pulled from PC UI
-//-----------------------------------------------------------------------------
-int CSaveRestore::SaveReadNameAndComment(FileHandle_t f, char *name,
-                                         char *comment) {
-  int i, tag, size, tokenSize, tokenCount;
-  char *pSaveData = NULL;
-  char *pFieldName = NULL;
-  char **pTokenList = NULL;
-
-  // Make sure we can at least read in the first five fields
-  unsigned int tagsize = sizeof(int) * 5;
-  if (g_pSaveRestoreFileSystem->Size(f) < tagsize) return 0;
-
-  int nRead = g_pSaveRestoreFileSystem->Read(&tag, sizeof(int), f);
-  if ((nRead != sizeof(int)) || tag != MAKEID('J', 'S', 'A', 'V')) return 0;
-
-  name[0] = '\0';
-  comment[0] = '\0';
-  if (g_pSaveRestoreFileSystem->Read(&tag, sizeof(int), f) != sizeof(int))
-    return 0;
-
-  if (g_pSaveRestoreFileSystem->Read(&size, sizeof(int), f) != sizeof(int))
-    return 0;
-
-  if (g_pSaveRestoreFileSystem->Read(&tokenCount, sizeof(int), f) !=
-      sizeof(int))  // These two ints are the token list
-    return 0;
-
-  if (g_pSaveRestoreFileSystem->Read(&tokenSize, sizeof(int), f) != sizeof(int))
-    return 0;
-
-  size += tokenSize;
-
-  // Sanity Check.
-  if (tokenCount < 0 || tokenCount > 1024 * 1024 * 32) {
-    return 0;
-  }
-
-  if (tokenSize < 0 || tokenSize > 1024 * 1024 * 10) {
-    return 0;
-  }
-
-  pSaveData = (char *)new char[size];
-  if (g_pSaveRestoreFileSystem->Read(pSaveData, size, f) != size) {
-    delete[] pSaveData;
-    return 0;
-  }
-
-  int nNumberOfFields;
-
-  char *pData;
-  int nFieldSize;
-
-  pData = pSaveData;
-
-  // Allocate a table for the strings, and parse the table
-  if (tokenSize > 0) {
-    pTokenList = new char *[tokenCount];
-
-    // Make sure the token strings pointed to by the pToken hashtable.
-    for (i = 0; i < tokenCount; i++) {
-      pTokenList[i] =
-          *pData ? pData : NULL;  // Point to each string in the pToken table
-      while (*pData++)
-        ;  // Find next token (after next 0)
-    }
-  } else
-    pTokenList = NULL;
-
-  // short, short (size, index of field name)
-  nFieldSize = *(short *)pData;
-  pData += sizeof(short);
-  pFieldName = pTokenList[*(short *)pData];
-
-  if (!pFieldName || Q_stricmp(pFieldName, "GameHeader")) {
-    delete[] pSaveData;
-    delete[] pTokenList;
-    return 0;
-  };
-
-  // int (fieldcount)
-  pData += sizeof(short);
-  nNumberOfFields = *(int *)pData;
-  pData += nFieldSize;
-
-  // Each field is a short (size), short (index of name), binary string of
-  // "size" bytes (data)
-  for (i = 0; i < nNumberOfFields; ++i) {
-    // Data order is:
-    // Size
-    // szName
-    // Actual Data
-
-    nFieldSize = *(short *)pData;
-    pData += sizeof(short);
-
-    pFieldName = pTokenList[*(short *)pData];
-    pData += sizeof(short);
-
-    if (!Q_stricmp(pFieldName, "comment")) {
-      strncpy(comment, pData, nFieldSize);
-    } else if (!Q_stricmp(pFieldName, "mapName")) {
-      Q_strncpy(name, pData, nFieldSize);
-    };
-
-    // Move to Start of next field.
-    pData += nFieldSize;
-  }
-
-  // Delete the string table we allocated
-  delete[] pTokenList;
-  delete[] pSaveData;
-
-  return (name[0] != '\0' && comment[0] != '\0') ? 1 : 0;
-}
-
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *level -
 // Output : CSaveRestoreData
@@ -2061,11 +2054,11 @@ CSaveRestoreData *CSaveRestore::LoadSaveData(const char *level) {
   FileHandle_t pFile;
 
   if (!IsXSave()) {
-    Q_snprintf(name, sizeof(name), "//%s/%s%s.HL1", MOD_DIR, GetSaveDir(),
-               level);  // DON'T FixSlashes on this, it needs to be //MOD
+    sprintf_s(name, "//%s/%s%s.HL1", MOD_DIR, GetSaveDir(),
+              level);  // DON'T FixSlashes on this, it needs to be //MOD
   } else {
-    Q_snprintf(name, sizeof(name), "%s:/%s.HL1", GetCurrentMod(),
-               level);  // DON'T FixSlashes on this, it needs to be //MOD
+    sprintf_s(name, "%s:/%s.HL1", GetCurrentMod(),
+              level);  // DON'T FixSlashes on this, it needs to be //MOD
   }
   ConMsg("Loading game from %s...\n", name);
 
@@ -2387,7 +2380,8 @@ int EntryInTable(CSaveRestoreData *pSaveData, const char *pMapName, int index) {
 
   index++;
   for (i = index; i < pSaveData->levelInfo.connectionCount; i++) {
-    if (!_stricmp(pSaveData->levelInfo.levelList[i].mapName, pMapName)) return i;
+    if (!_stricmp(pSaveData->levelInfo.levelList[i].mapName, pMapName))
+      return i;
   }
 
   return -1;
@@ -2405,7 +2399,7 @@ void LandmarkOrigin(CSaveRestoreData *pSaveData, Vector &output,
 
   for (i = 0; i < pSaveData->levelInfo.connectionCount; i++) {
     if (!_stricmp(pSaveData->levelInfo.levelList[i].landmarkName,
-                 pLandmarkName)) {
+                  pLandmarkName)) {
       VectorCopy(pSaveData->levelInfo.levelList[i].vecLandmarkOrigin, output);
       return;
     }
@@ -2444,7 +2438,7 @@ void CSaveRestore::LoadAdjacentEnts(const char *pOldLevel,
     for (test = 0; test < i; test++) {
       // Only do maps once
       if (!_stricmp(currentLevelData.levelInfo.levelList[i].mapName,
-                   currentLevelData.levelInfo.levelList[test].mapName))
+                    currentLevelData.levelInfo.levelList[test].mapName))
         break;
     }
     // Map was already in the list

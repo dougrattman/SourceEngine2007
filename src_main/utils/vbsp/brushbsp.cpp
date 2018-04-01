@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vbsp.h"
 
@@ -12,33 +12,24 @@ int c_active_brushes;
 // 0.1
 
 void FindBrushInTree(node_t *node, int brushnum) {
-  bspbrush_t *b;
-
   if (node->planenum == PLANENUM_LEAF) {
-    for (b = node->brushlist; b; b = b->next)
+    for (bspbrush_t *b = node->brushlist; b; b = b->next)
       if (b->original->brushnum == brushnum) Msg("here\n");
     return;
   }
+
   FindBrushInTree(node->children[0], brushnum);
   FindBrushInTree(node->children[1], brushnum);
 }
 
-//==================================================
-
-/*
-================
-DrawBrushList
-================
-*/
 void DrawBrushList(bspbrush_t *brush, node_t *node) {
-  int i;
-  side_t *s;
-
   GLS_BeginScene();
   for (; brush; brush = brush->next) {
-    for (i = 0; i < brush->numsides; i++) {
-      s = &brush->sides[i];
+    for (int i = 0; i < brush->numsides; i++) {
+      side_t *s = &brush->sides[i];
+
       if (!s->winding) continue;
+
       if (s->texinfo == TEXINFO_NODE)
         GLS_Winding(s->winding, 1);
       else if (!s->visible)
@@ -50,23 +41,17 @@ void DrawBrushList(bspbrush_t *brush, node_t *node) {
   GLS_EndScene();
 }
 
-/*
-================
-WriteBrushList
-================
-*/
 void WriteBrushList(char *name, bspbrush_t *brush, bool onlyvis) {
-  int i;
-  side_t *s;
-
-  qprintf("writing %s\n", name);
+  qprintf("Writing %s\n", name);
   FileHandle_t f = g_pFileSystem->Open(name, "w");
 
   for (; brush; brush = brush->next) {
-    for (i = 0; i < brush->numsides; i++) {
-      s = &brush->sides[i];
+    for (int i = 0; i < brush->numsides; i++) {
+      side_t *s = &brush->sides[i];
+
       if (!s->winding) continue;
       if (onlyvis && !s->visible) continue;
+
       OutputWinding(brush->sides[i].winding, f);
     }
   }
@@ -75,31 +60,24 @@ void WriteBrushList(char *name, bspbrush_t *brush, bool onlyvis) {
 }
 
 void PrintBrush(bspbrush_t *brush) {
-  int i;
-
   Msg("brush: %p\n", brush);
-  for (i = 0; i < brush->numsides; i++) {
+
+  for (int i = 0; i < brush->numsides; i++) {
     pw(brush->sides[i].winding);
     Msg("\n");
   }
 }
 
-/*
-==================
-BoundBrush
-
-Sets the mins/maxs based on the windings
-==================
-*/
+// Sets the mins/maxs based on the windings.
 void BoundBrush(bspbrush_t *brush) {
-  int i, j;
-  winding_t *w;
-
   ClearBounds(brush->mins, brush->maxs);
-  for (i = 0; i < brush->numsides; i++) {
-    w = brush->sides[i].winding;
+
+  for (int i = 0; i < brush->numsides; i++) {
+    winding_t *w = brush->sides[i].winding;
+
     if (!w) continue;
-    for (j = 0; j < w->numpoints; j++)
+
+    for (int j = 0; j < w->numpoints; j++)
       AddPointToBounds(w->p[j], brush->mins, brush->maxs);
   }
 }
@@ -123,12 +101,6 @@ Vector PointInsideBrush(bspbrush_t *brush) {
   return insidePoint;
 }
 
-/*
-==================
-CreateBrushWindings
-
-==================
-*/
 void CreateBrushWindings(bspbrush_t *brush) {
   int i, j;
   winding_t *w;
@@ -160,13 +132,7 @@ void CreateBrushWindings(bspbrush_t *brush) {
   BoundBrush(brush);
 }
 
-/*
-==================
-BrushFromBounds
-
-Creates a new axial brush
-==================
-*/
+// Creates a new axial brush
 bspbrush_t *BrushFromBounds(Vector &mins, Vector &maxs) {
   bspbrush_t *b;
   int i;
@@ -191,12 +157,7 @@ bspbrush_t *BrushFromBounds(Vector &mins, Vector &maxs) {
   return b;
 }
 
-/*
-==================
-BrushVolume
-
-==================
-*/
+// BrushVolume
 f32 BrushVolume(bspbrush_t *brush) {
   int i;
   winding_t *w;

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dt_send.h"
 
@@ -301,7 +301,7 @@ float AssignRangeMultiplier(int nBits, double range) {
       (fHighLowMul * range) > (double)iHighValue) {
     // Squeeze it down smaller and smaller until it's going to produce an
     // integer in the valid range when given the highest value.
-    float multipliers[] = {0.9999, 0.99, 0.9, 0.8, 0.7};
+    float multipliers[] = {0.9999f, 0.99f, 0.9f, 0.8f, 0.7f};
     int i;
     for (i = 0; i < SOURCE_ARRAYSIZE(multipliers); i++) {
       float new_fHighLowMul = (float)(iHighValue / range) * multipliers[i];
@@ -639,7 +639,7 @@ SendProp InternalSendPropArray(const int elementCount, const int elementStride,
 SendProp SendPropExclude(
     const char *pDataTableName,  // Data table name (given to BEGIN_SEND_TABLE
                                  // and BEGIN_RECV_TABLE).
-    const char *pPropName  // Name of the property to exclude.
+    const char *pPropName        // Name of the property to exclude.
 ) {
   SendProp ret;
 

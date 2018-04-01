@@ -12,41 +12,41 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FileDialogApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileSystemOpenDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\tier0\include\memoverride.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\tier0\include\afxmem_override.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="file_dialog_app.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="file_system_open_dlg.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileDialogApp.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FileSystemOpenDlg.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\IFileSystemOpenDialog.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StdAfx.h">
+    <ClInclude Include="..\..\common\IFileSystemOpenDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="file_dialog_app.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="file_system_open_dlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="FileSystemOpenDialog.rc">
+    <ResourceCompile Include="filesystemopendialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

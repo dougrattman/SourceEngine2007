@@ -3046,9 +3046,9 @@ model_t *CModelLoader::LoadModel(model_t *mod, REFERENCETYPE *pReferencetype) {
 
       // the map may have explicit texture exclusion
       // the texture state needs to be established before any loading work
-      if (IsX360() || mat_excludetextures.GetBool()) {
+      if (mat_excludetextures.GetBool()) {
         char szExcludePath[SOURCE_MAX_PATH];
-        sprintf(szExcludePath, "//MOD/maps/%s_exclude.lst", m_szLoadName);
+        sprintf_s(szExcludePath, "//MOD/maps/%s_exclude.lst", m_szLoadName);
         g_pMaterialSystem->SetExcludedTextures(szExcludePath);
       }
 
@@ -3075,8 +3075,10 @@ model_t *CModelLoader::LoadModel(model_t *mod, REFERENCETYPE *pReferencetype) {
       break;
   };
 
-  float dt = (Plat_FloatTime() - st);
-  COM_TimestampedLog("Load of %s took %.3f msec", mod->szName, 1000.0f * dt);
+  const double dt = Plat_FloatTime() - st;
+  Plat_TimestampedLog(
+      "Engine::CModelLoader::LoadModel: Load of %s took %.3f msec.",
+      mod->szName, 1000.0f * dt);
   g_flAccumulatedModelLoadTime += dt;
 
   return mod;
@@ -3663,7 +3665,7 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
 
   Assert(!(mod->nLoadFlags & FMODELLOADER_LOADED));
 
-  COM_TimestampedLog("Map_LoadModel: Start");
+  Plat_TimestampedLog("Engine::CModelLoader::Map_LoadModel start.");
 
   double startTime = Plat_FloatTime();
 
@@ -3674,11 +3676,11 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
   mod->brush.renderHandle = 0;
 
   // HDR and features must be established first
-  COM_TimestampedLog("  Map_CheckForHDR");
+  Plat_TimestampedLog("  Map_CheckForHDR");
   m_bMapHasHDRLighting = Map_CheckForHDR(mod, m_szLoadName);
 
   // Load the collision model
-  COM_TimestampedLog("  CM_LoadMap");
+  Plat_TimestampedLog("  CM_LoadMap");
   unsigned int checksum;
   CM_LoadMap(mod->szName, false, &checksum);
 
@@ -3687,26 +3689,26 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
   mod->nLoadFlags |= FMODELLOADER_LOADED;
   CMapLoadHelper::Init(mod, m_szLoadName);
 
-  COM_TimestampedLog("  Mod_LoadVertices");
+  Plat_TimestampedLog("  Mod_LoadVertices");
   Mod_LoadVertices();
 
-  COM_TimestampedLog("  Mod_LoadEdges");
+  Plat_TimestampedLog("  Mod_LoadEdges");
   medge_t *pedges = Mod_LoadEdges();
 
-  COM_TimestampedLog("  Mod_LoadSurfedges");
+  Plat_TimestampedLog("  Mod_LoadSurfedges");
   Mod_LoadSurfedges(pedges);
 
-  COM_TimestampedLog("  Mod_LoadPlanes");
+  Plat_TimestampedLog("  Mod_LoadPlanes");
   Mod_LoadPlanes();
 
-  COM_TimestampedLog("  Mod_LoadOcclusion");
+  Plat_TimestampedLog("  Mod_LoadOcclusion");
   Mod_LoadOcclusion();
 
   // texdata needs to load before texinfo
-  COM_TimestampedLog("  Mod_LoadTexdata");
+  Plat_TimestampedLog("  Mod_LoadTexdata");
   Mod_LoadTexdata();
 
-  COM_TimestampedLog("  Mod_LoadTexinfo");
+  Plat_TimestampedLog("  Mod_LoadTexinfo");
   Mod_LoadTexinfo();
 
 #ifndef SWDS
@@ -3714,7 +3716,7 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
 #endif
 
   // Until BSP version 19, this must occur after loading texinfo
-  COM_TimestampedLog("  Mod_LoadLighting");
+  Plat_TimestampedLog("  Mod_LoadLighting");
   if (g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE &&
       CMapLoadHelper::LumpSize(LUMP_LIGHTING_HDR) > 0) {
     CMapLoadHelper mlh(LUMP_LIGHTING_HDR);
@@ -3724,13 +3726,13 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
     Mod_LoadLighting(mlh);
   }
 
-  COM_TimestampedLog("  Mod_LoadPrimitives");
+  Plat_TimestampedLog("  Mod_LoadPrimitives");
   Mod_LoadPrimitives();
 
-  COM_TimestampedLog("  Mod_LoadPrimVerts");
+  Plat_TimestampedLog("  Mod_LoadPrimVerts");
   Mod_LoadPrimVerts();
 
-  COM_TimestampedLog("  Mod_LoadPrimIndices");
+  Plat_TimestampedLog("  Mod_LoadPrimIndices");
   Mod_LoadPrimIndices();
 
 #ifndef SWDS
@@ -3738,13 +3740,13 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
 #endif
 
   // faces need to be loaded before vertnormals
-  COM_TimestampedLog("  Mod_LoadFaces");
+  Plat_TimestampedLog("  Mod_LoadFaces");
   Mod_LoadFaces();
 
-  COM_TimestampedLog("  Mod_LoadVertNormals");
+  Plat_TimestampedLog("  Mod_LoadVertNormals");
   Mod_LoadVertNormals();
 
-  COM_TimestampedLog("  Mod_LoadVertNormalIndices");
+  Plat_TimestampedLog("  Mod_LoadVertNormalIndices");
   Mod_LoadVertNormalIndices();
 
 #ifndef SWDS
@@ -3752,54 +3754,54 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
 #endif
 
   // note leafs must load befor marksurfaces
-  COM_TimestampedLog("  Mod_LoadLeafs");
+  Plat_TimestampedLog("  Mod_LoadLeafs");
   Mod_LoadLeafs();
 
-  COM_TimestampedLog("  Mod_LoadMarksurfaces");
+  Plat_TimestampedLog("  Mod_LoadMarksurfaces");
   Mod_LoadMarksurfaces();
 
-  COM_TimestampedLog("  Mod_LoadNodes");
+  Plat_TimestampedLog("  Mod_LoadNodes");
   Mod_LoadNodes();
 
-  COM_TimestampedLog("  Mod_LoadLeafWaterData");
+  Plat_TimestampedLog("  Mod_LoadLeafWaterData");
   Mod_LoadLeafWaterData();
 
-  COM_TimestampedLog("  Mod_LoadCubemapSamples");
+  Plat_TimestampedLog("  Mod_LoadCubemapSamples");
   Mod_LoadCubemapSamples();
 
 #ifndef SWDS
   // UNDONE: Does the cmodel need worldlights?
-  COM_TimestampedLog("  OverlayMgr()->LoadOverlays");
+  Plat_TimestampedLog("  OverlayMgr()->LoadOverlays");
   OverlayMgr()->LoadOverlays();
 #endif
 
-  COM_TimestampedLog("  Mod_LoadLeafMinDistToWater");
+  Plat_TimestampedLog("  Mod_LoadLeafMinDistToWater");
   Mod_LoadLeafMinDistToWater();
 
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_LOADWORLDMODEL);
 #endif
 
-  COM_TimestampedLog("  LUMP_CLIPPORTALVERTS");
+  Plat_TimestampedLog("  LUMP_CLIPPORTALVERTS");
   Mod_LoadLump(mod, LUMP_CLIPPORTALVERTS,
                va("%s [%s]", m_szLoadName, "clipportalverts"),
                sizeof(m_worldBrushData.m_pClipPortalVerts[0]),
                (void **)&m_worldBrushData.m_pClipPortalVerts,
                &m_worldBrushData.m_nClipPortalVerts);
 
-  COM_TimestampedLog("  LUMP_AREAPORTALS");
+  Plat_TimestampedLog("  LUMP_AREAPORTALS");
   Mod_LoadLump(mod, LUMP_AREAPORTALS,
                va("%s [%s]", m_szLoadName, "areaportals"),
                sizeof(m_worldBrushData.m_pAreaPortals[0]),
                (void **)&m_worldBrushData.m_pAreaPortals,
                &m_worldBrushData.m_nAreaPortals);
 
-  COM_TimestampedLog("  LUMP_AREAS");
+  Plat_TimestampedLog("  LUMP_AREAS");
   Mod_LoadLump(mod, LUMP_AREAS, va("%s [%s]", m_szLoadName, "areas"),
                sizeof(m_worldBrushData.m_pAreas[0]),
                (void **)&m_worldBrushData.m_pAreas, &m_worldBrushData.m_nAreas);
 
-  COM_TimestampedLog("  Mod_LoadWorldlights");
+  Plat_TimestampedLog("  Mod_LoadWorldlights");
   if (g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE &&
       CMapLoadHelper::LumpSize(LUMP_WORLDLIGHTS_HDR) > 0) {
     CMapLoadHelper mlh(LUMP_WORLDLIGHTS_HDR);
@@ -3809,7 +3811,7 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
     Mod_LoadWorldlights(mlh, false);
   }
 
-  COM_TimestampedLog("  Mod_LoadGameLumpDict");
+  Plat_TimestampedLog("  Mod_LoadGameLumpDict");
   Mod_LoadGameLumpDict();
 
   // load the portal information
@@ -3825,7 +3827,7 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
   EngineVGui()->UpdateProgressBar(PROGRESS_LOADWORLDMODEL);
 #endif
 
-  COM_TimestampedLog("  Mod_LoadSubmodels");
+  Plat_TimestampedLog("  Mod_LoadSubmodels");
   CUtlVector<mmodel_t> submodelList;
   Mod_LoadSubmodels(submodelList);
 
@@ -3833,28 +3835,28 @@ void CModelLoader::Map_LoadModel(model_t *mod) {
   EngineVGui()->UpdateProgressBar(PROGRESS_LOADWORLDMODEL);
 #endif
 
-  COM_TimestampedLog("  SetupSubModels");
+  Plat_TimestampedLog("  SetupSubModels");
   SetupSubModels(mod, submodelList);
 
-  COM_TimestampedLog("  RecomputeSurfaceFlags");
+  Plat_TimestampedLog("  RecomputeSurfaceFlags");
   RecomputeSurfaceFlags(mod);
 
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_LOADWORLDMODEL);
 #endif
 
-  COM_TimestampedLog("  Map_VisClear");
+  Plat_TimestampedLog("  Map_VisClear");
   Map_VisClear();
 
-  COM_TimestampedLog("  Map_SetRenderInfoAllocated");
+  Plat_TimestampedLog("  Map_SetRenderInfoAllocated");
   Map_SetRenderInfoAllocated(false);
 
   // Close map file, etc.
   CMapLoadHelper::Shutdown();
 
   double elapsed = Plat_FloatTime() - startTime;
-  COM_TimestampedLog("Map_LoadModel: Finish - loading took %.4f seconds",
-                     elapsed);
+  Plat_TimestampedLog("Engine::CModelLoader::Map_LoadModel end (%.4f s).",
+                      elapsed);
 }
 
 void CModelLoader::Map_UnloadCubemapSamples(model_t *mod) {

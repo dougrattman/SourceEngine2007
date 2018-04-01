@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // This file contains code to allow us to associate client data with bsp leaves.
 
@@ -537,10 +537,10 @@ class CShadowTextureList {
     vmax = std::max(vmax, t2.y);
 
     // UNDONE: Do something about tiling
-    umin = std::clamp(umin, 0, 1);
-    umax = std::clamp(umax, 0, 1);
-    vmin = std::clamp(vmin, 0, 1);
-    vmax = std::clamp(vmax, 0, 1);
+    umin = std::clamp(umin, 0.0f, 1.0f);
+    umax = std::clamp(umax, 0.0f, 1.0f);
+    vmin = std::clamp(vmin, 0.0f, 1.0f);
+    vmax = std::clamp(vmax, 0.0f, 1.0f);
     Assert(umin >= 0.0f && umax <= 1.0f);
     Assert(vmin >= 0.0f && vmax <= 1.0f);
     const alphatexture_t &tex = m_Textures.Element(shadowTextureIndex);

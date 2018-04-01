@@ -419,7 +419,7 @@ void CEnvEffectsScript::ParseNewEffect(void) {
 
         if (!Q_stricmp(token, "color")) {
           ParseToken();
-          sscanf(token, "%i %i %i %i", &NewElement.m_iR, &NewElement.m_iG,
+          sscanf_s(token, "%i %i %i %i", &NewElement.m_iR, &NewElement.m_iG,
                  &NewElement.m_iB, &NewElement.m_iA);
 
           continue;

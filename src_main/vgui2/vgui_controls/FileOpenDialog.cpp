@@ -1272,7 +1272,7 @@ void FileOpenDialog::OnSelectFolder() {
   char pFullPath[SOURCE_MAX_PATH * 4];
   if (!Q_IsAbsolutePath(pFileName)) {
     GetCurrentDirectory(pFullPath, sizeof(pFullPath) - SOURCE_MAX_PATH);
-    strcat(pFullPath, pFileName);
+    strcat_s(pFullPath, pFileName);
     if (!pFileName[0]) {
       Q_StripTrailingSlash(pFullPath);
     }
@@ -1326,7 +1326,7 @@ void FileOpenDialog::OnOpen() {
   char pFullPath[SOURCE_MAX_PATH * 4];
   if (!Q_IsAbsolutePath(pFileName)) {
     GetCurrentDirectory(pFullPath, sizeof(pFullPath) - SOURCE_MAX_PATH);
-    strcat(pFullPath, pFileName);
+    strcat_s(pFullPath, pFileName);
     if (!pFileName[0]) {
       Q_StripTrailingSlash(pFullPath);
     }
@@ -1338,7 +1338,7 @@ void FileOpenDialog::OnOpen() {
   if (g_pFullFileSystem->IsDirectory(pFullPath, NULL)) {
     // it's a directory; change to the specified directory
     if (!bSpecifiedDirectory) {
-      strcat(pFullPath, "\\");
+      strcat_s(pFullPath, "\\");
     }
     SetStartDirectory(pFullPath);
 

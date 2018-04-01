@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SAVEGAMEDIALOG_H
 #define SAVEGAMEDIALOG_H
@@ -7,9 +7,7 @@
 #include "SaveGameBrowserDialog.h"
 #include "vgui_controls/KeyRepeat.h"
 
-//-----------------------------------------------------------------------------
 // Purpose: Save game dialog
-//-----------------------------------------------------------------------------
 class CSaveGameDialog : public CBaseSaveGameDialog {
   DECLARE_CLASS_SIMPLE(CSaveGameDialog, CBaseSaveGameDialog);
 
@@ -26,10 +24,6 @@ class CSaveGameDialog : public CBaseSaveGameDialog {
 };
 
 #define SAVE_NUM_ITEMS 4
-
-//
-//
-//
 
 class CSaveGameDialogXbox : public CSaveGameBrowserDialog {
   DECLARE_CLASS_SIMPLE(CSaveGameDialogXbox, CSaveGameBrowserDialog);

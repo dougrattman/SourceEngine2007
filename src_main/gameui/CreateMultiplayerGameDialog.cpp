@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "CreateMultiplayerGameDialog.h"
 
@@ -13,14 +13,10 @@
 #include "tier1/keyvalues.h"
 #include "vgui/ILocalize.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-//-----------------------------------------------------------------------------
 CCreateMultiplayerGameDialog::CCreateMultiplayerGameDialog(vgui::Panel *parent)
     : PropertyDialog(parent, "CreateMultiplayerGameDialog") {
   m_bBotsEnabled = false;
@@ -67,9 +63,6 @@ CCreateMultiplayerGameDialog::CCreateMultiplayerGameDialog(vgui::Panel *parent)
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Destructor
-//-----------------------------------------------------------------------------
 CCreateMultiplayerGameDialog::~CCreateMultiplayerGameDialog() {
   if (m_pSavedData) {
     m_pSavedData->deleteThis();
@@ -77,9 +70,7 @@ CCreateMultiplayerGameDialog::~CCreateMultiplayerGameDialog() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: runs the server when the OK button is pressed
-//-----------------------------------------------------------------------------
 bool CCreateMultiplayerGameDialog::OnOK(bool applyOnly) {
   // reset server enforced cvars
   g_pCVar->RevertFlaggedConVars(FCVAR_REPLICATED);
@@ -95,9 +86,9 @@ bool CCreateMultiplayerGameDialog::OnOK(bool applyOnly) {
 
   // get these values from m_pServerPage and store them temporarily
   char szMapName[64], szHostName[64], szPassword[64];
-  strncpy(szMapName, m_pServerPage->GetMapName(), sizeof(szMapName));
-  strncpy(szHostName, m_pGameplayPage->GetHostName(), sizeof(szHostName));
-  strncpy(szPassword, m_pGameplayPage->GetPassword(), sizeof(szPassword));
+  strcpy_s(szMapName, m_pServerPage->GetMapName());
+  strcpy_s(szHostName, m_pGameplayPage->GetHostName());
+  strcpy_s(szPassword, m_pGameplayPage->GetPassword());
 
   // save the config data
   if (m_pSavedData) {

@@ -12,7 +12,6 @@
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifndef ARCH_CPU_X86_64
@@ -27,9 +26,8 @@ static const u32 _sincos_inv_masks[] = {(u32)~0x0, (u32)0x0};
 #define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
   const alignas(16) Type _ps_##Name[4] = {Val, Val, Val, Val};
 
-#define _EPI32_CONST(Name, Val)                                            \
-  static const alignas(16) i32 _epi32_##Name[4] = {Val, Val, \
-                                                                 Val, Val}
+#define _EPI32_CONST(Name, Val) \
+  static const alignas(16) i32 _epi32_##Name[4] = {Val, Val, Val, Val}
 #define _PS_CONST(Name, Val) \
   static const alignas(16) f32 _ps_##Name[4] = {Val, Val, Val, Val}
 
@@ -67,7 +65,7 @@ f32 _SSE_Sqrt(f32 x) {
   Assert(s_bMathlibInitialized);
   f32 root = 0.f;
 #ifdef _WIN32
-  _asm
+  __asm
   {
 		sqrtss		xmm0, x
 		movss		root, xmm0
@@ -133,7 +131,7 @@ f32 _SSE_RSqrtFast(f32 x) {
 
   f32 rroot;
 #ifdef _WIN32
-  _asm
+  __asm
   {
 		rsqrtss	xmm0, x
 		movss	rroot, xmm0
@@ -168,7 +166,7 @@ f32 SOURCE_FASTCALL _SSE_VectorNormalize(Vector &vec) {
   // likely miss 3 branch predicts in a row.
   if (v[0] || v[1] || v[2]) {
 #ifdef _WIN32
-    _asm
+    __asm
     {
 			mov			eax, v
 			mov			edx, r
@@ -238,7 +236,7 @@ void SOURCE_FASTCALL _SSE_VectorNormalizeFast(Vector &vec) {
 f32 _SSE_InvRSquared(const f32 *v) {
   f32 inv_r2 = 1.f;
 #ifdef _WIN32
-  _asm {  // Intel SSE only routine
+  __asm {  // Intel SSE only routine
 		mov			eax, v
 		movss		xmm5, inv_r2  // x5 = 1.0, 0, 0, 0
 #ifdef ALIGNED_VECTOR
@@ -434,7 +432,6 @@ f32 _SSE_cos(f32 x) {
 
   return x;
 }
-
 
 // SSE2 implementations of optimized routines:// any x
 
@@ -693,11 +690,12 @@ void VectorRotateSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
 #ifdef _WIN32
 void _declspec(naked) _SSE_VectorMA(const f32 *start, f32 scale,
                                     const f32 *direction, f32 *dest) {
-  // TODO(d.rattman): This don't work!! It will overwrite memory in the write to dest
+  // TODO(d.rattman): This don't work!! It will overwrite memory in the write to
+  // dest
   Assert(0);
 
   Assert(s_bMathlibInitialized);
-  _asm {  // Intel SSE only routine
+  __asm {  // Intel SSE only routine
 		mov	eax, DWORD PTR [esp+0x04]	; *start, s0..s2
 		mov ecx, DWORD PTR [esp+0x0c]	; *direction, d0..d2
 		mov edx, DWORD PTR [esp+0x10]	; *dest
@@ -726,11 +724,12 @@ void _declspec(naked) _SSE_VectorMA(const f32 *start, f32 scale,
 void _declspec(naked) __cdecl _SSE_VectorMA(const Vector &start, f32 scale,
                                             const Vector &direction,
                                             Vector &dest) {
-  // TODO(d.rattman): This don't work!! It will overwrite memory in the write to dest
+  // TODO(d.rattman): This don't work!! It will overwrite memory in the write to
+  // dest
   Assert(0);
 
   Assert(s_bMathlibInitialized);
-  _asm
+  __asm
   {
     // Intel SSE only routine
 		mov	eax, DWORD PTR [esp+0x04]	; *start, s0..s2

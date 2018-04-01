@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "stdafx.h"
 
@@ -26,7 +26,6 @@
 #include "hammer.h"
 #include "hammer_mathlib.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_MAPCLASS(CMapEntity)
@@ -347,7 +346,8 @@ void CMapEntity::AddHelpersForClass(GDclass *pClass, bool bLoading) {
     //
     // Look for keys that define helpers.
     //
-    // TODO(d.rattman): make this totally data driven like the helper factory, or better
+    // TODO(d.rattman): make this totally data driven like the helper factory,
+    // or better
     //		  yet, like the LINK_ENTITY_TO_CLASS stuff in the game DLL
     int nVarCount = pClass->GetVariableCount();
     for (int i = 0; i < nVarCount; i++) {
@@ -735,8 +735,8 @@ static inline void BuildNewTargetName(const char *pOldName,
   // wildcards when we replace the name.
   //
   // For example, "oldname*" would become "newname*" instead of just "newname"
-  // TODO(d.rattman): ??? handle different-length names with wildcards, eg. "old_vort*" =>
-  // "new_weasel*"
+  // TODO(d.rattman): ??? handle different-length names with wildcards, eg.
+  // "old_vort*" => "new_weasel*"
   const char *pszWildcard = strchr(pOldName, '*');
   if (pszWildcard) {
     strcpy(&pBuffer[pszWildcard - pOldName], "*");
@@ -945,7 +945,7 @@ void CMapEntity::PostloadWorld(CMapWorld *pWorld) {
   const char *pszValue = m_KeyValues.GetValue("origin", &nIndex);
   if (pszValue != NULL) {
     Vector Origin;
-    sscanf(pszValue, "%f %f %f", &Origin[0], &Origin[1], &Origin[2]);
+    sscanf_s(pszValue, "%f %f %f", &Origin[0], &Origin[1], &Origin[2]);
     SetOrigin(Origin);
   }
 
@@ -1856,7 +1856,7 @@ void CMapEntity::RenderLogical(CRender2D *pRender) {
 
   // Get the entity render color
   color32 rgbColor = GetRenderColor();
-  color32 rgbHighlight = {static_cast<u8>(7 * rgbColor.r) / 8,
+  color32 rgbHighlight = {static_cast<u8>(7 * rgbColor.r / 8),
                           static_cast<u8>(7 * rgbColor.g / 8),
                           static_cast<u8>(7 * rgbColor.b / 8), UINT8_MAX};
   color32 rgbLowlight = {static_cast<u8>(5 * rgbColor.r / 8),

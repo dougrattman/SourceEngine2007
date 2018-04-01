@@ -3,6 +3,8 @@
 #ifndef BASE_INCLUDE_WINDOWS_SCOPED_COM_INITIALIZER_H_
 #define BASE_INCLUDE_WINDOWS_SCOPED_COM_INITIALIZER_H_
 
+#include "base/include/check.h"
+#include "base/include/windows/windows_errno_info.h"
 #include "base/include/windows/windows_light.h"
 
 #include <ObjBase.h>
@@ -14,35 +16,25 @@ namespace source::windows {
 class ScopedComInitializer {
  public:
   // Initializes COM with |coinit| flags for scope.
-  explicit ScopedComInitializer(const COINIT coinit) noexcept : hr_ {
-    CoInitializeEx(nullptr, coinit)
-  }
-#ifndef NDEBUG
-  , thread_id_ { GetCurrentThreadId() }
-#endif
-  {}
+  explicit ScopedComInitializer(const COINIT coinit) noexcept
+      : errno_code_{CoInitializeEx(nullptr, coinit)}, thread_id_{GetCurrentThreadId()} {}
   // Free COM at the end of scope lifetime.
   ~ScopedComInitializer() {
-#ifndef NDEBUG
     const DWORD this_thread_id{GetCurrentThreadId()};
-
     // COM should be freed on the same thread as it was initialized.
-    assert(this_thread_id == thread_id_);
-#endif
+    CHECK(this_thread_id == thread_id_, CO_E_NOTINITIALIZED);
 
-    if (SUCCEEDED(hr_)) {
+    if (succeeded(errno_code_)) {
       CoUninitialize();
     }
   }
 
   // Get COM initialization result.
-  [[nodiscard]] HRESULT hr() const noexcept { return hr_; }
+  [[nodiscard]] windows_errno_code errno_code() const noexcept { return errno_code_; }
 
  private:
-  const HRESULT hr_;
-#ifndef NDEBUG
+  const windows_errno_code errno_code_;
   const DWORD thread_id_;
-#endif
 
   ScopedComInitializer(const ScopedComInitializer &s) = delete;
   ScopedComInitializer &operator=(ScopedComInitializer &s) = delete;

@@ -7,6 +7,7 @@
 
 #ifdef OS_WIN
 #include "base/include/base_types.h"
+#include "base/include/windows/windows_errno_info.h"
 #include "tier0/include/tier0_api.h"
 
 // Writes out a minidump of the current stack trace with a unique filename.
@@ -36,10 +37,9 @@ SOURCE_TIER0_API FnMiniDump SetMiniDumpFunction(FnMiniDump minidump_fn);
 // dump_file_name if not-nullptr should be a writable ch buffer of length at least SOURCE_MAX_PATH
 // and on return will contain the name of the minidump file written.  If dump_file_name is nullptr
 // the name of the minidump file written will not be available after the function returns.
-SOURCE_TIER0_API u32 WriteMiniDumpUsingExceptionInfo(u32 se_code, EXCEPTION_POINTERS *se_info,
-                                                     MINIDUMP_TYPE minidump_type,
-                                                     wch *dump_file_name = nullptr,
-                                                     usize dump_file_name_size = 0);
+SOURCE_TIER0_API source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
+    u32 se_code, EXCEPTION_POINTERS *se_info, MINIDUMP_TYPE minidump_type,
+    wch *dump_file_name = nullptr, usize dump_file_name_size = 0);
 #endif
 
 #endif  // SOURCE_TIER0_INCLUDE_MINIDUMP_H_

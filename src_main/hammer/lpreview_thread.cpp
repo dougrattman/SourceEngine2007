@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: The thread which performs lighting preview
 //
@@ -13,7 +13,6 @@
 #include "mathlib/simdvectormatrix.h"
 #include "raytrace.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 CInterlockedInt n_gbufs_queued;
@@ -676,11 +675,11 @@ void CLightingPreviewThread::SendVectorMatrixAsRendering(
     for (int x = 0; x < src.m_nWidth; x++) {
       Vector color = src.Element(x, y);
       *(ret_bm->GetPixel(x, y) + 0) =
-          (uint8_t)std::min(255, (255.0 * pow(color.z, (float)(1 / 2.2))));
+          (uint8_t)std::min(255, (int)(255.0f * pow(color.z, (1 / 2.2f))));
       *(ret_bm->GetPixel(x, y) + 1) =
-          (uint8_t)std::min(255, (255.0 * pow(color.y, (float)(1 / 2.2))));
+          (uint8_t)std::min(255, (int)(255.0f * pow(color.y, (1 / 2.2f))));
       *(ret_bm->GetPixel(x, y) + 2) =
-          (uint8_t)std::min(255, (255.0 * pow(color.x, (float)(1 / 2.2))));
+          (uint8_t)std::min(255, (int)(255.0f * pow(color.x, (1 / 2.2f))));
       *(ret_bm->GetPixel(x, y) + 3) = 0;
     }
   MessageFromLPreview ret_msg(LPREVIEW_MSG_DISPLAY_RESULT);
@@ -709,7 +708,7 @@ void HandleLightingPreview(void) {
         if (g_pLPreviewOutputBitmap) delete g_pLPreviewOutputBitmap;
         g_pLPreviewOutputBitmap = NULL;
         //				if ( msg.m_nBitmapGenerationCounter ==
-        //g_nBitmapGenerationCounter )
+        // g_nBitmapGenerationCounter )
         {
           g_pLPreviewOutputBitmap = msg.m_pBitmapToDisplay;
           if (g_pLPreviewOutputBitmap &&

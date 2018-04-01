@@ -126,7 +126,7 @@ void CAskConnectPanel::ApplySettings(KeyValues *inResourceData) {
   const char *pStr = inResourceData->GetString("BgColor", NULL);
   if (pStr) {
     int r, g, b, a;
-    if (sscanf(pStr, "%d %d %d %d", &r, &g, &b, &a) == 4) {
+    if (sscanf_s(pStr, "%d %d %d %d", &r, &g, &b, &a) == 4) {
       m_bgColor = Color(r, g, b, a);
       SetBgColor(m_bgColor);
     }

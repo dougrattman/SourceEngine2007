@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include <cstdio>
 #include "tier1/KeyValues.h"
@@ -58,7 +58,7 @@ int __cdecl PlayerAuthCompare(const void *elem1, const void *elem2) {
   const char *authid1 = p1->kv->GetString("authid");
   const char *authid2 = p2->kv->GetString("authid");
 
-  return stricmp(authid1, authid2);
+  return _stricmp(authid1, authid2);
 }
 
 //-----------------------------------------------------------------------------
@@ -121,8 +121,8 @@ int __cdecl PlayerTimeCompare(vgui::ListPanel *pPanel,
   const char *time1 = item1.kv->GetString("time");
   const char *time2 = item2.kv->GetString("time");
 
-  int numFields1 = sscanf(time1, "%i:%i:%i", &h1, &m1, &s1);
-  int numFields2 = sscanf(time2, "%i:%i:%i", &h2, &m2, &s2);
+  int numFields1 = sscanf_s(time1, "%i:%i:%i", &h1, &m1, &s1);
+  int numFields2 = sscanf_s(time2, "%i:%i:%i", &h2, &m2, &s2);
 
   switch (numFields1) {
     case 2:

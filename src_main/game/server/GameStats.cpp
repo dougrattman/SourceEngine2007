@@ -578,7 +578,8 @@ bool CBaseGameStats::LoadFromFile(void) {
 }
 
 bool CBaseGameStats_Driver::Init() {
-  const char *pGameDir = CommandLine()->ParmValue("-game", "hl2");
+  const char *pGameDir = CommandLine()->ParmValue(
+      source::tier0::command_line_switches::kGamePath, "hl2");
 
   // standardizing is a good thing
   char szLoweredGameDir[256];
@@ -623,7 +624,8 @@ bool CBaseGameStats_Driver::Init() {
   }
 
   if (StatsTrackingIsFullyEnabled()) {
-    // TODO(d.rattman): Load m_tLastUpload from registry and save it back out, too
+    // TODO(d.rattman): Load m_tLastUpload from registry and save it back out,
+    // too
 #ifndef SWDS
     IRegistry *reg = InstanceRegistry("Steam");
     Assert(reg);

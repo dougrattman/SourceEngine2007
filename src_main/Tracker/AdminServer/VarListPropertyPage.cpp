@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "VarListPropertyPage.h"
 
@@ -114,7 +114,7 @@ void CVarListPropertyPage::SetVarString(const char *varName,
 
   // parse the rule
   const char *type = rule->GetString("type");
-  if (!stricmp(type, "enumeration")) {
+  if (!_stricmp(type, "enumeration")) {
     // look up the value in the enumeration
     int iValue = atoi(value);
     const char *result = rule->FindKey("list", true)->GetString(value, "");

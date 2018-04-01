@@ -1,4 +1,4 @@
-// Copyright © 1996-2001, Valve LLC, All rights reserved.
+// Copyright Â© 1996-2001, Valve LLC, All rights reserved.
 
 #include "BanPanel.h"
 
@@ -104,7 +104,7 @@ static const wchar_t *LocalizeFind(const char *identifier,
 //-----------------------------------------------------------------------------
 void CBanPanel::OnServerDataResponse(const char *value, const char *response) {
   // build the list
-  if (!stricmp(value, "banlist")) {
+  if (!_stricmp(value, "banlist")) {
     // clear current list
     m_pBanListPanel->DeleteAllItems();
 
@@ -112,7 +112,8 @@ void CBanPanel::OnServerDataResponse(const char *value, const char *response) {
     int item = 0;
     float banTime = 0.0f;
     char id[64] = {0};
-    while (3 == sscanf(response, "%i %s : %f min\n", &item, id, &banTime)) {
+    while (3 == sscanf_s(response, "%i %s : %f min\n", &item, id,
+                         SOURCE_ARRAYSIZE(id), &banTime)) {
       KeyValues *ban = new KeyValues("ban");
 
       // determine type
@@ -158,34 +159,18 @@ void CBanPanel::OnKeyCodeTyped(vgui::KeyCode code) {
 //-----------------------------------------------------------------------------
 void CBanPanel::OnOpenContextMenu(int row) {
   /* CONTEXT MENU CODE TEMPORARILY DISABLED UNTIL VERIFIED AS WORKING
-          if (m_pBanListPanel->IsVisible() && m_pBanListPanel->IsCursorOver()
-                  && m_pBanListPanel->GetNumSelectedRows())
-          // show the ban changing menu IF its the visible panel and the cursor
-     is
-          // over it
-          {
-          
-
-
-
-
-
-
-                  unsigned int banID =m_pBanListPanel->GetSelectedRow(0);
-                          
-
-
-
-
-
-
-                  // activate context menu
-                  m_pBanContextMenu->ShowMenu(this, banID);
-          }
-          else
-          {
-                  m_pBanContextMenu->ShowMenu(this, -1);
-          }
+  if (m_pBanListPanel->IsVisible() && m_pBanListPanel->IsCursorOver()
+          && m_pBanListPanel->GetNumSelectedRows())
+  // show the ban changing menu IF its the visible panel and the cursor is
+  // over it
+  {
+          unsigned int banID =m_pBanListPanel->GetSelectedRow(0);
+          // activate context menu
+          m_pBanContextMenu->ShowMenu(this, banID);
+  } else
+  {
+          m_pBanContextMenu->ShowMenu(this, -1);
+  }
   */
 }
 
@@ -237,7 +222,7 @@ void CBanPanel::ChangeBan() {
   if (kv != NULL) {
     char timeText[20];
     float time = kv->GetFloat("time");
-    _snprintf(timeText, sizeof(timeText), "%0.2f", time);
+    _snprintf_s(timeText, sizeof(timeText), "%0.2f", time);
 
     // open a dialog asking them what time to change the ban lenght to
     CDialogCvarChange *box = new CDialogCvarChange(this);
@@ -257,8 +242,8 @@ void CBanPanel::RemoveBanByID(const char *id) {
 
   // send down the command
   char cmd[512];
-  _snprintf(cmd, sizeof(cmd) - 1, "%s %s\n",
-            IsIPAddress(id) ? "removeip" : "removeid", id);
+  _snprintf_s(cmd, sizeof(cmd) - 1, "%s %s\n",
+              IsIPAddress(id) ? "removeip" : "removeid", id);
   RemoteServer().SendCommand(cmd);
 
   // force the file to be written
@@ -286,8 +271,8 @@ void CBanPanel::ChangeBanTimeByID(const char *id, const char *newtime) {
 
   // send down the command
   char cmd[512];
-  _snprintf(cmd, sizeof(cmd) - 1, "%s %s %s\n",
-            IsIPAddress(id) ? "addip" : "banid", newtime, id);
+  _snprintf_s(cmd, sizeof(cmd) - 1, "%s %s %s\n",
+              IsIPAddress(id) ? "addip" : "banid", newtime, id);
   RemoteServer().SendCommand(cmd);
   if (IsIPAddress(id)) {
     RemoteServer().SendCommand("writeip");
@@ -348,22 +333,22 @@ void CBanPanel::OnFileSelected(const char *fullpath) {
 
   // we don't use filesystem() here becuase we want to let the user pick
   // a file from anywhere on their filesystem... so we use stdio
-  FILE *f = fopen(fullpath, "rb");
-  while (!feof(f) && fgets(line, 255, f)) {
-    // parse each line of the config file adding the ban
-    tok.SetLine(line);
-    if (tok.CountToken() == 3) {
-      // add the ban
-      const char *id = tok.GetToken(2);
-      ChangeBanTimeByID(id, "0");
+  FILE *f;
+  if (fopen_s(&f, fullpath, "rb")) {
+    while (!feof(f) && fgets(line, 255, f)) {
+      // parse each line of the config file adding the ban
+      tok.SetLine(line);
+      if (tok.CountToken() == 3) {
+        // add the ban
+        const char *id = tok.GetToken(2);
+        ChangeBanTimeByID(id, "0");
+      }
     }
   }
 
   // change the cursor back to normal and shutdown file
   surface()->SetCursor(dc_user);
-  if (f) {
-    fclose(f);
-  }
+  if (f) fclose(f);
 }
 
 //-----------------------------------------------------------------------------
@@ -372,5 +357,5 @@ void CBanPanel::OnFileSelected(const char *fullpath) {
 //-----------------------------------------------------------------------------
 bool CBanPanel::IsIPAddress(const char *id) {
   int s1, s2, s3, s4;
-  return (4 == sscanf(id, "%d.%d.%d.%d", &s1, &s2, &s3, &s4));
+  return 4 == sscanf_s(id, "%d.%d.%d.%d", &s1, &s2, &s3, &s4);
 }

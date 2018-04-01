@@ -17,6 +17,7 @@
 #include "FileSystem.h"
 #include "SteamBootStrapper.h"
 #include "VPanel.h"
+#include "base/include/compiler_specific.h"
 #include "base/include/windows/scoped_com_initializer.h"
 #include "bitmap.h"
 #include "tier0/include/basetypes.h"
@@ -43,7 +44,6 @@
 #include "vgui_surfacelib/FontManager.h"
 #include "vgui_surfacelib/Win32Font.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifdef PlaySound
@@ -580,31 +580,6 @@ static void staticGenerateIconForTexture(Texture *texture, HDC hdc) {
 
   // generate the AND plane based on the alpha
   uchar planeAND[32 * 32 / 8];
-
-  /* !! disabled until verified
-  //
-  // from the alpha of the bitmap, generate a bitmask
-  //
-  uchar *ptr = (uchar *)texture->_dib + 3;	// jump to alpha portion
-  uchar *ptrEnd = (uchar *)texture->_dib + (texture->_wide * texture->_tall *
-  4); uchar *andPtr = planeAND; while (ptr < ptrEnd)
-  {
-          // Start all empty
-          *andPtr = 0;
-
-          // assume the number of pixel is a multiple of 8
-          // if the alpha is high enough, then mask out the pixel
-
-          // it's two bits per pixel, strangely enough
-          if (*ptr > 127)	{ *andPtr |= 0x03; }	ptr += 4;
-          if (*ptr > 127)	{ *andPtr |= 0x0C; }	ptr += 4;
-          if (*ptr > 127)	{ *andPtr |= 0x30; }	ptr += 4;
-          if (*ptr > 127)	{ *andPtr |= 0xC0; }	ptr += 4;
-
-          andPtr++;
-  }
-  */
-
   memset(planeAND, 0x00, sizeof(planeAND));
   HBITMAP mask = ::CreateBitmap(texture->_wide, texture->_tall, 1, 1, planeAND);
 
@@ -644,9 +619,11 @@ CWin32Surface::CWin32Surface()
   _needKB = true;
   _needMouse = true;
 
-  if (FAILED(scoped_com_initializer_.hr())) {
-    Warning("vgui2::Surface COM initialization failed, error 0x%8x",
-            scoped_com_initializer_.hr());
+  if (source::windows::failed(scoped_com_initializer_.errno_code())) {
+    Warning("vgui2::Surface COM initialization failed: %s.",
+            source::windows::make_windows_errno_info(
+                scoped_com_initializer_.errno_code())
+                .description);
   }
 
   m_bSupportsUnicode = true;
@@ -951,28 +928,29 @@ void CWin32Surface::SetNotifyIcon(VPANEL context, HTexture iconID,
                                   VPANEL panelToReceiveMessages,
                                   const char *text) {
   context = GetContextPanelForChildPanel(context);
-  if (!context) return;
 
-  if (!text) {
-    text = "";
-  }
+  if (!context) return;
+  if (!text) text = "";
 
   // things haven't changed so just update the tooltip
   if (_notifyIcon == iconID && _notifyPanel == panelToReceiveMessages &&
       context && PLAT(context)->notifyIcon) {
-    ::NOTIFYICONDATA iconData = {
-        sizeof(iconData),
+    NOTIFYICONDATA notify_icon_data = {
+        sizeof(notify_icon_data),
         PLAT(context)->hwnd,
         1,                          // icon ID
         NIF_TIP,                    // modify tooltip only
         WM_MY_TRAY_NOTIFICATION,    // callback message
         PLAT(context)->notifyIcon,  // icon handle
-        "",                         // tooltip text
-    };
+        ""};                        // tooltip text
 
-    strncpy(iconData.szTip, text, 63);
-    iconData.szTip[63] = '\0';
-    ::Shell_NotifyIcon(NIM_MODIFY, &iconData);
+    strcpy_s(notify_icon_data.szTip, text);
+    BOOL success = Shell_NotifyIcon(NIM_MODIFY, &notify_icon_data);
+
+    if (!success) {
+      Msg("SetNotifyIcon failed (0x%8.x)\n", GetLastError());
+    }
+
     return;
   }
 
@@ -982,13 +960,13 @@ void CWin32Surface::SetNotifyIcon(VPANEL context, HTexture iconID,
   DWORD dwMessage = NIM_MODIFY;
   if (!iconID) {
     dwMessage = NIM_DELETE;
-    PLAT(context)->notifyIcon = NULL;
+    PLAT(context)->notifyIcon = nullptr;
   } else if (!PLAT(context)->notifyIcon) {
     dwMessage = NIM_ADD;
   }
 
   // make sure the icon has been loaded
-  Texture *texture = NULL;
+  Texture *texture = nullptr;
   if (iconID) {
     texture = GetTextureById(iconID);
 
@@ -1003,24 +981,21 @@ void CWin32Surface::SetNotifyIcon(VPANEL context, HTexture iconID,
     PLAT(context)->notifyIcon = texture->_icon;
   }
 
-  ::NOTIFYICONDATA iconData = {
-      sizeof(iconData),
+  NOTIFYICONDATA notify_icon_data = {
+      sizeof(notify_icon_data),
       PLAT(context)->hwnd,
       1,                                 // icon ID
       NIF_ICON | NIF_TIP | NIF_MESSAGE,  // items used
       WM_MY_TRAY_NOTIFICATION,           // callback message
       PLAT(context)->notifyIcon,         // icon handle
-      "",                                // tooltip text
-  };
+      ""};                               // tooltip text
 
-  strncpy(iconData.szTip, text, 63);
-  iconData.szTip[63] = '\0';
+  strcpy_s(notify_icon_data.szTip, text);
 
-  BOOL success = ::Shell_NotifyIcon(dwMessage, &iconData);
+  BOOL success = Shell_NotifyIcon(dwMessage, &notify_icon_data);
 
   if (iconID && !success) {
-    DWORD err = GetLastError();
-    Msg("error: SetNotifyIcon(%d) failed\n", err);
+    Msg("SetNotifyIcon failed (0x%8.x)\n", GetLastError());
   }
 }
 
@@ -1478,7 +1453,7 @@ HBITMAP staticCreateBitmapHandle(int wide, int tall, HDC hdc, int bpp,
 bool CWin32Surface::LoadBMP(Texture *texture, const char *filename) {
   // try load the tga
   char buf[1024];
-  _snprintf(buf, sizeof(buf), "%s.bmp", filename);
+  _snprintf_s(buf, SOURCE_ARRAYSIZE(buf), "%s.bmp", filename);
 
   // look in the skins directory first
   FileHandle_t file = g_pFullFileSystem->Open(buf, "rb", "SKIN");
@@ -1561,7 +1536,7 @@ bool CWin32Surface::LoadTGA(Texture *texture, const char *filename) {
 
   // try load the tga
   char buf[1024];
-  _snprintf(buf, sizeof(buf), "%s.tga", filename);
+  _snprintf_s(buf, SOURCE_ARRAYSIZE(buf), "%s.tga", filename);
 
   // look in the skins directory first
   FileHandle_t file = g_pFullFileSystem->Open(buf, "rb", "SKIN");
@@ -2064,7 +2039,7 @@ void CWin32Surface::CreatePopup(VPANEL panel, bool minimised,
     _popupList.AddElement(panel);
   } else {
     // somehow getting added twice, fundamental problem
-    _asm int 3;
+    DebuggerBreak();
   }
 
   // hack, force a windows sound to be played
@@ -3013,15 +2988,19 @@ void CWin32Surface::initStaticData() {
   memset(&staticWndclass, 0, sizeof(staticWndclass));
   staticWndclass.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
   staticWndclass.lpfnWndProc = staticProc;
-  staticWndclass.hInstance = GetModuleHandle(NULL);
+  staticWndclass.hInstance = GetModuleHandle(nullptr);
 
   // Get the resource ID of the icon group from the environment...default to
   // 101.
   DWORD wIconID = 101;
-  const char *sIconResourceID = getenv(szSteamBootStrapperIconIdEnvVar);
-  if (sIconResourceID) {
+  usize icon_id_size;
+  char sIconResourceID[32];
+
+  if (!getenv_s(&icon_id_size, sIconResourceID,
+                szSteamBootStrapperIconIdEnvVar) &&
+      icon_id_size > 0) {
     DWORD wTmpIconID = 0;
-    if (sscanf(sIconResourceID, "%u", &wTmpIconID) == 1 && wTmpIconID > 101) {
+    if (sscanf_s(sIconResourceID, "%u", &wTmpIconID) == 1 && wTmpIconID > 101) {
       wIconID = wTmpIconID;
     }
   }

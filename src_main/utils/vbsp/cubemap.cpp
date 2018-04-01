@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <KeyValues.h>
 #include "bitmap/imageformat.h"
@@ -116,8 +116,8 @@ static const char *s_pDependentMaterialVar[] = {
 
 static const char *FindDependentMaterial(const char *pMaterialName,
                                          const char **ppMaterialVar = NULL) {
-  // TODO(d.rattman): This is a terrible way of doing this! It creates a dependency
-  // between vbsp and *all* code which reads dependent materials from
+  // TODO(d.rattman): This is a terrible way of doing this! It creates a
+  // dependency between vbsp and *all* code which reads dependent materials from
   // materialvars At the time of writing this function, that means the engine +
   // studiorender. We need a better way of figuring out how to do this, but for
   // now I'm trying to do the fastest solution possible since it's close to ship
@@ -142,8 +142,8 @@ static const char *FindDependentMaterial(const char *pMaterialName,
     }
 
 #ifdef _DEBUG
-    // TODO(d.rattman): Note that this code breaks if a material has more than 1 dependent
-    // material
+    // TODO(d.rattman): Note that this code breaks if a material has more than 1
+    // dependent material
     ++i;
     static char pDependentMaterialName2[MAX_MATERIAL_NAME];
     while (s_pDependentMaterialVar[i][0]) {
@@ -170,7 +170,7 @@ static bool LoadSrcVTFFiles(IVTFTexture *pSrcVTFTextures[6],
   int i;
   for (i = 0; i < 6; i++) {
     char srcMaterialName[1024];
-    sprintf(srcMaterialName, "%s%s", pSkyboxMaterialBaseName, facingName[i]);
+    sprintf_s(srcMaterialName, "%s%s", pSkyboxMaterialBaseName, facingName[i]);
 
     IMaterial *pSkyboxMaterial =
         g_pMaterialSystem->FindMaterial(srcMaterialName, "skybox");
@@ -310,86 +310,12 @@ void CreateDefaultCubemaps(bool bHDR) {
     for (int iFace = 0; iFace < 6; ++iFace) {
       // Finally, iterate over all mip levels in the *destination*
       for (int iMip = 0; iMip < pDstCubemap->MipCount(); ++iMip) {
-        // Copy the bits from the source images into the cube faces
-        unsigned char *pSrcBits = pSrcVTFTextures[iFace]->ImageData(
-            iFrame, 0, iMip + iMipLevelOffset);
         unsigned char *pDstBits = pDstCubemap->ImageData(iFrame, iFace, iMip);
         int iSize = pDstCubemap->ComputeMipSize(iMip);
-        int iSrcMipSize =
-            pSrcVTFTextures[iFace]->ComputeMipSize(iMip + iMipLevelOffset);
 
-        // !!! TODO(d.rattman): Set this to black until HDR cubemaps are built properly!
+        // TODO(d.rattman): Set this to black until HDR cubemaps are built
+        // properly!
         memset(pDstBits, 0, iSize);
-        continue;
-
-        if ((pSrcVTFTextures[iFace]->Width() == 4) &&
-            (pSrcVTFTextures[iFace]->Height() ==
-             4))  // If texture is 4x4 square
-        {
-          // Force mip level 2 to get the 1x1 face
-          unsigned char *pSrcBits =
-              pSrcVTFTextures[iFace]->ImageData(iFrame, 0, 2);
-          int iSrcMipSize = pSrcVTFTextures[iFace]->ComputeMipSize(2);
-
-          // Replicate 1x1 mip level across entire face
-          // memset( pDstBits, 0, iSize );
-          for (int i = 0; i < (iSize / iSrcMipSize); i++) {
-            memcpy(pDstBits + (i * iSrcMipSize), pSrcBits, iSrcMipSize);
-          }
-        } else if (pSrcVTFTextures[iFace]->Width() ==
-                   pSrcVTFTextures[iFace]->Height())  // If texture is square
-        {
-          if (iSrcMipSize != iSize) {
-            Warning(
-                "%s - ERROR! Cannot copy square face for default cubemap! "
-                "iSrcMipSize(%d) != iSize(%d)\n",
-                skyboxMaterialName, iSrcMipSize, iSize);
-            memset(pDstBits, 0, iSize);
-          } else {
-            // Just copy the mip level
-            memcpy(pDstBits, pSrcBits, iSize);
-          }
-        } else if (pSrcVTFTextures[iFace]->Width() ==
-                   pSrcVTFTextures[iFace]->Height() *
-                       2)  // If texture is rectangle 2x wide
-        {
-          int iMipWidth, iMipHeight, iMipDepth;
-          pDstCubemap->ComputeMipLevelDimensions(iMip, &iMipWidth, &iMipHeight,
-                                                 &iMipDepth);
-          if ((iMipHeight > 1) && (iSrcMipSize * 2 != iSize)) {
-            Warning("%s - ERROR building default cube map! %d*2 != %d\n",
-                    skyboxMaterialName, iSrcMipSize, iSize);
-            memset(pDstBits, 0, iSize);
-          } else {
-            // Copy row at a time and repeat last row
-            memcpy(pDstBits, pSrcBits, iSize / 2);
-            // memcpy( pDstBits + iSize/2, pSrcBits, iSize/2 );
-            int nSrcRowSize =
-                pSrcVTFTextures[iFace]->RowSizeInBytes(iMip + iMipLevelOffset);
-            int nDstRowSize = pDstCubemap->RowSizeInBytes(iMip);
-            if (nSrcRowSize != nDstRowSize) {
-              Warning(
-                  "%s - ERROR building default cube map! nSrcRowSize(%d) != "
-                  "nDstRowSize(%d)!\n",
-                  skyboxMaterialName, nSrcRowSize, nDstRowSize);
-              memset(pDstBits, 0, iSize);
-            } else {
-              for (int i = 0; i < (iSize / 2 / nSrcRowSize); i++) {
-                memcpy(pDstBits + iSize / 2 + i * nSrcRowSize,
-                       pSrcBits + iSrcMipSize - nSrcRowSize, nSrcRowSize);
-              }
-            }
-          }
-        } else {
-          // ERROR! This code only supports square and rectangluar 2x wide
-          Warning(
-              "%s - Couldn't create default cubemap because texture res is "
-              "%dx%d\n",
-              skyboxMaterialName, pSrcVTFTextures[iFace]->Width(),
-              pSrcVTFTextures[iFace]->Height());
-          memset(pDstBits, 0, iSize);
-          return;
-        }
       }
     }
   }
@@ -414,10 +340,10 @@ void CreateDefaultCubemaps(bool bHDR) {
   // Write the puppy out!
   char dstVTFFileName[1024];
   if (bHDR) {
-    sprintf(dstVTFFileName, "materials/maps/%s/cubemapdefault.hdr.vtf",
-            mapbase);
+    sprintf_s(dstVTFFileName, "materials/maps/%s/cubemapdefault.hdr.vtf",
+              mapbase);
   } else {
-    sprintf(dstVTFFileName, "materials/maps/%s/cubemapdefault.vtf", mapbase);
+    sprintf_s(dstVTFFileName, "materials/maps/%s/cubemapdefault.vtf", mapbase);
   }
 
   CUtlBuffer outputBuf;
@@ -436,7 +362,8 @@ void CreateDefaultCubemaps(bool bHDR) {
   int i;
   for (i = 0; i < s_DefaultCubemapNames.Count(); i++) {
     char vtfName[SOURCE_MAX_PATH];
-    VTFNameToHDRVTFName(s_DefaultCubemapNames[i], vtfName, SOURCE_MAX_PATH, bHDR);
+    VTFNameToHDRVTFName(s_DefaultCubemapNames[i], vtfName, SOURCE_MAX_PATH,
+                        bHDR);
     if (FileExistsInPak(pak, vtfName)) {
       continue;
     }
@@ -460,18 +387,20 @@ void Cubemap_CreateDefaultCubemaps(void) {
 void Cubemap_SaveBrushSides(const char *pSideListStr) {
   IntVector_t &brushSidesVector =
       s_EnvCubemapToBrushSides[s_EnvCubemapToBrushSides.AddToTail()];
-  char *pTmp = (char *)_alloca(strlen(pSideListStr) + 1);
-  strcpy(pTmp, pSideListStr);
-  const char *pScan = strtok(pTmp, " ");
-  if (!pScan) {
-    return;
-  }
+  size_t size{strlen(pSideListStr) + 1};
+  char *pTmp = (char *)_alloca(size);
+  strcpy_s(pTmp, size, pSideListStr);
+
+  char *context;
+  const char *pScan = strtok_s(pTmp, " ", &context);
+  if (!pScan) return;
+
   do {
     int brushSideID;
-    if (sscanf(pScan, "%d", &brushSideID) == 1) {
+    if (sscanf_s(pScan, "%d", &brushSideID) == 1) {
       brushSidesVector.AddToTail(brushSideID);
     }
-  } while ((pScan = strtok(NULL, " ")));
+  } while ((pScan = strtok_s(nullptr, " ", &context)));
 }
 
 //-----------------------------------------------------------------------------
@@ -494,7 +423,7 @@ static void GeneratePatchedName(const char *pMaterialName,
   }
 
   BackSlashToForwardSlash(pBuffer);
-  Q_strlower(pBuffer);
+  Q_strlower(pBuffer, nMaxLen);
 }
 
 //-----------------------------------------------------------------------------
@@ -507,9 +436,9 @@ static bool PatchEnvmapForMaterialAndDependents(const char *pMaterialName,
   // Do *NOT* patch the material if there is an $envmap specified and it's not
   // 'env_cubemap'
 
-  // TODO(d.rattman): It's theoretically ok to patch the material if $envmap is not
-  // specified, because we're using the 'replace' block, which will only add the
-  // env_cubemap if $envmap is specified in the source material. But it will
+  // TODO(d.rattman): It's theoretically ok to patch the material if $envmap is
+  // not specified, because we're using the 'replace' block, which will only add
+  // the env_cubemap if $envmap is specified in the source material. But it will
   // fail if someone adds a specific non-env_cubemap $envmap to the source
   // material at a later point. Bleah
 
@@ -545,8 +474,8 @@ static bool PatchEnvmapForMaterialAndDependents(const char *pMaterialName,
 
   char pDependentPatchedMaterialName[1024];
   if (bDependentMaterialPatched) {
-    // TODO(d.rattman): Annoying! I either have to pass back the patched dependent
-    // material name or reconstruct it. Both are sucky.
+    // TODO(d.rattman): Annoying! I either have to pass back the patched
+    // dependent material name or reconstruct it. Both are sucky.
     GeneratePatchedName(pDependentMaterial, info, true,
                         pDependentPatchedMaterialName, 1024);
     pPatchInfo[nPatchCount].m_pKey = pDependentMaterialVar;
@@ -621,10 +550,12 @@ static int Cubemap_CreateTexInfo(int originalTexInfo, int origin[3]) {
     // Store off the name of the cubemap that we need to create since we
     // successfully patched
     char pFileName[1024];
-    int nLen = Q_snprintf(pFileName, 1024, "materials/%s.vtf", pTextureName);
+    int nLen = sprintf_s(pFileName, "materials/%s.vtf", pTextureName);
     int id = s_DefaultCubemapNames.AddToTail();
-    s_DefaultCubemapNames[id] = new char[nLen + 1];
-    strcpy(s_DefaultCubemapNames[id], pFileName);
+    size_t size{(size_t)nLen + 1};
+
+    s_DefaultCubemapNames[id] = new char[size];
+    strcpy_s(s_DefaultCubemapNames[id], size, pFileName);
 
     // Make a new texdata
     nTexDataID = AddCloneTexData(pTexData, pGeneratedTexDataName);
@@ -670,7 +601,7 @@ static int SideIDToIndex(int brushSideID) {
 // side referenced by an env_cubemap manually.
 //-----------------------------------------------------------------------------
 void Cubemap_FixupBrushSidesMaterials(void) {
-  Msg("fixing up env_cubemap materials on brush sides...\n");
+  Msg("Fixing up env_cubemap materials on brush sides...\n");
   Assert(s_EnvCubemapToBrushSides.Count() == g_nCubemapSamples);
 
   int cubemapID;
@@ -915,11 +846,12 @@ void Cubemap_AddUnreferencedCubemaps() {
       }
     }
     if (j == s_DefaultCubemapNames.Count()) {
-      int nLen = Q_snprintf(pFileName, 1024, "materials/%s.vtf", pTextureName);
-
+      int nLen = sprintf_s(pFileName, "materials/%s.vtf", pTextureName);
       int id = s_DefaultCubemapNames.AddToTail();
-      s_DefaultCubemapNames[id] = new char[nLen + 1];
-      strcpy(s_DefaultCubemapNames[id], pFileName);
+      size_t size{(size_t)nLen + 1};
+
+      s_DefaultCubemapNames[id] = new char[size];
+      strcpy_s(s_DefaultCubemapNames[id], size, pFileName);
     }
   }
 }

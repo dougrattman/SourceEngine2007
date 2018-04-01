@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "OptionsDialog.h"
 
@@ -19,7 +19,6 @@
 #include "vgui_controls/AnalogBar.h"
 #include "vgui_controls/AnimationController.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifdef GetCurrentTime
@@ -235,8 +234,8 @@ COptionsDialogXbox::COptionsDialogXbox(vgui::Panel *parent,
   }
 
   // Faster repeats for sideways
-  m_KeyRepeat.SetKeyRepeatTime(KEY_XBUTTON_LEFT, 0.08);
-  m_KeyRepeat.SetKeyRepeatTime(KEY_XBUTTON_RIGHT, 0.08);
+  m_KeyRepeat.SetKeyRepeatTime(KEY_XBUTTON_LEFT, 0.08f);
+  m_KeyRepeat.SetKeyRepeatTime(KEY_XBUTTON_RIGHT, 0.08f);
 }
 
 //-----------------------------------------------------------------------------
@@ -345,13 +344,13 @@ void COptionsDialogXbox::ApplySchemeSettings(vgui::IScheme *pScheme) {
   for (int iPanelList = 0; iPanelList < 3; ++iPanelList) {
     pPanel = pPanelList[iPanelList];
 
-    int iX, iY, iZ, iWide, iTall;
-    bool bVisible;
-    pPanel->GetPos(iX, iY);
-    iZ = ipanel()->GetZPos(pPanel->GetVPanel());
-    iWide = pPanel->GetWide();
-    iTall = pPanel->GetTall();
-    bVisible = pPanel->IsVisible();
+    int x, y;
+    pPanel->GetPos(x, y);
+
+    int iZ = ipanel()->GetZPos(pPanel->GetVPanel());
+    int iWide = pPanel->GetWide();
+    int iTall = pPanel->GetTall();
+    bool bVisible = pPanel->IsVisible();
 
     for (int iLabel = 1; iLabel < m_iNumItems; ++iLabel) {
       if (iPanelList == 0) {
@@ -367,7 +366,7 @@ void COptionsDialogXbox::ApplySchemeSettings(vgui::IScheme *pScheme) {
         m_pValueBars[iLabel]->SetHomeColor(m_pValueBars[0]->GetHomeColor());
       }
 
-      pPanel->SetPos(iX, iY + iLabel * m_iOptionSpacing);
+      pPanel->SetPos(x, y + iLabel * m_iOptionSpacing);
       pPanel->SetZPos(iZ);
       pPanel->SetWide(iWide);
       pPanel->SetTall(iTall);
@@ -905,7 +904,7 @@ void COptionsDialogXbox::ChangeValue(float fChange) {
         float fOldValue = varOption.GetFloat();
         float fValue =
             std::clamp(fOldValue + fIncValue, m_pSelectedOption->fMinValue,
-                  m_pSelectedOption->fMaxValue);
+                       m_pSelectedOption->fMaxValue);
 
         if (fOldValue != fValue) {
           m_bOptionsChanged = true;

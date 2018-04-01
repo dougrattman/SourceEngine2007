@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef VMPI_DISTRIBUTE_WORK_INTERNAL_H
 #define VMPI_DISTRIBUTE_WORK_INTERNAL_H
@@ -65,7 +65,7 @@ class CVisibleWindowVectorT : protected CUtlVector<T> {
   // Resets the content and makes size "uiTotal"
   void Reset(uint64_t uiTotal) {
     BaseClass::RemoveAll();
-    BaseClass::EnsureCapacity((int)std::min(100, uiTotal));
+    BaseClass::EnsureCapacity((int)std::min(100ULL, uiTotal));
     m_uiBase = 0;
     m_uiTotal = uiTotal;
   }

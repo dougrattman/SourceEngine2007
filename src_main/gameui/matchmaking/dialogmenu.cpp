@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Multi-purpose menu for matchmaking dialogs, navigable with the xbox
 // controller.
@@ -17,7 +17,6 @@
 #include "vgui_controls/Label.h"
 #include "vgui_controls\ImagePanel.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------
@@ -315,8 +314,8 @@ void COptionsItem::PerformLayout() {
   BaseClass::PerformLayout();
 
   int optionWide = std::max(m_nOptionsMinWide, GetWide() - m_nOptionsXPos -
-                                              m_pRightArrow->GetWide() -
-                                              m_nOptionsLeftMargin);
+                                                   m_pRightArrow->GetWide() -
+                                                   m_nOptionsLeftMargin);
   int optionTall = GetTall();
 
   for (int i = 0; i < m_OptionLabels.Count(); ++i) {
@@ -920,7 +919,7 @@ void CDialogMenu::ApplySettings(KeyValues *pResourceData) {
           prop.nType = SESSION_PROPERTY;
           Q_strncpy(prop.szID, pID, sizeof(prop.szID));
           Q_strncpy(prop.szValueType, pValueType, sizeof(prop.szValueType));
-          itoa(i, prop.szValue, 10);
+          _itoa_s(i, prop.szValue, 10);
 
           pItem->AddOption(prop.szValue, prop);
         }

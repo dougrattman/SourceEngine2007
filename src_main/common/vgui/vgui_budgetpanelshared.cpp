@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui_budgetpanelshared.h"
 
@@ -124,9 +124,9 @@ void CBudgetPanelShared::SendConfigDataToBase() {
     data.m_BudgetGroupInfo[i].m_Color = g_TempBudgetGroupSpace[i].m_Color;
   }
 
-  data.m_HistoryLabelValues.AddToTail(1000.0 / 20);
-  data.m_HistoryLabelValues.AddToTail(1000.0 / 30);
-  data.m_HistoryLabelValues.AddToTail(1000.0 / 60);
+  data.m_HistoryLabelValues.AddToTail(1000.0f / 20);
+  data.m_HistoryLabelValues.AddToTail(1000.0f / 30);
+  data.m_HistoryLabelValues.AddToTail(1000.0f / 60);
 
   // Copy all the cvars in.
   data.m_flHistoryRange = budget_history_range_ms.GetFloat();
@@ -151,7 +151,7 @@ void CBudgetPanelShared::DrawColoredText(vgui::HFont font, int x, int y, int r,
   char msg[4096];
   va_list marker;
   va_start(marker, pText);
-  _vsnprintf(msg, sizeof(msg), pText, marker);
+  _vsnprintf_s(msg, sizeof(msg), pText, marker);
   va_end(marker);
 
   wchar_t unicodeStr[4096];

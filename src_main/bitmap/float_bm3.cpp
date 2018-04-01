@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bitmap/float_bm.h"
 
@@ -26,7 +26,7 @@ void FloatBitMap_t::InitializeWithRandomPixelsFromAnotherFloatBM(
 
 FloatBitMap_t *FloatBitMap_t::QuarterSizeWithGaussian(void) const {
   // generate a new bitmap half on each axis, using a separable gaussian.
-  static float kernel[] = {.05, .25, .4, .25, .05};
+  static float kernel[] = {.05f, .25f, .4f, .25f, .05f};
   FloatBitMap_t *newbm = new FloatBitMap_t(Width / 2, Height / 2);
 
   for (int y = 0; y < Height / 2; y++)
@@ -47,6 +47,7 @@ FloatBitMap_t *FloatBitMap_t::QuarterSizeWithGaussian(void) const {
         newbm->Pixel(x, y, c) = sum / sumweights;
       }
     }
+
   return newbm;
 }
 

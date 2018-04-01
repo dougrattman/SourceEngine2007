@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Sound code shared between server and client
 
@@ -92,7 +92,7 @@ float SND_GetGainFromMult(float gain, float dist_mult, f32 dist) {
     gain = snd_gain_min.GetFloat() *
            (2.0 - relative_dist * snd_gain_min.GetFloat());
 
-    if (gain <= 0.0) gain = 0.001;  // don't propagate 0 gain
+    if (gain <= 0.0) gain = 0.001f;  // don't propagate 0 gain
   }
 
   return gain;

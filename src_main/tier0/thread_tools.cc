@@ -534,8 +534,8 @@ bool ThreadInterlockedAssignIf(long volatile *pDest, long value,
 		setz al
   }
 #else
-  return (InterlockedCompareExchange(TO_INTERLOCK_PARAM(pDest), value,
-                                     comperand) == comperand);
+  return InterlockedCompareExchange(TO_INTERLOCK_PARAM(pDest), value,
+                                    comperand) == comperand;
 #endif
 }
 
@@ -568,8 +568,8 @@ bool ThreadInterlockedAssignPointerIf(void *volatile *pDest, void *value,
 		setz al
   }
 #else
-  return (InterlockedCompareExchangePointer(TO_INTERLOCK_PTR_PARAM(pDest),
-                                            value, comperand) == comperand);
+  return InterlockedCompareExchangePointer(TO_INTERLOCK_PTR_PARAM(pDest), value,
+                                           comperand) == comperand;
 #endif
 }
 #endif
@@ -596,6 +596,7 @@ i64 ThreadInterlockedCompareExchange64(i64 volatile *pDest, i64 value,
 #endif
 }
 
+// NOTE: USED BY VPHYSICS!
 bool ThreadInterlockedAssignIf64(volatile i64 *pDest, i64 value,
                                  i64 comperand) {
   Assert((usize)pDest % 8 == 0);

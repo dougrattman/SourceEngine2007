@@ -287,7 +287,7 @@ void CMapPointHandle::SetRenderColor(color32 rgbColor) {}
 void CMapPointHandle::OnParentKeyChanged(const char *szKey,
                                          const char *szValue) {
   if (_stricmp(szKey, m_szKeyName) == 0) {
-    sscanf(szValue, "%f %f %f", &m_Origin.x, &m_Origin.y, &m_Origin.z);
+    sscanf_s(szValue, "%f %f %f", &m_Origin.x, &m_Origin.y, &m_Origin.z);
     CalcBounds();
   }
 }

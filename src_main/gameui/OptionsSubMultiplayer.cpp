@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "OptionsSubMultiplayer.h"
 
@@ -47,7 +47,6 @@
 #include "deps/libjpeg/jpeglib.h"
 #undef JPEGLIB_USE_STDIO
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -873,7 +872,6 @@ static void ValveJpegErrorHandler(j_common_ptr cinfo) {
 // convert the JPEG file given to a TGA file at the given output path.
 ConversionErrorType COptionsSubMultiplayer::ConvertJPEGToTGA(
     const char *jpegpath, const char *tgaPath) {
-#if !defined(_X360)
   struct jpeg_decompress_struct jpegInfo;
   struct ValveJpegErrorHandler_t jerr;
   JSAMPROW row_pointer[1];
@@ -885,8 +883,8 @@ ConversionErrorType COptionsSubMultiplayer::ConvertJPEGToTGA(
   int image_width;
 
   // open the jpeg image file.
-  FILE *infile = fopen(jpegpath, "rb");
-  if (infile == NULL) {
+  FILE *infile;
+  if (fopen_s(&infile, jpegpath, "rb")) {
     return CE_CANT_OPEN_SOURCE_FILE;
   }
 
@@ -981,18 +979,13 @@ ConversionErrorType COptionsSubMultiplayer::ConvertJPEGToTGA(
   }
 
   free(buf);
-  return bRetVal ? CE_SUCCESS : CE_ERROR_WRITING_OUTPUT_FILE;
 
-#else
-  return CE_SOURCE_FILE_FORMAT_NOT_SUPPORTED;
-#endif
+  return bRetVal ? CE_SUCCESS : CE_ERROR_WRITING_OUTPUT_FILE;
 }
 
 // convert the bmp file given to a TGA file at the given destination path.
 ConversionErrorType COptionsSubMultiplayer::ConvertBMPToTGA(
     const char *bmpPath, const char *tgaPath) {
-  if (!IsPC()) return CE_SOURCE_FILE_FORMAT_NOT_SUPPORTED;
-
   HBITMAP hBitmap = (HBITMAP)LoadImage(
       NULL, bmpPath, IMAGE_BITMAP, 0, 0,
       LR_CREATEDIBSECTION | LR_LOADFROMFILE | LR_DEFAULTSIZE);
@@ -1237,8 +1230,8 @@ static void WriteTGAHeader(FILE *outfile, TGAHeader &header) {
 unsigned char *COptionsSubMultiplayer::ReadTGAAsRGBA(
     const char *tgaPath, int &width, int &height, ConversionErrorType &errcode,
     TGAHeader &tgaHeader) {
-  FILE *tgaFile = fopen(tgaPath, "rb");
-  if (tgaFile == NULL) {
+  FILE *tgaFile;
+  if (fopen_s(&tgaFile, tgaPath, "rb")) {
     errcode = CE_CANT_OPEN_SOURCE_FILE;
     return NULL;
   }
@@ -1408,8 +1401,8 @@ ConversionErrorType COptionsSubMultiplayer::ConvertTGA(const char *tgaPath) {
   PadRGBAImage(resizeBuffer, finalWidth, finalHeight, finalBuffer,
                paddedImageWidth, paddedImageHeight);
 
-  FILE *outfile = fopen(tgaPath, "wb");
-  if (outfile == NULL) {
+  FILE *outfile;
+  if (fopen_s(&outfile, tgaPath, "wb")) {
     free(resizeBuffer);
     free(finalBuffer);
 
@@ -1604,8 +1597,8 @@ ConversionErrorType COptionsSubMultiplayer::PadRGBAImage(
 // the same location.
 ConversionErrorType COptionsSubMultiplayer::ConvertTGAToVTF(
     const char *tgaPath) {
-  FILE *infile = fopen(tgaPath, "rb");
-  if (infile == NULL) {
+  FILE *infile;
+  if (fopen_s(&infile, tgaPath, "rb")) {
     return CE_CANT_OPEN_SOURCE_FILE;
   }
 
@@ -1661,7 +1654,7 @@ ConversionErrorType COptionsSubMultiplayer::ConvertTGAToVTF(
   vtfParams[2] = new char[16]{"-dontusegamedir"};
 
   vtfParams[3] = new char[strlen(tgaPath) + 1];
-  strcpy(vtfParams[3], tgaPath);
+  strcpy_s(vtfParams[3], strlen(tgaPath) + 1, tgaPath);
 
   // call vtex to do the conversion.
   vtex->VTex(4, vtfParams);
@@ -1705,8 +1698,8 @@ ConversionErrorType COptionsSubMultiplayer::WriteSprayVMT(const char *vtfPath) {
   filename[i] = 0;
 
   // create the vmt file.
-  FILE *vmtFile = fopen(vmtPath, "w");
-  if (vmtFile == NULL) {
+  FILE *vmtFile;
+  if (fopen_s(&vmtFile, vmtPath, "w")) {
     return CE_ERROR_WRITING_OUTPUT_FILE;
   }
 

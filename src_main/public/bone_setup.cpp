@@ -19,7 +19,6 @@
 #include "posedebugger.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 // -----------------------------------------------------------------
@@ -964,7 +963,8 @@ void QuaternionSM(float s, const Quaternion &p, const Quaternion &q,
 }
 
 #if ALLOW_SIMD_QUATERNION_MATH
-SOURCE_FORCEINLINE fltx4 QuaternionSMSIMD(float s, const fltx4 &p, const fltx4 &q) {
+SOURCE_FORCEINLINE fltx4 QuaternionSMSIMD(float s, const fltx4 &p,
+                                          const fltx4 &q) {
   fltx4 p1, q1, result;
   p1 = QuaternionScaleSIMD(p, s);
   q1 = QuaternionMultSIMD(p1, q);
@@ -990,7 +990,8 @@ void QuaternionMA(const Quaternion &p, float s, const Quaternion &q,
 }
 
 #if ALLOW_SIMD_QUATERNION_MATH
-SOURCE_FORCEINLINE fltx4 QuaternionMASIMD(const fltx4 &p, float s, const fltx4 &q) {
+SOURCE_FORCEINLINE fltx4 QuaternionMASIMD(const fltx4 &p, float s,
+                                          const fltx4 &q) {
   fltx4 p1, q1, result;
   q1 = QuaternionScaleSIMD(q, s);
   p1 = QuaternionMultSIMD(p, q1);
@@ -1015,7 +1016,7 @@ void QuaternionAccumulate(const Quaternion &p, float s, const Quaternion &q,
 
 #if ALLOW_SIMD_QUATERNION_MATH
 SOURCE_FORCEINLINE fltx4 QuaternionAccumulateSIMD(const fltx4 &p, float s,
-                                           const fltx4 &q) {
+                                                  const fltx4 &q) {
   fltx4 q2, s4, result;
   q2 = QuaternionAlignSIMD(p, q);
   s4 = ReplicateX4(s);
@@ -2288,8 +2289,8 @@ bool Studio_SolveIK(int iThigh, int iKnee, int iFoot, Vector &targetFoot,
   float l2 = (worldFoot - worldKnee).Length();
 
   // exaggerate knee targets for legs that are nearly straight
-  // TODO(d.rattman): should be configurable, and the ikKnee should be from the original
-  // animation, not modifed
+  // TODO(d.rattman): should be configurable, and the ikKnee should be from the
+  // original animation, not modifed
   float d = (targetFoot - worldThigh).Length() - std::min(l1, l2);
   d = std::max(l1 + l2, d);
   // TODO(d.rattman): too short knee directions cause trouble
@@ -2556,7 +2557,7 @@ bool Studio_IKSequenceError(const CStudioHdr *pStudioHdr,
     if ((panim[0]->flags & STUDIO_LOOPING) &&
         panim[0]->pIKRule(iRule)->type == IK_GROUND &&
         ikRule.end - ikRule.start > 0.75) {
-      ikRule.flWeight = 0.001;
+      ikRule.flWeight = 0.001f;
       flCycle = ikRule.end - 0.001;
     } else {
       return false;
@@ -2645,7 +2646,8 @@ bool Studio_IKSequenceError(const CStudioHdr *pStudioHdr,
 //-----------------------------------------------------------------------------
 
 CIKContext::CIKContext() {
-  m_target.EnsureCapacity(12);  // TODO(d.rattman): this sucks, shouldn't it be grown?
+  m_target.EnsureCapacity(
+      12);  // TODO(d.rattman): this sucks, shouldn't it be grown?
   m_iFramecounter = -1;
   m_pStudioHdr = NULL;
   m_flTime = -1.0f;
@@ -3280,8 +3282,8 @@ void CIKContext::UpdateTargets(Vector pos[], Quaternion q[],
       pTarget->trace.hip = p1;
       pTarget->trace.knee = p2;
       pTarget->trace.closest = p1 + dt * (fabs(d1 - d2) * 1.01);
-      pTarget->trace.farthest = p1 + dt * (d1 + d2) * 0.99;
-      pTarget->trace.lowest = p1 + Vector(0, 0, -1) * (d1 + d2) * 0.99;
+      pTarget->trace.farthest = p1 + dt * (d1 + d2) * 0.99f;
+      pTarget->trace.lowest = p1 + Vector(0, 0, -1) * (d1 + d2) * 0.99f;
       // pTarget->trace.endpos = pTarget->est.pos;
     }
   }
@@ -3527,8 +3529,8 @@ void CIKContext::SolveDependencies(Vector pos[], Quaternion q[],
                          boneToWorld[pchain->pLink(2)->bone]);
 
         // rebuild chain
-        // TODO(d.rattman): is this needed if everyone past this uses the boneToWorld
-        // array?
+        // TODO(d.rattman): is this needed if everyone past this uses the
+        // boneToWorld array?
         SolveBone(m_pStudioHdr, pchain->pLink(2)->bone, boneToWorld, pos, q);
         SolveBone(m_pStudioHdr, pchain->pLink(1)->bone, boneToWorld, pos, q);
         SolveBone(m_pStudioHdr, pchain->pLink(0)->bone, boneToWorld, pos, q);
@@ -3536,43 +3538,14 @@ void CIKContext::SolveDependencies(Vector pos[], Quaternion q[],
         // TODO(d.rattman): need to invalidate the targets that forced this...
         if (pChainResult->target != -1) {
           CIKTarget *pTarget = &m_target[pChainResult->target];
-          VectorScale(pTarget->latched.deltaPos, 0.8,
+          VectorScale(pTarget->latched.deltaPos, 0.8f,
                       pTarget->latched.deltaPos);
-          QuaternionScale(pTarget->latched.deltaQ, 0.8,
+          QuaternionScale(pTarget->latched.deltaQ, 0.8f,
                           pTarget->latched.deltaQ);
         }
       }
     }
   }
-
-#if 0
-		Vector p1, p2, p3;
-		Quaternion q1, q2, q3;
-
-		// current p and q
-		MatrixAngles( boneToWorld[bone], q1, p1 );
-
-		
-		// target p and q
-		MatrixAngles( worldTarget, q2, p2 );
-
-		// blend in position and angles
-		p3 = p1 * (1.0 - m_ikRule[i].flWeight ) + p2 * m_ikRule[i].flWeight;
-
-		// do exact IK solution
-		// TODO(d.rattman): once per link!
-		Studio_SolveIK(pchain, p3, boneToWorld );
-
-		// force angle (bad?)
-		QuaternionSlerp( q1, q2, m_ikRule[i].flWeight, q3 );
-		MatrixGetColumn( boneToWorld[bone], 3, p3 );
-		QuaternionMatrix( q3, p3, boneToWorld[bone] );
-
-		// rebuild chain
-		SolveBone( m_pStudioHdr, pchain->pLink( 2 )->bone, boneToWorld, pos, q );
-		SolveBone( m_pStudioHdr, pchain->pLink( 1 )->bone, boneToWorld, pos, q );
-		SolveBone( m_pStudioHdr, pchain->pLink( 0 )->bone, boneToWorld, pos, q );
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -3937,7 +3910,8 @@ void DoQuatInterpBone(mstudiobone_t *pbones, int ibone,
     ConcatTransforms(tmpmatrix, bonetoworld.GetBone(pProc->control),
                      controlmatrix);
 
-    MatrixAngles(controlmatrix, src, pos);  // TODO(d.rattman): make a version without pos
+    MatrixAngles(controlmatrix, src,
+                 pos);  // TODO(d.rattman): make a version without pos
 
     int i;
     for (i = 0; i < pProc->numtriggers; i++) {
@@ -4585,8 +4559,8 @@ int Studio_MaxFrame(const CStudioHdr *pStudioHdr, int iSequence,
 
   if (maxFrame > 1) maxFrame -= 1;
 
-  // TODO(d.rattman): why does the weights sometimes not exactly add it 1.0 and this
-  // sometimes rounds down?
+  // TODO(d.rattman): why does the weights sometimes not exactly add it 1.0 and
+  // this sometimes rounds down?
   return (maxFrame + 0.01);
 }
 
@@ -4683,9 +4657,9 @@ bool Studio_AnimPosition(mstudioanimdesc_t *panim, float flCycle,
       vecPos = vecPos + d * pmove->vector;
       vecAngle.y = vecAngle.y * (1 - f) + pmove->angle * f;
       if (iLoops != 0) {
-        mstudiomovement_t *pmove = panim->pMovement(panim->nummovements - 1);
-        vecPos = vecPos + iLoops * pmove->position;
-        vecAngle.y = vecAngle.y + iLoops * pmove->angle;
+        mstudiomovement_t *m = panim->pMovement(panim->nummovements - 1);
+        vecPos = vecPos + iLoops * m->position;
+        vecAngle.y = vecAngle.y + iLoops * m->angle;
       }
       return true;
     } else {

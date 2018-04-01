@@ -1955,7 +1955,7 @@ void CMatSystemSurface::SetTitle(VPANEL panel, const wchar_t *title) {
 
   TitleEntry *e = &m_Titles[entry];
   Assert(e);
-  wcsncpy(e->title, title, sizeof(e->title) / sizeof(wchar_t));
+  wcscpy_s(e->title, title);
   e->panel = panel;
 }
 

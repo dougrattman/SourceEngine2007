@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: implementation of the CHLTVServer class.
 
@@ -159,8 +159,8 @@ void CDeltaEntityCache::AddDeltaBits(int nEntityIndex, int nDeltaTick,
       pEntry = pEntry->pNext;
     }
 
-    int entrySize =
-        sizeof(DeltaEntityEntry_s) + SOURCE_PAD_NUMBER(Bits2Bytes(pEntry->nBits), 4);
+    int entrySize = sizeof(DeltaEntityEntry_s) +
+                    SOURCE_PAD_NUMBER(Bits2Bytes(pEntry->nBits), 4);
 
     DeltaEntityEntry_s *pNew =
         (DeltaEntityEntry_s *)((char *)(pEntry) + entrySize);
@@ -391,7 +391,7 @@ void CHLTVFrame::FreeBuffers(void) {
 }
 
 CHLTVServer::CHLTVServer() {
-  m_flTickInterval = 0.03;
+  m_flTickInterval = 0.03f;
   m_MasterClient = NULL;
   m_Server = NULL;
   m_Director = NULL;
@@ -1014,7 +1014,8 @@ Vector CHLTVServer::GetOriginFromPackedEntity(PackedEntity* pe)
                 if ( Q_strcmp( pProp->GetName(), "m_vecOrigin" ) == 0 )
                 {
                         Assert( pProp->GetType() == DPT_Vector );
-                
+                
+
 
 
 

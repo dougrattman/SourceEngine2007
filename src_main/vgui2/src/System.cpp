@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui/ISystem.h"
 
@@ -26,7 +26,7 @@
 #include "vgui_key_translation.h"
 
 #define PROTECTED_THINGS_DISABLE
- 
+
 #include "tier0/include/memdbgon.h"
 
 #ifdef ShellExecute
@@ -708,7 +708,7 @@ int CSystem::GetAvailableDrives(char *buf, int bufLen) {
 //-----------------------------------------------------------------------------
 double CSystem::GetFreeDiskSpace(const char *path) {
   char buf[SOURCE_MAX_PATH];
-  strcpy(buf, path);
+  strcpy_s(buf, path);
   // strip of to first slash (to make it look like 'x:\')
   char *slash = strstr(buf, "\\");
   if (slash) {
@@ -749,8 +749,8 @@ void CSystem::SetUserConfigFile(const char *fileName, const char *pathName) {
     m_pUserConfigData = new KeyValues("UserConfigData");
   }
 
-  strncpy(m_szFileName, fileName, sizeof(m_szFileName) - 1);
-  strncpy(m_szPathID, pathName, sizeof(m_szPathID) - 1);
+  strcpy_s(m_szFileName, fileName);
+  strcpy_s(m_szPathID, pathName);
 
   // open
   m_pUserConfigData->UsesEscapeSequences(true);  // VGUI may use this
@@ -788,9 +788,7 @@ bool CSystem::GetCommandLineParamValue(const char *paramName, char *value,
 
   char token[512];
   ParseFile(loc, token, NULL);
-
-  strncpy(value, token, valueBufferSize - 1);
-  value[valueBufferSize - 1] = 0;
+  strcpy_s(value, valueBufferSize, token);
 
   return true;
 }
@@ -845,7 +843,7 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
                              const char *iconFile) {
   bool bSuccess = false;
   char temp[SOURCE_MAX_PATH];
-  strcpy(temp, linkFileName);
+  strcpy_s(temp, linkFileName);
 
   // make sure it doesn't already exist
   struct _stat statBuf;
@@ -872,7 +870,8 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
     if (SUCCEEDED(hr)) {
       wchar_t wsz[SOURCE_MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
-      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, SOURCE_MAX_PATH);
+      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz,
+                          SOURCE_MAX_PATH);
       hr = ppf->Save(wsz, TRUE);
       if (SUCCEEDED(hr)) {
         bSuccess = true;
@@ -891,8 +890,8 @@ bool CSystem::GetShortcutTarget(const char *linkFileName, char *targetPath,
                                 char *arguments, int destBufferSizes) {
 #ifndef _X360
   char temp[SOURCE_MAX_PATH];
-  strcpy(temp, linkFileName);
-  strlwr(temp);
+  strcpy_s(temp, linkFileName);
+  _strlwr_s(temp);
 
   targetPath[0] = 0;
   arguments[0] = 0;
@@ -908,7 +907,8 @@ bool CSystem::GetShortcutTarget(const char *linkFileName, char *targetPath,
     if (SUCCEEDED(hres)) {
       wchar_t wsz[SOURCE_MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
-      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, SOURCE_MAX_PATH);
+      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz,
+                          SOURCE_MAX_PATH);
 
       // Read the link into the persistent file
       hres = ppf->Load(wsz, 0);
@@ -941,8 +941,8 @@ bool CSystem::ModifyShortcutTarget(const char *linkFileName,
 #ifndef _X360
   bool bSuccess = false;
   char temp[SOURCE_MAX_PATH];
-  strcpy(temp, linkFileName);
-  strlwr(temp);
+  strcpy_s(temp, linkFileName);
+  _strlwr_s(temp);
 
   // Create the ShellLink object
   IShellLink *psl;
@@ -955,7 +955,8 @@ bool CSystem::ModifyShortcutTarget(const char *linkFileName,
     if (SUCCEEDED(hres)) {
       wchar_t wsz[SOURCE_MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
-      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, SOURCE_MAX_PATH);
+      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz,
+                          SOURCE_MAX_PATH);
 
       // Read the link into the persistent file
       hres = ppf->Load(wsz, 0);

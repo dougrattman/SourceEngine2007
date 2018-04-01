@@ -1,10 +1,5 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "blockingudpsocket.h"
-
-#include <cassert>
-
-#include "base/include/macros.h"
 #include "build/include/build_config.h"
 
 #ifdef OS_WIN
@@ -24,6 +19,11 @@ inline int getsocketerrno() { return WSAGetLastError(); }
 #define closesocket close
 inline int getsocketerrno() { return errno; }
 #endif  // OS_WIN
+
+#include "blockingudpsocket.h"
+
+#include <cassert>
+#include "base/include/macros.h"
 
 #include "tier0/include/vcrmode.h"
 

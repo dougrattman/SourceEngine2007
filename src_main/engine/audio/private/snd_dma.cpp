@@ -683,7 +683,6 @@ bool S_IsInitted() { return snd_initialized; }
 CSfxTable *S_FindName(const char *szName, int *pfInCache) {
   int i;
   CSfxTable *sfx = NULL;
-  char szBuff[SOURCE_MAX_PATH];
   const char *pName;
 
   if (!szName) {

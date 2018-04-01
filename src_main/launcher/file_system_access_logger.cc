@@ -60,7 +60,8 @@ void FileSystemAccessLogger::Init() {
   // game directory has not been established yet, must derive ourselves
   ch path[SOURCE_MAX_PATH];
   Q_snprintf(path, SOURCE_ARRAYSIZE(path), "%s/%s", base_directory_,
-             command_line_->ParmValue("-game", "hl2"));
+             command_line_->ParmValue(
+                 source::tier0::command_line_switches::kGamePath, "hl2"));
   Q_FixSlashes(path);
   Q_strlower(path);
   path_to_game_directory_ = path;

@@ -34,7 +34,7 @@ SpewRetval_t UnitTestSpew( SpewType_t type, char const *pMsg )
 	printf( "%s", pMsg );
 	OutputDebugString( pMsg );
 
-	if ( Sys_IsDebuggerPresent() )
+	if (Plat_IsInDebugSession())
 		return ( type == SPEW_ASSERT || type == SPEW_ERROR ) ? SPEW_DEBUGGER : SPEW_CONTINUE;
 	return SPEW_CONTINUE;
 }

@@ -1,9 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>
 
+#include "tier0/include/fasttimer.h"
 #include "vmpi_filesystem_internal.h"
 #include "vstdlib/random.h"
 #include "zlib.h"
@@ -665,7 +666,8 @@ int CMasterMulticastThread::AddFileRequest(const char *pFilename,
   pClient->m_flTransmitStartTime = pClient->m_flLastAckTime;
   pClient->m_nTimesFileCycled = 0;
   pClient->m_nChunksLeft = pFile->m_Info.m_nChunks;
-  pClient->m_ChunksToSend.SetSize(SOURCE_PAD_NUMBER(pFile->m_Info.m_nChunks, 8) / 8);
+  pClient->m_ChunksToSend.SetSize(
+      SOURCE_PAD_NUMBER(pFile->m_Info.m_nChunks, 8) / 8);
   memset(pClient->m_ChunksToSend.Base(), 0xFF, pClient->m_ChunksToSend.Count());
   pFile->m_Clients.AddToTail(pClient);
 
@@ -837,7 +839,7 @@ bool CMasterMulticastThread::CheckClientTimeouts() {
               pInfo->m_ClientID) {
             flMostRecentTime =
                 std::max(flMostRecentTime,
-                    pTestFile->m_Clients[iTestClient]->m_flLastAckTime);
+                         pTestFile->m_Clients[iTestClient]->m_flLastAckTime);
           }
         }
       }
@@ -859,8 +861,8 @@ inline bool CMasterMulticastThread::Thread_SendFileChunk_Multicast(
   CMulticastFile *pFile = m_Files[m_iCurFile];
 
   int iStartByte = m_iCurActiveChunk * MULTICAST_CHUNK_PAYLOAD_SIZE;
-  int iEndByte =
-      std::min(iStartByte + MULTICAST_CHUNK_PAYLOAD_SIZE, pFile->m_Data.Count());
+  int iEndByte = std::min(iStartByte + MULTICAST_CHUNK_PAYLOAD_SIZE,
+                          pFile->m_Data.Count());
 
   WSABUF bufs[4];
   bufs[0].buf = (char *)&pFile->m_Info;
@@ -1110,8 +1112,9 @@ bool CMasterMulticastThread::FindWarningSuppression(const char *pFilename) {
 }
 
 void CMasterMulticastThread::AddWarningSuppression(const char *pFilename) {
-  char *pBlah = new char[strlen(pFilename) + 1];
-  strcpy(pBlah, pFilename);
+  size_t size{strlen(pFilename) + 1};
+  char *pBlah = new char[size];
+  strcpy_s(pBlah, size, pFilename);
   m_WarningSuppressions.AddToTail(pBlah);
 }
 
@@ -1179,10 +1182,10 @@ int CMasterMulticastThread::FinishFileSetup(CMulticastFile *pFile,
   // Get this file in the queue.
   if (!bFileAlreadyExisted) {
     pFile->m_Filename.SetSize(strlen(pFilename) + 1);
-    strcpy(pFile->m_Filename.Base(), pFilename);
+    strcpy_s(pFile->m_Filename.Base(), pFile->m_Filename.Size(), pFilename);
 
     pFile->m_PathID.SetSize(strlen(pPathID) + 1);
-    strcpy(pFile->m_PathID.Base(), pPathID);
+    strcpy_s(pFile->m_PathID.Base(), pFile->m_PathID.Size(), pPathID);
 
     pFile->m_nCycles = 0;
 
@@ -1190,7 +1193,8 @@ int CMasterMulticastThread::FinishFileSetup(CMulticastFile *pFile,
     pFile->m_Info.m_UncompressedSize = pFile->m_UncompressedData.Count();
 
     pFile->m_Info.m_nChunks =
-        SOURCE_PAD_NUMBER(pFile->m_Info.m_CompressedSize, chunkSize) / chunkSize;
+        SOURCE_PAD_NUMBER(pFile->m_Info.m_CompressedSize, chunkSize) /
+        chunkSize;
 
     // Initialize the chunks.
     pFile->m_Chunks.SetSize(pFile->m_Info.m_nChunks);

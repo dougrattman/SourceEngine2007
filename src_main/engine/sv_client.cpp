@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "server_pch.h"
 
@@ -728,26 +728,26 @@ bool CGameClient::CheckConnect(void) {
 void CGameClient::ActivatePlayer(void) {
   CBaseClient::ActivatePlayer();
 
-  COM_TimestampedLog("CGameClient::ActivatePlayer -start");
+  Plat_TimestampedLog("Engine::CGameClient::ActivatePlayer start.");
 
   // call the spawn function
   if (!sv.m_bLoadgame) {
     g_ServerGlobalVariables.curtime = sv.GetTime();
 
-    COM_TimestampedLog("g_pServerPluginHandler->ClientPutInServer");
+    Plat_TimestampedLog("  g_pServerPluginHandler->ClientPutInServer");
 
     g_pServerPluginHandler->ClientPutInServer(edict, m_Name);
   }
 
-  COM_TimestampedLog("g_pServerPluginHandler->ClientActive");
+  Plat_TimestampedLog("  g_pServerPluginHandler->ClientActive");
 
   g_pServerPluginHandler->ClientActive(edict, sv.m_bLoadgame);
 
-  COM_TimestampedLog("g_pServerPluginHandler->ClientSettingsChanged");
+  Plat_TimestampedLog("  g_pServerPluginHandler->ClientSettingsChanged");
 
   g_pServerPluginHandler->ClientSettingsChanged(edict);
 
-  COM_TimestampedLog("GetTestScriptMgr()->CheckPoint");
+  Plat_TimestampedLog("  GetTestScriptMgr()->CheckPoint");
 
   GetTestScriptMgr()->CheckPoint("client_connected");
 
@@ -762,7 +762,7 @@ void CGameClient::ActivatePlayer(void) {
     g_GameEventManager.FireEvent(event);
   }
 
-  COM_TimestampedLog("CGameClient::ActivatePlayer -end");
+  Plat_TimestampedLog("Engine::CGameClient::ActivatePlayer end.");
 }
 
 bool CGameClient::SendSignonData(void) {
