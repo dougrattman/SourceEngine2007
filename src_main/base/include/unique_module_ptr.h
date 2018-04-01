@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASE_INCLUDE_UNIQUE_MODULE_PTR_H_
 #define BASE_INCLUDE_UNIQUE_MODULE_PTR_H_
@@ -37,7 +37,7 @@ using module_descriptor = void;
 posix_errno_info make_posix_dlerror_errno_info() noexcept {
   const char *last_dl_error{dlerror()};
   // TODO(d.rattman): Check dlerror sources to find way to get error code.
-  posix_errno_info info = {last_dl_error == nullptr ? EXIT_FAILURE : EOK};
+  posix_errno_info info = {last_dl_error == nullptr ? EOK : EXIT_FAILURE};
 
   if (last_dl_error == nullptr) {
     strcpy_s(info.description, "Ok (0)");
