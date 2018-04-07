@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IMESH_H
 #define IMESH_H
@@ -9,9 +9,9 @@
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
+#include "base/include/compiler_specific.h"
 #include "materialsystem/imaterial.h"
 #include "tier0/include/basetypes.h"
-#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 #include "tier1/interface.h"
 #include "tier2/meshutils.h"
@@ -44,10 +44,10 @@ enum : int {
 // Internal maximums for sizes. Don't use directly, use
 // IMaterialSystem::GetMaxToRender()
 enum {
-  INDEX_BUFFER_SIZE = 32768,
-  DYNAMIC_VERTEX_BUFFER_MEMORY = (1024 + 512) * 1024,
-  DYNAMIC_VERTEX_BUFFER_MEMORY_SMALL =
-      384 * 1024,  // Only allocate this much during map transitions
+  INDEX_BUFFER_SIZE = 65535,
+  DYNAMIC_VERTEX_BUFFER_MEMORY = (1024 + 768) * 1024,
+  // Only allocate this much during map transitions
+  DYNAMIC_VERTEX_BUFFER_MEMORY_SMALL = 384 * 1024,
 };
 
 // Vertex fields must be written in well-defined order to achieve write
@@ -560,7 +560,8 @@ class CVertexBuilder : private VertexDesc_t {
   // update.
   void FastAdvanceNVertices(int n);
 
-  // TODO(d.rattman): Remove! Backward compat so we can use this from a CMeshBuilder.
+  // TODO(d.rattman): Remove! Backward compat so we can use this from a
+  // CMeshBuilder.
   void AttachBegin(IMesh *pMesh, int nMaxVertexCount, const MeshDesc_t &desc);
   void AttachEnd();
   void AttachBeginModify(IMesh *pMesh, int nFirstVertex, int nVertexCount,
@@ -829,7 +830,8 @@ inline void CVertexBuilder::End(bool bSpewData) {
 }
 
 //-----------------------------------------------------------------------------
-// TODO(d.rattman): Remove! Backward compat so we can use this from a CMeshBuilder.
+// TODO(d.rattman): Remove! Backward compat so we can use this from a
+// CMeshBuilder.
 //-----------------------------------------------------------------------------
 inline void CVertexBuilder::AttachBegin(IMesh *pMesh, int nMaxVertexCount,
                                         const MeshDesc_t &desc) {
@@ -1097,7 +1099,8 @@ inline void CVertexBuilder::FastAdvanceNVertices(int n) {
 //-----------------------------------------------------------------------------
 inline void CVertexBuilder::FastVertex(const ModelVertexDX7_t &vertex) {
   Assert(m_CompressionType ==
-         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts if needed
+         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts
+                                    // if needed
   Assert(m_nCurrentVertex < m_nMaxVertexCount);
 
 #if defined(_WIN32) && !defined(_X360)
@@ -1141,7 +1144,8 @@ inline void CVertexBuilder::FastVertex(const ModelVertexDX7_t &vertex) {
 
 inline void CVertexBuilder::FastVertexSSE(const ModelVertexDX7_t &vertex) {
   Assert(m_CompressionType ==
-         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts if needed
+         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts
+                                    // if needed
   Assert(m_nCurrentVertex < m_nMaxVertexCount);
 
 #if defined(_WIN32) && !defined(_X360)
@@ -1179,7 +1183,8 @@ inline void CVertexBuilder::Fast4VerticesSSE(ModelVertexDX7_t const *vtx_a,
                                              ModelVertexDX7_t const *vtx_c,
                                              ModelVertexDX7_t const *vtx_d) {
   Assert(m_CompressionType ==
-         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts if needed
+         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts
+                                    // if needed
   Assert(m_nCurrentVertex < m_nMaxVertexCount - 3);
 
 #if defined(_WIN32) && !defined(_X360)
@@ -1238,7 +1243,8 @@ inline void CVertexBuilder::Fast4VerticesSSE(ModelVertexDX7_t const *vtx_a,
 
 inline void CVertexBuilder::FastVertex(const ModelVertexDX8_t &vertex) {
   Assert(m_CompressionType ==
-         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts if needed
+         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts
+                                    // if needed
   Assert(m_nCurrentVertex < m_nMaxVertexCount);
 
 #if defined(_WIN32) && !defined(_X360)
@@ -1285,7 +1291,8 @@ inline void CVertexBuilder::FastVertex(const ModelVertexDX8_t &vertex) {
 
 inline void CVertexBuilder::FastVertexSSE(const ModelVertexDX8_t &vertex) {
   Assert(m_CompressionType ==
-         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts if needed
+         VERTEX_COMPRESSION_NONE);  // TODO(d.rattman): support compressed verts
+                                    // if needed
   Assert(m_nCurrentVertex < m_nMaxVertexCount);
 
 #if defined(_WIN32) && !defined(_X360)
@@ -1330,8 +1337,8 @@ inline int CVertexBuilder::GetCurrentVertex() const { return m_nCurrentVertex; }
 // Data retrieval...
 //-----------------------------------------------------------------------------
 inline const float *CVertexBuilder::Position() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1340,8 +1347,8 @@ inline const float *CVertexBuilder::Position() const {
 }
 
 inline const float *CVertexBuilder::Normal() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1350,8 +1357,8 @@ inline const float *CVertexBuilder::Normal() const {
 }
 
 inline unsigned int CVertexBuilder::Color() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1363,8 +1370,8 @@ inline unsigned int CVertexBuilder::Color() const {
 }
 
 inline unsigned char *CVertexBuilder::Specular() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1373,8 +1380,8 @@ inline unsigned char *CVertexBuilder::Specular() const {
 }
 
 inline const float *CVertexBuilder::TexCoord(int stage) const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1383,8 +1390,8 @@ inline const float *CVertexBuilder::TexCoord(int stage) const {
 }
 
 inline const float *CVertexBuilder::TangentS() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1394,8 +1401,8 @@ inline const float *CVertexBuilder::TangentS() const {
 }
 
 inline const float *CVertexBuilder::TangentT() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1405,8 +1412,8 @@ inline const float *CVertexBuilder::TangentT() const {
 }
 
 inline float CVertexBuilder::Wrinkle() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1416,8 +1423,8 @@ inline float CVertexBuilder::Wrinkle() const {
 }
 
 inline const float *CVertexBuilder::BoneWeight() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1430,8 +1437,8 @@ inline int CVertexBuilder::NumBoneWeights() const { return m_NumBoneWeights; }
 
 #ifndef NEW_SKINNING
 inline unsigned char *CVertexBuilder::BoneMatrix() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -1440,8 +1447,8 @@ inline unsigned char *CVertexBuilder::BoneMatrix() const {
 }
 #else
 inline float *CVertexBuilder::BoneMatrix() const {
-  // TODO(d.rattman): add a templatized accessor (return type varies to ensure calling
-  // code is updated appropriately)
+  // TODO(d.rattman): add a templatized accessor (return type varies to ensure
+  // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
   //        return-by-value templatized accessor)
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);
@@ -2073,10 +2080,10 @@ inline void CVertexBuilder::CompressedUserData(const float *pData) {
     PackNormal_SHORT2(pData, (unsigned int *)pUserData, binormalSign);
 #else  //( COMPRESSED_NORMALS_TYPE == COMPRESSED_NORMALS_COMBINEDTANGENTS_UBYTE4
        //)
-       // TODO(d.rattman): add a combined CompressedNormalAndTangent() accessor, to avoid
-       // reading back from write-combined memory here The normal should have
-       // already been written into the lower 16 bits - here, we OR in the
-       // tangent into the upper 16 bits
+       // TODO(d.rattman): add a combined CompressedNormalAndTangent() accessor,
+       // to avoid reading back from write-combined memory here The normal
+       // should have already been written into the lower 16 bits - here, we OR
+       // in the tangent into the upper 16 bits
     unsigned int existingNormalData = *(unsigned int *)m_pCurrNormal;
     Assert((existingNormalData & 0xFFFF0000) == 0);
 #ifdef _DEBUG
@@ -2177,7 +2184,8 @@ class CIndexBuilder : private IndexDesc_t {
   // Generates indices for a particular primitive type
   void GenerateIndices(MaterialPrimitiveType_t primitiveType, int nIndexCount);
 
-  // TODO(d.rattman): Remove! Backward compat so we can use this from a CMeshBuilder.
+  // TODO(d.rattman): Remove! Backward compat so we can use this from a
+  // CMeshBuilder.
   void AttachBegin(IMesh *pMesh, int nMaxIndexCount, const MeshDesc_t &desc);
   void AttachEnd();
   void AttachBeginModify(IMesh *pMesh, int nFirstIndex, int nIndexCount,
@@ -2408,7 +2416,8 @@ inline void CIndexBuilder::EndModify(bool bSpewData) {
 }
 
 //-----------------------------------------------------------------------------
-// TODO(d.rattman): Remove! Backward compat so we can use this from a CMeshBuilder.
+// TODO(d.rattman): Remove! Backward compat so we can use this from a
+// CMeshBuilder.
 //-----------------------------------------------------------------------------
 inline void CIndexBuilder::AttachBegin(IMesh *pMesh, int nMaxIndexCount,
                                        const MeshDesc_t &desc) {
@@ -2933,7 +2942,8 @@ inline void CMeshBuilder::ComputeNumVertsAndIndices(
       Assert(0);
   }
 
-  // TODO(d.rattman): need to get this from meshdx8.cpp, or move it to somewhere common
+  // TODO(d.rattman): need to get this from meshdx8.cpp, or move it to somewhere
+  // common
   Assert(*pMaxVertices <= 32768);
   Assert(*pMaxIndices <= 32768);
 }
@@ -3183,7 +3193,9 @@ SOURCE_FORCEINLINE void CMeshBuilder::AdvanceVertices(int nVertexCount) {
   m_VertexBuilder.AdvanceVertices(nVertexCount);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::AdvanceIndex() { m_IndexBuilder.AdvanceIndex(); }
+SOURCE_FORCEINLINE void CMeshBuilder::AdvanceIndex() {
+  m_IndexBuilder.AdvanceIndex();
+}
 
 SOURCE_FORCEINLINE void CMeshBuilder::AdvanceIndices(int nIndices) {
   m_IndexBuilder.AdvanceIndices(nIndices);
@@ -3328,7 +3340,7 @@ SOURCE_FORCEINLINE void CMeshBuilder::FastIndex(unsigned short idx) {
 // of FastIndex Fast Index! No need to call advance index, and no random access
 // allowed
 SOURCE_FORCEINLINE void CMeshBuilder::FastIndex2(unsigned short nIndex1,
-                                          unsigned short nIndex2) {
+                                                 unsigned short nIndex2) {
   m_IndexBuilder.FastIndex2(nIndex1, nIndex2);
 }
 
@@ -3343,26 +3355,29 @@ SOURCE_FORCEINLINE void CMeshBuilder::FastAdvanceNVertices(int nVertexCount) {
 //-----------------------------------------------------------------------------
 // Fast Vertex! No need to call advance vertex, and no random access allowed
 //-----------------------------------------------------------------------------
-SOURCE_FORCEINLINE void CMeshBuilder::FastVertex(const ModelVertexDX7_t &vertex) {
+SOURCE_FORCEINLINE void CMeshBuilder::FastVertex(
+    const ModelVertexDX7_t &vertex) {
   m_VertexBuilder.FastVertex(vertex);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::FastVertexSSE(const ModelVertexDX7_t &vertex) {
+SOURCE_FORCEINLINE void CMeshBuilder::FastVertexSSE(
+    const ModelVertexDX7_t &vertex) {
   m_VertexBuilder.FastVertexSSE(vertex);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Fast4VerticesSSE(const ModelVertexDX7_t *vtx_a,
-                                                const ModelVertexDX7_t *vtx_b,
-                                                const ModelVertexDX7_t *vtx_c,
-                                                const ModelVertexDX7_t *vtx_d) {
+SOURCE_FORCEINLINE void CMeshBuilder::Fast4VerticesSSE(
+    const ModelVertexDX7_t *vtx_a, const ModelVertexDX7_t *vtx_b,
+    const ModelVertexDX7_t *vtx_c, const ModelVertexDX7_t *vtx_d) {
   m_VertexBuilder.Fast4VerticesSSE(vtx_a, vtx_b, vtx_c, vtx_d);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::FastVertex(const ModelVertexDX8_t &vertex) {
+SOURCE_FORCEINLINE void CMeshBuilder::FastVertex(
+    const ModelVertexDX8_t &vertex) {
   m_VertexBuilder.FastVertex(vertex);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::FastVertexSSE(const ModelVertexDX8_t &vertex) {
+SOURCE_FORCEINLINE void CMeshBuilder::FastVertexSSE(
+    const ModelVertexDX8_t &vertex) {
   m_VertexBuilder.FastVertexSSE(vertex);
 }
 #endif  // ARCH_CPU_X86_64
@@ -3386,7 +3401,8 @@ SOURCE_FORCEINLINE void CMeshBuilder::Normal3fv(const float *n) {
   m_VertexBuilder.Normal3fv(n);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::NormalDelta3f(float nx, float ny, float nz) {
+SOURCE_FORCEINLINE void CMeshBuilder::NormalDelta3f(float nx, float ny,
+                                                    float nz) {
   m_VertexBuilder.NormalDelta3f(nx, ny, nz);
 }
 
@@ -3402,7 +3418,8 @@ SOURCE_FORCEINLINE void CMeshBuilder::Color3fv(const float *rgb) {
   m_VertexBuilder.Color3fv(rgb);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color4f(float r, float g, float b, float a) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color4f(float r, float g, float b,
+                                              float a) {
   m_VertexBuilder.Color4f(r, g, b, a);
 }
 
@@ -3411,7 +3428,7 @@ SOURCE_FORCEINLINE void CMeshBuilder::Color4fv(const float *rgba) {
 }
 
 SOURCE_FORCEINLINE void CMeshBuilder::Color3ub(unsigned char r, unsigned char g,
-                                        unsigned char b) {
+                                               unsigned char b) {
   m_VertexBuilder.Color3ub(r, g, b);
 }
 
@@ -3420,7 +3437,8 @@ SOURCE_FORCEINLINE void CMeshBuilder::Color3ubv(unsigned char const *rgb) {
 }
 
 SOURCE_FORCEINLINE void CMeshBuilder::Color4ub(unsigned char r, unsigned char g,
-                                        unsigned char b, unsigned char a) {
+                                               unsigned char b,
+                                               unsigned char a) {
   m_VertexBuilder.Color4ub(r, g, b, a);
 }
 
@@ -3436,7 +3454,8 @@ SOURCE_FORCEINLINE void CMeshBuilder::Specular3fv(const float *rgb) {
   m_VertexBuilder.Specular3fv(rgb);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular4f(float r, float g, float b, float a) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular4f(float r, float g, float b,
+                                                 float a) {
   m_VertexBuilder.Specular4f(r, g, b, a);
 }
 
@@ -3444,8 +3463,9 @@ SOURCE_FORCEINLINE void CMeshBuilder::Specular4fv(const float *rgba) {
   m_VertexBuilder.Specular4fv(rgba);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular3ub(unsigned char r, unsigned char g,
-                                           unsigned char b) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular3ub(unsigned char r,
+                                                  unsigned char g,
+                                                  unsigned char b) {
   m_VertexBuilder.Specular3ub(r, g, b);
 }
 
@@ -3453,8 +3473,10 @@ SOURCE_FORCEINLINE void CMeshBuilder::Specular3ubv(unsigned char const *c) {
   m_VertexBuilder.Specular3ubv(c);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular4ub(unsigned char r, unsigned char g,
-                                           unsigned char b, unsigned char a) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular4ub(unsigned char r,
+                                                  unsigned char g,
+                                                  unsigned char b,
+                                                  unsigned char a) {
   m_VertexBuilder.Specular4ub(r, g, b, a);
 }
 
@@ -3475,33 +3497,38 @@ SOURCE_FORCEINLINE void CMeshBuilder::TexCoord2fv(int nStage, const float *st) {
 }
 
 SOURCE_FORCEINLINE void CMeshBuilder::TexCoord3f(int nStage, float s, float t,
-                                          float u) {
+                                                 float u) {
   m_VertexBuilder.TexCoord3f(nStage, s, t, u);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord3fv(int nStage, const float *stu) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord3fv(int nStage,
+                                                  const float *stu) {
   m_VertexBuilder.TexCoord3fv(nStage, stu);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord4f(int nStage, float s, float t, float u,
-                                          float v) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord4f(int nStage, float s, float t,
+                                                 float u, float v) {
   m_VertexBuilder.TexCoord4f(nStage, s, t, u, v);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord4fv(int nStage, const float *stuv) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord4fv(int nStage,
+                                                  const float *stuv) {
   m_VertexBuilder.TexCoord4fv(nStage, stuv);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoordSubRect2f(int nStage, float s, float t,
-                                                 float offsetS, float offsetT,
-                                                 float scaleS, float scaleT) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoordSubRect2f(int nStage, float s,
+                                                        float t, float offsetS,
+                                                        float offsetT,
+                                                        float scaleS,
+                                                        float scaleT) {
   m_VertexBuilder.TexCoordSubRect2f(nStage, s, t, offsetS, offsetT, scaleS,
                                     scaleT);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoordSubRect2fv(int nStage, const float *st,
-                                                  const float *offset,
-                                                  const float *scale) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoordSubRect2fv(int nStage,
+                                                         const float *st,
+                                                         const float *offset,
+                                                         const float *scale) {
   m_VertexBuilder.TexCoordSubRect2fv(nStage, st, offset, scale);
 }
 
@@ -3530,7 +3557,8 @@ SOURCE_FORCEINLINE void CMeshBuilder::BoneWeight(int nIndex, float flWeight) {
 }
 
 template <VertexCompressionType_t T>
-SOURCE_FORCEINLINE void CMeshBuilder::CompressedBoneWeight3fv(const float *pWeights) {
+SOURCE_FORCEINLINE void CMeshBuilder::CompressedBoneWeight3fv(
+    const float *pWeights) {
   m_VertexBuilder.CompressedBoneWeight3fv<T>(pWeights);
 }
 
@@ -3553,7 +3581,7 @@ SOURCE_FORCEINLINE void CMeshBuilder::CompressedUserData(const float *pData) {
 
 template <VertexCompressionType_t T>
 SOURCE_FORCEINLINE void CMeshBuilder::CompressedNormal3f(float nx, float ny,
-                                                  float nz) {
+                                                         float nz) {
   m_VertexBuilder.CompressedNormal3f<T>(nx, ny, nz);
 }
 

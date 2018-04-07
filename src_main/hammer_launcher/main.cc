@@ -57,9 +57,7 @@ bool CHammerApp::Create() {
 
   bool is_steam;
   char filesystem_dll_path[SOURCE_MAX_PATH];
-  if (FileSystem_GetFileSystemDLLName(filesystem_dll_path,
-                                      SOURCE_ARRAYSIZE(filesystem_dll_path),
-                                      is_steam) != FS_OK)
+  if (FileSystem_GetFileSystemDLLName(filesystem_dll_path, std::size(filesystem_dll_path), is_steam) != FS_OK)
     return false;
 
   FileSystem_SetupSteamInstallPath();

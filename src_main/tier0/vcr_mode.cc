@@ -201,7 +201,7 @@ static void VCR_Error(const ch *error, ...) {
   ch error_message[256];
   va_list marker;
   va_start(marker, error);
-  _snprintf_s(error_message, SOURCE_ARRAYSIZE(error_message), error, marker);
+  sprintf_s(error_message, error, marker);
   va_end(marker);
 
   g_pHelpers->ErrorMessage(error_message);

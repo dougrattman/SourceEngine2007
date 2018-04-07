@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -210,7 +210,7 @@ void CNPC_PlayerCompanion::Spawn() {
   SetSolid(SOLID_BBOX);
   AddSolidFlags(FSOLID_NOT_STANDABLE);
   SetBloodColor(BLOOD_COLOR_RED);
-  m_flFieldOfView = 0.02;
+  m_flFieldOfView = 0.02f;
   m_NPCState = NPC_STATE_NONE;
 
   CapabilitiesClear();
@@ -233,7 +233,7 @@ void CNPC_PlayerCompanion::Spawn() {
   SetAimTarget(NULL);
   m_bReadinessCapable = IsReadinessCapable();
   SetReadinessValue(0.0f);
-  SetReadinessSensitivity(random->RandomFloat(0.7, 1.3));
+  SetReadinessSensitivity(random->RandomFloat(0.7f, 1.3f));
   m_flReadinessLockedUntil = 0.0f;
 
   m_AnnounceAttackTimer.Set(10, 30);
@@ -531,10 +531,10 @@ void CNPC_PlayerCompanion::PredictPlayerPush() {
   CBasePlayer *pPlayer = AI_GetSinglePlayer();
   if (pPlayer && pPlayer->GetSmoothedVelocity().LengthSqr() >= Square(140)) {
     Vector predictedPosition =
-        pPlayer->WorldSpaceCenter() + pPlayer->GetSmoothedVelocity() * .4;
+        pPlayer->WorldSpaceCenter() + pPlayer->GetSmoothedVelocity() * .4f;
     Vector delta = WorldSpaceCenter() - predictedPosition;
     if (delta.z < GetHullHeight() * .5 &&
-        delta.Length2DSqr() < Square(GetHullWidth() * 1.414))
+        delta.Length2DSqr() < Square(GetHullWidth() * 1.414f))
       TestPlayerPushing(pPlayer);
   }
 }
@@ -543,7 +543,7 @@ void CNPC_PlayerCompanion::PredictPlayerPush() {
 // Purpose: Allows for modification of the interrupt mask for the current
 // schedule.
 //			In the most cases the base implementation should be
-//called first.
+// called first.
 //-----------------------------------------------------------------------------
 void CNPC_PlayerCompanion::BuildScheduleTestBits() {
   BaseClass::BuildScheduleTestBits();
@@ -1578,36 +1578,36 @@ void CNPC_PlayerCompanion::UpdateReadiness() {
       vecSpot = EyePosition() + vecOffset;
 
       if (GetReadinessLevel() == AIRL_STEALTH) {
-        NDebugOverlay::Text(vecSpot, "Stealth", true, 0.1);
+        NDebugOverlay::Text(vecSpot, "Stealth", true, 0.1f);
       } else if (GetReadinessLevel() == AIRL_PANIC) {
-        NDebugOverlay::Text(vecSpot, "Panic", true, 0.1);
+        NDebugOverlay::Text(vecSpot, "Panic", true, 0.1f);
       } else {
-        NDebugOverlay::Text(vecSpot, "Unspecified", true, 0.1);
+        NDebugOverlay::Text(vecSpot, "Unspecified", true, 0.1f);
       }
     } else {
       vecSpot = EyePosition() + vecOffset;
       NDebugOverlay::Line(vecSpot, vecSpot + right * GRADLENGTH, 255, 255, 255,
-                          false, 0.1);
+                          false, 0.1f);
 
       vecSpot = EyePosition() + vecOffset +
                 Vector(0, 0, BARLENGTH * READINESS_VALUE_RELAXED);
       NDebugOverlay::Line(vecSpot, vecSpot + right * GRADLENGTH, 0, 255, 0,
-                          false, 0.1);
+                          false, 0.1f);
 
       vecSpot = EyePosition() + vecOffset +
                 Vector(0, 0, BARLENGTH * READINESS_VALUE_STIMULATED);
       NDebugOverlay::Line(vecSpot, vecSpot + right * GRADLENGTH, 255, 255, 0,
-                          false, 0.1);
+                          false, 0.1f);
 
       vecSpot = EyePosition() + vecOffset +
                 Vector(0, 0, BARLENGTH * READINESS_VALUE_AGITATED);
       NDebugOverlay::Line(vecSpot, vecSpot + right * GRADLENGTH, 255, 0, 0,
-                          false, 0.1);
+                          false, 0.1f);
 
       vecSpot = EyePosition() + vecOffset;
       NDebugOverlay::Line(
           vecSpot, vecSpot + Vector(0, 0, BARLENGTH * GetReadinessValue()), 255,
-          255, 0, false, 0.1);
+          255, 0, false, 0.1f);
     }
   }
 }
@@ -2043,7 +2043,7 @@ void CNPC_PlayerCompanion::OnUpdateShotRegulator() {
         // Longer burst
         int longBurst = random->RandomInt(10, 15);
         GetShotRegulator()->SetBurstShotsRemaining(longBurst);
-        GetShotRegulator()->SetRestInterval(0.1, 0.2);
+        GetShotRegulator()->SetRestInterval(0.1f, 0.2f);
       } else {
         // Longer burst
         GetShotRegulator()->SetBurstShotsRemaining(
@@ -2470,15 +2470,16 @@ int CNPC_PlayerCompanion::OnTakeDamage_Alive(const CTakeDamageInfo &info) {
 
     // @Note (toml 07-25-04): there isn't a good solution to player companions
     // getting injured by
-    //						  fires that have huge damage radii that extend outside
-    //the
-    // rendered 						  fire. Recovery from being injured by fire will also not
-    // be done 						  before we ship/ Here we trade one bug (guys standing around dying
-    // from flames they appear to not be near), for a lesser one
+    //						  fires that have huge damage radii that extend
+    //outside the
+    // rendered 						  fire. Recovery from being injured by fire will also
+    // not
+    // be done 						  before we ship/ Here we trade one bug (guys standing
+    // around dying from flames they appear to not be near), for a lesser one
     // this guy
-    // was standing in a fire and didn't react. Since 						  the levels are
-    // supposed to have the centers of all the fires
-    // npc clipped, this latter case should be rare.
+    // was standing in a fire and didn't react. Since 						  the levels
+    // are supposed to have the centers of all the fires npc clipped, this
+    // latter case should be rare.
     if (bIsEnvFire) {
       if ((GetAbsOrigin() - info.GetAttacker()->GetAbsOrigin()).Length2DSqr() >
           Square(12 + GetHullWidth() * .5)) {
@@ -2714,7 +2715,7 @@ bool CNPC_PlayerCompanion::MovementCost(int moveType, const Vector &vecStart,
 
     if (m_bWeightPathsInCover && GetEnemy()) {
       if (BaseClass::IsCoverPosition(GetEnemy()->EyePosition(), vecEnd)) {
-        *pCost *= 0.1;
+        *pCost *= 0.1f;
         bResult = true;
       }
     }
@@ -2888,12 +2889,13 @@ void CNPC_PlayerCompanion::InputOutsideTransition(inputdata_t &inputdata) {
   if (!bMadeIt) {
     // Force us if we didn't find a normal route
     if (bAlwaysTransition) {
-      bMadeIt = FindSpotForNPCInRadius(
-          &teleportLocation, pPlayer->GetAbsOrigin(), this, 32.0 * 1.414, true);
+      bMadeIt =
+          FindSpotForNPCInRadius(&teleportLocation, pPlayer->GetAbsOrigin(),
+                                 this, 32.0f * 1.414f, true);
       if (!bMadeIt)
         bMadeIt =
             FindSpotForNPCInRadius(&teleportLocation, pPlayer->GetAbsOrigin(),
-                                   this, 32.0 * 1.414, false);
+                                   this, 32.0f * 1.414f, false);
     }
   }
 

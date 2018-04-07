@@ -801,7 +801,8 @@ static void CalcTriangleTangentSpace(s_source_t *pSrc, int v1, int v2, int v3,
           edge02 = p2 - p0;
           CrossProduct( edge02, edge01, flatNormal );
           VectorNormalize( flatNormal );
-          
+          
+
           // Get the average position
           Vector avgPos = ( p0 + p1 + p2 ) / 3.0f;
 
@@ -811,21 +812,24 @@ static void CalcTriangleTangentSpace(s_source_t *pSrc, int v1, int v2, int v3,
           fvprint( 0,  fp, "%f %f %f 1.0 0.0 0.0\n", endS[0], endS[1], endS[2]
      ); fvprint( 0,  fp, "%f %f %f 1.0 0.0 0.0\n", avgPos[0], avgPos[1],
      avgPos[2] );
-          
+          
+
           // Draw the tvect
           Vector endT = avgPos + tVect * .2f;
           fvprint( 0,  fp, "2\n" );
           fvprint( 0,  fp, "%f %f %f 0.0 1.0 0.0\n", endT[0], endT[1], endT[2]
      ); fvprint( 0,  fp, "%f %f %f 0.0 1.0 0.0\n", avgPos[0], avgPos[1],
      avgPos[2] );
-          
+          
+
           // Draw the normal
           Vector endN = avgPos + flatNormal * .2f;
           fvprint( 0,  fp, "2\n" );
           fvprint( 0,  fp, "%f %f %f 0.0 0.0 1.0\n", endN[0], endN[1], endN[2]
      ); fvprint( 0,  fp, "%f %f %f 0.0 0.0 1.0\n", avgPos[0], avgPos[1],
      avgPos[2] );
-          
+          
+
           // Draw the wireframe of the triangle in white.
           fvprint( 0,  fp, "2\n" );
           fvprint( 0,  fp, "%f %f %f 1.0 1.0 1.0\n", p0[0], p0[1], p0[2] );
@@ -846,7 +850,8 @@ static void CalcTriangleTangentSpace(s_source_t *pSrc, int v1, int v2, int v3,
      ); fvprint( 0,  fp, "%f %f %f 0.1 0.1 0.1\n", tmp1[0], tmp1[1], tmp1[2] );
           fvprint( 0,  fp, "%f %f %f 0.1 0.1 0.1\n", tmp2[0], tmp2[1], tmp2[2]
      );
-                  
+                  
+
           fflush( fp );
   */
 }

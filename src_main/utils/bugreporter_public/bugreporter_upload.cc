@@ -267,8 +267,7 @@ void UpdateProgress(const BugReportParameters& params, char const* fmt, ...) {
   va_end(argptr);
 
   char status[2060];
-  _snprintf_s(status, SOURCE_ARRAYSIZE(status), "(%u): %s",
-              params.progressContext, buffer);
+  sprintf_s(status, "(%u): %s", params.progressContext, buffer);
 
   BugReportProgress progress;
   strcpy_s(progress.status, status);

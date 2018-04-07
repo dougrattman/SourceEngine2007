@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines a group of app systems that all have the same lifetime
 // that need to be connected/initialized, etc. in a well-defined order
@@ -25,14 +25,14 @@ CSysModule *CAppSystemGroup::LoadModuleDLL(const ch *module_name) {
 
 AppModule_t CAppSystemGroup::LoadModule(const ch *module_name) {
   // Remove the extension when creating the name.
-  const i32 module_name_length = Q_strlen(module_name) + 1;
+  const usize module_name_length = strlen(module_name) + 1;
   ch *pModuleName = (ch *)securestackalloc(module_name_length);
   Q_StripExtension(module_name, pModuleName, module_name_length);
 
   // See if we already loaded it...
   for (i32 i = m_Modules.Count(); --i >= 0;) {
     if (m_Modules[i].m_pModuleName) {
-      if (!Q_stricmp(pModuleName, m_Modules[i].m_pModuleName)) {
+      if (!_stricmp(pModuleName, m_Modules[i].m_pModuleName)) {
         securestackfree(pModuleName);
         return i;
       }
@@ -49,7 +49,7 @@ AppModule_t CAppSystemGroup::LoadModule(const ch *module_name) {
   m_Modules[nIndex].m_pModule = pSysModule;
   m_Modules[nIndex].m_Factory = nullptr;
   m_Modules[nIndex].m_pModuleName = (ch *)malloc(module_name_length);
-  Q_strncpy(m_Modules[nIndex].m_pModuleName, pModuleName, module_name_length);
+  strcpy_s(m_Modules[nIndex].m_pModuleName, module_name_length, pModuleName);
 
   securestackfree(pModuleName);
 
@@ -474,6 +474,6 @@ bool CSteamAppSystemGroup::SetupSearchPaths(const ch *pStartingDir,
 
   FileSystem_AddSearchPath_Platform(fsInfo.m_pFileSystem,
                                     steamInfo.m_GameInfoPath);
-  Q_strncpy(m_pGameInfoPath, steamInfo.m_GameInfoPath, sizeof(m_pGameInfoPath));
+  strcpy_s(m_pGameInfoPath, steamInfo.m_GameInfoPath);
   return true;
 }

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef FILESYSTEM_TOOLS_H
 #define FILESYSTEM_TOOLS_H
@@ -7,10 +7,10 @@
 #include "filesystem_init.h"
 
 // This is the the path of the initial source file
-extern char qdir[1024];
+extern char qdir[SOURCE_MAX_PATH];
 
 // This is the base engine + mod-specific game dir (e.g. "d:\tf2\mytfmod\")
-extern char gamedir[1024];
+extern char gamedir[SOURCE_MAX_PATH];
 
 // Filesystem initialization.
 

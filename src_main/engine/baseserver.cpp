@@ -716,7 +716,7 @@ void CBaseServer::UserInfoChanged(int nClientIndex) {
 }
 
 void CBaseServer::FillServerInfo(SVC_ServerInfo &serverinfo) {
-  static char gamedir[MAX_OSPATH];
+  static char gamedir[SOURCE_MAX_PATH];
   Q_FileBase(com_gamedir, gamedir, sizeof(gamedir));
 
   serverinfo.m_nProtocol = PROTOCOL_VERSION;

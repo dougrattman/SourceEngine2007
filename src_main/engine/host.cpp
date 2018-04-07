@@ -2339,7 +2339,7 @@ bool IsLowViolence_Registry() {
     bReducedGore = (Q_strlen(szBuffer) > 0) ? true : false;
   }
 
-  char gamedir[MAX_OSPATH];
+  char gamedir[SOURCE_MAX_PATH];
   Q_FileBase(com_gamedir, gamedir, sizeof(gamedir));
 
   // also check mod specific directories for LV changes

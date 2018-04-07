@@ -8,7 +8,7 @@
 #include "tier1/utlvector.h"
 
 bool CTextConsole::Init(/*IBaseSystem * system*/) {
-  // m_System = system;	// NULL or a valid base system interface
+  // m_System = system;	// nullptr or a valid base system interface
 
   memset(m_szConsoleText, 0, sizeof(m_szConsoleText));
   m_nConsoleTextLen = 0;
@@ -184,8 +184,7 @@ void CTextConsole::ReceiveTab() {
         nCurrentColumn = 1;
       }
 
-      Q_snprintf(szFormatCmd, sizeof(szFormatCmd), "%-*s ", nLongestCmd,
-                 pszCurrentCmd);
+      sprintf_s(szFormatCmd, "%-*s ", nLongestCmd, pszCurrentCmd);
       Echo(szFormatCmd);
 
       i++;

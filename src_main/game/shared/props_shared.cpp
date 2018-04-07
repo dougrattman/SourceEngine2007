@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: static_prop - don't move, don't animate, don't do anything.
 //			physics_prop - move, take damage, but don't animate
@@ -16,7 +16,6 @@
 #include "gamestringpool.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 ConVar sv_pushaway_clientside_size("sv_pushaway_clientside_size", "15",
@@ -257,10 +256,10 @@ void CPropData::ParsePropDataFile(void) {
 // Purpose: Parse a keyvalues section into the prop
 //
 //			pInteractionSection is a bit of jiggery-pokery to get
-//around the unfortunate 			fact that the interaction KV
+// around the unfortunate 			fact that the interaction KV
 // sections ("physgun_interactions",
 //"fire_interactions", etc) 			are OUTSIDE the "prop_data" KV
-//section in the model, but may be contained WITHIN the
+// section in the model, but may be contained WITHIN the
 // specified Base's "prop_data" section (i.e. in propdata.txt)
 //-----------------------------------------------------------------------------
 int CPropData::ParsePropFromKV(CBaseEntity *pProp, KeyValues *pSection,
@@ -647,20 +646,20 @@ const char *GetMassEquivalent(float flMass) {
       {2500, "large car"},
       {6000, "t-rex"},
       {7200, "elephant"},
-      {8e4, "space shuttle"},
-      {7e5, "locomotive"},
-      {9.2e6, "Eiffel tower"},
-      {6e24, "the Earth"},
-      {7e24, "really freaking heavy"},
+      {8e4f, "space shuttle"},
+      {7e5f, "locomotive"},
+      {9.2e6f, "Eiffel tower"},
+      {6e24f, "the Earth"},
+      {7e24f, "really freaking heavy"},
   };
 
-  for (int i = 0; i < sizeof(masstext) / sizeof(masstext[0]) - 1; i++) {
+  for (int i = 0; i < std::size(masstext) - 1; i++) {
     if (flMass < masstext[i].flMass) {
       return masstext[i].sz;
     }
   }
 
-  return masstext[sizeof(masstext) / sizeof(masstext[0]) - 1].sz;
+  return masstext[std::size(masstext) - 1].sz;
 }
 #else
 extern const char *GetMassEquivalent(float flMass);

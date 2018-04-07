@@ -100,8 +100,8 @@ class DedicatedOsWindows : public IDedicatedOs {
     console.SetTitle(host_name);
 
     ch status[256];
-    Q_snprintf(status, SOURCE_ARRAYSIZE(status), "%.1f fps %2i/%2i on map %16s",
-               fps, current_players_count, max_players_count, map_name);
+    sprintf_s(status, "%.1f fps %2i/%2i on map %16s", fps,
+              current_players_count, max_players_count, map_name);
 
     console.SetStatusLine(status);
     console.UpdateStatus();
@@ -146,7 +146,7 @@ class DedicatedOsWindows : public IDedicatedOs {
     ch text[1024];
 
     va_start(arg_list, format);
-    Q_vsnprintf(text, SOURCE_ARRAYSIZE(text), format, arg_list);
+    vsprintf_s(text, format, arg_list);
     va_end(arg_list);
 
     // Get current text and append it.

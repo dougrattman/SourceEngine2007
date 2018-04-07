@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "ireslistgenerator.h"
 
@@ -20,8 +20,7 @@ bool SaveResList(const CUtlRBTree<CUtlString, int> &list, ch const *pchFileName,
   if (fh != FILESYSTEM_INVALID_HANDLE) {
     for (int i = list.FirstInorder(); i != list.InvalidIndex();
          i = list.NextInorder(i)) {
-      g_pFullFileSystem->Write(list[i].String(), Q_strlen(list[i].String()),
-                               fh);
+      g_pFullFileSystem->Write(list[i].String(), strlen(list[i].String()), fh);
       g_pFullFileSystem->Write("\n", 1, fh);
     }
 
@@ -56,8 +55,8 @@ void LoadResList(CUtlRBTree<CUtlString, int> &list, ch const *pchFileName,
     // Ensure filename has "quotes" around it
     CUtlString s;
     if (szToken[0] == '\"') {
-      Assert(Q_strlen(szToken) > 2);
-      Assert(szToken[Q_strlen(szToken) - 1] == '\"');
+      Assert(strlen(szToken) > 2);
+      Assert(szToken[strlen(szToken) - 1] == '\"');
       s = szToken;
     } else {
       s = CFmtStr("\"%s\"", szToken);
@@ -161,9 +160,9 @@ void CResListGenerator::CollateFiles(ch const *pchResListFilename) {
 
   for (int i = 0; i < m_WorkItems.Count(); ++i) {
     ch fn[SOURCE_MAX_PATH];
-    Q_snprintf(fn, sizeof(fn), "%s\\%s\\%s\\%s", m_sFullGamePath.String(),
-               m_sWorkingDir.String(), m_WorkItems[i].m_sSubDir.String(),
-               pchResListFilename);
+    sprintf_s(fn, "%s\\%s\\%s\\%s", m_sFullGamePath.String(),
+              m_sWorkingDir.String(), m_WorkItems[i].m_sSubDir.String(),
+              pchResListFilename);
     vecReslists.AddToTail(fn);
   }
 
@@ -186,13 +185,12 @@ void CResListGenerator::Init(ch const *pchBaseDir, ch const *pchGameDir) {
   m_sGameDir = pchGameDir;
 
   ch path[SOURCE_MAX_PATH];
-  Q_snprintf(path, sizeof(path), "%s/%s", m_sBaseDir.String(),
-             m_sGameDir.String());
+  sprintf_s(path, "%s/%s", m_sBaseDir.String(), m_sGameDir.String());
   Q_FixSlashes(path);
   Q_strlower(path);
   m_sFullGamePath = path;
 
-  const ch *pchCommandFile = NULL;
+  const ch *pchCommandFile = nullptr;
   if (CommandLine()->CheckParm("-makereslists", &pchCommandFile) &&
       pchCommandFile) {
     // base path setup, now can get and parse command file
@@ -208,8 +206,7 @@ bool CResListGenerator::IsActive() { return m_bInitialized && m_bActive; }
 
 void CResListGenerator::Collate() {
   ch szDir[SOURCE_MAX_PATH];
-  V_snprintf(szDir, sizeof(szDir), "%s\\%s", m_sFullGamePath.String(),
-             m_sFinalDir.String());
+  sprintf_s(szDir, "%s\\%s", m_sFullGamePath.String(), m_sFinalDir.String());
   g_pFullFileSystem->CreateDirHierarchy(szDir, "GAME");
 
   // Now create the collated/merged data
@@ -230,35 +227,35 @@ void CResListGenerator::SetupCommandLine() {
       const CWorkItem &work = m_WorkItems[m_nCurrentWorkItem];
 
       // Clean the working dir
-      ch szWorkingDir[512];
-      Q_snprintf(szWorkingDir, sizeof(szWorkingDir), "%s\\%s",
-                 m_sWorkingDir.String(), work.m_sSubDir.String());
+      ch szWorkingDir[SOURCE_MAX_PATH];
+      sprintf_s(szWorkingDir, "%s\\%s", m_sWorkingDir.String(),
+                work.m_sSubDir.String());
 
       ch szFullWorkingDir[SOURCE_MAX_PATH];
-      V_snprintf(szFullWorkingDir, sizeof(szFullWorkingDir), "%s\\%s",
-                 m_sFullGamePath.String(), szWorkingDir);
+      sprintf_s(szFullWorkingDir, "%s\\%s", m_sFullGamePath.String(),
+                szWorkingDir);
       g_pFullFileSystem->CreateDirHierarchy(szFullWorkingDir, "GAME");
 
       // Preserve startmap
-      ch const *pszStartMap = NULL;
+      ch const *pszStartMap = nullptr;
       CommandLine()->CheckParm("-startmap", &pszStartMap);
       ch szMap[SOURCE_MAX_PATH] = {0};
       if (pszStartMap) {
-        Q_strncpy(szMap, pszStartMap, sizeof(szMap));
+        strcpy_s(szMap, pszStartMap);
       }
 
       // Prepare stuff
       // Reset command line based on current state
       ch szCmd[512];
-      Q_snprintf(szCmd, sizeof(szCmd), "%s %s %s -reslistdir %s",
-                 m_sOriginalCommandLine.String(), m_sBaseCommandLine.String(),
-                 work.m_sAddCommands.String(), szWorkingDir);
+      sprintf_s(szCmd, "%s %s %s -reslistdir %s",
+                m_sOriginalCommandLine.String(), m_sBaseCommandLine.String(),
+                work.m_sAddCommands.String(), szWorkingDir);
 
       Warning("Reslists:  Setting command line:\n'%s'\n", szCmd);
 
       CommandLine()->CreateCmdLine(szCmd);
       // Never rebuild caches by default, inly do it in STATE_GENERATINGCACHES
-      CommandLine()->AppendParm("-norebuildaudio", NULL);
+      CommandLine()->AppendParm("-norebuildaudio", nullptr);
       if (szMap[0]) {
         CommandLine()->AppendParm("-startmap", szMap);
       }
@@ -269,8 +266,8 @@ void CResListGenerator::SetupCommandLine() {
       // Prepare stuff
       // Reset command line based on current state
       ch szCmd[512];
-      Q_snprintf(szCmd, sizeof(szCmd), "%s -reslistdir %s -rebuildaudio",
-                 m_sOriginalCommandLine.String(), m_sFinalDir.String());
+      sprintf_s(szCmd, "%s -reslistdir %s -rebuildaudio",
+                m_sOriginalCommandLine.String(), m_sFinalDir.String());
 
       Warning("Caches:  Setting command line:\n'%s'\n", szCmd);
 
@@ -318,8 +315,8 @@ bool CResListGenerator::ShouldContinue() {
 void CResListGenerator::LoadMapList(ch const *pchGameDir,
                                     CUtlVector<CUtlString> &vecMaps,
                                     ch const *pchMapFile) {
-  ch fullpath[512];
-  Q_snprintf(fullpath, sizeof(fullpath), "%s/%s", pchGameDir, pchMapFile);
+  ch fullpath[SOURCE_MAX_PATH];
+  sprintf_s(fullpath, "%s/%s", pchGameDir, pchMapFile);
 
   // Load them in
   CUtlBuffer buf(0, 0, CUtlBuffer::TEXT_BUFFER);
@@ -331,14 +328,13 @@ void CResListGenerator::LoadMapList(ch const *pchGameDir,
       if (!szMap[0]) break;
 
       // Strip trailing CR/LF chars
-      int len = Q_strlen(szMap);
+      usize len = strlen(szMap);
       while (len >= 1 && szMap[len - 1] == '\n' || szMap[len - 1] == '\r') {
-        szMap[len - 1] = 0;
-        len = Q_strlen(szMap);
+        szMap[len - 1] = '\0';
+        len = strlen(szMap);
       }
 
-      CUtlString newMap;
-      newMap = szMap;
+      CUtlString newMap = szMap;
       vecMaps.AddToTail(newMap);
     }
   } else {
@@ -353,8 +349,8 @@ bool CResListGenerator::InitCommandFile(ch const *pchGameDir,
     return false;
   }
 
-  ch fullpath[512];
-  Q_snprintf(fullpath, sizeof(fullpath), "%s/%s", pchGameDir, pchCommandFile);
+  ch fullpath[SOURCE_MAX_PATH];
+  sprintf_s(fullpath, "%s/%s", pchGameDir, pchCommandFile);
 
   CUtlBuffer buf;
   if (!g_pFullFileSystem->ReadFile(fullpath, "GAME", buf)) {
@@ -377,7 +373,7 @@ bool CResListGenerator::InitCommandFile(ch const *pchGameDir,
     return false;
   }
 
-  ch const *pszSolo = NULL;
+  ch const *pszSolo = nullptr;
   if (CommandLine()->CheckParm("+map", &pszSolo) && pszSolo) {
     m_MapList.Purge();
 
@@ -388,7 +384,7 @@ bool CResListGenerator::InitCommandFile(ch const *pchGameDir,
 
   m_nCurrentWorkItem = CommandLine()->ParmValue("-startstage", 0);
 
-  ch const *pszStartMap = NULL;
+  ch const *pszStartMap = nullptr;
   CommandLine()->CheckParm("-startmap", &pszStartMap);
   if (pszStartMap) {
     m_sInitialStartMap = pszStartMap;
@@ -414,7 +410,7 @@ bool CResListGenerator::InitCommandFile(ch const *pchGameDir,
   int i = 0;
   do {
     ch sz[32];
-    Q_snprintf(sz, sizeof(sz), "%i", i);
+    sprintf_s(sz, "%i", i);
     KeyValues *subKey = kv->FindKey(sz, false);
     if (!subKey) break;
 
@@ -433,7 +429,8 @@ bool CResListGenerator::InitCommandFile(ch const *pchGameDir,
   } while (true);
 
   m_bActive = m_WorkItems.Count() > 0;
-  m_nCurrentWorkItem = std::clamp(m_nCurrentWorkItem, 0, m_WorkItems.Count() - 1);
+  m_nCurrentWorkItem =
+      std::clamp(m_nCurrentWorkItem, 0, m_WorkItems.Count() - 1);
 
   bool bCollate = CommandLine()->CheckParm("-collate") ? true : false;
   if (bCollate) {

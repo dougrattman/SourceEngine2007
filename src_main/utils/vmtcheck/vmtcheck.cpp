@@ -261,7 +261,7 @@ int main( int argc, char* argv[] )
 
 	char workingdir[ 256 ];
 	workingdir[0] = 0;
-	Q_getwd( workingdir, sizeof( workingdir ) );
+	Q_getwd( workingdir );
 
 	// If they didn't specify -game on the command line, use VPROJECT.
 	CmdLib_InitFileSystem( workingdir );

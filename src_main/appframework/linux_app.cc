@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: An application framework.
 
@@ -84,8 +84,8 @@ bool CSteamApplication::Create() {
   FileSystem_SetErrorMode(FS_ERRORMODE_NONE);
 
   char pFileSystemDLL[SOURCE_MAX_PATH];
-  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, SOURCE_MAX_PATH, m_bSteam) !=
-      FS_OK)
+  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, std::size(pFileSystemDLL),
+                                      m_bSteam) != FS_OK)
     return false;
 
   AppModule_t fileSystemModule = LoadModule(pFileSystemDLL);

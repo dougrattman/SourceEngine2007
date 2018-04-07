@@ -47,30 +47,29 @@ void FileSystemAccessLogger::Init() {
   if (command_line_->CheckParm("-reslistdir", &pszDir) && pszDir) {
     ch szDir[SOURCE_MAX_PATH];
 
-    Q_strncpy(szDir, pszDir, SOURCE_ARRAYSIZE(szDir));
+    strcpy_s(szDir, pszDir);
     Q_StripTrailingSlash(szDir);
     Q_strlower(szDir);
     Q_FixSlashes(szDir);
 
-    if (Q_strlen(szDir) > 0) {
+    if (szDir[0] != '\0') {
       resource_lists_directory_ = szDir;
     }
   }
 
   // game directory has not been established yet, must derive ourselves
   ch path[SOURCE_MAX_PATH];
-  Q_snprintf(path, SOURCE_ARRAYSIZE(path), "%s/%s", base_directory_,
-             command_line_->ParmValue(
-                 source::tier0::command_line_switches::kGamePath, "hl2"));
+  sprintf_s(path, "%s/%s", base_directory_,
+            command_line_->ParmValue(
+                source::tier0::command_line_switches::kGamePath, "hl2"));
   Q_FixSlashes(path);
   Q_strlower(path);
   path_to_game_directory_ = path;
 
   // create file to dump out to
   ch szDir[SOURCE_MAX_PATH];
-  V_snprintf(szDir, SOURCE_ARRAYSIZE(szDir), "%s\\%s",
-             path_to_game_directory_.String(),
-             resource_lists_directory_.String());
+  sprintf_s(szDir, "%s\\%s", path_to_game_directory_.String(),
+            resource_lists_directory_.String());
   g_pFullFileSystem->CreateDirHierarchy(szDir, "GAME");
 
   g_pFullFileSystem->AddLoggingFunc(&LogAllFilesFunc);
@@ -84,9 +83,8 @@ void FileSystemAccessLogger::Init() {
         "GAME");
   }
 
-  GetCurrentDirectoryA(SOURCE_ARRAYSIZE(current_directory_),
-                       current_directory_);
-  Q_strncat(current_directory_, "\\", SOURCE_ARRAYSIZE(current_directory_), 1);
+  GetCurrentDirectoryA(std::size(current_directory_), current_directory_);
+  strcat_s(current_directory_, "\\");
   _strlwr_s(current_directory_);
 }
 
@@ -119,7 +117,7 @@ void FileSystemAccessLogger::LogToAllReslist(ch const *line) {
       "at", "GAME");
   if (fh != FILESYSTEM_INVALID_HANDLE) {
     g_pFullFileSystem->Write("\"", 1, fh);
-    g_pFullFileSystem->Write(line, Q_strlen(line), fh);
+    g_pFullFileSystem->Write(line, strlen(line), fh);
     g_pFullFileSystem->Write("\"\n", 2, fh);
     g_pFullFileSystem->Close(fh);
   }
@@ -145,10 +143,10 @@ void FileSystemAccessLogger::LogFile(const ch *fullPathFileName,
   // make it relative to our root directory
   const ch *relative = Q_stristr(fullPathFileName, base_directory_);
   if (relative) {
-    relative += Q_strlen(base_directory_) + 1;
+    relative += strlen(base_directory_) + 1;
 
     ch rel[SOURCE_MAX_PATH];
-    Q_strncpy(rel, relative, SOURCE_ARRAYSIZE(rel));
+    strcpy_s(rel, relative);
     Q_strlower(rel);
     Q_FixSlashes(rel);
 

@@ -104,10 +104,10 @@ void CChangeGameDialog::OnCommand(const char *command) {
 
       if (kv) {
         // change the game dir and restart the engine
-        char command[256];
-        sprintf_s(command, "_setgamedir %s\n", kv->GetString("ModDir"));
+        char cmd[256];
+        sprintf_s(cmd, "_setgamedir %s\n", kv->GetString("ModDir"));
 
-        engine->ClientCmd_Unrestricted(command);
+        engine->ClientCmd_Unrestricted(cmd);
         // Force restart of entire engine
         engine->ClientCmd_Unrestricted("_restart\n");
       }

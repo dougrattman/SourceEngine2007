@@ -1,8 +1,8 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "filesystem_tools.h"
 
-#if defined(_WIN32)
+#ifdef OS_WIN
 #include <direct.h>
 #include <io.h>  // _chmod
 
@@ -24,32 +24,22 @@
 #include "vmpi_tools_shared.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
-// ----------------------------------------------------------------------------------------------------
-// // Module interface.
-// ----------------------------------------------------------------------------------------------------
-// //
-
-IBaseFileSystem *g_pFileSystem = NULL;
+IBaseFileSystem *g_pFileSystem = nullptr;
 
 // These are only used for tools that need the search paths that the engine's
 // file system provides.
-CSysModule *g_pFullFileSystemModule = NULL;
+CSysModule *g_pFullFileSystemModule = nullptr;
 
-// ---------------------------------------------------------------------------
-//
 // These are the base paths that everything will be referenced relative to
 // (textures especially) All of these directories include the trailing slash
-//
-// ---------------------------------------------------------------------------
 
 // This is the the path of the initial source file (relative to the cwd)
-char qdir[1024];
+char qdir[SOURCE_MAX_PATH];
 
 // This is the base engine + mod-specific game dir (e.g. "c:\tf2\mytfmod\")
-char gamedir[1024];
+char gamedir[SOURCE_MAX_PATH];
 
 void FileSystem_SetupStandardDirectories(const char *pFilename,
                                          const char *pGameInfoPath) {
@@ -58,16 +48,16 @@ void FileSystem_SetupStandardDirectories(const char *pFilename,
     pFilename = ".";
   }
 
-  Q_MakeAbsolutePath(qdir, sizeof(qdir), pFilename, NULL);
+  Q_MakeAbsolutePath(qdir, std::size(qdir), pFilename, nullptr);
   Q_StripFilename(qdir);
   Q_strlower(qdir);
-  if (qdir[0] != 0) {
-    Q_AppendSlash(qdir, sizeof(qdir));
+  if (qdir[0] != '\0') {
+    Q_AppendSlash(qdir, std::size(qdir));
   }
 
   // Set gamedir.
-  Q_MakeAbsolutePath(gamedir, sizeof(gamedir), pGameInfoPath);
-  Q_AppendSlash(gamedir, sizeof(gamedir));
+  Q_MakeAbsolutePath(gamedir, std::size(gamedir), pGameInfoPath);
+  Q_AppendSlash(gamedir, std::size(gamedir));
 }
 
 bool FileSystem_Init_Normal(const char *pFilename, FSInitType_t initType,
@@ -76,8 +66,8 @@ bool FileSystem_Init_Normal(const char *pFilename, FSInitType_t initType,
     // First, get the name of the module
     char fileSystemDLLName[SOURCE_MAX_PATH];
     bool bSteam;
-    if (FileSystem_GetFileSystemDLLName(fileSystemDLLName, SOURCE_MAX_PATH, bSteam) !=
-        FS_OK)
+    if (FileSystem_GetFileSystemDLLName(
+            fileSystemDLLName, std::size(fileSystemDLLName), bSteam) != FS_OK)
       return false;
 
     // If we're under Steam we need extra setup to let us find the proper
@@ -137,11 +127,11 @@ bool FileSystem_Init_Normal(const char *pFilename, FSInitType_t initType,
 
 bool FileSystem_Init(const char *pBSPFilename, int maxMemoryUsage,
                      FSInitType_t initType, bool bOnlyUseFilename) {
-  Assert(CommandLine()->GetCmdLine() !=
-         NULL);  // Should have called CreateCmdLine by now.
+  // Should have called CreateCmdLine by now.
+  Assert(!!CommandLine()->GetCmdLine());
 
   // If this app uses VMPI, then let VMPI intercept all filesystem calls.
-#if defined(MPI)
+#ifdef MPI
   if (g_bUseMPI) {
     if (g_bMPIMaster) {
       if (!FileSystem_Init_Normal(pBSPFilename, initType, bOnlyUseFilename))
@@ -152,7 +142,7 @@ bool FileSystem_Init(const char *pBSPFilename, int maxMemoryUsage,
       SendQDirInfo();
     } else {
       g_pFileSystem = g_pFullFileSystem =
-          VMPI_FileSystem_Init(maxMemoryUsage, NULL);
+          VMPI_FileSystem_Init(maxMemoryUsage, nullptr);
       RecvQDirInfo();
     }
     return true;
@@ -163,7 +153,7 @@ bool FileSystem_Init(const char *pBSPFilename, int maxMemoryUsage,
 }
 
 void FileSystem_Term() {
-#if defined(MPI)
+#ifdef MPI
   if (g_bUseMPI) {
     g_pFileSystem = g_pFullFileSystem = VMPI_FileSystem_Term();
   }
@@ -171,18 +161,18 @@ void FileSystem_Term() {
 
   if (g_pFullFileSystem) {
     g_pFullFileSystem->Shutdown();
-    g_pFullFileSystem = NULL;
-    g_pFileSystem = NULL;
+    g_pFullFileSystem = nullptr;
+    g_pFileSystem = nullptr;
   }
 
   if (g_pFullFileSystemModule) {
     Sys_UnloadModule(g_pFullFileSystemModule);
-    g_pFullFileSystemModule = NULL;
+    g_pFullFileSystemModule = nullptr;
   }
 }
 
 CreateInterfaceFn FileSystem_GetFactory() {
-#if defined(MPI)
+#ifdef MPI
   if (g_bUseMPI) return VMPI_FileSystem_GetFactory();
 #endif
   return Sys_GetFactory(g_pFullFileSystemModule);
@@ -195,5 +185,6 @@ bool FileSystem_SetGame(const char *szModDir) {
   CFSSearchPathsInit fsInit;
   fsInit.m_pDirectoryName = szModDir;
   fsInit.m_pFileSystem = g_pFullFileSystem;
-  return (FileSystem_LoadSearchPaths(fsInit) == FS_OK);
+
+  return FileSystem_LoadSearchPaths(fsInit) == FS_OK;
 }

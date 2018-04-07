@@ -67,7 +67,7 @@ const char *MakeModuleFileName() {
 
     return pszModuleName;
   }
-  return NULL;
+  return nullptr;
 }
 
 static void *AllocUnattributed(size_t nSize) {
@@ -89,7 +89,7 @@ static void *ReallocUnattributed(void *pMem, size_t nSize) {
 }
 
 #else
-#define MakeModuleFileName() NULL
+#define MakeModuleFileName() nullptr
 inline void *AllocUnattributed(size_t nSize) {
   return g_pMemAlloc->Alloc(nSize);
 }
@@ -164,7 +164,7 @@ void *__cdecl _nh_malloc(size_t nSize, int) { return AllocUnattributed(nSize); }
 
 void *__cdecl _expand(void *pMem, size_t nSize) {
   Assert(0);
-  return NULL;
+  return nullptr;
 }
 
 unsigned int _amblksiz = 16;  // BYTES_PER_PARA;
@@ -344,7 +344,7 @@ void *__cdecl _realloc_dbg(void *pMem, size_t nNewSize, int nBlockUse,
 void *__cdecl _expand_dbg(void *pMem, size_t nNewSize, int nBlockUse,
                           const char *pFileName, int nLine) {
   Assert(0);
-  return NULL;
+  return nullptr;
 }
 
 void __cdecl _free_dbg(void *pMem, int nBlockUse) {
@@ -377,7 +377,7 @@ ALLOC_CALL void *__cdecl _aligned_realloc_base(void *ptr, size_t size,
 ALLOC_CALL void *__cdecl _aligned_recalloc_base(void *ptr, size_t size,
                                                 size_t align) {
   Error("Unsupported function\n");
-  return NULL;
+  return nullptr;
 }
 
 FREE_CALL void __cdecl _aligned_free_base(void *ptr) {
@@ -406,20 +406,20 @@ FREE_CALL void __cdecl _aligned_free(void *memblock) {
 // aligned offset base
 ALLOC_CALL void *__cdecl _aligned_offset_malloc_base(size_t size, size_t align,
                                                      size_t offset) {
-  return NULL;
+  return nullptr;
 }
 
 ALLOC_CALL void *__cdecl _aligned_offset_realloc_base(void *memblock,
                                                       size_t size, size_t align,
                                                       size_t offset) {
-  return NULL;
+  return nullptr;
 }
 
 ALLOC_CALL void *__cdecl _aligned_offset_recalloc_base(void *memblock,
                                                        size_t size,
                                                        size_t align,
                                                        size_t offset) {
-  return NULL;
+  return nullptr;
 }
 
 // aligned offset
@@ -453,7 +453,7 @@ extern "C" {
 
 int _CrtDumpMemoryLeaks() { return 0; }
 
-_CRT_DUMP_CLIENT _CrtSetDumpClient(_CRT_DUMP_CLIENT dumpClient) { return NULL; }
+_CRT_DUMP_CLIENT _CrtSetDumpClient(_CRT_DUMP_CLIENT dumpClient) { return nullptr; }
 
 int _CrtSetDbgFlag(int nNewFlag) {
   return g_pMemAlloc->CrtSetDbgFlag(nNewFlag);
@@ -470,7 +470,7 @@ void __cdecl _CrtSetDbgBlockType(void *pMem, int nBlockUse) { DebuggerBreak(); }
 
 _CRT_ALLOC_HOOK __cdecl _CrtSetAllocHook(_CRT_ALLOC_HOOK pfnNewHook) {
   DebuggerBreak();
-  return NULL;
+  return nullptr;
 }
 
 long __cdecl _CrtSetBreakAlloc(long lNewBreakAlloc) {
@@ -545,7 +545,7 @@ int __cdecl _CrtDbgReport(int nRptType, const char *szFile, int nLine,
   va_list args;
   if (szFormat) {
     va_start(args, szFormat);
-    _vsnprintf_s(output, SOURCE_ARRAYSIZE(output) - 1, szFormat, args);
+    _vsnprintf_s(output, std::size(output) - 1, szFormat, args);
     va_end(args);
   } else {
     output[0] = '\0';
@@ -558,7 +558,7 @@ int __cdecl _CrtDbgReport(int nRptType, const char *szFile, int nLine,
 // and invalid parameter handlers.
 // If you manage to call a pure-virtual function (easily done if you
 // indirectly / call a pure-virtual function from the base-class constructor or
-// destructor) / or if you invoke the invalid parameter handler (printf(NULL);
+// destructor) / or if you invoke the invalid parameter handler (printf(nullptr);
 // is one way) / then no crash dump will be created. / This crash redirects the
 // handlers for these two events so that crash dumps / are created.
 //
@@ -600,7 +600,7 @@ int __cdecl _CrtDbgReport(int nRptType, const char *szFile, int nLine,
 
  void InvalidParameterViolation()
 {
- printf( NULL );
+ printf( nullptr );
 }
 */
 
@@ -725,7 +725,7 @@ extern "C" void *__cdecl _recalloc_dbg(void *memblock, size_t count,
                                       nLine);
 }
 
-_CRT_REPORT_HOOK __cdecl _CrtGetReportHook() { return NULL; }
+_CRT_REPORT_HOOK __cdecl _CrtGetReportHook() { return nullptr; }
 int __cdecl _CrtReportBlockType(const void *pUserData) { return 0; }
 
 }  // end extern "C"
@@ -750,7 +750,7 @@ size_t __crtDebugFillThreshold = 0;
 
 extern "C" void *__cdecl _heap_alloc_base(size_t size) {
   assert(0);
-  return NULL;
+  return nullptr;
 }
 
 void *__cdecl _heap_alloc_dbg(size_t nSize, int nBlockUse,
@@ -769,12 +769,12 @@ void __cdecl _free_dbg_nolock(void *pUserData, int nBlockUse) {
 
 _CRT_ALLOC_HOOK __cdecl _CrtGetAllocHook() {
   assert(0);
-  return NULL;
+  return nullptr;
 }
 
 _CRT_DUMP_CLIENT __cdecl _CrtGetDumpClient() {
   assert(0);
-  return NULL;
+  return nullptr;
 }
 
 void *__cdecl _aligned_malloc_dbg(size_t size, size_t align, const char *f_name,
@@ -815,7 +815,7 @@ size_t __cdecl _CrtSetDebugFillThreshold(size_t _NewDebugFillThreshold) {
 char *__cdecl _strdup(const char *string) {
   int nSize = (int)strlen(string) + 1;
   // Check for integer underflow.
-  if (nSize <= 0) return NULL;
+  if (nSize <= 0) return nullptr;
   char *pCopy = (char *)AllocUnattributed(nSize);
   if (pCopy) memcpy(pCopy, string, nSize);
   return pCopy;

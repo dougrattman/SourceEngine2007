@@ -8,11 +8,10 @@
 #include "base/include/windows/windows_light.h"
 
 namespace source::windows {
-// Build error from message |message| and error code |error_code|.
-inline wstr BuildError(_In_ wstr message, _In_ u32 error_code) {
+// Build error from message |message| and error code |errno_code|.
+inline wstr BuildError(_In_ wstr message, _In_ windows_errno_code errno_code) {
   message += L"\n\nPrecise error description: ";
-  message += make_windows_errno_info(win32_to_windows_errno_code(error_code))
-                 .description;
+  message += make_windows_errno_info(errno_code).description;
   return message;
 }
 
@@ -23,10 +22,11 @@ inline void ShowErrorBox(_In_ wstr message) {
 }
 
 // Show error box with |message| by |error_code|.
-inline u32 NotifyAboutError(_In_ wstr message,
-                            _In_ u32 error_code = GetLastError()) {
-  ShowErrorBox(BuildError(message, error_code));
-  return error_code;
+inline windows_errno_code NotifyAboutError(
+    _In_ wstr message, _In_ u32 error_code = GetLastError()) {
+  const windows_errno_code errno_code{win32_to_windows_errno_code(error_code)};
+  ShowErrorBox(BuildError(message, errno_code));
+  return errno_code;
 }
 }  // namespace source::windows
 

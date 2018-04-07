@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -15,7 +15,6 @@
 #include "npcevent.h"
 #include "tier1/keyvalues.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define ACTBUSY_SEE_ENTITY_TIMEOUT 1.0f
@@ -677,10 +676,10 @@ void CAI_ActBusyBehavior::OnFriendDamaged(CBaseCombatCharacter *pSquadmate,
 //			volume.
 //
 //			NOTE: We keep this count to prevent the NPC re-entering
-//combat 			actbusy whilst too many enemies are present in the safe zone. 			This
-//count does not automatically alert the NPC that there are 			enemies in the safe
-//zone. 			You must set COND_ACTBUSY_AWARE_OF_ENEMY_IN_SAFE_ZONE to let 			the NPC
-//know.
+// combat 			actbusy whilst too many enemies are present in the safe
+// zone. 			This count does not automatically alert the NPC
+// that there are 			enemies in the safe zone.
+// You must set COND_ACTBUSY_AWARE_OF_ENEMY_IN_SAFE_ZONE to let the NPC know.
 //-----------------------------------------------------------------------------
 int CAI_ActBusyBehavior::CountEnemiesInSafeZone() {
   if (!IsCombatActBusy()) {
@@ -877,8 +876,8 @@ Activity CAI_ActBusyBehavior::NPC_TranslateActivity(Activity nActivity) {
   Activity nNewActivity = BaseClass::NPC_TranslateActivity(nActivity);
 
   if (nActivity == ACT_RUN) {
-    // TODO(d.rattman): Forcing STIMULATED here is illegal if the entity doesn't support
-    // it as an activity
+    // TODO(d.rattman): Forcing STIMULATED here is illegal if the entity doesn't
+    // support it as an activity
     CAI_PlayerAlly *pAlly = dynamic_cast<CAI_PlayerAlly *>(GetOuter());
     if (pAlly) return ACT_RUN_STIMULATED;
   }
@@ -1347,7 +1346,7 @@ bool CAI_ActBusyBehavior::QueryHearSound(CSound *pSound) {
 //-----------------------------------------------------------------------------
 // Purpose: Because none of the startbusy schedules break on COND_NEW_ENEMY
 //			we have to do this distance check against all enemy NPCs
-//we 			see as we're traveling to an ACTBUSY node
+// we 			see as we're traveling to an ACTBUSY node
 //-----------------------------------------------------------------------------
 #define ACTBUSY_ENEMY_TOO_CLOSE_DIST_SQR Square(240)  // 20 feet
 void CAI_ActBusyBehavior::OnSeeEntity(CBaseEntity *pEntity) {
@@ -1842,7 +1841,7 @@ void CAI_ActBusyBehavior::RunTask(const Task_t *pTask) {
           // Show which actbusy we're moving towards
           NDebugOverlay::Line(GetOuter()->WorldSpaceCenter(),
                               GetHintNode()->GetAbsOrigin(), 0, 255, 0, true,
-                              0.2);
+                              0.2f);
         }
       }
 
@@ -2494,10 +2493,10 @@ void CAI_ActBusyQueueGoal::DrawDebugGeometryOverlays(void) {
     if (!m_hNodes[i]) continue;
     if (m_bPlayerBlockedNodes[i]) {
       NDebugOverlay::Box(m_hNodes[i]->GetAbsOrigin(), -Vector(5, 5, 5),
-                         Vector(5, 5, 5), 255, 0, 0, 0, 0.1);
+                         Vector(5, 5, 5), 255, 0, 0, 0, 0.1f);
     } else {
       NDebugOverlay::Box(m_hNodes[i]->GetAbsOrigin(), -Vector(5, 5, 5),
-                         Vector(5, 5, 5), 255, 255, 255, 0, 0.1);
+                         Vector(5, 5, 5), 255, 255, 255, 0, 0.1f);
     }
   }
 }
@@ -2744,7 +2743,7 @@ void CAI_ActBusyQueueGoal::MoveQueueUp(void) {
   // Find the node the NPC has arrived at, and tell the guy behind him to move
   // forward
   if (GetNextThink(QUEUE_MOVEUP_THINK_CONTEXT) < gpGlobals->curtime) {
-    float flTime = gpGlobals->curtime + RandomFloat(0.3, 0.5);
+    float flTime = gpGlobals->curtime + RandomFloat(0.3f, 0.5f);
     SetContextThink(&CAI_ActBusyQueueGoal::MoveQueueUpThink, flTime,
                     QUEUE_MOVEUP_THINK_CONTEXT);
   }

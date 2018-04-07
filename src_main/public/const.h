@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef CONST_H
 #define CONST_H
@@ -23,8 +23,8 @@
 #define MAXIMUM_TICK_INTERVAL (0.1)
 
 // This is the max # of players the engine can handle
-#define ABSOLUTE_PLAYER_LIMIT \
-  255  // not 256, so we can send the limit as a byte
+// not 256, so we can send the limit as a byte
+#define ABSOLUTE_PLAYER_LIMIT 255
 #define ABSOLUTE_PLAYER_LIMIT_DW ((ABSOLUTE_PLAYER_LIMIT / 32) + 1)
 
 // a player name may have 31 chars + 0 on the PC.
@@ -51,8 +51,8 @@
 // Max # of networkable server classes
 #define MAX_SERVER_CLASSES (1 << MAX_SERVER_CLASS_BITS)
 
-#define SIGNED_GUID_LEN \
-  32  // Hashed CD Key (32 hex alphabetic chars + 0 terminator )
+// Hashed CD Key (32 hex alphabetic chars + 0 terminator )
+#define SIGNED_GUID_LEN 32
 
 // Used for networking ehandles.
 #define NUM_ENT_ENTRY_BITS (MAX_EDICT_BITS + 1)
@@ -148,8 +148,9 @@
 #define FL_DISSOLVING (1 << 28)  // We're dissolving!
 #define FL_TRANSRAGDOLL \
   (1 << 29)  // In the process of turning into a client side ragdoll.
-#define FL_UNBLOCKABLE_BY_PLAYER \
-  (1 << 30)  // pusher that can't be blocked by the player
+
+// pusher that can't be blocked by the player
+#define FL_UNBLOCKABLE_BY_PLAYER (1 << 30)
 
 // edict->movetype values
 enum MoveType_t {
@@ -161,10 +162,12 @@ enum MoveType_t {
   MOVETYPE_FLYGRAVITY,  // flies through the air + is affected by gravity
   MOVETYPE_VPHYSICS,    // uses VPHYSICS for simulation
   MOVETYPE_PUSH,        // no clip to world, push and crush
-  MOVETYPE_NOCLIP,    // No gravity, no collisions, still do velocity/avelocity
-  MOVETYPE_LADDER,    // Used by players only when going onto a ladder
-  MOVETYPE_OBSERVER,  // Observer movement, depends on player's observer mode
-  MOVETYPE_CUSTOM,    // Allows the entity to describe its own physics
+  MOVETYPE_NOCLIP,      // No gravity, no collisions, still do
+                        // velocity/avelocity
+  MOVETYPE_LADDER,      // Used by players only when going onto a ladder
+  MOVETYPE_OBSERVER,    // Observer movement, depends on player's observer
+                        // mode
+  MOVETYPE_CUSTOM,      // Allows the entity to describe its own physics
 
   // should always be defined as the last item in the list
   MOVETYPE_LAST = MOVETYPE_CUSTOM,

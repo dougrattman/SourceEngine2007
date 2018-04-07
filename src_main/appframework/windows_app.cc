@@ -123,7 +123,7 @@ bool CSteamApplication::Create() {
   FileSystem_SetErrorMode(FS_ERRORMODE_AUTO);
 
   ch pFileSystemDLL[SOURCE_MAX_PATH];
-  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, SOURCE_MAX_PATH, m_bSteam) !=
+  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, std::size(pFileSystemDLL), m_bSteam) !=
       FS_OK)
     return false;
 

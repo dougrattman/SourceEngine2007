@@ -19,10 +19,10 @@
 
 #include "tier0/include/memdbgon.h"
 
-static CMainPanel *g_pMainPanel = NULL;  // the main panel to show
+static CMainPanel *g_pMainPanel = nullptr;  // the main panel to show
 static CSysModule *g_hAdminServerModule;
-IAdminServer *g_pAdminServer = NULL;
-static IVGuiModule *g_pAdminVGuiModule = NULL;
+IAdminServer *g_pAdminServer = nullptr;
+static IVGuiModule *g_pAdminVGuiModule = nullptr;
 
 void *DedicatedFactory(const char *pName, int *pReturnCode);
 
@@ -44,11 +44,10 @@ int StartVGUI(CreateInterfaceFn dedicatedFactory) {
   if (!getenv_s(&steam_path_size, steam_path, "SteamInstallPath") &&
       steam_path_size > 0) {
     // put the config dir directly under steam
-    Q_snprintf(config_dir, SOURCE_ARRAYSIZE(config_dir), "%s/config",
-               steam_path);
+    sprintf_s(config_dir, "%s/config", steam_path);
   } else {
     // we're not running steam, so just put the config dir under the platform
-    Q_strncpy(config_dir, "platform/config", SOURCE_ARRAYSIZE(config_dir));
+    strcpy_s(config_dir, "platform/config");
   }
   g_pFullFileSystem->CreateDirHierarchy("config", "PLATFORM");
   g_pFullFileSystem->AddSearchPath(config_dir, "CONFIG", PATH_ADD_TO_HEAD);
@@ -64,7 +63,7 @@ int StartVGUI(CreateInterfaceFn dedicatedFactory) {
   vgui::surface()->SetEmbeddedPanel(g_pMainPanel->GetVPanel());
 
   // load the scheme
-  vgui::scheme()->LoadSchemeFromFile("Resource/SourceScheme.res", NULL);
+  vgui::scheme()->LoadSchemeFromFile("Resource/SourceScheme.res", nullptr);
 
   // localization
   g_pVGuiLocalize->AddFile("Resource/platform_%language%.txt");
@@ -77,8 +76,8 @@ int StartVGUI(CreateInterfaceFn dedicatedFactory) {
   // load the module
   g_pFullFileSystem->GetLocalCopy("bin/adminserver.dll");
   g_hAdminServerModule = g_pFullFileSystem->LoadModule("adminserver");
-  Assert(g_hAdminServerModule != NULL);
-  CreateInterfaceFn adminFactory = NULL;
+  Assert(g_hAdminServerModule != nullptr);
+  CreateInterfaceFn adminFactory = nullptr;
 
   if (!g_hAdminServerModule) {
     vgui::ivgui()->DPrintf2(
@@ -89,11 +88,11 @@ int StartVGUI(CreateInterfaceFn dedicatedFactory) {
     // make sure we get the right version
     adminFactory = Sys_GetFactory(g_hAdminServerModule);
     g_pAdminServer =
-        (IAdminServer *)adminFactory(ADMINSERVER_INTERFACE_VERSION, NULL);
+        (IAdminServer *)adminFactory(ADMINSERVER_INTERFACE_VERSION, nullptr);
     g_pAdminVGuiModule =
-        (IVGuiModule *)adminFactory("VGuiModuleAdminServer001", NULL);
-    Assert(g_pAdminServer != NULL);
-    Assert(g_pAdminVGuiModule != NULL);
+        (IVGuiModule *)adminFactory("VGuiModuleAdminServer001", nullptr);
+    Assert(g_pAdminServer != nullptr);
+    Assert(g_pAdminVGuiModule != nullptr);
     if (!g_pAdminServer || !g_pAdminVGuiModule) {
       vgui::ivgui()->DPrintf2(
           "Admin Error: module version (bin/adminserver.dll, %s) invalid, "
@@ -121,7 +120,7 @@ void StopVGUI() {
   SetEvent(g_pMainPanel->GetShutdownHandle());
 
   delete g_pMainPanel;
-  g_pMainPanel = NULL;
+  g_pMainPanel = nullptr;
 
   if (g_hAdminServerModule) {
     g_pAdminVGuiModule->Shutdown();
@@ -150,7 +149,7 @@ void VGUIFinishedConfig() {
 
 void VGUIPrintf(const char *msg) {
   if (!g_pMainPanel || VGUIIsInConfig() || VGUIIsStopping()) {
-    ::MessageBox(NULL, msg, "Dedicated Server Error", MB_OK | MB_TOPMOST);
+    ::MessageBox(nullptr, msg, "Dedicated Server Error", MB_OK | MB_TOPMOST);
   } else if (g_pMainPanel) {
     g_pMainPanel->AddConsoleText(msg);
   }

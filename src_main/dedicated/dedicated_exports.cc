@@ -17,7 +17,7 @@ void ProcessConsoleInput() {
     input = DedicatedOs()->ConsoleInput();
 
     if (input) {
-      Q_snprintf(console_text, SOURCE_ARRAYSIZE(console_text), "%s\n", input);
+      sprintf_s(console_text, "%s\n", input);
       engine->AddConsoleText(console_text);
     }
   } while (input);

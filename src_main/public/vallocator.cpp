@@ -10,14 +10,7 @@
 
 VStdAllocator g_StdAllocator;
 
-void *VStdAllocator::Alloc(unsigned long size) {
-  if (size) {
-    void *ret = malloc(size);
-    return ret;
-  }
-
-  return 0;
-}
+void *VStdAllocator::Alloc(usize size) { return size ? malloc(size) : nullptr; }
 
 void VStdAllocator::Free(void *ptr) { free(ptr); }
 

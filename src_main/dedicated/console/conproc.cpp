@@ -262,13 +262,13 @@ void InitConProc() {
   heventChildSend = heventChild;
 
   // So we'll know when to go away.
-  heventDone = CreateEvent(NULL, FALSE, FALSE, NULL);
+  heventDone = CreateEvent(nullptr, FALSE, FALSE, nullptr);
   if (!heventDone) {
     DedicatedOs()->Printf("InitConProc:  Couldn't create heventDone\n");
     return;
   }
 
-  if (!_beginthreadex(NULL, 0, RequestProc, NULL, 0, &threadAddr)) {
+  if (!_beginthreadex(nullptr, 0, RequestProc, nullptr, 0, &threadAddr)) {
     CloseHandle(heventDone);
     DedicatedOs()->Printf("InitConProc:  Couldn't create third party thread\n");
     return;

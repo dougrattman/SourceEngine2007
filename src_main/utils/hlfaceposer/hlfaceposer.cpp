@@ -481,7 +481,7 @@ bool FacePoser_ShowFileNameDialog( bool openFile, char *relative, size_t bufsize
 	Assert( wildcard );
 
 	char workingdir[ 256 ];
-	Q_getwd( workingdir, sizeof( workingdir ) );
+	Q_getwd( workingdir );
 	strlwr( workingdir );
 	Q_FixSlashes( workingdir, '/' );
 

@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
 
   char workingdir[256];
   workingdir[0] = 0;
-  Q_getwd(workingdir, sizeof(workingdir));
+  Q_getwd(workingdir);
 
   CHLSceneManagerApp sceneManagerApp;
   CSteamApplication steamApplication(&sceneManagerApp);

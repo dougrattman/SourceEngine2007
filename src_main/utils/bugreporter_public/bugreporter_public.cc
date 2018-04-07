@@ -49,7 +49,7 @@ struct PublicBug : public Bug {
   }
 
   char exename[256];
-  char gamedir[256];
+  char gamedir[SOURCE_MAX_PATH];
   unsigned int ram;
   unsigned int cpu;
   char processor[256];

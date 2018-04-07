@@ -23,10 +23,10 @@
 
 using namespace vgui;
 
-static CMainPanel *s_InternetDlg = NULL;
-CSysModule *g_hAdminServerModule = NULL;
+static CMainPanel *s_InternetDlg = nullptr;
+CSysModule *g_hAdminServerModule = nullptr;
 extern IAdminServer *g_pAdminServer;
-char *gpszCvars = NULL;
+char *gpszCvars = nullptr;
 
 void Sys_Sleep_Old(int msec);
 
@@ -35,12 +35,12 @@ extern BOOL gbAppHasBeenTerminated;  // used to signal the server thread
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CMainPanel::CMainPanel() : Panel(NULL, "CMainPanel") {
+CMainPanel::CMainPanel() : Panel(nullptr, "CMainPanel") {
   SetPaintBackgroundEnabled(false);
   SetFgColor(Color(0, 0, 0, 0));
   m_bStarting = false;
   m_flPreviousSteamProgress = 0.0f;
-  m_pGameServer = NULL;
+  m_pGameServer = nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -57,13 +57,13 @@ CMainPanel::~CMainPanel() {
 //-----------------------------------------------------------------------------
 void CMainPanel::Initialize() {
   s_InternetDlg = this;
-  m_pGameServer = NULL;
+  m_pGameServer = nullptr;
 
   m_bStarted = false;
   m_bIsInConfig = true;
   m_bClosing = false;
-  m_pProgressBox = NULL;
-  m_hShutdown = NULL;
+  m_pProgressBox = nullptr;
+  m_hShutdown = nullptr;
 
   MoveToFront();
 
@@ -110,8 +110,7 @@ void CMainPanel::StartServer(const char *cvars) {
 
   // make sure we have all the steam content for this mod
   char reslist[SOURCE_MAX_PATH];
-  _snprintf_s(reslist, SOURCE_ARRAYSIZE(reslist), "reslists/%s/preload.lst",
-              m_pConfigPage->GetGameName());
+  sprintf_s(reslist, "reslists/%s/preload.lst", m_pConfigPage->GetGameName());
   m_hResourceWaitHandle = g_pFullFileSystem->WaitForResources(reslist);
   if (!m_hResourceWaitHandle) {
     Assert(0);
@@ -119,7 +118,7 @@ void CMainPanel::StartServer(const char *cvars) {
 
   m_pProgressBox->SetCancelButtonEnabled(false);
 
-  m_hShutdown = CreateEvent(NULL, TRUE, FALSE, NULL);
+  m_hShutdown = CreateEvent(nullptr, TRUE, FALSE, nullptr);
   ivgui()->AddTickSignal(GetVPanel());
 }
 
@@ -133,7 +132,7 @@ void CMainPanel::OnTick() {
     if (!m_pProgressBox.Get() || !m_pProgressBox->IsVisible()) {
       // cancel out
       g_pFullFileSystem->CancelWaitForResources(m_hResourceWaitHandle);
-      m_hResourceWaitHandle = NULL;
+      m_hResourceWaitHandle = 0;
       DoStop();
       return;
     }
@@ -160,7 +159,7 @@ void CMainPanel::OnTick() {
 
     // see if we're done
     if (complete) {
-      m_hResourceWaitHandle = NULL;
+      m_hResourceWaitHandle = 0;
       m_bStarting = true;
       m_bIsInConfig = false;
       // at this stage in the process the user can no longer cancel
@@ -182,7 +181,7 @@ void CMainPanel::OnTick() {
 
         if (m_pProgressBox) {
           m_pProgressBox->Close();
-          m_pProgressBox = NULL;
+          m_pProgressBox = nullptr;
         }
       } else  // must be stopping the server
       {
@@ -209,7 +208,7 @@ void CMainPanel::DoStop() {
 
   if (m_pProgressBox) {
     m_pProgressBox->Close();
-    m_pProgressBox = NULL;
+    m_pProgressBox = nullptr;
   }
 
   ivgui()->Stop();

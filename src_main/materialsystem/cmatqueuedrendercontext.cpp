@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -410,7 +410,8 @@ class CMatQueuedMesh : public IMesh {
           i++;
         }
         while (i < nIndices) {
-          int nToCopy = std::min(SOURCE_ARRAYSIZE(tempIndices), (usize)nIndices - i);
+          int nToCopy =
+              std::min(SOURCE_ARRAYSIZE(tempIndices), (usize)nIndices - i);
           for (int j = 0; j < nToCopy; j++) {
             tempIndices[j] = pIndexData[i + j] + desc.m_nFirstVertex;
           }
@@ -1021,24 +1022,16 @@ IMesh *CMatQueuedRenderContext::GetDynamicMeshEx(VertexFormat_t vertexFormat,
   return m_pQueuedMesh;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 int CMatQueuedRenderContext::GetMaxVerticesToRender(IMaterial *pMaterial) {
-  pMaterial =
-      ((IMaterialInternal *)pMaterial)->GetRealTimeVersion();  // always work
-                                                               // with the real
-                                                               // time version
-                                                               // of materials
-                                                               // internally.
+  // always work with the real time version of materials internally.
+  pMaterial = ((IMaterialInternal *)pMaterial)->GetRealTimeVersion();
 
   MeshDesc_t temp;
-
   // Be conservative, assume no compression (in here, we don't know if the
   // caller will used a compressed VB or not)
-  // TODO(d.rattman): allow the caller to specify which compression type should be used to
-  // compute size from the vertex format
-  //        (this can vary between multiple VBs/Meshes using the same material)
+  // TODO(d.rattman): allow the caller to specify which compression type should
+  // be used to compute size from the vertex format (this can vary between
+  // multiple VBs/Meshes using the same material)
   VertexFormat_t materialFormat =
       pMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED;
   g_pShaderAPI->ComputeVertexDescription(0, materialFormat, temp);

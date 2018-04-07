@@ -880,8 +880,8 @@ void CSave::WriteTime(const char *pname, const float *data, int count) {
     } else {
       tmp = data[i] - m_pGameInfo->GetBaseTime();
       if (fabsf(tmp) <
-          0.001)  // never allow a time to become zero due to rebasing
-        tmp = 0.001;
+          0.001f)  // never allow a time to become zero due to rebasing
+        tmp = 0.001f;
     }
 
     WriteData((const char *)&tmp, sizeof(float));

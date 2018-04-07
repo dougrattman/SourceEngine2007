@@ -126,12 +126,11 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
 #endif
 
   char fixed_library_path[1024];
-  Q_strncpy(fixed_library_path, library_path,
-            SOURCE_ARRAYSIZE(fixed_library_path));
+  strcpy_s(fixed_library_path, library_path);
 
-  if (!Q_stristr(fixed_library_path, module_extension))
-    Q_strncat(fixed_library_path, module_addition,
-              SOURCE_ARRAYSIZE(fixed_library_path));
+  if (!Q_stristr(fixed_library_path, module_extension)) {
+    strcat_s(fixed_library_path, module_addition);
+  }
 
   Q_FixSlashes(fixed_library_path);
 
@@ -172,7 +171,7 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
 
   if (!Q_IsAbsolutePath(module_name) &&
       // Full path wasn't passed in, using the current working dir.
-      _getcwd(current_directory, SOURCE_ARRAYSIZE(current_directory))) {
+      _getcwd(current_directory, std::size(current_directory))) {
     size_t current_directory_length = strlen(current_directory) - 1;
 
     if (current_directory[current_directory_length] == '/' ||
@@ -183,11 +182,10 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
     char absolute_module_name[1024];
     if (strstr(module_name, "bin/") == module_name) {
       // Don't make bin/bin path.
-      Q_snprintf(absolute_module_name, SOURCE_ARRAYSIZE(absolute_module_name),
-                 "%s/%s", current_directory, module_name);
+      sprintf_s(absolute_module_name, "%s/%s", current_directory, module_name);
     } else {
-      Q_snprintf(absolute_module_name, SOURCE_ARRAYSIZE(absolute_module_name),
-                 "%s/bin/%s", current_directory, module_name);
+      sprintf_s(absolute_module_name, "%s/bin/%s", current_directory,
+                module_name);
     }
 
     return Sys_LoadLibrary(absolute_module_name);

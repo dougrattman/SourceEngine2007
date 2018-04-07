@@ -862,8 +862,8 @@ void CBaseGameStats::SetHL2UnlockedChapterStatistic(void) {
   // to estimate how far they got in HL2
   char const *relative = "cfg/config.cfg";
   char fullpath[512];
-  char gamedir[256];
-  engine->GetGameDir(gamedir, 256);
+  char gamedir[SOURCE_MAX_PATH];
+  engine->GetGameDir(gamedir, SOURCE_MAX_PATH);
   Q_snprintf(fullpath, sizeof(fullpath), "%s/../hl2/%s", gamedir, relative);
 
   if (filesystem->FileExists(fullpath)) {

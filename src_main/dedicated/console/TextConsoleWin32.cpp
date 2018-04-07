@@ -49,7 +49,7 @@ char *CTextConsoleWin32::GetLine() {
     if (!GetNumberOfConsoleInputEvents(hinput, &numevents)) {
       Error("CTextConsoleWin32::GetLine: !GetNumberOfConsoleInputEvents");
 
-      return NULL;
+      return nullptr;
     }
 
     if (numevents <= 0) break;
@@ -57,10 +57,10 @@ char *CTextConsoleWin32::GetLine() {
     if (!ReadConsoleInput(hinput, recs, SOURCE_ARRAYSIZE(recs), &numread)) {
       Error("CTextConsoleWin32::GetLine: !ReadConsoleInput");
 
-      return NULL;
+      return nullptr;
     }
 
-    if (numread == 0) return NULL;
+    if (numread == 0) return nullptr;
 
     for (int i = 0; i < (int)numread; i++) {
       INPUT_RECORD *pRec = &recs[i];
@@ -110,16 +110,16 @@ char *CTextConsoleWin32::GetLine() {
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void CTextConsoleWin32::PrintRaw(const char *pszMsg, int nChars) {
   unsigned long dummy;
 
   if (nChars == 0) {
-    WriteFile(houtput, pszMsg, strlen(pszMsg), &dummy, NULL);
+    WriteFile(houtput, pszMsg, strlen(pszMsg), &dummy, nullptr);
   } else {
-    WriteFile(houtput, pszMsg, nChars, &dummy, NULL);
+    WriteFile(houtput, pszMsg, nChars, &dummy, nullptr);
   }
 }
 

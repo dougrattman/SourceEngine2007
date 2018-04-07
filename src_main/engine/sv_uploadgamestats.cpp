@@ -309,7 +309,7 @@ class CUploadGameStats : public IUploadGameStats {
     // This is a hack so that if we are running internally, but not from steam,
     // that we can generate gamestats data still for episodic
     if (!g_pFileSystem->IsSteam()) {
-      char gamedir[64];
+      char gamedir[SOURCE_MAX_PATH];
       Q_FileBase(com_gamedir, gamedir, sizeof(gamedir));
 
       bool bForcingGameStats = ForceGameStats();

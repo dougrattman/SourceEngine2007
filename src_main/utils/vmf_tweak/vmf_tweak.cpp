@@ -522,7 +522,7 @@ int main(int argc, char* argv[])
 	// If they didn't specify -game on the command line, use VPROJECT.
 	char workingdir[ 256 ];
 	workingdir[0] = 0;
-	Q_getwd( workingdir, sizeof(workingdir) );
+	Q_getwd( workingdir );
 	CmdLib_InitFileSystem( workingdir );
 	ScanChunks( pRoot, LogicAuto );
 	FileSystem_Term();

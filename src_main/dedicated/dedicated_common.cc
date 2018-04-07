@@ -41,7 +41,7 @@ const ch *GetExeDirectory() {
   if (exe_dir[exe_dir_size - 4] != CORRECT_PATH_SEPARATOR ||
       exe_dir[exe_dir_size - 3] != 'b' || exe_dir[exe_dir_size - 2] != 'i' ||
       exe_dir[exe_dir_size - 1] != 'n') {
-    Q_strncat(exe_dir, "\\bin", SOURCE_ARRAYSIZE(exe_dir), COPY_ALL_CHARACTERS);
+    strcat_s(exe_dir, "\\bin");
     Q_FixSlashes(exe_dir);
   }
 

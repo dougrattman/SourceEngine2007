@@ -1452,13 +1452,13 @@ HBITMAP staticCreateBitmapHandle(int wide, int tall, HDC hdc, int bpp,
 //-----------------------------------------------------------------------------
 bool CWin32Surface::LoadBMP(Texture *texture, const char *filename) {
   // try load the tga
-  char buf[1024];
-  _snprintf_s(buf, SOURCE_ARRAYSIZE(buf), "%s.bmp", filename);
+  char buf[SOURCE_MAX_PATH];
+  sprintf_s(buf, "%s.bmp", filename);
 
   // look in the skins directory first
   FileHandle_t file = g_pFullFileSystem->Open(buf, "rb", "SKIN");
   if (!file) {
-    file = g_pFullFileSystem->Open(buf, "rb", NULL);
+    file = g_pFullFileSystem->Open(buf, "rb", nullptr);
   }
 
   if (!file) return false;
@@ -1490,7 +1490,7 @@ bool CWin32Surface::LoadBMP(Texture *texture, const char *filename) {
       // throw a bitmap header on it and register it in windows
       texture->_wide = lpbmi->bmiHeader.biWidth;
       texture->_tall = lpbmi->bmiHeader.biHeight;
-      texture->_icon = NULL;
+      texture->_icon = nullptr;
       texture->_bMask = false;
       texture->_bitmap = staticCreateBitmapHandle(
           texture->_wide, texture->_tall, PLAT(_currentContextPanel)->hdc, 32,
@@ -1535,8 +1535,8 @@ bool CWin32Surface::LoadTGA(Texture *texture, const char *filename) {
   bool invertAlpha = false;
 
   // try load the tga
-  char buf[1024];
-  _snprintf_s(buf, SOURCE_ARRAYSIZE(buf), "%s.tga", filename);
+  char buf[SOURCE_MAX_PATH];
+  sprintf_s(buf, "%s.tga", filename);
 
   // look in the skins directory first
   FileHandle_t file = g_pFullFileSystem->Open(buf, "rb", "SKIN");

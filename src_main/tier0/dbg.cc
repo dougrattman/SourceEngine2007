@@ -153,8 +153,7 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
   /* Printf the file and line for warning + assert only... */
   i32 len = 0;
   if ((spewType == SPEW_ASSERT)) {
-    len = _snprintf_s(message, SOURCE_ARRAYSIZE(message) - 1,
-                      "%s (%d) : ", s_pFileName, s_Line);
+    len = sprintf_s(message, "%s (%d) : ", s_pFileName, s_Line);
   }
 
   if (len == -1) return SPEW_ABORT;

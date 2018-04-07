@@ -1,17 +1,11 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Basic header for using vgui.
 
 #ifndef SOURCE_VGUI_VGUI_H_
 #define SOURCE_VGUI_VGUI_H_
 
-#ifndef NULL
-#ifdef __cplusplus
-#define NULL 0
-#else
-#define NULL ((void *)0)
-#endif
-#endif
+#include "base/include/macros.h"
 
 using uchar = unsigned char;
 using ushort = unsigned short;

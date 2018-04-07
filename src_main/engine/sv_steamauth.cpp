@@ -129,7 +129,7 @@ void CSteam3::Activate() {
 
   m_eServerMode = GetCurrentServerMode();
 
-  char gamedir[MAX_OSPATH];
+  char gamedir[SOURCE_MAX_PATH];
   Q_FileBase(com_gamedir, gamedir, sizeof(gamedir));
 
   // Figure out the game port. If we're doing a SrcTV relay, then ignore the

@@ -32,8 +32,8 @@ inline wstr GetDirectoryFromFilePath(_In_ wstr file_path) {
 
 // Show no launcher at path |launcher_dll_path| error box with system-specific
 // error message from error code |error_code|.
-inline u32 NotifyAboutNoLauncherError(_In_ const wstr &launcher_dll_path,
-                                      _In_ u32 error_code) {
+inline source::windows::windows_errno_code NotifyAboutNoLauncherError(
+    _In_ const wstr &launcher_dll_path, _In_ u32 error_code) {
   wstr user_friendly_message{
       L"Please, contact support. Failed to load the launcher.dll from " +
       launcher_dll_path};
@@ -43,7 +43,7 @@ inline u32 NotifyAboutNoLauncherError(_In_ const wstr &launcher_dll_path,
 // Show no launcher at path |launcher_dll_path| entry point
 // |launcher_dll_entry_point_name| error box with system-specific error message
 // from error code |error_code|.
-inline u32 NotifyAboutNoLauncherEntryPointError(
+inline source::windows::windows_errno_code NotifyAboutNoLauncherEntryPointError(
     _In_ const wstr &launcher_dll_path,
     _In_z_ const wch *launcher_dll_entry_point_name, _In_ u32 error_code) {
   wstr user_friendly_message{L"Please, contact support. Failed to find the " +

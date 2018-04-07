@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 // These classes let you write your own allocators to be used with new and
 // delete. If you have an allocator: VAllocator *pAlloc, you can call new and
 // delete like this:
@@ -12,16 +12,18 @@
 #ifndef VALLOCATOR_H
 #define VALLOCATOR_H
 
-class VAllocator {
+#include "tier1/interface.h"
+
+the_interface IVAllocator {
  public:
-  virtual void *Alloc(unsigned long size) = 0;
+  virtual void *Alloc(usize size) = 0;
   virtual void Free(void *ptr) = 0;
 };
 
 // This allocator just uses malloc and free.
-class VStdAllocator : public VAllocator {
+class VStdAllocator : public IVAllocator {
  public:
-  virtual void *Alloc(unsigned long size);
+  virtual void *Alloc(usize size);
   virtual void Free(void *ptr);
 };
 extern VStdAllocator g_StdAllocator;

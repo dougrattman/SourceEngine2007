@@ -93,8 +93,7 @@ class Win32File {
         tmp_name_only[strlen(tmp_name_only) - 1] = '\0';
       }
 
-      V_snprintf(tmp_file_path, SOURCE_ARRAYSIZE(tmp_file_path), "_%s.tmp",
-                 tmp_name_only);
+      sprintf_s(tmp_file_path, "_%s.tmp", tmp_name_only);
     } else {
       // generate safe name at the desired prefix
       char unique_file_path[SOURCE_MAX_PATH];
@@ -109,8 +108,9 @@ class Win32File {
     }
 
     FileName = tmp_file_path;
-    HANDLE hFile = CreateFile(tmp_file_path, GENERIC_READ | GENERIC_WRITE, 0,
-                              NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hFile =
+        CreateFile(tmp_file_path, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
+                   CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 
     return hFile;
   }
@@ -352,7 +352,7 @@ class ZipFile {
         buf.SeekGet(CUtlBuffer::SEEK_HEAD, newfiles[i].filepos);
         buf.Get(e.m_pData, e.m_Length);
       } else {
-        e.m_pData = NULL;
+        e.m_pData = nullptr;
       }
 
       // Add to tree
@@ -363,11 +363,12 @@ class ZipFile {
     delete[] newfiles;
   }
   HANDLE ParseFromDisk(const char *pFilename) {
-    HANDLE hFile = CreateFile(pFilename, GENERIC_READ | GENERIC_WRITE, 0, NULL,
-                              OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hFile =
+        CreateFile(pFilename, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
+                   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (!hFile) {
       // not found
-      return NULL;
+      return nullptr;
     }
 
     unsigned int fileLen = Win32File::FileSeek(hFile, 0, FILE_END);
@@ -375,7 +376,7 @@ class ZipFile {
     if (fileLen < sizeof(ZIP_EndOfCentralDirRecord)) {
       // bad format
       CloseHandle(hFile);
-      return NULL;
+      return nullptr;
     }
 
     // need to get the central dir
@@ -410,7 +411,7 @@ class ZipFile {
     if (numZipFiles <= 0) {
       // No files
       CloseHandle(hFile);
-      return NULL;
+      return nullptr;
     }
 
     Win32File::FileSeek(hFile, rec.startOfCentralDirOffset, FILE_BEGIN);
@@ -430,7 +431,7 @@ class ZipFile {
           zipFileHeader.compressionMethod != 0) {
         // bad contents
         CloseHandle(hFile);
-        return NULL;
+        return nullptr;
       }
 
       char fileName[1024];
@@ -534,7 +535,7 @@ class ZipFile {
     CZipEntry() {
       m_Name = "";
       m_Length = 0;
-      m_pData = NULL;
+      m_pData = nullptr;
       m_ZipOffset = 0;
       m_ZipCRC = 0;
       m_DiskCacheOffset = 0;
@@ -550,7 +551,7 @@ class ZipFile {
         m_pData = malloc(src.m_Length);
         memcpy(m_pData, src.m_pData, src.m_Length);
       } else {
-        m_pData = NULL;
+        m_pData = nullptr;
       }
 
       m_ZipOffset = src.m_ZipOffset;
@@ -565,7 +566,7 @@ class ZipFile {
     }
     static bool ZipFileLessFunc_CaselessSort(CZipEntry const &src1,
                                              CZipEntry const &src2) {
-      return (V_stricmp(src1.m_Name.String(), src2.m_Name.String()) < 0);
+      return _stricmp(src1.m_Name.String(), src2.m_Name.String()) < 0;
     }
 
     // Name of entry
@@ -602,7 +603,7 @@ ZipFile::ZipFile(const char *pDiskCacheWritePath, bool bSortByName)
   m_bForceAlignment = false;
   m_bCompatibleFormat = true;
 
-  m_bUseDiskCacheForWrites = (pDiskCacheWritePath != NULL);
+  m_bUseDiskCacheForWrites = (pDiskCacheWritePath != nullptr);
   m_hDiskCacheWriteFile = INVALID_HANDLE_VALUE;
 
   if (bSortByName) {
@@ -642,7 +643,7 @@ static void ReadTextData(const char *pSrc, int nSrcSize, CUtlBuffer &buf) {
     buf.PutChar(*pSrcScan);
   }
 
-  // Null terminate
+  // nullptr terminate
   buf.PutChar('\0');
 }
 
@@ -677,7 +678,7 @@ void ZipFile::AddBufferToZip(const char *relativename, void *data, int length,
                              bool bTextMode) {
   // Lower case only
   char name[512];
-  Q_strcpy(name, relativename);
+  strcpy_s(name, relativename);
   Q_strlower(name);
 
   int dstLength = length;
@@ -710,7 +711,7 @@ void ZipFile::AddBufferToZip(const char *relativename, void *data, int length,
       Win32File::FileWrite(m_hDiskCacheWriteFile, update->m_pData,
                            update->m_Length);
       free(update->m_pData);
-      update->m_pData = NULL;
+      update->m_pData = nullptr;
     }
   } else {
     // Create a new entry
@@ -728,10 +729,10 @@ void ZipFile::AddBufferToZip(const char *relativename, void *data, int length,
         e.m_DiskCacheOffset = Win32File::FileTell(m_hDiskCacheWriteFile);
         Win32File::FileWrite(m_hDiskCacheWriteFile, e.m_pData, e.m_Length);
         free(e.m_pData);
-        e.m_pData = NULL;
+        e.m_pData = nullptr;
       }
     } else {
-      e.m_pData = NULL;
+      e.m_pData = nullptr;
     }
 
     m_Files.Insert(e);
@@ -743,7 +744,7 @@ bool ZipFile::ReadFileFromZip(const char *pRelativeName, bool bTextMode,
                               CUtlBuffer &buf) {
   // Lower case only
   char pName[512];
-  Q_strncpy(pName, pRelativeName, 512);
+  strcpy_s(pName, pRelativeName);
   Q_strlower(pName);
 
   // See if entry is in list already
@@ -772,7 +773,7 @@ bool ZipFile::ReadFileFromZip(HANDLE hZipFile, const char *pRelativeName,
                               bool bTextMode, CUtlBuffer &buf) {
   // Lower case only
   char pName[512];
-  Q_strncpy(pName, pRelativeName, 512);
+  strcpy_s(pName, pRelativeName);
   Q_strlower(pName);
 
   // See if entry is in list already
@@ -810,7 +811,7 @@ bool ZipFile::ReadFileFromZip(HANDLE hZipFile, const char *pRelativeName,
 bool ZipFile::FileExistsInZip(const char *pRelativeName) {
   // Lower case only
   char pName[512];
-  Q_strncpy(pName, pRelativeName, 512);
+  strcpy_s(pName, pRelativeName);
   Q_strlower(pName);
 
   // See if entry is in list already
@@ -880,8 +881,7 @@ u16 ZipFile::MakeXZipCommentString(char *comment, u16 max_length) {
   char tmp[XZIP_COMMENT_LENGTH];
   memset(tmp, 0, sizeof(tmp));
 
-  V_snprintf(tmp, SOURCE_ARRAYSIZE(tmp), "XZP%c %d",
-             m_bCompatibleFormat ? '1' : '2', m_AlignmentSize);
+  sprintf_s(tmp, "XZP%c %d", m_bCompatibleFormat ? '1' : '2', m_AlignmentSize);
   if (comment && max_length <= XZIP_COMMENT_LENGTH) {
     memcpy(comment, tmp, sizeof(tmp));
   }
@@ -892,7 +892,7 @@ u16 ZipFile::MakeXZipCommentString(char *comment, u16 max_length) {
 
 // Purpose: An XZIP has its configuration in the ascii comment
 void ZipFile::ParseXZipCommentString(const char *pCommentString) {
-  if (!V_strnicmp(pCommentString, "XZP", 3)) {
+  if (!_strnicmp(pCommentString, "XZP", 3)) {
     m_bCompatibleFormat = true;
     if (pCommentString[3] == '2') {
       m_bCompatibleFormat = false;
@@ -978,7 +978,7 @@ int ZipFile::GetNextFilename(int id, char *pBuffer, int bufferSize,
 
   CZipEntry *e = &m_Files[id];
 
-  Q_strncpy(pBuffer, e->m_Name.String(), bufferSize);
+  strcpy_s(pBuffer, bufferSize, e->m_Name.String());
   fileSize = e->m_Length;
 
   return id;
@@ -1099,7 +1099,7 @@ void ZipFile::SaveDirectory(IWriteStream &stream) {
     CZipEntry *e = &m_Files[i];
     Assert(e);
 
-    if (e->m_Length > 0 && e->m_pData != NULL) {
+    if (e->m_Length > 0 && e->m_pData != nullptr) {
       ZIP_FileHeader hdr = {0};
       hdr.signature = PKID(1, 2);
       hdr.versionMadeBy =

@@ -39,13 +39,13 @@ void *FileSystemFactory(const char *interface_name, int *return_code) {
   }
 #endif
 
-  if (!Q_stricmp(interface_name, FILESYSTEM_INTERFACE_VERSION)) {
+  if (!_stricmp(interface_name, FILESYSTEM_INTERFACE_VERSION)) {
     if (return_code) *return_code = IFACE_OK;
 
     return file_system;
   }
 
-  if (!Q_stricmp(interface_name, BASEFILESYSTEM_INTERFACE_VERSION)) {
+  if (!_stricmp(interface_name, BASEFILESYSTEM_INTERFACE_VERSION)) {
     if (return_code) *return_code = IFACE_OK;
 
     return base_file_system;

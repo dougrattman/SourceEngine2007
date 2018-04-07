@@ -2922,7 +2922,7 @@ bool CLocalizationCheckApp::PreInit() {
 
   char workingdir[256];
   workingdir[0] = 0;
-  Q_getwd(workingdir, sizeof(workingdir));
+  Q_getwd(workingdir);
 
   // If they didn't specify -game on the command line, use VPROJECT.
   if (!SetupSearchPaths(workingdir, false, true)) {
@@ -3119,7 +3119,7 @@ int CLocalizationCheckApp::Main() {
 
     char workingdir[256];
     workingdir[0] = 0;
-    Q_getwd(workingdir, sizeof(workingdir));
+    Q_getwd(workingdir);
 
     BuildFileList(wavefiles, workingdir, ".wav");
     vprint(0, "forcing ducking on %i .wav files in %s\n\n", wavefiles.Count(),

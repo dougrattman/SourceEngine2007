@@ -205,7 +205,7 @@ class CDefaultAppSystemGroup : public CBaseClass {
   virtual void Destroy() {}
 };
 
-class CFSSteamSetupInfo;
+struct CFSSteamSetupInfo;
 
 // Special helper for game info directory suggestion.
 // SuggestGameInfoDirFn_t.

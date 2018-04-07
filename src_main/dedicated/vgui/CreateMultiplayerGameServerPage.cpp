@@ -41,7 +41,7 @@ const char *GetLiblistFallbackDir(const char *pszGameDir) {
 
   szFallback[0] = 0;
 
-  _snprintf_s(szTemp, sizeof(szTemp) - 1, "%s\\liblist.gam", pszGameDir);
+  sprintf_s(szTemp, "%s\\liblist.gam", pszGameDir);
   g_pFullFileSystem->GetLocalCopy(szTemp);
 
   FileHandle_t hFile = g_pFullFileSystem->Open(szTemp, "rt");
@@ -99,8 +99,8 @@ CCreateMultiplayerGameServerPage::CCreateMultiplayerGameServerPage(
 
   // as we are a popup frame we need to store this seperately
   m_MainPanel = parent;
-  m_pSavedData = NULL;
-  m_pGameInfo = NULL;
+  m_pSavedData = nullptr;
+  m_pGameInfo = nullptr;
   m_szMod[0] = '\0';
 
   SetMinimumSize(310, 350);
@@ -115,8 +115,8 @@ CCreateMultiplayerGameServerPage::CCreateMultiplayerGameServerPage(
   m_pMapList->SetEditable(false);
 
   m_pNetworkCombo = new ComboBox(this, "NetworkCombo", 10, false);
-  int defaultItem = m_pNetworkCombo->AddItem("#Internet", NULL);
-  int lanItem = m_pNetworkCombo->AddItem("#LAN", NULL);
+  int defaultItem = m_pNetworkCombo->AddItem("#Internet", nullptr);
+  int lanItem = m_pNetworkCombo->AddItem("#LAN", nullptr);
   if (CommandLine()->CheckParm("-steam") && IsSteamInOfflineMode()) {
     defaultItem = lanItem;
   }
@@ -125,7 +125,7 @@ CCreateMultiplayerGameServerPage::CCreateMultiplayerGameServerPage(
   m_pNumPlayers = new ComboBox(this, "NumPlayers", 10, false);
   char num[3];
   for (int i = 1; i <= MAX_PLAYERS; i++) {
-    _snprintf_s(num, SOURCE_ARRAYSIZE(num), "%i", i);
+    sprintf_s(num, "%i", i);
     m_pNumPlayers->AddItem(num, nullptr);
   }
   m_pNumPlayers->ActivateItemByRow(23);  // 24 players by default
@@ -146,7 +146,7 @@ CCreateMultiplayerGameServerPage::CCreateMultiplayerGameServerPage(
 
   // load some defaults into the controls
   SetControlString("ServerNameEdit", "Half-Life dedicated server");
-  Q_strncpy(m_szGameName, "Half-Life", sizeof(m_szGameName));
+  strcpy_s(m_szGameName, "Half-Life");
 
   LoadMODList();
 
@@ -154,7 +154,7 @@ CCreateMultiplayerGameServerPage::CCreateMultiplayerGameServerPage(
 
   // get default port from commandline if possible
   m_iPort = 27015;
-  const char *portVal = NULL;
+  const char *portVal = nullptr;
   if (CommandLine()->CheckParm("-port", &portVal) && portVal &&
       atoi(portVal) > 0) {
     m_iPort = atoi(portVal);
@@ -188,11 +188,11 @@ CCreateMultiplayerGameServerPage::~CCreateMultiplayerGameServerPage() {
   SaveConfig();
   if (m_pSavedData) {
     m_pSavedData->deleteThis();
-    m_pSavedData = NULL;
+    m_pSavedData = nullptr;
   }
   if (m_pGameInfo) {
     m_pGameInfo->deleteThis();
-    m_pGameInfo = NULL;
+    m_pGameInfo = nullptr;
   }
 }
 
@@ -311,7 +311,7 @@ bool CCreateMultiplayerGameServerPage::BadRconChars(const char *pass) {
 
 const char *ToString(int val) {
   static char text[256];
-  Q_snprintf(text, sizeof(text), "%i", val);
+  sprintf_s(text, "%i", val);
   return text;
 }
 
@@ -331,7 +331,7 @@ void CCreateMultiplayerGameServerPage::OnCommand(const char *cmd) {
 
   if (!_stricmp(cmd, "cancel")) {
     vgui::ivgui()->PostMessage(m_MainPanel->GetVPanel(), new KeyValues("Quit"),
-                               NULL);
+                               0);
     Close();
   } else if (!_stricmp(cmd, "start")) {
     // save our current settings
@@ -359,9 +359,9 @@ void CCreateMultiplayerGameServerPage::OnCommand(const char *cmd) {
                                        "#Start_Server_RCON_Error");
       dlg->DoModal();
     } else {
-      _snprintf_s(cvars, SOURCE_ARRAYSIZE(cvars),
-                  "rcon_password \"%s\"\nsetmaster enable\nhostname \"%s\"\n",
-                  m_szPassword, m_szHostName);
+      sprintf_s(cvars,
+                "rcon_password \"%s\"\nsetmaster enable\nhostname \"%s\"\n",
+                m_szPassword, m_szHostName);
 
       m_pGameCombo->SetEnabled(false);
       m_pNumPlayers->SetEnabled(false);
@@ -399,8 +399,7 @@ void CCreateMultiplayerGameServerPage::OnCommand(const char *cmd) {
             MountDependencies(iAppId, depList);
 
             char gameinfoFilename[SOURCE_MAX_PATH];
-            Q_snprintf(gameinfoFilename, sizeof(gameinfoFilename),
-                       "%s\\gameinfo.txt", m_iServer.gameDir);
+            sprintf_s(gameinfoFilename, "%s\\gameinfo.txt", m_iServer.gameDir);
             g_pFullFileSystem->GetLocalCopy(gameinfoFilename);
           }
         }
@@ -409,7 +408,7 @@ void CCreateMultiplayerGameServerPage::OnCommand(const char *cmd) {
       // Launch the old dedicated server if necessary.
       if (LaunchOldDedicatedServer(gameData)) {
         vgui::ivgui()->PostMessage(m_MainPanel->GetVPanel(),
-                                   new KeyValues("Quit"), NULL);
+                                   new KeyValues("Quit"), NO_VPANEL);
         Close();
       }
 
@@ -435,10 +434,11 @@ void CCreateMultiplayerGameServerPage::LoadMODList() {
 
     KeyValues *gamesFile = new KeyValues(pSteamGamesFilename);
 
-    if (gamesFile->LoadFromFile(g_pFullFileSystem, pSteamGamesFilename, NULL)) {
-      for (KeyValues *kv = gamesFile->GetFirstSubKey(); kv != NULL;
+    if (gamesFile->LoadFromFile(g_pFullFileSystem, pSteamGamesFilename,
+                                nullptr)) {
+      for (KeyValues *kv = gamesFile->GetFirstSubKey(); kv != nullptr;
            kv = kv->GetNextKey()) {
-        const char *pGameDir = kv->GetString("gamedir", NULL);
+        const char *pGameDir = kv->GetString("gamedir", nullptr);
         if (!pGameDir)
           Error("Mod %s in %s missing 'gamedir'.", kv->GetName(),
                 pSteamGamesFilename);
@@ -447,7 +447,7 @@ void CCreateMultiplayerGameServerPage::LoadMODList() {
       }
     }
     gamesFile->deleteThis();
-    gamesFile = NULL;
+    gamesFile = nullptr;
   }
 
   // For backward compatibility, check inside the dedicated server's own
@@ -467,27 +467,26 @@ void CCreateMultiplayerGameServerPage::LoadMODList() {
 void CCreateMultiplayerGameServerPage::LoadModListInDirectory(
     const char *pDirectoryName) {
   char searchString[SOURCE_MAX_PATH * 2];
-  Q_strncpy(searchString, pDirectoryName, sizeof(searchString));
+  strcpy_s(searchString, pDirectoryName);
   Q_AppendSlash(searchString, sizeof(searchString));
-  Q_strncat(searchString, "*.*", sizeof(searchString), COPY_ALL_CHARACTERS);
+  strcat_s(searchString, "*.*");
 
-  FileFindHandle_t findHandle = NULL;
+  FileFindHandle_t findHandle = 0;
   const char *filename =
       g_pFullFileSystem->FindFirst(searchString, &findHandle);
   while (filename) {
     // add to the mod list
     if (filename[0] != '.' && g_pFullFileSystem->FindIsDirectory(findHandle)) {
       char fullFilename[SOURCE_MAX_PATH];
-      if (Q_stricmp(pDirectoryName, ".") == 0) {
+      if (_stricmp(pDirectoryName, ".") == 0) {
         // If we don't do this, then the games in hlds_steamgames.vdf will get
         // listed twice since their gamedir is listed as "cstrike" and "hl2mp",
         // not ".\cstrike" or ".\hl2mp".
-        Q_strncpy(fullFilename, filename, sizeof(fullFilename));
+        strcpy_s(fullFilename, filename);
       } else {
-        Q_strncpy(fullFilename, pDirectoryName, sizeof(fullFilename));
+        strcpy_s(fullFilename, pDirectoryName);
         Q_AppendSlash(fullFilename, sizeof(fullFilename));
-        Q_strncat(fullFilename, filename, sizeof(fullFilename),
-                  COPY_ALL_CHARACTERS);
+        strcat_s(fullFilename, filename);
       }
 
       LoadPossibleMod(fullFilename);
@@ -501,8 +500,7 @@ void CCreateMultiplayerGameServerPage::LoadModListInDirectory(
 void CCreateMultiplayerGameServerPage::LoadPossibleMod(
     const char *pGameDirName) {
   char gameInfoFilename[1024];
-  Q_snprintf(gameInfoFilename, sizeof(gameInfoFilename) - 1, "%s\\gameinfo.txt",
-             pGameDirName);
+  sprintf_s(gameInfoFilename, "%s\\gameinfo.txt", pGameDirName);
   if (!g_pFullFileSystem->FileExists(gameInfoFilename)) return;
 
   // don't want to add single player games to the list
@@ -514,7 +512,7 @@ void CCreateMultiplayerGameServerPage::LoadPossibleMod(
   AddMod(pGameDirName, gameInfoFilename, pGameInfo);
 
   pGameInfo->deleteThis();
-  pGameInfo = NULL;
+  pGameInfo = nullptr;
 }
 
 void CCreateMultiplayerGameServerPage::AddMod(const char *pGameDirName,
@@ -526,14 +524,14 @@ void CCreateMultiplayerGameServerPage::AddMod(const char *pGameDirName,
   for (int i = 0; i < m_pGameCombo->GetItemCount(); i++) {
     if (!m_pGameCombo->IsItemIDValid(i)) continue;
 
-    if (Q_stricmp(m_pGameCombo->GetItemUserData(i)->GetString("gamedir"),
-                  pGameDirName) == 0)
+    if (_stricmp(m_pGameCombo->GetItemUserData(i)->GetString("gamedir"),
+                 pGameDirName) == 0)
       return;
   }
 
   // If this mod supports multiplayer, then we'll add it.
   const char *gameType = pGameInfo->GetString("type", "singleplayer_only");
-  if (Q_stricmp(gameType, "singleplayer_only") != 0) {
+  if (_stricmp(gameType, "singleplayer_only") != 0) {
     // Validate the gameinfo.txt format..
     KeyValues *pSub = pGameInfo->FindKey("FileSystem");
     if (!pSub) Error("%s missing FileSystem key.", pGameInfoFilename);
@@ -546,7 +544,7 @@ void CCreateMultiplayerGameServerPage::AddMod(const char *pGameDirName,
     // about it.
     if (IsEp1EraAppID(iSteamAppId)) return;
 
-    const char *gameName = pGameInfo->GetString("game", NULL);
+    const char *gameName = pGameInfo->GetString("game", nullptr);
     if (!gameName) Error("%s missing 'game' key.", pGameInfoFilename);
 
     // add to drop-down combo and mod list
@@ -556,7 +554,7 @@ void CCreateMultiplayerGameServerPage::AddMod(const char *pGameDirName,
     m_pGameCombo->AddItem(gameName, kv);
 
     kv->deleteThis();
-    kv = NULL;
+    kv = nullptr;
   }
 }
 
@@ -567,7 +565,7 @@ void CCreateMultiplayerGameServerPage::AddMod(const char *pGameDirName,
 int CCreateMultiplayerGameServerPage::LoadMaps(const char *pszMod) {
   // iterate the filesystem getting the list of all the files
   // UNDONE: steam wants this done in a special way, need to support that
-  FileFindHandle_t findHandle = NULL;
+  FileFindHandle_t findHandle = 0;
   char szSearch[256];
   sprintf_s(szSearch, "%s/maps/*.bsp", pszMod);
 
@@ -575,7 +573,7 @@ int CCreateMultiplayerGameServerPage::LoadMaps(const char *pszMod) {
 
   const char *pszFilename = g_pFullFileSystem->FindFirst(szSearch, &findHandle);
 
-  KeyValues *hiddenMaps = NULL;
+  KeyValues *hiddenMaps = nullptr;
   if (m_pGameInfo) {
     hiddenMaps = m_pGameInfo->FindKey("hidden_maps");
   }
@@ -612,7 +610,7 @@ int CCreateMultiplayerGameServerPage::LoadMaps(const char *pszMod) {
     iMapsFound++;
 
     // add to the map list
-    m_pMapList->AddItem(mapname, NULL);
+    m_pMapList->AddItem(mapname, nullptr);
 
     // get the next file
   nextFile:
@@ -644,9 +642,10 @@ void CCreateMultiplayerGameServerPage::LoadMapList() {
 
   if (CommandLine()->CheckParm("-steam")) {
     KeyValues *userData = m_pGameCombo->GetActiveItemUserData();
-    if (userData && userData->GetString("DedicatedServerStartMap", NULL)) {
+    if (userData && userData->GetString("DedicatedServerStartMap", nullptr)) {
       // set only
-      m_pMapList->AddItem(userData->GetString("DedicatedServerStartMap"), NULL);
+      m_pMapList->AddItem(userData->GetString("DedicatedServerStartMap"),
+                          nullptr);
       m_pMapList->ActivateItemByRow(0);
       m_pMapList->SetEnabled(false);
       return;
@@ -708,8 +707,7 @@ void CCreateMultiplayerGameServerPage::OnTextChanged(Panel *panel) {
     bool updateHostname = false;
     char hostname[256];
     GetControlString("ServerNameEdit", m_szHostName, sizeof(m_szHostName));
-    _snprintf_s(hostname, sizeof(hostname) - 1, "%s dedicated server",
-                m_szGameName);
+    sprintf_s(hostname, "%s dedicated server", m_szGameName);
     if (!_stricmp(m_szHostName, hostname)) {
       updateHostname = true;
     }
@@ -721,24 +719,23 @@ void CCreateMultiplayerGameServerPage::OnTextChanged(Panel *panel) {
     KeyValues *gameData = m_pGameCombo->GetActiveItemUserData();
     if (!gameData) Error("Missing gameData for active item.");
 
-    const char *pGameDir = gameData->GetString("gamedir", NULL);
+    const char *pGameDir = gameData->GetString("gamedir", nullptr);
     if (!pGameDir) Error("Game %s missing 'gamedir' key.", m_szGameName);
 
-    Q_strncpy(m_szMod, pGameDir, sizeof(m_szMod));
+    strcpy_s(m_szMod, pGameDir);
 
     // re-load the GameInfo KeyValues
     if (m_pGameInfo) {
       m_pGameInfo->deleteThis();
     }
     char liblist[1024];
-    Q_snprintf(liblist, sizeof(liblist) - 1, "%s\\gameinfo.txt", m_szMod);
+    sprintf_s(liblist, "%s\\gameinfo.txt", m_szMod);
     m_pGameInfo = new KeyValues("GameInfo");
     m_pGameInfo->LoadFromFile(g_pFullFileSystem, liblist);
 
     // redo the hostname with the new game name
     if (updateHostname) {
-      _snprintf_s(hostname, sizeof(hostname) - 1, "%s dedicated server",
-                  m_szGameName);
+      sprintf_s(hostname, "%s dedicated server", m_szGameName);
       SetControlString("ServerNameEdit", hostname);
     }
 

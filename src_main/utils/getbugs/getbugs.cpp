@@ -850,7 +850,7 @@ int main(int argc, char *argv[]) {
   vprint(0, "    Getting bugs...\n");
 
   workingdir[0] = 0;
-  Q_getwd(workingdir, sizeof(workingdir));
+  Q_getwd(workingdir);
 
   // If they didn't specify -game on the command line, use VPROJECT.
   CmdLib_InitFileSystem(workingdir);

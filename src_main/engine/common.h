@@ -1,10 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef COMMON_H
 #define COMMON_H
 
 #include "filesystem.h"
-#include "mathlib/vector.h"  // @Note (toml 05-01-02): solely for definition of QAngle
+#include "mathlib/vector.h"  // NOTE(toml 05-01-02): solely for definition of QAngle
 #include "qlimits.h"
 #include "tier0/include/basetypes.h"
 #include "worldsize.h"
@@ -12,90 +12,80 @@
 class Vector;
 struct cache_user_t;
 
-//============================================================================
-
 #define COM_COPY_CHUNK_SIZE 1024  // For copying operations
-
-#ifndef NULL
-#define NULL ((void *)0)
-#endif
 
 #include "tier1/strtools.h"
 
-//============================================================================
-char *COM_StringCopy(const char *text);  // allocates memory and copys text
-void COM_StringFree(
-    const char *text);  // frees memory allocated by COM_StringCopy
-void COM_AddNoise(unsigned char *data, int length,
-                  int number);  // Changes n random bits in a data block
+// Allocates memory and copys text.
+ch *COM_StringCopy(const ch *text);
+// Frees memory allocated by COM_StringCopy.
+void COM_StringFree(const ch *text);
 
-//============================================================================
-extern void COM_WriteFile(const char *filename, void *data, int len);
-extern int COM_OpenFile(const char *filename, FileHandle_t *file);
+extern void COM_WriteFile(const ch *filename, void *data, int len);
+extern int COM_OpenFile(const ch *filename, FileHandle_t *file);
 extern void COM_CloseFile(FileHandle_t hFile);
-extern void COM_CreatePath(const char *path);
-extern int COM_FileSize(const char *filename);
-extern int COM_ExpandFilename(char *filename, int maxlength);
-extern uint8_t *COM_LoadFile(const char *path, int usehunk, int *pLength);
-extern bool COM_IsValidPath(const char *pszFilename);
+extern void COM_CreatePath(const ch *path);
+extern int COM_FileSize(const ch *filename);
+extern int COM_ExpandFilename(ch *filename, int maxlength);
+extern uint8_t *COM_LoadFile(const ch *path, int usehunk, int *pLength);
+extern bool COM_IsValidPath(const ch *pszFilename);
 
-const char *COM_Parse(const char *data);
-char *COM_ParseLine(char *data);
-int COM_TokenWaiting(const char *buffer);
+const ch *COM_Parse(const ch *data);
+ch *COM_ParseLine(ch *data);
+int COM_TokenWaiting(const ch *buffer);
 
 extern bool com_ignorecolons;
-extern char com_token[1024];
+extern ch com_token[1024];
 
 void COM_Init();
-void COM_Shutdown(void);
-bool COM_CheckGameDirectory(const char *gamedir);
-void COM_ParseDirectoryFromCmd(const char *pCmdName, char *pDirName, int maxlen,
-                               const char *pDefault);
+void COM_Shutdown();
+bool COM_CheckGameDirectory(const ch *gamedir);
+void COM_ParseDirectoryFromCmd(const ch *pCmdName, ch *pDirName, int maxlen,
+                               const ch *pDefault);
 
 #define Bits2Bytes(b) ((b + 7) >> 3)
 
 // does a varargs printf into a temp buffer
-char *va(const char *format, ...);
+ch *va(const ch *format, ...);
 // prints a vector into a temp buffer.
-char *vstr(Vector &v);
+ch *vstr(Vector &v);
 
-//============================================================================
-extern char com_basedir[MAX_OSPATH];
-extern char com_gamedir[MAX_OSPATH];
+extern ch com_basedir[MAX_OSPATH];
+extern ch com_gamedir[MAX_OSPATH];
 
-uint8_t *COM_LoadStackFile(const char *path, void *buffer, int bufsize,
+uint8_t *COM_LoadStackFile(const ch *path, void *buffer, int bufsize,
                            int &filesize);
-void COM_LoadCacheFile(const char *path, cache_user_t *cu);
-uint8_t *COM_LoadFile(const char *path, int usehunk, int *pLength);
+void COM_LoadCacheFile(const ch *path, cache_user_t *cu);
+uint8_t *COM_LoadFile(const ch *path, int usehunk, int *pLength);
 
 void COM_CopyFileChunk(FileHandle_t dst, FileHandle_t src, int nSize);
-bool COM_CopyFile(const char *netpath, const char *cachepath);
+bool COM_CopyFile(const ch *netpath, const ch *cachepath);
 
-void COM_SetupLogDir(const char *mapname);
-void COM_GetGameDir(char *szGameDir, int maxlen);
-int COM_CompareFileTime(const char *filename1, const char *filename2,
+void COM_SetupLogDir(const ch *mapname);
+void COM_GetGameDir(ch *szGameDir, usize maxlen);
+int COM_CompareFileTime(const ch *filename1, const ch *filename2,
                         int *iCompare);
-int COM_GetFileTime(const char *pFileName);
-const char *COM_ParseFile(const char *data, char *token, int maxtoken);
+int COM_GetFileTime(const ch *pFileName);
+const ch *COM_ParseFile(const ch *data, ch *token, usize maxtoken);
 
-extern char gszDisconnectReason[256];
-extern char gszExtendedDisconnectReason[256];
+extern ch gszDisconnectReason[256];
+extern ch gszExtendedDisconnectReason[256];
 extern bool gfExtendedError;
-extern uint8_t g_eSteamLoginFailure;
-void COM_ExplainDisconnection(bool bPrint, const char *fmt, ...);
+extern u8 g_eSteamLoginFailure;
+void COM_ExplainDisconnection(bool bPrint, const ch *fmt, ...);
 
-const char *COM_DXLevelToString(int dxlevel);  // convert DX level to string
+// convert DX level to string.
+const ch *COM_DXLevelToString(int dxlevel);
 
-void COM_Log(char *pszFile, char *fmt, ...);  // Log a debug message to
-                                              // specified file ( if pszFile ==
-                                              // NULL uses c:\\hllog.txt )
-void COM_LogString(char const *pchFile, char const *pchString);
+// Log a debug message to specified file (pszFile == NULL => c:\\hllog.txt).
+void COM_Log(ch *pszFile, ch *fmt, ...);
+void COM_LogString(ch const *pchFile, ch const *pchString);
 
-const char *COM_FormatSeconds(
-    int seconds);  // returns seconds as hh:mm:ss string
+// Returns seconds as hh:mm:ss string.
+const ch *COM_FormatSeconds(int seconds);
 
-const char *COM_GetModDirectory();  // return the mod dir (rather than the
-                                    // complete -game param, which can be a
-                                    // path)
+// Return the mod dir (rather than the complete -game param, which can be a
+// path).
+const ch *COM_GetModDirectory();
 
 #endif  // COMMON_H

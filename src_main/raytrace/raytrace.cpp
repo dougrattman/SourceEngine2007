@@ -230,9 +230,10 @@ struct NodeToVisit {
   CacheOptimizedKDNode const *node;
 };
 
-static fltx4 FourEpsilons = {1.0e-10, 1.0e-10, 1.0e-10, 1.0e-10};
-static fltx4 FourZeros = {1.0e-10, 1.0e-10, 1.0e-10, 1.0e-10};
-static fltx4 FourNegativeEpsilons = {-1.0e-10, -1.0e-10, -1.0e-10, -1.0e-10};
+static fltx4 FourEpsilons = {1.0e-10f, 1.0e-10f, 1.0e-10f, 1.0e-10f};
+static fltx4 FourZeros = {1.0e-10f, 1.0e-10f, 1.0e-10f, 1.0e-10f};
+static fltx4 FourNegativeEpsilons = {-1.0e-10f, -1.0e-10f, -1.0e-10f,
+                                     -1.0e-10f};
 
 static float BoxSurfaceArea(Vector const &boxmin, Vector const &boxmax) {
   Vector boxdim = boxmax - boxmin;
@@ -306,7 +307,7 @@ void RayTracingEnvironment::Trace4Rays(
 
   memset(rslt_out->HitIds, 0xff, sizeof(rslt_out->HitIds));
 
-  rslt_out->HitDistance = ReplicateX4(1.0e23);
+  rslt_out->HitDistance = ReplicateX4(1.0e23f);
 
   rslt_out->surface_normal.DuplicateVector(Vector(0., 0., 0.));
   FourVectors OneOverRayDir = rays.direction;
@@ -547,8 +548,8 @@ void RayTracingEnvironment::CalculateTriangleListBounds(int32_t const *tris,
                                                         int ntris,
                                                         Vector &minout,
                                                         Vector &maxout) {
-  minout = Vector(1.0e23, 1.0e23, 1.0e23);
-  maxout = Vector(-1.0e23, -1.0e23, -1.0e23);
+  minout = Vector(1.0e23f, 1.0e23f, 1.0e23f);
+  maxout = Vector(-1.0e23f, -1.0e23f, -1.0e23f);
   for (int i = 0; i < ntris; i++) {
     CacheOptimizedTriangle const &tri = OptimizedTriangleList[tris[i]];
     for (int v = 0; v < 3; v++)
@@ -603,7 +604,7 @@ float RayTracingEnvironment::CalculateCostsOfSplit(
   nleft = 0;
   nright = 0;
   nboth = 0;
-  float min_coord = 1.0e23, max_coord = -1.0e23;
+  float min_coord = 1.0e23f, max_coord = -1.0e23f;
 
   for (int t = 0; t < ntris; t++) {
     CacheOptimizedTriangle &tri = OptimizedTriangleList[tri_list[t]];
@@ -671,7 +672,7 @@ void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
     return;
   }
 
-  float best_cost = 1.0e23;
+  float best_cost = 1.0e23f;
   int best_nleft = 0, best_nright = 0, best_nboth = 0;
   float best_splitvalue = 0;
   int split_plane = 0;

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "particles/particles.h"
 
@@ -23,7 +23,6 @@
 #include "tier2/tier2.h"
 #include "vtf/vtf.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -721,8 +720,7 @@ void CWorldCollideContextData::operator delete(void *pData, int nBlockUse,
 //-----------------------------------------------------------------------------
 CParticleCollection::CParticleCollection() {
   static_assert((MAX_RANDOM_FLOATS & (MAX_RANDOM_FLOATS - 1)) == 0);
-  static_assert(sizeof(s_pRandomFloats) / sizeof(float) >=
-                      MAX_RANDOM_FLOATS);
+  static_assert(sizeof(s_pRandomFloats) / sizeof(float) >= MAX_RANDOM_FLOATS);
 
   m_pNextDef = m_pPrevDef = NULL;
   m_nUniqueParticleId = 0;
@@ -1467,8 +1465,8 @@ void CParticleCollection::SkipToTime(float t) {
     m_fl4CurTime = ReplicateX4(t);
     m_nParticleFlags &= ~PCFLAGS_FIRST_FRAME;
 
-    // TODO(d.rattman): In future, we may have to tell operators, initializers about this
-    // too
+    // TODO(d.rattman): In future, we may have to tell operators, initializers
+    // about this too
     int nEmitterCount = m_pDef->m_Emitters.Count();
     int i;
     for (i = 0; i < nEmitterCount; i++) {
@@ -1583,7 +1581,7 @@ void CParticleCollection::Simulate(float dt) {
   }
 
   float flRemainingDt = dt;
-  float flMaxDT = 0.1;  // default
+  float flMaxDT = 0.1f;  // default
   if (m_pDef->m_flMaximumTimeStep > 0.0) flMaxDT = m_pDef->m_flMaximumTimeStep;
 
   // Limit timestep if needed (prevents short lived particles from being created
@@ -1930,10 +1928,10 @@ void CParticleCollection::RecomputeBounds(void) {
     return;
   }
 
-  fltx4 min_x = ReplicateX4(1.0e23);
+  fltx4 min_x = ReplicateX4(1.0e23f);
   fltx4 min_y = min_x;
   fltx4 min_z = min_x;
-  fltx4 max_x = ReplicateX4(-1.0e23);
+  fltx4 max_x = ReplicateX4(-1.0e23f);
   fltx4 max_y = max_x;
   fltx4 max_z = max_x;
 

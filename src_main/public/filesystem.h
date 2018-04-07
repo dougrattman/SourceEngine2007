@@ -17,18 +17,15 @@ class CUtlBuffer;
 class KeyValues;
 class IFileList;
 
-typedef void *FileHandle_t;
-typedef int FileFindHandle_t;
-typedef void (*FileSystemLoggingFunc_t)(const char *fileName,
-                                        const char *accessType);
-typedef int WaitForResourcesHandle_t;
-
-//-----------------------------------------------------------------------------
-// Enums used by the interface
-//-----------------------------------------------------------------------------
+using FileHandle_t = void *;
+using FileFindHandle_t = int;
+using FileSystemLoggingFunc_t = void (*)(const char *fileName,
+                                         const char *accessType);
+using WaitForResourcesHandle_t = int;
 
 #define FILESYSTEM_MAX_SEARCH_PATHS 128
 
+// Enums used by the interface
 enum FileSystemSeek_t {
   FILESYSTEM_SEEK_HEAD = SEEK_SET,
   FILESYSTEM_SEEK_CURRENT = SEEK_CUR,

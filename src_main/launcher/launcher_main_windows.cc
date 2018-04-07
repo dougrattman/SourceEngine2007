@@ -99,7 +99,7 @@ inline u32 GetExecutableName(_In_ ch *exe_name, usize exe_name_length) {
 std::tuple<const ch *, u32> ComputeBaseDirectoryFromExePath() {
   static ch base_directory[SOURCE_MAX_PATH];
   const u32 return_code{
-      GetExecutableName(base_directory, SOURCE_ARRAYSIZE(base_directory))};
+      GetExecutableName(base_directory, std::size(base_directory))};
 
   if (return_code == NO_ERROR) {
     ch *last_backward_slash{strrchr(base_directory, '\\')};
@@ -211,10 +211,9 @@ void RemoveSpuriousGameParameters(ICommandLine *const command_line) {
   ch last_game_arg[SOURCE_MAX_PATH];
 
   for (usize i = 0; i < command_line->ParmCount() - 1; i++) {
-    if (Q_stricmp(command_line->GetParm(i),
-                  source::tier0::command_line_switches::kGamePath) == 0) {
-      Q_snprintf(last_game_arg, SOURCE_ARRAYSIZE(last_game_arg), "\"%s\"",
-                 command_line->GetParm(i + 1));
+    if (_stricmp(command_line->GetParm(i),
+                 source::tier0::command_line_switches::kGamePath) == 0) {
+      sprintf_s(last_game_arg, "\"%s\"", command_line->GetParm(i + 1));
       ++count_game_args;
       ++i;
     }
@@ -236,7 +235,7 @@ void RelaunchWithNewLanguageViaSteam() {
                     REG_OPTION_RESERVED, KEY_ALL_ACCESS,
                     &source_key) == NO_ERROR) {
     ch relaunch_url[SOURCE_MAX_PATH];
-    DWORD relaunch_url_length = SOURCE_ARRAYSIZE(relaunch_url);
+    DWORD relaunch_url_length = std::size(relaunch_url);
 
     if (RegQueryValueExA(source_key, "Relaunch URL", nullptr, nullptr,
                          (LPBYTE)relaunch_url,

@@ -1104,11 +1104,9 @@ const ch *CThread::GetName() {
   AUTO_LOCK(m_Lock);
   if (!m_szName[0]) {
 #ifdef OS_WIN
-    _snprintf_s(m_szName, sizeof(m_szName) - 1, "Thread(%p/%p)", this,
-                m_hThread);
+    sprintf_s(m_szName, "Thread(%p/%p)", this, m_hThread);
 #elif OS_POSIX
-    _snprintf_s(m_szName, sizeof(m_szName) - 1, "Thread(%p/0x%x)", this,
-                m_threadId);
+    sprintf_s(m_szName, "Thread(%p/0x%x)", this, m_threadId);
 #endif
   }
   return m_szName;

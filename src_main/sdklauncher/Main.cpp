@@ -46,7 +46,7 @@ static ATOM staticWndclassAtom = 0;
 static HWND staticHwnd = 0;
 
 // This is the base engine + mod-specific game dir (e.g. "c:\tf2\mytfmod\")
-char gamedir[1024];
+char gamedir[SOURCE_MAX_PATH];
 extern char g_engineDir[50];
 CSDKLauncherDialog *g_pMainFrame = 0;
 
