@@ -61,7 +61,7 @@ namespace std {
 template <>
 struct default_delete<source::module_descriptor> {
   // Use HMODULE here since module_descriptor is HMODULE.
-  void operator()(_In_ HMODULE module) const noexcept {
+  void operator()(_In_ source::module_descriptor *module) const noexcept {
     const DWORD errno_code{FreeLibrary(module) ? NOERROR : GetLastError()};
     CHECK(errno_code == NOERROR, errno_code);
   }

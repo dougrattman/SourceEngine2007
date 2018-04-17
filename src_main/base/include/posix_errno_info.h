@@ -10,6 +10,7 @@
 
 #include "base/include/errno_info.h"
 
+// POSIX errno success code.
 #define EOK 0
 
 namespace source {
