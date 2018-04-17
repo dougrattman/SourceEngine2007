@@ -380,7 +380,6 @@
     <ClCompile Include="vprof.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="extendedtrace.h" />
     <ClInclude Include="include\basetypes.h" />
     <ClInclude Include="include\command_line_switches.h" />
     <ClInclude Include="include\dbg.h" />

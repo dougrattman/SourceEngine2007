@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -12,7 +12,6 @@
 
 #define PROTECTED_THINGS_DISABLE
 #include "base/include/compiler_specific.h"
-#include "extendedtrace.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/vcrmode.h"
 

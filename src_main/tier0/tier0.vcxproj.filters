@@ -77,9 +77,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="extendedtrace.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="mem_helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>

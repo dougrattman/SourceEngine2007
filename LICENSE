@@ -205,18 +205,6 @@ Valve’s obligations to provide such notices:
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   """
 
-- Extended Trace is licensed as follows:
-  """
-    Written by Zoltan Csizmadia, zoltan_csizmadia@yahoo.com
-    For companies(Austin,TX): If you would like to get my resume, send an email.
-
-    The source is free, but if you want to use it, mention my name and e-mail
-    address
-
-    History:
-      1.0      Initial version                  Zoltan Csizmadia
-  """
-
 - ICE (64-bit private key block cipher), located at deps/libice, is licensed
   as follows:
   """
