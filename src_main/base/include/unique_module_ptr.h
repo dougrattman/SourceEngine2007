@@ -1,4 +1,4 @@
-﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASE_INCLUDE_UNIQUE_MODULE_PTR_H_
 #define BASE_INCLUDE_UNIQUE_MODULE_PTR_H_
@@ -119,7 +119,7 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
   template <typename T>
   std::tuple<T, source::windows::windows_errno_info> get_address_as(
       _In_z_ const ch *function_name) const noexcept {
-    static_assert(type_traits::is_function_pointer_v<T>,
+    static_assert(source::type_traits::is_function_pointer_v<T>,
                   "The T should be a function pointer.");
     const auto address =
         reinterpret_cast<T>(GetProcAddress(get(), function_name));
@@ -143,7 +143,7 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
   template <typename T>
   std::tuple<T, posix_errno_info> get_address_as(const ch *function_name) const
       noexcept {
-    static_assert(type_traits::is_function_pointer<T>::value,
+    static_assert(source::type_traits::is_function_pointer<T>::value,
                   "The T should be a function pointer.");
     const auto address = reinterpret_cast<T>(dlsym(get(), function_name));
     return {address, address != nullptr ? posix_errno_info_ok
