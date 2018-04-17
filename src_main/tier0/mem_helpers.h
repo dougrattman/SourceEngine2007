@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER0_MEM_HELPERS_H_
 #define SOURCE_TIER0_MEM_HELPERS_H_
@@ -20,6 +20,8 @@
 // In here, we make sure the memory is either random garbage, or it's set to
 // 0xffeeffee, which casts to a NAN.
 void ApplyMemoryInitializations(void *memory, usize size);
+
+// Gets used heap size, or std::numeric_limits<usize>::max() in case of error.
 usize CalcHeapUsed();
 
 #endif  // SOURCE_TIER0_MEM_HELPERS_H_

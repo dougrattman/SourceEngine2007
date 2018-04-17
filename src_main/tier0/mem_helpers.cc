@@ -118,7 +118,7 @@ void ApplyMemoryInitializations(void *memory, usize size) {
 }
 
 usize CalcHeapUsed() {
-#if defined(OS_POSIX)
+#ifdef OS_POSIX
   return 0;
 #else
 

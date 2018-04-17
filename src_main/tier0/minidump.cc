@@ -5,6 +5,7 @@
 #ifdef OS_WIN
 #include <ctime>
 
+#include "base/include/macros.h"
 #include "base/include/unique_module_ptr.h"
 #include "base/include/windows/scoped_se_translator.h"
 #include "tier0/include/dbg.h"
@@ -112,7 +113,8 @@ source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
     // https://msdn.microsoft.com/en-us/library/windows/desktop/ms680360(v=vs.85).aspx
     error_code = was_written_minidump
                      ? S_OK
-                     : source::windows::windows_errno_code_last_error();
+                     : implicit_cast<source::windows::windows_errno_code>(
+                           GetLastError());
 
     CloseHandle(minidump_file);
   }
