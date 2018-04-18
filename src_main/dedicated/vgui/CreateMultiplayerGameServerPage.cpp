@@ -408,7 +408,7 @@ void CCreateMultiplayerGameServerPage::OnCommand(const char *cmd) {
       // Launch the old dedicated server if necessary.
       if (LaunchOldDedicatedServer(gameData)) {
         vgui::ivgui()->PostMessage(m_MainPanel->GetVPanel(),
-                                   new KeyValues("Quit"), NO_VPANEL);
+                                   new KeyValues("Quit"), 0);
         Close();
       }
 
