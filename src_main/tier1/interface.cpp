@@ -6,6 +6,7 @@
 
 #ifdef OS_WIN
 #include <direct.h>  // _getcwd
+#include "base/include/windows/windows_errno_info.h"
 #include "base/include/windows/windows_light.h"
 #elif OS_POSIX
 #define _getcwd getcwd
@@ -31,7 +32,6 @@
 
 #include "tier0/include/memdbgon.h"
 
-// InterfaceReg.
 InterfaceReg *InterfaceReg::s_pInterfaceRegs = nullptr;
 
 InterfaceReg::InterfaceReg(InstantiateInterfaceFn instantiate_interface_func,
@@ -48,16 +48,13 @@ InterfaceReg::InterfaceReg(InstantiateInterfaceFn instantiate_interface_func,
 void *CreateInterface(const char *interface_name, int *return_code) {
   for (auto *it = InterfaceReg::s_pInterfaceRegs; it; it = it->m_pNext) {
     if (strcmp(it->m_pName, interface_name) == 0) {
-      if (return_code) {
-        *return_code = IFACE_OK;
-      }
+      if (return_code) *return_code = IFACE_OK;
+
       return it->m_CreateFn();
     }
   }
 
-  if (return_code) {
-    *return_code = IFACE_FAILED;
-  }
+  if (return_code) *return_code = IFACE_FAILED;
 
   return nullptr;
 }
@@ -65,22 +62,18 @@ void *CreateInterface(const char *interface_name, int *return_code) {
 #ifdef OS_POSIX
 // Linux doesn't have this function so this emulates its functionality
 void *GetModuleHandle(const char *name) {
-  if (name == nullptr) {
-    // hmm, how can this be handled under linux....
-    // is it even needed?
-    return nullptr;
-  }
+  if (name == nullptr) return nullptr;
 
-  void *handle;
-  if ((handle = dlopen(name, RTLD_NOW)) == nullptr) {
+  void *handle{dlopen(name, RTLD_NOW)};
+  if (handle == nullptr) {
     fprintf(stderr, "dlopen %s error:%s\n", name, dlerror());
-    // couldn't open this file
     return nullptr;
   }
 
   // read "man dlopen" for details in short dlopen() inc a ref count so dec the
-  // ref count by performing the close
+  // ref count by performing the close.
   dlclose(handle);
+
   return handle;
 }
 #endif
@@ -89,7 +82,7 @@ static void *Sys_GetProcAddress(HMODULE module, const char *proc_name) {
   return GetProcAddress(module, proc_name);
 }
 
-// Purpose: returns a pointer to a function, given a module
+// returns a pointer to a function, given a module
 static void *Sys_GetProcAddress(const char *module_name,
                                 const char *proc_name) {
   const HMODULE module = GetModuleHandle(module_name);
@@ -125,7 +118,7 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
   constexpr char const *module_addition = module_extension;
 #endif
 
-  char fixed_library_path[1024];
+  char fixed_library_path[SOURCE_MAX_PATH];
   strcpy_s(fixed_library_path, library_path);
 
   if (!Q_stristr(fixed_library_path, module_extension)) {
@@ -135,7 +128,6 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
   Q_FixSlashes(fixed_library_path);
 
 #ifdef OS_WIN
-
   const ThreadedLoadLibraryFunc_t thread_func = GetThreadedLoadLibraryFunc();
   if (!thread_func) return InternalLoadLibrary(fixed_library_path);
 
@@ -150,9 +142,7 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
 
   ReleaseThreadHandle(thread_handle);
   return context.library_module;
-
 #elif OS_POSIX
-
   const HMODULE module = dlopen(fixed_library_path, RTLD_NOW);
   if (!module) {
     const char *error_msg = dlerror();
@@ -162,12 +152,11 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
   }
 
   return module;
-
 #endif
 }
 
 static HMODULE LoadModuleByRelativePath(const char *module_name) {
-  char current_directory[1024];
+  char current_directory[SOURCE_MAX_PATH];
 
   if (!Q_IsAbsolutePath(module_name) &&
       // Full path wasn't passed in, using the current working dir.
@@ -179,7 +168,7 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
       current_directory[current_directory_length] = '\0';
     }
 
-    char absolute_module_name[1024];
+    char absolute_module_name[SOURCE_MAX_PATH];
     if (strstr(module_name, "bin/") == module_name) {
       // Don't make bin/bin path.
       sprintf_s(absolute_module_name, "%s/%s", current_directory, module_name);
@@ -194,28 +183,7 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
   return nullptr;
 }
 
-#ifdef OS_WIN
-static DWORD SpewModuleLoadError(_In_z_ const char *module_name,
-                                 _In_ DWORD error_code = GetLastError()) {
-  char *system_error;
-
-  if (!FormatMessage(
-          FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-              FORMAT_MESSAGE_IGNORE_INSERTS,
-          nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-          (LPSTR)&system_error, 0, nullptr)) {
-    Warning("Module %s load error: N/A.", module_name);
-    return error_code;
-  }
-
-  Warning("Module %s load error: %s", module_name, system_error);
-  LocalFree(system_error);
-
-  return error_code;
-}
-#endif
-
-// Purpose: Loads a DLL/component from disk and returns a handle to it
+// Loads a DLL/component from disk and returns a handle to it
 CSysModule *Sys_LoadModule(const char *module_name) {
   // If using the Steam file system, either the DLL must be a minimum footprint
   // file in the depot (MFP) or a file system GetLocalCopy() call must be made
@@ -228,7 +196,8 @@ CSysModule *Sys_LoadModule(const char *module_name) {
 
     if (!module) {
 #ifdef OS_WIN
-      SpewModuleLoadError(module_name);
+      const auto errno_info = source::windows::windows_errno_info_last_error();
+      Warning("Module %s load error: %s", module_name, errno_info.description);
 #else
       Error("Failed to load %s: %s\n", module_name, dlerror());
 #endif  // OS_WIN
@@ -247,21 +216,19 @@ CSysModule *Sys_LoadModule(const char *module_name) {
   return reinterpret_cast<CSysModule *>(module);
 }
 
-// Purpose: Unloads a DLL/component from
+// Unloads a DLL/component.
 BOOL Sys_UnloadModule(CSysModule *module_handle) {
 #ifdef OS_WIN
   const HMODULE module = reinterpret_cast<HMODULE>(module_handle);
   return module ? FreeLibrary(module) : TRUE;
 #elif OS_POSIX
-  if (module_handle) {
-    dlclose((void *)module_handle);
-  }
+  if (module_handle) dlclose((void *)module_handle);
 
   return TRUE;
 #endif
 }
 
-// Purpose: returns a pointer to a function, given a module
+// Returns a pointer to a function, given a module.
 CreateInterfaceFn Sys_GetFactory(CSysModule *module_handle) {
 #ifdef OS_WIN
   const HMODULE module = reinterpret_cast<HMODULE>(module_handle);
@@ -275,16 +242,16 @@ CreateInterfaceFn Sys_GetFactory(CSysModule *module_handle) {
 #endif
 }
 
-// Purpose: returns the instance of this module
+// Returns the instance of this module.
 CreateInterfaceFn Sys_GetFactoryThis() { return CreateInterface; }
 
-// Purpose: returns the instance of the named module
+// Returns the instance of the named module.
 CreateInterfaceFn Sys_GetFactory(const char *module_name) {
   return static_cast<CreateInterfaceFn>(
       Sys_GetProcAddress(module_name, CREATEINTERFACE_PROCNAME));
 }
 
-// Purpose: get the interface for the specified module and version.
+// Get the interface for the specified module and version.
 bool Sys_LoadInterface(const char *module_name,
                        const char *interface_version_name,
                        CSysModule **out_module, void **out_interface) {
@@ -308,7 +275,7 @@ bool Sys_LoadInterface(const char *module_name,
   return true;
 }
 
-// Purpose: Place this as a singleton at module scope (e.g.) and use it to get
+// Place this as a singleton at module scope (e.g.) and use it to get
 // the factory from the specified module name.
 CDllDemandLoader::CDllDemandLoader(char const *module_path)
     : module_path_{module_path}, module_{nullptr}, is_load_attempted_{false} {}
