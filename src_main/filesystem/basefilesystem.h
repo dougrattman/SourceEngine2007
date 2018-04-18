@@ -67,7 +67,7 @@
 #define PATHSEPARATOR(c) ((c) == '/')
 #endif  // OS_WIN
 
-#define MAX_FILEPATH 512
+#define MAX_FILEPATH SOURCE_MAX_PATH
 
 extern CUtlSymbolTableMT g_PathIDTable;
 
@@ -92,8 +92,6 @@ class CWhitelistSpecs {
   IFileList *m_pAllowFromDiskList;
 };
 typedef CThreadSafeRefCountedObject<CWhitelistSpecs *> CWhitelistHolder;
-
-//-----------------------------------------------------------------------------
 
 class CFileHandle {
  public:
@@ -173,8 +171,6 @@ class CPackFileHandle {
   unsigned int m_nLength;       // Length of this file.
   unsigned int m_nIndex;        // Index into the pack's directory table
 };
-
-//-----------------------------------------------------------------------------
 
 class CPackFile : public CRefCounted<CRefCountServiceMT> {
  public:
@@ -328,14 +324,10 @@ class CFileLoadInfo {
                                  // loaded off disk or the Steam cache.
 };
 
-//-----------------------------------------------------------------------------
-
 #ifdef AsyncRead
 #undef AsyncRead
 #undef AsyncReadMutiple
 #endif
-
-//-----------------------------------------------------------------------------
 
 the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   friend class CPackFileHandle;
@@ -1125,15 +1117,10 @@ inline CPackFile::~CPackFile() {
 }
 
 inline int CPackFile::GetSectorSize() {
-  if (m_hPackFileHandle) {
-    return m_fs->FS_GetSectorSize(m_hPackFileHandle);
-  } else {
-    return -1;
-  }
+  return m_hPackFileHandle ? m_fs->FS_GetSectorSize(m_hPackFileHandle) : -1;
 }
 
-#if defined(TRACK_BLOCKING_IO)
-
+#ifdef TRACK_BLOCKING_IO
 class CAutoBlockReporter {
  public:
   CAutoBlockReporter(CBaseFileSystem *fs, bool synchronous,
@@ -1175,14 +1162,11 @@ class CAutoBlockReporter {
   CAutoBlockReporter block##name(fs, sync, filename, blockType, accessType);
 #define AUTOBLOCKREPORTER_FH(name, fs, sync, handle, blockType, accessType) \
   CAutoBlockReporter block##name(fs, sync, handle, blockType, accessType);
-
 #else
-
 #define AUTOBLOCKREPORTER_FN(name, fs, sync, filename, blockType, \
                              accessType)  // Nothing
 #define AUTOBLOCKREPORTER_FH(name, fs, sync, handle, blockType, \
                              accessType)  // Nothing
-
 #endif
 
 // singleton accessor

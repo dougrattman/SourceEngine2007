@@ -11,7 +11,7 @@
 
 #include "base/include/windows/windows_light.h"
 
-ISteamInterface *steam = NULL;
+ISteamInterface *steam = nullptr;
 static SteamHandle_t g_pLastErrorFile;
 static TSteamError g_tLastError;
 static TSteamError g_tLastErrorNoFile;
@@ -28,7 +28,7 @@ void CheckError(SteamHandle_t fp, TSteamError &steamError) {
     }
 
     // show the error
-    MessageBox(NULL,
+    MessageBox(nullptr,
                "Could not acquire necessary game files because the connection "
                "to Steam servers was lost.",
                "Source - Fatal Error", MB_OK | MB_ICONEXCLAMATION);
@@ -45,7 +45,7 @@ void CheckError(SteamHandle_t fp, TSteamError &steamError) {
       g_tLastError = steamError;
     }
   } else {
-    // write to the NULL error checker
+    // write to the nullptr error checker
     if (steamError.eSteamError != eSteamErrorNone ||
         g_tLastErrorNoFile.eSteamError != eSteamErrorNone) {
       g_tLastErrorNoFile = steamError;
@@ -153,7 +153,7 @@ CFileSystem_Steam::CFileSystem_Steam() {
   m_bContentLoaded = false;
   m_hWaitForResourcesCallHandle = STEAM_INVALID_CALL_HANDLE;
   m_iCurrentReturnedCallHandle = 1;
-  m_hSteamDLL = NULL;
+  m_hSteamDLL = nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -226,8 +226,8 @@ void MountDependencies(int iAppId, CUtlVector<unsigned int> &depList) {
 void *CFileSystem_Steam::QueryInterface(const char *pInterfaceName) {
   // We also implement the IMatSystemSurface interface
   if (!Q_strncmp(pInterfaceName, FILESYSTEM_INTERFACE_VERSION,
-                 Q_strlen(FILESYSTEM_INTERFACE_VERSION) + 1))
-    return (IFileSystem *)this;
+                 strlen(FILESYSTEM_INTERFACE_VERSION) + 1))
+    return implicit_cast<IFileSystem *>(this);
 
   return CBaseFileSystem::QueryInterface(pInterfaceName);
 }
@@ -259,7 +259,7 @@ void CFileSystem_Steam::Shutdown() {
     Assert(!("STEAM VFS failed to unmount"));
 
     // just continue on as if nothing happened
-    // ::MessageBox(NULL, szErrorMsg, "Half-Life FileSystem_Steam Error",
+    // ::MessageBox(nullptr, szErrorMsg, "Half-Life FileSystem_Steam Error",
     // MB_OK); exit( -1 );
   }
 
@@ -267,7 +267,7 @@ void CFileSystem_Steam::Shutdown() {
 
   if (m_hSteamDLL) {
     Sys_UnloadModule((CSysModule *)m_hSteamDLL);
-    m_hSteamDLL = NULL;
+    m_hSteamDLL = nullptr;
   }
   m_bSteamInitialized = false;
 }
@@ -290,7 +290,7 @@ void CFileSystem_Steam::LoadAndStartSteam() {
     Error("CFileSystem_Steam::Init() failed: failed to find steam interface\n");
     ::DestroyWindow(GetForegroundWindow());
     ::MessageBox(
-        NULL,
+        nullptr,
         "CFileSystem_Steam::Init() failed: failed to find steam interface",
         "Half-Life FileSystem_Steam Error", MB_OK);
     _exit(-1);
@@ -302,7 +302,7 @@ void CFileSystem_Steam::LoadAndStartSteam() {
                       &steamError)) {
     Error("SteamStartup() failed: %s\n", steamError.szDesc);
     ::DestroyWindow(GetForegroundWindow());
-    ::MessageBox(NULL, steamError.szDesc, "Half-Life FileSystem_Steam Error",
+    ::MessageBox(nullptr, steamError.szDesc, "Half-Life FileSystem_Steam Error",
                  MB_OK);
     _exit(-1);
   }
@@ -318,7 +318,7 @@ FilesystemMountRetval_t CFileSystem_Steam::MountSteamContent(int nExtraAppId) {
   // MWD: This is here because of Hammer's funky startup sequence that requires
   // MountSteamContent() be called in CHammerApp::PreInit(). Once that root
   // problem is addressed this will be removed;
-  if (NULL == steam) {
+  if (nullptr == steam) {
     LoadAndStartSteam();
   }
 
@@ -337,7 +337,7 @@ FilesystemMountRetval_t CFileSystem_Steam::MountSteamContent(int nExtraAppId) {
         MountDependencies(-nExtraAppId, depList);
         return FILESYSTEM_MOUNT_OK;
       } else {
-        const char *pMainAppId = NULL;
+        const char *pMainAppId = nullptr;
 
         // If they specified extra app IDs they want to mount after the main
         // one, then we mount the caches manually here.
@@ -366,8 +366,8 @@ FilesystemMountRetval_t CFileSystem_Steam::MountSteamContent(int nExtraAppId) {
     } else if (!steam->MountAppFilesystem(&steamError)) {
       Error("MountAppFilesystem() failed: %s\n", steamError.szDesc);
       ::DestroyWindow(GetForegroundWindow());
-      ::MessageBox(NULL, steamError.szDesc, "Half-Life FileSystem_Steam Error",
-                   MB_OK);
+      ::MessageBox(nullptr, steamError.szDesc,
+                   "Half-Life FileSystem_Steam Error", MB_OK);
       _exit(-1);
     }
 
@@ -394,7 +394,7 @@ FILE *CFileSystem_Steam::FS_fopen(const char *filename, const char *options,
 
   if (!steam) {
     AssertMsg(0, "CFileSystem_Steam::FS_fopen used with 0 steam interface!");
-    return NULL;
+    return nullptr;
   }
 
   CFileLoadInfo dummyInfo;
@@ -430,7 +430,7 @@ void CFileSystem_Steam::FS_setbufsize(FILE *fp, unsigned nBytes) {}
 WaitForResourcesHandle_t CFileSystem_Steam::WaitForResources(
     const char *resourcelist) {
   char szResourceList[SOURCE_MAX_PATH];
-  Q_strncpy(szResourceList, resourcelist, sizeof(szResourceList));
+  strcpy_s(szResourceList, resourcelist);
   Q_DefaultExtension(szResourceList, ".lst", sizeof(szResourceList));
 
   // cancel any old call
@@ -672,7 +672,7 @@ char *CFileSystem_Steam::FS_fgets(char *dest, int destSize, FILE *fp) {
     // Read in the next char...
     if (FS_fread(&c, 1, 1, fp) != 1) {
       if (g_tLastError.eSteamError != eSteamErrorEOF || numCharRead == 0) {
-        return NULL;  // If we hit an error, return NULL.
+        return nullptr;  // If we hit an error, return nullptr.
       }
 
       numCharRead = destSize;  // Hit EOF, no more to read, all done...
@@ -680,11 +680,11 @@ char *CFileSystem_Steam::FS_fgets(char *dest, int destSize, FILE *fp) {
 
     else {
       *dest++ = c;    // add the char to the string and point to the next pos
-      *dest = '\0';   // append NULL
+      *dest = '\0';   // append nullptr
       numCharRead++;  // count the char read
     }
   }
-  return dest;  // Has a NULL termination...
+  return dest;  // Has a nullptr termination...
 }
 
 //-----------------------------------------------------------------------------
@@ -731,7 +731,7 @@ int CFileSystem_Steam::FS_stat(const char *path, struct _stat *buf) {
     buf->st_ctime = Info.lCreationTime;
   }
 
-  CheckError(NULL, steamError);
+  CheckError(0, steamError);
   return returnVal;
 }
 
@@ -755,7 +755,7 @@ HANDLE CFileSystem_Steam::FS_FindFirstFile(const char *findname,
 
   steamResult =
       steam->FindFirst(findname, eSteamFindAll, &steamFindInfo, &steamError);
-  CheckError(NULL, steamError);
+  CheckError(0, steamError);
 
   if (steamResult == STEAM_INVALID_HANDLE) {
     hResult = INVALID_HANDLE_VALUE;
@@ -802,7 +802,7 @@ bool CFileSystem_Steam::FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) {
 
   result = (steam->FindNext((SteamHandle_t)handle, &steamFindInfo,
                             &steamError) == 0);
-  CheckError(NULL, steamError);
+  CheckError(0, steamError);
 
   if (result) {
     strcpy_s(dat->cFileName, steamFindInfo.cszName);
@@ -820,7 +820,7 @@ bool CFileSystem_Steam::FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) {
 bool CFileSystem_Steam::FS_FindClose(HANDLE handle) {
   TSteamError steamError;
   int result = (steam->FindClose((SteamHandle_t)handle, &steamError) == 0);
-  CheckError(NULL, steamError);
+  CheckError(0, steamError);
   return result != 0;
 }
 
@@ -902,13 +902,13 @@ CSysModule *CFileSystem_Steam::LoadModule(const char *pFileName,
   CBaseFileSystem::ParsePathID(pFileName, pPathID, szNewPath);
 
   // File must end in .dll
-  char szExtension[] = ".dll";
-  Assert(Q_strlen(pFileName) < sizeof(szNewPath));
+  const char szExtension[] = ".dll";
+  Assert(strlen(pFileName) < std::size(szNewPath));
 
-  Q_strncpy(szNewPath, pFileName, sizeof(szNewPath));
+  strcpy_s(szNewPath, pFileName);
   if (!Q_stristr(szNewPath, szExtension)) {
     Assert(strlen(pFileName) + sizeof(szExtension) < sizeof(szNewPath));
-    Q_strncat(szNewPath, szExtension, sizeof(szNewPath), COPY_ALL_CHARACTERS);
+    strcat_s(szNewPath, szExtension);
   }
 
   LogFileAccess(szNewPath);
@@ -926,9 +926,8 @@ CSysModule *CFileSystem_Steam::LoadModule(const char *pFileName,
 
     if (m_SearchPaths[i].GetPathID() == lookup) {
       char newPathName[SOURCE_MAX_PATH];
-      Q_snprintf(newPathName, sizeof(newPathName), "%s%s",
-                 m_SearchPaths[i].GetPathString(),
-                 szNewPath);  // append the path to this dir.
+      sprintf_s(newPathName, "%s%s", m_SearchPaths[i].GetPathString(),
+                szNewPath);  // append the path to this dir.
 
       // make sure the file exists, and is in the Steam cache
       if (bValidatedDllOnly && !IsFileInSteamCache(newPathName)) continue;
@@ -944,7 +943,7 @@ CSysModule *CFileSystem_Steam::LoadModule(const char *pFileName,
       if (module)  // we found the binary in one of our search paths
       {
         if (bValidatedDllOnly && !IsFileInSteamCache2(newPathName)) {
-          return NULL;
+          return nullptr;
         } else {
           return module;
         }
@@ -957,7 +956,7 @@ CSysModule *CFileSystem_Steam::LoadModule(const char *pFileName,
     return Sys_LoadModule(szNewPath);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 // HACK HACK - to allow IsFileInSteamCache() to use the old C exported interface
@@ -993,7 +992,7 @@ int CFileSystem_Steam::HintResourceNeed(const char *hintlist,
                                         int forgetEverything) {
   TSteamError steamError;
   int result = steam->HintResourceNeed(hintlist, forgetEverything, &steamError);
-  CheckError(NULL, steamError);
+  CheckError(0, steamError);
   return result;
 }
 

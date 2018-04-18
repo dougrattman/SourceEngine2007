@@ -101,7 +101,7 @@ FileInfo *CFileTracker::GetFileInfo(const char *pFilename,
   AUTO_LOCK(m_Mutex);
 
   CPathIDFileList *pPath = GetPathIDFileList(pPathID, false);
-  if (!pPath) return NULL;
+  if (!pPath) return nullptr;
 
   return pPath->FindFileInfo(pFilename);
 }
@@ -245,7 +245,7 @@ void CFileTracker::CalculateMissingCRC(const char *pFilename,
                                        const char *pPathID) {
   // Force it to make a CRC of disk files.
   FileHandle_t fh = m_pFileSystem->FindFileInSearchPaths(
-      pFilename, "rb", pPathID, FSOPEN_FORCE_TRACK_CRC, NULL, true);
+      pFilename, "rb", pPathID, FSOPEN_FORCE_TRACK_CRC, nullptr, true);
   if (!fh) return;
 
   FileInfo *pInfo = GetFileInfo(pFilename, pPathID);
@@ -334,10 +334,8 @@ int CFileTracker::GetUnverifiedCRCFiles(CUnverifiedCRCFile *pFiles,
     // Add this file to their list.
     CUnverifiedCRCFile *pOutFile = &pFiles[iOutFile];
 
-    V_strncpy(pOutFile->m_Filename, pInfo->GetFilename(),
-              sizeof(pOutFile->m_Filename));
-    V_strncpy(pOutFile->m_PathID, pInfo->m_pPathIDFileList->m_PathID.String(),
-              sizeof(pOutFile->m_PathID));
+    strcpy_s(pOutFile->m_Filename, pInfo->GetFilename());
+    strcpy_s(pOutFile->m_PathID, pInfo->m_pPathIDFileList->m_PathID.String());
     pOutFile->m_CRC = pInfo->m_CRC;
 
     ++iOutFile;
@@ -366,12 +364,11 @@ CPathIDFileList *CFileTracker::GetPathIDFileList(const char *pPathID,
       pPath->m_PathID = pPathID;
       m_PathIDs.Insert(pPathID, pPath);
       return pPath;
-    } else {
-      return NULL;
     }
-  } else {
-    return m_PathIDs[i];
+
+    return nullptr;
   }
+  return m_PathIDs[i];
 }
 
 //-----------------------------------------------------------------------------
@@ -394,10 +391,9 @@ FileInfo *CPathIDFileList::FindFileInfo(const char *pFilename) {
   Assert(!V_IsAbsolutePath(pFilename));
 
   int i = m_Files.Find(pFilename);
-  if (i == m_Files.InvalidIndex())
-    return NULL;
-  else
-    return m_Files[i];
+  if (i != m_Files.InvalidIndex()) return m_Files[i];
+
+  return nullptr;
 }
 
 FileInfo *CPathIDFileList::AddFileInfo(const char *pFilename) {

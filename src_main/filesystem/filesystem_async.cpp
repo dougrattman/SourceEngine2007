@@ -114,7 +114,7 @@ class CAsyncOpenedFiles {
 
   FSAsyncFile_t FindOrAdd(const char *pszFilename) {
     char szFixedName[MAX_FILEPATH];
-    Q_strncpy(szFixedName, pszFilename, sizeof(szFixedName));
+    strcpy_s(szFixedName, pszFilename);
     Q_FixSlashes(szFixedName);
 
     Assert((int)FS_INVALID_ASYNC_FILE == m_map.InvalidIndex());
@@ -132,7 +132,7 @@ class CAsyncOpenedFiles {
 
   FSAsyncFile_t Find(const char *pszFilename) {
     char szFixedName[MAX_FILEPATH];
-    Q_strncpy(szFixedName, pszFilename, sizeof(szFixedName));
+    strcpy_s(szFixedName, pszFilename);
     Q_FixSlashes(szFixedName);
 
     AUTO_LOCK_FM(m_mutex);
@@ -147,7 +147,7 @@ class CAsyncOpenedFiles {
 
   AsyncOpenedFile_t *Get(FSAsyncFile_t item) {
     if (item == FS_INVALID_ASYNC_FILE) {
-      return NULL;
+      return nullptr;
     }
 
     AUTO_LOCK_FM(m_mutex);
@@ -225,7 +225,7 @@ class CFileAsyncJob : public CJob {
   }
 
   virtual JobStatus_t GetResult(void **ppData, int *pSize) {
-    *ppData = NULL;
+    *ppData = nullptr;
     *pSize = 0;
     return GetStatus();
   }
@@ -240,7 +240,7 @@ class CFileAsyncReadJob : public CFileAsyncJob, protected FileAsyncRequest_t {
   CFileAsyncReadJob(const FileAsyncRequest_t &fromRequest)
       : CFileAsyncJob(ConvertPriority(fromRequest.priority)),
         FileAsyncRequest_t(fromRequest),
-        m_pResultData(NULL),
+        m_pResultData(nullptr),
         m_nResultSize(0),
         m_pRealContext(fromRequest.pContext),
         m_pfnRealCallback(fromRequest.pfnCallback) {
@@ -257,7 +257,7 @@ class CFileAsyncReadJob : public CFileAsyncJob, protected FileAsyncRequest_t {
       g_AsyncOpenedFiles.AddRef(hSpecificAsyncFile);
     }
 #if (defined(_DEBUG) || defined(USE_MEM_DEBUG))
-    m_pszAllocCreditFile = NULL;
+    m_pszAllocCreditFile = nullptr;
     m_nAllocCreditLine = 0;
 #endif
   }
@@ -574,7 +574,7 @@ void CBaseFileSystem::ShutdownAsync() {
 FSAsyncStatus_t CBaseFileSystem::AsyncReadMultiple(
     const FileAsyncRequest_t *pRequests, int nRequests,
     FSAsyncControl_t *phControls) {
-  return AsyncReadMultipleCreditAlloc(pRequests, nRequests, NULL, 0,
+  return AsyncReadMultipleCreditAlloc(pRequests, nRequests, nullptr, 0,
                                       phControls);
 }
 
@@ -833,7 +833,7 @@ FSAsyncStatus_t CBaseFileSystem::AsyncFinish(FSAsyncControl_t hControl,
 FSAsyncStatus_t CBaseFileSystem::AsyncGetResult(FSAsyncControl_t hControl,
                                                 void **ppData, int *pSize) {
   if (ppData) {
-    *ppData = NULL;
+    *ppData = nullptr;
   }
   if (pSize) {
     *pSize = 0;
@@ -931,7 +931,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncRead(const FileAsyncRequest_t &request) {
 
   if (request.nBytes < 0 || request.nOffset < 0) {
     Msg("Invalid async read of %s\n", request.pszFilename);
-    DoAsyncCallback(request, NULL, 0, FSASYNC_ERR_FILEOPEN);
+    DoAsyncCallback(request, nullptr, 0, FSASYNC_ERR_FILEOPEN);
     return FSASYNC_ERR_FILEOPEN;
   }
 
@@ -940,7 +940,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncRead(const FileAsyncRequest_t &request) {
   AsyncOpenedFile_t *pHeldFile =
       (request.hSpecificAsyncFile != FS_INVALID_ASYNC_FILE)
           ? g_AsyncOpenedFiles.Get(request.hSpecificAsyncFile)
-          : NULL;
+          : nullptr;
 
   FileHandle_t hFile;
 
@@ -974,7 +974,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncRead(const FileAsyncRequest_t &request) {
       unsigned nOffsetAlign;
       nBytesBuffer = nBytesToRead +
                      ((request.flags & FSASYNC_FLAGS_NULLTERMINATE) ? 1 : 0);
-      if (GetOptimalIOConstraints(hFile, &nOffsetAlign, NULL, NULL) &&
+      if (GetOptimalIOConstraints(hFile, &nOffsetAlign, nullptr, nullptr) &&
           (request.nOffset % nOffsetAlign == 0)) {
         nBytesBuffer = GetOptimalReadSize(hFile, nBytesBuffer);
       }
@@ -1008,7 +1008,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncRead(const FileAsyncRequest_t &request) {
                                                         : FSASYNC_OK;
     DoAsyncCallback(request, pDest, std::min(nBytesRead, nBytesToRead), result);
   } else {
-    DoAsyncCallback(request, NULL, 0, FSASYNC_ERR_FILEOPEN);
+    DoAsyncCallback(request, nullptr, 0, FSASYNC_ERR_FILEOPEN);
     result = FSASYNC_ERR_FILEOPEN;
   }
 
@@ -1030,7 +1030,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncGetFileSize(
     const FileAsyncRequest_t &request) {
   int size = Size(request.pszFilename, request.pszPathID);
 
-  DoAsyncCallback(request, NULL, size,
+  DoAsyncCallback(request, nullptr, size,
                   (size) ? FSASYNC_OK : FSASYNC_ERR_FILEOPEN);
 
   return FSASYNC_OK;
@@ -1042,8 +1042,8 @@ FSAsyncStatus_t CBaseFileSystem::SyncGetFileSize(
 FSAsyncStatus_t CBaseFileSystem::SyncWrite(const char *pszFilename,
                                            const void *pSrc, int nSrcBytes,
                                            bool bFreeMemory, bool bAppend) {
-  FileHandle_t hFile = OpenEx(pszFilename, (bAppend) ? "ab+" : "wb",
-                              IsX360() ? FSOPEN_NEVERINPACK : 0, NULL);
+  FileHandle_t hFile =
+      OpenEx(pszFilename, (bAppend) ? "ab+" : "wb", 0, nullptr);
   if (hFile) {
     SetBufferSize(hFile, 0);
     Write(pSrc, nSrcBytes, hFile);
@@ -1067,13 +1067,11 @@ FSAsyncStatus_t CBaseFileSystem::SyncWrite(const char *pszFilename,
 //-----------------------------------------------------------------------------
 FSAsyncStatus_t CBaseFileSystem::SyncAppendFile(
     const char *pAppendToFileName, const char *pAppendFromFileName) {
-  FileHandle_t hDestFile =
-      OpenEx(pAppendToFileName, "ab+", IsX360() ? FSOPEN_NEVERINPACK : 0, NULL);
+  FileHandle_t hDestFile = OpenEx(pAppendToFileName, "ab+", 0, nullptr);
   FSAsyncStatus_t result = FSASYNC_ERR_FAILURE;
   if (hDestFile) {
     SetBufferSize(hDestFile, 0);
-    FileHandle_t hSourceFile = OpenEx(pAppendFromFileName, "rb",
-                                      IsX360() ? FSOPEN_NEVERINPACK : 0, NULL);
+    FileHandle_t hSourceFile = OpenEx(pAppendFromFileName, "rb", 0, nullptr);
     if (hSourceFile) {
       SetBufferSize(hSourceFile, 0);
       const int BUFSIZE = 128 * 1024;
@@ -1112,7 +1110,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncAppendFile(
 void CBaseFileSystem::DoAsyncCallback(const FileAsyncRequest_t &request,
                                       void *pData, int nBytesRead,
                                       FSAsyncStatus_t result) {
-  void *pDataToFree = NULL;
+  void *pDataToFree = nullptr;
 
   if (request.pfnCallback) {
     AUTO_LOCK_FM(m_AsyncCallbackMutex);

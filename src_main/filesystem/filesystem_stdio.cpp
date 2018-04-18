@@ -204,8 +204,8 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CFileSystem_Stdio, IBaseFileSystem,
 #ifndef _RETAIL
 bool UseOptimalBufferAllocation() {
   static bool bUseOptimalBufferAllocation =
-      (IsX360() || (!IsLinux() && Q_stristr(Plat_GetCommandLine(),
-                                            "-unbuffered_io") != NULL));
+      ((!IsLinux() &&
+        Q_stristr(Plat_GetCommandLine(), "-unbuffered_io") != nullptr));
   return bUseOptimalBufferAllocation;
 }
 ConVar filesystem_unbuffered_io("filesystem_unbuffered_io", "1", 0, "");
@@ -216,28 +216,22 @@ ConVar filesystem_unbuffered_io("filesystem_unbuffered_io", "1", 0, "");
 #endif
 
 ConVar filesystem_native("filesystem_native", "1", 0, "Use native FS or STDIO");
-ConVar filesystem_max_stdio_read("filesystem_max_stdio_read",
-                                 IsX360() ? "64" : "16", 0, "");
+ConVar filesystem_max_stdio_read("filesystem_max_stdio_read", "64", 0, "");
 ConVar filesystem_report_buffered_io("filesystem_report_buffered_io", "0");
-
-// constructor
 
 CFileSystem_Stdio::CFileSystem_Stdio() {
   m_bMounted = false;
   m_bCanAsync = true;
 }
 
-// Purpose:
-
 CFileSystem_Stdio::~CFileSystem_Stdio() { Assert(!m_bMounted); }
 
 // QueryInterface:
-
 void *CFileSystem_Stdio::QueryInterface(const char *pInterfaceName) {
   // We also implement the IMatSystemSurface interface
-  if (!Q_strncmp(pInterfaceName, FILESYSTEM_INTERFACE_VERSION,
-                 Q_strlen(FILESYSTEM_INTERFACE_VERSION) + 1))
-    return (IFileSystem *)this;
+  if (!strncmp(pInterfaceName, FILESYSTEM_INTERFACE_VERSION,
+               strlen(FILESYSTEM_INTERFACE_VERSION) + 1))
+    return implicit_cast<IFileSystem *>(this);
 
   return CBaseFileSystem::QueryInterface(pInterfaceName);
 }
@@ -325,7 +319,7 @@ void CFileSystem_Stdio::FreeOptimalReadBuffer(void *p) {
 FILE *CFileSystem_Stdio::FS_fopen(const char *filename, const char *options,
                                   unsigned flags, int64_t *size,
                                   CFileLoadInfo *pInfo) {
-  CStdFilesystemFile *pFile = NULL;
+  CStdFilesystemFile *pFile = nullptr;
 
   if (pInfo) pInfo->m_bLoadedFromSteamCache = false;
 
@@ -555,7 +549,7 @@ CStdioFile *CStdioFile::FS_fopen(const char *filename, const char *options,
 
 void CStdioFile::FS_setbufsize(unsigned nBytes) {
 #ifdef _WIN32
-  setvbuf(m_pFile, NULL, nBytes ? _IOFBF : _IONBF, nBytes);
+  setvbuf(m_pFile, nullptr, nBytes ? _IOFBF : _IONBF, nBytes);
 #endif
 }
 
@@ -642,7 +636,7 @@ int GetSectorSize(const char *pszFilename) {
     return 0;
   }
 
-#if defined(_WIN32) && !defined(FILESYSTEM_STEAM) && !defined(_X360)
+#if defined(_WIN32) && !defined(FILESYSTEM_STEAM)
   char szAbsoluteFilename[MAX_FILEPATH];
   if (pszFilename[1] != ':') {
     Q_MakeAbsolutePath(szAbsoluteFilename, sizeof(szAbsoluteFilename),
@@ -731,28 +725,22 @@ bool CWin32ReadOnlyFile::CanOpen(const char *filename, const char *options) {
 
 static HANDLE OpenWin32File(const char *filename, bool bOverlapped,
                             bool bUnbuffered, int64_t *pFileSize) {
-  HANDLE hFile;
-
   DWORD createFlags = FILE_ATTRIBUTE_NORMAL;
+  if (bOverlapped) createFlags |= FILE_FLAG_OVERLAPPED;
+  if (bUnbuffered) createFlags |= FILE_FLAG_NO_BUFFERING;
 
-  if (bOverlapped) {
-    createFlags |= FILE_FLAG_OVERLAPPED;
-  }
-
-  if (bUnbuffered) {
-    createFlags |= FILE_FLAG_NO_BUFFERING;
-  }
-
-  hFile = ::CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, NULL,
-                       OPEN_EXISTING, createFlags, NULL);
+  HANDLE hFile = ::CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, nullptr,
+                              OPEN_EXISTING, createFlags, nullptr);
   if (hFile != INVALID_HANDLE_VALUE && !*pFileSize) {
     LARGE_INTEGER fileSize;
     if (!GetFileSizeEx(hFile, &fileSize)) {
       CloseHandle(hFile);
       hFile = INVALID_HANDLE_VALUE;
     }
+
     *pFileSize = fileSize.QuadPart;
   }
+
   return hFile;
 }
 
@@ -772,7 +760,7 @@ CWin32ReadOnlyFile *CWin32ReadOnlyFile::FS_fopen(const char *filename,
   if (bTryUnbuffered) {
     hFileUnbuffered = OpenWin32File(filename, bOverlapped, true, &fileSize);
     if (hFileUnbuffered == INVALID_HANDLE_VALUE) {
-      return NULL;
+      return nullptr;
     }
   }
 
@@ -781,12 +769,10 @@ CWin32ReadOnlyFile *CWin32ReadOnlyFile::FS_fopen(const char *filename,
     if (hFileUnbuffered != INVALID_HANDLE_VALUE) {
       CloseHandle(hFileUnbuffered);
     }
-    return NULL;
+    return nullptr;
   }
 
-  if (size) {
-    *size = fileSize;
-  }
+  if (size) *size = fileSize;
 
   return new CWin32ReadOnlyFile(hFileUnbuffered, hFileBuffered,
                                 (sectorSize) ? sectorSize : 1, fileSize,
@@ -835,11 +821,9 @@ size_t CWin32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
     return 0;
   }
 
-  CThreadEvent *pEvent = NULL;
+  CThreadEvent *pEvent = nullptr;
 
-  if (destSize == (size_t)-1) {
-    destSize = size;
-  }
+  if (destSize == (size_t)-1) destSize = size;
 
   byte tempBuffer[READ_TEMP_BUFFER];
   HANDLE hReadFile = m_hFileBuffered;
@@ -848,7 +832,7 @@ size_t CWin32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
   int64_t offset = m_ReadPos;
 
   if (m_hFileUnbuffered != INVALID_HANDLE_VALUE) {
-    const int destBaseAlign = (IsX360()) ? 4 : m_SectorSize;
+    const int destBaseAlign = m_SectorSize;
     bool bDestBaseIsAligned = ((DWORD)dest % destBaseAlign == 0);
     bool bCanReadUnbufferedDirect =
         (bDestBaseIsAligned && (destSize % m_SectorSize == 0) &&
@@ -957,14 +941,11 @@ size_t CWin32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
 }
 
 char *CWin32ReadOnlyFile::FS_fgets(char *dest, int destSize) {
-  if (FS_feof()) {
-    return NULL;
-  }
+  if (FS_feof()) return nullptr;
+
   int nStartPos = m_ReadPos;
   int nBytesRead = FS_fread(dest, destSize, destSize);
-  if (!nBytesRead) {
-    return NULL;
-  }
+  if (!nBytesRead) return nullptr;
 
   dest[std::min(nBytesRead, destSize - 1)] = 0;
   char *pNewline = strchr(dest, '\n');
@@ -975,6 +956,7 @@ char *CWin32ReadOnlyFile::FS_fgets(char *dest, int destSize) {
   } else {
     pNewline = &dest[std::min(nBytesRead, destSize - 1)];
   }
+
   m_ReadPos = nStartPos + (pNewline - dest) + 1;
 
   return dest;
