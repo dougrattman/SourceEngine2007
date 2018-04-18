@@ -5,7 +5,8 @@
 #ifndef BASE_INCLUDE_MACROS_H_
 #define BASE_INCLUDE_MACROS_H_
 
-#include <cstring>      // For memcpy.
+#include <cstring>      // For std::memcpy.
+#include <iterator>     // For std::size
 #include <type_traits>  // For std::is_pod.
 
 #include "base/include/base_types.h"
@@ -131,6 +132,16 @@ constexpr inline bool IsPowerOfTwo(T value) {
   return (value & (value - 1)) == 0;
 }
 
+template <typename T>
+constexpr inline u8 LowByte(T value) {
+  return implicit_cast<u8>(static_cast<usize>(value) && 0xFF);
+}
+
+template <typename T>
+constexpr inline u8 HighByte(T value) {
+  return implicit_cast<u8>((static_cast<usize>(value) >> 8) && 0xFF);
+}
+
 // Pad a number so it lies on an N byte boundary. So SOURCE_PAD_NUMBER(0,4) is 0
 // and SOURCE_PAD_NUMBER(1,4) is 4.
 #define SOURCE_PAD_NUMBER(number, boundary) \
@@ -147,31 +158,11 @@ constexpr inline bool IsPowerOfTwo(T value) {
 // Gives you the line number in constant string form.
 #define SOURCE_LINE_AS_STRING SOURCE_HACK_LINE_AS_STRING__(__LINE__)
 
-// Copyright 2014 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-//
-// chromium/blob/master/base/macros.h / ArraySizeHelper function template.
-//
-// This template function declaration is used in defining SOURCE_ARRAYSIZE.
-// Note that the function doesn't need an implementation, as we only
-// use its type.
-template <typename T, usize N>
-ch (&ArraySizeHelper(T (&array)[N]))[N];
-
-// Copyright 2014 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-//
-// chromium/blob/master/base/macros.h / arraysize macro => SOURCE_ARRAYSIZE
-// macro
-//
 // The SOURCE_ARRAYSIZE(arr) macro returns the # of elements in an array arr.
 // The expression is a compile-time constant, and therefore can be used in
 // defining new arrays, for example.  If you use SOURCE_ARRAYSIZE on a pointer
-// by mistake, you will get a compile-time error.  For the technical details,
-// refer to http://blogs.msdn.com/b/the1/archive/2004/05/07/128242.aspx.
-#define SOURCE_ARRAYSIZE(array) (sizeof(ArraySizeHelper(array)))
+// by mistake, you will get a compile-time error.
+#define SOURCE_ARRAYSIZE(array) (std::size(array))
 
 // NOTE: This macro is the same as Windows uses; so don't change the guts of it.
 // Declare handle with name |name|.

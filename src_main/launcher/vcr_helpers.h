@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_LAUNCHER_VCR_HELPERS_H_
 #define SOURCE_LAUNCHER_VCR_HELPERS_H_
@@ -6,6 +6,7 @@
 #include <tuple>
 
 #include "base/include/base_types.h"
+#include "base/include/windows/windows_errno_info.h"
 #include "base/include/windows/windows_light.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vcrmode.h"
@@ -20,7 +21,7 @@ class VCRHelpers : public IVCRHelpers {
   void *GetMainWindow() override { return nullptr; }
 };
 
-std::tuple<VCRHelpers, u32> BootstrapVCRHelpers(
+std::tuple<VCRHelpers, source::windows::windows_errno_code> BootstrapVCRHelpers(
     const ICommandLine *command_line);
 
 #endif  // !SOURCE_LAUNCHER_VCR_HELPERS_H_

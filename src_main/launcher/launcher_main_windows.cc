@@ -85,23 +85,25 @@ const ch *ComputeBaseDirectoryFromCommandLine(
 }
 
 // Gets the executable name
-inline u32 GetExecutableName(_In_ ch *exe_name, usize exe_name_length) {
+inline source::windows::windows_errno_code GetExecutableName(
+    _In_ ch *exe_name, usize exe_name_length) {
   const HMODULE exe_module = GetModuleHandleW(nullptr);
   if (exe_module &&
       GetModuleFileNameA(exe_module, exe_name,
                          static_cast<DWORD>(exe_name_length)) != 0) {
-    return NO_ERROR;
+    return S_OK;
   }
 
-  return GetLastError();
+  return source::windows::windows_errno_code_last_error();
 }
 
-std::tuple<const ch *, u32> ComputeBaseDirectoryFromExePath() {
+std::tuple<const ch *, source::windows::windows_errno_code>
+ComputeBaseDirectoryFromExePath() {
   static ch base_directory[SOURCE_MAX_PATH];
-  const u32 return_code{
+  const source::windows::windows_errno_code return_code{
       GetExecutableName(base_directory, std::size(base_directory))};
 
-  if (return_code == NO_ERROR) {
+  if (source::windows::succeeded(return_code)) {
     ch *last_backward_slash{strrchr(base_directory, '\\')};
     if (*last_backward_slash) {
       *(last_backward_slash + 1) = '\0';
@@ -123,17 +125,15 @@ std::tuple<const ch *, u32> ComputeBaseDirectoryFromExePath() {
 }
 
 // Purpose: Determine the directory where this .exe is running from
-std::tuple<const ch *, u32> ComputeBaseDirectory(
-    _In_ const ICommandLine *command_line) {
+std::tuple<const ch *, source::windows::windows_errno_code>
+ComputeBaseDirectory(_In_ const ICommandLine *command_line) {
   const ch *cmd_base_directory{
       ComputeBaseDirectoryFromCommandLine(command_line)};
 
   // nullptr means nothing to get from command line.
-  if (cmd_base_directory == nullptr) {
-    return ComputeBaseDirectoryFromExePath();
-  }
-
-  return {cmd_base_directory, NO_ERROR};
+  return cmd_base_directory == nullptr
+             ? ComputeBaseDirectoryFromExePath()
+             : std::make_tuple(cmd_base_directory, S_OK);
 }
 
 inline const ch *GetCtrlEventDescription(_In_ DWORD ctrl_type) {
@@ -157,31 +157,33 @@ inline const ch *GetCtrlEventDescription(_In_ DWORD ctrl_type) {
 BOOL WINAPI ConsoleCtrlHandler(_In_ DWORD ctrl_type) {
   Warning("Exit process, since event '%s' occurred.",
           GetCtrlEventDescription(ctrl_type));
-  // TODO: Process ctrl_type, change process exit code.
+  // TODO(d.rattman): Process ctrl_type, change process exit code.
   ExitProcess(NO_ERROR);
 }
 
-std::tuple<bool, u32> InitTextModeIfNeeded(
+std::tuple<bool, source::windows::windows_errno_code> InitTextModeIfNeeded(
     _In_ const ICommandLine *command_line) {
   if (!command_line->CheckParm(
           source::tier0::command_line_switches::textMode)) {
-    return {false, NO_ERROR};
+    return {false, S_OK};
   }
 
-  u32 return_code{AllocConsole() != FALSE ? NO_ERROR : GetLastError()};
-  if (return_code == NO_ERROR) {
+  source::windows::windows_errno_code return_code{
+      AllocConsole() != FALSE
+          ? S_OK
+          : source::windows::windows_errno_code_last_error()};
+  if (source::windows::succeeded(return_code)) {
     FILE *dummy;
     // reopen stdin, stout, stderr handles as console window input, output and
     // output.
-    return_code =
-        !freopen_s(&dummy, "CONIN$", "rb", stdin) &&
-                !freopen_s(&dummy, "CONOUT$", "wb", stdout) &&
-                !freopen_s(&dummy, "CONOUT$", "wb", stderr)
-            ? NO_ERROR
-            : errno;  // Yea, no direct mapping errno => GetLastError() :(
+    return_code = !freopen_s(&dummy, "CONIN$", "rb", stdin) &&
+                          !freopen_s(&dummy, "CONOUT$", "wb", stdout) &&
+                          !freopen_s(&dummy, "CONOUT$", "wb", stderr)
+                      ? S_OK
+                      : E_FAIL;  // Yea, no direct mapping errno => HRESULT :(
 
     // freopen set last error in errno (not 0 => not NO_ERROR).
-    if (return_code != NO_ERROR) {
+    if (return_code != S_OK) {
       ch error_description[96];
       strerror_s(error_description, errno);
       Error(
@@ -191,13 +193,13 @@ std::tuple<bool, u32> InitTextModeIfNeeded(
     }
   }
 
-  if (return_code == NO_ERROR) {
+  if (return_code == S_OK) {
     return_code = SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE) != FALSE
-                      ? NO_ERROR
-                      : GetLastError();
+                      ? S_OK
+                      : source::windows::windows_errno_code_last_error();
   }
 
-  return {return_code == NO_ERROR, return_code};
+  return {source::windows::succeeded(return_code), return_code};
 }
 
 // Remove all but the last -game parameter. This is for mods based off something
@@ -290,21 +292,20 @@ ICommandLine *const CreateCommandLine() {
   return command_line;
 }
 
-u32 SetProcessPriorityInternal(_In_z_ const ch *priority_switch,
-                               _In_ DWORD priority_class) {
+source::windows::windows_errno_code SetProcessPriorityInternal(
+    _In_z_ const ch *priority_switch, _In_ DWORD priority_class) {
   const BOOL return_code{SetPriorityClass(GetCurrentProcess(), priority_class)};
+  if (return_code != FALSE) return S_OK;
 
-  if (return_code == FALSE) {
-    const u32 error_code{GetLastError()};
-    Warning("Can't set process priority by switch %s (0x%.8x).",
-            priority_switch, error_code);
-    return error_code;
-  }
+  const auto errno_info{source::windows::windows_errno_info_last_error()};
+  Warning("Can't set process priority by switch %s: %s.", priority_switch,
+          errno_info.description);
 
-  return NO_ERROR;
+  return errno_info.code;
 }
 
-u32 SetProcessPriorityIfNeeded(_In_ const ICommandLine *command_line) {
+source::windows::windows_errno_code SetProcessPriorityIfNeeded(
+    _In_ const ICommandLine *command_line) {
   const bool is_low_priority{!!command_line->CheckParm(
       source::tier0::command_line_switches::kCpuPriorityLow)};
   const bool is_high_priority{!!command_line->CheckParm(
@@ -316,10 +317,10 @@ u32 SetProcessPriorityIfNeeded(_In_ const ICommandLine *command_line) {
         "of %s,%s switches.",
         source::tier0::command_line_switches::kCpuPriorityLow,
         source::tier0::command_line_switches::kCpuPriorityHigh);
-    return ERROR_BAD_ARGUMENTS;
+    return source::windows::win32_to_windows_errno_code(ERROR_BAD_ARGUMENTS);
   }
 
-  if (!is_low_priority && !is_high_priority) return NO_ERROR;
+  if (!is_low_priority && !is_high_priority) return S_OK;
 
   if (is_low_priority) {
     return SetProcessPriorityInternal(
@@ -349,9 +350,9 @@ void CleanupSettings(_In_ ICommandLine *const command_line) {
   command_line->RemoveParm("+mat_hdr_level");
 }
 
-u32 RunSteamApplication(_In_ ICommandLine *command_line,
-                        _In_z_ const ch *base_directory,
-                        _In_ const bool is_text_mode) {
+source::windows::windows_errno_code RunSteamApplication(
+    _In_ ICommandLine *command_line, _In_z_ const ch *base_directory,
+    _In_ const bool is_text_mode) {
   bool need_restart{true};
   FileSystemAccessLogger file_system_access_logger{base_directory,
                                                    command_line};
@@ -378,12 +379,13 @@ u32 RunSteamApplication(_In_ ICommandLine *command_line,
     }
   }
 
-  return NO_ERROR;
+  return S_OK;
 }
 }  // namespace
 
 // Here app go.
-SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
+SOURCE_API_EXPORT source::windows::windows_errno_code LauncherMain(
+    _In_ HINSTANCE instance, _In_ int) {
   if (instance == nullptr) return ERROR_INVALID_HANDLE;
 
   // First, since almost all depends on this.
@@ -397,19 +399,22 @@ SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
   ScopedMemoryLeakDumper scoped_memory_leak_dumper{
       g_pMemAlloc, command_line->FindParm("-leakcheck") > 0};
 
+  using namespace source::windows;
+
   // Run in text mode? (No graphics or sound).
   auto [is_text_mode, return_code] = InitTextModeIfNeeded(command_line);
-  if (return_code != NO_ERROR) {
+  if (failed(return_code)) {
     Error("Can't run in text mode (0x%.8x).", return_code);
     return return_code;
   }
 
   // Winsock is ready, skip if can't initialize.
-  source::windows::ScopedWinsockInitializer scoped_winsock_initializer{
-      source::windows::WinsockVersion::Version2_2};
+  ScopedWinsockInitializer scoped_winsock_initializer{
+      WinsockVersion::Version2_2};
   return_code = scoped_winsock_initializer.error_code();
-  if (return_code != NO_ERROR) {
-    Warning("Winsock 2.2 unavailable, error code 0x%.8x.", return_code);
+  if (failed(return_code)) {
+    Warning("Winsock 2.2 unavailable: %s.",
+            make_windows_errno_info(return_code).description);
   }
 
   VCRHelpers vcr_helpers;
@@ -417,12 +422,12 @@ SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
 
   // Find directory exe is running from.
   std::tie(base_directory, return_code) = ComputeBaseDirectory(command_line);
-  if (return_code == NO_ERROR) {
+  if (succeeded(return_code)) {
     // VCR helpers is ready.
     std::tie(vcr_helpers, return_code) = BootstrapVCRHelpers(command_line);
   }
 
-  if (return_code == NO_ERROR) {
+  if (succeeded(return_code)) {
     // Rehook the command line through VCR mode.
     CommandLine()->CreateCmdLine(VCRHook_GetCommandLine());
 
@@ -433,7 +438,7 @@ SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
     return_code = SetProcessPriorityIfNeeded(command_line);
   }
 
-  if (return_code == NO_ERROR) {
+  if (succeeded(return_code)) {
     // If game is not run from Steam then add -insecure in order to avoid
     // client timeout message.
     if (command_line->FindParm("-steam") == 0) {
@@ -443,11 +448,11 @@ SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
     // Figure out the directory the executable is running from and make that
     // be the current working directory.
     return_code = SetCurrentDirectoryA(base_directory) != FALSE
-                      ? NO_ERROR
-                      : GetLastError();
+                      ? S_OK
+                      : windows_errno_code_last_error();
   }
 
-  if (return_code == NO_ERROR) {
+  if (succeeded(return_code)) {
     return_code =
         RunSteamApplication(command_line, base_directory, is_text_mode);
   }

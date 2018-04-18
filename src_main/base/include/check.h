@@ -8,8 +8,10 @@
 #include <cstdlib>
 
 #ifndef NDEBUG
+// Just use |code_|.
 #define SOURCE_DBG_CODE_NOSCOPE(code_) code_
 #else  // NDEBUG
+// Skip |code_|.
 #define SOURCE_DBG_CODE_NOSCOPE(code_) ((void)0)
 #endif  // !NDEBUG
 

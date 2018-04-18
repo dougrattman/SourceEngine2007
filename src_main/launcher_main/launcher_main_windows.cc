@@ -31,29 +31,31 @@ inline wstr GetDirectoryFromFilePath(_In_ wstr file_path) {
 }
 
 // Show no launcher at path |launcher_dll_path| error box with system-specific
-// error message from error code |error_code|.
+// error message from error info |errno_info|.
 inline source::windows::windows_errno_code NotifyAboutNoLauncherError(
-    _In_ const wstr &launcher_dll_path, _In_ u32 error_code) {
+    _In_ const wstr &launcher_dll_path,
+    _In_ source::windows::windows_errno_info errno_info) {
   wstr user_friendly_message{
       L"Please, contact support. Failed to load the launcher.dll from " +
       launcher_dll_path};
-  return source::windows::NotifyAboutError(user_friendly_message, error_code);
+  return source::windows::NotifyAboutError(user_friendly_message, errno_info);
 }
 
 // Show no launcher at path |launcher_dll_path| entry point
 // |launcher_dll_entry_point_name| error box with system-specific error message
-// from error code |error_code|.
+// from error info |errno_info|.
 inline source::windows::windows_errno_code NotifyAboutNoLauncherEntryPointError(
     _In_ const wstr &launcher_dll_path,
-    _In_z_ const wch *launcher_dll_entry_point_name, _In_ u32 error_code) {
+    _In_z_ const wch *launcher_dll_entry_point_name,
+    _In_ source::windows::windows_errno_info errno_info) {
   wstr user_friendly_message{L"Please, contact support. Failed to find the " +
                              launcher_dll_path + L" entry point " +
                              launcher_dll_entry_point_name + L"."};
-  return source::windows::NotifyAboutError(user_friendly_message, error_code);
+  return source::windows::NotifyAboutError(user_friendly_message, errno_info);
 }
 
 // Enable termination on heap corruption.
-inline u32 EnableTerminationOnHeapCorruption() {
+inline source::windows::windows_errno_code EnableTerminationOnHeapCorruption() {
   // Enables the terminate-on-corruption feature.  If the heap manager detects
   // an error in any heap used by the process, it calls the Windows Error
   // Reporting service and terminates the process.
@@ -62,12 +64,13 @@ inline u32 EnableTerminationOnHeapCorruption() {
   // https://msdn.microsoft.com/en-us/library/windows/desktop/aa366705(v=vs.85).aspx
   return HeapSetInformation(nullptr, HeapEnableTerminationOnCorruption, nullptr,
                             0)
-             ? NOERROR
-             : GetLastError();
+             ? S_OK
+             : source::windows::windows_errno_code_last_error();
 }
 
 // Get module's file path with instance |instance|.
-inline std::tuple<wstr, u32> GetThisModuleFilePath(_In_ HINSTANCE instance) {
+inline std::tuple<wstr, source::windows::windows_errno_code>
+GetThisModuleFilePath(_In_ HINSTANCE instance) {
   wch this_module_file_path[MAX_PATH];
   // If the function succeeds, the return value is the length of the string that
   // is copied to the buffer, in characters, not including the terminating null
@@ -80,24 +83,28 @@ inline std::tuple<wstr, u32> GetThisModuleFilePath(_In_ HINSTANCE instance) {
   // See https://msdn.microsoft.com/en-us/library/ms683197(v=vs.85).aspx
   return GetModuleFileNameW(instance, this_module_file_path,
                             ARRAYSIZE(this_module_file_path))
-             ? std::make_tuple(wstr{this_module_file_path}, GetLastError())
-             : std::make_tuple(wstr{}, GetLastError());
+             ? std::make_tuple(wstr{this_module_file_path},
+                               source::windows::windows_errno_code_last_error())
+             : std::make_tuple(
+                   wstr{}, source::windows::windows_errno_code_last_error());
 }
 }  // namespace
 
 // Game for Windows entry point.
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
                       _In_ wchar_t *, _In_ int cmd_show) {
+  using namespace source::windows;
+
   // Game uses features of Windows 10.
   if (!IsWindows10OrGreater()) {
-    return source::windows::NotifyAboutError(
+    return NotifyAboutError(
         L"Unfortunately, your environment is not supported."
         L" " SOURCE_APP_NAME L" requires at least Windows 10 to survive.",
-        ERROR_EXE_MACHINE_TYPE_MISMATCH);
+        win32_to_windows_errno_code(ERROR_EXE_MACHINE_TYPE_MISMATCH));
   }
 
   // Do not show fault error boxes, etc.
-  const source::windows::ScopedErrorMode scoped_error_mode{
+  const ScopedErrorMode scoped_error_mode{
 #ifdef NDEBUG
       // The system does not display the critical-error-handler message box.
       // Instead, the system sends the error to the calling process.
@@ -112,21 +119,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
       SEM_NOGPFAULTERRORBOX};
 
   // Enable heap corruption detection & app termination.
-  u32 error_code = EnableTerminationOnHeapCorruption();
-  if (error_code != NOERROR) {
-    return source::windows::NotifyAboutError(
+  windows_errno_code errno_code{EnableTerminationOnHeapCorruption()};
+  if (failed(errno_code)) {
+    return NotifyAboutError(
         L"Please, contact support. Failed to enable termination on heap "
         L"corruption feature for your environment.",
-        error_code);
+        errno_code);
   }
 
   // Use the .exe name to determine the root directory.
   wstr this_module_file_path;
-  std::tie(this_module_file_path, error_code) = GetThisModuleFilePath(instance);
-  if (error_code != NOERROR) {
-    return source::windows::NotifyAboutError(
+  std::tie(this_module_file_path, errno_code) = GetThisModuleFilePath(instance);
+  if (failed(errno_code)) {
+    return NotifyAboutError(
         L"Please, contact support. Can't get current exe file path.",
-        error_code);
+        errno_code);
   }
 
   const wstr root_dir{GetDirectoryFromFilePath(this_module_file_path)};
@@ -139,7 +146,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
           launcher_dll_path, LOAD_WITH_ALTERED_SEARCH_PATH);
 
   if (errno_info.is_success() && launcher_module) {
-    using LauncherMain = int (*)(HINSTANCE, int);
+    using LauncherMain =
+        source::windows::windows_errno_code (*)(HINSTANCE, int);
     LauncherMain main;
     std::tie(main, errno_info) =
         launcher_module.get_address_as<LauncherMain>("LauncherMain");
@@ -148,8 +156,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
     return errno_info.is_success() && main
                ? (*main)(instance, cmd_show)
                : NotifyAboutNoLauncherEntryPointError(
-                     launcher_dll_path, L"LauncherMain", errno_info.code);
+                     launcher_dll_path, L"LauncherMain", errno_info);
   }
 
-  return NotifyAboutNoLauncherError(launcher_dll_path, errno_info.code);
+  return NotifyAboutNoLauncherError(launcher_dll_path, errno_info);
 }
