@@ -101,8 +101,10 @@ class CCommandLine : public ICommandLine {
 };
 
 // Instance singleton and expose interface to rest of code.
-static CCommandLine g_command_line;
-ICommandLine *CommandLine() { return &g_command_line; }
+ICommandLine *CommandLine() {
+  static CCommandLine command_line;
+  return &command_line;
+}
 
 CCommandLine::CCommandLine() : command_line_{nullptr}, params_count_{0} {
   memset(params_, 0, sizeof(params_));

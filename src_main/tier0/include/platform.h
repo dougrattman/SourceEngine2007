@@ -265,7 +265,7 @@ SOURCE_TIER0_API const CPUInformation &GetCPUInformation();
 // Registers the current thread with Tier0's thread management system.
 // This should be called on every thread created in the game.
 SOURCE_TIER0_API unsigned long Plat_RegisterThread(
-    const ch *pName = "Source Thread");
+    const ch *name = "Source Thread");
 
 // Registers the current thread as the primary thread.
 SOURCE_TIER0_API unsigned long Plat_RegisterPrimaryThread();
