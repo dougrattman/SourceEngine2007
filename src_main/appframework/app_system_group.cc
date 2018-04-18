@@ -133,7 +133,7 @@ static ch const *g_StageLookup[] = {
 
 void CAppSystemGroup::ReportStartupFailure(i32 nErrorStage, i32 nSysIndex) {
   ch const *pszStageDesc = "Unknown";
-  if (nErrorStage >= 0 && nErrorStage < SOURCE_ARRAYSIZE(g_StageLookup)) {
+  if (nErrorStage >= 0 && (size_t)nErrorStage < std::size(g_StageLookup)) {
     pszStageDesc = g_StageLookup[nErrorStage];
   }
 

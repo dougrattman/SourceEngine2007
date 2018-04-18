@@ -487,7 +487,7 @@ class BugReporter : public IBugReporter {
           Msg("%s %s Invalid field!\n", func, msg);
           break;
         default:
-          int i = 0;
+          size_t i = 0;
           for (i; i < SOURCE_ARRAYSIZE(trk_error_id_name_map_); ++i) {
             if (trk_error_id_name_map_[i].id == rc) {
               Msg("%s returned %i - %s!\n", func, rc,
