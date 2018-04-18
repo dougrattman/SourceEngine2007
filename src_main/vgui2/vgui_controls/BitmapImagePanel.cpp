@@ -311,9 +311,9 @@ void CBitmapImagePanel::ApplySchemeSettings(IScheme *pScheme) {
 //-----------------------------------------------------------------------------
 const char *CBitmapImagePanel::GetDescription() {
   static char buf[1024];
-  _snprintf_s(buf, sizeof(buf),
-              "%s, string image, string imagecolor, alignment imageAlignment, "
-              "int preserveAspectRatio, int filtered",
-              BaseClass::GetDescription());
+  sprintf_s(buf,
+            "%s, string image, string imagecolor, alignment imageAlignment, "
+            "int preserveAspectRatio, int filtered",
+            BaseClass::GetDescription());
   return buf;
 }

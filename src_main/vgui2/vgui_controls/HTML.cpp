@@ -294,8 +294,7 @@ void HTML::OpenURL(const char *URL, bool force) {
           steam_html_location[SOURCE_MAX_PATH], html_file_path[SOURCE_MAX_PATH];
 
       if (!g_pFullFileSystem->FileExists(offline_dir)) {
-        _snprintf_s(steam_html_location, SOURCE_ARRAYSIZE(steam_html_location),
-                    "%senglish.html", OFFLINE_FILE);
+        sprintf_s(steam_html_location, "%senglish.html", OFFLINE_FILE);
         offline_dir = steam_html_location;
       }
 
@@ -304,8 +303,7 @@ void HTML::OpenURL(const char *URL, bool force) {
       g_pFullFileSystem->GetLocalPath(offline_dir, html_file_path,
                                       SOURCE_ARRAYSIZE(html_file_path));
 
-      _snprintf_s(html_locatiion, SOURCE_ARRAYSIZE(html_locatiion), "file://%s",
-                  html_file_path);
+      sprintf_s(html_locatiion, "file://%s", html_file_path);
       browser->OpenURL(html_locatiion);
 
       return;
@@ -486,9 +484,9 @@ bool HTML::OnStartURL(const char *url, const char *target, bool first) {
     if (!_strnicmp(m_CustomURLHandlers[i].url, url,
                    strlen(m_CustomURLHandlers[i].url))) {
       // we have a custom handler
-      Panel *target = m_CustomURLHandlers[i].hPanel;
-      if (target) {
-        PostMessage(target,
+      Panel *p = m_CustomURLHandlers[i].hPanel;
+      if (p) {
+        PostMessage(p,
                     new KeyValues("CustomURL", "url",
                                   url + strlen(m_CustomURLHandlers[i].url) + 3,
                                   "protocol", m_CustomURLHandlers[i].url));
@@ -501,14 +499,9 @@ bool HTML::OnStartURL(const char *url, const char *target, bool first) {
   if (bURLHandled) return false;
 
   if (m_bNewWindowsOnly) {
-    if (target &&
-        (!_stricmp(target, "_blank") ||
-         !_stricmp(target, "_new")))  // only allow NEW windows (_blank ones)
-    {
-      return true;
-    } else {
-      return false;
-    }
+    // only allow NEW windows (_blank ones)
+    return (target &&
+            (!_stricmp(target, "_blank") || !_stricmp(target, "_new")));
   }
 
   return true;
@@ -520,17 +513,13 @@ bool HTML::OnStartURL(const char *url, const char *target, bool first) {
 void HTML::BrowserResize() {
   int w, h;
   GetSize(w, h);
-  IBorder *border;
-  border = scheme()->GetIScheme(GetScheme())->GetBorder("BrowserBorder");
+  IBorder *border =
+      scheme()->GetIScheme(GetScheme())->GetBorder("BrowserBorder");
+
   int left = 0, top = 0, right = 0, bottom = 0;
   if (border) {
     border->GetInset(left, top, right, bottom);
   }
-  // TODO: does the win32 surface still need this offset when direct rendering?
-  // left += 1;
-  // top += 1;
-  // right += 1;
-  // bottom += 1;
 
   if (browser) {
     browser->OnSize(m_iScrollX + left, m_iScrollY + top,

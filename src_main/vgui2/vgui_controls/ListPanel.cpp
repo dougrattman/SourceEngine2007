@@ -2565,7 +2565,7 @@ void ListPanel::ApplyUserConfigSettings(KeyValues *userConfig) {
   // read which columns are hidden
   for (int i = 0; i < m_CurrentColumns.Count(); i++) {
     char name[64];
-    _snprintf_s(name, sizeof(name), "%d_hidden", i);
+    sprintf_s(name, "%d_hidden", i);
 
     int hidden = userConfig->GetInt(name, -1);
     if (hidden == 0) {
@@ -2574,7 +2574,7 @@ void ListPanel::ApplyUserConfigSettings(KeyValues *userConfig) {
       SetColumnVisible(i, false);
     }
 
-    _snprintf_s(name, sizeof(name), "%d_width", i);
+    sprintf_s(name, "%d_width", i);
     int nWidth = userConfig->GetInt(name, -1);
     if (nWidth >= 0) {
       column_t &column = m_ColumnsData[m_CurrentColumns[i]];
@@ -2594,10 +2594,10 @@ void ListPanel::GetUserConfigSettings(KeyValues *userConfig) {
     column_t &column = m_ColumnsData[m_CurrentColumns[i]];
 
     char name[64];
-    _snprintf_s(name, sizeof(name), "%d_hidden", i);
+    sprintf_s(name, "%d_hidden", i);
     userConfig->SetInt(name, column.m_bHidden ? 1 : 0);
 
-    _snprintf_s(name, sizeof(name), "%d_width", i);
+    sprintf_s(name, "%d_width", i);
     userConfig->SetInt(name, column.m_pHeader->GetWide());
   }
 }

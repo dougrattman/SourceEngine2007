@@ -1350,7 +1350,7 @@ void RichText::OnCursorExited() {
 //-----------------------------------------------------------------------------
 // Purpose: Handle selection of text by mouse
 //-----------------------------------------------------------------------------
-void RichText::OnCursorMoved(int x, int y) {
+void RichText::OnCursorMoved(int x_, int y_) {
   if (_mouseSelection) {
     // update the cursor position
     int x, y;
@@ -1808,8 +1808,6 @@ void RichText::OpenEditMenu() {
   int x, y;
   // get base panel's postition
   panel->GetPos(x, y);
-  
-
 
   // adjust our cursor position accordingly
   cursorX += x;
@@ -2280,7 +2278,7 @@ void RichText::SetUnderlineFont(HFont font) { m_hFontUnderline = font; }
 //			allocations.
 // Input:	validator -		Our global validator object
 //			pchName -		Our name (typically a member var
-//in our container)
+// in our container)
 //-----------------------------------------------------------------------------
 void RichText::Validate(CValidator &validator, char *pchName) {
   validator.Push("vgui::RichText", this, pchName);

@@ -299,7 +299,8 @@ void Label::SetEnabled(bool state) { Panel::SetEnabled(state); }
 //			&ty1 -
 // Note:	horizontal alignment is west if the image dar has
 //			more than one image in it, this is because we use image
-//sizes 			to determine layout in classes for example, Menu.
+// sizes 			to determine layout in classes for example,
+// Menu.
 //-----------------------------------------------------------------------------
 void Label::ComputeAlignment(int &tx0, int &ty0, int &tx1, int &ty1) {
   int wide, tall;
@@ -688,8 +689,8 @@ void Label::ResetToSimpleTextImage() {
 //-----------------------------------------------------------------------------
 // Purpose: Multiple image handling
 //			Images are drawn from left to right across the label,
-//ordered by index 			By default there is a TextImage in position 0 			Set the
-//contents of an IImage in the IImage array.
+// ordered by index 			By default there is a TextImage in position 0
+// Set the contents of an IImage in the IImage array.
 //-----------------------------------------------------------------------------
 void Label::SetImageAtIndex(int index, IImage *image, int offset) {
   EnsureImageCapacity(index);
@@ -769,8 +770,8 @@ void Label::SetImageBounds(int index, int x, int width) {
 // the associates behaviour
 //			If the associate is disabled, so are we
 //			If the associate has focus, we may alter how we draw
-//			If we get a hotkey press or focus message, we forward the
-//focus to the associate
+//			If we get a hotkey press or focus message, we forward
+//the focus to the associate
 //-----------------------------------------------------------------------------
 void Label::SetAssociatedControl(Panel *control) {
   if (control != this) {
@@ -934,7 +935,7 @@ void Label::ApplySettings(KeyValues *inResourceData) {
                                             sizeof(unicodeVar));
 
       char var[256];
-      _snprintf_s(var, sizeof(var), "#var_%s", labelText);
+      sprintf_s(var, "#var_%s", labelText);
       g_pVGuiLocalize->AddString(var + 1, unicodeVar, "");
       SetText(var);
     } else {
@@ -1024,7 +1025,8 @@ const char *Label::GetDescription(void) {
 //-----------------------------------------------------------------------------
 // Purpose: If a label has images in _imageDar, the size
 //			must take those into account as well as the textImage
-//part 			Textimage part will shrink ONLY if there is not enough room.
+// part 			Textimage part will shrink ONLY if there is not enough
+// room.
 //-----------------------------------------------------------------------------
 void Label::PerformLayout() {
   int wide, tall;

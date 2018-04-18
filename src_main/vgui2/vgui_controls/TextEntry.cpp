@@ -1247,7 +1247,7 @@ void TextEntry::OnCursorExited()  // outside of window recieve drag scrolling
 //-----------------------------------------------------------------------------
 // Purpose: Handle selection of text by mouse
 //-----------------------------------------------------------------------------
-void TextEntry::OnCursorMoved(int x, int y) {
+void TextEntry::OnCursorMoved(int x_, int y_) {
   if (_mouseSelection) {
     // update the cursor position
     int x, y;
@@ -2763,6 +2763,7 @@ void TextEntry::OpenEditMenu() {
   // get base panel's postition
   panel->GetPos(x, y);
   
+
   // adjust our cursor position accordingly
   cursorX += x;
   cursorY += y;

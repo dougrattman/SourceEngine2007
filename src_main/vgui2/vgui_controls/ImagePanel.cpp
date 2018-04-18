@@ -193,9 +193,8 @@ void ImagePanel::ApplySchemeSettings(IScheme *pScheme) {
 //-----------------------------------------------------------------------------
 const char *ImagePanel::GetDescription() {
   static char buf[1024];
-  _snprintf_s(
-      buf, sizeof(buf),
-      "%s, string image, string border, string fillcolor, bool scaleImage",
+  sprintf_s(
+      buf, "%s, string image, string border, string fillcolor, bool scaleImage",
       BaseClass::GetDescription());
   return buf;
 }

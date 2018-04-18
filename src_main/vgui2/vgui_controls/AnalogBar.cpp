@@ -369,10 +369,10 @@ void AnalogBar::GetSettings(KeyValues *outResourceData) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns a string description of the panel fields for use in the UI
 //-----------------------------------------------------------------------------
-const char *AnalogBar::GetDescription(void) {
+const char *AnalogBar::GetDescription() {
   static char buf[1024];
-  _snprintf_s(buf, sizeof(buf), "%s, string analogValue, string variable",
-              BaseClass::GetDescription());
+  sprintf_s(buf, "%s, string analogValue, string variable",
+            BaseClass::GetDescription());
   return buf;
 }
 

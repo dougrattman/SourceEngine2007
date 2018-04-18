@@ -118,8 +118,7 @@ void URLLabel::GetSettings(KeyValues *outResourceData) {
 //-----------------------------------------------------------------------------
 const char *URLLabel::GetDescription(void) {
   static char buf[1024];
-  _snprintf_s(buf, sizeof(buf), "%s, string URLText",
-              BaseClass::GetDescription());
+  sprintf_s(buf, "%s, string URLText", BaseClass::GetDescription());
   return buf;
 }
 

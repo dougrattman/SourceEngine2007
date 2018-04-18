@@ -360,7 +360,7 @@ void BuildModeDialog::CreateControls() {
     for (KeyValues *kv = vars->GetFirstSubKey(); kv != NULL;
          kv = kv->GetNextKey()) {
       char buf[32];
-      _snprintf_s(buf, sizeof(buf), "%%%s%%", kv->GetName());
+      sprintf_s(buf, "%%%s%%", kv->GetName());
       menu->AddMenuItem(kv->GetName(),
                         new KeyValues("SetClipboardText", "text", buf), this);
     }

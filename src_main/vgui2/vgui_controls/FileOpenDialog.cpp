@@ -910,28 +910,26 @@ void FileOpenDialog::ValidatePath() {
   // ensure to add '\' to end of path
   char *pos = strrchr(fullpath, '\\');
   if (!(pos && !pos[1] && pos[0] == '\\')) {
-    Q_strncat(fullpath, "\\", sizeof(fullpath), COPY_ALL_CHARACTERS);
+    strcat_s(fullpath, "\\");
   }
 
   // see if the path can be opened
-  Q_strncat(fullpath, "*", sizeof(fullpath), COPY_ALL_CHARACTERS);
+  strcat_s(fullpath, "*");
+
   char *pData = fullpath;
-  while (*pData == ' ') {
-    pData++;
-  }
+  while (*pData == ' ') pData++;
 
   WIN32_FIND_DATA findData;
   HANDLE findHandle = ::FindFirstFile(pData, &findData);
   if (findHandle != INVALID_HANDLE_VALUE) {
     // directory is valid, remove * and store
     char *pos = strrchr(pData, '*');
-    if (pos) {
-      *pos = 0;
-    }
-    Q_strncpy(m_szLastPath, pData, sizeof(m_szLastPath));
+    if (pos) *pos = 0;
+
+    strcpy_s(m_szLastPath, pData);
   } else {
     // failed to load file, use the previously successful path
-    Q_strcpy(pData, fullpath - pData, m_szLastPath);
+    strcpy_s(pData, fullpath - pData, m_szLastPath);
   }
 
   m_pFullPathEdit->SetText(pData);
@@ -939,29 +937,29 @@ void FileOpenDialog::ValidatePath() {
 }
 
 const char *GetAttributesAsString(DWORD dwAttributes) {
-  static char out[256];
+  static char out[16];
   out[0] = 0;
 
   if (dwAttributes & FILE_ATTRIBUTE_ARCHIVE) {
-    Q_strncat(out, "A", sizeof(out), COPY_ALL_CHARACTERS);
+    strcat_s(out, "A");
   }
   if (dwAttributes & FILE_ATTRIBUTE_COMPRESSED) {
-    Q_strncat(out, "C", sizeof(out), COPY_ALL_CHARACTERS);
+    strcat_s(out, "C");
   }
   if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-    Q_strncat(out, "D", sizeof(out), COPY_ALL_CHARACTERS);
+    strcat_s(out, "D");
   }
   if (dwAttributes & FILE_ATTRIBUTE_HIDDEN) {
-    Q_strncat(out, "H", sizeof(out), COPY_ALL_CHARACTERS);
+    strcat_s(out, "H");
   }
   if (dwAttributes & FILE_ATTRIBUTE_READONLY) {
-    Q_strncat(out, "R", sizeof(out), COPY_ALL_CHARACTERS);
+    strcat_s(out, "R");
   }
   if (dwAttributes & FILE_ATTRIBUTE_SYSTEM) {
-    Q_strncat(out, "S", sizeof(out), COPY_ALL_CHARACTERS);
+    strcat_s(out, "S");
   }
   if (dwAttributes & FILE_ATTRIBUTE_TEMPORARY) {
-    Q_strncat(out, "T", sizeof(out), COPY_ALL_CHARACTERS);
+    strcat_s(out, "T");
   }
   return out;
 }
@@ -984,9 +982,9 @@ const char *GetFileTimetamp(FILETIME ft) {
       hour -= 12;
     }
   }
-  Q_snprintf(out, sizeof(out), "%d/%02d/%04d %d:%02d %s", local.wMonth,
-             local.wDay, local.wYear, hour, local.wMinute,
-             am ? "AM" : "PM"  // TODO: Localize this?
+  sprintf_s(out, "%d/%02d/%04d %d:%02d %s", local.wMonth, local.wDay,
+            local.wYear, hour, local.wMinute,
+            am ? "AM" : "PM"  // TODO: Localize this?
   );
   return out;
 }
@@ -1008,10 +1006,10 @@ void FileOpenDialog::PopulateFileList() {
 
   KeyValues *combokv = m_pFileTypeCombo->GetActiveItemUserData();
   if (combokv) {
-    Q_strncpy(filterList, combokv->GetString("filter", "*"), MAX_FILTER_LENGTH);
+    strcpy_s(filterList, combokv->GetString("filter", "*"));
   } else {
     // add wildcard for search
-    Q_strncpy(filterList, "*\0", MAX_FILTER_LENGTH);
+    strcpy_s(filterList, "*\0");
   }
 
   char *filterPtr = filterList;
@@ -1040,15 +1038,14 @@ void FileOpenDialog::PopulateFileList() {
         break;
       }
 
-      Q_snprintf(dir, SOURCE_MAX_PATH * 4, "%s%s", currentDir, curFilter);
+      sprintf_s(dir, "%s%s", currentDir, curFilter);
 
       // open the directory and walk it, loading files
       findHandle = ::FindFirstFile(dir, &findData);
       while (findHandle != INVALID_HANDLE_VALUE) {
         if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-          char fullpath[512];
-          Q_snprintf(fullpath, sizeof(fullpath), "%s%s", currentDir,
-                     findData.cFileName);
+          char fullpath[SOURCE_MAX_PATH];
+          sprintf_s(fullpath, "%s%s", currentDir, findData.cFileName);
 
           // add the file to the list
           kv->SetString("text", findData.cFileName);
@@ -1092,7 +1089,7 @@ void FileOpenDialog::PopulateFileList() {
 
   // find all the directories
   GetCurrentDirectory(dir, sizeof(dir));
-  Q_strncat(dir, "*", sizeof(dir), COPY_ALL_CHARACTERS);
+  strcat_s(dir, "*");
   findHandle = ::FindFirstFile(dir, &findData);
   while (findHandle != INVALID_HANDLE_VALUE) {
     if (findData.cFileName[0] != '.' &&
@@ -1137,7 +1134,7 @@ bool FileOpenDialog::ExtensionMatchesFilter(const char *pExt) {
   if (!combokv) return true;
 
   char filterList[MAX_FILTER_LENGTH + 1];
-  Q_strncpy(filterList, combokv->GetString("filter", "*"), MAX_FILTER_LENGTH);
+  strcpy_s(filterList, combokv->GetString("filter", "*"));
 
   char *filterPtr = filterList;
   while ((filterPtr != NULL) && (*filterPtr != 0)) {
@@ -1157,12 +1154,12 @@ bool FileOpenDialog::ExtensionMatchesFilter(const char *pExt) {
 
     if (curFilter[0] == 0) break;
 
-    if (!Q_stricmp(curFilter, "*") || !Q_stricmp(curFilter, "*.*")) return true;
+    if (!_stricmp(curFilter, "*") || !_stricmp(curFilter, "*.*")) return true;
 
     // TODO(d.rattman): This isn't exactly right, but tough cookies;
     // it assumes the first two characters of the filter are *.
     Assert(curFilter[0] == '*' && curFilter[1] == '.');
-    if (!Q_stricmp(&curFilter[2], pExt)) return true;
+    if (!_stricmp(&curFilter[2], pExt)) return true;
   }
 
   return false;
@@ -1178,7 +1175,7 @@ void FileOpenDialog::ChooseExtension(char *pExt, int nBufLen) {
   if (!combokv) return;
 
   char filterList[MAX_FILTER_LENGTH + 1];
-  Q_strncpy(filterList, combokv->GetString("filter", "*"), MAX_FILTER_LENGTH);
+  strcpy_s(filterList, combokv->GetString("filter", "*"));
 
   char *filterPtr = filterList;
   while ((filterPtr != NULL) && (*filterPtr != 0)) {
@@ -1198,12 +1195,12 @@ void FileOpenDialog::ChooseExtension(char *pExt, int nBufLen) {
 
     if (curFilter[0] == 0) break;
 
-    if (!Q_stricmp(curFilter, "*") || !Q_stricmp(curFilter, "*.*")) continue;
+    if (!_stricmp(curFilter, "*") || !_stricmp(curFilter, "*.*")) continue;
 
     // TODO(d.rattman): This isn't exactly right, but tough cookies;
     // it assumes the first two characters of the filter are *.
     Assert(curFilter[0] == '*' && curFilter[1] == '.');
-    Q_strncpy(pExt, &curFilter[1], nBufLen);
+    strcpy_s(pExt, nBufLen, &curFilter[1]);
     break;
   }
 }
@@ -1277,7 +1274,7 @@ void FileOpenDialog::OnSelectFolder() {
       Q_StripTrailingSlash(pFullPath);
     }
   } else {
-    Q_strncpy(pFullPath, pFileName, sizeof(pFullPath));
+    strcpy_s(pFullPath, pFileName);
   }
 
   if (g_pFullFileSystem->FileExists(pFullPath)) {
@@ -1303,7 +1300,7 @@ void FileOpenDialog::OnOpen() {
   char pFileName[SOURCE_MAX_PATH];
   GetSelectedFileName(pFileName, sizeof(pFileName));
 
-  int nLen = Q_strlen(pFileName);
+  usize nLen = strlen(pFileName);
   bool bSpecifiedDirectory =
       (pFileName[nLen - 1] == '/' || pFileName[nLen - 1] == '\\');
   Q_StripTrailingSlash(pFileName);
@@ -1331,7 +1328,7 @@ void FileOpenDialog::OnOpen() {
       Q_StripTrailingSlash(pFullPath);
     }
   } else {
-    Q_strncpy(pFullPath, pFileName, sizeof(pFullPath));
+    strcpy_s(pFullPath, pFileName);
   }
 
   // If the name specified is a directory, then change directory
@@ -1394,7 +1391,7 @@ void FileOpenDialog::PopulateFileNameCompletion() {
   m_pFileNameEdit->GetText(buf, 80);
   wchar_t wbuf[80];
   m_pFileNameEdit->GetText(wbuf, 80);
-  int bufLen = wcslen(wbuf);
+  usize bufLen = wcslen(wbuf);
 
   // delete all items before we check if there's even a string
   m_pFileNameEdit->DeleteAllItems();
