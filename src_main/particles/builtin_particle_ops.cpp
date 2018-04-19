@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "particles/particles.h"
 
@@ -11,7 +11,7 @@
 #include "tier2/fileutils.h"
 #include "tier2/renderutils.h"
 #include "tier2/tier2.h"
- 
+
 #include "tier0/include/memdbgon.h"
 
 #if MEASURE_PARTICLE_PERF
@@ -1075,9 +1075,9 @@ void C_OP_VectorNoise::Operate(CParticleCollection *pParticles,
                                  0.5 * (m_vecOutputMax.z - m_vecOutputMin.z));
 
   FourVectors ofs_y;
-  ofs_y.DuplicateVector(Vector(100000.5, 300000.25, 9000000.75));
+  ofs_y.DuplicateVector(Vector(100000.5f, 300000.25f, 9000000.75f));
   FourVectors ofs_z;
-  ofs_z.DuplicateVector(Vector(110000.25, 310000.75, 9100000.5));
+  ofs_z.DuplicateVector(Vector(110000.25f, 310000.75f, 9100000.5f));
 
   int nActive = pParticles->m_nActiveParticles;
   for (int i = 0; i < nActive; i += 4) {
@@ -1894,12 +1894,12 @@ void C_OP_PositionLock::Operate(CParticleCollection *pParticles,
   C4VAttributeWriteIterator pPrevXYZ(PARTICLE_ATTRIBUTE_PREV_XYZ, pParticles);
 
   int nCtr = pParticles->m_nPaddedActiveParticles;
-  bool bUseRange = (m_flRange != 0.0);
+  bool bUseRange = (m_flRange != 0.0f);
   fltx4 fl4OORange;
-  if (bUseRange) fl4OORange = ReplicateX4(1.0 / m_flRange);
+  if (bUseRange) fl4OORange = ReplicateX4(1.0f / m_flRange);
 
-  fltx4 fl4BiasParm = PreCalcBiasParameter(ReplicateX4(0.2));
-  if (m_flStartTime_min >= 1.0)  // always locked on
+  fltx4 fl4BiasParm = PreCalcBiasParameter(ReplicateX4(0.2f));
+  if (m_flStartTime_min >= 1.0f)  // always locked on
   {
     do {
       FourVectors v4ScaledDelta = v4Delta;
@@ -3193,10 +3193,10 @@ void C_OP_LockToBone::Operate(CParticleCollection *pParticles, float flStrength,
   if (pParticles->m_ControlPointHitBoxes[m_nControlPointNumber]
           .CurAndPrevValid()) {
     float flAgeThreshold = m_flLifeTimeFadeEnd;
-    if (flAgeThreshold <= 0.0) flAgeThreshold = 1.0e20;
-    float flIScale = 0.0;
+    if (flAgeThreshold <= 0.0f) flAgeThreshold = 1.0e20f;
+    float flIScale = 0.0f;
     if (m_flLifeTimeFadeEnd > m_flLifeTimeFadeStart)
-      flIScale = 1.0 / (m_flLifeTimeFadeEnd - m_flLifeTimeFadeStart);
+      flIScale = 1.0f / (m_flLifeTimeFadeEnd - m_flLifeTimeFadeStart);
 
     for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
       float *pXYZ =

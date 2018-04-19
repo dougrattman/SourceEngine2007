@@ -1991,7 +1991,7 @@ extern ConVar dsp_vol_5ch;
 extern ConVar dsp_vol_4ch;
 extern ConVar dsp_vol_2ch;
 
-extern void MXR_SetCurrentSoundMixer(const char *szsoundmixer);
+extern void MXR_SetCurrentSoundMixer(const ch *szsoundmixer);
 extern ConVar snd_soundmixer;
 
 void MIX_PaintChannels(int endtime, bool bIsUnderwater) {
@@ -2204,7 +2204,7 @@ bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
   int i;
   int mixflag = ppaint->flags;
   float scale;
-  char wavtype = pChannel->wavtype;
+  ch wavtype = pChannel->wavtype;
   float dspmix;
 
   // copy current channel volumes into output array

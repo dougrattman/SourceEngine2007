@@ -51,7 +51,7 @@ class CAudioXAudio2 : public CAudioDeviceBase {
   void ClearBuffer() override;
   void TransferSamples(int end) override;
 
-  const char *DeviceName() override;
+  const ch *DeviceName() override;
   int DeviceChannels() override { return m_deviceChannels; }
   int DeviceSampleBits() override { return m_deviceSampleBits; }
   int DeviceSampleBytes() override { return m_deviceSampleBits / 8; }
@@ -66,12 +66,12 @@ class CAudioXAudio2 : public CAudioDeviceBase {
 
  private:
   int TransferStereo(const portable_samplepair_t *pFront, int paintedTime,
-                     int endTime, char *pOutptuBuffer);
+                     int endTime, ch *pOutptuBuffer);
   int TransferSurroundInterleaved(const portable_samplepair_t *pFront,
                                   const portable_samplepair_t *pRear,
                                   const portable_samplepair_t *pCenter,
                                   int paintedTime, int endTime,
-                                  char *pOutputBuffer);
+                                  ch *pOutputBuffer);
 
   int m_deviceChannels;  // channels per hardware output buffer (1 for quad/5.1,
                          // 2 for stereo)
@@ -83,7 +83,7 @@ class CAudioXAudio2 : public CAudioDeviceBase {
   IXAudio2 *m_pXAudio2;
   IXAudio2SourceVoice *m_pSourceVoice;
 
-  char *m_pOutputBuffer;
+  ch *m_pOutputBuffer;
   int m_bufferSizeBytes;  // size of a single hardware output buffer, in bytes
 
   std::atomic_uint32_t m_PacketTail;
@@ -201,7 +201,7 @@ bool CAudioXAudio2::Init() {
 
   m_bufferSizeBytes =
       XAUDIO_BUFFER_SAMPLES * (m_deviceSampleBits / 8) * m_deviceChannels;
-  m_pOutputBuffer = new char[MAX_XAUDIO_PACKETS * m_bufferSizeBytes];
+  m_pOutputBuffer = new ch[MAX_XAUDIO_PACKETS * m_bufferSizeBytes];
   ClearBuffer();
 
   V_memset(m_Packets, 0, MAX_XAUDIO_PACKETS * sizeof(XAUDIOPACKET));
@@ -341,7 +341,7 @@ void CAudioXAudio2::ClearBuffer() {
 // Fill the output buffer with L/R samples
 int CAudioXAudio2::TransferStereo(const portable_samplepair_t *pFrontBuffer,
                                   int paintedTime, int endTime,
-                                  char *pOutputBuffer) {
+                                  ch *pOutputBuffer) {
   int linearCount;
   int i;
   int val;
@@ -382,7 +382,7 @@ int CAudioXAudio2::TransferSurroundInterleaved(
     const portable_samplepair_t *pFrontBuffer,
     const portable_samplepair_t *pRearBuffer,
     const portable_samplepair_t *pCenterBuffer, int paintedTime, int endTime,
-    char *pOutputBuffer) {
+    ch *pOutputBuffer) {
   int linearCount;
   int i, j;
   int val;
@@ -447,11 +447,11 @@ void CAudioXAudio2::TransferSamples(int endTime) {
 
   if (!m_bSurround) {
     pPacket->BufferSize = TransferStereo(PAINTBUFFER, g_paintedtime, endTime,
-                                         (char *)pPacket->pBuffer);
+                                         (ch *)pPacket->pBuffer);
   } else {
     pPacket->BufferSize = TransferSurroundInterleaved(
         PAINTBUFFER, REARPAINTBUFFER, CENTERPAINTBUFFER, g_paintedtime, endTime,
-        (char *)pPacket->pBuffer);
+        (ch *)pPacket->pBuffer);
   }
 
   // submit packet
@@ -461,7 +461,7 @@ void CAudioXAudio2::TransferSamples(int endTime) {
 //-----------------------------------------------------------------------------
 // Get our device name
 //-----------------------------------------------------------------------------
-const char *CAudioXAudio2::DeviceName() {
+const ch *CAudioXAudio2::DeviceName() {
   if (m_bSurround) {
     return "XAudio: 5.1 Channel Surround";
   }

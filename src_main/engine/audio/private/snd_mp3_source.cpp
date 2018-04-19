@@ -116,9 +116,9 @@ void CAudioSourceMP3::GetCacheData(CAudioSourceCachedInfo *info) {
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : char const
+// Output : ch const
 //-----------------------------------------------------------------------------
-char const *CAudioSourceMP3::GetFileName() {
+ch const *CAudioSourceMP3::GetFileName() {
   return m_pSfx ? m_pSfx->GetFileName() : "NULL m_pSfx";
 }
 
@@ -187,8 +187,8 @@ void CAudioSourceMP3Cache::CacheUnload(void) {
   }
 }
 
-char *CAudioSourceMP3Cache::GetDataPointer(void) {
-  char *pMP3Data = NULL;
+ch *CAudioSourceMP3Cache::GetDataPointer(void) {
+  ch *pMP3Data = NULL;
   bool dummy = false;
 
   if (m_hCache == 0) {
@@ -203,7 +203,7 @@ char *CAudioSourceMP3Cache::GetDataPointer(void) {
 
 int CAudioSourceMP3Cache::GetOutputData(
     void **pData, int samplePosition, int sampleCount,
-    char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+    ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   // how many bytes are available ?
   int totalSampleCount = m_dataSize - samplePosition;
 
@@ -232,7 +232,7 @@ int CAudioSourceMP3Cache::GetOutputData(
     }
 
     if (*pData) {
-      *pData = (char *)*pData + samplePosition;
+      *pData = (ch *)*pData + samplePosition;
     } else {
       // Out of data or file i/o problem
       sampleCount = 0;
@@ -289,11 +289,11 @@ CAudioMixer *CAudioSourceStreamMP3::CreateMixer(int intialStreamPosition) {
 
 int CAudioSourceStreamMP3::GetOutputData(
     void **pData, int samplePosition, int sampleCount,
-    char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+    ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   return 0;
 }
 
-bool Audio_IsMP3(const char *pName) {
+bool Audio_IsMP3(const ch *pName) {
   int len = strlen(pName);
   if (len > 4) {
     if (!Q_strnicmp(&pName[len - 4], ".mp3", 4)) {

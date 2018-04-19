@@ -5,12 +5,12 @@
 #include "MPAFile.h"
 
 // static variables
-const char* CMPAHeader::m_szLayers[] = {"Layer I", "Layer II", "Layer III"};
-const char* CMPAHeader::m_szMPEGVersions[] = {"MPEG 2.5", "", "MPEG 2",
+const ch* CMPAHeader::m_szLayers[] = {"Layer I", "Layer II", "Layer III"};
+const ch* CMPAHeader::m_szMPEGVersions[] = {"MPEG 2.5", "", "MPEG 2",
                                               "MPEG 1"};
-const char* CMPAHeader::m_szChannelModes[] = {"Stereo", "Joint Stereo",
+const ch* CMPAHeader::m_szChannelModes[] = {"Stereo", "Joint Stereo",
                                               "Dual Channel", "Single Channel"};
-const char* CMPAHeader::m_szEmphasis[] = {"None", "50/15ms", "", "CCIT J.17"};
+const ch* CMPAHeader::m_szEmphasis[] = {"None", "50/15ms", "", "CCIT J.17"};
 
 // tolerance range, look at expected offset +/- m_dwTolerance for subsequent
 // frames

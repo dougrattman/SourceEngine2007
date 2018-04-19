@@ -794,8 +794,8 @@ void C_INIT_InitialVelocityNoise::InitNewParticlesBlock(
   float CoordScale = m_flNoiseScale;
   float CoordScaleLoc = m_flNoiseScaleLoc;
 
-  Vector ofs_y = Vector(100000.5, 300000.25, 9000000.75);
-  Vector ofs_z = Vector(110000.25, 310000.75, 9100000.5);
+  Vector ofs_y = Vector(100000.5f, 300000.25f, 9000000.75f);
+  Vector ofs_z = Vector(110000.25f, 310000.75f, 9100000.5f);
 
   size_t attr_stride;
 
@@ -931,8 +931,8 @@ void C_INIT_InitialVelocityNoise::InitNewParticlesScalar(
   float CoordScale = m_flNoiseScale;
   float CoordScaleLoc = m_flNoiseScaleLoc;
 
-  Vector ofs_y = Vector(100000.5, 300000.25, 9000000.75);
-  Vector ofs_z = Vector(110000.25, 310000.75, 9100000.5);
+  Vector ofs_y = Vector(100000.5f, 300000.25f, 9000000.75f);
+  Vector ofs_z = Vector(110000.25f, 310000.75f, 9100000.5f);
 
   for (; nParticleCount--; start_p++) {
     const float *xyz =

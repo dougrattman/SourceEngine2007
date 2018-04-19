@@ -75,7 +75,7 @@ int CCircularBuffer::GetReadAvailable() {
 // buffer.  Output  : Returns the number of bytes placed in the destination
 // buffer.  Author  : DSpeyrer
 //------------------------------------------------------------------------------
-int CCircularBuffer::Peek(char *pchDest, int nCount) {
+int CCircularBuffer::Peek(ch *pchDest, int nCount) {
   // If no data available, just return.
   if (m_nCount == 0) return 0;
 
@@ -138,7 +138,7 @@ int CCircularBuffer::Advance(int nCount) {
 // buffer.  Author  : DSpeyrer
 //------------------------------------------------------------------------------
 int CCircularBuffer::Read(void *pchDestIn, int count) {
-  char *pchDest = (char *)pchDestIn;
+  ch *pchDest = (ch *)pchDestIn;
   int nPeeked = Peek(pchDest, count);
   int read_count;
 
@@ -165,7 +165,7 @@ int CCircularBuffer::Read(void *pchDestIn, int count) {
 int CCircularBuffer::Write(void *pData, int nBytesRequested) {
   // Write all the data.
   int nBytesToWrite = nBytesRequested;
-  char *pDataToWrite = (char *)pData;
+  ch *pDataToWrite = (ch *)pData;
 
   while (nBytesToWrite) {
     int from = m_nWrite;
@@ -196,7 +196,7 @@ int CCircularBuffer::Write(void *pData, int nBytesRequested) {
 }
 
 CCircularBuffer *AllocateCircularBuffer(int nSize) {
-  char *bufer = (char *)malloc(sizeof(CCircularBuffer) + nSize - 1);
+  ch *bufer = (ch *)malloc(sizeof(CCircularBuffer) + nSize - 1);
   CCircularBuffer *circular_buffer = (CCircularBuffer *)bufer;
 
   circular_buffer->SetSize(nSize);
@@ -204,5 +204,5 @@ CCircularBuffer *AllocateCircularBuffer(int nSize) {
 }
 
 void FreeCircularBuffer(CCircularBuffer *pCircularBuffer) {
-  free((char *)pCircularBuffer);
+  free((ch *)pCircularBuffer);
 }

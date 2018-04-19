@@ -25,7 +25,7 @@ the_interface ISoundServices {
  public:
   // Allocate a block of memory that will be automatically
   // cleaned up on level change
-  virtual void *LevelAlloc(int nBytes, const char *pszTag) = 0;
+  virtual void *LevelAlloc(int nBytes, const ch *pszTag) = 0;
 
   // Notification that someone called S_ExtraUpdate()
   virtual void OnExtraUpdate() = 0;
@@ -58,12 +58,12 @@ the_interface ISoundServices {
 
   // Calls into client .dll with list of close caption tokens to construct a
   // caption out of
-  virtual void EmitSentenceCloseCaption(char const *tokenstream) = 0;
+  virtual void EmitSentenceCloseCaption(ch const *tokenstream) = 0;
   // Calls into client .dll with list of close caption tokens to construct a
   // caption out of
-  virtual void EmitCloseCaption(char const *captionname, float duration) = 0;
+  virtual void EmitCloseCaption(ch const *captionname, float duration) = 0;
 
-  virtual char const *GetGameDir() = 0;
+  virtual ch const *GetGameDir() = 0;
 
   // If the game is paused, certain audio will pause, too (anything with
   // phoneme/sentence data for now)
@@ -77,26 +77,26 @@ the_interface ISoundServices {
   virtual void GetAllManifestFiles(CUtlRBTree<FileNameHandle_t, int> &
                                    list) = 0;
   virtual void GetAllSoundFilesInManifest(
-      CUtlRBTree<FileNameHandle_t, int> & list, char const *manifestfile) = 0;
+      CUtlRBTree<FileNameHandle_t, int> & list, ch const *manifestfile) = 0;
 
   virtual void CacheBuildingStart() = 0;
   virtual void CacheBuildingUpdateProgress(float percent,
-                                           char const *cachefile) = 0;
+                                           ch const *cachefile) = 0;
   virtual void CacheBuildingFinish() = 0;
 
   // For building sound cache manifests
   virtual int GetPrecachedSoundCount() = 0;
-  virtual char const *GetPrecachedSound(int index) = 0;
+  virtual ch const *GetPrecachedSound(int index) = 0;
 
   virtual void OnSoundStarted(int guid, StartSoundParams_t &params,
-                              char const *soundname) = 0;
+                              ch const *soundname) = 0;
   virtual void OnSoundStopped(int guid, int soundsource, int channel,
-                              char const *soundname) = 0;
+                              ch const *soundname) = 0;
 
   virtual bool GetToolSpatialization(int iUserData, int guid,
                                      SpatializationInfo_t &info) = 0;
 
-  virtual char const *GetUILanguage() = 0;
+  virtual ch const *GetUILanguage() = 0;
 };
 
 extern ISoundServices *g_pSoundServices;

@@ -90,10 +90,10 @@ struct channel_t {
   float ob_gain_inc;     // crossfade increment
 
   short activeIndex;
-  char wavtype;  // 0 default, CHAR_DOPPLER, CHAR_DIRECTIONAL, CHAR_DISTVARIANT
-  char pad;
+  ch wavtype;  // 0 default, CHAR_DOPPLER, CHAR_DIRECTIONAL, CHAR_DISTVARIANT
+  ch pad;
 
-  char sample_prev[8];  // last sample(s) in previous input data buffer - space
+  ch sample_prev[8];  // last sample(s) in previous input data buffer - space
                         // for 2, 16 bit, stereo samples
 
   int initialStreamPosition;

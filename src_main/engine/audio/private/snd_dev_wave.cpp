@@ -40,10 +40,10 @@ class CAudioDeviceWave : public CAudioDeviceBase {
                       const Vector &right, const Vector &up);
   void MixBegin(int sampleCount);
   void MixUpsample(int sampleCount, int filtertype);
-  void Mix8Mono(channel_t *pChannel, char *pData, int outputOffset,
+  void Mix8Mono(channel_t *pChannel, ch *pData, int outputOffset,
                 int inputOffset, fixedint rateScaleFix, int outCount,
                 int timecompress);
-  void Mix8Stereo(channel_t *pChannel, char *pData, int outputOffset,
+  void Mix8Stereo(channel_t *pChannel, ch *pData, int outputOffset,
                   int inputOffset, fixedint rateScaleFix, int outCount,
                   int timecompress);
   void Mix16Mono(channel_t *pChannel, short *pData, int outputOffset,
@@ -60,7 +60,7 @@ class CAudioDeviceWave : public CAudioDeviceBase {
                        portable_samplepair_t *pbufrear,
                        portable_samplepair_t *pbufcenter, int samplecount);
 
-  const char *DeviceName(void) { return "Windows WAVE"; }
+  const ch *DeviceName(void) { return "Windows WAVE"; }
   int DeviceChannels(void) { return 2; }
   int DeviceSampleBits(void) { return 16; }
   int DeviceSampleBytes(void) { return 2; }
@@ -217,7 +217,7 @@ void *CAudioDeviceWave::AllocOutputMemory(int nSize, HGLOBAL &hMemory) {
     return NULL;
   }
 
-  HPSTR lpData = (char *)GlobalLock(hMemory);
+  HPSTR lpData = (ch *)GlobalLock(hMemory);
   if (!lpData) {
     DevWarning("Sound: Failed to lock.\n");
     GlobalFree(hMemory);
@@ -246,7 +246,7 @@ void CAudioDeviceWave::FreeOutputMemory(HGLOBAL &hMemory) {
 void CAudioDeviceWave::AllocateOutputBuffers() {
   // Allocate and lock memory for the waveform data.
   int nBufferSize = WAV_BUFFER_SIZE * WAV_BUFFERS;
-  HPSTR lpData = (char *)AllocOutputMemory(nBufferSize, m_hWaveData);
+  HPSTR lpData = (ch *)AllocOutputMemory(nBufferSize, m_hWaveData);
   if (!lpData) return;
 
   // Allocate and lock memory for the waveform header
@@ -429,7 +429,7 @@ void CAudioDeviceWave::MixUpsample(int sampleCount, int filtertype) {
   ppaint->ifilter++;
 }
 
-void CAudioDeviceWave::Mix8Mono(channel_t *pChannel, char *pData,
+void CAudioDeviceWave::Mix8Mono(channel_t *pChannel, ch *pData,
                                 int outputOffset, int inputOffset,
                                 fixedint rateScaleFix, int outCount,
                                 int timecompress) {
@@ -442,7 +442,7 @@ void CAudioDeviceWave::Mix8Mono(channel_t *pChannel, char *pData,
                   (uint8_t *)pData, inputOffset, rateScaleFix, outCount);
 }
 
-void CAudioDeviceWave::Mix8Stereo(channel_t *pChannel, char *pData,
+void CAudioDeviceWave::Mix8Stereo(channel_t *pChannel, ch *pData,
                                   int outputOffset, int inputOffset,
                                   fixedint rateScaleFix, int outCount,
                                   int timecompress) {

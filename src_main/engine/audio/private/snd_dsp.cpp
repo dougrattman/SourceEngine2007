@@ -8684,7 +8684,7 @@ bool AllocDsps(bool bLoadPresetFile) {
 // count number of dsp presets specified in preset file
 // counts outer {} pairs, ignoring inner {} pairs.
 
-int DSP_CountFilePresets(const char *pstart) {
+int DSP_CountFilePresets(const ch *pstart) {
   int cpresets = 0;
   bool binpreset = false;
   bool blookleft = false;
@@ -8732,7 +8732,7 @@ int DSP_CountFilePresets(const char *pstart) {
 }
 
 struct dsp_stringmap_t {
-  char sz[33];
+  ch sz[33];
   int i;
 };
 
@@ -8810,7 +8810,7 @@ int gcdsp_stringmap = sizeof(gdsp_stringmap) / sizeof(dsp_stringmap_t);
 // given ptr to 0 term. string, return integer or float value from
 // g_dsp_stringmap
 
-float DSP_LookupStringToken(char *psz, int ipset) {
+float DSP_LookupStringToken(ch *psz, int ipset) {
   int i;
   float fipset = (float)ipset;
 
@@ -8846,9 +8846,9 @@ void DSP_ReleaseMemory(void) {
 }
 
 bool DSP_LoadPresetFile(void) {
-  char szFile[MAX_OSPATH];
-  char *pbuffer;
-  const char *pstart;
+  ch szFile[MAX_OSPATH];
+  ch *pbuffer;
+  const ch *pstart;
   bool bResult = false;
   int cpresets;
   int ipreset;
@@ -8873,7 +8873,7 @@ bool DSP_LoadPresetFile(void) {
     Error("DSP_LoadPresetFile: unable to open '%s'\n", szFile);
     return bResult;
   }
-  pbuffer = (char *)buf.PeekGet();  // Use malloc - free at end of this routine
+  pbuffer = (ch *)buf.PeekGet();  // Use malloc - free at end of this routine
 
   pstart = pbuffer;
 

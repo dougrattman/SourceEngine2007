@@ -43,9 +43,9 @@ typedef enum { SIS_SUCCESS, SIS_FAILURE, SIS_NOTAVAIL } sndinitstat;
 extern void ReleaseSurround();
 extern bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
                                    int volume[CCHANVOLUMES], int mixchans);
-void OnSndSurroundCvarChanged(IConVar *var, const char *pOldString,
+void OnSndSurroundCvarChanged(IConVar *var, const ch *pOldString,
                               float flOldValue);
-void OnSndSurroundLegacyChanged(IConVar *var, const char *pOldString,
+void OnSndSurroundLegacyChanged(IConVar *var, const ch *pOldString,
                                 float flOldValue);
 
 LPDIRECTSOUND8 pDS;
@@ -81,7 +81,7 @@ class CAudioDirectSound : public CAudioDeviceBase {
   void ChannelReset(int entnum, int channelIndex, float distanceMod);
   void TransferSamples(int end);
 
-  const char *DeviceName();
+  const ch *DeviceName();
   int DeviceChannels() { return m_deviceChannels; }
   int DeviceSampleBits() { return m_deviceSampleBits; }
   int DeviceSampleBytes() { return m_deviceSampleBits / 8; }
@@ -96,7 +96,7 @@ class CAudioDirectSound : public CAudioDeviceBase {
  private:
   void DetectWindowsSpeakerSetup();
   bool LockDSBuffer(LPDIRECTSOUNDBUFFER pBuffer, DWORD **pdwWriteBuffer,
-                    DWORD *pdwSizeBuffer, const char *pBufferName,
+                    DWORD *pdwSizeBuffer, const ch *pBufferName,
                     int lockFlags = 0);
   bool IsUsingBufferPerSpeaker();
 
@@ -379,7 +379,7 @@ void CAudioDirectSound::ClearBuffer() {
   int clear;
 
   DWORD dwSizeFL, dwSizeFR, dwSizeRL, dwSizeRR, dwSizeFC;
-  char *pDataFL, *pDataFR, *pDataRL, *pDataRR, *pDataFC;
+  ch *pDataFL, *pDataFR, *pDataRL, *pDataRR, *pDataFC;
 
   dwSizeFC = 0;  // compiler warning
   pDataFC = NULL;
@@ -963,7 +963,7 @@ void CAudioDirectSound::DetectWindowsSpeakerSetup() {
  This should only happen if the user has changed it via the console or the UI
  Changes won't take effect until the engine has restarted
 */
-void OnSndSurroundCvarChanged(IConVar *pVar, const char *pOldString,
+void OnSndSurroundCvarChanged(IConVar *pVar, const ch *pOldString,
                               float flOldValue) {
   if (!pDS) return;
 
@@ -976,7 +976,7 @@ void OnSndSurroundCvarChanged(IConVar *pVar, const char *pOldString,
 
   // get the new config
   DWORD newSpeakerConfig = 0;
-  const char *speakerConfigDesc = "";
+  const ch *speakerConfigDesc = "";
 
   ConVarRef var(pVar);
   switch (var.GetInt()) {
@@ -1019,7 +1019,7 @@ void OnSndSurroundCvarChanged(IConVar *pVar, const char *pOldString,
   g_pSoundServices->RestartSoundSystem();
 }
 
-void OnSndSurroundLegacyChanged(IConVar *pVar, const char *pOldString,
+void OnSndSurroundLegacyChanged(IConVar *pVar, const ch *pOldString,
                                 float flOldValue) {
   if (pDS && CAudioDirectSound::m_pSingleton) {
     ConVarRef var(pVar);
@@ -1511,7 +1511,7 @@ void CAudioDirectSound::UpdateListener(const Vector &position,
 void CAudioDirectSound::ChannelReset(int entnum, int channelIndex,
                                      float distanceMod) {}
 
-const char *CAudioDirectSound::DeviceName() {
+const ch *CAudioDirectSound::DeviceName() {
   if (m_bSurroundCenter) return "5 Channel Surround";
 
   if (m_bSurround) return "4 Channel Surround";
@@ -1576,7 +1576,7 @@ bool CAudioDirectSound::IsUsingBufferPerSpeaker() {
 bool CAudioDirectSound::LockDSBuffer(LPDIRECTSOUNDBUFFER pBuffer,
                                      DWORD **pdwWriteBuffer,
                                      DWORD *pdwSizeBuffer,
-                                     const char *pBufferName, int lockFlags) {
+                                     const ch *pBufferName, int lockFlags) {
   if (!pBuffer) return false;
 
   HRESULT hr;

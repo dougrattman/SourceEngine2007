@@ -36,10 +36,10 @@ class CAudioDeviceBase : public IAudioDevice {
   virtual void MixBegin(int sampleCount);
   virtual void MixUpsample(int sampleCount, int filtertype);
 
-  virtual void Mix8Mono(channel_t *pChannel, char *pData, int outputOffset,
+  virtual void Mix8Mono(channel_t *pChannel, ch *pData, int outputOffset,
                         int inputOffset, fixedint rateScaleFix, int outCount,
                         int timecompress);
-  virtual void Mix8Stereo(channel_t *pChannel, char *pData, int outputOffset,
+  virtual void Mix8Stereo(channel_t *pChannel, ch *pData, int outputOffset,
                           int inputOffset, fixedint rateScaleFix, int outCount,
                           int timecompress);
   virtual void Mix16Mono(channel_t *pChannel, short *pData, int outputOffset,
@@ -52,7 +52,7 @@ class CAudioDeviceBase : public IAudioDevice {
   virtual void ChannelReset(int entnum, int channelIndex, float distanceMod) {}
   virtual void TransferSamples(int end) {}
 
-  virtual const char *DeviceName() { return nullptr; }
+  virtual const ch *DeviceName() { return nullptr; }
   virtual int DeviceChannels() { return 0; }
   virtual int DeviceSampleBits() { return 0; }
   virtual int DeviceSampleBytes() { return 0; }

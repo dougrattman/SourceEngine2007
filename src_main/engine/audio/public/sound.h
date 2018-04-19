@@ -99,19 +99,19 @@ void S_GetActiveSounds(CUtlVector<SndInfo_t> &sndlist);
 void S_SetVolumeByGuid(int guid, float fvol);
 float S_GetElapsedTimeByGuid(int guid);
 bool S_IsLoopingSoundByGuid(int guid);
-void S_ReloadSound(const char *pSample);
-float S_GetMono16Samples(const char *pszName, CUtlVector<short> &sampleList);
+void S_ReloadSound(const ch *pSample);
+float S_GetMono16Samples(const ch *pszName, CUtlVector<short> &sampleList);
 
-CSfxTable *S_DummySfx(const char *name);
-CSfxTable *S_PrecacheSound(const char *sample);
-void S_PrefetchSound(char const *name, bool bPlayOnce);
+CSfxTable *S_DummySfx(const ch *name);
+CSfxTable *S_PrecacheSound(const ch *sample);
+void S_PrefetchSound(ch const *name, bool bPlayOnce);
 void S_MarkUISound(CSfxTable *pSfx);
 void S_ReloadFilesInList(IFileList *pFilesToReload);
 
 f32 S_GetNominalClipDist();
 
-extern bool TestSoundChar(const char *pch, char c);
-extern char *PSkipSoundChars(const char *pch);
+extern bool TestSoundChar(const ch *pch, ch c);
+extern ch *PSkipSoundChars(const ch *pch);
 
 #include "soundchars.h"
 
@@ -131,7 +131,7 @@ float S_GetGainFromSoundLevel(soundlevel_t soundlevel, f32 dist);
 struct musicsave_t {
   DECLARE_SIMPLE_DATADESC();
 
-  char songname[128];
+  ch songname[128];
   int sampleposition;
   short master_volume;
 };

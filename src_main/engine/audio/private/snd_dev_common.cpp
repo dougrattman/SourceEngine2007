@@ -460,7 +460,7 @@ void CAudioDeviceBase::MixUpsample(int sampleCount, int filtertype) {
   pPaint->ifilter++;
 }
 
-void CAudioDeviceBase::Mix8Mono(channel_t *pChannel, char *pData,
+void CAudioDeviceBase::Mix8Mono(channel_t *pChannel, ch *pData,
                                 int outputOffset, int inputOffset,
                                 fixedint rateScaleFix, int outCount,
                                 int timecompress) {
@@ -492,7 +492,7 @@ void CAudioDeviceBase::Mix8Mono(channel_t *pChannel, char *pData,
   }
 }
 
-void CAudioDeviceBase::Mix8Stereo(channel_t *pChannel, char *pData,
+void CAudioDeviceBase::Mix8Stereo(channel_t *pChannel, ch *pData,
                                   int outputOffset, int inputOffset,
                                   fixedint rateScaleFix, int outCount,
                                   int timecompress) {
@@ -616,10 +616,10 @@ class CAudioDeviceNull : public CAudioDeviceBase {
   void MixBegin(int) {}
   void MixUpsample(int sampleCount, int filtertype) {}
 
-  void Mix8Mono(channel_t *pChannel, char *pData, int outputOffset,
+  void Mix8Mono(channel_t *pChannel, ch *pData, int outputOffset,
                 int inputOffset, fixedint rateScaleFix, int outCount,
                 int timecompress) {}
-  void Mix8Stereo(channel_t *pChannel, char *pData, int outputOffset,
+  void Mix8Stereo(channel_t *pChannel, ch *pData, int outputOffset,
                   int inputOffset, fixedint rateScaleFix, int outCount,
                   int timecompress) {}
   void Mix16Mono(channel_t *pChannel, short *pData, int outputOffset,
@@ -632,7 +632,7 @@ class CAudioDeviceNull : public CAudioDeviceBase {
   void ChannelReset(int, int, float) {}
   void TransferSamples(int end) {}
 
-  const char *DeviceName(void) { return "Audio Disabled"; }
+  const ch *DeviceName(void) { return "Audio Disabled"; }
   int DeviceChannels(void) { return 2; }
   int DeviceSampleBits(void) { return 16; }
   int DeviceSampleBytes(void) { return 2; }

@@ -526,7 +526,7 @@ class ZipFile {
 
   unsigned short CalculatePadding(unsigned int filenameLen, unsigned int pos);
   void SaveDirectory(IWriteStream &stream);
-  u16 MakeXZipCommentString(char *pComment, u16 max_length);
+  u16 MakeXZipCommentString(char *pComment, size_t max_length);
   void ParseXZipCommentString(const char *pComment);
 
   // Internal entry for faster searching, etc.
@@ -877,7 +877,7 @@ unsigned short ZipFile::CalculatePadding(unsigned int filenameLen,
 
 // Purpose: Create the XZIP identifying comment string
 // Output : Length
-u16 ZipFile::MakeXZipCommentString(char *comment, u16 max_length) {
+u16 ZipFile::MakeXZipCommentString(char *comment, size_t max_length) {
   char tmp[XZIP_COMMENT_LENGTH];
   memset(tmp, 0, sizeof(tmp));
 

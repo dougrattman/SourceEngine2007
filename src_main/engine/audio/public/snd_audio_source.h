@@ -98,7 +98,7 @@ class CAudioSourceCachedInfo : public IBaseCacheInfo {
 
   virtual void Save(CUtlBuffer &buf);
   virtual void Restore(CUtlBuffer &buf);
-  virtual void Rebuild(char const *filename);
+  virtual void Rebuild(ch const *filename);
 
   // A hack, but will work okay
   static int s_CurrentType;
@@ -202,7 +202,7 @@ class IAudioSourceCache {
  public:
   virtual bool Init(unsigned int memSize) = 0;
   virtual void Shutdown() = 0;
-  virtual void LevelInit(char const *mapname) = 0;
+  virtual void LevelInit(ch const *mapname) = 0;
   virtual void LevelShutdown() = 0;
 
   // This invalidates the cached size/date info for sounds so it'll regenerate
@@ -241,23 +241,23 @@ the_interface IAsyncWavDataCache {
   virtual void Shutdown() = 0;
 
   // implementation that treats file as monolithic
-  virtual memhandle_t AsyncLoadCache(char const *filename, int datasize,
+  virtual memhandle_t AsyncLoadCache(ch const *filename, int datasize,
                                      int startpos,
                                      bool bIsPrefetch = false) = 0;
-  virtual void PrefetchCache(char const *filename, int datasize,
+  virtual void PrefetchCache(ch const *filename, int datasize,
                              int startpos) = 0;
-  virtual bool CopyDataIntoMemory(char const *filename, int datasize,
+  virtual bool CopyDataIntoMemory(ch const *filename, int datasize,
                                   int startpos, void *buffer, int bufsize,
                                   int copystartpos, int bytestocopy,
                                   bool *pbPostProcessed) = 0;
-  virtual bool CopyDataIntoMemory(memhandle_t & handle, char const *filename,
+  virtual bool CopyDataIntoMemory(memhandle_t & handle, ch const *filename,
                                   int datasize, int startpos, void *buffer,
                                   int bufsize, int copystartpos,
                                   int bytestocopy, bool *pbPostProcessed) = 0;
   virtual bool IsDataLoadCompleted(memhandle_t handle, bool *pIsValid) = 0;
-  virtual void RestartDataLoad(memhandle_t * pHandle, const char *pFilename,
+  virtual void RestartDataLoad(memhandle_t * pHandle, const ch *pFilename,
                                int dataSize, int startpos) = 0;
-  virtual bool GetDataPointer(memhandle_t & handle, char const *filename,
+  virtual bool GetDataPointer(memhandle_t & handle, ch const *filename,
                               int datasize, int startpos, void **pData,
                               int copystartpos, bool *pbPostProcessed) = 0;
   virtual void SetPostProcessed(memhandle_t handle, bool proc) = 0;
@@ -265,7 +265,7 @@ the_interface IAsyncWavDataCache {
 
   // alternate multi-buffer streaming implementation
   virtual StreamHandle_t OpenStreamedLoad(
-      char const *pFileName, int dataSize, int dataStart, int startPos,
+      ch const *pFileName, int dataSize, int dataStart, int startPos,
       int loopPos, int bufferSize, int numBuffers, streamFlags_t flags) = 0;
   virtual void CloseStreamedLoad(StreamHandle_t hStream) = 0;
   virtual int CopyStreamedDataIntoMemory(StreamHandle_t hStream, void *pBuffer,
@@ -353,7 +353,7 @@ the_interface CAudioSource {
   // you prefer to copy the data, you can copy it into copyBuf and set pData to
   // copyBuf.
   virtual int GetOutputData(void **pData, int samplePosition, int sampleCount,
-                            char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) = 0;
+                            ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) = 0;
 
   virtual int SampleRate(void) = 0;
 
@@ -406,7 +406,7 @@ the_interface CAudioSource {
   // Make sure our data is rebuilt into the per-level cache
   virtual void CheckAudioSourceCache() = 0;
 
-  virtual char const *GetFileName() = 0;
+  virtual ch const *GetFileName() = 0;
 
   virtual void SetPlayOnce(bool) = 0;
   virtual bool IsPlayOnce() = 0;
@@ -420,7 +420,7 @@ the_interface CAudioSource {
 };
 
 // Fast method for determining duration of .wav/.mp3, exposed to server as well
-extern float AudioSource_GetSoundDuration(char const *pName);
+extern float AudioSource_GetSoundDuration(ch const *pName);
 
 // uses wave file cached in memory already
 extern float AudioSource_GetSoundDuration(CSfxTable *pSfx);

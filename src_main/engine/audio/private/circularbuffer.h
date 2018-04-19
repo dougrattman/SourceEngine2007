@@ -60,7 +60,7 @@ class CCircularBuffer {
   int GetReadAvailable();  // Get the amount available to read.
 
   int GetMaxUsed();
-  int Peek(char *pchDest, int nCount);
+  int Peek(ch *pchDest, int nCount);
   int Advance(int nCount);
   int Read(void *pchDest, int nCount);
   int Write(void *pchData, int nCount);
@@ -73,7 +73,7 @@ class CCircularBuffer {
   int m_nWrite;  // Write index into circular buffer
 
   int m_nSize;  // Size of circular buffer in bytes (how much data it can hold).
-  char m_chData[1];  // Circular buffer holding data
+  ch m_chData[1];  // Circular buffer holding data
 };
 
 // Use this to instantiate a CircularBuffer.
@@ -83,7 +83,7 @@ class CSizedCircularBuffer : public CCircularBuffer {
   CSizedCircularBuffer() : CCircularBuffer(size) {}
 
  private:
-  char myData[size - 1];
+  ch myData[size - 1];
 };
 
 CCircularBuffer *AllocateCircularBuffer(int nSize);

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "particles/particles.h"
 
@@ -11,7 +11,6 @@
 #include "tier2/fileutils.h"
 #include "tier2/tier2.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern int g_nParticle_Multiplier;
@@ -366,8 +365,8 @@ class C_OP_ContinuousEmitter : public CParticleOperatorInstance {
           flCurrDrawTime - pParticles->m_pDef->m_flNoDrawTimeToGoToSleep);
       pParticles->m_flCurTime = flPrevDrawTime;
       pParticles->m_fl4CurTime = ReplicateX4(flPrevDrawTime);
-      for (float i = flPrevDrawTime; i < flCurrDrawTime; i += 0.1) {
-        pParticles->Simulate(.1);
+      for (float i = flPrevDrawTime; i < flCurrDrawTime; i += 0.1f) {
+        pParticles->Simulate(.1f);
       }
     }
   }

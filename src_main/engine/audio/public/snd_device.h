@@ -112,10 +112,10 @@ the_interface IAudioDevice {
   virtual void MixUpsample(int sampleCount, int filtertype) = 0;
 
   // sink sound data
-  virtual void Mix8Mono(channel_t * pChannel, char *pData, int outputOffset,
+  virtual void Mix8Mono(channel_t * pChannel, ch *pData, int outputOffset,
                         int inputOffset, fixedint rateScaleFix, int outCount,
                         int timecompress) = 0;
-  virtual void Mix8Stereo(channel_t * pChannel, char *pData, int outputOffset,
+  virtual void Mix8Stereo(channel_t * pChannel, ch *pData, int outputOffset,
                           int inputOffset, fixedint rateScaleFix, int outCount,
                           int timecompress) = 0;
   virtual void Mix16Mono(channel_t * pChannel, short *pData, int outputOffset,
@@ -131,7 +131,7 @@ the_interface IAudioDevice {
   virtual void TransferSamples(int end) = 0;
 
   // device parameters
-  virtual const char *DeviceName() = 0;
+  virtual const ch *DeviceName() = 0;
   virtual int DeviceChannels() = 0;     // 1 = mono, 2 = stereo
   virtual int DeviceSampleBits() = 0;   // bits per sample (8 or 16)
   virtual int DeviceSampleBytes() = 0;  // above / 8

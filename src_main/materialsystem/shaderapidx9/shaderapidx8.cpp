@@ -1875,7 +1875,7 @@ CShaderAPIDx8::~CShaderAPIDx8() {
 }
 
 void CShaderAPIDx8::ClearStdTextureHandles() {
-  for (int i = 0; i < SOURCE_ARRAYSIZE(m_StdTextureHandles); i++)
+  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_StdTextureHandles); i++)
     m_StdTextureHandles[i] = INVALID_SHADERAPI_TEXTURE_HANDLE;
 }
 

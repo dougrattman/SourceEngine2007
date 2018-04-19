@@ -49,8 +49,8 @@ class CMPAException {
     NoFrame
   };
 
-  CMPAException(ErrorIDs ErrorID, const char* szFile,
-                const char* szFunction = nullptr, bool bGetLastError = false);
+  CMPAException(ErrorIDs ErrorID, const ch* szFile,
+                const ch* szFunction = nullptr, bool bGetLastError = false);
   // copy constructor (necessary because of LPSTR members)
   CMPAException(const CMPAException& Source);
   ~CMPAException();
@@ -62,19 +62,19 @@ class CMPAException {
  private:
   ErrorIDs m_ErrorID;
   bool m_bGetLastError;
-  const char* m_szFunction;
-  const char* m_szFile;
+  const ch* m_szFunction;
+  const ch* m_szFile;
 };
 
 class CMPAFile {
  public:
-  CMPAFile(const char* szFile, DWORD dwFileOffset,
+  CMPAFile(const ch* szFile, DWORD dwFileOffset,
            FileHandle_t hFile = FILESYSTEM_INVALID_HANDLE);
   ~CMPAFile();
 
   DWORD ExtractBytes(DWORD& dwOffset, DWORD dwNumBytes,
                      bool bMoveOffset = true);
-  const char* GetFilename() const { return m_szFile; };
+  const ch* GetFilename() const { return m_szFile; };
 
   bool GetNextFrame();
   bool GetPrevFrame();
@@ -85,7 +85,7 @@ class CMPAFile {
   static const DWORD m_dwInitBufferSize;
 
   // methods for file access
-  void Open(const char* szFilename);
+  void Open(const ch* szFilename);
   void SetPosition(int offset);
   DWORD Read(void* pData, DWORD dwSize, DWORD dwOffset);
 
@@ -95,7 +95,7 @@ class CMPAFile {
 
   // concerning file itself
   FileHandle_t m_hFile;
-  char* m_szFile;
+  ch* m_szFile;
   bool m_bMustReleaseFile;
 
  public:

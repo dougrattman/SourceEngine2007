@@ -29,11 +29,11 @@ class CUtlBuffer;
 class IParticleOperatorDefinition;
 class CSheet;
 class CMeshBuilder;
-extern float s_pRandomFloats[];
+extern float s_pRandomFloats[4096];
 
 // Random numbers
 
-#define MAX_RANDOM_FLOATS 4096
+#define MAX_RANDOM_FLOATS std::size(s_pRandomFloats)
 #define RANDOM_FLOAT_MASK (MAX_RANDOM_FLOATS - 1)
 
 // Particle attributes
@@ -1254,8 +1254,8 @@ class CStridedConstPtr {
 
 class CM128InitialAttributeIterator : public CStridedConstPtr<fltx4> {
  public:
-  SOURCE_FORCEINLINE CM128InitialAttributeIterator(int nAttribute,
-                                            CParticleCollection *pParticles) {
+  SOURCE_FORCEINLINE CM128InitialAttributeIterator(
+      int nAttribute, CParticleCollection *pParticles) {
     m_pData = pParticles->GetInitialM128AttributePtr(nAttribute, &m_nStride);
   }
 };
@@ -1263,7 +1263,7 @@ class CM128InitialAttributeIterator : public CStridedConstPtr<fltx4> {
 class CM128AttributeIterator : public CStridedConstPtr<fltx4> {
  public:
   SOURCE_FORCEINLINE CM128AttributeIterator(int nAttribute,
-                                     CParticleCollection *pParticles) {
+                                            CParticleCollection *pParticles) {
     m_pData = pParticles->GetM128AttributePtr(nAttribute, &m_nStride);
   }
 };
@@ -1271,15 +1271,15 @@ class CM128AttributeIterator : public CStridedConstPtr<fltx4> {
 class C4IAttributeIterator : public CStridedConstPtr<FourInts> {
  public:
   SOURCE_FORCEINLINE C4IAttributeIterator(int nAttribute,
-                                   CParticleCollection *pParticles) {
+                                          CParticleCollection *pParticles) {
     m_pData = pParticles->Get4IAttributePtr(nAttribute, &m_nStride);
   }
 };
 
 class CM128AttributeWriteIterator : public CStridedPtr<fltx4> {
  public:
-  SOURCE_FORCEINLINE CM128AttributeWriteIterator(int nAttribute,
-                                          CParticleCollection *pParticles) {
+  SOURCE_FORCEINLINE CM128AttributeWriteIterator(
+      int nAttribute, CParticleCollection *pParticles) {
     m_pData = pParticles->GetM128AttributePtrForWrite(nAttribute, &m_nStride);
   }
 };
@@ -1287,23 +1287,23 @@ class CM128AttributeWriteIterator : public CStridedPtr<fltx4> {
 class C4VAttributeIterator : public CStridedConstPtr<FourVectors> {
  public:
   SOURCE_FORCEINLINE C4VAttributeIterator(int nAttribute,
-                                   CParticleCollection *pParticles) {
+                                          CParticleCollection *pParticles) {
     m_pData = pParticles->Get4VAttributePtr(nAttribute, &m_nStride);
   }
 };
 
 class C4VInitialAttributeIterator : public CStridedConstPtr<FourVectors> {
  public:
-  SOURCE_FORCEINLINE C4VInitialAttributeIterator(int nAttribute,
-                                          CParticleCollection *pParticles) {
+  SOURCE_FORCEINLINE C4VInitialAttributeIterator(
+      int nAttribute, CParticleCollection *pParticles) {
     m_pData = pParticles->GetInitial4VAttributePtr(nAttribute, &m_nStride);
   }
 };
 
 class C4VAttributeWriteIterator : public CStridedPtr<FourVectors> {
  public:
-  SOURCE_FORCEINLINE C4VAttributeWriteIterator(int nAttribute,
-                                        CParticleCollection *pParticles) {
+  SOURCE_FORCEINLINE C4VAttributeWriteIterator(
+      int nAttribute, CParticleCollection *pParticles) {
     m_pData = pParticles->Get4VAttributePtrForWrite(nAttribute, &m_nStride);
   }
 };
@@ -1741,7 +1741,7 @@ inline void CParticleCollection::FillAttributeWithConstant(int nAttribute,
 // Helper to set vector attribute values
 
 SOURCE_FORCEINLINE void SetVectorAttribute(float *pAttribute, float x, float y,
-                                    float z) {
+                                           float z) {
   pAttribute[0] = x;
   pAttribute[4] = y;
   pAttribute[8] = z;
@@ -1753,7 +1753,8 @@ SOURCE_FORCEINLINE void SetVectorAttribute(float *pAttribute, const Vector &v) {
   pAttribute[8] = v.z;
 }
 
-SOURCE_FORCEINLINE void SetVectorFromAttribute(Vector &v, const float *pAttribute) {
+SOURCE_FORCEINLINE void SetVectorFromAttribute(Vector &v,
+                                               const float *pAttribute) {
   v.x = pAttribute[0];
   v.y = pAttribute[4];
   v.z = pAttribute[8];
@@ -1770,7 +1771,8 @@ SOURCE_FORCEINLINE float CParticleCollection::ComputeSqrDistanceToParticle(
 
 // Grows the dist sq range for all particles
 
-SOURCE_FORCEINLINE void CParticleCollection::GrowDistSqrBounds(float flDistSqr) {
+SOURCE_FORCEINLINE void CParticleCollection::GrowDistSqrBounds(
+    float flDistSqr) {
   if (m_flLastMinDistSqr > flDistSqr) {
     m_flLastMinDistSqr = flDistSqr;
   } else if (m_flLastMaxDistSqr < flDistSqr) {
@@ -2030,14 +2032,15 @@ inline int CParticleCollection::GetGroupID(void) const {
   return m_pDef->m_nGroupID;
 }
 
-SOURCE_FORCEINLINE const Vector &CParticleCollection::GetControlPointAtCurrentTime(
-    int nControlPoint) const {
+SOURCE_FORCEINLINE const Vector &
+CParticleCollection::GetControlPointAtCurrentTime(int nControlPoint) const {
   Assert(nControlPoint <= GetHighestControlPoint());
   Assert(m_pDef->ReadsControlPoint(nControlPoint));
   return m_ControlPoints[nControlPoint].m_Position;
 }
 
-SOURCE_FORCEINLINE void CParticleCollection::GetControlPointOrientationAtCurrentTime(
+SOURCE_FORCEINLINE void
+CParticleCollection::GetControlPointOrientationAtCurrentTime(
     int nControlPoint, Vector *pForward, Vector *pRight, Vector *pUp) const {
   Assert(nControlPoint <= GetHighestControlPoint());
   Assert(m_pDef->ReadsControlPoint(nControlPoint));

@@ -318,12 +318,12 @@ struct MP3Duration_t {
 
 CUtlRBTree<MP3Duration_t, int> g_MP3Durations(0, 0, MP3Duration_t::LessFunc);
 
-float GetMP3Duration_Helper(char const* filename) {
+float GetMP3Duration_Helper(ch const* filename) {
   float duration = 60.0f;
 
   // See if it's in the RB tree already...
-  char fn[512];
-  Q_snprintf(fn, sizeof(fn), "sound/%s", filename);
+  ch fn[MAX_PATH];
+  sprintf_s(fn, "sound/%s", filename);
 
   FileNameHandle_t h = g_pFullFileSystem->FindOrAddFileName(fn);
 

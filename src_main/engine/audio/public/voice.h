@@ -19,7 +19,7 @@ Defines the engine's interface to the voice code.
   -2  // Returned by AssignChannel if currently in tweak mode (not an error).
 
 //! Initialize the voice code.
-bool Voice_Init(const char *pCodec);
+bool Voice_Init(const ch *pCodec);
 
 //! Shutdown the voice code.
 void Voice_Deinit();
@@ -44,15 +44,15 @@ bool Voice_IsRecording();
 //! Begin recording input from the mic.
 bool Voice_RecordStart(
     //! Filename to store incoming mic data, or NULL if none.
-    const char *pUncompressedFile,
+    const ch *pUncompressedFile,
 
     //! Filename to store the output of compression and decompressiong with the
     //! codec, or NULL if none.
-    const char *pDecompressedFile,
+    const ch *pDecompressedFile,
 
     //! If this is non-0, the voice manager will use this file for input instead
     //! of the mic.
-    const char *pMicInputFile);
+    const ch *pMicInputFile);
 
 //! Stop recording from the mic.
 bool Voice_RecordStop();
@@ -61,7 +61,7 @@ bool Voice_RecordStop();
 //! number of available bytes, it discards the first bytes and gives you the
 //! last ones. Set bFinal to true on the last call to this (it will flush out
 //! any stored voice data).
-int Voice_GetCompressedData(char *pchData, int nCount, bool bFinal);
+int Voice_GetCompressedData(ch *pchData, int nCount, bool bFinal);
 
 //! Pass incoming data from the server into here.
 //! The data should have been compressed and gotten through a
@@ -70,7 +70,7 @@ int Voice_AddIncomingData(
     //! Channel index.
     int nChannel,
     //! Compressed data to add to the channel.
-    const char *pchData,
+    const ch *pchData,
     //! Number of bytes in pchData.
     int nCount,
     //! Sequence number. If a packet is missed, it adds padding so the time

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "netmessages.h"
 
@@ -12,7 +12,6 @@
 #include "tier0/include/vprof.h"
 #include "tier1/bitbuf.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static char s_text[1024];
@@ -212,8 +211,8 @@ const char *g_MostCommonPrefixes[] = {"materials", "models", "sounds",
                                       "scripts"};
 
 static int FindCommonPathID(const char *pPathID) {
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_MostCommonPathIDs); i++) {
-    if (V_stricmp(pPathID, g_MostCommonPathIDs[i]) == 0) return i;
+  for (usize i = 0; i < SOURCE_ARRAYSIZE(g_MostCommonPathIDs); i++) {
+    if (_stricmp(pPathID, g_MostCommonPathIDs[i]) == 0) return i;
   }
   return -1;
 }
@@ -583,7 +582,8 @@ bool NET_Tick::WriteToBuffer(bf_write &buffer) {
   buffer.WriteUBitLong(
       std::clamp((int)(NET_TICK_SCALEUP * m_flHostFrameTime), 0, 65535), 16);
   buffer.WriteUBitLong(
-      std::clamp((int)(NET_TICK_SCALEUP * m_flHostFrameTimeStdDeviation), 0, 65535),
+      std::clamp((int)(NET_TICK_SCALEUP * m_flHostFrameTimeStdDeviation), 0,
+                 65535),
       16);
 #endif
   return !buffer.IsOverflowed();
