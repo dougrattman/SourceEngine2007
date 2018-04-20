@@ -9,6 +9,9 @@
       <UniqueIdentifier>{23ca9a90-78d0-4708-8178-49d35861fdd7}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{4cd9ec4c-bdde-41e1-b0bf-d3a6f8c8db97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\tier0\include\memoverride.cc">
@@ -37,5 +40,13 @@
     <ClInclude Include="..\frame_encoder\frame_voice_codec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\vaudio_miles.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

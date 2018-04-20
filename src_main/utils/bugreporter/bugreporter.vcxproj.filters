@@ -7,6 +7,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{5a4461d4-e63e-4e0a-b695-ddfd43835a31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Fiels">
+      <UniqueIdentifier>{9480a460-a6a5-4959-a9de-ad7eb803b849}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\tier0\include\memoverride.cc">
@@ -23,5 +26,13 @@
     <ClInclude Include="..\..\deps\trktool\trktool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\bugreporter.rc">
+      <Filter>Resource Fiels</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

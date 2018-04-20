@@ -7,6 +7,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{9c66d164-62f1-454d-8193-43559f2ca071}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{c879f82c-9b54-46de-8e5f-a0f6cc4b0b89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\tier0\include\memoverride.cc">
@@ -20,5 +23,13 @@
     <ClInclude Include="..\..\common\bugreporter\bugreporter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\bugreporter_filequeue.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

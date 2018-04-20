@@ -9,6 +9,9 @@
       <UniqueIdentifier>{23ca9a90-78d0-4708-8178-49d35861fdd7}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{e94865ef-468b-4131-b558-a02b12034280}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\tier0\include\memoverride.cc">
@@ -28,5 +31,13 @@
     <ClInclude Include="..\frame_encoder\frame_voice_codec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\vaudio_speex.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

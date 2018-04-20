@@ -7,6 +7,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{d0cf9020-4133-4370-953f-b962f9d591b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{19d71c6e-206f-4af8-a908-3394581b35e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\public\blockingudpsocket.cpp">
@@ -35,5 +38,13 @@
     <ClInclude Include="shared_file_system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\bugreporter_public.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -25,7 +25,7 @@
 
 #define BUGSUB_CONFIG "\\\\bugbait\\bugsub\\config.txt"
 
-class BugReporter *g_bugreporter = NULL;
+class BugReporter *g_bugreporter{nullptr};
 
 class BugReporter : public IBugReporter {
  public:
@@ -179,11 +179,8 @@ BugReporter::~BugReporter() {
   delete bug_;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Initialize and login with default username/password for this
-// computer (from resource/bugreporter.res) Output : Returns true on success,
-// false on failure.
-//-----------------------------------------------------------------------------
+// Initialize and login with default username/password for this computer (from
+// resource/bugreporter.res).
 bool BugReporter::Init(CreateInterfaceFn engineFactory) {
   // Load our bugreporter_text options file
   m_OptionsFile = new KeyValues("OptionsFile");
@@ -206,13 +203,15 @@ bool BugReporter::Init(CreateInterfaceFn engineFactory) {
   fread(buf, cfg_info.st_size, 1, fp);
   fclose(fp);
   buf[cfg_info.st_size] = 0;
+
   if (!m_OptionsFile->LoadFromBuffer(BUGSUB_CONFIG, buf)) {
     AssertMsg(0, "Failed to load bugreporter_text options file.");
     delete buf;
     return false;
   }
-  strncpy_s(m_BugRootDirectory, m_OptionsFile->GetString("bug_directory", "."),
-            sizeof(m_BugRootDirectory));
+  delete buf;
+
+  strcpy_s(m_BugRootDirectory, m_OptionsFile->GetString("bug_directory", "."));
 
   PopulateLists();
 
@@ -223,7 +222,6 @@ bool BugReporter::Init(CreateInterfaceFn engineFactory) {
       !getenv_s(&username_size, username, "username") && username_size > 0
           ? username
           : nullptr);
-  delete buf;
   return true;
 }
 
@@ -383,15 +381,15 @@ void BugReporter::StartNewBugReport() {
   do {
     VCRHook_LocalTime(&t);
 
-    Q_snprintf(m_CurrentBugDirectory, sizeof(m_CurrentBugDirectory),
-               "%s\\%04i%02i%02i-%02i%02i%02i-%s", m_BugRootDirectory,
-               t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min,
-               t.tm_sec, bug_strings_.String(user_name_));
+    sprintf_s(m_CurrentBugDirectory, "%s\\%04i%02i%02i-%02i%02i%02i-%s",
+              m_BugRootDirectory, t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+              t.tm_hour, t.tm_min, t.tm_sec, bug_strings_.String(user_name_));
     if (_access(m_CurrentBugDirectory, 0) != 0) break;
 
     // sleep for a second or two then try again
     Sleep(RandomInt(1000, 2000));
   } while (1);
+
   _mkdir(m_CurrentBugDirectory);
 }
 
@@ -455,9 +453,8 @@ bool BugReporter::CommitBugReport(int &bugSubmissionId) {
 
   // Write it out to the file
   // Need to use native calls to bypass steam filesystem
-  char szBugFileName[1024];
-  Q_snprintf(szBugFileName, sizeof(szBugFileName), "%s\\bug.txt",
-             m_CurrentBugDirectory);
+  char szBugFileName[SOURCE_MAX_PATH];
+  sprintf_s(szBugFileName, "%s\\bug.txt", m_CurrentBugDirectory);
   FILE *fp;
   if (fopen_s(&fp, szBugFileName, "wb")) return false;
 
@@ -472,12 +469,12 @@ bool BugReporter::CommitBugReport(int &bugSubmissionId) {
 
 void BugReporter::SetTitle(char const *title) {
   Assert(bug_);
-  Q_strncpy(bug_->title, title, sizeof(bug_->title));
+  strcpy_s(bug_->title, title);
 }
 
 void BugReporter::SetDescription(char const *description) {
   Assert(bug_);
-  Q_strncpy(bug_->desc, description, sizeof(bug_->desc));
+  strcpy_s(bug_->desc, description);
 }
 
 void BugReporter::SetSubmitter(char const *username /* = 0 */) {
@@ -486,94 +483,93 @@ void BugReporter::SetSubmitter(char const *username /* = 0 */) {
   }
 
   Assert(bug_);
-  Q_strncpy(bug_->submitter, username, sizeof(bug_->submitter));
+  strcpy_s(bug_->submitter, username);
 }
 
 void BugReporter::SetOwner(char const *username) {
   Assert(bug_);
-  Q_strncpy(bug_->owner, username, sizeof(bug_->owner));
+  strcpy_s(bug_->owner, username);
 }
 
 void BugReporter::SetSeverity(char const *severity) {
   Assert(bug_);
-  Q_strncpy(bug_->severity, severity, sizeof(bug_->severity));
+  strcpy_s(bug_->severity, severity);
 }
 
 void BugReporter::SetPriority(char const *priority) {
   Assert(bug_);
-  Q_strncpy(bug_->priority, priority, sizeof(bug_->priority));
+  strcpy_s(bug_->priority, priority);
 }
 
 void BugReporter::SetArea(char const *area) {
   Assert(bug_);
   char const *game = GetAreaMapForArea(area);
-  Q_strncpy(bug_->area, game, sizeof(bug_->area));
+  strcpy_s(bug_->area, game);
 }
 
 void BugReporter::SetMapNumber(char const *mapnumber) {
   Assert(bug_);
-  Q_strncpy(bug_->mapNumber, mapnumber, sizeof(bug_->mapNumber));
+  strcpy_s(bug_->mapNumber, mapnumber);
 }
 
 void BugReporter::SetReportType(char const *reporttype) {
   Assert(bug_);
-  Q_strncpy(bug_->reportType, reporttype, sizeof(bug_->reportType));
+  strcpy_s(bug_->reportType, reporttype);
 }
 
 void BugReporter::SetLevel(char const *levelnamne) {
   Assert(bug_);
-  Q_strncpy(bug_->level, levelnamne, sizeof(bug_->level));
+  strcpy_s(bug_->level, levelnamne);
 }
 
 void BugReporter::SetDriverInfo(char const *info) {
   Assert(bug_);
-  Q_strncpy(bug_->driverInfo, info, sizeof(bug_->driverInfo));
+  strcpy_s(bug_->driverInfo, info);
 }
 
 void BugReporter::SetMiscInfo(char const *info) {
   Assert(bug_);
-  Q_strncpy(bug_->misc, info, sizeof(bug_->misc));
+  strcpy_s(bug_->misc, info);
 }
 
 void BugReporter::SetPosition(char const *position) {
   Assert(bug_);
-  Q_strncpy(bug_->position, position, sizeof(bug_->position));
+  strcpy_s(bug_->position, position);
 }
 
 void BugReporter::SetOrientation(char const *pitch_yaw_roll) {
   Assert(bug_);
-  Q_strncpy(bug_->orientation, pitch_yaw_roll, sizeof(bug_->orientation));
+  strcpy_s(bug_->orientation, pitch_yaw_roll);
 }
 
 void BugReporter::SetBuildNumber(char const *build_num) {
   Assert(bug_);
-  Q_strncpy(bug_->build, build_num, sizeof(bug_->build));
+  strcpy_s(bug_->build, build_num);
 }
 
 void BugReporter::SetScreenShot(char const *screenshot_unc_address) {
   Assert(bug_);
-  Q_strncpy(bug_->screenshotUnc, screenshot_unc_address,
-            sizeof(bug_->screenshotUnc));
+  strcpy_s(bug_->screenshotUnc, screenshot_unc_address);
 }
 
 void BugReporter::SetSaveGame(char const *savegame_unc_address) {
   Assert(bug_);
-  Q_strncpy(bug_->savegameUnc, savegame_unc_address, sizeof(bug_->savegameUnc));
+  strcpy_s(bug_->savegameUnc, savegame_unc_address);
 }
 
 void BugReporter::SetBSPName(char const *bsp_unc_address) {
   Assert(bug_);
-  Q_strncpy(bug_->bspUnc, bsp_unc_address, sizeof(bug_->bspUnc));
+  strcpy_s(bug_->bspUnc, bsp_unc_address);
 }
 
 void BugReporter::SetVMFName(char const *vmf_unc_address) {
   Assert(bug_);
-  Q_strncpy(bug_->vmfUnc, vmf_unc_address, sizeof(bug_->vmfUnc));
+  strcpy_s(bug_->vmfUnc, vmf_unc_address);
 }
 
 void BugReporter::AddIncludedFile(char const *filename) {
   Bug::IncludeFile includedfile;
-  Q_strncpy(includedfile.name, filename, sizeof(includedfile.name));
+  strcpy_s(includedfile.name, filename);
   bug_->includedFiles.AddToTail(includedfile);
 }
 
@@ -599,7 +595,7 @@ bool BugReporter::SymbolLessThan(const CUtlSymbol &sym1,
   const char *string1 = bug_strings_.String(sym1);
   const char *string2 = bug_strings_.String(sym2);
 
-  return Q_stricmp(string1, string2) < 0;
+  return _stricmp(string1, string2) < 0;
 }
 
 // owner, not required <<Unassigned>>
@@ -629,9 +625,12 @@ bool BugReporter::PopulateLists() {
     char const *area = pKV->GetName();
     char const *game = pKV->GetString();
     char areamap[256];
-    Q_snprintf(areamap, sizeof(areamap), "@%s", game);
+
+    sprintf_s(areamap, "@%s", game);
+
     CUtlSymbol area_sym = bug_strings_.AddString(area);
     CUtlSymbol area_map_sym = bug_strings_.AddString(areamap);
+
     areas_.AddToTail(area_sym);
     area_maps_.AddToTail(area_map_sym);
     pKV = pKV->GetNextKey();
@@ -643,10 +642,12 @@ bool BugReporter::PopulateLists() {
     char const *level = pKV->GetName();
     char const *area = pKV->GetString();
     char areamap[256];
-    Q_snprintf(areamap, sizeof(areamap), "@%s", area);
+
+    sprintf_s(areamap, "@%s", area);
 
     CUtlSymbol level_sym = bug_strings_.AddString(level);
     CUtlSymbol area_sym = bug_strings_.Find(areamap);
+
     if (!area_sym.IsValid()) {
       area_sym = bug_strings_.AddString(areamap);
     }

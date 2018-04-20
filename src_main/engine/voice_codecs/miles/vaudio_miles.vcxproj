@@ -142,8 +142,8 @@
       <HeaderFileName />
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0407</Culture>
+      <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
@@ -197,8 +197,8 @@
       </HeaderFileName>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0407</Culture>
+      <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
@@ -247,8 +247,8 @@
       <HeaderFileName />
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0407</Culture>
+      <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
@@ -298,8 +298,8 @@
       </HeaderFileName>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0407</Culture>
+      <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
@@ -316,6 +316,7 @@
     <ClInclude Include="..\frame_encoder\iframe_encoder.h" />
     <ClInclude Include="..\frame_encoder\frame_voice_codec.h" />
     <ClInclude Include="miles_base_types.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\tier0\tier0.vcxproj">
@@ -327,6 +328,9 @@
     <ProjectReference Include="..\..\..\vstdlib\vstdlib.vcxproj">
       <Project>{08257043-fe59-4e3f-8c99-a181397052d0}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\vaudio_miles.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

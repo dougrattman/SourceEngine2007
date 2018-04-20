@@ -1,0 +1,44 @@
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+
+#include "resource.h"
+
+#include <winresrc.h>
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+// Version info.
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    	HALFLIFE_VER_FILEVERSION_HEADER
+PRODUCTVERSION 	HALFLIFE_VER_PRODUCTVERSION_HEADER
+FILEFLAGSMASK  	VS_FFI_FILEFLAGSMASK
+FILEFLAGS      	HALFLIFE_VER_FILEFLAGS
+FILEOS         	VOS_NT_WINDOWS32
+FILETYPE       	VFT_DLL
+FILESUBTYPE    	VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        // U.S. English, Unicode
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName",      HALFLIFE_VER_COMPANYNAME_STR
+            VALUE "FileDescription",  HALFLIFE_VER_FILEDESCRIPTION_STR
+            VALUE "FileVersion",      HALFLIFE_VER_FILEVERSION_INFO_STR
+            VALUE "InternalName",     HALFLIFE_VER_INTERNALNAME_STR
+            VALUE "LegalCopyright",   HALFLIFE_VER_LEGALCOPYRIGHT_STR
+            VALUE "OriginalFilename", HALFLIFE_VER_ORIGINALFILENAME_STR
+            VALUE "ProductName",      HALFLIFE_VER_PRODUCTNAME_STR
+            VALUE "ProductVersion",   HALFLIFE_VER_PRODUCTVERSION_INFO_STR
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        // U.S. English, Unicode
+        VALUE "Translation", 0x0409, 0x04B0
+    END
+END
+
+#endif
+
