@@ -281,7 +281,7 @@ void CPlayerPanel::KickSelectedPlayers() {
 
     // kick 'em
     char cmd[512];
-    _snprintf_s(cmd, sizeof(cmd), "kick \"%s\"", pl->GetString("name"));
+    sprintf_s(cmd, "kick \"%s\"", pl->GetString("name"));
     RemoteServer().SendCommand(cmd);
   }
 
@@ -313,7 +313,7 @@ void CPlayerPanel::AddBanByID(const char *id, const char *newtime) {
 
   // send down the ban command
   char cmd[512];
-  _snprintf_s(cmd, sizeof(cmd) - 1, "%s %s %s\n", banCmd, newtime, id);
+  sprintf_s(cmd, "%s %s %s\n", banCmd, newtime, id);
   RemoteServer().SendCommand(cmd);
 
   // force the file to update
@@ -334,7 +334,15 @@ void CPlayerPanel::OnOpenContextMenu(int itemID) {
                   // get the server
                   unsigned int playerID =
      m_pPlayerListPanel->GetDataItem(m_pPlayerListPanel->GetSelectedRow(0))->userData;
-                  
+                  
+
+
+
+
+
+
+
+
 
 
 

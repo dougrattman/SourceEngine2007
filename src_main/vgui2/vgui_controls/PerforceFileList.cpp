@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains a list of files, determines their perforce status.
 
@@ -17,7 +17,8 @@
 
 using namespace vgui;
 
-static int ListFileNameSortFunc([[maybe_unused]] ListPanel *pPanel, const ListPanelItem &item1,
+static int ListFileNameSortFunc([[maybe_unused]] ListPanel *pPanel,
+                                const ListPanelItem &item1,
                                 const ListPanelItem &item2) {
   bool dir1 = item1.kv->GetInt("directory") == 1;
   bool dir2 = item2.kv->GetInt("directory") == 1;
@@ -128,7 +129,7 @@ PerforceFileList::PerforceFileList(Panel *pParent, const char *pPanelName)
   m_bShowDeletedFiles = false;
 
   // list panel
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ColInfo); ++i) {
+  for (int i = 0; i < (int)SOURCE_ARRAYSIZE(g_ColInfo); ++i) {
     const ColumnInfo_t &info = g_ColInfo[i];
 
     AddColumnHeader(i, info.columnName, info.columnText, info.startingWidth,

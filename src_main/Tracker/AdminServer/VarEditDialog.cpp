@@ -110,8 +110,7 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
 
   // set value
   char title[256];
-  _snprintf_s(title, sizeof(title) - 1, "Change %s",
-              m_pRules->GetString("name"));
+  sprintf_s(title, "Change %s", m_pRules->GetString("name"));
   SetTitle(title, false);
 
   // bring to front
@@ -144,7 +143,7 @@ void CVarEditDialog::ApplyChanges() {
     // get the enumeration position from the combo box
     int iVal = m_pComboEdit->GetActiveItem();
     char value[32];
-    _snprintf_s(value, sizeof(value) - 1, "%d", iVal);
+    sprintf_s(value, "%d", iVal);
     RemoteServer().SetValue(m_pRules->GetName(), value);
 
   } else if (!_stricmp(type, "customlist")) {

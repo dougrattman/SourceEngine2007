@@ -801,7 +801,7 @@ CParticleCollection::~CParticleCollection(void) {
     MemAlloc_FreeAligned(m_pOperatorContextData);
   }
 
-  for (int i = 0; i < SOURCE_ARRAYSIZE(m_pCollisionCacheData); i++) {
+  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_pCollisionCacheData); i++) {
     if (m_pCollisionCacheData[i]) {
       delete m_pCollisionCacheData[i];
     }
@@ -2999,7 +2999,7 @@ void CParticleSystemMgr::DumpProfileInformation(void) {
                                  p->m_nMaxParticles);
   }
   g_pFullFileSystem->FPrintf(fh, "\n\nopname, total time, max time\n");
-  for (int i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
+  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
     for (int j = 0; j < m_ParticleOperators[i].Count(); j++) {
       float flmax = m_ParticleOperators[i][j]->MaximumRecordedExecutionTime();
       float fltotal = m_ParticleOperators[i][j]->TotalRecordedExecutionTime();
@@ -3022,7 +3022,7 @@ void CParticleSystemMgr::CommitProfileInformation(bool bCommit) {
       if (bCommit) p->m_flTotalSimTime += p->m_flUncomittedTotalSimTime;
       p->m_flUncomittedTotalSimTime = 0.;
     }
-    for (int i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
+    for (usize i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
       for (int j = 0; j < m_ParticleOperators[i].Count(); j++) {
         if (bCommit)
           m_ParticleOperators[i][j]->m_flTotalExecutionTime +=

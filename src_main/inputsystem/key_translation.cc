@@ -1,14 +1,13 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "key_translation.h"
 
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
-#include "base/include/windows/windows_light.h"
 #include "xbox/xboxstubs.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static ButtonCode_t s_pVirtualKeyToButtonCode[256];
@@ -121,8 +120,9 @@ static const char *s_pButtonCodeName[] = {
     "F11",            // KEY_F11,
     "F12",            // KEY_F12,
 
-    // TODO(d.rattman): CAPSLOCK/NUMLOCK/SCROLLLOCK all appear above. What are these for?!
-    // They only appear in CInputWin32::UpdateToggleButtonState in vgui2
+    // TODO(d.rattman): CAPSLOCK/NUMLOCK/SCROLLLOCK all appear above. What are
+    // these for?! They only appear in CInputWin32::UpdateToggleButtonState in
+    // vgui2
     "CAPSLOCKTOGGLE",    // KEY_CAPSLOCKTOGGLE,
     "NUMLOCKTOGGLE",     // KEY_NUMLOCKTOGGLE,
     "SCROLLLOCKTOGGLE",  // KEY_SCROLLLOCKTOGGLE,
@@ -298,9 +298,9 @@ static ButtonCode_t s_pScanToButtonCode[128];
 
 void ButtonCode_InitKeyTranslationTable() {
   static_assert(sizeof(s_pButtonCodeName) / sizeof(const char *) ==
-                      BUTTON_CODE_LAST);
+                BUTTON_CODE_LAST);
   static_assert(sizeof(s_pAnalogCodeName) / sizeof(const char *) ==
-                      ANALOG_CODE_LAST);
+                ANALOG_CODE_LAST);
 
   // set virtual key translation table
   memset(s_pVirtualKeyToButtonCode, KEY_NONE,
@@ -505,7 +505,7 @@ ButtonCode_t ButtonCode_StringToButtonCode(const char *pString,
   if (!pString || !pString[0]) return BUTTON_CODE_INVALID;
 
   // Backward compat for screwed up previous joystick button names
-  if (!Q_strnicmp(pString, "aux", 3)) {
+  if (!_strnicmp(pString, "aux", 3)) {
     int nIndex = atoi(&pString[3]);
     if (nIndex < 29) return JOYSTICK_BUTTON(0, nIndex);
     if (nIndex <= 32) return JOYSTICK_POV_BUTTON(0, nIndex - 29);
@@ -513,17 +513,16 @@ ButtonCode_t ButtonCode_StringToButtonCode(const char *pString,
   }
 
   for (int i = 0; i < BUTTON_CODE_LAST; ++i) {
-    if (!Q_stricmp(s_pButtonCodeName[i], pString)) return (ButtonCode_t)i;
+    if (!_stricmp(s_pButtonCodeName[i], pString)) return (ButtonCode_t)i;
   }
 
-#if !defined(_X360)
   if (bXController) {
-    for (int i = 0; i < SOURCE_ARRAYSIZE(s_pXControllerButtonCodeNames); ++i) {
-      if (!Q_stricmp(s_pXControllerButtonCodeNames[i], pString))
+    for (usize i = 0; i < SOURCE_ARRAYSIZE(s_pXControllerButtonCodeNames);
+         ++i) {
+      if (!_stricmp(s_pXControllerButtonCodeNames[i], pString))
         return (ButtonCode_t)(JOYSTICK_FIRST_BUTTON + i);
     }
   }
-#endif
 
   return BUTTON_CODE_INVALID;
 }
@@ -532,7 +531,7 @@ AnalogCode_t AnalogCode_StringToAnalogCode(const char *pString) {
   if (!pString || !pString[0]) return ANALOG_CODE_INVALID;
 
   for (int i = 0; i < ANALOG_CODE_LAST; ++i) {
-    if (!Q_stricmp(s_pAnalogCodeName[i], pString)) return (AnalogCode_t)i;
+    if (!_stricmp(s_pAnalogCodeName[i], pString)) return (AnalogCode_t)i;
   }
 
   return ANALOG_CODE_INVALID;
@@ -602,7 +601,7 @@ void ButtonCode_UpdateScanCodeLayout() {
   HKL englishKb = ::LoadKeyboardLayout("00000409", 0);
 
   if (englishKb && englishKb != currentKb) {
-    for (int i = 0; i < SOURCE_ARRAYSIZE(s_pScanToButtonCode); i++) {
+    for (usize i = 0; i < SOURCE_ARRAYSIZE(s_pScanToButtonCode); i++) {
       // take the english/QWERTY
       ButtonCode_t code = s_pScanToButtonCode_QWERTY[i];
 

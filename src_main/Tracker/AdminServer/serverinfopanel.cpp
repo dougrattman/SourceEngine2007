@@ -49,8 +49,8 @@ void CServerInfoPanel::OnThink() {
   if (time != m_iLastUptimeDisplayed) {
     m_iLastUptimeDisplayed = time;
     char timeText[64];
-    _snprintf_s(timeText, sizeof(timeText), "%0.1i:%0.2i:%0.2i:%0.2i",
-                (time / 3600) / 24, (time / 3600), (time / 60) % 60, time % 60);
+    sprintf_s(timeText, "%0.1i:%0.2i:%0.2i:%0.2i", (time / 3600) / 24,
+              (time / 3600), (time / 60) % 60, time % 60);
     SetControlString("UpTimeText", timeText);
   }
 }

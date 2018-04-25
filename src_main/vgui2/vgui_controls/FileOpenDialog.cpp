@@ -452,7 +452,7 @@ void FileOpenDialog::Init(const char *title, KeyValues *pContextKeyValues) {
 
   // list panel
   m_pFileList = new ListPanel(this, "FileList");
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ColInfo); ++i) {
+  for (int i = 0; i < (int)SOURCE_ARRAYSIZE(g_ColInfo); ++i) {
     const ColumnInfo_t &info = g_ColInfo[i];
 
     m_pFileList->AddColumnHeader(i, info.columnName, info.columnText,

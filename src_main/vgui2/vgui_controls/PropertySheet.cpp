@@ -212,8 +212,8 @@ class PageTab : public Button {
   }
 
   virtual void OnDragFailed(CUtlVector<KeyValues *> &msglist) {
-    PropertySheet *sheet = IsDroppingSheet(msglist);
-    if (!sheet) return;
+    PropertySheet *dropping_sheet = IsDroppingSheet(msglist);
+    if (!dropping_sheet) return;
 
     // Create a new property sheet
     if (m_pParent->IsDraggableTab()) {
@@ -734,29 +734,30 @@ void PropertySheet::PerformLayout() {
 
   int x, y, wide, tall;
   GetBounds(x, y, wide, tall);
+
   if (_activePage) {
-    int tabHeight = IsSmallTabs() ? 14 : 28;
+    const int tabHeight = IsSmallTabs() ? 14 : 28;
 
     if (_showTabs) {
       _activePage->SetBounds(0, tabHeight, wide, tall - tabHeight);
     } else {
       _activePage->SetBounds(0, 0, wide, tall);
     }
+
     _activePage->InvalidateLayout();
   }
 
-  int xtab;
   int limit = m_PageTabs.Count();
-
-  xtab = 0;
+  int xtab = 0;
 
   // draw the visible tabs
   if (_showTabs) {
     for (int i = 0; i < limit; i++) {
       int tabHeight = IsSmallTabs() ? 13 : 27;
 
-      int width, tall;
-      m_PageTabs[i]->GetSize(width, tall);
+      int width, tall_;
+      m_PageTabs[i]->GetSize(width, tall_);
+
       if (m_PageTabs[i] == _activeTab) {
         // active tab is taller
         _activeTab->SetBounds(xtab, 2, width, tabHeight);
@@ -777,6 +778,7 @@ void PropertySheet::PerformLayout() {
     _activePage->MoveToFront();
     _activePage->Repaint();
   }
+
   if (_activeTab) {
     _activeTab->MoveToFront();
     _activeTab->Repaint();

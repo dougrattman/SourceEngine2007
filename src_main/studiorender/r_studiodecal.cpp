@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "studiorender.h"
 
@@ -14,7 +14,6 @@
 #include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static int g_nTotalDecalVerts;
@@ -341,8 +340,8 @@ static int IntersectPlane(DecalClipState_t& state, int start, int end,
 
   // Interpolate normal
   Vector vNormal;
-  // TODO(d.rattman): this is a bug (it's using position data to compute interpolated
-  // normals!)... not seeing any obvious artifacts, though
+  // TODO(d.rattman): this is a bug (it's using position data to compute
+  // interpolated normals!)... not seeing any obvious artifacts, though
   vNormal[0] = startVert.m_Position[0] * (1.0 - t) + endVert.m_Position[0] * t;
   vNormal[1] = startVert.m_Position[1] * (1.0 - t) + endVert.m_Position[1] * t;
   vNormal[2] = startVert.m_Position[2] * (1.0 - t) + endVert.m_Position[2] * t;
@@ -610,8 +609,8 @@ void CStudioRender::AddTriangleToDecal(DecalBuildInfo_t& build, int i1, int i2,
   DecalBuildVertexInfo_t* pVertexInfo = build.m_pVertexInfo;
 
   // All must be front-facing for a decal to be added
-  // TODO(d.rattman): Could make it work if not all are front-facing, need clipping for
-  // that
+  // TODO(d.rattman): Could make it work if not all are front-facing, need
+  // clipping for that
   int nAllFrontFacing = pVertexInfo[i1].m_Flags & pVertexInfo[i2].m_Flags &
                         pVertexInfo[i3].m_Flags;
   if ((nAllFrontFacing & DecalBuildVertexInfo_t::FRONT_FACING) == 0) return;
@@ -720,11 +719,11 @@ void CStudioRender::AddDecalToMesh(DecalBuildInfo_t& build) {
 // Adds a decal to a mesh
 //-----------------------------------------------------------------------------
 bool CStudioRender::AddDecalToModel(DecalBuildInfo_t& buildInfo) {
-  // TODO(d.rattman): We need to do some high-level culling to figure out exactly
-  // which meshes we need to add the decals to
-  // Turns out this solution may also be good for mesh sorting
-  // we need to know the center of each mesh, could also store a
-  // bounding radius for each mesh and test the ray against each sphere.
+  // TODO(d.rattman): We need to do some high-level culling to figure out
+  // exactly which meshes we need to add the decals to Turns out this solution
+  // may also be good for mesh sorting we need to know the center of each mesh,
+  // could also store a bounding radius for each mesh and test the ray against
+  // each sphere.
 
   for (int i = 0; i < m_pSubModel->nummeshes; ++i) {
     buildInfo.m_Mesh = i;
@@ -1364,8 +1363,8 @@ bool CStudioRender::DrawMultiBoneDecals(CMeshBuilder& meshBuilder,
 
       if (vertData) {
         mstudioboneweight_t* pBoneWeights = vertData->BoneWeights(n);
-        // TODO(d.rattman): could be faster to blend the matrices and then transform the
-        // pos+norm by the same matrix
+        // TODO(d.rattman): could be faster to blend the matrices and then
+        // transform the pos+norm by the same matrix
         R_StudioTransform(*vertData->Position(n), pBoneWeights,
                           pCachedVert->m_Position.AsVector3D());
         R_StudioRotate(*vertData->Normal(n), pBoneWeights,
@@ -1389,7 +1388,7 @@ bool CStudioRender::DrawMultiBoneDecals(CMeshBuilder& meshBuilder,
       // Add a little extra offset for hardware skinning; in that case
       // we're doing software skinning for decals and it might not be quite
       // right
-      VectorMA(pCachedVert->m_Position.AsVector3D(), 0.1,
+      VectorMA(pCachedVert->m_Position.AsVector3D(), 0.1f,
                pCachedVert->m_Normal.AsVector3D(),
                pCachedVert->m_Position.AsVector3D());
 
@@ -1498,7 +1497,7 @@ bool CStudioRender::DrawMultiBoneFlexedDecals(IMatRenderContext* pRenderContext,
         // Add a little extra offset for hardware skinning; in that case
         // we're doing software skinning for decals and it might not be quite
         // right
-        VectorMA(pCachedVert->m_Position.AsVector3D(), 0.1,
+        VectorMA(pCachedVert->m_Position.AsVector3D(), 0.1f,
                  pCachedVert->m_Normal.AsVector3D(),
                  pCachedVert->m_Position.AsVector3D());
 

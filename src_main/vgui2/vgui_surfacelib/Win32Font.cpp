@@ -286,25 +286,25 @@ void CWin32Font::GetCharRGBA(wchar_t ch, int rgbaWide, int rgbaTall,
         if ((x < rgbaWide) && (y < rgbaTall)) {
           unsigned char grayscale = lpbuf[(j * wide + i)];
 
-          float r, g, b, a;
+          float r, g, b_, a_;
           if (grayscale) {
-            r = g = b = 1.0f;
-            a = (grayscale + 0) / 64.0f;
-            if (a > 1.0f) a = 1.0f;
+            r = g = b_ = 1.0f;
+            a_ = (grayscale + 0) / 64.0f;
+            if (a_ > 1.0f) a_ = 1.0f;
           } else {
-            r = g = b = a = 0.0f;
+            r = g = b_ = a_ = 0.0f;
           }
 
           // Don't want anything drawn for tab characters.
           if (ch == '\t') {
-            r = g = b = 0;
+            r = g = b_ = 0;
           }
 
           unsigned char *dst = &rgba[(y * rgbaWide + x) * 4];
           dst[0] = (unsigned char)(r * 255.0f);
           dst[1] = (unsigned char)(g * 255.0f);
-          dst[2] = (unsigned char)(b * 255.0f);
-          dst[3] = (unsigned char)(a * 255.0f);
+          dst[2] = (unsigned char)(b_ * 255.0f);
+          dst[3] = (unsigned char)(a_ * 255.0f);
         }
       }
     }
@@ -357,21 +357,21 @@ void CWin32Font::GetCharRGBA(wchar_t ch, int rgbaWide, int rgbaTall,
           unsigned char *dst = &rgba[(i + j * rgbaWide) * 4];
 
           // Don't want anything drawn for tab characters.
-          unsigned char r, g, b;
+          unsigned char r, g, b_;
           if (ch == '\t') {
-            r = g = b = 0;
+            r = g = b_ = 0;
           } else {
             r = src[0];
             g = src[1];
-            b = src[2];
+            b_ = src[2];
           }
 
           // generate alpha based on luminance conversion
           dst[0] = r;
           dst[1] = g;
-          dst[2] = b;
+          dst[2] = b_;
           dst[3] = (unsigned char)((float)r * 0.34f + (float)g * 0.55f +
-                                   (float)b * 0.11f);
+                                   (float)b_ * 0.11f);
         }
       }
     }

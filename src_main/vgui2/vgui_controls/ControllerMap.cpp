@@ -1,11 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui_controls/ControllerMap.h"
 #include "tier1/keyvalues.h"
 #include "vgui/ISurface.h"
 #include "vgui/KeyCode.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -50,8 +49,8 @@ bool lessFunc(const int &lhs, const int &rhs) { return lhs < rhs; }
 // Purpose: converts a button name string to the equivalent keycode
 //-----------------------------------------------------------------------------
 int StringToButtonCode(const char *name) {
-  for (int i = 0; i < SOURCE_ARRAYSIZE(s_ControllerButtons); ++i) {
-    if (!Q_stricmp(s_ControllerButtons[i].name, name))
+  for (usize i = 0; i < SOURCE_ARRAYSIZE(s_ControllerButtons); ++i) {
+    if (!_stricmp(s_ControllerButtons[i].name, name))
       return s_ControllerButtons[i].code;
   }
   return -1;

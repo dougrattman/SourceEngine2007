@@ -724,8 +724,6 @@ void CColorCorrectionSystem::SetResetable(ColorCorrectionHandle_t handle,
 //-----------------------------------------------------------------------------
 void CColorCorrectionSystem::GetCurrentColorCorrection(
     ShaderColorCorrectionInfo_t *pInfo) {
-  static_assert(COLOR_CORRECTION_MAX_TEXTURES ==
-                SOURCE_ARRAYSIZE(pInfo->m_pLookupWeights));
   pInfo->m_bIsEnabled = m_bEnabled && (GetNumLookups() > 0 ||
                                        m_DefaultColorCorrectionWeight != 0.0f);
   pInfo->m_nLookupCount = GetNumLookups();

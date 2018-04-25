@@ -1,9 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef TEXTUREMANAGER_H
 #define TEXTUREMANAGER_H
 
 #include "itextureinternal.h"
+#include "shaderapi/ishaderdynamic.h"
 #include "tier1/interface.h"
 
 class ITexture;
@@ -11,7 +12,9 @@ class ITextureInternal;
 class IVTFTexture;
 
 enum : int {
-  COLOR_CORRECTION_MAX_TEXTURES = 4,
+  COLOR_CORRECTION_MAX_TEXTURES =
+      sizeof(ShaderColorCorrectionInfo_t::m_pLookupWeights) /
+      sizeof(ShaderColorCorrectionInfo_t::m_pLookupWeights[0]),
   COLOR_CORRECTION_TEXTURE_SIZE = 32
 };
 

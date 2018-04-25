@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <memory.h>
 #include <cmath>
@@ -13,7 +13,6 @@ typedef unsigned char byte;
 #include "rope_shared.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -70,7 +69,9 @@ TimeModifier_t g_TimeModifiers[] = {
     {"Accel (time*time)", TimeModifierFunc_TimeSquared},
 };
 
-int Motion_GetNumberOfTimeModifiers() { return SOURCE_ARRAYSIZE(g_TimeModifiers); }
+int Motion_GetNumberOfTimeModifiers() {
+  return SOURCE_ARRAYSIZE(g_TimeModifiers);
+}
 
 bool Motion_GetTimeModifierDetails(int timeInterpNum, const char **outName) {
   if (timeInterpNum < 0 || timeInterpNum >= Motion_GetNumberOfTimeModifiers()) {
@@ -255,7 +256,7 @@ CPositionInterpolator_Rope::CPositionInterpolator_Rope() {
   m_nSegments = 5;
 
   for (int i = 0; i < 2; i++)
-    m_Delegate.m_CurEndPoints[i] = Vector(1e24, 1e24, 1e24);
+    m_Delegate.m_CurEndPoints[i] = Vector(1e24f, 1e24f, 1e24f);
 }
 
 void CPositionInterpolator_Rope::Release() { delete this; }

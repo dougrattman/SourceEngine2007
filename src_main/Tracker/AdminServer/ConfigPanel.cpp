@@ -62,11 +62,11 @@ CConfigPanel::CConfigPanel(vgui::Panel *parent, bool autorefresh, bool savercon,
   m_pGraphsRefreshTimeTextEntry->SetEditable(m_pGraphsButton->IsSelected());
 
   char refreshText[20];
-  _snprintf_s(refreshText, 20, "%i", refreshtime);
+  sprintf_s(refreshText, "%i", refreshtime);
 
   m_pRefreshTextEntry->SetText(refreshText);
 
-  _snprintf_s(refreshText, 20, "%i", graphsrefreshtime);
+  sprintf_s(refreshText, "%i", graphsrefreshtime);
 
   m_pGraphsRefreshTimeTextEntry->SetText(refreshText);
 

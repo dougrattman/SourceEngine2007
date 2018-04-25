@@ -86,9 +86,8 @@ void virtualmodel_t::AppendModels(int group, const studiohdr_t *pStudioHdr) {
   // determine quantity of valid include models in one pass only
   // temporarily cache results off, otherwise FindModel() causes ref counting
   // problems
-  int j;
-  int nValidIncludes = 0;
-  for (j = 0; j < pStudioHdr->numincludemodels; j++) {
+  usize nValidIncludes = 0;
+  for (int j = 0; j < pStudioHdr->numincludemodels; j++) {
     // find model (increases ref count)
     void *tmp = NULL;
     const studiohdr_t *pTmpHdr =
@@ -108,7 +107,7 @@ void virtualmodel_t::AppendModels(int group, const studiohdr_t *pStudioHdr) {
 
   if (nValidIncludes) {
     m_group.EnsureCapacity(m_group.Count() + nValidIncludes);
-    for (j = 0; j < nValidIncludes; j++) {
+    for (usize j = 0; j < nValidIncludes; j++) {
       MEM_ALLOC_CREDIT();
       int g = m_group.AddToTail();
       m_group[g].cache = list[j].handle;
