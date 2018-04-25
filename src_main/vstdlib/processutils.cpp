@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vstdlib/iprocessutils.h"
 
@@ -52,7 +52,7 @@ class CProcessUtils : public CTier1AppSystem<IProcessUtils> {
   };
 
   // Returns the last error that occurred
-  char *GetErrorString(char *pBuf, int nBufLen);
+  char *GetErrorString(char *pBuf, usize nBufLen);
 
   // creates the process, adds it to the list and writes the windows HANDLE
   // into info.m_hProcess
@@ -70,17 +70,13 @@ class CProcessUtils : public CTier1AppSystem<IProcessUtils> {
   bool m_bInitialized;
 };
 
-
 // Purpose: singleton accessor
-
 static CProcessUtils s_ProcessUtils;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CProcessUtils, IProcessUtils,
                                   PROCESS_UTILS_INTERFACE_VERSION,
                                   s_ProcessUtils);
 
-
 // Initialize, shutdown process system
-
 InitReturnVal_t CProcessUtils::Init() {
   InitReturnVal_t nRetVal = BaseClass::Init();
   if (nRetVal != INIT_OK) return nRetVal;
@@ -100,10 +96,8 @@ void CProcessUtils::Shutdown() {
   return BaseClass::Shutdown();
 }
 
-
 // Returns the last error that occurred
-
-char *CProcessUtils::GetErrorString(char *pBuf, int nBufLen) {
+char *CProcessUtils::GetErrorString(char *pBuf, usize nBufLen) {
   FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, pBuf,
                 nBufLen, NULL);
   char *p = strchr(pBuf, '\r');  // get rid of \r\n
@@ -115,9 +109,7 @@ char *CProcessUtils::GetErrorString(char *pBuf, int nBufLen) {
 
 ProcessHandle_t CProcessUtils::CreateProcess(ProcessInfo_t &info,
                                              bool bConnectStdPipes) {
-  STARTUPINFO si;
-  memset(&si, 0, sizeof si);
-  si.cb = sizeof(si);
+  STARTUPINFO si{sizeof(si)};
   if (bConnectStdPipes) {
     si.dwFlags = STARTF_USESTDHANDLES;
     si.hStdInput = info.m_hChildStdinRd;
@@ -142,9 +134,7 @@ ProcessHandle_t CProcessUtils::CreateProcess(ProcessInfo_t &info,
   return PROCESS_HANDLE_INVALID;
 }
 
-
 // Options for compilation
-
 ProcessHandle_t CProcessUtils::StartProcess(const char *pCommandLine,
                                             bool bConnectStdPipes) {
   Assert(m_bInitialized);
@@ -166,10 +156,8 @@ ProcessHandle_t CProcessUtils::StartProcess(const char *pCommandLine,
     return CreateProcess(info, false);
   }
 
-  SECURITY_ATTRIBUTES saAttr;
-
+  SECURITY_ATTRIBUTES saAttr{sizeof(SECURITY_ATTRIBUTES)};
   // Set the bInheritHandle flag so pipe handles are inherited.
-  saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
   saAttr.bInheritHandle = TRUE;
   saAttr.lpSecurityDescriptor = NULL;
 
@@ -179,11 +167,6 @@ ProcessHandle_t CProcessUtils::StartProcess(const char *pCommandLine,
       if (DuplicateHandle(GetCurrentProcess(), info.m_hChildStdoutWr,
                           GetCurrentProcess(), &info.m_hChildStderrWr, 0, TRUE,
                           DUPLICATE_SAME_ACCESS)) {
-        //				_setmode( info.m_hChildStdoutRd, _O_TEXT
-        //); 				_setmode( info.m_hChildStdoutWr, _O_TEXT
-        //); 				_setmode( info.m_hChildStderrWr, _O_TEXT
-        //);
-
         ProcessHandle_t hProcess = CreateProcess(info, true);
         if (hProcess != PROCESS_HANDLE_INVALID) return hProcess;
 
@@ -198,9 +181,7 @@ ProcessHandle_t CProcessUtils::StartProcess(const char *pCommandLine,
   return PROCESS_HANDLE_INVALID;
 }
 
-
 // Start up a process
-
 ProcessHandle_t CProcessUtils::StartProcess(int argc, const char **argv,
                                             bool bConnectStdPipes) {
   CUtlString commandLine;
@@ -213,9 +194,7 @@ ProcessHandle_t CProcessUtils::StartProcess(int argc, const char **argv,
   return StartProcess(commandLine.Get(), bConnectStdPipes);
 }
 
-
 // Shuts down the process handle
-
 void CProcessUtils::ShutdownProcess(ProcessHandle_t hProcess) {
   ProcessInfo_t &info = m_Processes[hProcess];
   CloseHandle(info.m_hChildStderrWr);
@@ -227,9 +206,7 @@ void CProcessUtils::ShutdownProcess(ProcessHandle_t hProcess) {
   m_Processes.Remove(hProcess);
 }
 
-
 // Closes the process
-
 void CProcessUtils::CloseProcess(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   if (hProcess != PROCESS_HANDLE_INVALID) {
@@ -238,9 +215,7 @@ void CProcessUtils::CloseProcess(ProcessHandle_t hProcess) {
   }
 }
 
-
 // Aborts the process
-
 void CProcessUtils::AbortProcess(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   if (hProcess != PROCESS_HANDLE_INVALID) {
@@ -252,9 +227,7 @@ void CProcessUtils::AbortProcess(ProcessHandle_t hProcess) {
   }
 }
 
-
 // Returns true if the process is complete
-
 bool CProcessUtils::IsProcessComplete(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   Assert(hProcess != PROCESS_HANDLE_INVALID);
@@ -264,7 +237,6 @@ bool CProcessUtils::IsProcessComplete(ProcessHandle_t hProcess) {
   return (WaitForSingleObject(h, 0) != WAIT_TIMEOUT);
 }
 
-
 // Methods used to write input into a process
 
 int CProcessUtils::SendProcessInput(ProcessHandle_t hProcess, char *pBuf,
@@ -273,9 +245,6 @@ int CProcessUtils::SendProcessInput(ProcessHandle_t hProcess, char *pBuf,
   Assert(0);
   return 0;
 }
-
-
-// Methods used to read	output back from a process
 
 int CProcessUtils::GetActualProcessOutputSize(ProcessHandle_t hProcess) {
   Assert(hProcess != PROCESS_HANDLE_INVALID);
@@ -305,8 +274,8 @@ int CProcessUtils::GetActualProcessOutput(ProcessHandle_t hProcess, char *pBuf,
   DWORD dwCount = 0;
   DWORD dwRead = 0;
 
-  // TODO(d.rattman): Is there a way of making pipes be text mode so we don't get /n/rs
-  // back?
+  // TODO(d.rattman): Is there a way of making pipes be text mode so we don't
+  // get /n/rs back?
   char *pTempBuf = (char *)_alloca(nBufLen);
   if (!PeekNamedPipe(info.m_hChildStdoutRd, NULL, NULL, NULL, &dwCount, NULL)) {
     char buf[512];
@@ -374,10 +343,8 @@ int CProcessUtils::GetProcessOutput(ProcessHandle_t hProcess, char *pBuf,
   return nActualCountRead + nBytesRead + 1;
 }
 
-
 // Returns the exit code for the process. Doesn't work unless the process is
 // complete
-
 int CProcessUtils::GetProcessExitCode(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   ProcessInfo_t &info = m_Processes[hProcess];
@@ -387,9 +354,7 @@ int CProcessUtils::GetProcessExitCode(ProcessHandle_t hProcess) {
   return nExitCode;
 }
 
-
 // Waits until a process is complete
-
 void CProcessUtils::WaitUntilProcessCompletes(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
 

@@ -128,21 +128,16 @@ class alignas(16) CJobQueue {
 MSVC_END_WARNING_OVERRIDE_SCOPE()
 #pragma pack(pop)
 
-//
-// CThreadPool
-//
-
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4324)
 
+// CThreadPool
 class CThreadPool : public CRefCounted1<IThreadPool, CRefCountServiceMT> {
  public:
   CThreadPool();
   ~CThreadPool();
 
-  //-----------------------------------------------------
   // Thread functions
-  //-----------------------------------------------------
   bool Start(
       const ThreadPoolStartParams_t &startParams = ThreadPoolStartParams_t()) {
     return Start(startParams, NULL);
@@ -152,49 +147,35 @@ class CThreadPool : public CRefCounted1<IThreadPool, CRefCountServiceMT> {
   bool Stop(int timeout = TT_INFINITE);
   void Distribute(bool bDistribute = true, int *pAffinityTable = NULL);
 
-  //-----------------------------------------------------
   // Functions for any thread
-  //-----------------------------------------------------
   unsigned GetJobCount() { return m_nJobs; }
   int NumThreads();
   int NumIdleThreads();
 
-  //-----------------------------------------------------
   // Pause/resume processing jobs
-  //-----------------------------------------------------
   int SuspendExecution();
   int ResumeExecution();
 
-  //-----------------------------------------------------
   // Offer the current thread to the pool
-  //-----------------------------------------------------
   virtual int YieldWait(CThreadEvent *pEvents, int nEvents,
                         bool bWaitAll = true, unsigned timeout = TT_INFINITE);
   virtual int YieldWait(CJob **, int nJobs, bool bWaitAll = true,
                         unsigned timeout = TT_INFINITE);
   void Yield(unsigned timeout);
 
-  //-----------------------------------------------------
   // Add a native job to the queue (master thread)
-  //-----------------------------------------------------
   void AddJob(CJob *);
   void InsertJobInQueue(CJob *);
 
-  //-----------------------------------------------------
   // Add an function object to the queue (master thread)
-  //-----------------------------------------------------
   void AddFunctorInternal(CFunctor *, CJob ** = NULL,
                           const char *pszDescription = NULL,
                           unsigned flags = 0);
 
-  //-----------------------------------------------------
   // Remove a job from the queue (master thread)
-  //-----------------------------------------------------
   virtual void ChangePriority(CJob *p, JobPriority_t priority);
 
-  //-----------------------------------------------------
   // Bulk job manipulation (blocking)
-  //-----------------------------------------------------
   int ExecuteToPriority(JobPriority_t toPriority, JobFilter_t pfnFilter = NULL);
   int AbortAll();
 
@@ -208,15 +189,10 @@ class CThreadPool : public CRefCounted1<IThreadPool, CRefCountServiceMT> {
     COMPUTATION_STACKSIZE = 0,
   };
 
-  //-----------------------------------------------------
-  //
-  //-----------------------------------------------------
   CJob *PeekJob();
   CJob *GetDummyJob();
 
-  //-----------------------------------------------------
   // Thread functions
-  //-----------------------------------------------------
   int Run();
 
  private:
@@ -308,8 +284,8 @@ class CJobThread : public CWorkerThread {
 
     ++m_pOwner->m_nIdleThreads;
     m_IdleEvent.Set();
-    while (!bExit && (waitResult = Wait(SOURCE_ARRAYSIZE(waitHandles),
-                                        waitHandles)) != WAIT_FAILED) {
+    while (!bExit && (waitResult = Wait(std::size(waitHandles), waitHandles)) !=
+                         WAIT_FAILED) {
       if (PeekCall()) {
         switch (GetCallParam()) {
           case TPM_EXIT:
@@ -898,13 +874,13 @@ void Test(bool bDistribute, bool bSleep = true, bool bFinishExecute = false,
         }
 
         CCountJob jobs[4000];
-        g_nTotalToComplete = SOURCE_ARRAYSIZE(jobs);
+        g_nTotalToComplete = std::size(jobs);
 
         CFastTimer timer, suspendTimer;
 
         suspendTimer.Start();
         timer.Start();
-        for (int j = 0; j < SOURCE_ARRAYSIZE(jobs); j++) {
+        for (size_t j = 0; j < std::size(jobs); j++) {
           jobs[j].SetFlags(JF_QUEUE);
           jobs[j].bDoWork = bDoWork;
           g_pTestThreadPool->AddJob(&jobs[j]);
@@ -927,7 +903,7 @@ void Test(bool bDistribute, bool bSleep = true, bool bFinishExecute = false,
         g_done.Reset();
 
         int counts[8] = {0};
-        for (int j = 0; j < SOURCE_ARRAYSIZE(jobs); j++) {
+        for (size_t j = 0; j < std::size(jobs); j++) {
           if (jobs[j].GetServiceThread() != -1) {
             counts[jobs[j].GetServiceThread()]++;
             jobs[j].ClearServiceThread();
@@ -968,8 +944,8 @@ class CExecuteTestJob : public CJob {
     }
 
     for (size_t i = 0; i < 50; ++i) {
-      const unsigned int hash1{HashBlock(memory, SOURCE_ARRAYSIZE(memory))},
-          hash2{HashBlock(memory, SOURCE_ARRAYSIZE(memory))};  //-V656
+      const unsigned int hash1{HashBlock(memory, std::size(memory))},
+          hash2{HashBlock(memory, std::size(memory))};  //-V656
 
       (void)sqrt((float)hash1 + (float)hash2 + 10.0f);  //-V530
     }
@@ -1022,7 +998,7 @@ void TestForcedExecute() {
       g_pTestThreadPool->Start(params, "Tst");
 
       static CExecuteTestJob jobs[4000];
-      for (int j = 0; j < SOURCE_ARRAYSIZE(jobs); j++) {
+      for (size_t j = 0; j < std::size(jobs); j++) {
         g_ReadyToExecute = FALSE;
 
         for (int k = 0; k < i; k++) {

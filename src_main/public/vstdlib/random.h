@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Random number generator
 
@@ -12,10 +12,10 @@
 
 #define NTAB 32
 
-// A generator of uniformly distributed random numbers
+// A generator of uniformly distributed random numbers.
 the_interface IUniformRandomStream {
  public:
-  // Sets the seed of the random number generator
+  // Sets the seed of the random number generator.
   virtual void SetSeed(int seed) = 0;
 
   // Generates random numbers
@@ -25,12 +25,12 @@ the_interface IUniformRandomStream {
                                float exponent = 1.0f) = 0;
 };
 
-// The standard generator of uniformly distributed random numbers
+// The standard generator of uniformly distributed random numbers.
 class VSTDLIB_CLASS CUniformRandomStream : public IUniformRandomStream {
  public:
   CUniformRandomStream();
 
-  // Sets the seed of the random number generator
+  // Sets the seed of the random number generator.
   void SetSeed(int iSeed) override;
 
   // Generates random numbers
@@ -49,7 +49,7 @@ class VSTDLIB_CLASS CUniformRandomStream : public IUniformRandomStream {
   CThreadFastMutex m_mutex;
 };
 
-// A generator of gaussian distributed random numbers
+// A generator of gaussian distributed random numbers.
 class VSTDLIB_CLASS CGaussianRandomStream {
  public:
   // Passing in NULL will cause the gaussian stream to use the
@@ -71,7 +71,7 @@ class VSTDLIB_CLASS CGaussianRandomStream {
 };
 
 // A couple of convenience functions to access the library's global uniform
-// stream
+// stream.
 VSTDLIB_INTERFACE void RandomSeed(int iSeed);
 VSTDLIB_INTERFACE float RandomFloat(float flMinVal = 0.0f,
                                     float flMaxVal = 1.0f);
@@ -83,7 +83,7 @@ VSTDLIB_INTERFACE float RandomGaussianFloat(float flMean = 0.0f,
                                             float flStdDev = 1.0f);
 
 // Installs a global random number generator, which will affect the Random
-// functions above
+// functions above.
 VSTDLIB_INTERFACE void InstallUniformRandomStream(
     IUniformRandomStream *pStream);
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_VSTDLIB_IPROCESSUTILS_H_
 #define SOURCE_VSTDLIB_IPROCESSUTILS_H_
@@ -19,7 +19,7 @@ enum {
 // from.
 the_interface IProcessUtils : public IAppSystem {
  public:
-  // Starts, stops a process
+  // Starts, stops a process.
   virtual ProcessHandle_t StartProcess(const ch *pCommandLine,
                                        bool bConnectStdPipes) = 0;
   virtual ProcessHandle_t StartProcess(i32 argc, const ch **argv,
@@ -27,23 +27,23 @@ the_interface IProcessUtils : public IAppSystem {
   virtual void CloseProcess(ProcessHandle_t hProcess) = 0;
   virtual void AbortProcess(ProcessHandle_t hProcess) = 0;
 
-  // Returns true if a process is complete
+  // Returns true if a process is complete.
   virtual bool IsProcessComplete(ProcessHandle_t hProcess) = 0;
 
-  // Waits until a process is complete
+  // Waits until a process is complete.
   virtual void WaitUntilProcessCompletes(ProcessHandle_t hProcess) = 0;
 
-  // Methods used to write input into a process
+  // Methods used to write input into a process.
   virtual i32 SendProcessInput(ProcessHandle_t hProcess, ch * pBuf,
                                i32 nBufLen) = 0;
 
-  // Methods used to read	output back from a process
+  // Methods used to read	output back from a process.
   virtual i32 GetProcessOutputSize(ProcessHandle_t hProcess) = 0;
   virtual i32 GetProcessOutput(ProcessHandle_t hProcess, ch * pBuf,
                                i32 nBufLen) = 0;
 
   // Returns the exit code for the process. Doesn't work unless the process is
-  // complete
+  // complete.
   virtual i32 GetProcessExitCode(ProcessHandle_t hProcess) = 0;
 };
 
