@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Local header for CVTFTexture class declaration - allows
 // platform-specific implementation to be placed in separate cpp files.
@@ -11,69 +11,57 @@
 #include "tier1/byteswap.h"
 #include "vtf/vtf.h"
 
-class CEdgePos {
- public:
-  CEdgePos() {}
-  CEdgePos(int ix, int iy) {
-    x = ix;
-    y = iy;
+struct CEdgePos {
+  CEdgePos() = default;
+  CEdgePos(int x_, int y_) : x{x_}, y{y_} {}
+
+  void operator+=(const CEdgePos &o) {
+    x += o.x;
+    y += o.y;
   }
 
-  void operator+=(const CEdgePos &other) {
-    x += other.x;
-    y += other.y;
+  void operator/=(int v) {
+    x /= v;
+    y /= v;
   }
 
-  void operator/=(int val) {
-    x /= val;
-    y /= val;
+  CEdgePos operator>>(int shift) const { return {x >> shift, y >> shift}; }
+  CEdgePos operator*(int shift) const { return {x * shift, y * shift}; }
+
+  CEdgePos operator-(const CEdgePos &other) const {
+    return {x - other.x, y - other.y};
   }
 
-  CEdgePos operator>>(int shift) { return CEdgePos(x >> shift, y >> shift); }
-
-  CEdgePos operator*(int shift) { return CEdgePos(x * shift, y * shift); }
-
-  CEdgePos operator-(const CEdgePos &other) {
-    return CEdgePos(x - other.x, y - other.y);
+  CEdgePos operator+(const CEdgePos &other) const {
+    return {x + other.x, y + other.y};
   }
 
-  CEdgePos operator+(const CEdgePos &other) {
-    return CEdgePos(x + other.x, y + other.y);
-  }
-
-  bool operator!=(const CEdgePos &other) { return !(*this == other); }
-
-  bool operator==(const CEdgePos &other) {
-    return x == other.x && y == other.y;
-  }
+  bool operator!=(const CEdgePos &o) const { return !(*this == o); }
+  bool operator==(const CEdgePos &o) const { return x == o.x && y == o.y; }
 
   int x, y;
 };
 
-class CEdgeIncrements {
- public:
+struct CEdgeIncrements {
   CEdgePos iFace1Start, iFace1End;
   CEdgePos iFace1Inc, iFace2Inc;
   CEdgePos iFace2Start, iFace2End;
 };
 
-class CEdgeMatch {
- public:
+struct CEdgeMatch {
   int m_iFaces[2];      // Which faces are touching.
   int m_iEdges[2];      // Which edge on each face is touching.
   int m_iCubeVerts[2];  // Which of the cube's verts comprise this edge?
   bool m_bFlipFace2Edge;
 };
 
-class CCornerMatch {
- public:
+struct CCornerMatch {
   // The info for the 3 edges that match at this corner.
   int m_iFaces[3];
   int m_iFaceEdges[3];
 };
 
-class CEdgeFaceIndex {
- public:
+struct CEdgeFaceIndex {
   int m_iEdge;
   int m_iFace;
 };
@@ -81,9 +69,7 @@ class CEdgeFaceIndex {
 #define NUM_EDGE_MATCHES 12
 #define NUM_CORNER_MATCHES 8
 
-//-----------------------------------------------------------------------------
-// Implementation of the VTF Texture
-//-----------------------------------------------------------------------------
+// Implementation of the VTF Texture.
 class CVTFTexture : public IVTFTexture {
  public:
   CVTFTexture();
@@ -104,14 +90,12 @@ class CVTFTexture : public IVTFTexture {
   virtual bool HasResourceEntry(uint32_t eType) const;
 
   // Retrieve available resource types of this IVTFTextures
-  //		arrTypesBuffer buffer to be filled with resource types
-  // available.
-  //		numTypesBufferElems		how many resource types the
-  // buffer  can  accomodate.
+  // arrTypesBuffer buffer to be filled with resource types available.
+  // numTypesBufferElems how many resource types the buffer can accomodate.
   // Returns:
-  //		number of resource types available (can be greater than
-  //"numTypesBufferElems" 		in which case only first
-  //"numTypesBufferElems" are copied to "arrTypesBuffer")
+  // number of resource types available (can be greater than
+  // "numTypesBufferElems" in which case only first "numTypesBufferElems" are
+  // copied to "arrTypesBuffer")
   virtual unsigned int GetResourceTypes(uint32_t *arrTypesBuffer,
                                         int numTypesBufferElems) const;
 
@@ -125,8 +109,8 @@ class CVTFTexture : public IVTFTexture {
                              int *pStartLocation, int *pSizeInBytes) const;
   virtual int FileSize(int nMipSkipCount = 0) const;
 
-  // When unserializing, we can skip a certain number of mip levels,
-  // and we also can just load everything but the image data
+  // When unserializing, we can skip a certain number of mip levels, and we also
+  // can just load everything but the image data
   virtual bool Unserialize(CUtlBuffer &buf, bool bBufferHeaderOnly = false,
                            int nSkipMipLevels = 0);
   virtual bool Serialize(CUtlBuffer &buf);
@@ -160,8 +144,8 @@ class CVTFTexture : public IVTFTexture {
   // single frame
   virtual int ComputeMipSize(int iMipLevel) const;
 
-  // Computes the size (in bytes) of a single face of a single frame
-  // All mip levels starting at the specified mip level are included
+  // Computes the size (in bytes) of a single face of a single frame. All mip
+  // levels starting at the specified mip level are included
   virtual int ComputeFaceSize(int iStartingMipLevel = 0) const;
 
   // Computes the total size of all faces, all frames
@@ -195,15 +179,15 @@ class CVTFTexture : public IVTFTexture {
   virtual void ConvertImageFormat(ImageFormat fmt, bool bNormalToDUDV);
 
   // Generate spheremap based on the current cube faces (only works for
-  // cubemaps) The look dir indicates the direction of the center of the sphere
+  // cubemaps). The look dir indicates the direction of the center of the sphere
   virtual void GenerateSpheremap(LookDir_t lookDir);
 
   virtual void GenerateHemisphereMap(unsigned char *pSphereMapBitsRGBA,
                                      int targetWidth, int targetHeight,
                                      LookDir_t lookDir, int iFrame);
 
-  // Fixes the cubemap faces orientation from our standard to the
-  // standard the material system needs.
+  // Fixes the cubemap faces orientation from our standard to the standard the
+  // material system needs.
   virtual void FixCubemapFaceOrientation();
 
   // Normalize the top mip level if necessary
@@ -221,8 +205,8 @@ class CVTFTexture : public IVTFTexture {
   // Computes the alpha flags
   virtual void ComputeAlphaFlags();
 
-  // Gets the texture all internally consistent assuming you've loaded
-  // mip 0 of all faces of all frames
+  // Gets the texture all internally consistent assuming you've loaded mip 0 of
+  // all faces of all frames
   virtual void PostProcess(bool bGenerateSpheremap,
                            LookDir_t lookDir = LOOK_DOWN_Z,
                            bool bAllowFixCubemapOrientation = true);
@@ -327,12 +311,6 @@ class CVTFTexture : public IVTFTexture {
   // Removes the resource entry info if it's present
   bool RemoveResourceEntryInfo(unsigned int eType);
 
-#if defined(_X360)
-  bool ReadHeader(CUtlBuffer &buf, VTFFileHeaderX360_t &header);
-  bool LoadImageData(CUtlBuffer &buf, bool bBufferIsVolatile,
-                     int nMipSkipCount);
-#endif
-
  private:
   // This is to make sure old-format .vtf files are read properly
   int m_nVersion[2];
@@ -372,14 +350,6 @@ class CVTFTexture : public IVTFTexture {
 
   CByteswap m_Swap;
 
-#if defined(_X360)
-  int m_iPreloadDataSize;
-  int m_iCompressedSize;
-  // resolves actual dimensions to/from mapping dimensions due to pre-picmipping
-  int m_nMipSkipCount;
-  unsigned char m_LowResImageSample[4];
-#endif
-
   CUtlVector<ResourceEntryInfo> m_arrResourcesInfo;
 
   struct ResourceMemorySection {
@@ -394,9 +364,8 @@ class CVTFTexture : public IVTFTexture {
     bool WriteData(CUtlBuffer &buf) const;
   };
   CUtlVector<ResourceMemorySection> m_arrResourcesData;
-  CUtlVector<ResourceMemorySection>
-      m_arrResourcesData_ForReuse;  // Maintained to keep allocated memory
-                                    // blocks when unserializing from files
+  // Maintained to keep allocated memory blocks when unserializing from files
+  CUtlVector<ResourceMemorySection> m_arrResourcesData_ForReuse;
 
   VtfProcessingOptions m_Options;
 };

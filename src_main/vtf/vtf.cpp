@@ -61,6 +61,7 @@ BEGIN_BYTESWAP_DATADESC_(VTFFileHeaderX360_t, VTFFileBaseHeader_t)
       DEFINE_ARRAY(lowResImageSample, FIELD_CHARACTER, 4),
       DEFINE_FIELD(compressedSize, FIELD_INTEGER),
 END_DATADESC()
+
 #if defined(OS_POSIX)
 // stub functions
 const char *S3TC_GetBlock(const void *pCompressed, ImageFormat format,
@@ -2638,9 +2639,8 @@ void CVTFTexture::MatchCubeMapS3TCPalettes(
 void CVTFTexture::MatchCubeMapBorders(int iStage, ImageFormat finalFormat,
                                       bool bSkybox) {
   // HDRFIXME: hack hack hack
-  if (m_Format != IMAGE_FORMAT_RGBA8888) {
-    return;
-  }
+  if (m_Format != IMAGE_FORMAT_RGBA8888) return;
+
   if (!IsCubeMap()) return;
 
   Assert(IsCubeMap());
@@ -2664,9 +2664,8 @@ void CVTFTexture::MatchCubeMapBorders(int iStage, ImageFormat finalFormat,
         swap(m_OriginalData[i].r, m_OriginalData[i].b);
 
       return;
-    } else {
-      // Drop down below and do the edge matching.
     }
+    // Drop down below and do the edge matching.
   } else {
     if (finalFormat == IMAGE_FORMAT_DXT1 || finalFormat == IMAGE_FORMAT_DXT5) {
       Assert(m_Format == finalFormat);

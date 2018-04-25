@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 //
 // Purpose: Force pc .VTF to preferred .VTF 360 format conversion.
@@ -22,9 +22,7 @@ struct ResourceCopy_t {
   ResourceEntryInfo m_EntryInfo;
 };
 
-//-----------------------------------------------------------------------------
 // Converts to an alternate format
-//-----------------------------------------------------------------------------
 ImageFormat PreferredFormat(IVTFTexture *pVTFTexture, ImageFormat fmt,
                             int width, int height, int mipCount,
                             int faceCount) {
@@ -206,8 +204,8 @@ bool ConvertImageFormatEx(unsigned char *pSourceImage, int sourceImageSize,
           float fl360Gamma = SrgbGammaTo360Gamma(flSrgbGamma);
 
           fl360Gamma = std::clamp(fl360Gamma, 0.0f, 1.0f);
-          *(pRGB[j]) = (unsigned char)(std::clamp(((fl360Gamma * 255.0f) + 0.5f),
-                                             0.0f, 255.0f));
+          *(pRGB[j]) = (unsigned char)(std::clamp(
+              ((fl360Gamma * 255.0f) + 0.5f), 0.0f, 255.0f));
         }
       }
     } else if ((targetFormat == IMAGE_FORMAT_DXT1_ONEBITALPHA) ||
@@ -297,10 +295,11 @@ bool ConvertImageFormatEx(unsigned char *pSourceImage, int sourceImageSize,
             float fl360Gamma = SrgbGammaTo360Gamma(flSrgbGamma);
 
             fl360Gamma = std::clamp(fl360Gamma, 0.0f, 1.0f);
-            //*p8BitValue = ( unsigned char ) ( std::clamp( ( ( fl360Gamma * 255.0f )
+            //*p8BitValue = ( unsigned char ) ( std::clamp( ( ( fl360Gamma *
+            //255.0f )
             //+ 0.5f ), 0.0f, 255.0f ) );
-            *p8BitValue =
-                (unsigned char)(std::clamp(((fl360Gamma * 255.0f)), 0.0f, 255.0f));
+            *p8BitValue = (unsigned char)(std::clamp(((fl360Gamma * 255.0f)),
+                                                     0.0f, 255.0f));
           }
         }
 
