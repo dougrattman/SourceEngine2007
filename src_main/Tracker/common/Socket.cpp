@@ -15,9 +15,7 @@
 
 #include <VGUI/IVGui.h>
 
-//-----------------------------------------------------------------------------
 // Purpose: All socket I/O occurs on a thread
-//-----------------------------------------------------------------------------
 class CSocketThread {
  public:
   typedef struct threadsocket_s {

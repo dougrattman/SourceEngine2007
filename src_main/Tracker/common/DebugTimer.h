@@ -1,15 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DEBUGTIMER_H
 #define DEBUGTIMER_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 // resets the timer
 void Timer_Start();
@@ -17,6 +9,4 @@ void Timer_Start();
 // returns the time since Timer_Start() was called, in seconds
 double Timer_End();
 
-
-
-#endif // DEBUGTIMER_H
+#endif  // DEBUGTIMER_H

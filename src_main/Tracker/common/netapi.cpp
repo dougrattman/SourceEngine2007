@@ -1,27 +1,14 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//=============================================================================
+
 #include <cstdio>
 #include <cstdlib>
-#if !defined(_X360)
-#include "winsock.h"
-#else
-#include "winsockx.h"
-#endif
-#include "inetapi.h"
 
-#if defined(_X360)
-#include "xbox/xbox_win32stubs.h"
-#endif
+#include "inetapi.h"
+#include "winsock.h"
 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
 // Purpose: Implements INetAPI
-//-----------------------------------------------------------------------------
 class CNetAPI : public INetAPI {
  public:
   virtual void NetAdrToSockAddr(netadr_t *a, struct sockaddr *s);
@@ -41,11 +28,6 @@ class CNetAPI : public INetAPI {
 static CNetAPI g_NetAPI;
 INetAPI *net = (INetAPI *)&g_NetAPI;
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *a -
-//			*s -
-//-----------------------------------------------------------------------------
 void CNetAPI::NetAdrToSockAddr(netadr_t *a, struct sockaddr *s) {
   memset(s, 0, sizeof(*s));
 
@@ -60,11 +42,6 @@ void CNetAPI::NetAdrToSockAddr(netadr_t *a, struct sockaddr *s) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *s -
-//			*a -
-//-----------------------------------------------------------------------------
 void CNetAPI::SockAddrToNetAdr(struct sockaddr *s, netadr_t *a) {
   if (s->sa_family == AF_INET) {
     a->type = NA_IP;
@@ -73,11 +50,6 @@ void CNetAPI::SockAddrToNetAdr(struct sockaddr *s, netadr_t *a) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *a -
-// Output : char
-//-----------------------------------------------------------------------------
 char *CNetAPI::AdrToString(netadr_t *a) {
   static char s[64];
 
@@ -94,12 +66,6 @@ char *CNetAPI::AdrToString(netadr_t *a) {
   return s;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *s -
-//			*sadr -
-// Output : static bool
-//-----------------------------------------------------------------------------
 static bool StringToSockaddr(const char *s, struct sockaddr *sadr) {
   struct hostent *h;
   char *colon;
@@ -140,12 +106,6 @@ static bool StringToSockaddr(const char *s, struct sockaddr *sadr) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *s -
-//			*a -
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
 bool CNetAPI::StringToAdr(const char *s, netadr_t *a) {
   struct sockaddr sadr;
 
@@ -164,11 +124,7 @@ bool CNetAPI::StringToAdr(const char *s, netadr_t *a) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Lookup the IP address for the specified IP socket
-// Input  : socket -
-//			*a -
-//-----------------------------------------------------------------------------
 void CNetAPI::GetSocketAddress(int socket, netadr_t *a) {
   char buff[512];
   struct sockaddr_in address;
@@ -188,12 +144,7 @@ void CNetAPI::GetSocketAddress(int socket, netadr_t *a) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Full IP address compare
-// Input  : *a -
-//			*b -
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
 bool CNetAPI::CompareAdr(netadr_t *a, netadr_t *b) {
   if (a->type != b->type) {
     return false;
@@ -211,13 +162,7 @@ bool CNetAPI::CompareAdr(netadr_t *a, netadr_t *b) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Full IP address compare
-// Input  : *a -
-//			*b -
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
-
 void CNetAPI::GetLocalIP(netadr_t *a) {
   char s[64];
 

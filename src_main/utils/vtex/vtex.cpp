@@ -520,9 +520,7 @@ static const char *GetSourceExtension(void) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Computes the desired texture format based on flags
-//-----------------------------------------------------------------------------
 static ImageFormat ComputeDesiredImageFormat(IVTFTexture *pTexture,
                                              VTexConfigInfo_t &info) {
   bool bDUDVTarget = info.m_bNormalToDuDv || info.m_bDuDv;
@@ -599,9 +597,7 @@ static ImageFormat ComputeDesiredImageFormat(IVTFTexture *pTexture,
   return targetFormat;
 }
 
-//-----------------------------------------------------------------------------
 // Computes the low res image size
-//-----------------------------------------------------------------------------
 void VTFGetLowResImageInfo(int cacheWidth, int cacheHeight,
                            int *lowResImageWidth, int *lowResImageHeight,
                            ImageFormat *imageFormat) {
@@ -635,9 +631,7 @@ void VTFGetLowResImageInfo(int cacheWidth, int cacheHeight,
   *imageFormat = LOWRES_IMAGE_FORMAT;
 }
 
-//-----------------------------------------------------------------------------
 // This method creates the low-res image and hooks it into the VTF Texture
-//-----------------------------------------------------------------------------
 static void CreateLowResImage(IVTFTexture *pVTFTexture) {
   int iWidth, iHeight;
   ImageFormat imageFormat;
@@ -655,9 +649,7 @@ static void CreateLowResImage(IVTFTexture *pVTFTexture) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Computes the source file name
-//-----------------------------------------------------------------------------
 template <size_t scr_name_size>
 void MakeSrcFileName(char (&pSrcName)[scr_name_size], unsigned int flags,
                      const char *pFullNameWithoutExtension, int frameID,
@@ -715,10 +707,7 @@ static void ComputeBufferHash(void const *pvBuffer, size_t numBytes,
   CRC32_ProcessBuffer(&uiHashUpdate, pvBuffer, numBytes);
 }
 
-//-----------------------------------------------------------------------------
-// Loads a file into a UTLBuffer,
-// also computes the hash of the buffer.
-//-----------------------------------------------------------------------------
+// Loads a file into a UTLBuffer, also computes the hash of the buffer.
 static bool LoadFile(const char *pFileName, CUtlBuffer &buf, bool bFailOnError,
                      CRC32_t *puiHash) {
   FILE *fp;
@@ -746,9 +735,7 @@ static bool LoadFile(const char *pFileName, CUtlBuffer &buf, bool bFailOnError,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Creates a texture the size of the PSD image stored in the buffer
-//-----------------------------------------------------------------------------
 static void InitializeSrcTexture_PSD(IVTFTexture *pTexture,
                                      const char *pInputFileName,
                                      CUtlBuffer &psdBuffer, int nDepth,
@@ -770,9 +757,7 @@ static void InitializeSrcTexture_PSD(IVTFTexture *pTexture,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Creates a texture the size of the TGA image stored in the buffer
-//-----------------------------------------------------------------------------
 static void InitializeSrcTexture_TGA(IVTFTexture *pTexture,
                                      const char *pInputFileName,
                                      CUtlBuffer &tgaBuffer, int nDepth,
@@ -827,9 +812,7 @@ static void EatWhiteSpace(CUtlBuffer &buf) {
   return;
 }
 
-//-----------------------------------------------------------------------------
 // Creates a texture the size of the PFM image stored in the buffer
-//-----------------------------------------------------------------------------
 static void InitializeSrcTexture_PFM(IVTFTexture *pTexture,
                                      const char *pInputFileName,
                                      CUtlBuffer &fileBuffer, int nDepth,
@@ -891,9 +874,7 @@ static void InitializeSrcTexture(IVTFTexture *pTexture,
 
 #define DISTANCE_CODE_ALPHA_INOUT_THRESHOLD 10
 
-//-----------------------------------------------------------------------------
 // Loads a face from a PSD image
-//-----------------------------------------------------------------------------
 static bool LoadFaceFromPSD(IVTFTexture *pTexture, CUtlBuffer &psdBuffer, int z,
                             int nFrame, int nFace, float flGamma,
                             const VTexConfigInfo_t &info) {
@@ -1025,9 +1006,7 @@ static bool LoadFaceFromPSD(IVTFTexture *pTexture, CUtlBuffer &psdBuffer, int z,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Loads a face from a TGA image
-//-----------------------------------------------------------------------------
 static bool LoadFaceFromTGA(IVTFTexture *pTexture, CUtlBuffer &tgaBuffer, int z,
                             int nFrame, int nFace, float flGamma,
                             const VTexConfigInfo_t &info) {
@@ -1155,9 +1134,7 @@ static bool LoadFaceFromTGA(IVTFTexture *pTexture, CUtlBuffer &tgaBuffer, int z,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Loads a face from a PFM image
-//-----------------------------------------------------------------------------
 // HDRFIXME: How is this different from InitializeSrcTexture_PFM?
 static bool LoadFaceFromPFM(IVTFTexture *pTexture, CUtlBuffer &fileBuffer,
                             int z, int nFrame, int nFace, float flGamma,
@@ -1266,9 +1243,7 @@ static bool LoadFace(IVTFTexture *pTexture, CUtlBuffer &tgaBuffer, int z,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Loads source image data
-//-----------------------------------------------------------------------------
 static bool LoadSourceImages(IVTFTexture *pTexture,
                              const char *pFullNameWithoutExtension,
                              bool *pbGenerateSphereMaps,
@@ -1487,9 +1462,7 @@ static void AttachShtFile(const char *pFullNameWithoutExtension,
   pTexture->SetResourceData(VTF_RSRC_SHEET, buf.Base(), buf.TellPut());
 }
 
-//-----------------------------------------------------------------------------
 // Does the dirty deed and generates a VTF file
-//-----------------------------------------------------------------------------
 bool ProcessFiles(const char *pFullNameWithoutExtension, const char *pOutputDir,
                   const char *pBaseName, bool isCubeMap,
                   VTexConfigInfo_t &info) {
@@ -1725,10 +1698,8 @@ static bool GetKeyValueFromBuffer(CUtlBuffer &buffer, char (&key)[key_size],
   return false;
 }
 
-//-----------------------------------------------------------------------------
 // Loads the .psd file or .txt file associated with the .tga and gets out
 // various data
-//-----------------------------------------------------------------------------
 static bool LoadConfigFile(const char *pFileBaseName, VTexConfigInfo_t &info,
                            bool *isCubeMap) {
   // Tries to load .txt, then .psd

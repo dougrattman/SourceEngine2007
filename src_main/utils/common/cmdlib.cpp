@@ -746,9 +746,9 @@ void CreatePath(char *path) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Creates a path, path may already exist
-//-----------------------------------------------------------------------------
+
 #if defined(_WIN32) || defined(WIN32)
 void SafeCreatePath(char *path) {
   char *ptr;
