@@ -1258,7 +1258,7 @@ void CQueuedLoader::GetJobRequests() {
   f64 flProgress = PROGRESS_PARSEDRESLIST;
   while (true) {
     bool bIsDone = true;
-    for (int i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
+    for (size_t i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
       if (!jobs[i]->IsFinished()) {
         bIsDone = false;
         break;
@@ -1278,7 +1278,7 @@ void CQueuedLoader::GetJobRequests() {
     }
   }
 
-  for (int i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
+  for (size_t i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
     jobs[i]->Release();
   }
 
