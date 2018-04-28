@@ -421,12 +421,12 @@ void CBaseGamesPage::ServerResponded(int iServer,
     int iServerIP = m_mapServerIP.Find(netAdr);
     if (iServerIP != m_mapServerIP.InvalidIndex()) {
       // if we already had this entry under another index remove the old entry
-      int iServerMap = m_mapServers.Find(m_mapServerIP[iServerIP]);
-      if (iServerMap != m_mapServers.InvalidIndex()) {
-        serverdisplay_t &server = m_mapServers[iServerMap];
+      int old_server_map = m_mapServers.Find(m_mapServerIP[iServerIP]);
+      if (old_server_map != m_mapServers.InvalidIndex()) {
+        serverdisplay_t &server = m_mapServers[old_server_map];
         if (m_pGameList->IsValidItemID(server.m_iListID))
           m_pGameList->RemoveItem(server.m_iListID);
-        m_mapServers.RemoveAt(iServerMap);
+        m_mapServers.RemoveAt(old_server_map);
       }
       m_mapServerIP.RemoveAt(iServerIP);
     }
@@ -505,8 +505,8 @@ void CBaseGamesPage::ServerResponded(int iServer,
       std::max(0, pServerItem->m_nMaxPlayers - pServerItem->m_nBotPlayers);
 
   char buf[32];
-  Q_snprintf(buf, sizeof(buf), "%d / %d", nAdjustedForBotsPlayers,
-             nAdjustedForBotsMaxPlayers);
+  sprintf_s(buf, "%d / %d", nAdjustedForBotsPlayers,
+            nAdjustedForBotsMaxPlayers);
   kv->SetString("Players", buf);
 
   kv->SetInt("Ping", pServerItem->m_nPing);
@@ -518,8 +518,8 @@ void CBaseGamesPage::ServerResponded(int iServer,
     struct tm now;
 
     if (!localtime_s(&now, (time_t *)&pServerItem->m_ulTimeLastPlayed)) {
-      char buf[64];
-      strftime(buf, sizeof(buf), "%a %d %b %I:%M%p", &now);
+      char time_buf[64];
+      strftime(buf, sizeof(time_buf), "%a %d %b %I:%M%p", &now);
       Q_strlower(buf + strlen(buf) - 4,
                  SOURCE_ARRAYSIZE(buf) - strlen(buf) + 4);
       kv->SetString("LastPlayed", buf);
