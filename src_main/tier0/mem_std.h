@@ -11,10 +11,6 @@
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
-#ifdef OS_WIN
-#include "base/include/windows/windows_light.h"
-#endif
-
 #include "base/include/stdio_file_stream.h"
 #include "mem_helpers.h"
 #include "tier0/include/dbg.h"

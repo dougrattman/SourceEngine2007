@@ -16,6 +16,10 @@
 #define VA_RESERVE_FLAGS MEM_RESERVE
 #endif
 
+#ifdef OS_WIN
+#include "base/include/windows/windows_light.h"
+#endif
+
 #include "base/include/stdio_file_stream.h"
 #include "mem_helpers.h"
 #include "tier0/include/dbg.h"

@@ -6,8 +6,6 @@
 #include <tchar.h>
 #include <cstdio>  // sprintf_s
 
-#include "base/include/windows/windows_light.h"
-
 #include <comdef.h>  // _com_error
 
 #include "base/include/check.h"

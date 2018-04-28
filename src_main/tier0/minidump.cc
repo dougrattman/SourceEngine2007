@@ -21,8 +21,9 @@ static bool g_bInException = false;
 
 // Creates a new file and dumps the exception info into it.
 source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
-    u32 se_code, EXCEPTION_POINTERS *se_info, MINIDUMP_TYPE minidump_type,
-    wch *dump_file_name, usize dump_file_name_size) {
+    u32 se_code, struct _EXCEPTION_POINTERS *se_info,
+    MINIDUMP_TYPE minidump_type, wch *dump_file_name,
+    usize dump_file_name_size) {
   if (dump_file_name && dump_file_name_size) *dump_file_name = L'\0';
 
   auto [dbghelp_module, errno_info] =
@@ -138,7 +139,7 @@ source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
 }
 
 static void Tier0WriteMiniDump(u32 unstructured_exception_code,
-                               EXCEPTION_POINTERS *exception_infos) {
+                               struct _EXCEPTION_POINTERS *exception_infos) {
   // First try to write it with all the indirectly referenced memory (ie: a
   // large file). If that doesn't work, then write a smaller one.
   auto minidump_type = static_cast<MINIDUMP_TYPE>(

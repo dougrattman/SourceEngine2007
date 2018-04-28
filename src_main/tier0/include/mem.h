@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Memory allocation!
 
@@ -10,7 +10,7 @@
 #include "tier0/include/tier0_api.h"
 
 // DLL-exported methods for particular kinds of memory
-SOURCE_TIER0_API void *MemAllocScratch(usize nMemSize);
+SOURCE_TIER0_API void *MemAllocScratch(usize size);
 SOURCE_TIER0_API void MemFreeScratch();
 
 #ifdef OS_POSIX

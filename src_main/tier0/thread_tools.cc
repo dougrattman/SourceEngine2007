@@ -1114,7 +1114,7 @@ const ch *CThread::GetName() {
 
 void CThread::SetName(const ch *pszName) {
   AUTO_LOCK(m_Lock);
-  strncpy_s(m_szName, pszName, SOURCE_ARRAYSIZE(m_szName) - 1);
+  strncpy_s(m_szName, pszName, std::size(m_szName) - 1);
 }
 
 bool CThread::Start(u32 nBytesStack) {

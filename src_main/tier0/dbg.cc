@@ -148,7 +148,7 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
                                  const ch* pMsgFormat, va_list args) {
   ch message[5020];
   // check that we won't artifically truncate the string
-  assert(strlen(pMsgFormat) < SOURCE_ARRAYSIZE(message));
+  assert(strlen(pMsgFormat) < std::size(message));
 
   /* Printf the file and line for warning + assert only... */
   i32 len = 0;
@@ -159,21 +159,21 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
   if (len == -1) return SPEW_ABORT;
 
   /* Create the message.... */
-  i32 val = _vsnprintf_s(&message[len], SOURCE_ARRAYSIZE(message) - len,
-                         SOURCE_ARRAYSIZE(message) - len - 1, pMsgFormat, args);
+  i32 val = _vsnprintf_s(&message[len], std::size(message) - len,
+                         std::size(message) - len - 1, pMsgFormat, args);
   if (val == -1) return SPEW_ABORT;
 
   len += val;
   /* use normal assert here; to avoid recursion. */
-  assert(len * sizeof(*pMsgFormat) < SOURCE_ARRAYSIZE(message));
+  assert(len * sizeof(*pMsgFormat) < std::size(message));
 
   // Add \n for warning and assert
   if ((spewType == SPEW_ASSERT)) {
-    len += sprintf_s(&message[len], SOURCE_ARRAYSIZE(message) - len, "\n");
+    len += sprintf_s(&message[len], std::size(message) - len, "\n");
   }
 
   /* use normal assert here; to avoid recursion. */
-  assert(len < SOURCE_ARRAYSIZE(message) - 1);
+  assert(len < std::size(message) - 1);
   assert(s_SpewOutputFunc);
 
   /* direct it to the appropriate target(s) */
