@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Deals with singleton
 
@@ -6,9 +6,9 @@
 #define CLIENTEFFECTPRECACHESYSTEM_H
 
 #include "IGameSystem.h"
+#include "base/include/macros.h"
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialSystem.h"
-#include "base/include/macros.h"
 #include "tier1/UtlVector.h"
 #include "tier1/interface.h"
 
@@ -107,28 +107,28 @@ class CClientEffect : public IClientEffect {
 #define CLIENTEFFECT_MATERIAL(materialName) materialName,
 
 // End
-#define CLIENTEFFECT_REGISTER_END()                       \
-  }                                                       \
-  ;                                                       \
-  void ClientEffectRegister::Cache(bool precache) {       \
-    for (int i = 0; i < SOURCE_ARRAYSIZE(m_pszMaterials); i++) { \
-      ReferenceMaterial(m_pszMaterials[i], precache);     \
-    }                                                     \
-  }                                                       \
-  ClientEffectRegister register_ClientEffectRegister;     \
+#define CLIENTEFFECT_REGISTER_END()                                 \
+  }                                                                 \
+  ;                                                                 \
+  void ClientEffectRegister::Cache(bool precache) {                 \
+    for (size_t i = 0; i < SOURCE_ARRAYSIZE(m_pszMaterials); i++) { \
+      ReferenceMaterial(m_pszMaterials[i], precache);               \
+    }                                                               \
+  }                                                                 \
+  ClientEffectRegister register_ClientEffectRegister;               \
   }
 
-#define CLIENTEFFECT_REGISTER_END_CONDITIONAL(condition)    \
-  }                                                         \
-  ;                                                         \
-  void ClientEffectRegister::Cache(bool precache) {         \
-    if (condition) {                                        \
+#define CLIENTEFFECT_REGISTER_END_CONDITIONAL(condition)           \
+  }                                                                \
+  ;                                                                \
+  void ClientEffectRegister::Cache(bool precache) {                \
+    if (condition) {                                               \
       for (int i = 0; i < SOURCE_ARRAYSIZE(m_pszMaterials); i++) { \
-        ReferenceMaterial(m_pszMaterials[i], precache);     \
-      }                                                     \
-    }                                                       \
-  }                                                         \
-  ClientEffectRegister register_ClientEffectRegister;       \
+        ReferenceMaterial(m_pszMaterials[i], precache);            \
+      }                                                            \
+    }                                                              \
+  }                                                                \
+  ClientEffectRegister register_ClientEffectRegister;              \
   }
 
 #endif  // CLIENTEFFECTPRECACHESYSTEM_H
