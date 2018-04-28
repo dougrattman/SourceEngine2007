@@ -117,9 +117,9 @@ const char *GetInternalBugReporterDLL() {
     return bug_reporter_dll;
 
   char *gamedir = com_gamedir;
-  gamedir = Q_strrchr(gamedir, '\\') + 1;
-  if (!Q_stricmp(gamedir, "hl2") || !Q_stricmp(gamedir, "ep2") ||
-      !Q_stricmp(gamedir, "episodic")) {
+  gamedir = strrchr(gamedir, '\\') + 1;
+  if (!_stricmp(gamedir, "hl2") || !_stricmp(gamedir, "ep2") ||
+      !_stricmp(gamedir, "episodic")) {
     return BUG_REPORTER_OLD_DLLNAME;
   }
 
@@ -530,7 +530,7 @@ CBugUIPanel::CBugUIPanel(bool bIsPublic, vgui::Panel *parent)
   m_sDllName =
       m_bIsPublic ? BUG_REPORTER_PUBLIC_DLLNAME : GetInternalBugReporterDLL();
 
-  m_hZip = (HZIP)0;
+  m_hZip = nullptr;
 
   m_hDirectorySelectDialog = NULL;
   m_hFileOpenDialog = NULL;

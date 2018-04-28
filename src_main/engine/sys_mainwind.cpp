@@ -2,8 +2,15 @@
 
 #include "sys_mainwind.h"
 
-#include "base/include/windows/scoped_winsock_initializer.h"
 #include "base/include/windows/windows_light.h"
+
+#ifdef OS_WIN
+#include "base/include/windows/windows_errno_info.h"
+#include "base/include/windows/windows_light.h"
+
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#include <WinSock2.h>
+#endif  // OS_WIN
 
 #include "avi/iavi.h"
 #include "cdll_engine_int.h"
@@ -93,25 +100,16 @@ enum GameInputEventType_t {
 
 void DoSomeSocketStuffInOrderToGetZoneAlarmToNoticeUs() {
 #ifdef OS_WIN
-  source::windows::ScopedWinsockInitializer scoped_winsock_initializer{
-      source::windows::WinsockVersion::Version2_2};
-  DWORD error_code = scoped_winsock_initializer.error_code();
-  if (error_code != ERROR_SUCCESS) {
-    Warning("Winsock 2.2 unavailable (0x%.8x).", error_code);
-    return;
-  }
-
+  // Winsock should be already running here.
   SOCKET temp_socket = socket(AF_INET, SOCK_DGRAM, 0);
-  if (temp_socket == INVALID_SOCKET) {
-    return;
-  }
+  if (temp_socket == INVALID_SOCKET) return;
 
   char options[] = {1};
   setsockopt(temp_socket, SOL_SOCKET, SO_BROADCAST, options,
-             SOURCE_ARRAYSIZE(options));
+             std::size(options));
 
   char host_name[256];
-  gethostname(host_name, SOURCE_ARRAYSIZE(host_name));
+  gethostname(host_name, std::size(host_name));
 
   hostent *hInfo = gethostbyname(host_name);
   if (hInfo) {
@@ -217,25 +215,24 @@ class CGame : public IGame {
     // Get the window name
     char window_name[256];
     window_name[0] = 0;
-    KeyValues *modinfo{new KeyValues("ModInfo")};
-    if (modinfo->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
-      Q_strncpy(window_name, modinfo->GetString("game"),
-                SOURCE_ARRAYSIZE(window_name));
+    KeyValues *mod_info{new KeyValues("ModInfo")};
+    if (mod_info->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
+      strcpy_s(window_name, mod_info->GetString("game"));
     }
 
-    char const *game_type{modinfo->GetString("type")};
+    char const *game_type{mod_info->GetString("type")};
     if (game_type && Q_stristr(game_type, "multiplayer"))
       DoSomeSocketStuffInOrderToGetZoneAlarmToNoticeUs();
 
-    modinfo->deleteThis();
+    mod_info->deleteThis();
 
     if (!window_name[0]) {
-      Q_strncpy(window_name, "HALF-LIFE 2", SOURCE_ARRAYSIZE(window_name));
+      strcpy_s(window_name, "HALF-LIFE 2");
     }
 
     wch unicode_window_name[512];
     ::MultiByteToWideChar(CP_UTF8, 0, window_name, -1, unicode_window_name,
-                          SOURCE_ARRAYSIZE(unicode_window_name));
+                          std::size(unicode_window_name));
 
     // Oops, we didn't clean up the class registration from last cycle which
     // might mean that the wndproc pointer is bogus
@@ -257,8 +254,8 @@ class CGame : public IGame {
 
     // Create a full screen size window by default, it'll get resized later
     // anyway
-    int width{GetSystemMetrics(SM_CXSCREEN)};
-    int height{GetSystemMetrics(SM_CYSCREEN)};
+    const int width{GetSystemMetrics(SM_CXSCREEN)};
+    const int height{GetSystemMetrics(SM_CYSCREEN)};
 
     // Create the window
     DWORD ex_style{0};
@@ -273,7 +270,8 @@ class CGame : public IGame {
         height, nullptr, nullptr, instance_, nullptr);
 
     if (!hwnd) {
-      Error("Unable to create game window");
+      Error("Unable to create game window: %s",
+            source::windows::windows_errno_info_last_error().description);
       return false;
     }
 
@@ -350,20 +348,15 @@ class CGame : public IGame {
 
   void PlayStartupVideos() override {
 #ifndef SWDS
-
     // Wait for the mode to change and stabilized
     // TODO(d.rattman): There's really no way to know when this is completed, so
     // we have to guess a time that will mostly be correct
-    if (videomode->IsWindowedMode() == false) {
-      Sleep(1000);
-    }
+    if (videomode->IsWindowedMode() == false) Sleep(1000);
 
     bool bEndGame = CommandLine()->CheckParm("-endgamevid");
-    bool bRecap = CommandLine()->CheckParm(
-        "-recapvid");  // TODO(d.rattman): This is a temp
-                       // addition until the
-                       // movie playback is
-                       // centralized -- jdw
+    // TODO(d.rattman): This is a temp addition until the movie playback is
+    // centralized -- jdw
+    bool bRecap = CommandLine()->CheckParm("-recapvid");
 
     if (!bEndGame && !bRecap &&
         (CommandLine()->CheckParm("-dev") ||
@@ -387,29 +380,24 @@ class CGame : public IGame {
     // have to use the malloc memory allocation option in COM_LoadFile since the
     // memory system isn't set up at this point.
     const char *buffer = (char *)COM_LoadFile(pszFile, 5, &vidFileLength);
-
-    if ((buffer == nullptr) || (vidFileLength == 0)) {
-      return;
-    }
+    if (buffer == nullptr || vidFileLength == 0) return;
 
     // hide cursor while playing videos
     ::ShowCursor(FALSE);
 
     const char *start = buffer;
 
-    while (1) {
+    while (true) {
       start = COM_Parse(start);
-      if (Q_strlen(com_token) <= 0) {
-        break;
-      }
+      if (com_token[0] == '\0') break;
 
       // get the path to the avi file and play it.
       char localPath[SOURCE_MAX_PATH];
       g_pFileSystem->GetLocalPath(com_token, localPath, sizeof(localPath));
       PlayVideoAndWait(localPath);
-      localPath[0] = 0;  // just to make sure we don't play the same avi file
-                         // twice in the case that one movie is there but
-                         // another isn't.
+      // just to make sure we don't play the same avi file twice in the case
+      // that one movie is there but another isn't.
+      localPath[0] = '\0';
     }
 
     // show cursor again
@@ -679,18 +667,18 @@ class CGame : public IGame {
   }
 
   // Message handlers.
-  void HandleMsg_WindowMove(const InputEvent_t &event) {
+  void OnWindowMove(const InputEvent_t &event) {
     game->SetWindowXY(event.m_nData, event.m_nData2);
 #ifndef SWDS
     videomode->UpdateWindowPosition();
 #endif
   }
 
-  void HandleMsg_ActivateApp(const InputEvent_t &event) {
+  void OnAppActivate(const InputEvent_t &event) {
     AppActivate(event.m_nData ? true : false);
   }
 
-  void HandleMsg_Close(const InputEvent_t &event) {
+  void OnWindowClose(const InputEvent_t &event) {
     if (eng->GetState() == IEngine::DLL_ACTIVE) {
       eng->SetQuitting(IEngine::QUIT_TODESKTOP);
     }
@@ -942,10 +930,10 @@ struct GameMessageHandler {
 };
 
 GameMessageHandler game_message_handlers[] = {
-    {&CGame::HandleMsg_ActivateApp, IE_AppActivated},
-    {&CGame::HandleMsg_WindowMove, IE_WindowMove},
-    {&CGame::HandleMsg_Close, IE_Close},
-    {&CGame::HandleMsg_Close, IE_Quit},
+    {&CGame::OnAppActivate, IE_AppActivated},
+    {&CGame::OnWindowMove, IE_WindowMove},
+    {&CGame::OnWindowClose, IE_Close},
+    {&CGame::OnWindowClose, IE_Quit},
 };
 
 LONG WINAPI SourceEngineWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam,

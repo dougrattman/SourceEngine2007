@@ -290,10 +290,8 @@ void CL_InitHL2DemoFlag() {
 #endif
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Returns true if the user is playing the HL2 Demo (rather than the
 // full game)
-//-----------------------------------------------------------------------------
 bool CL_IsHL2Demo() {
   CL_InitHL2DemoFlag();
   return s_bIsHL2Demo;
@@ -333,19 +331,15 @@ void CL_InitPortalDemoFlag() {
 #endif
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Returns true if the user is playing the Portal Demo (rather than the
 // full game)
-//-----------------------------------------------------------------------------
 bool CL_IsPortalDemo() {
   CL_InitPortalDemoFlag();
   return s_bIsPortalDemo;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: If the client is in the process of connecting and the cl.signon hits
-//  is complete, make sure the client thinks its totally connected.
-//-----------------------------------------------------------------------------
+// is complete, make sure the client thinks its totally connected.
 void CL_CheckClientState() {
   // Setup the local network backdoor (we do this each frame so it can be
   // toggled on and off).
@@ -358,23 +352,17 @@ void CL_CheckClientState() {
   CL_SetupLocalNetworkBackDoor(useBackdoor);
 }
 
-//-----------------------------------------------------------------------------
-// bool CL_CheckCRCs( const char *pszMap )
-//-----------------------------------------------------------------------------
 bool CL_CheckCRCs(const char *pszMap) {
   // Don't verify CRC if we are running a local server (i.e., we are playing
   // single player, or we are the server in multiplay
-  if (sv.IsActive())  // Single player
-    return true;
+  if (sv.IsActive()) return true;
 
   CRC32_t mapCRC;  // If this is the worldmap, CRC agains server's map
   CRC32_Init(&mapCRC);
   if (!CRC_MapFile(&mapCRC, pszMap)) {
     // Does the file exist?
     FileHandle_t fp = 0;
-    int nSize = -1;
-
-    nSize = COM_OpenFile(pszMap, &fp);
+    int nSize = COM_OpenFile(pszMap, &fp);
     if (fp) g_pFileSystem->Close(fp);
 
     if (nSize != -1) {
@@ -400,8 +388,7 @@ bool CL_CheckCRCs(const char *pszMap) {
   // Check to see that our copy of the client side dll matches the server's.
   // Client side DLL  CRC check.
   char client_dll_name[MAX_QPATH];  // Client side DLL being used.
-  Q_snprintf(client_dll_name, SOURCE_ARRAYSIZE(client_dll_name),
-             "bin\\client.dll");
+  sprintf_s(client_dll_name, "bin\\client.dll");
 
   CRC32_t clientDllCRC;
   if (!CRC_File(&clientDllCRC, client_dll_name) &&
@@ -412,7 +399,7 @@ bool CL_CheckCRCs(const char *pszMap) {
     return false;
   }
 
-#if !defined(_DEBUG)
+#ifdef NDEBUG
   // These must match.
   // Except during demo playback.  For that just put a warning.
   if (cl.serverClientSideDllCRC != 0xFFFFFFFF &&
@@ -429,10 +416,6 @@ bool CL_CheckCRCs(const char *pszMap) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : nMaxClients -
-//-----------------------------------------------------------------------------
 void CL_ReallocateDynamicData(int maxclients) {
   Assert(entitylist);
   if (entitylist) {
@@ -441,13 +424,8 @@ void CL_ReallocateDynamicData(int maxclients) {
 }
 
 /*
-=================
-CL_ReadPackets
-
 Updates the local time and reads/handles messages on client net connection.
-=================
 */
-
 void CL_ReadPackets(bool bFinalTick) {
   VPROF_BUDGET("CL_ReadPackets", VPROF_BUDGETGROUP_OTHER_NETWORKING);
 
@@ -482,7 +460,7 @@ void CL_ReadPackets(bool bFinalTick) {
   }
 
   // check timeout, but not if running _DEBUG engine
-#if !defined(_DEBUG)
+#ifdef NDEBUG
   // Only check on final frame because that's when the server might send us a
   // packet in single player.  This avoids
   //  a bug where if you sit in the game code in the debugger then you get a
@@ -495,20 +473,14 @@ void CL_ReadPackets(bool bFinalTick) {
 
     // Show the vgui dialog on timeout
     COM_ExplainDisconnection(false, "Lost connection to server.");
-    if (IsPC()) {
-      EngineVGui()->ShowErrorMessage();
-    }
+    EngineVGui()->ShowErrorMessage();
 
     Host_Disconnect(true);
-    return;
   }
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void CL_ClearState(void) {
+void CL_ClearState() {
   CL_ResetEntityBits();
 
   R_UnloadSkys();
@@ -546,12 +518,7 @@ void CL_ClearState(void) {
   cl.Clear();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Used for sorting sounds
-// Input  : &sound1 -
-//			&sound2 -
-// Output : static bool
-//-----------------------------------------------------------------------------
 static bool CL_SoundMessageLessFunc(SoundInfo_t const &sound1,
                                     SoundInfo_t const &sound2) {
   return sound1.nSequenceNumber < sound2.nSequenceNumber;
@@ -561,35 +528,26 @@ static CUtlRBTree<SoundInfo_t, int> g_SoundMessages(0, 0,
                                                     CL_SoundMessageLessFunc);
 extern ConVar snd_show;
 
-//-----------------------------------------------------------------------------
 // Purpose: Add sound to queue
-// Input  : sound -
-//-----------------------------------------------------------------------------
 void CL_AddSound(const SoundInfo_t &sound) { g_SoundMessages.Insert(sound); }
 
-//-----------------------------------------------------------------------------
 // Purpose: Play sound packet
-// Input  : sound -
-//-----------------------------------------------------------------------------
 void CL_DispatchSound(const SoundInfo_t &sound) {
   CSfxTable *pSfx;
 
   char name[MAX_QPATH];
-
   name[0] = 0;
+
   if (sound.bIsSentence) {
     // make dummy sfx for sentences
     const char *pSentenceName = VOX_SentenceNameFromIndex(sound.nSoundNum);
-    if (!pSentenceName) {
-      pSentenceName = "";
-    }
+    if (!pSentenceName) pSentenceName = "";
 
-    Q_snprintf(name, sizeof(name), "%c%s", CHAR_SENTENCE, pSentenceName);
-
+    sprintf_s(name, "%c%s", CHAR_SENTENCE, pSentenceName);
     pSfx = S_DummySfx(name);
   } else {
     pSfx = cl.GetSound(sound.nSoundNum);
-    Q_strncpy(name, cl.GetSoundName(sound.nSoundNum), sizeof(name));
+    strcpy_s(name, cl.GetSoundName(sound.nSoundNum));
   }
 
   if (snd_show.GetInt() >= 2) {
@@ -602,7 +560,7 @@ void CL_DispatchSound(const SoundInfo_t &sound) {
   }
 
   StartSoundParams_t params;
-  params.staticsound = (sound.nChannel == CHAN_STATIC) ? true : false;
+  params.staticsound = sound.nChannel == CHAN_STATIC;
   params.soundsource = sound.nEntityIndex;
   params.entchannel = params.staticsound ? CHAN_STATIC : sound.nChannel;
   params.pSfx = pSfx;
@@ -626,11 +584,6 @@ void CL_DispatchSound(const SoundInfo_t &sound) {
       // first tick
       soundtime -= ((g_ClientGlobalVariables.simTicksThisFrame - 1) *
                     host_state.interval_per_tick);
-#if 0
-			static float lastSoundTime = 0;
-			Msg("[%.3f] Play %s at %.3f\n", soundtime - lastSoundTime, name, soundtime );
-			lastSoundTime = soundtime;
-#endif
       // this sound was networked over from the server, use server clock
       params.delay = S_ComputeDelayForSoundtime(soundtime, CLOCK_SYNC_SERVER);
       if (params.delay < 0) {
@@ -654,14 +607,11 @@ void CL_DispatchSound(const SoundInfo_t &sound) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Called after reading network messages to play sounds encoded in the
 // network packet
-//-----------------------------------------------------------------------------
-void CL_DispatchSounds(void) {
-  int i;
+void CL_DispatchSounds() {
   // Walk list in sequence order
-  i = g_SoundMessages.FirstInorder();
+  int i = g_SoundMessages.FirstInorder();
   while (i != g_SoundMessages.InvalidIndex()) {
     SoundInfo_t const *msg = &g_SoundMessages[i];
     Assert(msg);
@@ -676,9 +626,7 @@ void CL_DispatchSounds(void) {
   g_SoundMessages.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
 // Retry last connection (e.g., after we enter a password)
-//-----------------------------------------------------------------------------
 void CL_Retry() {
   if (!cl.m_szRetryAddress[0]) {
     ConMsg("Can't retry, no previous connection\n");
@@ -696,11 +644,7 @@ CON_COMMAND_F(retry, "Retry connection to last server.",
 }
 
 /*
-=====================
-CL_Connect_f
-
 User command to connect to server
-=====================
 */
 CON_COMMAND_F(connect, "Connect to specified server.", FCVAR_DONTRECORD) {
   if (args.ArgC() < 2) {
@@ -712,7 +656,7 @@ CON_COMMAND_F(connect, "Connect to specified server.", FCVAR_DONTRECORD) {
 
   // If it's not a single player connection to "localhost", initialize
   // networking & stop listenserver
-  if (Q_strncmp(address, "localhost", 9)) {
+  if (strncmp(address, "localhost", 9)) {
     Host_Disconnect(false);
 
     // allow remote
@@ -736,9 +680,7 @@ CON_COMMAND_F(connect, "Connect to specified server.", FCVAR_DONTRECORD) {
   gfExtendedError = false;
 }
 
-//-----------------------------------------------------------------------------
 // Takes the map name, strips path and extension
-//-----------------------------------------------------------------------------
 void CL_SetupMapName(const char *pName, char *pFixedName, int maxlen) {
   const char *pSlash = strrchr(pName, '\\');
   const char *pSlash2 = strrchr(pName, '/');
@@ -748,7 +690,7 @@ void CL_SetupMapName(const char *pName, char *pFixedName, int maxlen) {
   else
     pSlash = pName;
 
-  Q_strncpy(pFixedName, pSlash, maxlen);
+  strcpy_s(pFixedName, maxlen, pSlash);
   char *pExt = strchr(pFixedName, '.');
   if (pExt) *pExt = 0;
 }
@@ -819,11 +761,7 @@ int CL_GetServerQueryPort() {
 }
 
 /*
-==================
-CL_RegisterResources
-
 Clean up and move to next part of sequence.
-==================
 */
 void CL_RegisterResources() {
   // All done precaching.
@@ -969,16 +907,8 @@ void CL_FullyConnected() {
   Plat_TimestampedLog("Engine::CL_FullyConnected: MAP LOAD COMPLETE.");
 }
 
-/*
-=====================
-CL_NextDemo
-
-Called to play the next demo in the demo loop
-=====================
-*/
+// Called to play the next demo in the demo loop
 void CL_NextDemo(void) {
-  char str[1024];
-
   if (cl.demonum == -1) return;  // don't play demos
 
   SCR_BeginLoadingPlaque();
@@ -994,7 +924,8 @@ void CL_NextDemo(void) {
     }
   }
 
-  Q_snprintf(str, sizeof(str), "playdemo %s", cl.demos[cl.demonum]);
+  char str[1024];
+  sprintf_s(str, "playdemo %s", cl.demos[cl.demonum]);
   Cbuf_AddText(str);
   cl.demonum++;
 }
@@ -1006,14 +937,13 @@ void CL_TakeScreenshot(const char *name) {
   cl_takesnapshot = true;
   cl_takejpeg = false;
 
-  if (name != NULL) {
-    Q_strncpy(cl_snapshotname, name, sizeof(cl_snapshotname));
+  if (name != nullptr) {
+    strcpy_s(cl_snapshotname, name);
   } else {
-    cl_snapshotname[0] = 0;
+    cl_snapshotname[0] = '\0';
 
-    if (Q_strlen(cl_screenshotname.GetString()) > 0) {
-      Q_snprintf(cl_snapshotname, sizeof(cl_snapshotname), "%s",
-                 cl_screenshotname.GetString());
+    if (strlen(cl_screenshotname.GetString()) > 0) {
+      strcpy_s(cl_snapshotname, cl_screenshotname.GetString());
     }
   }
 
@@ -1026,11 +956,7 @@ CON_COMMAND_F(screenshot, "Take a screenshot.", FCVAR_CLIENTCMD_CAN_EXECUTE) {
   // Don't playback screenshots unless specifically requested.
   if (demoplayer->IsPlayingBack() && !cl_playback_screenshots.GetBool()) return;
 
-  if (args.ArgC() == 2) {
-    CL_TakeScreenshot(args[1]);
-  } else {
-    CL_TakeScreenshot(NULL);
-  }
+  CL_TakeScreenshot(args.ArgC() == 2 ? args[1] : nullptr);
 }
 
 CON_COMMAND_F(devshots_screenshot,
@@ -1038,11 +964,11 @@ CON_COMMAND_F(devshots_screenshot,
               "taking your own screenshots, use the 'screenshot' command "
               "instead.",
               FCVAR_DONTRECORD) {
-  CL_TakeScreenshot(NULL);
+  CL_TakeScreenshot(nullptr);
 
   // See if we got a subdirectory to store the devshots in
   if (args.ArgC() == 2) {
-    Q_strncpy(cl_snapshot_subdirname, args[1], sizeof(cl_snapshot_subdirname));
+    strcpy_s(cl_snapshot_subdirname, args[1]);
 
     // Use the first available shot in each subdirectory
     cl_snapshotnum = 0;
@@ -1075,11 +1001,9 @@ CON_COMMAND(jpeg, "Take a jpeg screenshot:  jpeg <filename> <quality 1-100>.") {
 }
 
 void CL_TakeSnapshotAndSwap() {
-  bool bReadPixelsFromFrontBuffer =
+  bool is_read_pixels_from_front_buffer =
       g_pMaterialSystemHardwareConfig->ReadPixelsFromFrontBuffer();
-  if (bReadPixelsFromFrontBuffer) {
-    Shader_SwapBuffers();
-  }
+  if (is_read_pixels_from_front_buffer) Shader_SwapBuffers();
 
   if (cl_takesnapshot) {
     char base[MAX_OSPATH];
@@ -1159,7 +1083,7 @@ void CL_TakeSnapshotAndSwap() {
     ++cl_movieinfo.movieframe;
   }
 
-  if (!bReadPixelsFromFrontBuffer) {
+  if (!is_read_pixels_from_front_buffer) {
     Shader_SwapBuffers();
   }
 
@@ -1184,7 +1108,7 @@ void CL_StartMovie(const char *filename, int flags, int nWidth, int nHeight,
   host_framerate.SetValue(flFrameRate);
 
   cl_movieinfo.Reset();
-  Q_strncpy(cl_movieinfo.moviename, filename, sizeof(cl_movieinfo.moviename));
+  strcpy_s(cl_movieinfo.moviename, filename);
   cl_movieinfo.type = flags;
   cl_movieinfo.jpeg_quality = avi_jpeg_quality;
 
@@ -1193,8 +1117,8 @@ void CL_StartMovie(const char *filename, int flags, int nWidth, int nHeight,
 #define SOUND_DMA_SPEED 44100  // hardware playback rate
 
     AVIParams_t params;
-    Q_strncpy(params.m_pFileName, filename, sizeof(params.m_pFileName));
-    Q_strncpy(params.m_pPathID, "MOD", sizeof(params.m_pPathID));
+    strcpy_s(params.m_pFileName, filename);
+    strcpy_s(params.m_pPathID, "MOD");
     params.m_nNumChannels = 2;
     params.m_nSampleBits = 16;
     params.m_nSampleRate = SOUND_DMA_SPEED;
@@ -1322,9 +1246,7 @@ CON_COMMAND_F(startmovie, "Start recording movie frames.", FCVAR_DONTRECORD) {
       "cleared...\n");
 }
 
-//-----------------------------------------------------------------------------
-// Ends frame dumping
-//-----------------------------------------------------------------------------
+// Ends frame dumping.
 CON_COMMAND_F(endmovie, "Stop recording movie frames.", FCVAR_DONTRECORD) {
   if (!CL_IsRecordingMovie()) {
     ConMsg("No movie started.\n");
@@ -1334,30 +1256,24 @@ CON_COMMAND_F(endmovie, "Stop recording movie frames.", FCVAR_DONTRECORD) {
   }
 }
 
-/*
-=====================
-CL_Rcon_f
-
-  Send the rest of the command line over as
-  an unconnected command.
-=====================
-*/
+// Send the rest of the command line over as an unconnected command.
 CON_COMMAND_F(rcon, "Issue an rcon command.", FCVAR_DONTRECORD) {
   char message[1024];  // Command message
   char szParam[256];
   message[0] = 0;
+
   for (int i = 1; i < args.ArgC(); i++) {
     const char *pParam = args[i];
     // put quotes around empty arguments so we can pass things like this: rcon
     // sv_password "" otherwise the "" on the end is lost
-    if (strchr(pParam, ' ') || (Q_strlen(pParam) == 0)) {
-      Q_snprintf(szParam, sizeof(szParam), "\"%s\"", pParam);
-      Q_strncat(message, szParam, sizeof(message), COPY_ALL_CHARACTERS);
+    if (strchr(pParam, ' ') || strlen(pParam) == 0) {
+      sprintf_s(szParam, "\"%s\"", pParam);
+      strncat_s(message, szParam, _TRUNCATE);
     } else {
-      Q_strncat(message, pParam, sizeof(message), COPY_ALL_CHARACTERS);
+      strncat_s(message, pParam, _TRUNCATE);
     }
     if (i != (args.ArgC() - 1)) {
-      Q_strncat(message, " ", sizeof(message), COPY_ALL_CHARACTERS);
+      strncat_s(message, " ", _TRUNCATE);
     }
   }
 
@@ -1379,13 +1295,7 @@ CON_COMMAND_F(box, "Draw a debug box.", FCVAR_CHEAT) {
                                0, 100);
 }
 
-/*
-==============
-CL_View_f
-
-Debugging changes the view entity to the specified index
-===============
-*/
+// Debugging changes the view entity to the specified index
 CON_COMMAND_F(cl_view, "Set the view entity index.", FCVAR_CHEAT) {
   int nNewView;
 
@@ -1407,17 +1317,15 @@ CON_COMMAND_F(cl_view, "Set the view entity index.", FCVAR_CHEAT) {
 }
 
 static int CL_AllocLightFromArray(dlight_t *pLights, int lightCount, int key) {
-  int i;
-
   // first look for an exact key match
   if (key) {
-    for (i = 0; i < lightCount; i++) {
+    for (int i = 0; i < lightCount; i++) {
       if (pLights[i].key == key) return i;
     }
   }
 
   // then look for anything else
-  for (i = 0; i < lightCount; i++) {
+  for (int i = 0; i < lightCount; i++) {
     if (pLights[i].die < cl.GetTime()) return i;
   }
 
@@ -1426,12 +1334,7 @@ static int CL_AllocLightFromArray(dlight_t *pLights, int lightCount, int key) {
 
 bool g_bActiveDlights = false;
 bool g_bActiveElights = false;
-/*
-===============
-CL_AllocDlight
 
-===============
-*/
 dlight_t *CL_AllocDlight(int key) {
   int i = CL_AllocLightFromArray(cl_dlights, MAX_DLIGHTS, key);
   dlight_t *dl = &cl_dlights[i];
@@ -1444,12 +1347,6 @@ dlight_t *CL_AllocDlight(int key) {
   return dl;
 }
 
-/*
-===============
-CL_AllocElight
-
-===============
-*/
 dlight_t *CL_AllocElight(int key) {
   int i = CL_AllocLightFromArray(cl_elights, MAX_ELIGHTS, key);
   dlight_t *el = &cl_elights[i];
@@ -1459,28 +1356,18 @@ dlight_t *CL_AllocElight(int key) {
   return el;
 }
 
-/*
-===============
-CL_DecayLights
-
-===============
-*/
-void CL_DecayLights(void) {
-  int i;
-  dlight_t *dl;
-  float time;
-
-  time = cl.GetFrameTime();
-  if (time <= 0.0f) return;
+void CL_DecayLights() {
+  float frame_time = cl.GetFrameTime();
+  if (frame_time <= 0.0f) return;
 
   g_bActiveDlights = false;
   g_bActiveElights = false;
-  dl = cl_dlights;
+  dlight_t *dl = cl_dlights;
 
   r_dlightchanged = 0;
   r_dlightactive = 0;
 
-  for (i = 0; i < MAX_DLIGHTS; i++, dl++) {
+  for (int i = 0; i < MAX_DLIGHTS; i++, dl++) {
     if (!dl->IsRadiusGreaterThanZero()) {
       R_MarkDLightNotVisible(i);
       continue;
@@ -1492,7 +1379,7 @@ void CL_DecayLights(void) {
     } else if (dl->decay) {
       r_dlightchanged |= (1 << i);
 
-      dl->radius -= time * dl->decay;
+      dl->radius -= frame_time * dl->decay;
       if (dl->radius < 0) {
         dl->radius = 0;
       }
@@ -1507,7 +1394,7 @@ void CL_DecayLights(void) {
   }
 
   dl = cl_elights;
-  for (i = 0; i < MAX_ELIGHTS; i++, dl++) {
+  for (int i = 0; i < MAX_ELIGHTS; i++, dl++) {
     if (!dl->IsRadiusGreaterThanZero()) continue;
 
     if (dl->die < cl.GetTime()) {
@@ -1515,7 +1402,7 @@ void CL_DecayLights(void) {
       continue;
     }
 
-    dl->radius -= time * dl->decay;
+    dl->radius -= frame_time * dl->decay;
     if (dl->radius < 0) {
       dl->radius = 0;
     }
@@ -1528,7 +1415,6 @@ void CL_DecayLights(void) {
 void CL_ExtraMouseUpdate(float frametime) {
   // Not ready for commands yet.
   if (!cl.IsActive()) return;
-
   if (!Host_ShouldRun()) return;
 
   // Don't create usercmds here during playback, they were encoded into the
@@ -1539,14 +1425,8 @@ void CL_ExtraMouseUpdate(float frametime) {
   g_ClientDLL->ExtraMouseSample(frametime, !cl.m_bPaused);
 }
 
-/*
-=================
-CL_SendMove
-
-Constructs the movement command and sends it to the server if it's time.
-=================
-*/
-void CL_SendMove(void) {
+// Constructs the movement command and sends it to the server if it's time.
+void CL_SendMove() {
   uint8_t data[MAX_CMD_BUFFER];
 
   int nextcommandnr = cl.lastoutgoingcommand + cl.chokedcommands + 1;
@@ -1590,7 +1470,6 @@ void CL_SendMove(void) {
 
 void CL_Move(float accumulated_extra_samples, bool bFinalTick) {
   if (!cl.IsConnected()) return;
-
   if (!Host_ShouldRun()) return;
 
   // only send packets on the final tick in one engine frame
@@ -1676,17 +1555,11 @@ void CL_Move(float accumulated_extra_samples, bool bFinalTick) {
     cl.m_NetChannel->SendNetMsg(mymsg);
   }
 
-  // COM_Log( "cl.log", "Sending command number %i(%i) to server\n",
-  // cl.m_NetChan->m_nOutSequenceNr, cl.m_NetChan->m_nOutSequenceNr &
-  // CL_UPDATE_MASK );
-
   // Remember outgoing command that we are sending
   cl.lastoutgoingcommand = cl.m_NetChannel->SendDatagram(NULL);
-
   cl.chokedcommands = 0;
 
   // calc next packet send time
-
   if (cl.IsActive()) {
     // use full update rate when active
     float commandInterval = 1.0f / cl_cmdrate->GetFloat();
@@ -1717,31 +1590,26 @@ void CL_LatchInterpolationAmount() {
   cl.m_NetChannel->SetInterpolationAmount(flInterp);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *pMessage -
-//-----------------------------------------------------------------------------
 void CL_HudMessage(const char *pMessage) {
-  if (g_ClientDLL) {
-    g_ClientDLL->HudText(pMessage);
-  }
+  if (g_ClientDLL) g_ClientDLL->HudText(pMessage);
 }
 
 CON_COMMAND_F(cl_showents, "Dump entity list to console.", FCVAR_CHEAT) {
   for (int i = 0; i < entitylist->GetMaxEntities(); i++) {
     char entStr[256], classStr[256];
-    IClientNetworkable *pEnt;
+    IClientNetworkable *client_networkable;
 
-    if ((pEnt = entitylist->GetClientNetworkable(i)) != NULL) {
+    if ((client_networkable = entitylist->GetClientNetworkable(i)) != nullptr) {
       entStr[0] = 0;
-      Q_snprintf(classStr, sizeof(classStr), "'%s'",
-                 pEnt->GetClientClass()->m_pNetworkName);
+      sprintf_s(classStr, "'%s'",
+                client_networkable->GetClientClass()->m_pNetworkName);
     } else {
-      Q_snprintf(entStr, sizeof(entStr), "(missing), ");
-      Q_snprintf(classStr, sizeof(classStr), "(missing)");
+      sprintf_s(entStr, "(missing), ");
+      sprintf_s(classStr, "(missing)");
     }
 
-    if (pEnt) ConMsg("Ent %3d: %s class %s\n", i, entStr, classStr);
+    if (client_networkable)
+      ConMsg("Ent %3d: %s class %s\n", i, entStr, classStr);
   }
 }
 
@@ -1828,9 +1696,9 @@ int CL_GetBackgroundLevelIndex(int nNumChapters) {
 //-----------------------------------------------------------------------------
 // Purpose: returns the name of the background level to load
 //-----------------------------------------------------------------------------
-void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
+void CL_GetBackgroundLevelName(char *pszBackgroundName, size_t bufSize,
                                bool bMapName) {
-  Q_strncpy(pszBackgroundName, DEFAULT_BACKGROUND_NAME, bufSize);
+  strcpy_s(pszBackgroundName, bufSize, DEFAULT_BACKGROUND_NAME);
 
   KeyValues *pChapterFile = new KeyValues(pszBackgroundName);
 
@@ -1843,7 +1711,7 @@ void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
     KeyValues *pChapters = pChapterFile->GetNextKey();
     if (bMapName && pChapters) {
       const char *pszName = pChapters->GetName();
-      if (pszName && pszName[0] && !Q_strncmp("BackgroundMaps", pszName, 14)) {
+      if (pszName && pszName[0] && !strncmp("BackgroundMaps", pszName, 14)) {
         pChapterRoot = pChapters;
         pChapters = pChapters->GetFirstSubKey();
       } else {
@@ -1874,12 +1742,12 @@ void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
 
     // Find the chapter background with this index
     char buf[4];
-    Q_snprintf(buf, sizeof(buf), "%d", nChapterToLoad);
+    sprintf_s(buf, "%d", nChapterToLoad);
     KeyValues *pLoadChapter = pChapterRoot->FindKey(buf);
 
     // Copy the background name
     if (pLoadChapter) {
-      Q_strncpy(pszBackgroundName, pLoadChapter->GetString(), bufSize);
+      strcpy_s(pszBackgroundName, bufSize, pLoadChapter->GetString());
     }
   }
 
@@ -1895,7 +1763,7 @@ void CL_CheckToDisplayStartupMenus(const CCommand &args) {
     CL_GetBackgroundLevelName(szBackgroundName, sizeof(szBackgroundName), true);
 
     char cmd[SOURCE_MAX_PATH];
-    Q_snprintf(cmd, sizeof(cmd), "map_background %s\n", szBackgroundName);
+    sprintf_s(cmd, "map_background %s\n", szBackgroundName);
     Cbuf_AddText(cmd);
   }
 }
@@ -1903,10 +1771,9 @@ void CL_CheckToDisplayStartupMenus(const CCommand &args) {
 static float s_fDemoRevealGameUITime = -1;
 float s_fDemoPlayMusicTime = -1;
 static bool s_bIsRavenHolmn = false;
-//-----------------------------------------------------------------------------
+
 // Purpose: run the special demo logic when transitioning from the trainstation
 // levels
-//----------------------------------------------------------------------------
 void CL_DemoTransitionFromTrainstation() {
   // kick them out to GameUI instead and bring up the chapter page with raveholm
   // unlocked
@@ -1930,9 +1797,7 @@ void CL_DemoTransitionFromTestChmb() {
   s_fDemoRevealGameUITime = Plat_FloatTime() + 1.9;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: make the gameui appear after a certain interval
-//----------------------------------------------------------------------------
 void V_RenderVGuiOnly();
 bool V_CheckGamma();
 void CL_DemoCheckGameUIRevealTime() {

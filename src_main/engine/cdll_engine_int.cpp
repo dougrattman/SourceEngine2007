@@ -91,7 +91,7 @@ IMaterial *BrushModel_GetLightingAndMaterial(const Vector &start,
                                              Vector &diffuseLightColor,
                                              Vector &baseColor);
 const char *Key_NameForBinding(const char *pBinding);
-void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
+void CL_GetBackgroundLevelName(char *pszBackgroundName, size_t bufSize,
                                bool bMapName);
 CreateInterfaceFn g_ClientFactory = NULL;
 extern char gpszVersionString[32];

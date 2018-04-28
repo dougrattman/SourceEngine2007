@@ -41,7 +41,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
+void CL_GetBackgroundLevelName(char *pszBackgroundName, size_t bufSize,
                                bool bMapName);
 
 // HDRFIXME: move this somewhere else.
@@ -457,7 +457,7 @@ class CVideoMode_Common : public IVideoMode {
       m_bPlayedStartupVideo = true;
     }
   }
-  void ComputeStartupGraphicName(char *pBuf, int nBufLen) {
+  void ComputeStartupGraphicName(char *pBuf, usize nBufLen) {
     char szBackgroundName[SOURCE_MAX_PATH];
     CL_GetBackgroundLevelName(szBackgroundName, sizeof(szBackgroundName),
                               false);
@@ -465,18 +465,17 @@ class CVideoMode_Common : public IVideoMode {
     float aspectRatio = (float)GetModeWidth() / GetModeHeight();
     if (aspectRatio >= 1.6f) {
       // use the widescreen version
-      Q_snprintf(pBuf, nBufLen, "materials/console/%s_widescreen.vtf",
-                 szBackgroundName);
+      sprintf_s(pBuf, nBufLen, "materials/console/%s_widescreen.vtf",
+                szBackgroundName);
     } else {
-      Q_snprintf(pBuf, nBufLen, "materials/console/%s.vtf", szBackgroundName);
+      sprintf_s(pBuf, nBufLen, "materials/console/%s.vtf", szBackgroundName);
     }
 
     if (!g_pFileSystem->FileExists(pBuf, "GAME")) {
-      Q_strncpy(pBuf,
-                (aspectRatio >= 1.6f)
-                    ? "materials/console/background01_widescreen.vtf"
-                    : "materials/console/background01.vtf",
-                nBufLen);
+      strcpy_s(pBuf, nBufLen,
+               aspectRatio >= 1.6f
+                   ? "materials/console/background01_widescreen.vtf"
+                   : "materials/console/background01.vtf");
     }
   }
 
@@ -548,11 +547,10 @@ class CVideoMode_Common : public IVideoMode {
     float aspectRatio = (float)GetModeWidth() / GetModeHeight();
     if (aspectRatio >= 1.6f) {
       // use the widescreen version
-      Q_snprintf(material, sizeof(material),
-                 "materials/console/%s_widescreen.vtf", szBackgroundName);
+      sprintf_s(material, "materials/console/%s_widescreen.vtf",
+                szBackgroundName);
     } else {
-      Q_snprintf(material, sizeof(material), "materials/console/%s.vtf",
-                 szBackgroundName);
+      sprintf_s(material, "materials/console/%s.vtf", szBackgroundName);
     }
 
     // load in the background vtf

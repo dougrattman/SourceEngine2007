@@ -789,8 +789,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   // Initializes, shuts down the registry
   bool InitRegistry(const char *pModName) {
     char szRegSubPath[SOURCE_MAX_PATH];
-    Q_snprintf(szRegSubPath, sizeof(szRegSubPath), "%s\\%s", "Source",
-               pModName);
+    sprintf_s(szRegSubPath, "%s\\%s", "Source", pModName);
     return registry->Init(szRegSubPath);
   }
 
