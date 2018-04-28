@@ -20,9 +20,11 @@
 #define EPS 1.2e-7f
 #define RNMX (1.0f - EPS)
 
+namespace {
 static CUniformRandomStream s_UniformStream;
 static CGaussianRandomStream s_GaussianStream;
 static IUniformRandomStream *s_pUniformStream = &s_UniformStream;
+}  // namespace
 
 // Installs a global random number generator, which will affect the Random
 // functions above
@@ -32,28 +34,28 @@ void InstallUniformRandomStream(IUniformRandomStream *pStream) {
 
 // A couple of convenience functions to access the library's global uniform
 // stream
-void RandomSeed(int iSeed) { s_pUniformStream->SetSeed(iSeed); }
+void RandomSeed(i32 iSeed) { s_pUniformStream->SetSeed(iSeed); }
 
-float RandomFloat(float flMinVal, float flMaxVal) {
+f32 RandomFloat(f32 flMinVal, f32 flMaxVal) {
   return s_pUniformStream->RandomFloat(flMinVal, flMaxVal);
 }
 
-float RandomFloatExp(float flMinVal, float flMaxVal, float flExponent) {
+f32 RandomFloatExp(f32 flMinVal, f32 flMaxVal, f32 flExponent) {
   return s_pUniformStream->RandomFloatExp(flMinVal, flMaxVal, flExponent);
 }
 
-int RandomInt(int iMinVal, int iMaxVal) {
+int RandomInt(i32 iMinVal, i32 iMaxVal) {
   return s_pUniformStream->RandomInt(iMinVal, iMaxVal);
 }
 
-float RandomGaussianFloat(float flMean, float flStdDev) {
+f32 RandomGaussianFloat(f32 flMean, f32 flStdDev) {
   return s_GaussianStream.RandomFloat(flMean, flStdDev);
 }
 
 // Implementation of the uniform random number stream
 CUniformRandomStream::CUniformRandomStream() { SetSeed(0); }
 
-void CUniformRandomStream::SetSeed(int iSeed) {
+void CUniformRandomStream::SetSeed(i32 iSeed) {
   AUTO_LOCK(m_mutex);
   m_idum = ((iSeed < 0) ? iSeed : -iSeed);
   m_iy = 0;
@@ -61,8 +63,7 @@ void CUniformRandomStream::SetSeed(int iSeed) {
 
 int CUniformRandomStream::GenerateRandomNumber() {
   AUTO_LOCK(m_mutex);
-  int j;
-  int k;
+  int j, k;
 
   if (m_idum <= 0 || !m_iy) {
     if (-(m_idum) < 1)
@@ -89,36 +90,29 @@ int CUniformRandomStream::GenerateRandomNumber() {
   return m_iy;
 }
 
-float CUniformRandomStream::RandomFloat(float flLow, float flHigh) {
-  // float in [0,1)
-  float fl = AM * GenerateRandomNumber();
-  if (fl > RNMX) {
-    fl = RNMX;
-  }
-  return (fl * (flHigh - flLow)) + flLow;  // float in [low,high)
+f32 CUniformRandomStream::RandomFloat(f32 flLow, f32 flHigh) {
+  // f32 in [0,1)
+  f32 fl = AM * GenerateRandomNumber();
+  if (fl > RNMX) fl = RNMX;
+
+  return fl * (flHigh - flLow) + flLow;  // f32 in [low,high)
 }
 
-float CUniformRandomStream::RandomFloatExp(float flMinVal, float flMaxVal,
-                                           float flExponent) {
-  // float in [0,1)
-  float fl = AM * GenerateRandomNumber();
-  if (fl > RNMX) {
-    fl = RNMX;
-  }
-  if (flExponent != 1.0f) {
-    fl = powf(fl, flExponent);
-  }
-  return (fl * (flMaxVal - flMinVal)) + flMinVal;  // float in [low,high)
+f32 CUniformRandomStream::RandomFloatExp(f32 flMinVal, f32 flMaxVal,
+                                         f32 flExponent) {
+  // f32 in [0,1)
+  f32 fl = AM * GenerateRandomNumber();
+
+  if (fl > RNMX) fl = RNMX;
+  if (flExponent != 1.0f) fl = powf(fl, flExponent);
+
+  return fl * (flMaxVal - flMinVal) + flMinVal;  // f32 in [low,high)
 }
 
-int CUniformRandomStream::RandomInt(int iLow, int iHigh) {
+int CUniformRandomStream::RandomInt(i32 iLow, i32 iHigh) {
   // ASSERT(lLow <= lHigh);
-  unsigned int maxAcceptable;
   unsigned int x = iHigh - iLow + 1;
-  unsigned int n;
-  if (x <= 1 || MAX_RANDOM_RANGE < x - 1) {
-    return iLow;
-  }
+  if (x <= 1 || MAX_RANDOM_RANGE < x - 1) return iLow;
 
   // The following maps a uniform distribution on the interval
   // [0,MAX_RANDOM_RANGE] to a smaller, client-specified range of [0,x-1] in a
@@ -128,7 +122,8 @@ int CUniformRandomStream::RandomInt(int iLow, int iHigh) {
   // loop is 2. For cases where x is much smaller than MAX_RANDOM_RANGE, the
   // average number of times through the loop is very close to 1.
   //
-  maxAcceptable = MAX_RANDOM_RANGE - ((MAX_RANDOM_RANGE + 1) % x);
+  unsigned int maxAcceptable = MAX_RANDOM_RANGE - ((MAX_RANDOM_RANGE + 1) % x);
+  unsigned int n;
   do {
     n = GenerateRandomNumber();
   } while (n > maxAcceptable);
@@ -139,45 +134,44 @@ int CUniformRandomStream::RandomInt(int iLow, int iHigh) {
 // Implementation of the gaussian random number stream
 // We're gonna use the Box-Muller method (which actually generates 2
 // gaussian-distributed numbers at once)
-CGaussianRandomStream::CGaussianRandomStream(
-    IUniformRandomStream *pUniformStream) {
-  AttachToStream(pUniformStream);
+CGaussianRandomStream::CGaussianRandomStream(IUniformRandomStream *stream) {
+  AttachToStream(stream);
 }
 
 // Attaches to a random uniform stream
-void CGaussianRandomStream::AttachToStream(
-    IUniformRandomStream *pUniformStream) {
-  AUTO_LOCK(m_mutex);
-  m_pUniformStream = pUniformStream;
-  m_bHaveValue = false;
+void CGaussianRandomStream::AttachToStream(IUniformRandomStream *stream) {
+  AUTO_LOCK(mutex_);
+  uniform_stream_ = stream;
+  have_value_ = false;
 }
 
 // Generates random numbers
-float CGaussianRandomStream::RandomFloat(float flMean, float flStdDev) {
-  AUTO_LOCK(m_mutex);
-  IUniformRandomStream *pUniformStream =
-      m_pUniformStream ? m_pUniformStream : s_pUniformStream;
-  float fac, rsq, v1, v2;
+f32 CGaussianRandomStream::RandomFloat(f32 flMean, f32 flStdDev) {
+  AUTO_LOCK(mutex_);
 
-  if (!m_bHaveValue) {
+  if (!have_value_) {
+    IUniformRandomStream *stream =
+        uniform_stream_ ? uniform_stream_ : s_pUniformStream;
+    f32 rsq, v1, v2;
     // Pick 2 random #s from -1 to 1
     // Make sure they lie inside the unit circle. If they don't, try again
     do {
-      v1 = 2.0f * pUniformStream->RandomFloat() - 1.0f;
-      v2 = 2.0f * pUniformStream->RandomFloat() - 1.0f;
+      v1 = 2.0f * stream->RandomFloat() - 1.0f;
+      v2 = 2.0f * stream->RandomFloat() - 1.0f;
       rsq = v1 * v1 + v2 * v2;
     } while ((rsq > 1.0f) || (rsq == 0.0f));
 
     // The box-muller transformation to get the two gaussian numbers
-    fac = sqrtf(-2.0f * log(rsq) / rsq);
+    f32 fac = sqrtf(-2.0f * log(rsq) / rsq);
 
     // Store off one value for later use
-    m_flRandomValue = v1 * fac;
-    m_bHaveValue = true;
+    random_value_ = v1 * fac;
+    have_value_ = true;
 
     return flStdDev * (v2 * fac) + flMean;
-  } else {
-    m_bHaveValue = false;
-    return flStdDev * m_flRandomValue + flMean;
   }
+
+  have_value_ = false;
+
+  return flStdDev * random_value_ + flMean;
 }

@@ -10,20 +10,20 @@
 #include "tier1/interface.h"
 #include "vstdlib/vstdlib.h"
 
-#define NTAB 32
-
 // A generator of uniformly distributed random numbers.
 the_interface IUniformRandomStream {
  public:
   // Sets the seed of the random number generator.
-  virtual void SetSeed(int seed) = 0;
+  virtual void SetSeed(i32 seed) = 0;
 
   // Generates random numbers
-  virtual float RandomFloat(float min_value = 0.0f, float max_value = 1.0f) = 0;
-  virtual int RandomInt(int min_value, int max_value) = 0;
-  virtual float RandomFloatExp(float min_value = 0.0f, float max_value = 1.0f,
-                               float exponent = 1.0f) = 0;
+  virtual f32 RandomFloat(f32 min_value = 0.0f, f32 max_value = 1.0f) = 0;
+  virtual i32 RandomInt(i32 min_value, i32 max_value) = 0;
+  virtual f32 RandomFloatExp(f32 min_value = 0.0f, f32 max_value = 1.0f,
+                             f32 exponent = 1.0f) = 0;
 };
+
+#define NTAB 32
 
 // The standard generator of uniformly distributed random numbers.
 class VSTDLIB_CLASS CUniformRandomStream : public IUniformRandomStream {
@@ -31,20 +31,20 @@ class VSTDLIB_CLASS CUniformRandomStream : public IUniformRandomStream {
   CUniformRandomStream();
 
   // Sets the seed of the random number generator.
-  void SetSeed(int iSeed) override;
+  void SetSeed(i32 seed) override;
 
   // Generates random numbers
-  float RandomFloat(float flMinVal = 0.0f, float flMaxVal = 1.0f) override;
-  int RandomInt(int iMinVal, int iMaxVal) override;
-  float RandomFloatExp(float flMinVal = 0.0f, float flMaxVal = 1.0f,
-                       float flExponent = 1.0f) override;
+  f32 RandomFloat(f32 min_value = 0.0f, f32 max_value = 1.0f) override;
+  i32 RandomInt(i32 min_value, i32 max_value) override;
+  f32 RandomFloatExp(f32 min_value = 0.0f, f32 max_value = 1.0f,
+                     f32 exponent = 1.0f) override;
 
  private:
-  int GenerateRandomNumber();
+  i32 GenerateRandomNumber();
 
-  int m_idum;
-  int m_iy;
-  int m_iv[NTAB];
+  i32 m_idum;
+  i32 m_iy;
+  i32 m_iv[NTAB];
 
   CThreadFastMutex m_mutex;
 };
@@ -54,37 +54,34 @@ class VSTDLIB_CLASS CGaussianRandomStream {
  public:
   // Passing in NULL will cause the gaussian stream to use the
   // installed global random number generator
-  CGaussianRandomStream(IUniformRandomStream *pUniformStream = NULL);
+  CGaussianRandomStream(IUniformRandomStream *stream = nullptr);
 
   // Attaches to a random uniform stream
-  void AttachToStream(IUniformRandomStream *pUniformStream = NULL);
+  void AttachToStream(IUniformRandomStream *stream = nullptr);
 
   // Generates random numbers
-  float RandomFloat(float flMean = 0.0f, float flStdDev = 1.0f);
+  f32 RandomFloat(f32 mean = 0.0f, f32 std_deviation = 1.0f);
 
  private:
-  IUniformRandomStream *m_pUniformStream;
-  bool m_bHaveValue;
-  float m_flRandomValue;
+  IUniformRandomStream *uniform_stream_;
+  bool have_value_;
+  f32 random_value_;
 
-  CThreadFastMutex m_mutex;
+  CThreadFastMutex mutex_;
 };
 
 // A couple of convenience functions to access the library's global uniform
 // stream.
-VSTDLIB_INTERFACE void RandomSeed(int iSeed);
-VSTDLIB_INTERFACE float RandomFloat(float flMinVal = 0.0f,
-                                    float flMaxVal = 1.0f);
-VSTDLIB_INTERFACE float RandomFloatExp(float flMinVal = 0.0f,
-                                       float flMaxVal = 1.0f,
-                                       float flExponent = 1.0f);
-VSTDLIB_INTERFACE int RandomInt(int iMinVal, int iMaxVal);
-VSTDLIB_INTERFACE float RandomGaussianFloat(float flMean = 0.0f,
-                                            float flStdDev = 1.0f);
+VSTDLIB_INTERFACE void RandomSeed(i32 seed);
+VSTDLIB_INTERFACE f32 RandomFloat(f32 min_value = 0.0f, f32 max_value = 1.0f);
+VSTDLIB_INTERFACE f32 RandomFloatExp(f32 min_value = 0.0f, f32 max_value = 1.0f,
+                                     f32 exponent = 1.0f);
+VSTDLIB_INTERFACE i32 RandomInt(i32 min_value, i32 max_value);
+VSTDLIB_INTERFACE f32 RandomGaussianFloat(f32 mean = 0.0f,
+                                          f32 std_deviation = 1.0f);
 
 // Installs a global random number generator, which will affect the Random
 // functions above.
-VSTDLIB_INTERFACE void InstallUniformRandomStream(
-    IUniformRandomStream *pStream);
+VSTDLIB_INTERFACE void InstallUniformRandomStream(IUniformRandomStream *stream);
 
 #endif  // SOURCE_VSTDLIB_RANDOM_H_
