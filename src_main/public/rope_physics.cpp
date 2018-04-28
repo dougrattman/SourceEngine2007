@@ -1,9 +1,8 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "rope_physics.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 CBaseRopePhysics::CBaseRopePhysics(CSimplePhysics::CNode *pNodes, int nNodes,
@@ -41,7 +40,7 @@ void CBaseRopePhysics::SetNumNodes(int nNodes) {
   }
 }
 
-void CBaseRopePhysics::Restart() { m_Physics.Init(1.0 / 50); }
+void CBaseRopePhysics::Restart() { m_Physics.Init(1.0f / 60); }
 
 void CBaseRopePhysics::ResetSpringLength(float flSpringDist) {
   m_flSpringDist = std::max(flSpringDist, 0.0f);
@@ -70,7 +69,7 @@ void CBaseRopePhysics::SetDelegate(CSimplePhysics::IHelper *pDelegate) {
 }
 
 void CBaseRopePhysics::Simulate(float dt) {
-  static float flEnergy = 0.98;
+  static float flEnergy = 0.98f;
   m_Physics.Simulate(m_pNodes, m_nNodes, this, dt, flEnergy);
 }
 
