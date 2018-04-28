@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // The copyright to the contents herein is the property of Valve, L.L.C.
 // The contents may be used and/or copied only with the written permission of
@@ -10,15 +10,10 @@
 
 #include "appframework/IAppSystem.h"
 
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 struct BGR888_t;
 class IMaterial;
 
-//-----------------------------------------------------------------------------
 // Parameters for creating a new BINK
-//-----------------------------------------------------------------------------
 struct BIKParams_t {
   BIKParams_t()
       : m_nFrameRate(0),
@@ -52,21 +47,15 @@ struct BIKParams_t {
   int m_nNumChannels;
 };
 
-//-----------------------------------------------------------------------------
 // Handle to an BINK
-//-----------------------------------------------------------------------------
 typedef unsigned short BIKHandle_t;
 enum { BIKHANDLE_INVALID = (BIKHandle_t)~0 };
 
-//-----------------------------------------------------------------------------
 // Handle to an BINK material
-//-----------------------------------------------------------------------------
 typedef unsigned short BIKMaterial_t;
 enum { BIKMATERIAL_INVALID = (BIKMaterial_t)~0 };
 
-//-----------------------------------------------------------------------------
 // Main AVI interface
-//-----------------------------------------------------------------------------
 #define BIK_INTERFACE_VERSION "VBik001"
 
 class IBik : public IAppSystem {

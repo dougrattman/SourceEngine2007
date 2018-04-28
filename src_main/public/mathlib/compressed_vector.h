@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_MATHLIB_COMPRESSED_VECTOR_H_
 #define SOURCE_MATHLIB_COMPRESSED_VECTOR_H_
@@ -21,10 +21,11 @@ class Vector32 {
   Vector32 &operator=(const Vector &vOther);
 
   operator Vector() const {
-    static f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};    
+    static f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};
     f32 fexp = expScale[exp] / 512.0f;
-    
-    return Vector{(((int)x) - 512) * fexp, (((int)y) - 512) * fexp, (((int)z) - 512) * fexp};
+
+    return Vector{(((int)x) - 512) * fexp, (((int)y) - 512) * fexp,
+                  (((int)z) - 512) * fexp};
   }
 
  private:
@@ -211,7 +212,7 @@ constexpr f32 maxfloat16bits = 65504.0f;
 class float16 {
  public:
   void Init() { m_storage.rawWord = 0; }
-  
+
   u16 GetBits() const { return m_storage.rawWord; }
 
   f32 GetFloat() const { return Convert16bitFloatTo32bits(m_storage.rawWord); }
@@ -423,9 +424,7 @@ class Vector2d32 {
   Vector2d32 &operator=(const Vector &vOther);
   Vector2d32 &operator=(const Vector2D &vOther);
 
-  operator Vector2D() const {
-    return Vector2D{x.GetFloat(), y.GetFloat()};
-  }
+  operator Vector2D() const { return Vector2D{x.GetFloat(), y.GetFloat()}; }
 
   void Init(f32 ix = 0.f, f32 iy = 0.f) {
     x.SetFloat(ix);

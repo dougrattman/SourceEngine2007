@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // The copyright to the contents herein is the property of Valve, L.L.C.
 // The contents may be used and/or copied only with the written permission of
@@ -10,15 +10,10 @@
 
 #include "appframework/IAppSystem.h"
 
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 struct BGR888_t;
 class IMaterial;
 
-//-----------------------------------------------------------------------------
 // Parameters for creating a new AVI
-//-----------------------------------------------------------------------------
 struct AVIParams_t {
   AVIParams_t()
       : m_nFrameRate(0),
@@ -52,21 +47,15 @@ struct AVIParams_t {
   int m_nNumChannels;
 };
 
-//-----------------------------------------------------------------------------
 // Handle to an AVI
-//-----------------------------------------------------------------------------
 typedef unsigned short AVIHandle_t;
 enum { AVIHANDLE_INVALID = (AVIHandle_t)~0 };
 
-//-----------------------------------------------------------------------------
 // Handle to an AVI material
-//-----------------------------------------------------------------------------
 typedef unsigned short AVIMaterial_t;
 enum { AVIMATERIAL_INVALID = (AVIMaterial_t)~0 };
 
-//-----------------------------------------------------------------------------
 // Main AVI interface
-//-----------------------------------------------------------------------------
 #define AVI_INTERFACE_VERSION "VAvi001"
 
 class IAvi : public IAppSystem {
