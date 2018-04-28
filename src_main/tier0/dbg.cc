@@ -20,10 +20,8 @@
 
 #include "tier0/include/memdbgon.h"
 
-enum { MAX_GROUP_NAME_LENGTH = 48 };
-
 struct SpewGroup_t {
-  ch m_GroupName[MAX_GROUP_NAME_LENGTH];
+  ch m_GroupName[48];
   i32 m_Level;
 };
 
@@ -48,7 +46,7 @@ static SpewType_t s_SpewType;
 static SpewGroup_t* s_pSpewGroups = 0;
 static usize s_GroupCount = 0;
 static i32 s_DefaultLevel = 0;
-static Color s_DefaultOutputColor(255, 255, 255, 255);
+static Color s_DefaultOutputColor{255, 255, 255, 255};
 
 // Only useable from within a spew function
 struct SpewInfo_t {
@@ -147,10 +145,10 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
                                  i32 nLevel, const Color* pColor,
                                  const ch* pMsgFormat, va_list args) {
   ch message[5020];
-  // check that we won't artifically truncate the string
+  // Check that we won't artifically truncate the string
   assert(strlen(pMsgFormat) < std::size(message));
 
-  /* Printf the file and line for warning + assert only... */
+  // Printf the file and line for warning + assert only.
   i32 len = 0;
   if ((spewType == SPEW_ASSERT)) {
     len = sprintf_s(message, "%s (%d) : ", s_pFileName, s_Line);
@@ -158,13 +156,13 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
 
   if (len == -1) return SPEW_ABORT;
 
-  /* Create the message.... */
+  // Create the message.
   i32 val = _vsnprintf_s(&message[len], std::size(message) - len,
                          std::size(message) - len - 1, pMsgFormat, args);
   if (val == -1) return SPEW_ABORT;
 
   len += val;
-  /* use normal assert here; to avoid recursion. */
+  // Use normal assert here; to avoid recursion.
   assert(len * sizeof(*pMsgFormat) < std::size(message));
 
   // Add \n for warning and assert
@@ -172,11 +170,11 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
     len += sprintf_s(&message[len], std::size(message) - len, "\n");
   }
 
-  /* use normal assert here; to avoid recursion. */
+  // Use normal assert here; to avoid recursion.
   assert(len < std::size(message) - 1);
   assert(s_SpewOutputFunc);
 
-  /* direct it to the appropriate target(s) */
+  // Direct it to the appropriate target(s).
   assert(static_cast<const SpewInfo_t*>(g_pSpewInfo) == nullptr);
   SpewInfo_t spewInfo = {pColor, pGroupName, nLevel};
 
@@ -187,9 +185,7 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
   switch (ret) {
     // Asserts put the break into the macro so it occurs in the right place
     case SPEW_DEBUGGER:
-      if (spewType != SPEW_ASSERT) {
-        DebuggerBreak();
-      }
+      if (spewType != SPEW_ASSERT) DebuggerBreak();
       break;
 
     case SPEW_ABORT:
@@ -606,7 +602,7 @@ void SpewActivate(const ch* pGroupName, i32 level) {
       }
     }
 
-    Assert(strlen(pGroupName) < MAX_GROUP_NAME_LENGTH);
+    Assert(strlen(pGroupName) < sizeof(SpewGroup_t::m_GroupName));
     strcpy_s(s_pSpewGroups[ind].m_GroupName, pGroupName);
 
     // Update standard groups
@@ -617,6 +613,7 @@ void SpewActivate(const ch* pGroupName, i32 level) {
       }
     }
   }
+
   s_pSpewGroups[ind].m_Level = level;
 }
 
