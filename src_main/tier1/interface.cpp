@@ -197,7 +197,8 @@ CSysModule *Sys_LoadModule(const char *module_name) {
     if (!module) {
 #ifdef OS_WIN
       const auto errno_info = source::windows::windows_errno_info_last_error();
-      Warning("Module %s load error: %s", module_name, errno_info.description);
+      Warning("Module %s load error: %s\n", module_name,
+              errno_info.description);
 #else
       Error("Failed to load %s: %s\n", module_name, dlerror());
 #endif  // OS_WIN
