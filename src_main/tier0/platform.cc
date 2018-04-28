@@ -169,7 +169,7 @@ bool Plat_TimestampedLog(ch const *fmt, ...) {
   ch log_buffer[1024];
   va_list arg_list;
   va_start(arg_list, fmt);
-  _vsnprintf_s(log_buffer, SOURCE_ARRAYSIZE(log_buffer), fmt, arg_list);
+  _vsnprintf_s(log_buffer, std::size(log_buffer), fmt, arg_list);
   va_end(arg_list);
 
   const f64 current_stamp = Plat_FloatTime();

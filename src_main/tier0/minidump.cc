@@ -57,7 +57,7 @@ source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
 
   if (error_code == S_OK) {
     SetLastError(NOERROR);
-    GetModuleFileNameW(nullptr, module_name, SOURCE_ARRAYSIZE(module_name));
+    GetModuleFileNameW(nullptr, module_name, std::size(module_name));
 
     error_code = source::windows::windows_errno_code_last_error();
   }
@@ -74,7 +74,7 @@ source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
     if (stripped_module_name) ++stripped_module_name;
 
     // Can't use the normal string functions since we're in tier0.
-    _snwprintf_s(file_name, SOURCE_ARRAYSIZE(file_name),
+    _snwprintf_s(file_name, std::size(file_name),
                  L"%s_%s_%d%.2d%2d%.2d%.2d%.2d_%d.mdmp",
                  stripped_module_name ? stripped_module_name : L"unknown",
                  g_bWritingNonfatalMinidump ? L"assert" : L"crash",
@@ -128,8 +128,8 @@ source::windows::windows_errno_code WriteMiniDumpUsingExceptionInfo(
     // Mark any failed minidump writes by renaming them.
     if (minidump_file != INVALID_HANDLE_VALUE) {
       wch failed_file_name[SOURCE_MAX_PATH];
-      _snwprintf_s(failed_file_name, SOURCE_ARRAYSIZE(failed_file_name),
-                   L"(failed)%s", file_name);
+      _snwprintf_s(failed_file_name, std::size(failed_file_name), L"(failed)%s",
+                   file_name);
 
       _wrename(file_name, failed_file_name);
     }

@@ -99,8 +99,8 @@ AssertDisable *CreateNewAssertDisable(const ch *pFilename) {
   assert_disable->ignoreTimes = -1;
 
   strncpy_s(assert_disable->fileName, g_Info.fileName,
-            SOURCE_ARRAYSIZE(assert_disable->fileName) - 1);
-  assert_disable->fileName[SOURCE_ARRAYSIZE(assert_disable->fileName) - 1] = 0;
+            std::size(assert_disable->fileName) - 1);
+  assert_disable->fileName[std::size(assert_disable->fileName) - 1] = 0;
 
   return assert_disable;
 }
