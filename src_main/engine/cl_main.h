@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef CL_MAIN_H
 #define CL_MAIN_H
@@ -11,9 +11,9 @@
 #include "netmessages.h"
 #include "networkstringtable.h"
 #include "tier0/include/basetypes.h"
+#include "tier1/UtlVector.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/convar.h"
-#include "tier1/UtlVector.h"
 
 class CCommand;
 
@@ -34,7 +34,7 @@ class CEntityReadInfo;
 class CPureServerWhitelist;
 struct SoundInfo_t;
 
-#define DEFAULT_JPEG_QUALITY 50
+#define DEFAULT_JPEG_QUALITY 80
 
 void CL_TakeJpeg(const char *name = NULL, int quality = DEFAULT_JPEG_QUALITY);
 
