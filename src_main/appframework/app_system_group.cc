@@ -91,9 +91,7 @@ void CAppSystemGroup::UnloadAllModules() {
   m_Modules.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
 // Methods to add/remove various global singleton systems
-//-----------------------------------------------------------------------------
 IAppSystem *CAppSystemGroup::AddSystem(AppModule_t module,
                                        const ch *pInterfaceName) {
   if (module == APP_MODULE_INVALID) return nullptr;
@@ -171,9 +169,7 @@ void CAppSystemGroup::RemoveAllSystems() {
   m_SystemDict.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
 // Simpler method of doing the LoadModule/AddSystem thing.
-//-----------------------------------------------------------------------------
 bool CAppSystemGroup::AddSystems(AppSystemInfo_t *systems) {
   while (systems->m_pModuleName[0]) {
     AppModule_t module = LoadModule(systems->m_pModuleName);
@@ -195,9 +191,7 @@ bool CAppSystemGroup::AddSystems(AppSystemInfo_t *systems) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Methods to find various global singleton systems
-//-----------------------------------------------------------------------------
 void *CAppSystemGroup::FindSystem(const ch *pSystemName) {
   u16 i = m_SystemDict.Find(pSystemName);
   if (i != m_SystemDict.InvalidIndex()) return m_Systems[m_SystemDict[i]];
@@ -222,14 +216,10 @@ void *CAppSystemGroup::FindSystem(const ch *pSystemName) {
   return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Gets at the parent appsystem group
-//-----------------------------------------------------------------------------
 CAppSystemGroup *CAppSystemGroup::GetParent() { return m_pParentAppSystem; }
 
-//-----------------------------------------------------------------------------
 // Method to connect/disconnect all systems
-//-----------------------------------------------------------------------------
 bool CAppSystemGroup::ConnectSystems() {
   for (i32 i = 0; i < m_Systems.Count(); ++i) {
     IAppSystem *sys = m_Systems[i];
@@ -249,9 +239,7 @@ void CAppSystemGroup::DisconnectSystems() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Method to initialize/shutdown all systems
-//-----------------------------------------------------------------------------
 InitReturnVal_t CAppSystemGroup::InitSystems() {
   for (i32 i = 0; i < m_Systems.Count(); ++i) {
     InitReturnVal_t nRetVal = m_Systems[i]->Init();
@@ -270,16 +258,12 @@ void CAppSystemGroup::ShutdownSystems() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Returns the stage at which the app system group ran into an error
-//-----------------------------------------------------------------------------
 CAppSystemGroup::AppSystemGroupStage_t CAppSystemGroup::GetErrorStage() const {
   return m_nErrorStage;
 }
 
-//-----------------------------------------------------------------------------
 // Gets at a factory that works just like FindSystem
-//-----------------------------------------------------------------------------
 // This function is used to make this system appear to the outside world to
 // function exactly like the currently existing factory system
 CAppSystemGroup *s_pCurrentAppSystem;
@@ -291,16 +275,12 @@ void *AppSystemCreateInterfaceFn(const ch *pName, i32 *pReturnCode) {
   return pInterface;
 }
 
-//-----------------------------------------------------------------------------
 // Gets at a class factory for the topmost appsystem group in an appsystem stack
-//-----------------------------------------------------------------------------
 CreateInterfaceFn CAppSystemGroup::GetFactory() {
   return AppSystemCreateInterfaceFn;
 }
 
-//-----------------------------------------------------------------------------
 // Main application loop
-//-----------------------------------------------------------------------------
 i32 CAppSystemGroup::Run() {
   // The factory now uses this app system group
   s_pCurrentAppSystem = this;
@@ -322,17 +302,13 @@ i32 CAppSystemGroup::Run() {
   return nRetVal;
 }
 
-//-----------------------------------------------------------------------------
 // Virtual methods for override
-//-----------------------------------------------------------------------------
 i32 CAppSystemGroup::Startup() { return OnStartup(); }
 
 void CAppSystemGroup::Shutdown() { return OnShutdown(); }
 
-//-----------------------------------------------------------------------------
 // Use this version in cases where you can't control the main loop and
 // expect to be ticked
-//-----------------------------------------------------------------------------
 i32 CAppSystemGroup::OnStartup() {
   // The factory now uses this app system group
   s_pCurrentAppSystem = this;
@@ -414,40 +390,31 @@ destroy:
 }
 
 // This class represents a group of app systems that are loaded through steam
-
 CSteamAppSystemGroup::CSteamAppSystemGroup(IFileSystem *pFileSystem,
                                            CAppSystemGroup *pAppSystemParent) {
   m_pFileSystem = pFileSystem;
   m_pGameInfoPath[0] = 0;
 }
 
-//-----------------------------------------------------------------------------
 // Used by CSteamApplication to set up necessary pointers if we can't do it in
 // the constructor
-//-----------------------------------------------------------------------------
 void CSteamAppSystemGroup::Setup(IFileSystem *pFileSystem,
                                  CAppSystemGroup *pParentAppSystem) {
   m_pFileSystem = pFileSystem;
   m_pParentAppSystem = pParentAppSystem;
 }
 
-//-----------------------------------------------------------------------------
 // Loads the module from Steam
-//-----------------------------------------------------------------------------
 CSysModule *CSteamAppSystemGroup::LoadModuleDLL(const ch *pDLLName) {
   return m_pFileSystem->LoadModule(pDLLName);
 }
 
-//-----------------------------------------------------------------------------
 // Returns the game info path
-//-----------------------------------------------------------------------------
 const ch *CSteamAppSystemGroup::GetGameInfoPath() const {
   return m_pGameInfoPath;
 }
 
-//-----------------------------------------------------------------------------
 // Sets up the search paths
-//-----------------------------------------------------------------------------
 bool CSteamAppSystemGroup::SetupSearchPaths(const ch *pStartingDir,
                                             bool bOnlyUseStartingDir,
                                             bool bIsTool) {

@@ -27,14 +27,10 @@
 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Constructor
-//-----------------------------------------------------------------------------
-CVguiMatSysApp::CVguiMatSysApp() : m_HWnd{nullptr}, m_nWidth{0}, m_nHeight{0} {}
 
-//-----------------------------------------------------------------------------
+
+
 // Create all singleton systems
-//-----------------------------------------------------------------------------
 bool CVguiMatSysApp::Create() {
   AppSystemInfo_t app_systems[] = {
       {"inputsystem.dll", INPUTSYSTEM_INTERFACE_VERSION},
@@ -65,9 +61,7 @@ bool CVguiMatSysApp::Create() {
 
 void CVguiMatSysApp::Destroy() {}
 
-//-----------------------------------------------------------------------------
 // Window management
-//-----------------------------------------------------------------------------
 void *CVguiMatSysApp::CreateAppWindow(ch const *pTitle, bool bWindowed, i32 w,
                                       i32 h) {
   WNDCLASSEX wc{sizeof(wc)};
@@ -125,14 +119,10 @@ void *CVguiMatSysApp::CreateAppWindow(ch const *pTitle, bool bWindowed, i32 w,
   return hWnd;
 }
 
-//-----------------------------------------------------------------------------
 // Pump messages
-//-----------------------------------------------------------------------------
 void CVguiMatSysApp::AppPumpMessages() { g_pInputSystem->PollInputState(); }
 
-//-----------------------------------------------------------------------------
 // Sets up the game path
-//-----------------------------------------------------------------------------
 bool CVguiMatSysApp::SetupSearchPaths(const ch *pStartingDir,
                                       bool bOnlyUseStartingDir, bool bIsTool) {
   if (!BaseClass::SetupSearchPaths(pStartingDir, bOnlyUseStartingDir, bIsTool))
@@ -142,9 +132,7 @@ bool CVguiMatSysApp::SetupSearchPaths(const ch *pStartingDir,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Init, shutdown
-//-----------------------------------------------------------------------------
 bool CVguiMatSysApp::PreInit() {
   if (!BaseClass::PreInit()) return false;
 
@@ -210,21 +198,15 @@ void CVguiMatSysApp::PostShutdown() {
   BaseClass::PostShutdown();
 }
 
-//-----------------------------------------------------------------------------
 // Gets the window size
-//-----------------------------------------------------------------------------
 i32 CVguiMatSysApp::GetWindowWidth() const { return m_nWidth; }
 
 i32 CVguiMatSysApp::GetWindowHeight() const { return m_nHeight; }
 
-//-----------------------------------------------------------------------------
 // Returns the window
-//-----------------------------------------------------------------------------
 void *CVguiMatSysApp::GetAppWindow() { return m_HWnd; }
 
-//-----------------------------------------------------------------------------
 // Sets the video mode
-//-----------------------------------------------------------------------------
 bool CVguiMatSysApp::SetVideoMode() {
   MaterialSystem_Config_t config;
   if (CommandLine()->CheckParm("-fullscreen")) {
