@@ -76,11 +76,6 @@ ThreadHandle_t CreateSimpleThread(ThreadFunc_t pfnThread, void *pParam,
 #endif
 }
 
-ThreadHandle_t CreateSimpleThread(ThreadFunc_t pfnThread, void *pParam,
-                                  u32 stackSize) {
-  return CreateSimpleThread(pfnThread, pParam, nullptr, stackSize);
-}
-
 bool ReleaseThreadHandle(ThreadHandle_t hThread) {
 #ifdef OS_WIN
   return (CloseHandle(hThread) != 0);

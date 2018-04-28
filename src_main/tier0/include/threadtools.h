@@ -56,11 +56,8 @@ using ThreadId_t = unsigned long;
 SOURCE_FORWARD_DECLARE_HANDLE(ThreadHandle_t);
 using ThreadFunc_t = u32 (*)(void *parameter);
 
-SOURCE_TIER0_API_GLOBAL ThreadHandle_t CreateSimpleThread(ThreadFunc_t,
-                                                          void *pParam,
-                                                          ThreadId_t *pID,
-                                                          u32 stackSize = 0);
 SOURCE_TIER0_API ThreadHandle_t CreateSimpleThread(ThreadFunc_t, void *pParam,
+                                                   ThreadId_t *pID = nullptr,
                                                    u32 stackSize = 0);
 SOURCE_TIER0_API bool ReleaseThreadHandle(ThreadHandle_t);
 
@@ -475,13 +472,13 @@ class CThreadLocalPtr : private CThreadLocalBase {
 
  private:
   // Disallowed operations
-  CThreadLocalPtr(T *pFrom);
-  CThreadLocalPtr(const CThreadLocalPtr<T> &from);
-  T **operator&();
-  T *const *operator&() const;
-  void operator=(const CThreadLocalPtr<T> &from);
-  bool operator==(const CThreadLocalPtr<T> &p) const;
-  bool operator!=(const CThreadLocalPtr<T> &p) const;
+  CThreadLocalPtr(T *pFrom) = delete;
+  CThreadLocalPtr(const CThreadLocalPtr<T> &from) = delete;
+  T **operator&() = delete;
+  T *const *operator&() const = delete;
+  void operator=(const CThreadLocalPtr<T> &from) = delete;
+  bool operator==(const CThreadLocalPtr<T> &p) const = delete;
+  bool operator!=(const CThreadLocalPtr<T> &p) const = delete;
 };
 
 #endif  // NO_THREAD_LOCAL
