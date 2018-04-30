@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -100,8 +100,8 @@ static inline bool GetPortalScreenExtents(dareaportal_t *pPortal,
                                           portalclip_t *SOURCE_RESTRICT clip,
                                           CPortalRect &portalRect,
                                           float *pReflectionWaterHeight) {
-  portalRect.left = portalRect.bottom = 1e24;
-  portalRect.right = portalRect.top = -1e24;
+  portalRect.left = portalRect.bottom = 1e24f;
+  portalRect.right = portalRect.top = -1e24f;
   bool bValidExtents = false;
   worldbrushdata_t *pBrushData = host_state.worldbrush;
 

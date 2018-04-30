@@ -12,7 +12,7 @@
 // Purpose: Implements Audio IO on the engine's COMMON filesystem
 class COM_IOReadBinary : public IFileReadBinary {
  public:
-  int open(const char *pFileName) override;
+  int open(const ch *pFileName) override;
   int read(void *pOutput, int size, int file) override;
   void seek(int file, int pos) override;
   unsigned int tell(int file) override;
@@ -22,8 +22,8 @@ class COM_IOReadBinary : public IFileReadBinary {
 
 // prepend sound/ to the filename -- all sounds are loaded from the sound/
 // directory
-int COM_IOReadBinary::open(const char *pFileName) {
-  char namebuffer[512];
+int COM_IOReadBinary::open(const ch *pFileName) {
+  ch namebuffer[512];
   Q_strncpy(namebuffer, "sound", SOURCE_ARRAYSIZE(namebuffer));
 
   // the server is sending back sound names with slashes in front...

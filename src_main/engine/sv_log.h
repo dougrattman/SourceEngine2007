@@ -1,10 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 // Server logging functions
 
 #ifndef SV_LOG_H
 #define SV_LOG_H
 
-#include <igameevents.h>
+#include "igameevents.h"
 #include "tier1/netadr.h"
 
 class CLog : public IGameEventListener2 {

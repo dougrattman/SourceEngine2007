@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -13,11 +13,9 @@
 #include "tier0/include/memdbgon.h"
 
 CUtlVector<Vector> g_Points;
-//-----------------------------------------------------------------------------
-// Purpose: Draw the currently loaded line file
-// Input  : g_Points - list of points
-//-----------------------------------------------------------------------------
-void Linefile_Draw(void) {
+
+// Draw the currently loaded line file.
+void Linefile_Draw() {
   Vector *points = g_Points.Base();
   int pointCount = g_Points.Size();
 
@@ -26,20 +24,13 @@ void Linefile_Draw(void) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: parse the map.lin file from disk
-//			this file contains a list of line segments illustrating
-//a leak in 			the map
-//-----------------------------------------------------------------------------
-void Linefile_Read_f(void) {
-  Vector org;
-  int r;
-  int c;
-  char name[MAX_OSPATH];
-
+// Parse the map.lin file from disk this file contains a list of line
+// segments illustrating a leak in the map.
+void Linefile_Read_f() {
   g_Points.Purge();
 
-  Q_snprintf(name, sizeof(name), "maps/%s.lin", sv.GetMapName());
+  ch name[MAX_OSPATH];
+  sprintf_s(name, "maps/%s.lin", sv.GetMapName());
 
   CUtlBuffer buf(0, 0, CUtlBuffer::TEXT_BUFFER);
   if (!g_pFileSystem->ReadFile(name, NULL, buf)) {
@@ -48,10 +39,11 @@ void Linefile_Read_f(void) {
   }
 
   ConMsg("Reading %s...\n", name);
-  c = 0;
+  Vector org;
+  int c = 0;
 
   for (;;) {
-    r = buf.Scanf("%f %f %f\n", &org[0], &org[1], &org[2]);
+    int r = buf.Scanf("%f %f %f\n", &org[0], &org[1], &org[2]);
     if (r != 3) break;
     c++;
 

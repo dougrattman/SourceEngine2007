@@ -99,10 +99,10 @@ bool CSocketCreator::CreateListenSocket(const netadr_t &netAdr) {
 bool CSocketCreator::ConfigureSocket(int sock) {
   // disable NAGLE (rcon cmds are small in size)
   int nodelay = 1;
-  setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&nodelay, sizeof(nodelay));
+  setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (ch *)&nodelay, sizeof(nodelay));
 
   nodelay = 1;
-  setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&nodelay, sizeof(nodelay));
+  setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (ch *)&nodelay, sizeof(nodelay));
 
   int opt = 1, ret;
   ret = ioctlsocket(sock, FIONBIO, (unsigned long *)&opt);  // non-blocking
@@ -186,7 +186,7 @@ int CSocketCreator::ConnectSocket(const netadr_t &netAdr, bool bSingleSocket) {
 
   // disable NAGLE (rcon cmds are small in size)
   int nodelay = 1;
-  setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&nodelay,
+  setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, (ch *)&nodelay,
              sizeof(nodelay));
 
   struct sockaddr_in s;

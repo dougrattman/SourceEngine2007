@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -866,7 +866,7 @@ void CShadowMgr::ComputeSurfaceBounds(SurfaceBounds_t* pBounds,
     pBounds->m_vecMaxs = MaxSIMD(pos4, pBounds->m_vecMaxs);
   }
 
-  fltx4 eps = ReplicateX4(1e-3);
+  fltx4 eps = ReplicateX4(1e-3f);
   pBounds->m_vecMins = SetWToZeroSIMD(SubSIMD(pBounds->m_vecMins, eps));
   pBounds->m_vecMaxs = SetWToZeroSIMD(AddSIMD(pBounds->m_vecMaxs, eps));
   pBounds->m_vecCenter /= nCount;
@@ -1086,7 +1086,8 @@ void CShadowMgr::RemoveSurfaceFromShadow(ShadowHandle_t handle,
       // associated with a particular shadow per surface
       RemoveShadowDecalFromSurface(surfID, decalHandle);
 
-      // TODO(d.rattman): Could check the shadow doesn't appear again in the list
+      // TODO(d.rattman): Could check the shadow doesn't appear again in the
+      // list
       return;
     }
 
@@ -1749,8 +1750,8 @@ void CShadowMgr::AddShadowToBrushModel(ShadowHandle_t handle, model_t* pModel,
       }
     }
 
-    // TODO(d.rattman): We may want to do some more high-level per-surface culling
-    // If so, it'll be added to ApplyShadowToSurface. Call it instead.
+    // TODO(d.rattman): We may want to do some more high-level per-surface
+    // culling If so, it'll be added to ApplyShadowToSurface. Call it instead.
     AddSurfaceToShadow(handle, surfID);
   }
 }
@@ -2023,10 +2024,9 @@ static void ShadowClip(ShadowClipState_t& clip, Clipper& clipper) {
 //-----------------------------------------------------------------------------
 // Project vertices into shadow space
 //-----------------------------------------------------------------------------
-bool CShadowMgr::ProjectVerticesIntoShadowSpace(const VMatrix& modelToShadow,
-                                                float maxDist, int count,
-                                                Vector** SOURCE_RESTRICT ppPosition,
-                                                ShadowClipState_t& clip) {
+bool CShadowMgr::ProjectVerticesIntoShadowSpace(
+    const VMatrix& modelToShadow, float maxDist, int count,
+    Vector** SOURCE_RESTRICT ppPosition, ShadowClipState_t& clip) {
   bool insideVolume = false;
 
   // Create vertices to clip to...
@@ -2427,7 +2427,7 @@ int CShadowMgr::AddDisplacementShadowsToMeshBuilder(CMeshBuilder& meshBuilder,
 static void DrawShadowID(ShadowHandle_t shadowHandle,
                          const Vector& vecCentroid) {
 #ifndef SWDS
-  char buf[32];
+  ch buf[32];
   Q_snprintf(buf, sizeof(buf), "%d", shadowHandle);
   CDebugOverlay::AddTextOverlay(vecCentroid, 0, buf);
 #endif
@@ -2610,9 +2610,10 @@ bool ScreenSpaceRectFromPoints(IMatRenderContext* pRenderContext,
           vClippedPolygons[i][j],
           vScreenSpacePoint);  // Transform from World to screen space
 
-      fMinX = std::min(fMinX, vScreenSpacePoint.x);   // Update mins/maxes
-      fMaxX = std::max(fMaxX, vScreenSpacePoint.x);   //
-      fMinY = std::min(fMinY, -vScreenSpacePoint.y);  // These are in -1 to +1 range
+      fMinX = std::min(fMinX, vScreenSpacePoint.x);  // Update mins/maxes
+      fMaxX = std::max(fMaxX, vScreenSpacePoint.x);  //
+      fMinY =
+          std::min(fMinY, -vScreenSpacePoint.y);  // These are in -1 to +1 range
       fMaxY = std::max(fMaxY, -vScreenSpacePoint.y);  //
     }
   }
@@ -3264,8 +3265,8 @@ void CShadowMgr::RenderFlashlights(bool bDoMasking,
 #if NEWMESH
         indexBufferBuilder.End(
             false);  // haven't tested this one yet (flashlights)
-        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add a
-        // separate 'SupportsCompression' accessor)
+        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this
+        // stripping (add a separate 'SupportsCompression' accessor)
         VertexFormat_t vertexFormat =
             materialSortInfoArray[sortID].material->GetVertexFormat() &
             ~VERTEX_FORMAT_COMPRESSED;

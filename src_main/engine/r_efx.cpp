@@ -24,7 +24,7 @@ extern CClientState cl;
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int CVEfx::Draw_DecalIndexFromName(char *name) {
+int CVEfx::Draw_DecalIndexFromName(ch *name) {
   bool found = false;
   return ::Draw_DecalIndexFromName(name, &found);
 }
@@ -32,7 +32,7 @@ int CVEfx::Draw_DecalIndexFromName(char *name) {
 //-----------------------------------------------------------------------------
 // Retrieve decal texture name from decal by index
 //-----------------------------------------------------------------------------
-const char *CVEfx::Draw_DecalNameFromIndex(int nIndex) {
+const ch *CVEfx::Draw_DecalNameFromIndex(int nIndex) {
   return ::Draw_DecalNameFromIndex(nIndex);
 }
 

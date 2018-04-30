@@ -97,20 +97,20 @@ CON_COMMAND_F(rpt_password, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
   }
 
   bool bWasEnabled = RPTServer().HasPassword();
-  char buf[255];
+  ch buf[255];
   if (args.ArgC() == 1) {
     if (!bWasEnabled) return;
 
     RPTServer().SetPassword(NULL);
     ConMsg("Disabling...\n");
-    Q_snprintf(buf, sizeof(buf), "rpt_client_enable 0");
+    sprintf_s(buf, "rpt_client_enable 0");
   } else if (args.ArgC() == 2) {
     RPTServer().SetPassword(args.Arg(1));
     ConMsg("New password : %s\n", args.Arg(1));
     if (bWasEnabled) return;
 
     ConMsg("Enabling...\n");
-    Q_snprintf(buf, sizeof(buf), "rpt_client_enable 1");
+    sprintf_s(buf, "rpt_client_enable 1");
   }
 
   // Send a command to the server indicating this client can be rpted
@@ -183,7 +183,7 @@ CON_COMMAND_F(rpt_start, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
   RPTClient().SetPassword(args.Arg(1));
   RPTClient().CreateListenSocket(rptAddr);
 
-  char pDir[SOURCE_MAX_PATH];
+  ch pDir[SOURCE_MAX_PATH];
   tm now;
   VCRHook_LocalTime(&now);
 
@@ -196,7 +196,7 @@ CON_COMMAND_F(rpt_start, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
 
   // Send a command to the server indicating we want to connect to a remote
   // client
-  char pBuf[256];
+  ch pBuf[256];
   Q_snprintf(pBuf, sizeof(pBuf), "rpt_server_enable 1 %s\n",
              rptAddr.ToString());
   CCommand argsClient;
@@ -215,7 +215,7 @@ CON_COMMAND_F(rpt_end, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
 
   // Send a command to the server indicating we want to disconnect from a remote
   // client
-  char pBuf[256];
+  ch pBuf[256];
   Q_snprintf(pBuf, sizeof(pBuf), "rpt_server_enable 0\n");
   CCommand argsClient;
   argsClient.Tokenize(pBuf);
@@ -266,7 +266,7 @@ static bool PlayerIsValveEmployee(int nClientSlot) {
 
   CSteamID steamIDForPlayer(pi.friendsID, 1, k_EUniversePublic,
                             k_EAccountTypeIndividual);
-  for (int i = 0; i < SOURCE_ARRAYSIZE(s_pValveIDs); i++) {
+  for (usize i = 0; i < SOURCE_ARRAYSIZE(s_pValveIDs); i++) {
     if (steamIDForPlayer.ConvertToUint64() == (s_pValveIDs[i] ^ s_ValveMask))
       return true;
   }
@@ -315,7 +315,7 @@ CON_COMMAND_F(rpt_server_enable, "",
     g_nRptServerSlot = cmd_clientslot;
   }
 
-  char pBuf[256];
+  ch pBuf[256];
   Q_snprintf(pBuf, sizeof(pBuf), "rpt_connect %s\n", adr.ToString());
   SV_ExecuteRemoteCommand(pBuf, g_nRptClientSlot);
 }
@@ -330,7 +330,7 @@ CON_COMMAND_F(rpt_connect, "",
 
   if (args.ArgC() != 4) return;
 
-  const char *pAddress = args.Arg(1);
+  const ch *pAddress = args.Arg(1);
   netadr_t adr(pAddress);
   adr.SetPort(atoi(args.Arg(3)));
 
@@ -342,11 +342,11 @@ CON_COMMAND_F(rpt_connect, "",
 
 // Method to run rcon commands on an rpt-controlled machine
 CON_COMMAND_F(rpt, "Issue an rpt command.", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
-  char message[1024];  // Command message
-  char szParam[256];
+  ch message[1024];  // Command message
+  ch szParam[256];
   message[0] = 0;
   for (int i = 1; i < args.ArgC(); i++) {
-    const char *pParam = args[i];
+    const ch *pParam = args[i];
     // put quotes around empty arguments so we can pass things like this: rcon
     // sv_password "" otherwise the "" on the end is lost
     if (strchr(pParam, ' ') || (Q_strlen(pParam) == 0)) {
