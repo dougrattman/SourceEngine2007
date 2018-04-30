@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: VProf engine integration
 
@@ -26,7 +26,6 @@
 #include "tier1/utlvector.h"
 #include "vprof_record.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifdef VPROF_ENABLED
@@ -70,7 +69,7 @@ static bool g_bVProfNoVSyncOff = false;
 
 class ConsoleLogger {
  public:
-  ConsoleLogger(void) {
+  ConsoleLogger() {
 #if !defined(SWDS)
     m_condebugEnabled = con_debuglog;
 #else
@@ -161,10 +160,7 @@ void PreUpdateProfile(float filteredtime) {
                 ? g_VProfCurrentProfile.BudgetGroupNameToBudgetGroupID(
                       vprof_dump_spikes_budget_group.GetString())
                 : -1);
-#ifdef _XBOX  // X360TBD
-        if (GetLastProfileFileRead())
-          Msg("******* %s\n", GetLastProfileFileRead());
-#endif
+
         LastSpikeTime = Plat_FloatTime();
         LastSpikeFrame = g_ServerGlobalVariables.framecount;
 
@@ -217,6 +213,7 @@ void PreUpdateProfile(float filteredtime) {
   // This MUST come before GetVProfPanel()->UpdateProfile(), because
   // UpdateProfile uses the data we snapshot here.
   VProfExport_SnapshotVProfHistory();
+
 #ifdef VPROF_ENABLED
   VProfRecord_Snapshot();
 #endif
@@ -233,10 +230,6 @@ void PostUpdateProfile() {
     g_VProfCurrentProfile.MarkFrame();
   }
 }
-
-#if defined(_X360)
-void UpdateVXConsoleProfile() { g_VProfCurrentProfile.VXProfileUpdate(); }
-#endif
 
 static bool g_fVprofCacheMissOnByUI = false;
 static char g_szDefferedArg1[128];
@@ -341,27 +334,7 @@ CON_COMMAND(budget_toggle_group, "Turn a budget group on/off") {
                      BUDGETFLAG_HIDDEN));
 }
 
-#if defined(_X360)
-CON_COMMAND(vprof_update, "") {
-  if (args.ArgC() < 2) return;
-
-  const char *pArg = args[1];
-  if (!Q_stricmp(pArg, "cpu")) {
-    g_VProfCurrentProfile.VXEnableUpdateMode(VPROF_UPDATE_BUDGET, true);
-  } else if (!Q_stricmp(pArg, "texture")) {
-    g_VProfCurrentProfile.VXEnableUpdateMode(VPROF_UPDATE_TEXTURE_GLOBAL, true);
-    g_VProfCurrentProfile.VXEnableUpdateMode(VPROF_UPDATE_TEXTURE_PERFRAME,
-                                             false);
-  } else if (!Q_stricmp(pArg, "texture_frame")) {
-    g_VProfCurrentProfile.VXEnableUpdateMode(VPROF_UPDATE_TEXTURE_PERFRAME,
-                                             true);
-    g_VProfCurrentProfile.VXEnableUpdateMode(VPROF_UPDATE_TEXTURE_GLOBAL,
-                                             false);
-  }
-}
-#endif
-
-void VProfOn(void) {
+void VProfOn() {
   CCommand args;
   vprof_on(args);
 }
@@ -371,11 +344,6 @@ DEFERRED_CON_COMMAND(vprof_off, "Turn off VProf profiler") {
     Msg("VProf disabled.\n");
     g_VProfCurrentProfile.Stop();
     g_fVprofOnByUI = false;
-
-#if defined(_X360)
-    // disable all updating
-    g_VProfCurrentProfile.VXEnableUpdateMode(0xFFFFFFFF, false);
-#endif
   }
 }
 
@@ -461,9 +429,7 @@ DEFERRED_CON_COMMAND(vprof_generate_report_map_load,
   g_VProfCurrentProfile.Resume();
 }
 
-// ------------------------------------------------------------------------------------------------------------------------------------
-// // Exports for the dedicated server UI.
-// ------------------------------------------------------------------------------------------------------------------------------------
+// Exports for the dedicated server UI.
 class CVProfExport : public IVProfExport {
  public:
   CVProfExport() {
@@ -650,9 +616,7 @@ void VProfExport_Pause() { g_VProfExport.PauseProfile(); }
 
 void VProfExport_Resume() { g_VProfExport.ResumeProfile(); }
 
-//-----------------------------------------------------------------------------
 // Used to point the budget panel at remote data
-//-----------------------------------------------------------------------------
 void OverrideVProfExport(IVProfExport *pExport) {
   if (g_pVProfExport == &g_VProfExport) {
     g_pVProfExport = pExport;
@@ -665,9 +629,7 @@ void ResetVProfExport(IVProfExport *pExport) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Listener to vprof data
-//-----------------------------------------------------------------------------
 struct VProfListenInfo_t {
   ra_listener_id m_nListenerId;
   float m_flLastSentVProfDataTime;
@@ -686,23 +648,17 @@ struct VProfListenInfo_t {
 
 static CUtlVector<VProfListenInfo_t> s_VProfListeners;
 
-//-----------------------------------------------------------------------------
 // Purpose: serialize and send data to remote listeners
-//-----------------------------------------------------------------------------
 static int FindSentGroupIndex(VProfListenInfo_t &info, const char *pGroupName) {
   int nCount = info.m_SentGroups.Count();
   for (int i = 0; i < nCount; ++i) {
-    if (!Q_strcmp(pGroupName, info.m_SentGroups[i].Get())) return i;
+    if (!strcmp(pGroupName, info.m_SentGroups[i].Get())) return i;
   }
   return -1;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: serialize and send data to remote listeners
-//-----------------------------------------------------------------------------
 void WriteRemoteVProfGroupData(VProfListenInfo_t &info) {
-  if (IsX360()) return;
-
   int nGroupCount = g_pVProfileForDisplay->GetNumBudgetGroups();
   int nInitialCount = info.m_SentGroups.Count();
 
@@ -743,8 +699,6 @@ void WriteRemoteVProfGroupData(VProfListenInfo_t &info) {
 static ConVar rpt_vprof_time("rpt_vprof_time", "0.25",
                              FCVAR_HIDDEN | FCVAR_DONTRECORD, "");
 void WriteRemoteVProfData() {
-  if (IsX360()) return;
-
   // Throttle sending too much data
   float flMaxDelta = rpt_vprof_time.GetFloat();
   float flTime = Plat_FloatTime();
@@ -772,7 +726,7 @@ void WriteRemoteVProfData() {
     s_VProfListeners[i].m_flLastSentVProfDataTime = flTime;
 
     // Re-order send times to match send group order
-    int nSentSize = s_VProfListeners[i].m_SentGroups.Count() * sizeof(float);
+    usize nSentSize = s_VProfListeners[i].m_SentGroups.Count() * sizeof(float);
     float *pSentTimes = (float *)stackalloc(nSentSize);
     memset(pSentTimes, 0, nSentSize);
     for (int j = 0; j < nGroupCount; ++j) {
@@ -786,9 +740,7 @@ void WriteRemoteVProfData() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: add a new endpoint to send data to
-//-----------------------------------------------------------------------------
 void RegisterVProfDataListener(ra_listener_id listenerID) {
   RemoveVProfDataListener(listenerID);
   int nIndex = s_VProfListeners.AddToTail();
@@ -797,9 +749,7 @@ void RegisterVProfDataListener(ra_listener_id listenerID) {
   WriteRemoteVProfGroupData(s_VProfListeners[nIndex]);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: remove an endpoint we are sending data to
-//-----------------------------------------------------------------------------
 void RemoveVProfDataListener(ra_listener_id listenerID) {
   VProfListenInfo_t findInfo(listenerID);
   if (s_VProfListeners.FindAndRemove(findInfo)) {

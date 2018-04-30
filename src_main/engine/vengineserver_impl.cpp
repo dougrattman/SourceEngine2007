@@ -1619,7 +1619,5 @@ void CVEngineServer::TriggerMoved(edict_t *pTriggerEnt,
   SV_TriggerMoved(pTriggerEnt, accurateBboxTriggerChecks);
 }
 
-//-----------------------------------------------------------------------------
 // Called by the server to determine violence settings.
-//-----------------------------------------------------------------------------
-bool CVEngineServer::IsLowViolence() { return g_bLowViolence; }
+bool CVEngineServer::IsLowViolence() { return false; }

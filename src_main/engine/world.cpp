@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "world.h"
 
@@ -18,30 +18,16 @@
 #include "vengineserver_impl.h"
 #include "vphysics_interface.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Method to convert edict to index
-//-----------------------------------------------------------------------------
-static inline int IndexOfEdict(edict_t *pEdict) {
-  return (int)(pEdict - sv.edicts);
-}
-
-//============================================================================
-
-/*
-===============
-SV_ClearWorld
-
-===============
-*/
-void SV_ClearWorld(void) {
+void SV_ClearWorld() {
   MDLCACHE_COARSE_LOCK_(g_pMDLCache);
+
   // Clean up static props from the previous level
-#if !defined(SWDS)
+#ifndef SWDS
   g_pShadowMgr->LevelShutdown();
-#endif  // SWDS
+#endif  // !SWDS
+
   StaticPropMgr()->LevelShutdown();
 
   for (int i = 0; i < 3; i++) {
@@ -51,19 +37,19 @@ void SV_ClearWorld(void) {
           true, "Map coordinate extents are too large!!\nCheck for errors!\n");
     }
   }
+
   SpatialPartition()->Init(host_state.worldmodel->mins,
                            host_state.worldmodel->maxs);
 
   // Load all static props into the spatial partition
   StaticPropMgr()->LevelInit();
-#if !defined(SWDS)
+
+#ifndef SWDS
   g_pShadowMgr->LevelInit(host_state.worldbrush->numsurfaces);
 #endif
 }
 
-//-----------------------------------------------------------------------------
 // Trigger world-space bounds
-//-----------------------------------------------------------------------------
 static void CM_TriggerWorldSpaceBounds(ICollideable *pCollideable,
                                        Vector *pMins, Vector *pMaxs) {
   if (pCollideable->GetSolidFlags() & FSOLID_USE_TRIGGER_BOUNDS) {
@@ -87,9 +73,7 @@ static void CM_GetCollideableTriggerTestBox(ICollideable *pCollide,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Little enumeration class used to try touching all triggers
-//-----------------------------------------------------------------------------
 class CTouchLinks : public IPartitionEnumerator {
  public:
   CTouchLinks(edict_t *pEnt, const Vector *pPrevAbsOrigin,
@@ -250,10 +234,8 @@ class CTriggerMoved : public IPartitionEnumerator {
   bool m_bAccurateBBoxCheck;
 };
 
-//-----------------------------------------------------------------------------
 // Touches triggers. Or, if it is a trigger, causes other things to touch it
 // returns true if untouch needs to be checked
-//-----------------------------------------------------------------------------
 void SV_TriggerMoved(edict_t *pTriggerEnt, bool accurateBboxTriggerChecks) {
   CTriggerMoved triggerEnum(accurateBboxTriggerChecks);
   triggerEnum.TriggerMoved(pTriggerEnt);

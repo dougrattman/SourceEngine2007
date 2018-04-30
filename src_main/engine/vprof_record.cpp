@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vprof_record.h"
 
@@ -16,7 +16,6 @@
 
 CVProfile *g_pVProfileForDisplay = &g_VProfCurrentProfile;
 
- 
 #include "tier0/include/memdbgon.h"
 
 long GetFileSize(FILE *fp) {
@@ -27,13 +26,9 @@ long GetFileSize(FILE *fp) {
   return ret;
 }
 
-// ------------------------------------------------------------------------------------------------------------------------------------
-// // VProf record mode. Turn it on to record all the vprof data, then when
+// VProf record mode. Turn it on to record all the vprof data, then when
 // you're playing back, the engine's budget and vprof panels show the data from
 // the recording instead of the real data.
-// ------------------------------------------------------------------------------------------------------------------------------------
-// //
-
 class CVProfRecorder : public CVProfile {
  public:
   CVProfRecorder() {
