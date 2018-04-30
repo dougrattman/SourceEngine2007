@@ -1319,9 +1319,9 @@ void CMaterialSystem::ReadConfigFromConVars(MaterialSystem_Config_t *pConfig) {
 //-----------------------------------------------------------------------------
 static bool WasConVarSpecifiedOnCommandLine(const char *pConfigName) {
   // mat_dxlevel cannot be used on the command-line. Use -dxlevel instead.
-  if (!Q_stricmp(pConfigName, "mat_dxlevel")) return false;
+  if (!_stricmp(pConfigName, "mat_dxlevel")) return false;
 
-  return (g_pCVar->GetCommandLineValue(pConfigName) != NULL);
+  return g_pCVar->GetCommandLineValue(pConfigName) != nullptr;
 }
 
 static const char *pConvarsAllowedInDXSupport[] = {

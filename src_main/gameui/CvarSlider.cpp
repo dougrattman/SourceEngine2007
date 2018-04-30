@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "CvarSlider.h"
 
@@ -11,7 +11,6 @@
 
 #define CVARSLIDER_SCALE_FACTOR 100.0f
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -57,15 +56,13 @@ void CCvarSlider::SetupSlider(float minValue, float maxValue,
   SetRange((int)(CVARSLIDER_SCALE_FACTOR * minValue),
            (int)(CVARSLIDER_SCALE_FACTOR * maxValue));
 
-  char szMin[32];
-  char szMax[32];
-
-  Q_snprintf(szMin, sizeof(szMin), "%.2f", minValue);
-  Q_snprintf(szMax, sizeof(szMax), "%.2f", maxValue);
+  char szMin[32], szMax[32];
+  sprintf_s(szMin, "%.2f", minValue);
+  sprintf_s(szMax, "%.2f", maxValue);
 
   SetTickCaptions(szMin, szMax);
 
-  Q_strncpy(m_szCvarName, cvarname, sizeof(m_szCvarName));
+  strcpy_s(m_szCvarName, cvarname);
 
   m_bModifiedOnce = false;
   m_bAllowOutOfRange = bAllowOutOfRange;

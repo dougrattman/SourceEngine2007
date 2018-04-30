@@ -46,7 +46,7 @@ int GetAllNeighbors(const CCoreDispInfo *pDisp,
   for (int iCorner = 0; iCorner < 4; iCorner++) {
     const CDispCornerNeighbors *pCorner = pDisp->GetCornerNeighbors(iCorner);
 
-    for (int i = 0; i < pCorner->m_nNeighbors; i++) {
+    for (usize i = 0; i < pCorner->m_nNeighbors; i++) {
       if (nNeighbors < SOURCE_ARRAYSIZE(iNeighbors))
         iNeighbors[nNeighbors++] = pCorner->m_Neighbors[i];
     }
