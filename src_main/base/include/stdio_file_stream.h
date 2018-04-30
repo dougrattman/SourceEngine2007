@@ -22,7 +22,9 @@ class stdio_file_stream {
 
  public:
   // Move constructor.
-  stdio_file_stream(stdio_file_stream&& f) noexcept : fd_{f.fd_} { f.fd_ = nullptr; }
+  stdio_file_stream(stdio_file_stream&& f) noexcept : fd_{f.fd_} {
+    f.fd_ = nullptr;
+  }
 
   // Move assignment operator.
   stdio_file_stream& operator=(stdio_file_stream&& f) noexcept {
@@ -35,7 +37,8 @@ class stdio_file_stream {
   }
 
   // Like fscanf_s, read from file by |format|.
-  io_result<size_t> scan(_In_z_ _Scanf_s_format_string_ const char* format, ...) const noexcept {
+  io_result<size_t> scan(_In_z_ _Scanf_s_format_string_ const char* format,
+                         ...) const noexcept {
     // fscanf_s analog.
     int fields_assigned_count;
     va_list arg_list;
@@ -50,12 +53,22 @@ class stdio_file_stream {
   // Like fgetc, get char from file.
   io_result<int> getc() const noexcept {
     int c = fgetc(fd_);
-    return {c, c != EOF ? make_posix_errno_info(EOK) : make_posix_errno_info(ferror(fd_))};
+    return {
+        c, c != EOF ? posix_errno_info_ok : make_posix_errno_info(ferror(fd_))};
+  }
+
+  // Like fgets, get C string from file.
+  template <size_t buffer_size>
+  io_result<char*> gets(char (&buffer)[buffer_size]) const noexcept {
+    char* string = fgets(buffer, buffer_size, fd_);
+    return {string, string != nullptr ? posix_errno_info_ok
+                                      : make_posix_errno_info(ferror(fd_))};
   }
 
   // Reads into |buffer| of size |buffer_size| |elements_count| elements.
   template <typename T, size_t buffer_size>
-  io_result<size_t> read(T (&buffer)[buffer_size], size_t elements_count) const noexcept {
+  io_result<size_t> read(T (&buffer)[buffer_size], size_t elements_count) const
+      noexcept {
     return read(buffer, buffer_size * sizeof(T), sizeof(T), elements_count);
   }
 
@@ -90,7 +103,8 @@ class stdio_file_stream {
   }
 
   // Like fprintf_s, write to file by |format|.
-  io_result<size_t> print(_In_z_ _Printf_format_string_ const char* format, ...) const noexcept {
+  io_result<size_t> print(_In_z_ _Printf_format_string_ const char* format,
+                          ...) const noexcept {
     // fprintf_s analog.
     int bytes_written_count;
     va_list arg_list;
@@ -98,12 +112,14 @@ class stdio_file_stream {
     bytes_written_count = _vfprintf_s_l(fd_, format, nullptr, arg_list);
     va_end(arg_list);
 
-    return {bytes_written_count >= 0 ? bytes_written_count : 0, make_posix_errno_info(ferror(fd_))};
+    return {bytes_written_count >= 0 ? bytes_written_count : 0,
+            make_posix_errno_info(ferror(fd_))};
   }
 
   // Writes |elements_count| elements from |buffer| to file.
   template <typename T, size_t buffer_size>
-  io_result<size_t> write(T (&buffer)[buffer_size], size_t elements_count) const noexcept {
+  io_result<size_t> write(T (&buffer)[buffer_size], size_t elements_count) const
+      noexcept {
     return write(&buffer, sizeof(T), elements_count);
   }
 
@@ -122,25 +138,31 @@ class stdio_file_stream {
   // stdio file descriptor.
   FILE* fd_;
 
-  // Reads data from file into |buffer| of size |buffer_size_bytes| with element of
-  // |element_size_bytes| and elements count |max_elements_count|.  Gets "the number of
-  // (whole) items that were read into the buffer, which may be less than count if a read
-  // error or the end of the file is encountered before count is reached".  Uses fread_s
-  // internally, see
+  // Reads data from file into |buffer| of size |buffer_size_bytes| with element
+  // of |element_size_bytes| and elements count |max_elements_count|.  Gets "the
+  // number of (whole) items that were read into the buffer, which may be less
+  // than count if a read error or the end of the file is encountered before
+  // count is reached".  Uses fread_s internally, see
   // https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fread-s.
   [[nodiscard]] io_result<size_t> read(void* buffer, size_t buffer_size_bytes,
-                                       size_t element_size_bytes, size_t max_elements_count) const
+                                       size_t element_size_bytes,
+                                       size_t max_elements_count) const
       noexcept {
-    return {fread_s(buffer, buffer_size_bytes, element_size_bytes, max_elements_count, fd_),
+    return {fread_s(buffer, buffer_size_bytes, element_size_bytes,
+                    max_elements_count, fd_),
             make_posix_errno_info(ferror(fd_))};
   }
 
-  // Writes data from |buffer| of size |element_size_bytes| and count |max_elements_count| to file.
-  // Gets "the number of full items actually written, which may be less than count if an error
-  // occurs. Also, if an error occurs, the file-position indicator cannot be determined".  Uses
-  // fwrite internally, see https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fwrite.
-  [[nodiscard]] io_result<size_t> write(const void* buffer, size_t element_size_bytes,
-                                        size_t max_elements_count) const noexcept {
+  // Writes data from |buffer| of size |element_size_bytes| and count
+  // |max_elements_count| to file. Gets "the number of full items actually
+  // written, which may be less than count if an error occurs. Also, if an error
+  // occurs, the file-position indicator cannot be determined".  Uses fwrite
+  // internally, see
+  // https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fwrite.
+  [[nodiscard]] io_result<size_t> write(const void* buffer,
+                                        size_t element_size_bytes,
+                                        size_t max_elements_count) const
+      noexcept {
     return {std::fwrite(buffer, element_size_bytes, max_elements_count, fd_),
             make_posix_errno_info(ferror(fd_))};
   }
@@ -156,7 +178,9 @@ class stdio_file_stream {
   stdio_file_stream(_In_ FILE* fd) noexcept : fd_{fd} {}
 
   // Empty file stream, invalid.
-  static stdio_file_stream null() noexcept { return stdio_file_stream{nullptr}; }
+  static stdio_file_stream null() noexcept {
+    return stdio_file_stream{nullptr};
+  }
 
   stdio_file_stream(const stdio_file_stream& f) = delete;
   stdio_file_stream& operator=(const stdio_file_stream& f) = delete;
@@ -171,15 +195,18 @@ class stdio_file_stream_factory {
     FILE* fd;
     const posix_errno_code errno_code{fopen_s(&fd, file_path, mode)};
     return errno_code == EOK
-               ? std::make_tuple(stdio_file_stream{fd}, make_posix_errno_info(EOK))
-               : std::make_tuple(stdio_file_stream::null(), make_posix_errno_info(errno_code));
+               ? std::make_tuple(stdio_file_stream{fd},
+                                 make_posix_errno_info(EOK))
+               : std::make_tuple(stdio_file_stream::null(),
+                                 make_posix_errno_info(errno_code));
   }
 
  private:
   stdio_file_stream_factory() = delete;
   ~stdio_file_stream_factory() = delete;
   stdio_file_stream_factory(const stdio_file_stream_factory& f) = delete;
-  stdio_file_stream_factory& operator=(const stdio_file_stream_factory& f) = delete;
+  stdio_file_stream_factory& operator=(const stdio_file_stream_factory& f) =
+      delete;
 };
 }  // namespace source
 

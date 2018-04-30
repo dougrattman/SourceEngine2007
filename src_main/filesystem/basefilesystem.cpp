@@ -455,7 +455,6 @@ FILE *CBaseFileSystem::Trace_FOpen(const char *filename, const char *options,
                        FileBlockingItem::FB_ACCESS_OPEN);
 
   FILE *fp = FS_fopen(filename, options, flags, size, pInfo);
-
   if (fp) {
     FS_setbufsize(
         fp, options[0] == 'r' ? filesystem_buffer_size.GetInt() : 32 * 1024);
@@ -469,6 +468,12 @@ FILE *CBaseFileSystem::Trace_FOpen(const char *filename, const char *options,
     m_OpenedFiles.AddToTail(file);
 
     LogAccessToFile("open", filename, options);
+  } else {
+    if (m_fwLevel >= FILESYSTEM_WARNING_REPORTALLACCESSES) {
+      Warning(FILESYSTEM_WARNING_REPORTALLACCESSES,
+              "Tried to open %s with options %s, but failed: %s\n", filename,
+              options, source::posix_errno_info_last_error().description);
+    }
   }
 
   return fp;
@@ -2204,14 +2209,14 @@ FileHandle_t CBaseFileSystem::FindFileInSearchPaths(
   // Run through all the search paths.
   CSearchPathsIterator iter(this, &pFileName, pathID, FILTER_NONE);
 
-  for (CSearchPath *pSearchPath = iter.GetFirst(); pSearchPath != nullptr;
-       pSearchPath = iter.GetNext()) {
-    FileHandle_t filehandle = FindFile(pSearchPath, pFileName, pOptions, flags,
+  for (auto *search_path = iter.GetFirst(); search_path != nullptr;
+       search_path = iter.GetNext()) {
+    FileHandle_t filehandle = FindFile(search_path, pFileName, pOptions, flags,
                                        ppszResolvedFilename, bTrackCRCs);
     if (filehandle) return filehandle;
   }
 
-  return (FileHandle_t)0;
+  return (FileHandle_t) nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -2249,16 +2254,16 @@ FileHandle_t CBaseFileSystem::OpenForWrite(const char *pFileName,
 
   int64_t size;
   FILE *fp = Trace_FOpen(pTmpFileName, pOptions, 0, &size);
-  if (!fp) {
-    return (FileHandle_t)0;
+  if (fp) {
+    CFileHandle *fh = new CFileHandle{this};
+    fh->m_nLength = size;
+    fh->m_type = FT_NORMAL;
+    fh->m_pFile = fp;
+
+    return (FileHandle_t)fh;
   }
 
-  CFileHandle *fh = new CFileHandle(this);
-  fh->m_nLength = size;
-  fh->m_type = FT_NORMAL;
-  fh->m_pFile = fp;
-
-  return (FileHandle_t)fh;
+  return (FileHandle_t) nullptr;
 }
 
 // This looks for UNC-type filename specifiers, which should be used instead of

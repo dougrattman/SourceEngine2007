@@ -58,26 +58,26 @@ class CFileSystem_Stdio : public CBaseFileSystem {
 
  protected:
   // implementation of CBaseFileSystem virtual functions
-  virtual FILE *FS_fopen(const char *filename, const char *options,
-                         unsigned flags, int64_t *size, CFileLoadInfo *pInfo);
-  virtual void FS_setbufsize(FILE *fp, unsigned nBytes);
-  virtual void FS_fclose(FILE *fp);
-  virtual void FS_fseek(FILE *fp, int64_t pos, int seekType);
-  virtual long FS_ftell(FILE *fp);
-  virtual int FS_feof(FILE *fp);
-  virtual size_t FS_fread(void *dest, size_t destSize, size_t size, FILE *fp);
-  virtual size_t FS_fwrite(const void *src, size_t size, FILE *fp);
-  virtual bool FS_setmode(FILE *fp, FileMode_t mode);
-  virtual size_t FS_vfprintf(FILE *fp, const char *fmt, va_list list);
-  virtual int FS_ferror(FILE *fp);
-  virtual int FS_fflush(FILE *fp);
-  virtual char *FS_fgets(char *dest, int destSize, FILE *fp);
-  virtual int FS_stat(const char *path, struct _stat *buf);
-  virtual int FS_chmod(const char *path, int pmode);
-  virtual HANDLE FS_FindFirstFile(const char *findname, WIN32_FIND_DATA *dat);
-  virtual bool FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat);
-  virtual bool FS_FindClose(HANDLE handle);
-  virtual int FS_GetSectorSize(FILE *);
+  FILE *FS_fopen(const char *filename, const char *options, unsigned flags,
+                 int64_t *size, CFileLoadInfo *pInfo) override;
+  void FS_setbufsize(FILE *fp, size_t nBytes) override;
+  void FS_fclose(FILE *fp) override;
+  void FS_fseek(FILE *fp, int64_t pos, int seekType) override;
+  int64_t FS_ftell(FILE *fp) override;
+  int FS_feof(FILE *fp) override;
+  size_t FS_fread(void *dest, size_t destSize, size_t size, FILE *fp) override;
+  size_t FS_fwrite(const void *src, size_t size, FILE *fp) override;
+  bool FS_setmode(FILE *fp, FileMode_t mode) override;
+  size_t FS_vfprintf(FILE *fp, const char *fmt, va_list list) override;
+  int FS_ferror(FILE *fp) override;
+  int FS_fflush(FILE *fp) override;
+  char *FS_fgets(char *dest, int destSize, FILE *fp) override;
+  int FS_stat(const char *path, struct _stat *buf) override;
+  int FS_chmod(const char *path, int pmode) override;
+  HANDLE FS_FindFirstFile(const char *findname, WIN32_FIND_DATA *dat) override;
+  bool FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) override;
+  bool FS_FindClose(HANDLE handle) override;
+  int FS_GetSectorSize(FILE *) override;
 
  private:
   bool CanAsync() const { return can_be_async_; }
@@ -366,9 +366,9 @@ class Win32ReadOnlyFile : public IStdFilesystemFile {
 
     if (size) *size = file_size;
 
-    return new Win32ReadOnlyFile(unbuffered_file, buffered_file,
+    return new Win32ReadOnlyFile{unbuffered_file, buffered_file,
                                  storage_sector_size ? storage_sector_size : 1,
-                                 file_size, is_overlapped);
+                                 file_size, is_overlapped};
   }
 
   int FS_setbufsize(size_t nBytes) override { return 0; }
@@ -588,7 +588,7 @@ FILE *CFileSystem_Stdio::FS_fopen(const char *filename, const char *options,
   return (FILE *)StdioFile::FS_fopen(filename, options, size);
 }
 
-void CFileSystem_Stdio::FS_setbufsize(FILE *fp, unsigned nBytes) {
+void CFileSystem_Stdio::FS_setbufsize(FILE *fp, size_t nBytes) {
   ((IStdFilesystemFile *)fp)->FS_setbufsize(nBytes);
 }
 
@@ -602,7 +602,7 @@ void CFileSystem_Stdio::FS_fseek(FILE *fp, int64_t pos, int seekType) {
   ((IStdFilesystemFile *)fp)->FS_fseek(pos, seekType);
 }
 
-long CFileSystem_Stdio::FS_ftell(FILE *fp) {
+int64_t CFileSystem_Stdio::FS_ftell(FILE *fp) {
   return ((IStdFilesystemFile *)fp)->FS_ftell();
 }
 

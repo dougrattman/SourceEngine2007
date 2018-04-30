@@ -824,10 +824,10 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   virtual FILE *FS_fopen(const char *filename, const char *options,
                          unsigned flags, int64_t *size,
                          CFileLoadInfo *pInfo) = 0;
-  virtual void FS_setbufsize(FILE * fp, unsigned nBytes) = 0;
+  virtual void FS_setbufsize(FILE * fp, size_t nBytes) = 0;
   virtual void FS_fclose(FILE * fp) = 0;
   virtual void FS_fseek(FILE * fp, int64_t pos, int seekType) = 0;
-  virtual long FS_ftell(FILE * fp) = 0;
+  virtual int64_t FS_ftell(FILE * fp) = 0;
   virtual int FS_feof(FILE * fp) = 0;
   size_t FS_fread(void *dest, size_t size, FILE *fp) {
     return FS_fread(dest, (size_t)-1, size, fp);
