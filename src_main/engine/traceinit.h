@@ -1,12 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Allows matching of initialization and shutdown function calls
 
-#if !defined(TRACEINIT_H)
+#ifndef TRACEINIT_H
 #define TRACEINIT_H
 
-void TraceInit(const char *i, const char *s, int list);
-void TraceShutdown(const char *s, int list);
+#include "base/include/base_types.h"
+
+bool TraceInit(const ch *i, const ch *s, usize list);
+bool TraceShutdown(const ch *s, usize list);
 
 #define TRACEINITNUM(initfunc, shutdownfunc, num) \
   TraceInit(#initfunc, #shutdownfunc, num);       \

@@ -9,115 +9,100 @@
 
 #include "tier0/include/memdbgon.h"
 
-class CInitTracker {
+namespace {
+// Tracks init/shutdown sequence.
+class InitializationTracker {
  public:
-  enum {
-    NUM_LISTS = 4,
-  };
+  static InitializationTracker &Instance() {
+    static InitializationTracker initialization_tracker;
+    return initialization_tracker;
+  }
 
-  struct InitFunc {
-    const char *initname;
-    const char *shutdownname;
-    int referencecount;
-    int sequence;
-    bool warningprinted;
-    // Profiling data
-    float inittime;
-    float shutdowntime;
-  };
+  ~InitializationTracker() {
+    usize l = 0;
+    for (auto &func : init_function_counts_) {
+      // assert( m_nNumFuncs[l] == 0 );
+      for (usize i = 0; i < func; i++) {
+        InitFunction *f = init_functions_[l][i];
+        if (f->RefCount) {
+          Msg("Missing shutdown function for %s : %s.\n", f->InitName,
+              f->ShutdownName);
+        }
+        delete f;
+      }
+      init_functions_[l++].RemoveAll();
+      func = 0;
+    }
+  }
 
-  CInitTracker(void);
-  ~CInitTracker(void);
+  bool Init(const ch *init, const ch *shutdown, usize listnum) {
+    auto *f = new InitFunction{init, shutdown, 1, false, 0.0f, 0.0f};
+    if (f) {
+      init_functions_[listnum].AddToHead(f);
+      init_function_counts_[listnum]++;
+      return true;
+    }
 
-  void Init(const char *init, const char *shutdown, int listnum);
-  void Shutdown(const char *shutdown, int listnum);
+    return false;
+  }
+  bool Shutdown(const ch *shutdown, usize listnum) {
+    if (!init_function_counts_[listnum]) {
+      Msg("Mismatched shutdown function %s.\n", shutdown);
+      return false;
+    }
+
+    InitFunction *f = nullptr;
+    for (usize i = 0; i < init_function_counts_[listnum]; i++) {
+      f = init_functions_[listnum][i];
+      if (f->RefCount) break;
+    }
+
+    if (f && f->RefCount && _stricmp(f->ShutdownName, shutdown)) {
+      if (!f->IsWarningPrinted) {
+        f->IsWarningPrinted = true;
+        Msg("Shutdown function %s called out of order, expecting %s.\n",
+            shutdown, f->ShutdownName);
+      }
+    }
+
+    for (usize i = 0; i < init_function_counts_[listnum]; i++) {
+      InitFunction *ff = init_functions_[listnum][i];
+
+      if (!_stricmp(ff->ShutdownName, shutdown)) {
+        Assert(ff->RefCount);
+        ff->RefCount--;
+        return true;
+      }
+    }
+
+    Msg("Shutdown function %s not in list.\n", shutdown);
+    return false;
+  }
 
  private:
-  int m_nNumFuncs[NUM_LISTS];
-  CUtlVector<InitFunc *> m_Funcs[NUM_LISTS];
+  struct InitFunction {
+    const ch *InitName, *ShutdownName;
+    usize RefCount;
+    bool IsWarningPrinted;
+    // Profiling data
+    f32 InitStamp, ShutdownStamp;
+  };
+
+  InitializationTracker() {
+    for (auto &func : init_function_counts_) func = 0;
+  }
+
+  usize init_function_counts_[4];
+  CUtlVector<InitFunction *> init_functions_[4];
 };
+}  // namespace
 
-static CInitTracker g_InitTracker;
-
-CInitTracker::CInitTracker(void) {
-  for (int l = 0; l < NUM_LISTS; l++) {
-    m_nNumFuncs[l] = 0;
-  }
-}
-
-CInitTracker::~CInitTracker(void) {
-  for (int l = 0; l < NUM_LISTS; l++) {
-    // assert( m_nNumFuncs[l] == 0 );
-    for (int i = 0; i < m_nNumFuncs[l]; i++) {
-      InitFunc *f = m_Funcs[l][i];
-      if (f->referencecount) {
-        Msg("Missing shutdown function for %s : %s\n", f->initname,
-            f->shutdownname);
-      }
-      delete f;
-    }
-    m_Funcs[l].RemoveAll();
-    m_nNumFuncs[l] = 0;
-  }
-}
-
-void CInitTracker::Init(const char *init, const char *shutdown, int listnum) {
-  InitFunc *f = new InitFunc;
-  Assert(f);
-  f->initname = init;
-  f->shutdownname = shutdown;
-  f->sequence = m_nNumFuncs[listnum];
-  f->referencecount = 1;
-  f->warningprinted = false;
-  f->inittime = 0.0;  // Plat_FloatTime();
-  f->shutdowntime = 0.0;
-
-  m_Funcs[listnum].AddToHead(f);
-  m_nNumFuncs[listnum]++;
-}
-
-void CInitTracker::Shutdown(const char *shutdown, int listnum) {
-  if (!m_nNumFuncs[listnum]) {
-    Msg("Mismatched shutdown function %s\n", shutdown);
-    return;
-  }
-
-  InitFunc *f = NULL;
-  for (int i = 0; i < m_nNumFuncs[listnum]; i++) {
-    f = m_Funcs[listnum][i];
-    if (f->referencecount) break;
-  }
-
-  if (f && f->referencecount && _stricmp(f->shutdownname, shutdown)) {
-    if (!f->warningprinted) {
-      f->warningprinted = true;
-      // Msg( "Shutdown function %s called out of order, expecting %s\n",
-      // shutdown, f->shutdownname );
-    }
-  }
-
-  for (int i = 0; i < m_nNumFuncs[listnum]; i++) {
-    InitFunc *ff = m_Funcs[listnum][i];
-
-    if (!_stricmp(ff->shutdownname, shutdown)) {
-      Assert(ff->referencecount);
-      // f->shutdowntime = Plat_FloatTime();
-      ff->referencecount--;
-      return;
-    }
-  }
-
-  Msg("Shutdown function %s not in list!!!\n", shutdown);
-}
-
-void TraceInit(const char *i, const char *s, int listnum) {
-  g_InitTracker.Init(i, s, listnum);
-
+bool TraceInit(const ch *i, const ch *s, usize listnum) {
   Plat_TimestampedLog("TraceInit: %s", i);
+  return InitializationTracker::Instance().Init(i, s, listnum);
 }
 
-void TraceShutdown(const char *s, int listnum) {
-  g_InitTracker.Shutdown(s, listnum);
-
+bool TraceShutdown(const ch *s, usize listnum) {
   Plat_TimestampedLog("TraceShutdown: %s", s);
+  return InitializationTracker::Instance().Shutdown(s, listnum);
 }
