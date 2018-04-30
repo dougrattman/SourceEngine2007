@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Expose functions from sys_dll.cpp.
 
@@ -7,9 +7,6 @@
 
 #include "tier1/interface.h"
 
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 class IHammer;
 class IDataCache;
 class IPhysics;
@@ -23,9 +20,8 @@ class ISoundEmitterSystemBase;
 
 typedef unsigned short AVIHandle_t;
 
-//-----------------------------------------------------------------------------
 // Class factories
-//-----------------------------------------------------------------------------
+
 // This factory gets to many of the major app-single systems,
 // including the material system, vgui, vgui surface, the file system.
 extern CreateInterfaceFn g_AppSystemFactory;
@@ -33,9 +29,6 @@ extern CreateInterfaceFn g_AppSystemFactory;
 // this factory connect the AppSystemFactory + client.dll + gameui.dll
 extern CreateInterfaceFn g_GameSystemFactory;
 
-//-----------------------------------------------------------------------------
-// Singleton interfaces
-//-----------------------------------------------------------------------------
 extern IHammer *g_pHammer;
 extern IDataCache *g_pDataCache;
 extern IPhysics *g_pPhysics;
@@ -46,12 +39,9 @@ extern IAvi *avi;
 extern IBik *bik;
 extern IDedicatedExports *dedicated;
 
-//-----------------------------------------------------------------------------
-// Other singletons
-//-----------------------------------------------------------------------------
 extern AVIHandle_t g_hCurrentAVI;
 
-inline bool InEditMode() { return g_pHammer != NULL; }
+inline bool InEditMode() { return g_pHammer != nullptr; }
 
 struct modinfo_t {
   char szInfo[256];
@@ -65,8 +55,12 @@ struct modinfo_t {
 
 extern modinfo_t gmodinfo;
 
+bool Sys_InitGame(CreateInterfaceFn create_interface_fn,
+                 const ch *base_directory, void *window, bool is_dedicated);
+void Sys_ShutdownGame();
+
 void LoadEntityDLLs(const char *szBaseDir);
-void UnloadEntityDLLs(void);
+void UnloadEntityDLLs();
 
 // This returns true if someone called Error() or Sys_Error() and we're exiting.
 // Since we call exit() from inside those, some destructors need to be safe and

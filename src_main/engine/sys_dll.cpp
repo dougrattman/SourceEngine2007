@@ -1,13 +1,10 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifdef _WIN32
-#include "base/include/windows/windows_light.h"
-#endif
-
 #include "sys_dll.h"
 
 #include "DevShotGenerator.h"
 #include "MapReslistGenerator.h"
+#include "build/include/build_config.h"
 #include "cdll_engine_int.h"
 #include "cmd.h"
 #include "crtmemdebug.h"
@@ -22,6 +19,7 @@
 #include "idedicatedexports.h"
 #include "igame.h"
 #include "ihltvdirector.h"
+#include "initmathlib.h"
 #include "ivideomode.h"
 #include "keys.h"
 #include "profiling.h"
@@ -32,13 +30,15 @@
 #include "sv_main.h"
 #include "sys.h"
 #include "tier0/include/icommandline.h"
+#include "tier0/include/minidump.h"
 #include "tier0/include/vcrmode.h"
 #include "toolframework/itoolframework.h"
 #include "traceinit.h"
 #include "vengineserver_impl.h"
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #include <io.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/systeminformation.h"
 #include "vgui_baseui_interface.h"
 #endif
@@ -74,7 +74,7 @@ void COM_InitFilesystem(const char *pFullModPath);
 
 modinfo_t gmodinfo;
 
-#ifdef _WIN32
+#ifdef OS_WIN
 extern HWND *pmainwindow;
 #endif
 char gszDisconnectReason[256];
@@ -114,9 +114,6 @@ int g_iServerGameClientsVersion =
 
 IHLTVDirector *serverGameDirector = nullptr;
 
-void Sys_InitArgv(char *lpCmdLine);
-void Sys_ShutdownArgv();
-
 // Purpose: Compare file times.
 int Sys_CompareFileTime(long ft1, long ft2) {
   if (ft1 < ft2) {
@@ -135,30 +132,30 @@ inline bool IsSlash(char c) { return c == '\\' || c == '/'; }
 
 // Purpose: Create specified directory
 void Sys_mkdir(const char *path) {
-  char testpath[MAX_OSPATH];
-
+  char test_path[SOURCE_MAX_PATH];
   // Remove any terminal backslash or /
-  Q_strncpy(testpath, path, sizeof(testpath));
-  int nLen = Q_strlen(testpath);
-  if ((nLen > 0) && IsSlash(testpath[nLen - 1])) {
-    testpath[nLen - 1] = 0;
+  strcpy_s(test_path, path);
+
+  const usize path_len{strlen(test_path)};
+  if (path_len > 0 && IsSlash(test_path[path_len - 1])) {
+    test_path[path_len - 1] = '\0';
   }
 
   // Look for URL
-  const char *pPathID = "MOD";
-  if (IsSlash(testpath[0]) && IsSlash(testpath[1])) {
-    pPathID = nullptr;
+  const char *path_id{"MOD"};
+  if (IsSlash(test_path[0]) && IsSlash(test_path[1])) {
+    path_id = nullptr;
   }
 
-  if (g_pFileSystem->FileExists(testpath, pPathID)) {
+  if (g_pFileSystem->FileExists(test_path, path_id)) {
     // if there is a file of the same name as the directory we want to make,
     // just kill it
-    if (!g_pFileSystem->IsDirectory(testpath, pPathID)) {
-      g_pFileSystem->RemoveFile(testpath, pPathID);
+    if (!g_pFileSystem->IsDirectory(test_path, path_id)) {
+      g_pFileSystem->RemoveFile(test_path, path_id);
     }
   }
 
-  g_pFileSystem->CreateDirHierarchy(path, pPathID);
+  g_pFileSystem->CreateDirHierarchy(path, path_id);
 }
 
 const char *Sys_FindFirst(const char *path, char *basename, int namelength) {
@@ -218,15 +215,15 @@ void Sys_Printf(const char *format, ...) {
   char message[1024];
 
   va_start(arg_ptr, format);
-  Q_vsnprintf(message, SOURCE_ARRAYSIZE(message), format, arg_ptr);
+  vsprintf_s(message, format, arg_ptr);
   va_end(arg_ptr);
 
   if (developer.GetInt()) {
-#ifdef _WIN32
-    wchar_t unicode_message[2048];
-    ::MultiByteToWideChar(CP_UTF8, 0, message, -1, unicode_message,
-                          SOURCE_ARRAYSIZE(unicode_message));
-    unicode_message[SOURCE_ARRAYSIZE(unicode_message) - 1] = L'\0';
+#ifdef OS_WIN
+    wch unicode_message[2048];
+    MultiByteToWideChar(CP_UTF8, 0, message, -1, unicode_message,
+                        std::size(unicode_message));
+    unicode_message[std::size(unicode_message) - 1] = L'\0';
 
     OutputDebugStringW(unicode_message);
     Sleep(0);
@@ -234,16 +231,16 @@ void Sys_Printf(const char *format, ...) {
   }
 
   if (s_bIsDedicated) {
-    printf("%s", message);
+    fprintf_s(stdout, "%s", message);
   }
 }
 
 bool Sys_MessageBox(const char *title, const char *info,
-                    bool bShowOkAndCancel) {
-#ifdef _WIN32
-  return IDOK == ::MessageBox(nullptr, title, info,
-                              MB_ICONEXCLAMATION |
-                                  (bShowOkAndCancel ? MB_OKCANCEL : MB_OK));
+                    bool should_show_ok_cancel) {
+#ifdef OS_WIN
+  return IDOK == MessageBox(nullptr, title, info,
+                            MB_ICONEXCLAMATION |
+                                (should_show_ok_cancel ? MB_OKCANCEL : MB_OK));
 #elif OS_POSIX
   Warning("%s\n", info);
   return true;
@@ -254,14 +251,12 @@ bool Sys_MessageBox(const char *title, const char *info,
 
 // Purpose: Exit engine with error.
 void Sys_Error(const char *format, ...) {
-  extern char g_minidumpinfo[4096];
-
   va_list arg_ptr;
   char error_message[1024];
   static bool bReentry = false;  // Don't meltdown
 
   va_start(arg_ptr, format);
-  Q_vsnprintf(error_message, SOURCE_ARRAYSIZE(error_message), format, arg_ptr);
+  vsprintf_s(error_message, format, arg_ptr);
   va_end(arg_ptr);
 
   if (bReentry) {
@@ -278,57 +273,28 @@ void Sys_Error(const char *format, ...) {
   }
 
   g_bInErrorExit = true;
-#if !defined(SWDS)
+
+#ifndef SWDS
   if (videomode) videomode->Shutdown();
 #endif
 
-#ifdef _WIN32
+#ifdef OS_WIN
   if (!CommandLine()->FindParm("-makereslists") &&
       !CommandLine()->FindParm("-nomessagebox")) {
-    ::MessageBox(nullptr, error_message, "Awesome Engine - Error",
-                 MB_OK | MB_ICONERROR | MB_TOPMOST);
+    MessageBox(nullptr, error_message, "Awesome Engine - Error",
+               MB_OK | MB_ICONERROR | MB_TOPMOST);
   }
 
   DebuggerBreakIfDebugging();
 
-#if !defined(NO_STEAM) && !defined(SWDS) && !defined(LINUX)
-  char errorText[4096];
-  V_strcpy(errorText, "Sys_Error: ");
-  V_strncat(errorText, message, sizeof(errorText));
-  V_strncat(errorText, "\n", sizeof(errorText));
-  V_strncat(errorText, g_minidumpinfo, sizeof(errorText));
-
-  SteamAPI_SetMiniDumpComment(errorText);
-#endif
-
   if (!Plat_IsInDebugSession() && !CommandLine()->FindParm("-nominidumps")) {
-#ifndef NO_STEAM
-    // MiniDumpWrite() has problems capturing the calling thread's context
-    // unless it is called with an exception context.  So fake an exception.
-    __try {
-      RaiseException(0,                         // dwExceptionCode
-                     EXCEPTION_NONCONTINUABLE,  // dwExceptionFlags
-                     0,                         // nNumberOfArguments,
-                     NULL                       // const ULONG_PTR* lpArguments
-      );
-
-      // Never get here (non-continuable exception)
-    }
-    // Write the minidump from inside the filter (GetExceptionInformation() is
-    // only valid in the filter)
-
-    __except (
-        SteamAPI_WriteMiniDump(0, GetExceptionInformation(), build_number()),
-        EXCEPTION_EXECUTE_HANDLER) {
-      // We always get here because the above filter evaluates to
-      // EXCEPTION_EXECUTE_HANDLER
-    }
-#endif
+    WriteMiniDump();
   }
 #endif
 
   host_initialized = false;
-#if defined(_WIN32)
+
+#ifdef OS_WIN
   // We don't want global destructors in our process OR in any DLL to get
   // executed. _exit() avoids calling global destructors in our module, but not
   // in other DLLs.
@@ -341,16 +307,16 @@ void Sys_Error(const char *format, ...) {
 bool IsInErrorExit() { return g_bInErrorExit; }
 
 void Sys_Sleep(int msec) {
-#ifdef _WIN32
+#ifdef OS_WIN
   Sleep(msec);
 #elif OS_POSIX
   usleep(msec);
 #endif
 }
 
-// Purpose: Allocate memory for engine hunk.
+// Allocate memory for engine hunk.
 void Sys_InitMemory() {
-#ifdef _WIN32
+#ifdef OS_WIN
   // Allow overrides.
   const size_t heap_size = CommandLine()->ParmValue("-heapsize", 0);
   if (heap_size) {
@@ -403,12 +369,8 @@ void Sys_InitMemory() {
 
 void Sys_ShutdownMemory() { host_parms.memsize = 0; }
 
-void Sys_InitAuthentication() {}
-
-void Sys_ShutdownAuthentication() {}
-
 // Debug library spew output
-CThreadLocalInt<> g_bInSpew;
+thread_local bool g_bInSpew;
 
 SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const char *pMsg) {
   bool suppress = g_bInSpew;
@@ -433,9 +395,7 @@ SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const char *pMsg) {
     // dedicated server.
     if (dedicated) dedicated->Sys_Printf((char *)pMsg);
 
-    if (g_bTextMode) {
-      printf("%s", pMsg);
-    }
+    if (g_bTextMode) fprintf_s(stdout, "%s", pMsg);
 
     if ((spewType != SPEW_LOG) || (sv.GetMaxClients() == 1)) {
       Color color;
@@ -453,8 +413,8 @@ SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const char *pMsg) {
 #endif
         default: { color = GetSpewOutputColor(); } break;
       }
-      Con_ColorPrintf(color, temp);
 
+      Con_ColorPrintf(color, temp);
     } else {
       g_Log.Printf(temp);
     }
@@ -468,103 +428,89 @@ SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const char *pMsg) {
   }
 
   if (spewType == SPEW_ASSERT) {
-    if (CommandLine()->FindParm("-noassert") == 0)
-      return SPEW_DEBUGGER;
-    else
-      return SPEW_CONTINUE;
+    return CommandLine()->FindParm("-noassert") == 0 ? SPEW_DEBUGGER
+                                                     : SPEW_CONTINUE;
   }
 
   return SPEW_CONTINUE;
 }
 
-void DeveloperChangeCallback(IConVar *pConVar, const char *pOldString,
-                             float flOldValue) {
+void OnDeveloperConvarChange(IConVar *con_var, const char *old_value_string,
+                             float old_value_float) {
   // Set the "developer" spew group to the value...
-  ConVarRef var(pConVar);
-  int val = var.GetInt();
+  ConVarRef var{con_var};
+  const int val{var.GetInt()};
+
   SpewActivate("developer", val);
 
   // Activate console spew (spew value 2 == developer console spew)
   SpewActivate("console", val ? 2 : 1);
 }
 
-// Purpose: Factory conglomeration, gets the client, server, and gameui dlls
+// Factory conglomeration, gets the client, server, and gameui dlls
 // together.
-void *GameFactory(const char *pName, int *pReturnCode) {
+void *GameFactory(const char *interface_name, int *return_code) {
   // first ask the app factory
-  void *an_interface = g_AppSystemFactory(pName, pReturnCode);
+  void *an_interface = g_AppSystemFactory(interface_name, return_code);
   if (an_interface) return an_interface;
 
 #ifndef SWDS
     // now ask the client dll
-#ifdef _WIN32
+#ifdef OS_WIN
   if (ClientDLL_GetFactory()) {
-    an_interface = ClientDLL_GetFactory()(pName, pReturnCode);
+    an_interface = ClientDLL_GetFactory()(interface_name, return_code);
     if (an_interface) return an_interface;
   }
 
   // gameui.dll
   if (EngineVGui()->GetGameUIFactory()) {
-    an_interface = EngineVGui()->GetGameUIFactory()(pName, pReturnCode);
+    an_interface =
+        EngineVGui()->GetGameUIFactory()(interface_name, return_code);
     if (an_interface) return an_interface;
   }
 #endif
 #endif
-  // server dll factory access would go here when needed
 
-  return NULL;
+  // server dll factory access would go here when needed
+  return nullptr;
 }
 
 // factory instance
 CreateInterfaceFn g_GameSystemFactory = GameFactory;
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *lpOrgCmdLine -
-//			launcherFactory -
-//			*pwnd -
-//			bIsDedicated -
-// Output : int
-//-----------------------------------------------------------------------------
-int Sys_InitGame(CreateInterfaceFn appSystemFactory, const char *pBaseDir,
-                 void *pwnd, int bIsDedicated) {
-#ifdef BENCHMARK
-  if (bIsDedicated) {
-    Error("Dedicated server isn't supported by this benchmark!");
-  }
-#endif
-
-  extern void InitMathlib();
+bool Sys_InitGame(CreateInterfaceFn create_interface_fn, const ch *base_dir,
+                  void *window, bool is_dedicated) {
   InitMathlib();
 
   FileSystem_SetWhitelistSpewFlags();
 
-  // Activate console spew
-  // Must happen before developer.InstallChangeCallback because that callback
-  // may reset it
+  // Activate console spew. Must happen before developer.InstallChangeCallback
+  // because that callback may reset it
   SpewActivate("console", 1);
 
   // Install debug spew output....
-  developer.InstallChangeCallback(DeveloperChangeCallback);
+  developer.InstallChangeCallback(OnDeveloperConvarChange);
 
   SpewOutputFunc(Sys_SpewFunc);
 
   // Assume failure
   host_initialized = false;
-#ifdef _WIN32
+
+#ifdef OS_WIN
   // Grab main window pointer
-  pmainwindow = (HWND *)pwnd;
+  pmainwindow = (HWND *)window;
 #endif
+
   // Remember that this is a dedicated server
-  s_bIsDedicated = bIsDedicated ? true : false;
+  s_bIsDedicated = is_dedicated;
 
-  memset(&gmodinfo, 0, sizeof(modinfo_t));
+  memset(&gmodinfo, 0, sizeof(gmodinfo));
 
-  static char s_pBaseDir[256];
-  Q_strncpy(s_pBaseDir, pBaseDir, sizeof(s_pBaseDir));
-  Q_strlower(s_pBaseDir);
-  Q_FixSlashes(s_pBaseDir);
-  host_parms.basedir = s_pBaseDir;
+  static char base_directory[SOURCE_MAX_PATH];
+  strcpy_s(base_directory, base_dir);
+  Q_strlower(base_directory);
+  Q_FixSlashes(base_directory);
+  host_parms.basedir = base_directory;
 
 #ifdef OS_POSIX
   if (CommandLine()->FindParm("-pidfile")) {
@@ -585,7 +531,7 @@ int Sys_InitGame(CreateInterfaceFn appSystemFactory, const char *pBaseDir,
   // Initialize clock
   TRACEINIT(Sys_Init(), Sys_Shutdown());
 
-#if defined(_DEBUG)
+#ifndef NDEBUG
   if (!CommandLine()->FindParm("-nodttest") &&
       !CommandLine()->FindParm("-dti")) {
     RunDataTableTest();
@@ -596,43 +542,26 @@ int Sys_InitGame(CreateInterfaceFn appSystemFactory, const char *pBaseDir,
   SeedRandomNumberGenerator(CommandLine()->FindParm("-random_invariant") != 0);
 
   TRACEINIT(Sys_InitMemory(), Sys_ShutdownMemory());
-
   TRACEINIT(Host_Init(s_bIsDedicated), Host_Shutdown());
 
-  if (!host_initialized) return 0;
-
-  TRACEINIT(Sys_InitAuthentication(), Sys_ShutdownAuthentication());
+  if (!host_initialized) return false;
 
   MapReslistGenerator_BuildMapList();
 
-  return 1;
+  return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void Sys_ShutdownGame() {
-  TRACESHUTDOWN(Sys_ShutdownAuthentication());
-
   TRACESHUTDOWN(Host_Shutdown());
-
   TRACESHUTDOWN(Sys_ShutdownMemory());
-
-  // TRACESHUTDOWN( Sys_ShutdownArgv() );
-
   TRACESHUTDOWN(Sys_Shutdown());
 
   // Remove debug spew output....
-  developer.InstallChangeCallback(0);
-  SpewOutputFunc(0);
+  developer.InstallChangeCallback(nullptr);
+  SpewOutputFunc(nullptr);
 }
 
-//-----------------------------------------------------------------------------
-//
 // Backward compatibility
-//
-//-----------------------------------------------------------------------------
-#ifndef _XBOX
 class CServerGameDLLV3 : public IServerGameDLL {
  public:
   CServerGameDLLV3(ServerGameDLLV3::IServerGameDLL *pServerGameDLL)
@@ -793,14 +722,12 @@ class CServerGameDLLV3 : public IServerGameDLL {
   bool m_bInittedSendProxies;
   CStandardSendProxies m_SendProxies;
 };
-#endif
 
 // Try to load a single DLL.  If it conforms to spec, keep it loaded, and add
 // relevant info to the DLL directory.  If not, ignore it entirely.
 CreateInterfaceFn g_ServerFactory;
 
-#pragma optimize("g", off)
-static bool LoadThisDll(char *szDllFilename) {
+static bool LoadThisDll(const char *szDllFilename) {
   CSysModule *pDLL = g_pFileSystem->LoadModule(szDllFilename, "GAMEBIN", false);
 
   // Load DLL, ignore if cannot
@@ -848,7 +775,7 @@ static bool LoadThisDll(char *szDllFilename) {
     }
 
     serverGameEnts = (IServerGameEnts *)g_ServerFactory(
-        INTERFACEVERSION_SERVERGAMEENTS, NULL);
+        INTERFACEVERSION_SERVERGAMEENTS, nullptr);
     if (!serverGameEnts) {
       ConMsg("Could not get IServerGameEnts interface from library %s",
              szDllFilename);
@@ -856,7 +783,7 @@ static bool LoadThisDll(char *szDllFilename) {
     }
 
     serverGameClients = (IServerGameClients *)g_ServerFactory(
-        INTERFACEVERSION_SERVERGAMECLIENTS, NULL);
+        INTERFACEVERSION_SERVERGAMECLIENTS, nullptr);
     if (serverGameClients) {
       g_iServerGameClientsVersion = 4;
     } else {
@@ -864,7 +791,7 @@ static bool LoadThisDll(char *szDllFilename) {
       const char *pINTERFACEVERSION_SERVERGAMECLIENTS_V3 =
           "ServerGameClients003";
       serverGameClients = (IServerGameClients *)g_ServerFactory(
-          pINTERFACEVERSION_SERVERGAMECLIENTS_V3, NULL);
+          pINTERFACEVERSION_SERVERGAMECLIENTS_V3, nullptr);
       if (serverGameClients) {
         g_iServerGameClientsVersion = 3;
       } else {
@@ -873,8 +800,8 @@ static bool LoadThisDll(char *szDllFilename) {
         goto IgnoreThisDLL;
       }
     }
-    serverGameDirector =
-        (IHLTVDirector *)g_ServerFactory(INTERFACEVERSION_HLTVDIRECTOR, NULL);
+    serverGameDirector = (IHLTVDirector *)g_ServerFactory(
+        INTERFACEVERSION_HLTVDIRECTOR, nullptr);
     if (!serverGameDirector) {
       ConMsg("Could not get IHLTVDirector interface from library %s",
              szDllFilename);
@@ -889,62 +816,58 @@ static bool LoadThisDll(char *szDllFilename) {
   return true;
 
 IgnoreThisDLL:
-  if (pDLL != NULL) {
+  if (pDLL != nullptr) {
     g_pFileSystem->UnloadModule(pDLL);
-    serverGameDLL = NULL;
-    serverGameEnts = NULL;
-    serverGameClients = NULL;
+    serverGameDLL = nullptr;
+    serverGameEnts = nullptr;
+    serverGameClients = nullptr;
   }
   return false;
 }
-#pragma optimize("", on)
 
 // Scan DLL directory, load all DLLs that conform to spec.
 void LoadEntityDLLs(const char *szBaseDir) {
-  memset(&gmodinfo, 0, sizeof(modinfo_t));
+  memset(&gmodinfo, 0, sizeof(gmodinfo));
   gmodinfo.version = 1;
   gmodinfo.svonly = true;
 
   // Run through all DLLs found in the extension DLL directory
-  g_GameDLL = NULL;
-  sv_noclipduringpause = NULL;
+  g_GameDLL = nullptr;
+  sv_noclipduringpause = nullptr;
 
   // Listing file for this game.
   KeyValues *modinfo = new KeyValues("modinfo");
   if (modinfo->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
-    Q_strncpy(gmodinfo.szInfo, modinfo->GetString("url_info"),
-              sizeof(gmodinfo.szInfo));
-    Q_strncpy(gmodinfo.szDL, modinfo->GetString("url_dl"),
-              sizeof(gmodinfo.szDL));
+    strcpy_s(gmodinfo.szInfo, modinfo->GetString("url_info"));
+    strcpy_s(gmodinfo.szDL, modinfo->GetString("url_dl"));
+
     gmodinfo.version = modinfo->GetInt("version");
     gmodinfo.size = modinfo->GetInt("size");
     gmodinfo.svonly = modinfo->GetInt("svonly") ? true : false;
     gmodinfo.cldll = modinfo->GetInt("cldll") ? true : false;
-    Q_strncpy(gmodinfo.szHLVersion, modinfo->GetString("hlversion"),
-              sizeof(gmodinfo.szHLVersion));
+
+    strcpy_s(gmodinfo.szHLVersion, modinfo->GetString("hlversion"));
   }
   modinfo->deleteThis();
 
-  // Load the game .dll
-  char szDllFilename[SOURCE_MAX_PATH];
-#ifdef _WIN32
-  Q_snprintf(szDllFilename, sizeof(szDllFilename), "server.dll");
+  LoadThisDll(
+#ifdef OS_WIN
+      "server.dll"
 #elif OS_POSIX
-  Q_snprintf(szDllFilename, sizeof(szDllFilename), "server.so.1");
+      "server.so.1"
 #else
-#error "define server.dll type"
+#error Please, define server dll name in engine/sys_dll.cpp
 #endif
-
-  LoadThisDll(szDllFilename);
+  );
 
   if (serverGameDLL) {
-    Msg("server.dll loaded for \"%s\"\n",
-        (char *)serverGameDLL->GetGameDescription());
+    Msg("server library loaded for \"%s\".\n",
+        serverGameDLL->GetGameDescription());
   }
 }  //-V773
 
-// Purpose: Retrieves a string value from the registry
-#if defined(_WIN32)
+// Retrieves a string value from the registry
+#ifdef OS_WIN
 char string_type_name[] = {'S', 't', 'r', 'i', 'n', 'g', '\0'};
 
 void Sys_GetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
@@ -959,7 +882,7 @@ void Sys_GetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
   DWORD dwSize;         // Size of element data
 
   // Assume the worst
-  Q_strncpy(pszReturnString, pszDefaultValue, nReturnLength);
+  strcpy_s(pszReturnString, nReturnLength, pszDefaultValue);
 
   // Create it if it doesn't exist.  (Create opens the key otherwise)
   lResult = VCRHook_RegCreateKeyEx(
@@ -969,7 +892,7 @@ void Sys_GetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
       string_type_name,         // Type of value
       REG_OPTION_NON_VOLATILE,  // Store permanently in reg.
       KEY_ALL_ACCESS,           // REGSAM samDesired, // security access mask
-      NULL,
+      nullptr,
       &hKey,            // Key we are creating
       &dwDisposition);  // Type of creation
 
@@ -992,7 +915,7 @@ void Sys_GetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
     if (lResult == ERROR_SUCCESS) {
       // Only copy strings, and only copy as much data as requested.
       if (dwType == REG_SZ) {
-        Q_strncpy(pszReturnString, szBuff, nReturnLength);
+        strcpy_s(pszReturnString, nReturnLength, szBuff);
         pszReturnString[nReturnLength - 1] = '\0';
       }
     } else
@@ -1031,7 +954,7 @@ void Sys_GetRegKeyValueUnderRootInt(HKEY rootKey, const char *pszSubKey,
       string_type_name,         // Type of value
       REG_OPTION_NON_VOLATILE,  // Store permanently in reg.
       KEY_ALL_ACCESS,           // REGSAM samDesired, // security access mask
-      NULL,
+      nullptr,
       &hKey,            // Key we are creating
       &dwDisposition);  // Type of creation
 
@@ -1081,7 +1004,7 @@ void Sys_SetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
       string_type_name,         // Type of value
       REG_OPTION_NON_VOLATILE,  // Store permanently in reg.
       KEY_ALL_ACCESS,           // REGSAM samDesired, // security access mask
-      NULL,
+      nullptr,
       &hKey,            // Key we are creating
       &dwDisposition);  // Type of creation
 
@@ -1109,7 +1032,7 @@ void Sys_SetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
 void Sys_GetRegKeyValue(const char *pszSubKey, const char *pszElement,
                         char *pszReturnString, int nReturnLength,
                         const char *pszDefaultValue) {
-#if defined(_WIN32)
+#if defined(OS_WIN)
   Sys_GetRegKeyValueUnderRoot(HKEY_CURRENT_USER, pszSubKey, pszElement,
                               pszReturnString, nReturnLength, pszDefaultValue);
 #endif
@@ -1117,7 +1040,7 @@ void Sys_GetRegKeyValue(const char *pszSubKey, const char *pszElement,
 
 void Sys_GetRegKeyValueInt(char *pszSubKey, const char *pszElement,
                            long *plReturnValue, long lDefaultValue) {
-#if defined(_WIN32)
+#if defined(OS_WIN)
   Sys_GetRegKeyValueUnderRootInt(HKEY_CURRENT_USER, pszSubKey, pszElement,
                                  plReturnValue, lDefaultValue);
 #endif
@@ -1125,7 +1048,7 @@ void Sys_GetRegKeyValueInt(char *pszSubKey, const char *pszElement,
 
 void Sys_SetRegKeyValue(const char *pszSubKey, const char *pszElement,
                         const char *pszValue) {
-#if defined(_WIN32)
+#if defined(OS_WIN)
   Sys_SetRegKeyValueUnderRoot(HKEY_CURRENT_USER, pszSubKey, pszElement,
                               pszValue);
 #endif
@@ -1134,7 +1057,7 @@ void Sys_SetRegKeyValue(const char *pszSubKey, const char *pszElement,
 #define SOURCE_ENGINE_APP_CLASS "Valve.Source"
 
 void Sys_CreateFileAssociations(int count, FileAssociationInfo *list) {
-#if defined(_WIN32)
+#if defined(OS_WIN)
   char appname[512];
 
   GetModuleFileName(0, appname, sizeof(appname));
@@ -1178,34 +1101,29 @@ void Sys_CreateFileAssociations(int count, FileAssociationInfo *list) {
 }
 
 void Sys_TestSendKey(const char *pKey) {
-#if defined(_WIN32)
+#if defined(OS_WIN)
   int key = pKey[0];
   if (pKey[0] == '\\' && pKey[1] == 'r') {
     key = VK_RETURN;
   }
 
   HWND hWnd = (HWND)game->GetMainWindow();
+
   PostMessageA(hWnd, WM_KEYDOWN, key, 0);
   PostMessageA(hWnd, WM_KEYUP, key, 0);
-
-  // void Key_Event (int key, bool down);
-  // Key_Event( key, 1 );
-  // Key_Event( key, 0 );
 #endif
 }
-
-void Sys_OutputDebugString(const char *msg) { Plat_DebugString(msg); }
 
 void UnloadEntityDLLs() {
   if (!g_GameDLL) return;
 
   // Unlink the cvars associated with game DLL
   FileSystem_UnloadModule(g_GameDLL);
-  g_GameDLL = NULL;
-  serverGameDLL = NULL;
-  serverGameEnts = NULL;
-  serverGameClients = NULL;
-  sv_noclipduringpause = NULL;
+  g_GameDLL = nullptr;
+  serverGameDLL = nullptr;
+  serverGameEnts = nullptr;
+  serverGameClients = nullptr;
+  sv_noclipduringpause = nullptr;
 }
 
 CON_COMMAND(star_memory, "Dump memory stats") {
@@ -1225,7 +1143,8 @@ CON_COMMAND(star_memory, "Dump memory stats") {
         (stat.ullTotalPhys - stat.ullAvailPhys) / (1024.0f * 1024.0f) - 32.0f,
         stat.ullAvailPhys / (1024.0f * 1024.0f));
   } else {
-    Warning("Dump memory stats failed (0x%.8x).\n", GetLastError());
+    Warning("Dump memory stats failed: %s.\n",
+            source::windows::windows_errno_info_last_error().description);
   }
 #endif
 }

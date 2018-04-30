@@ -33,12 +33,6 @@
 
 #include "tier0/include/memdbgon.h"
 
-// Forward declarations
-
-i32 Sys_InitGame(CreateInterfaceFn appSystemFactory, ch const *pBaseDir,
-                 void *pwnd, i32 bIsDedicated);
-void Sys_ShutdownGame();
-
 // sleep time when not focus
 #define NOT_FOCUS_SLEEP 50
 
@@ -127,18 +121,18 @@ class CEngine : public IEngine {
     }
 
     if (ShouldSerializeAsync()) {
-      static ConVar *pSyncReportConVar =
+      static ConVar *fs_report_sync_opens =
           g_pCVar->FindVar("fs_report_sync_opens");
-      bool bReportingSyncOpens =
-          (pSyncReportConVar && pSyncReportConVar->GetInt());
+      bool should_report_sync_opens =
+          (fs_report_sync_opens && fs_report_sync_opens->GetInt());
       i32 reportLevel = 0;
-      if (bReportingSyncOpens) {
-        reportLevel = pSyncReportConVar->GetInt();
-        pSyncReportConVar->SetValue(0);
+      if (should_report_sync_opens) {
+        reportLevel = fs_report_sync_opens->GetInt();
+        fs_report_sync_opens->SetValue(0);
       }
       g_pFileSystem->AsyncFinishAll();
-      if (bReportingSyncOpens) {
-        pSyncReportConVar->SetValue(reportLevel);
+      if (should_report_sync_opens) {
+        fs_report_sync_opens->SetValue(reportLevel);
       }
     }
 
@@ -205,36 +199,31 @@ class CEngine : public IEngine {
 
  private:
   bool FilterTime(f32 dt) {
+    f32 fps_max_v{fps_max.GetFloat()};
     // Dedicated's tic_rate regulates server frame rate.  Don't apply fps filter
     // here. Only do this restriction on the client. Prevents clients from
     // accomplishing certain hacks by pausing their client for a period of time.
-    if (!sv.IsDedicated() && !CanCheat() && fps_max.GetFloat() < 30) {
+    if (!sv.IsDedicated() && !CanCheat() && fps_max_v < 30) {
       // Don't do anything if fps_max=0 (which means it's unlimited).
-      if (fps_max.GetFloat() != 0.0f) {
+      if (fps_max_v != 0.0f) {
         Warning(
             "sv_cheats is 0 and fps_max is being limited to a minimum of 30 "
-            "(or "
-            "set to 0).\n");
+            "(or set to 0).\n");
         fps_max.SetValue(30.0f);
+        fps_max_v = fps_max.GetFloat();
       }
     }
 
-    f32 fps = fps_max.GetFloat();
-    if (fps > 0.0f) {
-      // Limit fps to withing tolerable range
-      //		fps = std::max( MIN_FPS, fps ); // red herring - since
-      // we're
-      // only
-      // checking if dt < 1/fps, clamping against MIN_FPS has no effect
-      fps = std::min(MAX_FPS, fps);
+    if (fps_max_v > 0.0f) {
+      fps_max_v = std::clamp(fps_max_v, MIN_FPS, MAX_FPS);
 
-      f32 minframetime = 1.0 / fps;
+      const f32 min_frame_time{1.0f / fps_max_v};
 
       if (
-#if !defined(SWDS)
+#ifndef SWDS
           !demoplayer->IsPlayingTimeDemo() &&
 #endif
-          dt < minframetime) {
+          dt < min_frame_time) {
         // framerate is too high
         return false;
       }

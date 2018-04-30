@@ -43,6 +43,5 @@ struct FileAssociationInfo {
 
 void Sys_CreateFileAssociations(int count, FileAssociationInfo *list);
 void Sys_TestSendKey(const char *pKey);
-void Sys_OutputDebugString(const char *msg);
 
 #endif  // SYS_H
