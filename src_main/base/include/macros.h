@@ -95,12 +95,29 @@ constexpr inline To implicit_cast(const From value) {
 template <typename Dest, typename Source>
 inline Dest bit_cast(const Source& source) {
   static_assert(sizeof(Dest) == sizeof(Source), "Verify sizes are equal.");
-  static_assert(std::is_pod<Source>::value, "Verify Source should be POD.");
-  static_assert(std::is_pod<Dest>::value, "Verify Dest should be POD.");
-  static_assert(std::is_default_constructible<Dest>::value,
+  static_assert(std::is_trivially_copyable_v<Source>,
+                "Verify Source should be trivially copyable.");
+  static_assert(std::is_trivially_copyable_v<Dest>,
+                "Verify Dest be trivially copyable.");
+  static_assert(std::is_default_constructible_v<Dest>,
                 "Verify Dest should be default constructible.");
 
   Dest dest;
+  std::memcpy(&dest, &source, sizeof(dest));
+  return dest;
+}
+
+// Bitwise copy with type-checking. Returns reference to dest.
+template <typename Dest, typename Source>
+inline Dest& bitwise_copy(Dest& dest, const Source& source) {
+  static_assert(sizeof(Dest) == sizeof(Source), "Verify sizes are equal.");
+  static_assert(std::is_trivially_copyable_v<Source>,
+                "Verify Source should be trivially copyable.");
+  static_assert(std::is_trivially_copyable_v<Dest>,
+                "Verify Dest be trivially copyable.");
+  static_assert(std::is_default_constructible_v<Dest>,
+                "Verify Dest should be default constructible.");
+
   std::memcpy(&dest, &source, sizeof(dest));
   return dest;
 }
