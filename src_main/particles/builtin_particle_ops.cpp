@@ -125,8 +125,7 @@ void C_OP_BasicMovement::Operate(CParticleCollection *pParticles,
 
   int nAccumulators = pParticles->m_pDef->m_ForceGenerators.Count();
 
-  FourVectors PerParticleForceAccumulator[MAX_PARTICLES_IN_A_SYSTEM /
-                                          4];  // xbox fixme - memory
+  FourVectors PerParticleForceAccumulator[MAX_PARTICLES_IN_A_SYSTEM / 4];
 
   FourVectors *pAccOut = PerParticleForceAccumulator;
   if (nAccumulators) {
@@ -141,12 +140,12 @@ void C_OP_BasicMovement::Operate(CParticleCollection *pParticles,
     }
     // now, call all force accumulators
     for (int i = 0; i < nAccumulators; i++) {
-      float flStrength;
       CParticleOperatorInstance *pOp = pParticles->m_pDef->m_ForceGenerators[i];
-      if (pParticles->CheckIfOperatorShouldRun(pOp, &flStrength)) {
+      float new_strength;
+      if (pParticles->CheckIfOperatorShouldRun(pOp, &new_strength)) {
         START_OP;
         pParticles->m_pDef->m_ForceGenerators[i]->AddForces(
-            PerParticleForceAccumulator, pParticles, nblocks, flStrength,
+            PerParticleForceAccumulator, pParticles, nblocks, new_strength,
             pParticles->m_pOperatorContextData +
                 pParticles->m_pDef->m_nForceGeneratorsCtxOffsets[i]);
         END_OP;
@@ -203,11 +202,7 @@ void C_OP_BasicMovement::Operate(CParticleCollection *pParticles,
 
     // constraints get to see their own per psystem per op random #s
     for (int p = 0; p < m_nMaxConstraintPasses; p++) {
-      //			int
-      // nSaveOffset=pParticles->m_nOperatorRandomSampleOffset;
       for (int i = 0; i < nConstraints; i++) {
-        //				pParticles->m_nOperatorRandomSampleOffset
-        //+= 23;
         if (!bConstraintSatisfied[i]) {
           bConstraintSatisfied[i] = true;
           if ((!bFinalConstraint[i]) &&
@@ -231,8 +226,6 @@ void C_OP_BasicMovement::Operate(CParticleCollection *pParticles,
           }
         }
       }
-      //			pParticles->m_nOperatorRandomSampleOffset =
-      // nSaveOffset;
     }
     // now, run final constraints
     for (int i = 0; i < nConstraints; i++) {
@@ -645,7 +638,6 @@ void C_OP_OscillateScalar::Operate(CParticleCollection *pParticles,
   int nRandomOffset = pParticles->OperatorRandomSampleOffset();
 
   fltx4 fl4OscVal;
-
   fltx4 fl4ScaleFactor = ReplicateX4(flStrength * pParticles->m_flDt);
 
   fltx4 fl4CosFactorMultiplier = ReplicateX4(m_flOscMult);
@@ -791,7 +783,6 @@ void C_OP_OscillateVector::Operate(CParticleCollection *pParticles,
   int nRandomOffset = pParticles->OperatorRandomSampleOffset();
 
   FourVectors fvOscVal;
-
   fltx4 fl4ScaleFactor = ReplicateX4(flStrength * pParticles->m_flDt);
 
   fltx4 fl4CosFactorMultiplier = ReplicateX4(m_flOscMult);
@@ -1008,12 +999,13 @@ void C_OP_Noise::Operate(CParticleCollection *pParticles, float flStrength,
   float fMax = m_flOutputMax;
 
   if (ATTRIBUTES_WHICH_ARE_ANGLES & (1 << m_nFieldOutput)) {
-    fMin *= (M_PI / 180.0f);
-    fMax *= (M_PI / 180.0f);
+    fMin = DEG2RAD(fMin);
+    fMax = DEG2RAD(fMax);
   }
+
   // calculate coefficients. noise retuns -1..1
-  fltx4 ValueScale = ReplicateX4(0.5 * (fMax - fMin));
-  fltx4 ValueBase = ReplicateX4(fMin + 0.5 * (fMax - fMin));
+  fltx4 ValueScale = ReplicateX4(0.5f * (fMax - fMin));
+  fltx4 ValueBase = ReplicateX4(fMin + 0.5f * (fMax - fMin));
   int nActive = pParticles->m_nPaddedActiveParticles;
   do {
     FourVectors Coord = *pXYZ;
@@ -1234,8 +1226,8 @@ class CGeneralSpin : public CParticleOperatorInstance {
 
   virtual void InitParams(CParticleSystemDefinition *pDef,
                           CDmxElement *pElement) {
-    m_fSpinRateRadians = (float)m_nSpinRateDegrees * (M_PI / 180.0f);
-    m_fSpinRateMinRadians = (float)m_nSpinRateMinDegrees * (M_PI / 180.0f);
+    m_fSpinRateRadians = m_nSpinRateDegrees * (M_PI_F / 180.0f);
+    m_fSpinRateMinRadians = m_nSpinRateMinDegrees * (M_PI_F / 180.0f);
   }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
@@ -1251,24 +1243,21 @@ class CGeneralSpin : public CParticleOperatorInstance {
 void CGeneralSpin::Operate(CParticleCollection *pParticles, float flStrength,
                            void *pContext) const {
   float fCurSpinRate = m_fSpinRateRadians * flStrength;
-
-  if (fCurSpinRate == 0.0) return;
+  if (fCurSpinRate == 0.0f) return;
 
   float dt = pParticles->m_flDt;
-  float drot = dt * fabs(fCurSpinRate * 2.0f * M_PI);
-  if (m_fSpinRateStopTime == 0.0f) {
-    drot = fmod(drot, (float)(2.0f * M_PI));
-  }
-  if (fCurSpinRate < 0.0f) {
-    drot = -drot;
-  }
+  float drot = dt * fabs(fCurSpinRate * 2.0f * M_PI_F);
+
+  if (m_fSpinRateStopTime == 0.0f) drot = fmod(drot, 2.0f * M_PI_F);
+  if (fCurSpinRate < 0.0f) drot = -drot;
+
   fltx4 Rot_Add = ReplicateX4(drot);
-  fltx4 Pi_2 = ReplicateX4(2.0 * M_PI);
-  fltx4 nPi_2 = ReplicateX4(-2.0 * M_PI);
+  fltx4 Pi_2 = ReplicateX4(2.0f * M_PI_F);
+  fltx4 nPi_2 = ReplicateX4(-2.0f * M_PI_F);
 
   // TODO(d.rattman): This is wrong
   fltx4 minSpeedRadians =
-      ReplicateX4(dt * fabs(m_fSpinRateMinRadians * 2.0f * M_PI));
+      ReplicateX4(dt * fabs(m_fSpinRateMinRadians * 2.0f * M_PI_F));
 
   fltx4 now = pParticles->m_fl4CurTime;
   fltx4 SpinRateStopTime = ReplicateX4(m_fSpinRateStopTime);
@@ -2887,10 +2876,6 @@ void C_OP_DistanceToCP::Operate(CParticleCollection *pParticles,
         pParticles->GetFloatAttributePtrForWrite(m_nFieldOutput, i);
 
     *pOutput = Lerp(flStrength, *pOutput, flOutput);
-    // float *pOutput = pParticles->GetFloatAttributePtrForWrite(
-    // m_nFieldOutput, i ); float flOutput = RemapValClamped( flDistance,
-    // m_flInputMin, m_flInputMax, flMin, flMax  ); *pOutput = Lerp (flStrength,
-    //*pOutput, flOutput);
   }
 }
 
@@ -3511,38 +3496,25 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_OrientTo2dDirection)
 
 void C_OP_OrientTo2dDirection::Operate(CParticleCollection *pParticles,
                                        float flStrength, void *pContext) const {
-  float flRotOffset = m_flRotOffset * (M_PI / 180.0f);
+  float flRotOffset = DEG2RAD(m_flRotOffset);
   // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     const float *xyz =
         pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_XYZ, i);
     const float *xyz_prev =
         pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_PREV_XYZ, i);
-    float *roll = pParticles->GetFloatAttributePtrForWrite(
+
+    float *rotation = pParticles->GetFloatAttributePtrForWrite(
         PARTICLE_ATTRIBUTE_ROTATION, i);
 
-    Vector vecXYZ;
-    Vector vecPXYZ;
-    vecXYZ.x = xyz[0];
-    vecXYZ.y = xyz[4];
-    vecXYZ.z = xyz[8];
-    vecPXYZ.x = xyz_prev[0];
-    vecPXYZ.y = xyz_prev[4];
-    vecPXYZ.z = xyz_prev[8];
-    Vector vecVelocityCur = (vecXYZ - vecPXYZ);
+    Vector velocity_2d =
+        (Vector{xyz[0], xyz[4], 0} - Vector{xyz_prev[0], xyz_prev[4], 0});
+    VectorNormalizeFast(velocity_2d);
 
-    vecVelocityCur.z = 0.0f;
-    VectorNormalizeFast(vecVelocityCur);
-
-    float flCurRot = *roll;
-
-    float flVelRot = atan2(vecVelocityCur.y, vecVelocityCur.x) + M_PI;
-    flVelRot *= 180 / M_PI;
-    float flRadians = -(flVelRot)*M_PI / 180.0f;
-
-    flRadians += flRotOffset;
-    float flRotation = Lerp(m_flSpinStrength, flCurRot, flRadians);
-    *roll = flRotation;
+    float flCurRot = *rotation;
+    float flVelRot = atan2(velocity_2d.y, velocity_2d.x) * 180 / M_PI + 180;
+    const float flRadians = -DEG2RAD(flVelRot) + flRotOffset;
+    *rotation = Lerp(m_flSpinStrength, flCurRot, flRadians);
   }
 };
 
@@ -3554,11 +3526,11 @@ class C_OP_MaxVelocity : public CParticleOperatorInstance {
 
   float m_flMaxVelocity;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 

@@ -3235,8 +3235,8 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
       // We have the texture and path to its content
       char chResolveName[SOURCE_MAX_PATH] = {0},
            chResolveNameArg[SOURCE_MAX_PATH] = {0};
-      Q_snprintf(chResolveNameArg, SOURCE_ARRAYSIZE(chResolveNameArg) - 1,
-                 "materials/%s" TEXTURE_FNAME_EXTENSION, texture_name);
+      sprintf_s(chResolveNameArg, "materials/%s" TEXTURE_FNAME_EXTENSION,
+                texture_name);
 
       if (!g_pFullFileSystem->RelativePathToFullPath(
               chResolveNameArg, "game", chResolveName,

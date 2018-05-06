@@ -2571,7 +2571,7 @@ void CMatSystemSurface::DrawColoredCircle(int centerx, int centery,
   DrawSetColor(clr);
 
   for (int i = 0; i < CIRCLE_POINTS; i++) {
-    float flRadians = DEG2RAD(iDegrees);
+    float flRadians = DEG2RAD(iDegrees * 1.0f);
     iDegrees += (360 / CIRCLE_POINTS);
 
     float ca = cos(flRadians);

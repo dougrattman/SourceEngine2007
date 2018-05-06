@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -9,7 +9,6 @@
 #include "materialsystem/ishader.h"
 #include "studio.h"
 #include "tier0/include/platform.h"
-#include "tier0/include/systeminformation.h"
 #include "tier0/include/vprof.h"
 #include "tier1/fmtstr.h"
 

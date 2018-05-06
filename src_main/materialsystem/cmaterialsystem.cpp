@@ -1410,12 +1410,12 @@ void CMaterialSystem::WriteConfigurationInfoToConVars(
   for (KeyValues *pKey = pKeyValues->GetFirstSubKey(); pKey;
        pKey = pKey->GetNextKey()) {
     const char *pConfigName = pKey->GetName();
-    if (Q_strnicmp(pConfigName, "convar.", 7)) continue;
+    if (_strnicmp(pConfigName, "convar.", 7)) continue;
 
     pConfigName += 7;
     // check if legal
     bool bLegalVar = false;
-    for (int i = 0; i < SOURCE_ARRAYSIZE(pConvarsAllowedInDXSupport); i++) {
+    for (usize i = 0; i < SOURCE_ARRAYSIZE(pConvarsAllowedInDXSupport); i++) {
       if (!_stricmp(pConvarsAllowedInDXSupport[i], pConfigName)) {
         bLegalVar = true;
         break;
@@ -2040,7 +2040,7 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
   }
 
   // We need lower-case symbols for this to work
-  int nLen = Q_strlen(pMaterialName) + 1;
+  usize nLen = strlen(pMaterialName) + 1;
   char *pTemp = (char *)stackalloc(nLen);
   Q_StripExtension(pMaterialName, pTemp, nLen);
   Q_strlower(pTemp, nLen);
@@ -2054,20 +2054,20 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
   if (pExistingMaterial) return pExistingMaterial->GetQueueFriendlyVersion();
 
   // It hasn't been seen yet, so let's check to see if it's in the filesystem.
-  nLen = Q_strlen("materials/") + Q_strlen(pTemp) + Q_strlen(".vmt") + 1;
+  nLen = strlen("materials/") + strlen(pTemp) + strlen(".vmt") + 1;
   char *vmtName = (char *)stackalloc(nLen);
 
   // Check to see if this is a UNC-specified material name
   bool bIsUNC = pTemp[0] == '/' && pTemp[1] == '/' && pTemp[2] != '/';
   if (!bIsUNC) {
-    Q_strncpy(vmtName, "materials/", nLen);
-    Q_strncat(vmtName, pTemp, nLen, COPY_ALL_CHARACTERS);
+    strcpy_s(vmtName, nLen, "materials/");
+    strcat_s(vmtName, nLen, pTemp);
   } else {
-    Q_strncpy(vmtName, pTemp, nLen);
+    strcpy_s(vmtName, nLen, pTemp);
   }
 
   // Q_strncat( vmtName, ".vmt", nLen, COPY_ALL_CHARACTERS );
-  Assert(nLen >= (int)Q_strlen(vmtName) + 1);
+  Assert(nLen >= strlen(vmtName) + 1);
 
   CUtlVector<FileNameHandle_t> includes;
   KeyValues *pKeyValues = new KeyValues("vmt");
@@ -2079,13 +2079,13 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
     pPatchKeyValues = NULL;
   } else {
     char *matNameWithExtension;
-    nLen = Q_strlen(pTemp) + Q_strlen(".vmt") + 1;
+    nLen = strlen(pTemp) + strlen(".vmt") + 1;
     matNameWithExtension = (char *)stackalloc(nLen);
-    Q_strncpy(matNameWithExtension, pTemp, nLen);
-    Q_strncat(matNameWithExtension, ".vmt", nLen, COPY_ALL_CHARACTERS);
+    strcpy_s(matNameWithExtension, nLen, pTemp);
+    strcat_s(matNameWithExtension, nLen, ".vmt");
 
     IMaterialInternal *pMat = NULL;
-    if (!Q_stricmp(pKeyValues->GetName(), "subrect")) {
+    if (!_stricmp(pKeyValues->GetName(), "subrect")) {
       pMat = m_MaterialDict.AddMaterialSubRect(
           matNameWithExtension, pTextureGroupName, pKeyValues, pPatchKeyValues);
     } else {
@@ -2108,16 +2108,16 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
     Assert(pTemp);
 
     // convert to lowercase
-    nLen = Q_strlen(pTemp) + 1;
+    nLen = strlen(pTemp) + 1;
     char *name = (char *)stackalloc(nLen);
-    Q_strncpy(name, pTemp, nLen);
+    strcpy_s(name, nLen, pTemp);
     Q_strlower(name, nLen);
 
     if (m_MaterialDict.NoteMissing(name)) {
       if (pComplainPrefix) {
         DevWarning("%s", pComplainPrefix);
       }
-      DevWarning("material \"%s\" not found.\n", name);
+      DevWarning("Material \"%s\" not found.\n", name);
     }
   }
 
@@ -2138,14 +2138,12 @@ ITexture *CMaterialSystem::FindTexture(char const *pTextureName,
       TextureManager()->FindOrLoadTexture(pTextureName, pTextureGroupName);
   Assert(pTexture);
   if (pTexture->IsError()) {
-    if (IsPC()) {
-      for (int i = 0; i < NELEMS(TextureAliases); i += 2) {
-        if (!Q_stricmp(pTextureName, TextureAliases[i])) {
-          return FindTexture(TextureAliases[i + 1], pTextureGroupName,
-                             bComplain);
-        }
+    for (usize i = 0; i < std::size(TextureAliases); i += 2) {
+      if (!_stricmp(pTextureName, TextureAliases[i])) {
+        return FindTexture(TextureAliases[i + 1], pTextureGroupName, bComplain);
       }
     }
+
     if (bComplain) {
       DevWarning("Texture '%s' not found.\n", pTextureName);
     }
@@ -2794,7 +2792,7 @@ void CMaterialSystem::EndFrame(void) {
     switch (m_ThreadMode) {
       case MATERIAL_SINGLE_THREADED:
         m_pRenderContext.Set(&m_HardwareRenderContext);
-        for (int i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
+        for (usize i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
           Assert(m_QueuedRenderContexts[i].IsInitialized());
           m_QueuedRenderContexts[i].Term();
         }
@@ -2802,7 +2800,7 @@ void CMaterialSystem::EndFrame(void) {
 
       case MATERIAL_QUEUED_SINGLE_THREADED:
       case MATERIAL_QUEUED_THREADED:
-        for (int i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
+        for (usize i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
           if (!m_QueuedRenderContexts[i].IsInitialized()) {
             m_QueuedRenderContexts[i].Init(this, &m_HardwareRenderContext);
           }
@@ -3480,7 +3478,7 @@ void CMaterialSystem::UnbindMaterial(IMaterial *pMaterial) {
 //
 //-----------------------------------------------------------------------------
 void CMaterialSystem::CompactMemory() {
-  for (int i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
+  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
     m_QueuedRenderContexts[i].CompactMemory();
   }
 }

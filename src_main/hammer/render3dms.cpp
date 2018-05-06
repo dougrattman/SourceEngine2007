@@ -1084,7 +1084,7 @@ void CRender3D::EndRenderFrame(void) {
             static char const *rts_to_transmit[] = {
                 "_rt_albedo", "_rt_normal", "_rt_position", "_rt_flags"};
             MessageToLPreview Msg(LPREVIEW_MSG_G_BUFFERS);
-            for (int i = 0; i < NELEMS(rts_to_transmit); i++) {
+            for (int i = 0; i < std::size(rts_to_transmit); i++) {
               SetRenderTargetNamed(0, rts_to_transmit[i]);
               FloatBitMap_t *fbm =
                   new FloatBitMap_t(nTargetWidth, nTargetHeight);

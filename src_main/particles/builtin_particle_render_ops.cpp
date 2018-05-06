@@ -24,7 +24,6 @@
 #include "../common/blobulator/Implicit/UserFunctions.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 // Vertex instancing (1 vert submitted per particle, duplicated to 4 (a quad) on
@@ -890,8 +889,8 @@ void C_OP_RenderSprites::RenderSpriteCard(CMeshBuilder &meshBuilder,
   meshBuilder.TexCoord4f(1, pSample0->m_fLeft_U1, pSample0->m_fTop_V1,
                          pSample0->m_fRight_U1, pSample0->m_fBottom_V1);
   meshBuilder.TexCoord4f(2, pSample->m_fBlendFactor, rot, rad, yaw);
-  // TODO(d.rattman): change the vertex decl (remove texcoord3/cornerid) if instancing -
-  // need to adjust elements beyond texcoord3 down, though
+  // TODO(d.rattman): change the vertex decl (remove texcoord3/cornerid) if
+  // instancing - need to adjust elements beyond texcoord3 down, though
   if (!bUseInstancing) meshBuilder.TexCoord2f(3, 0, 0);
   meshBuilder.TexCoord4f(
       4, pSecondTexture0->m_fLeft_U0, pSecondTexture0->m_fTop_V0,
@@ -1016,8 +1015,8 @@ void C_OP_RenderSprites::RenderTwoSequenceSpriteCard(CMeshBuilder &meshBuilder,
   meshBuilder.TexCoord4f(1, pSample0->m_fLeft_U1, pSample0->m_fTop_V1,
                          pSample0->m_fRight_U1, pSample0->m_fBottom_V1);
   meshBuilder.TexCoord4f(2, pSample->m_fBlendFactor, rot, rad, yaw);
-  // TODO(d.rattman): change the vertex decl (remove texcoord3/cornerid) if instancing -
-  // need to adjust elements beyond texcoord3 down, though
+  // TODO(d.rattman): change the vertex decl (remove texcoord3/cornerid) if
+  // instancing - need to adjust elements beyond texcoord3 down, though
   if (!bUseInstancing) meshBuilder.TexCoord2f(3, 0, 0);
   meshBuilder.TexCoord4f(
       4, pSecondTexture0->m_fLeft_U0, pSecondTexture0->m_fTop_V0,
@@ -1197,8 +1196,8 @@ void C_OP_RenderSprites::RenderUnsorted(CParticleCollection *pParticles,
   if (!pParticles->m_pDef->GetMaterial()->IsSpriteCard()) {
     switch (m_nOrientationType) {
       case 0:
-        // TODO(d.rattman): Implement! Requires removing MATERIAL_VIEW modification from
-        // sorted version
+        // TODO(d.rattman): Implement! Requires removing MATERIAL_VIEW
+        // modification from sorted version
         Warning(
             "C_OP_RenderSprites::RenderUnsorted: Attempting to use an "
             "unimplemented sprite renderer for system \"%s\"!\n",
@@ -1822,15 +1821,15 @@ void C_OP_RenderRope::RenderSpriteCard(CParticleCollection *pParticles,
       vecP0 = vecP1;
       vecP1 = vecP2;
       vecP2 = vecP3;
-      const float *pRadius =
+      const float *next_radius =
           pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_RADIUS, nPnt);
-      const float *pAlpha =
+      const float *next_alpha =
           pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_ALPHA, nPnt - 2);
-      vecColor.Init(pColor[0], pColor[4], pColor[8], pAlpha[0]);
+      vecColor.Init(pColor[0], pColor[4], pColor[8], next_alpha[0]);
 
       if (nPnt < nParticles) {
         pXYZ = pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_XYZ, nPnt);
-        vecP3.Init(pXYZ[0], pXYZ[4], pXYZ[8], pRadius[0]);
+        vecP3.Init(pXYZ[0], pXYZ[4], pXYZ[8], next_radius[0]);
         nPnt++;
       } else {
         // fake last point by extrapolating

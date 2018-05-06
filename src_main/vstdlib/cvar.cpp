@@ -115,7 +115,7 @@ CCvar::CCvar()
 bool CCvar::Connect(CreateInterfaceFn factory) {
   ConnectTier1Libraries(&factory, 1);
 
-  s_pCVarQuery = (ICvarQuery *)factory(CVAR_QUERY_INTERFACE_VERSION, NULL);
+  s_pCVarQuery = (ICvarQuery *)factory(CVAR_QUERY_INTERFACE_VERSION, nullptr);
   if (!s_pCVarQuery) {
     s_pCVarQuery = &s_DefaultCvarQuery;
   }

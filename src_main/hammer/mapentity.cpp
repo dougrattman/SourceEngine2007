@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "stdafx.h"
 
@@ -884,7 +884,7 @@ void CMapEntity::CalculateTypeFlags(void) {
   m_EntityTypeFlags = 0;
   const char *pszClassName = GetClassName();
   if (pszClassName != NULL)
-    for (int i = 0; i < NELEMS(s_ClassFlagsTable); i++)
+    for (usize i = 0; i < std::size(s_ClassFlagsTable); i++)
       if (!_stricmp(pszClassName, s_ClassFlagsTable[i].m_pClassname))
         m_EntityTypeFlags |= s_ClassFlagsTable[i].m_nFlagsToOR;
 }

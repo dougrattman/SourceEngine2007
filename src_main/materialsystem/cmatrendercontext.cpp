@@ -1274,9 +1274,7 @@ IMesh *CMatRenderContext::GetDynamicMeshEx(VertexFormat_t vertexFormat,
                                            IMesh *pIndexOverride,
                                            IMaterial *pAutoBind) {
   VPROF_ASSERT_ACCOUNTED("CMatRenderContext::GetDynamicMesh");
-  if (pAutoBind) {
-    Bind(pAutoBind, NULL);
-  }
+  if (pAutoBind) Bind(pAutoBind, NULL);
 
   if (pVertexOverride) {
     if (CompressionType(pVertexOverride->GetVertexFormat()) !=
@@ -1312,29 +1310,25 @@ void CMatRenderContext::DepthRange(float zNear, float zFar) {
   g_pShaderAPI->SetViewports(1, &m_Viewport);
 }
 
-//-----------------------------------------------------------------------------
 // Private utility function to actually commit the top of the RT/Viewport stack
 // to the device.  Only called by the push and pop routines above.
-//-----------------------------------------------------------------------------
-void CMatRenderContext::CommitRenderTargetAndViewport(void) {
+void CMatRenderContext::CommitRenderTargetAndViewport() {
   Assert(m_RenderTargetStack.Count() > 0);
 
   const RenderTargetStackElement_t &element = m_RenderTargetStack.Top();
 
-  for (int rt = 0; rt < NELEMS(element.m_pRenderTargets); rt++) {
+  for (int rt = 0; rt < std::size(element.m_pRenderTargets); rt++) {
     // If we're dealing with the back buffer
     if (element.m_pRenderTargets[rt] == NULL) {
-      g_pShaderAPI->SetRenderTargetEx(
-          rt);  // No texture parameter here indicates back buffer
+      // No texture parameter here indicates back buffer
+      g_pShaderAPI->SetRenderTargetEx(rt);
 
-      if (IsPC()) {
-        Assert(ImageLoader::SizeInBytes(
-                   g_pShaderDevice->GetBackBufferFormat()) <= 4);
-        g_pShaderAPI->EnableLinearColorSpaceFrameBuffer(false);
-      }
+      Assert(ImageLoader::SizeInBytes(g_pShaderDevice->GetBackBufferFormat()) <=
+             4);
+      g_pShaderAPI->EnableLinearColorSpaceFrameBuffer(false);
 
-      if (rt == 0)  // the first rt sets the viewport
-      {
+      // the first rt sets the viewport
+      if (rt == 0) {
         // If either dimension is negative, set to full bounds of back buffer
         if ((element.m_nViewW < 0) || (element.m_nViewH < 0)) {
           m_Viewport.m_nTopLeftX = 0;
@@ -1358,13 +1352,11 @@ void CMatRenderContext::CommitRenderTargetAndViewport(void) {
       pTexInt->SetRenderTarget(rt, element.m_pDepthTexture);
 
       if (rt == 0) {
-        if (IsPC()) {
-          if (element.m_pRenderTargets[rt]->GetImageFormat() ==
-              IMAGE_FORMAT_RGBA16161616F) {
-            g_pShaderAPI->EnableLinearColorSpaceFrameBuffer(true);
-          } else {
-            g_pShaderAPI->EnableLinearColorSpaceFrameBuffer(false);
-          }
+        if (element.m_pRenderTargets[rt]->GetImageFormat() ==
+            IMAGE_FORMAT_RGBA16161616F) {
+          g_pShaderAPI->EnableLinearColorSpaceFrameBuffer(true);
+        } else {
+          g_pShaderAPI->EnableLinearColorSpaceFrameBuffer(false);
         }
 
         // If either dimension is negative, set to full bounds of target

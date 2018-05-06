@@ -19,15 +19,15 @@ enum LoaderPriority_t {
       2,  // job must be complete during preload phase
 };
 
-typedef void (*QueuedLoaderCallback_t)(void *pContext, void *pContext2,
-                                       const void *pData, int nSize,
-                                       LoaderError_t loaderError);
+using QueuedLoaderCallback_t = void (*)(void *pContext, void *pContext2,
+                                        const void *pData, int nSize,
+                                        LoaderError_t loaderError);
 
 struct LoaderJob_t {
   LoaderJob_t() { memset(this, 0, sizeof(*this)); }
 
   const char *m_pFilename;             // path to resource
-  const char *m_pPathID;               // optional, can be NULL
+  const char *m_pPathID;               // optional, can be nullptr
   QueuedLoaderCallback_t m_pCallback;  // called at i/o delivery
   void *m_pContext;                    // caller provided data
   void *m_pContext2;                   // caller provided data
@@ -114,11 +114,11 @@ the_interface IQueuedLoader : public IAppSystem {
   // callback is asynchronous
   virtual bool ClaimAnonymousJob(const char *pFilename,
                                  QueuedLoaderCallback_t pCallback,
-                                 void *pContext, void *pContext2 = NULL) = 0;
+                                 void *pContext, void *pContext2 = nullptr) = 0;
   // provides data if loaded, caller owns data
   virtual bool ClaimAnonymousJob(const char *pFilename, void **pData,
                                  int *pDataSize,
-                                 LoaderError_t *pError = NULL) = 0;
+                                 LoaderError_t *pError = nullptr) = 0;
 
   virtual bool IsMapLoading() const = 0;
   virtual bool IsSameMapLoading() const = 0;

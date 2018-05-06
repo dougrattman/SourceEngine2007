@@ -27,7 +27,6 @@
 #include "mathlib/vector.h"
 #include "options.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //#define DEBUGPTS
@@ -176,7 +175,7 @@ void CMapFace::UpdateFaceFlags(void) {
     if (strstr(tname, "skybox")) {
       m_nFaceFlags |= FACE_FLAGS_NOSHADOW;
     }
-    for (int i = 0; i < NELEMS(InvisToolTextures); i++)
+    for (usize i = 0; i < std::size(InvisToolTextures); i++)
       if (strstr(tname, InvisToolTextures[i])) {
         m_nFaceFlags |= FACE_FLAGS_NODRAW_IN_LPREVIEW | FACE_FLAGS_NOSHADOW;
         break;
@@ -323,7 +322,7 @@ void CMapFace::OnUndoRedo() {
 // Purpose: Creates a face from a list of points.
 // Input  : pPoints - An array of points.
 //			_nPoints - Number of points. If nPoints < 0, reverse
-//points.
+// points.
 //-----------------------------------------------------------------------------
 void CMapFace::CreateFace(Vector *pPoints, int _nPoints, bool bIsCordonFace) {
   SignalUpdate(EVTYPE_FACE_CHANGED);
@@ -637,7 +636,7 @@ void CMapFace::GetFaceBounds(Vector &pfMins, Vector &pfMaxs) const {
 // Purpose: Finds the top left and bottom right points on the face in texture
 // space.
 //			These points are returned in texture space, not world
-//space.
+// space.
 // Input  : TopLeft -
 //			BottomRight -
 //-----------------------------------------------------------------------------
@@ -675,8 +674,8 @@ void CMapFace::GetFaceTextureExtents(Vector2D &TopLeft,
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the distance along the face normal of a given point. The
-//			distance will be negative if the point is behind the face,
-//positive 			if the point is in front of the face.
+//			distance will be negative if the point is behind the
+//face, positive 			if the point is in front of the face.
 // Input  : fPoint - Point to calculate normal distance.
 //-----------------------------------------------------------------------------
 float CMapFace::GetNormalDistance(Vector &fPoint) {
@@ -687,16 +686,17 @@ float CMapFace::GetNormalDistance(Vector &fPoint) {
 //-----------------------------------------------------------------------------
 // Purpose: Determines the texture alignment(s) of this face. The alignments are
 //			are returned as TextureAlignment_t values OR'ed
-//together.
+// together.
 //
 // Output : Returns an integer with any of the following flags set:
 //
 //			TEXTURE_ALIGN_FACE - the texture axes are face aligned.
 //			TEXTURE_ALIGN_WORLD - the texture axes are world
-//aligned.
+// aligned.
 //
 //			If the returned value is zero (TEXTURE_ALIGN_NONE), the
-//texture axes 			are neither face aligned nor world aligned.
+// texture axes 			are neither face aligned nor world
+// aligned.
 //-----------------------------------------------------------------------------
 int CMapFace::GetTextureAlignment(void) const {
   Vector TexNormalAxis;
@@ -738,7 +738,8 @@ int CMapFace::GetTextureAlignment(void) const {
 // Purpose: Finds the top left and bottom right points of the given world
 // extents
 //			in texture space. These points are returned in texture
-//space, not world space, 			so a simple rectangle will suffice.
+// space, not world space, 			so a simple rectangle will
+// suffice.
 // Input  : Extents -
 //			TopLeft -
 //			BottomRight -
@@ -777,8 +778,8 @@ void CMapFace::GetTextureExtents(Extents_t Extents, Vector2D &TopLeft,
 
 //-----------------------------------------------------------------------------
 // Purpose: Determines the world extents of the face. Different from a bounding
-//			box in that each point in the returned extents is actually
-//on the face.
+//			box in that each point in the returned extents is
+//actually on the face.
 // Input  : Extents -
 //-----------------------------------------------------------------------------
 void CMapFace::GetFaceExtents(Extents_t Extents) const {
@@ -1035,7 +1036,7 @@ void CMapFace::DebugPoints(void) {
 //	nFlags -
 //		CREATE_FACE_PRESERVE_PLANE:
 //		CREATE_FACE_CLIPPING: the new face is a clipped version of this
-//face
+// face
 //-----------------------------------------------------------------------------
 void CMapFace::CreateFace(winding_t *w, int nFlags) {
   SignalUpdate(EVTYPE_FACE_CHANGED);
@@ -2297,11 +2298,11 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
   } else if (!_stricmp(szKey, "plane")) {
     int nRead =
         sscanf_s(szValue, "(%f %f %f) (%f %f %f) (%f %f %f)",
-               &pFace->plane.planepts[0][0], &pFace->plane.planepts[0][1],
-               &pFace->plane.planepts[0][2], &pFace->plane.planepts[1][0],
-               &pFace->plane.planepts[1][1], &pFace->plane.planepts[1][2],
-               &pFace->plane.planepts[2][0], &pFace->plane.planepts[2][1],
-               &pFace->plane.planepts[2][2]);
+                 &pFace->plane.planepts[0][0], &pFace->plane.planepts[0][1],
+                 &pFace->plane.planepts[0][2], &pFace->plane.planepts[1][0],
+                 &pFace->plane.planepts[1][1], &pFace->plane.planepts[1][2],
+                 &pFace->plane.planepts[2][0], &pFace->plane.planepts[2][1],
+                 &pFace->plane.planepts[2][2]);
 
     if (nRead != 9) {
       // TODO: need specific error message
@@ -2311,8 +2312,8 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
     strcpy(pLoadFace->szTexName, szValue);
   } else if (!_stricmp(szKey, "uaxis")) {
     int nRead = sscanf_s(szValue, "[%f %f %f %f] %f", &pFace->texture.UAxis[0],
-                       &pFace->texture.UAxis[1], &pFace->texture.UAxis[2],
-                       &pFace->texture.UAxis[3], &pFace->texture.scale[0]);
+                         &pFace->texture.UAxis[1], &pFace->texture.UAxis[2],
+                         &pFace->texture.UAxis[3], &pFace->texture.scale[0]);
 
     if (nRead != 5) {
       // TODO: need specific error message
@@ -2320,8 +2321,8 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
     }
   } else if (!_stricmp(szKey, "vaxis")) {
     int nRead = sscanf_s(szValue, "[%f %f %f %f] %f", &pFace->texture.VAxis[0],
-                       &pFace->texture.VAxis[1], &pFace->texture.VAxis[2],
-                       &pFace->texture.VAxis[3], &pFace->texture.scale[1]);
+                         &pFace->texture.VAxis[1], &pFace->texture.VAxis[2],
+                         &pFace->texture.VAxis[3], &pFace->texture.scale[1]);
 
     if (nRead != 5) {
       // TODO: need specific error message
@@ -2372,8 +2373,10 @@ ChunkFileResult_t CMapFace::LoadVMF(CChunkFile *pFile) {
 //-----------------------------------------------------------------------------
 // Purpose: Called after this object is added to the world.
 //
-//			NOTE: This function is NOT called during serialization. Use
-//PostloadWorld 				  to do similar bookkeeping after map load.
+//			NOTE: This function is NOT called during serialization.
+//Use
+// PostloadWorld 				  to do similar bookkeeping after map
+// load.
 //
 // Input  : pWorld - The world that we have been added to.
 //-----------------------------------------------------------------------------
@@ -2393,10 +2396,10 @@ void CMapFace::OnAddToWorld(CMapWorld *pWorld) {
 //-----------------------------------------------------------------------------
 // Purpose: Called just after this object has been removed from the world so
 //			that it can unlink itself from other objects in the
-//world.
+// world.
 // Input  : pWorld - The world that we were just removed from.
-//			bNotifyChildren - Whether we should forward notification to
-//our children.
+//			bNotifyChildren - Whether we should forward notification
+//to our children.
 //-----------------------------------------------------------------------------
 void CMapFace::OnRemoveFromWorld(void) {
   SignalUpdate(EVTYPE_FACE_CHANGED);
@@ -2818,8 +2821,8 @@ bool CMapFace::InSmoothingGroup(int iGroup) {
 // Purpose: Performs an intersection of this list with another.
 // Input  : IntersectWith - the list to intersect with.
 //			In - the list of items that were in both lists
-//			Out - the list of items that were in one list but not the
-//other.
+//			Out - the list of items that were in one list but not
+//the other.
 //-----------------------------------------------------------------------------
 void CMapFaceList::Intersect(CMapFaceList &IntersectWith, CMapFaceList &In,
                              CMapFaceList &Out) {
@@ -2862,8 +2865,8 @@ void CMapFaceList::Intersect(CMapFaceList &IntersectWith, CMapFaceList &In,
 // Purpose: Performs an intersection of this list with another.
 // Input  : IntersectWith - the list to intersect with.
 //			In - the list of items that were in both lists
-//			Out - the list of items that were in one list but not the
-//other.
+//			Out - the list of items that were in one list but not
+//the other.
 //-----------------------------------------------------------------------------
 void CMapFaceIDList::Intersect(CMapFaceIDList &IntersectWith,
                                CMapFaceIDList &In, CMapFaceIDList &Out) {
