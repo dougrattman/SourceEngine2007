@@ -22,26 +22,16 @@
 #endif  // defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
 #elif defined(ANDROID)
 #define OS_ANDROID 1
-#elif defined(__native_client__)
-#define OS_NACL 1
 #elif defined(__linux__)
 #define OS_LINUX 1
-// Use TOOLKIT_GTK on linux if TOOLKIT_VIEWS isn't defined.
-#if !defined(TOOLKIT_VIEWS)
-#define TOOLKIT_GTK
-#endif
 #elif defined(_WIN32)
 #define OS_WIN 1
-#define TOOLKIT_VIEWS 1
 #elif defined(__FreeBSD__)
 #define OS_FREEBSD 1
-#define TOOLKIT_GTK
 #elif defined(__OpenBSD__)
 #define OS_OPENBSD 1
-#define TOOLKIT_GTK
 #elif defined(__sun)
 #define OS_SOLARIS 1
-#define TOOLKIT_GTK
 #else
 #error Please add support for your platform in build/include/build_config.h
 #endif
@@ -55,13 +45,11 @@
 #endif
 // For access to standard POSIXish features, use OS_POSIX instead of a
 // more specific macro.
-#if defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_FREEBSD) ||    \
-    defined(OS_OPENBSD) || defined(OS_SOLARIS) || defined(OS_ANDROID) || \
-    defined(OS_NACL)
+#if defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_FREEBSD) || \
+    defined(OS_OPENBSD) || defined(OS_SOLARIS) || defined(OS_ANDROID)
 #define OS_POSIX 1
 #endif
-#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_ANDROID) && \
-    !defined(OS_NACL)
+#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_ANDROID)
 #define USE_X11 1  // Use X for graphics.
 #endif
 // Use tcmalloc
@@ -79,7 +67,7 @@
 #error Please add support for your compiler in build/include/build_config.h
 #endif
 // Processor architecture detection.  For more info on what's defined, see:
-//   http://msdn.microsoft.com/en-us/library/b0084kay.aspx
+//   https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros
 //   http://www.agner.org/optimize/calling_conventions.pdf
 //   or with gcc, run: "echo | gcc -E -dM -"
 #if defined(_M_X64) || defined(__x86_64__)
