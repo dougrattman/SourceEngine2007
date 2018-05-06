@@ -20,18 +20,20 @@ using windows_errno_code = HRESULT;
 
 // Generic test for success on any windows status value (non-negative numbers
 // indicate success).
-constexpr inline bool succeeded(const windows_errno_code error_code) noexcept {
+[[nodiscard]] constexpr inline bool succeeded(
+    const windows_errno_code error_code) noexcept {
   return error_code >= 0;
 }
 
 // Generic test for failure on any windows status value (negative numbers
 // indicate failure).
-constexpr inline bool failed(const windows_errno_code error_code) noexcept {
+[[nodiscard]] constexpr inline bool failed(
+    const windows_errno_code error_code) noexcept {
   return error_code < 0;
 }
 
 // Converts win32 code to Windows error code.
-constexpr inline windows_errno_code win32_to_windows_errno_code(
+[[nodiscard]] constexpr inline windows_errno_code win32_to_windows_errno_code(
     const unsigned long win32_code) noexcept {
   return win32_code <= 0
              ? (windows_errno_code)win32_code
@@ -44,7 +46,7 @@ using windows_errno_info =
     source::errno_info<windows_errno_code, TCHAR, 512, succeeded>;
 
 // Creates windows errno info from |errno_code|.
-inline windows_errno_info make_windows_errno_info(
+[[nodiscard]] inline windows_errno_info make_windows_errno_info(
     windows_errno_code errno_code) noexcept {
   windows_errno_info info = {errno_code};
   int sprintf_code;
@@ -67,18 +69,23 @@ inline windows_errno_info make_windows_errno_info(
 }
 
 // Last Windows errno code.
-inline windows_errno_code windows_errno_code_last_error() noexcept {
+[[nodiscard]] inline windows_errno_code
+windows_errno_code_last_error() noexcept {
   return win32_to_windows_errno_code(GetLastError());
 }
 
 // Last Windows errno info.
-inline windows_errno_info windows_errno_info_last_error() noexcept {
+[[nodiscard]] inline windows_errno_info
+windows_errno_info_last_error() noexcept {
   return make_windows_errno_info(windows_errno_code_last_error());
 }
 
+// Success Windows code info.
+inline static const windows_errno_code windows_errno_code_ok{S_OK};
+
 // Success Windows errno info.
 inline static const windows_errno_info windows_errno_info_ok{
-    make_windows_errno_info(S_OK)};
+    make_windows_errno_info(windows_errno_code_ok)};
 }  // namespace source::windows
 
 #endif  // BASE_INCLUDE_WINDOWS_WINDOWS_ERRNO_INFO_H_

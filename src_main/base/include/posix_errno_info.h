@@ -9,29 +9,36 @@
 #include <tuple>
 
 #include "base/include/errno_info.h"
-
-// POSIX errno success code.
-#define EOK 0
+#include "base/include/macros.h"
 
 namespace source {
 // POSIX errno code.
 using posix_errno_code = int;
 
-// Check either POSIX errno code success or not |code|.
-inline bool is_posix_errno_success(const posix_errno_code code) noexcept {
-  return code == EOK;
-};
+// Success POSIX errno code.
+inline static const posix_errno_code posix_errno_code_ok{0};
+
+// Generic test for success on any posix errno code.
+[[nodiscard]] constexpr inline bool succeeded(
+    const posix_errno_code code) noexcept {
+  return code == posix_errno_code_ok;
+}
+
+// Generic test for failure on any posix errno code.
+[[nodiscard]] constexpr inline bool failed(
+    const posix_errno_code code) noexcept {
+  return !succeeded(code);
+}
 
 // POSIX errno info.
-using posix_errno_info =
-    errno_info<posix_errno_code, char, 92, is_posix_errno_success>;
+using posix_errno_info = errno_info<posix_errno_code, char, 92, succeeded>;
 
 // Create POSIX errno info from POSIx errno code |errno_code|.
-inline posix_errno_info make_posix_errno_info(
+[[nodiscard]] inline posix_errno_info make_posix_errno_info(
     posix_errno_code errno_code) noexcept {
   posix_errno_info info = {errno_code};
 
-  if (errno_code == EOK) {
+  if (errno_code == posix_errno_code_ok) {
     strcpy_s(info.description, "Ok (0)");
     return info;
   }
@@ -46,13 +53,20 @@ inline posix_errno_info make_posix_errno_info(
   return info;
 }
 
+// Converts errno |errno_code| to posix_errno_code.
+[[nodiscard]] constexpr inline posix_errno_code errno_to_posix_errno_code(
+    errno_t errno_code) noexcept {
+  return implicit_cast<posix_errno_code>(errno_code);
+}
+
 // Last POSIX errno info.
-inline posix_errno_info posix_errno_info_last_error() noexcept {
+[[nodiscard]] inline posix_errno_info posix_errno_info_last_error() noexcept {
   return make_posix_errno_info(errno);
 }
 
 // Success POSIX errno info.
-static const posix_errno_info posix_errno_info_ok{make_posix_errno_info(EOK)};
+static const posix_errno_info posix_errno_info_ok{
+    make_posix_errno_info(posix_errno_code_ok)};
 }  // namespace source
 
 #endif  // !BASE_INCLUDE_POSIX_ERRNO_INFO_H_
