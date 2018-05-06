@@ -11,71 +11,52 @@
 #include "tier1/utlvector.h"
 #include "tier2/tier2.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 namespace TGALoader {
-
-
 // Format of the TGA header on disk
 
-
 #pragma pack(1)
-
 struct TGAHeader_t {
-  unsigned char id_length;
-  unsigned char colormap_type;
-  unsigned char image_type;
-  unsigned short colormap_index;
-  unsigned short colormap_length;
-  unsigned char colormap_size;
-  unsigned short x_origin;
-  unsigned short y_origin;
-  unsigned short width;
-  unsigned short height;
-  unsigned char pixel_size;
-  unsigned char attributes;
+  u8 id_length;
+  u8 colormap_type;
+  u8 image_type;
+  u16 colormap_index;
+  u16 colormap_length;
+  u8 colormap_size;
+  u16 x_origin;
+  u16 y_origin;
+  u16 width;
+  u16 height;
+  u8 pixel_size;
+  u8 attributes;
 };
 
-
 // read a row into an RGBA8888 array.
-
-
-typedef void (*ReadRowFunc_t)(CUtlBuffer& buf, TGAHeader_t const& header,
-                              unsigned char* pDstMemory);
-
+using ReadRowFunc_t = void (*)(CUtlBuffer& buf, TGAHeader_t const& header,
+                               u8* pDstMemory);
 
 // output a RGBA8888 row into the destination format.
-
-
-typedef void (*OutputRowFunc_t)(CUtlBuffer& buf, TGAHeader_t const& header,
-                                unsigned char* pDstMemory);
-
+using OutputRowFunc_t = void (*)(CUtlBuffer& buf, TGAHeader_t const& header,
+                                 u8* pDstMemory);
 
 // Important constants
-
-
 #define TGA_MAX_COLORMAP_SIZE (256 * 4)
 #define TGA_MAX_ROW_LENGTH_IN_PIXELS IMAGE_MAX_DIM
 
-
 // Globals... blech
-
-static unsigned char g_ColorMap[TGA_MAX_COLORMAP_SIZE];
+static u8 g_ColorMap[TGA_MAX_COLORMAP_SIZE];
 
 // run-length state from row to row for RLE images
 static bool g_IsRunLengthPacket;
 static int g_PixelsLeftInPacket;
 
-static unsigned char g_SrcGammaTable[256];
-static unsigned char g_DstGammaTable[256];
+static u8 g_SrcGammaTable[256];
+static u8 g_DstGammaTable[256];
 
-typedef CUtlMemory<unsigned char> CTempImage;
-
+using CTempImage = CUtlMemory<u8>;
 
 // Reads in a file, sticks it into a UtlVector
-
-
 static bool ReadFile(char const* pFileName, CTempImage& image,
                      int maxbytes = -1) {
   Assert(pFileName);
@@ -112,18 +93,14 @@ static bool ReadFile(char const* pFileName, CTempImage& image,
   return len == pos;
 }
 
-
 // Reads in the TGA Header
-
 static void ReadHeader(CUtlBuffer& buf, TGAHeader_t& header) {
   buf.Get(&header, sizeof(TGAHeader_t));
 }
 
-
 // Figures out TGA information
-
 bool GetInfo(CUtlBuffer& buf, int* width, int* height, ImageFormat* imageFormat,
-             float* sourceGamma) {
+             f32* sourceGamma) {
   TGAHeader_t header;
 
   ReadHeader(buf, header);
@@ -157,17 +134,14 @@ bool GetInfo(CUtlBuffer& buf, int* width, int* height, ImageFormat* imageFormat,
   return true;
 }
 
-
 // Returns the minimum amount you have to load to get information about the TGA
 // file
-
 int TGAHeaderSize() { return sizeof(TGAHeader_t); }
-
 
 // Gets info about a TGA file
 
 bool GetInfo(char const* pFileName, int* width, int* height,
-             ImageFormat* imageFormat, float* sourceGamma) {
+             ImageFormat* imageFormat, f32* sourceGamma) {
   // temporary memory
   CTempImage image;
 
@@ -180,14 +154,10 @@ bool GetInfo(char const* pFileName, int* width, int* height,
   return GetInfo(buf, width, height, imageFormat, sourceGamma);
 }
 
-
 // Various output methods
-
-
-void OutputRowRGBA8888(CUtlBuffer& buf, TGAHeader_t const& header,
-                       unsigned char* pDst) {
+void OutputRowRGBA8888(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[0] = pSrc[0];
     pDst[1] = pSrc[1];
     pDst[2] = pSrc[2];
@@ -196,10 +166,9 @@ void OutputRowRGBA8888(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowABGR8888(CUtlBuffer& buf, TGAHeader_t const& header,
-                       unsigned char* pDst) {
+void OutputRowABGR8888(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[3] = pSrc[0];
     pDst[2] = pSrc[1];
     pDst[1] = pSrc[2];
@@ -208,10 +177,9 @@ void OutputRowABGR8888(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowRGB888(CUtlBuffer& buf, TGAHeader_t const& header,
-                     unsigned char* pDst) {
+void OutputRowRGB888(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 3) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[0] = pSrc[0];
     pDst[1] = pSrc[1];
     pDst[2] = pSrc[2];
@@ -219,10 +187,9 @@ void OutputRowRGB888(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowBGR888(CUtlBuffer& buf, TGAHeader_t const& header,
-                     unsigned char* pDst) {
+void OutputRowBGR888(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 3) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[2] = pSrc[0];
     pDst[1] = pSrc[1];
     pDst[0] = pSrc[2];
@@ -230,37 +197,32 @@ void OutputRowBGR888(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowRGB565(CUtlBuffer& buf, TGAHeader_t const& header,
-                     unsigned char* pDst) {
+void OutputRowRGB565(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   Assert(0);
 }
 
-void OutputRowI8(CUtlBuffer& buf, TGAHeader_t const& header,
-                 unsigned char* pDst) {
+void OutputRowI8(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, ++pDst) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
 
     if ((pSrc[0] == pSrc[1]) && (pSrc[1] == pSrc[2])) {
       pDst[0] = pSrc[0];
     } else {
-      pDst[0] = (unsigned char)(0.299f * pSrc[0] + 0.587f * pSrc[1] +
-                                0.114f * pSrc[2]);
+      pDst[0] = (u8)(0.299f * pSrc[0] + 0.587f * pSrc[1] + 0.114f * pSrc[2]);
     }
 
     buf.SeekGet(CUtlBuffer::SEEK_CURRENT, 4);
   }
 }
 
-void OutputRowIA88(CUtlBuffer& buf, TGAHeader_t const& header,
-                   unsigned char* pDst) {
+void OutputRowIA88(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 2) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
 
     if ((pSrc[0] == pSrc[1]) && (pSrc[1] == pSrc[2])) {
       pDst[0] = pSrc[0];
     } else {
-      pDst[0] = (unsigned char)(0.299f * pSrc[0] + 0.587f * pSrc[1] +
-                                0.114f * pSrc[2]);
+      pDst[0] = (u8)(0.299f * pSrc[0] + 0.587f * pSrc[1] + 0.114f * pSrc[2]);
     }
     pDst[1] = pSrc[3];
 
@@ -268,42 +230,39 @@ void OutputRowIA88(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowA8(CUtlBuffer& buf, TGAHeader_t const& header,
-                 unsigned char* pDst) {
+void OutputRowA8(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, ++pDst) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[0] = pSrc[3];
     buf.SeekGet(CUtlBuffer::SEEK_CURRENT, 4);
   }
 }
 
 void OutputRowRGB888BlueScreen(CUtlBuffer& buf, TGAHeader_t const& header,
-                               unsigned char* pDst) {
+                               u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 3) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
-    pDst[0] = (unsigned char)(((int)pSrc[0] * (int)pSrc[3]) >> 8);
-    pDst[1] = (unsigned char)(((int)pSrc[1] * (int)pSrc[3]) >> 8);
+    u8* pSrc = (u8*)buf.PeekGet();
+    pDst[0] = (u8)(((int)pSrc[0] * (int)pSrc[3]) >> 8);
+    pDst[1] = (u8)(((int)pSrc[1] * (int)pSrc[3]) >> 8);
     pDst[2] = (((((int)pSrc[2] * (int)pSrc[3])) >> 8) + (255 - pSrc[3]));
     buf.SeekGet(CUtlBuffer::SEEK_CURRENT, 4);
   }
 }
 
 void OutputRowBGR888BlueScreen(CUtlBuffer& buf, TGAHeader_t const& header,
-                               unsigned char* pDst) {
+                               u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 3) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
-    pDst[2] = (unsigned char)(((int)pSrc[0] * (int)pSrc[3]) >> 8);
-    pDst[1] = (unsigned char)(((int)pSrc[1] * (int)pSrc[3]) >> 8);
-    pDst[0] = (unsigned char)(((((int)pSrc[2] * (int)pSrc[3])) >> 8) +
-                              (255 - pSrc[3]));
+    u8* pSrc = (u8*)buf.PeekGet();
+    pDst[2] = (u8)(((int)pSrc[0] * (int)pSrc[3]) >> 8);
+    pDst[1] = (u8)(((int)pSrc[1] * (int)pSrc[3]) >> 8);
+    pDst[0] = (u8)(((((int)pSrc[2] * (int)pSrc[3])) >> 8) + (255 - pSrc[3]));
     buf.SeekGet(CUtlBuffer::SEEK_CURRENT, 4);
   }
 }
 
-void OutputRowARGB8888(CUtlBuffer& buf, TGAHeader_t const& header,
-                       unsigned char* pDst) {
+void OutputRowARGB8888(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[0] = pSrc[3];
     pDst[1] = pSrc[0];
     pDst[2] = pSrc[1];
@@ -312,10 +271,9 @@ void OutputRowARGB8888(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowBGRA8888(CUtlBuffer& buf, TGAHeader_t const& header,
-                       unsigned char* pDst) {
+void OutputRowBGRA8888(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[0] = pSrc[2];
     pDst[1] = pSrc[1];
     pDst[2] = pSrc[0];
@@ -324,10 +282,9 @@ void OutputRowBGRA8888(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowBGRX8888(CUtlBuffer& buf, TGAHeader_t const& header,
-                       unsigned char* pDst) {
+void OutputRowBGRX8888(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
+    u8* pSrc = (u8*)buf.PeekGet();
     pDst[0] = pSrc[2];
     pDst[1] = pSrc[1];
     pDst[2] = pSrc[0];
@@ -336,11 +293,10 @@ void OutputRowBGRX8888(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowBGR565(CUtlBuffer& buf, TGAHeader_t const& header,
-                     unsigned char* pDst) {
+void OutputRowBGR565(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 2) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
-    unsigned short rgba =
+    u8* pSrc = (u8*)buf.PeekGet();
+    u16 rgba =
         (pSrc[2] & 0x1F) | ((pSrc[1] & 0x3F) << 5) | ((pSrc[0] & 0x1F) << 11);
 
     pDst[0] = rgba & 0xFF;
@@ -349,12 +305,11 @@ void OutputRowBGR565(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-void OutputRowBGRX5551(CUtlBuffer& buf, TGAHeader_t const& header,
-                       unsigned char* pDst) {
+void OutputRowBGRX5551(CUtlBuffer& buf, TGAHeader_t const& header, u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 2) {
-    unsigned char* pSrc = (unsigned char*)buf.PeekGet();
-    unsigned short rgba = (pSrc[2] & 0x1F) | ((pSrc[1] & 0x1F) << 5) |
-                          ((pSrc[0] & 0x1F) << 10) | 0x8000;
+    u8* pSrc = (u8*)buf.PeekGet();
+    u16 rgba = (pSrc[2] & 0x1F) | ((pSrc[1] & 0x1F) << 5) |
+               ((pSrc[0] & 0x1F) << 10) | 0x8000;
 
     pDst[0] = rgba & 0xFF;
     pDst[1] = rgba >> 8;
@@ -362,15 +317,11 @@ void OutputRowBGRX5551(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-
 // Reads an 8-bit palettized TGA image
-
-
 void ReadRow8BitUncompressedWithColormap(CUtlBuffer& buf,
-                                         TGAHeader_t const& header,
-                                         unsigned char* pDst) {
+                                         TGAHeader_t const& header, u8* pDst) {
   int i;
-  unsigned char* colormapEntry;
+  u8* colormapEntry;
 
   switch (header.colormap_size) {
     case 8:
@@ -415,26 +366,20 @@ void ReadRow8BitUncompressedWithColormap(CUtlBuffer& buf,
   }
 }
 
-
 // Reads an 8-bit greyscale TGA image
-
-
 void ReadRow8BitUncompressedWithoutColormap(CUtlBuffer& buf,
                                             TGAHeader_t const& header,
-                                            unsigned char* pDst) {
+                                            u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
     pDst[0] = pDst[1] = pDst[2] = buf.GetUnsignedChar();
     pDst[3] = 255;
   }
 }
 
-
 // Reads a 24-bit TGA image
-
-
 void ReadRow24BitUncompressedWithoutColormap(CUtlBuffer& buf,
                                              TGAHeader_t const& header,
-                                             unsigned char* pDst) {
+                                             u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
     pDst[2] = buf.GetUnsignedChar();
     pDst[1] = buf.GetUnsignedChar();
@@ -443,13 +388,10 @@ void ReadRow24BitUncompressedWithoutColormap(CUtlBuffer& buf,
   }
 }
 
-
 // Reads a 32-bit TGA image
-
-
 void ReadRow32BitUncompressedWithoutColormap(CUtlBuffer& buf,
                                              TGAHeader_t const& header,
-                                             unsigned char* pDst) {
+                                             u8* pDst) {
   for (int i = 0; i < header.width; ++i, pDst += 4) {
     pDst[2] = buf.GetUnsignedChar();
     pDst[1] = buf.GetUnsignedChar();
@@ -458,25 +400,22 @@ void ReadRow32BitUncompressedWithoutColormap(CUtlBuffer& buf,
   }
 }
 
-
 // Decompresses a run-length encoded row of bytes
-
-
 static void DecompressRow(CUtlBuffer& buf, TGAHeader_t const& header,
-                          unsigned char* pDst) {
+                          u8* pDst) {
   int bytesPerPixel = header.pixel_size >> 3;
   int pixelsLeftInRow = header.width;
   int numPixelsToProcess;
 
-#ifdef _DEBUG
-  unsigned char* pLast = pDst + header.width * bytesPerPixel;
+#ifndef NDEBUG
+  u8* pLast = pDst + header.width * bytesPerPixel;
 #endif
 
-  unsigned char repeat[4];
+  u8 repeat[4];
   do {
     if (!g_PixelsLeftInPacket) {
       // start a new packet.
-      unsigned char packetHeader = buf.GetUnsignedChar();
+      u8 packetHeader = buf.GetUnsignedChar();
       g_PixelsLeftInPacket = 1 + (packetHeader & 0x7f);
       if (packetHeader & 0x80) {
         g_IsRunLengthPacket = true;
@@ -514,13 +453,10 @@ static void DecompressRow(CUtlBuffer& buf, TGAHeader_t const& header,
   Assert(pDst == pLast);
 }
 
-
 // Reads a compressed 8-bit palettized TGA image
-
 void ReadRow8BitCompressedWithColormap(CUtlBuffer& buf,
-                                       TGAHeader_t const& header,
-                                       unsigned char* pDst) {
-  unsigned char rowI_8[TGA_MAX_ROW_LENGTH_IN_PIXELS];
+                                       TGAHeader_t const& header, u8* pDst) {
+  u8 rowI_8[TGA_MAX_ROW_LENGTH_IN_PIXELS];
 
   DecompressRow(buf, header, rowI_8);
 
@@ -529,13 +465,10 @@ void ReadRow8BitCompressedWithColormap(CUtlBuffer& buf,
   ReadRow8BitUncompressedWithColormap(uncompressedBuf, header, pDst);
 }
 
-
 // Reads a compressed 8-bit greyscale TGA image
-
 void ReadRow8BitCompressedWithoutColormap(CUtlBuffer& buf,
-                                          TGAHeader_t const& header,
-                                          unsigned char* pDst) {
-  unsigned char rowI_8[TGA_MAX_ROW_LENGTH_IN_PIXELS];
+                                          TGAHeader_t const& header, u8* pDst) {
+  u8 rowI_8[TGA_MAX_ROW_LENGTH_IN_PIXELS];
 
   DecompressRow(buf, header, rowI_8);
 
@@ -544,14 +477,11 @@ void ReadRow8BitCompressedWithoutColormap(CUtlBuffer& buf,
   ReadRow8BitUncompressedWithoutColormap(uncompressedBuf, header, pDst);
 }
 
-
 // Reads a compressed 24-bit TGA image
-
-
 void ReadRow24BitCompressedWithoutColormap(CUtlBuffer& buf,
                                            TGAHeader_t const& header,
-                                           unsigned char* pDst) {
-  unsigned char rowBGR_888[TGA_MAX_ROW_LENGTH_IN_PIXELS * 3];
+                                           u8* pDst) {
+  u8 rowBGR_888[TGA_MAX_ROW_LENGTH_IN_PIXELS * 3];
 
   DecompressRow(buf, header, rowBGR_888);
 
@@ -560,14 +490,11 @@ void ReadRow24BitCompressedWithoutColormap(CUtlBuffer& buf,
   ReadRow24BitUncompressedWithoutColormap(uncompressedBuf, header, pDst);
 }
 
-
 // Reads a compressed 32-bit TGA image
-
-
 void ReadRow32BitCompressedWithoutColormap(CUtlBuffer& buf,
                                            TGAHeader_t const& header,
-                                           unsigned char* pDst) {
-  unsigned char rowBGRA_8888[TGA_MAX_ROW_LENGTH_IN_PIXELS << 2];
+                                           u8* pDst) {
+  u8 rowBGRA_8888[TGA_MAX_ROW_LENGTH_IN_PIXELS << 2];
 
   DecompressRow(buf, header, rowBGRA_8888);
 
@@ -576,10 +503,7 @@ void ReadRow32BitCompressedWithoutColormap(CUtlBuffer& buf,
   ReadRow32BitUncompressedWithoutColormap(uncompressedBuf, header, pDst);
 }
 
-
 // Method used to read the TGA
-
-
 static ReadRowFunc_t GetReadRowFunc(TGAHeader_t const& header) {
   switch (header.image_type) {
     case 1:  // 8 bit uncompressed TGA image
@@ -621,23 +545,19 @@ static ReadRowFunc_t GetReadRowFunc(TGAHeader_t const& header) {
             return &ReadRow32BitCompressedWithoutColormap;
             break;
           default:
-            // Error( "unsupported tga colordepth: %d", TGAHeader_t.pixel_size"
-            // );
-            return NULL;
+            Error("Unsupported tga colordepth: %d\n", header.pixel_size);
+            return nullptr;
             break;
         }
       }
     default:
-      // Error( "unsupported tga pixel format" );
+      Error("Unsupported tga pixel format: %d\n", header.image_type);
       return 0;
       break;
   }
 }
 
-
 // Reads the color map
-
-
 static bool ReadColormap(CUtlBuffer& buf, TGAHeader_t const& header) {
   int numColormapBytes = header.colormap_length * (header.colormap_size >> 3);
   if (numColormapBytes > TGA_MAX_COLORMAP_SIZE) {
@@ -651,9 +571,7 @@ static bool ReadColormap(CUtlBuffer& buf, TGAHeader_t const& header) {
   return true;
 }
 
-
 // Reads the source image
-
 static bool ReadSourceImage(CUtlBuffer& buf, TGAHeader_t& header,
                             CTempImage& image) {
   // Figure out our reading and riting
@@ -671,7 +589,7 @@ static bool ReadSourceImage(CUtlBuffer& buf, TGAHeader_t& header,
 
   // read each row and process it. Note the image is upside-down from
   // the way we want it.
-  unsigned char* pDstBits;
+  u8* pDstBits;
   // flip the image vertically if necessary.
   if (header.attributes & 0x20) {
     for (int row = 0; row < header.height; ++row) {
@@ -692,11 +610,9 @@ static bool ReadSourceImage(CUtlBuffer& buf, TGAHeader_t& header,
   return true;
 }
 
-
 // Parses the lovely bits previously read from disk
-
-bool Load(unsigned char* pOutputImage, CUtlBuffer& buf, int width, int height,
-          ImageFormat imageFormat, float targetGamma, bool mipmap) {
+bool Load(u8* pOutputImage, CUtlBuffer& buf, int width, int height,
+          ImageFormat imageFormat, f32 targetGamma, bool mipmap) {
   TGAHeader_t header;
 
   // Read the TGA header
@@ -729,11 +645,9 @@ bool Load(unsigned char* pOutputImage, CUtlBuffer& buf, int width, int height,
   return true;
 }
 
-
 // Reads a TGA image from a file
-
-bool Load(unsigned char* pOutputImage, const char* pFileName, int width,
-          int height, ImageFormat imageFormat, float targetGamma, bool mipmap) {
+bool Load(u8* pOutputImage, const char* pFileName, int width, int height,
+          ImageFormat imageFormat, f32 targetGamma, bool mipmap) {
   Assert(pOutputImage && pFileName);
 
   // memory for the file
@@ -750,11 +664,9 @@ bool Load(unsigned char* pOutputImage, const char* pFileName, int width,
               mipmap);
 }
 
-
 // Creates a map in linear space
-
-bool LoadRGBA8888(CUtlBuffer& buf, CUtlMemory<unsigned char>& outputData,
-                  int& outWidth, int& outHeight) {
+bool LoadRGBA8888(CUtlBuffer& buf, CUtlMemory<u8>& outputData, int& outWidth,
+                  int& outHeight) {
   TGAHeader_t header;
 
   // Read the TGA header
@@ -783,11 +695,8 @@ bool LoadRGBA8888(CUtlBuffer& buf, CUtlMemory<unsigned char>& outputData,
   return true;
 }
 
-
 // Reads a TGA, keeps it in RGBA8888
-
-
-bool LoadRGBA8888(const char* pFileName, CUtlMemory<unsigned char>& outputData,
+bool LoadRGBA8888(const char* pFileName, CUtlMemory<u8>& outputData,
                   int& outWidth, int& outHeight) {
   Assert(pFileName);
 
@@ -804,4 +713,4 @@ bool LoadRGBA8888(const char* pFileName, CUtlMemory<unsigned char>& outputData,
   return LoadRGBA8888(buf, outputData, outWidth, outHeight);
 }
 
-}  // end namespace TGALoader
+}  // namespace TGALoader

@@ -3,7 +3,9 @@
 #ifndef IMAGEFORMAT_H
 #define IMAGEFORMAT_H
 
-#include <cstdio>
+#include <type_traits>
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
 
 enum NormalDecodeMode_t {
   NORMAL_DECODE_NONE = 0,
@@ -11,14 +13,11 @@ enum NormalDecodeMode_t {
   NORMAL_DECODE_ATI2N_ALPHA = 2
 };
 
-// Forward declaration
-#ifdef _WIN32
+#ifdef OS_WIN
 using D3DFORMAT = enum _D3DFORMAT : int;
 #endif
 
-
 // The various image format types
-
 
 enum ImageFormat {
   IMAGE_FORMAT_UNKNOWN = -1,
@@ -69,27 +68,30 @@ enum ImageFormat {
   NUM_IMAGE_FORMATS
 };
 
-
 // Color structures
 
-
 struct BGRA8888_t {
-  unsigned char b;  // change the order of names to change the
-  unsigned char g;  //  order of the output ARGB or BGRA, etc...
-  unsigned char r;  //  Last one is MSB, 1st is LSB.
-  unsigned char a;
-  inline BGRA8888_t &operator=(const BGRA8888_t &in) {
-    *(unsigned int *)this = *(unsigned int *)&in;
+  u8 b;  // change the order of names to change the
+  u8 g;  //  order of the output ARGB or BGRA, etc...
+  u8 r;  //  Last one is MSB, 1st is LSB.
+  u8 a;
+  constexpr inline BGRA8888_t &operator=(const BGRA8888_t &in) {
+    static_assert(std::is_standard_layout_v<BGRA8888_t>,
+                  "Verify BGRA8888_t has standart layout.");
+    static_assert(sizeof(u32) == sizeof(decltype(in)),
+                  "Verify in is of same size as u32.");
+
+    *(u32 *)(std::uintptr_t)this = *(u32 *)(std::uintptr_t)&in;
     return *this;
   }
 };
 
 struct RGBA8888_t {
-  unsigned char r;  // change the order of names to change the
-  unsigned char g;  //  order of the output ARGB or BGRA, etc...
-  unsigned char b;  //  Last one is MSB, 1st is LSB.
-  unsigned char a;
-  inline RGBA8888_t &operator=(const BGRA8888_t &in) {
+  u8 r;  // change the order of names to change the
+  u8 g;  //  order of the output ARGB or BGRA, etc...
+  u8 b;  //  Last one is MSB, 1st is LSB.
+  u8 a;
+  constexpr inline RGBA8888_t &operator=(const BGRA8888_t &in) {
     r = in.r;
     g = in.g;
     b = in.b;
@@ -99,28 +101,28 @@ struct RGBA8888_t {
 };
 
 struct RGB888_t {
-  unsigned char r;
-  unsigned char g;
-  unsigned char b;
-  inline RGB888_t &operator=(const BGRA8888_t &in) {
+  u8 r;
+  u8 g;
+  u8 b;
+  constexpr inline RGB888_t &operator=(const BGRA8888_t &in) {
     r = in.r;
     g = in.g;
     b = in.b;
     return *this;
   }
-  inline bool operator==(const RGB888_t &in) const {
+  constexpr inline bool operator==(const RGB888_t &in) const {
     return (r == in.r) && (g == in.g) && (b == in.b);
   }
-  inline bool operator!=(const RGB888_t &in) const {
+  constexpr inline bool operator!=(const RGB888_t &in) const {
     return (r != in.r) || (g != in.g) || (b != in.b);
   }
 };
 
 struct BGR888_t {
-  unsigned char b;
-  unsigned char g;
-  unsigned char r;
-  inline BGR888_t &operator=(const BGRA8888_t &in) {
+  u8 b;
+  u8 g;
+  u8 r;
+  constexpr inline BGR888_t &operator=(const BGRA8888_t &in) {
     r = in.r;
     g = in.g;
     b = in.b;
@@ -128,37 +130,30 @@ struct BGR888_t {
   }
 };
 
-// 360 uses this structure for x86 dxt decoding
-#if defined(_X360)
-#pragma bitfield_order(push, lsb_to_msb)
-#endif
 struct BGR565_t {
-  unsigned short b : 5;  // order of names changes
-  unsigned short g : 6;  //  byte order of output to 32 bit
-  unsigned short r : 5;
-  inline BGR565_t &operator=(const BGRA8888_t &in) {
+  u16 b : 5;  // order of names changes
+  u16 g : 6;  // byte order of output to 32 bit
+  u16 r : 5;
+  constexpr inline BGR565_t &operator=(const BGRA8888_t &in) {
     r = in.r >> 3;
     g = in.g >> 2;
     b = in.b >> 3;
     return *this;
   }
-  inline BGR565_t &Set(int red, int green, int blue) {
+  constexpr inline BGR565_t &Set(u32 red, u32 green, u32 blue) {
     r = red >> 3;
     g = green >> 2;
     b = blue >> 3;
     return *this;
   }
 };
-#if defined(_X360)
-#pragma bitfield_order(pop)
-#endif
 
 struct BGRA5551_t {
-  unsigned short b : 5;  // order of names changes
-  unsigned short g : 5;  //  byte order of output to 32 bit
-  unsigned short r : 5;
-  unsigned short a : 1;
-  inline BGRA5551_t &operator=(const BGRA8888_t &in) {
+  u16 b : 5;  // order of names changes
+  u16 g : 5;  // byte order of output to 32 bit
+  u16 r : 5;
+  u16 a : 1;
+  constexpr inline BGRA5551_t &operator=(const BGRA8888_t &in) {
     r = in.r >> 3;
     g = in.g >> 3;
     b = in.b >> 3;
@@ -168,11 +163,11 @@ struct BGRA5551_t {
 };
 
 struct BGRA4444_t {
-  unsigned short b : 4;  // order of names changes
-  unsigned short g : 4;  //  byte order of output to 32 bit
-  unsigned short r : 4;
-  unsigned short a : 4;
-  inline BGRA4444_t &operator=(const BGRA8888_t &in) {
+  u16 b : 4;  // order of names changes
+  u16 g : 4;  // byte order of output to 32 bit
+  u16 r : 4;
+  u16 a : 4;
+  constexpr inline BGRA4444_t &operator=(const BGRA8888_t &in) {
     r = in.r >> 4;
     g = in.g >> 4;
     b = in.b >> 4;
@@ -182,11 +177,11 @@ struct BGRA4444_t {
 };
 
 struct RGBX5551_t {
-  unsigned short r : 5;
-  unsigned short g : 5;
-  unsigned short b : 5;
-  unsigned short x : 1;
-  inline RGBX5551_t &operator=(const BGRA8888_t &in) {
+  u16 r : 5;
+  u16 g : 5;
+  u16 b : 5;
+  u16 x : 1;
+  constexpr inline RGBX5551_t &operator=(const BGRA8888_t &in) {
     r = in.r >> 3;
     g = in.g >> 3;
     b = in.b >> 3;
@@ -194,15 +189,11 @@ struct RGBX5551_t {
   }
 };
 
-
-// some important constants
-
+// Some important constants
 #define ARTWORK_GAMMA (2.2f)
 #define IMAGE_MAX_DIM (2048)
 
-
-// information about each image format
-
+// Information about each image format
 struct ImageFormatInfo_t {
   const char *m_pName;
   int m_NumBytes;
@@ -213,50 +204,45 @@ struct ImageFormatInfo_t {
   bool m_IsCompressed;
 };
 
-
-// Various methods related to pixelmaps and color formats
-
+// Various methods related to pixelmaps and color formats.
 namespace ImageLoader {
-
 bool GetInfo(const char *fileName, int *width, int *height,
-             enum ImageFormat *imageFormat, float *sourceGamma);
+             enum ImageFormat *imageFormat, f32 *sourceGamma);
 int GetMemRequired(int width, int height, int depth, ImageFormat imageFormat,
                    bool mipmap);
 int GetMipMapLevelByteOffset(int width, int height,
                              enum ImageFormat imageFormat, int skipMipLevels);
 void GetMipMapLevelDimensions(int *width, int *height, int skipMipLevels);
 int GetNumMipMapLevels(int width, int height, int depth = 1);
-bool Load(unsigned char *imageData, const char *fileName, int width, int height,
-          enum ImageFormat imageFormat, float targetGamma, bool mipmap);
-bool Load(unsigned char *imageData, FILE *fp, int width, int height,
-          enum ImageFormat imageFormat, float targetGamma, bool mipmap);
+bool Load(u8 *imageData, const char *fileName, int width, int height,
+          enum ImageFormat imageFormat, f32 targetGamma, bool mipmap);
+bool Load(u8 *imageData, FILE *fp, int width, int height,
+          enum ImageFormat imageFormat, f32 targetGamma, bool mipmap);
 
 // convert from any image format to any other image format.
 // return false if the conversion cannot be performed.
 // Strides denote the number of bytes per each line,
 // by default assumes width * # of bytes per pixel
-bool ConvertImageFormat(const unsigned char *src,
-                        enum ImageFormat srcImageFormat, unsigned char *dst,
+bool ConvertImageFormat(const u8 *src, enum ImageFormat srcImageFormat, u8 *dst,
                         enum ImageFormat dstImageFormat, int width, int height,
                         int srcStride = 0, int dstStride = 0);
 
 // must be used in conjunction with ConvertImageFormat() to pre-swap and
 // post-swap
-void PreConvertSwapImageData(unsigned char *pImageData, int nImageSize,
+void PreConvertSwapImageData(u8 *pImageData, int nImageSize,
                              ImageFormat imageFormat, int width = 0,
                              int stride = 0);
-void PostConvertSwapImageData(unsigned char *pImageData, int nImageSize,
+void PostConvertSwapImageData(u8 *pImageData, int nImageSize,
                               ImageFormat imageFormat, int width = 0,
                               int stride = 0);
-void ByteSwapImageData(unsigned char *pImageData, int nImageSize,
-                       ImageFormat imageFormat, int width = 0, int stride = 0);
+void ByteSwapImageData(u8 *pImageData, int nImageSize, ImageFormat imageFormat,
+                       int width = 0, int stride = 0);
 bool IsFormatValidForConversion(ImageFormat fmt);
-
 
 // convert back and forth from D3D format to ImageFormat, regardless of
 // whether it's supported or not
 
-#ifdef _WIN32
+#ifdef OS_WIN
 ImageFormat D3DFormatToImageFormat(D3DFORMAT format);
 D3DFORMAT ImageFormatToD3DFormat(ImageFormat format);
 #endif
@@ -284,8 +270,8 @@ struct ResampleInfo_t {
     m_flColorGoal[3] = 0.0f;
   }
 
-  unsigned char *m_pSrc;
-  unsigned char *m_pDest;
+  u8 *m_pSrc;
+  u8 *m_pDest;
 
   int m_nSrcWidth;
   int m_nSrcHeight;
@@ -295,16 +281,16 @@ struct ResampleInfo_t {
   int m_nDestHeight;
   int m_nDestDepth;
 
-  float m_flSrcGamma;
-  float m_flDestGamma;
+  f32 m_flSrcGamma;
+  f32 m_flDestGamma;
 
-  float m_flColorScale[4];  // Color scale factors RGBA
-  float m_flColorGoal[4];   // Color goal values RGBA		DestColor =
-                            // ColorGoal
-                            // + scale * (SrcColor - ColorGoal)
+  f32 m_flColorScale[4];  // Color scale factors RGBA
+  f32 m_flColorGoal[4];   // Color goal values RGBA		DestColor =
+                          // ColorGoal
+                          // + scale * (SrcColor - ColorGoal)
 
-  float m_flAlphaThreshhold;
-  float m_flAlphaHiFreqThreshhold;
+  f32 m_flAlphaThreshhold;
+  f32 m_flAlphaHiFreqThreshhold;
 
   int m_nFlags;
 };
@@ -313,101 +299,74 @@ bool ResampleRGBA8888(const ResampleInfo_t &info);
 bool ResampleRGBA16161616(const ResampleInfo_t &info);
 bool ResampleRGB323232F(const ResampleInfo_t &info);
 
-void ConvertNormalMapRGBA8888ToDUDVMapUVLX8888(const unsigned char *src,
-                                               int width, int height,
-                                               unsigned char *dst_);
-void ConvertNormalMapRGBA8888ToDUDVMapUVWQ8888(const unsigned char *src,
-                                               int width, int height,
-                                               unsigned char *dst_);
-void ConvertNormalMapRGBA8888ToDUDVMapUV88(const unsigned char *src, int width,
-                                           int height, unsigned char *dst_);
+void ConvertNormalMapRGBA8888ToDUDVMapUVLX8888(const u8 *src, int width,
+                                               int height, u8 *dst_);
+void ConvertNormalMapRGBA8888ToDUDVMapUVWQ8888(const u8 *src, int width,
+                                               int height, u8 *dst_);
+void ConvertNormalMapRGBA8888ToDUDVMapUV88(const u8 *src, int width, int height,
+                                           u8 *dst_);
 
-void ConvertIA88ImageToNormalMapRGBA8888(const unsigned char *src, int width,
-                                         int height, unsigned char *dst,
-                                         float bumpScale);
+void ConvertIA88ImageToNormalMapRGBA8888(const u8 *src, int width, int height,
+                                         u8 *dst, f32 bumpScale);
 
-void NormalizeNormalMapRGBA8888(unsigned char *src, int numTexels);
-
+void NormalizeNormalMapRGBA8888(u8 *src, int numTexels);
 
 // Gamma correction
-
-void GammaCorrectRGBA8888(unsigned char *src, unsigned char *dst, int width,
-                          int height, int depth, float srcGamma,
-                          float dstGamma);
-
+void GammaCorrectRGBA8888(u8 *src, u8 *dst, int width, int height, int depth,
+                          f32 srcGamma, f32 dstGamma);
 
 // Makes a gamma table
-
-void ConstructGammaTable(unsigned char *pTable, float srcGamma, float dstGamma);
-
+void ConstructGammaTable(u8 *pTable, f32 srcGamma, f32 dstGamma);
 
 // Gamma corrects using a previously constructed gamma table
-
-void GammaCorrectRGBA8888(unsigned char *pSrc, unsigned char *pDst, int width,
-                          int height, int depth, unsigned char *pGammaTable);
-
+void GammaCorrectRGBA8888(u8 *pSrc, u8 *pDst, int width, int height, int depth,
+                          u8 *pGammaTable);
 
 // Generates a number of mipmap levels
-
-void GenerateMipmapLevels(unsigned char *pSrc, unsigned char *pDst, int width,
-                          int height, int depth, ImageFormat imageFormat,
-                          float srcGamma, float dstGamma, int numLevels = 0);
-
+void GenerateMipmapLevels(u8 *pSrc, u8 *pDst, int width, int height, int depth,
+                          ImageFormat imageFormat, f32 srcGamma, f32 dstGamma,
+                          int numLevels = 0);
 
 // operations on square images (src and dst can be the same)
-
-bool RotateImageLeft(const unsigned char *src, unsigned char *dst,
-                     int widthHeight, ImageFormat imageFormat);
-bool RotateImage180(const unsigned char *src, unsigned char *dst,
-                    int widthHeight, ImageFormat imageFormat);
+bool RotateImageLeft(const u8 *src, u8 *dst, int widthHeight,
+                     ImageFormat imageFormat);
+bool RotateImage180(const u8 *src, u8 *dst, int widthHeight,
+                    ImageFormat imageFormat);
 bool FlipImageVertically(void *pSrc, void *pDst, int nWidth, int nHeight,
                          ImageFormat imageFormat, int nDstStride = 0);
 bool FlipImageHorizontally(void *pSrc, void *pDst, int nWidth, int nHeight,
                            ImageFormat imageFormat, int nDstStride = 0);
-bool SwapAxes(unsigned char *src, int widthHeight, ImageFormat imageFormat);
-
+bool SwapAxes(u8 *src, int widthHeight, ImageFormat imageFormat);
 
 // Returns info about each image format
-
 ImageFormatInfo_t const &ImageFormatInfo(ImageFormat fmt);
 
-
 // Gets the name of the image format
-
 inline char const *GetName(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_pName;
 }
 
-
 // Gets the size of the image format in bytes
-
 inline int SizeInBytes(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_NumBytes;
 }
 
-
 // Does the image format support transparency?
-
 inline bool IsTransparent(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_NumAlphaBits > 0;
 }
 
-
 // Is the image format compressed?
-
 inline bool IsCompressed(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_IsCompressed;
 }
 
-
 // Is any channel > 8 bits?
-
 inline bool HasChannelLargerThan8Bits(ImageFormat fmt) {
   ImageFormatInfo_t info = ImageFormatInfo(fmt);
   return (info.m_NumRedBits > 8 || info.m_NumGreeBits > 8 ||
           info.m_NumBlueBits > 8 || info.m_NumAlphaBits > 8);
 }
-
-}  // end namespace ImageLoader
+}  // namespace ImageLoader
 
 #endif  // IMAGEFORMAT_H

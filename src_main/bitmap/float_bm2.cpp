@@ -8,31 +8,31 @@
 #include <cstring>
 #include "tier0/include/platform.h"
 
-static float ScaleValue(float f, float overbright) {
+static f32 ScaleValue(f32 f, f32 overbright) {
   // map a value between 0..255 to the scale factor
   int ival = f;
   return ival * (overbright / 255.0);
 }
 
-static float IScaleValue(float f, float overbright) {
+static f32 IScaleValue(f32 f, f32 overbright) {
   f *= (1.0 / overbright);
   int ival = std::min(255.0, ceil(f * 255.0));
   return ival;
 }
 
 void MaybeSetScaleVaue(FloatBitMap_t const &orig, FloatBitMap_t &newbm, int x,
-                       int y, float newscale, float overbright) {
+                       int y, f32 newscale, f32 overbright) {
   // clamp the given scale value to the legal range for that pixel and regnerate
   // the rgb components.
-  float maxc = std::max(std::max(orig.Pixel(x, y, 0), orig.Pixel(x, y, 1)),
-                        orig.Pixel(x, y, 2));
+  f32 maxc = std::max(std::max(orig.Pixel(x, y, 0), orig.Pixel(x, y, 1)),
+                      orig.Pixel(x, y, 2));
   if (maxc == 0.0) {
     // pixel is black. any scale value is fine.
     newbm.Pixel(x, y, 3) = newscale;
     for (int c = 0; c < 3; c++) newbm.Pixel(x, y, c) = 0;
   } else {
-    //		float desired_floatscale=maxc;
-    float scale_we_will_get = ScaleValue(newscale, overbright);
+    //		f32 desired_floatscale=maxc;
+    f32 scale_we_will_get = ScaleValue(newscale, overbright);
     //		if (scale_we_will_get >= desired_floatscale )
     {
       newbm.Pixel(x, y, 3) = newscale;
@@ -42,14 +42,14 @@ void MaybeSetScaleVaue(FloatBitMap_t const &orig, FloatBitMap_t &newbm, int x,
   }
 }
 
-void FloatBitMap_t::Uncompress(float overbright) {
+void FloatBitMap_t::Uncompress(f32 overbright) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++) {
       int iactual_alpha_value = 255.0 * Pixel(x, y, 3);
-      float actual_alpha_value = iactual_alpha_value * (1.0 / 255.0);
+      f32 actual_alpha_value = iactual_alpha_value * (1.0 / 255.0);
       for (int c = 0; c < 3; c++) {
         int iactual_color_value = 255.0 * Pixel(x, y, c);
-        float actual_color_value = iactual_color_value * (1.0 / 255.0);
+        f32 actual_color_value = iactual_color_value * (1.0 / 255.0);
         Pixel(x, y, c) = actual_alpha_value * actual_color_value * overbright;
       }
     }
@@ -58,7 +58,7 @@ void FloatBitMap_t::Uncompress(float overbright) {
 #define GAUSSIAN_WIDTH 5
 #define SQ(x) ((x) * (x))
 
-void FloatBitMap_t::CompressTo8Bits(float overbright) {
+void FloatBitMap_t::CompressTo8Bits(f32 overbright) {
   FloatBitMap_t TmpFBM(Width, Height);
   // first, saturate to max overbright
   for (int y = 0; y < Height; y++)
@@ -69,14 +69,14 @@ void FloatBitMap_t::CompressTo8Bits(float overbright) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++) {
       // determine maximum component
-      float maxc =
+      f32 maxc =
           std::max(std::max(Pixel(x, y, 0), Pixel(x, y, 1)), Pixel(x, y, 2));
       if (maxc == 0) {
         for (int c = 0; c < 4; c++) TmpFBM.Pixel(x, y, c) = 0;
       } else {
-        float desired_floatscale = maxc;
-        float closest_iscale = IScaleValue(desired_floatscale, overbright);
-        float scale_value_we_got = ScaleValue(closest_iscale, overbright);
+        f32 desired_floatscale = maxc;
+        f32 closest_iscale = IScaleValue(desired_floatscale, overbright);
+        f32 scale_value_we_got = ScaleValue(closest_iscale, overbright);
         TmpFBM.Pixel(x, y, 3) = closest_iscale;
         for (int c = 0; c < 3; c++)
           TmpFBM.Pixel(x, y, c) = Pixel(x, y, c) / scale_value_we_got;
@@ -92,16 +92,16 @@ void FloatBitMap_t::CompressTo8Bits(float overbright) {
     FloatBitMap_t temp_filtered(&TmpFBM);
     for (int y = 0; y < Height; y++) {
       for (int x = 0; x < Width; x++) {
-        float sum_scales = 0.0;
-        float sum_weights = 0.0;
+        f32 sum_scales = 0.0;
+        f32 sum_weights = 0.0;
         for (int yofs = -GAUSSIAN_WIDTH; yofs <= GAUSSIAN_WIDTH; yofs++)
           for (int xofs = -GAUSSIAN_WIDTH; xofs <= GAUSSIAN_WIDTH; xofs++) {
-            float r = 0.456 * GAUSSIAN_WIDTH;
+            f32 r = 0.456 * GAUSSIAN_WIDTH;
             r = 0.26 * GAUSSIAN_WIDTH;
-            float x1 = xofs / r;
-            float y1 = yofs / r;
-            float a = (SQ(x1) + SQ(y1)) / (2.0 * SQ(r));
-            float w = exp(-a);
+            f32 x1 = xofs / r;
+            f32 y1 = yofs / r;
+            f32 a = (SQ(x1) + SQ(y1)) / (2.0 * SQ(r));
+            f32 w = exp(-a);
             sum_scales += w * TmpFBM.PixelClamped(x + xofs, y + yofs, 3);
             sum_weights += w;
           }
@@ -112,11 +112,11 @@ void FloatBitMap_t::CompressTo8Bits(float overbright) {
     }
     pass++;
     memcpy(TmpFBM.RGBAData, temp_filtered.RGBAData,
-           Width * Height * 4 * sizeof(float));
+           Width * Height * 4 * sizeof(f32));
   }
 #endif
 
-  memcpy(RGBAData, TmpFBM.RGBAData, Width * Height * 4 * sizeof(float));
+  memcpy(RGBAData, TmpFBM.RGBAData, Width * Height * 4 * sizeof(f32));
 
   // now, map scale to real value
   for (int y = 0; y < Height; y++)

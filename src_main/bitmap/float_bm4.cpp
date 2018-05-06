@@ -25,12 +25,12 @@ struct SSBumpCalculationContext  // what each thread needs to see
   FloatBitMap_t *ret_bm;  // the bitmnap we are building
   FloatBitMap_t const *src_bm;
   int nrays_to_trace_per_pixel;
-  float bump_scale;
+  f32 bump_scale;
   Vector *trace_directions;  // light source directions to trace
   Vector *normals;
   int min_y;  // range of scanlines to computer for
   int max_y;
-  uint32_t m_nOptionFlags;
+  u32 m_nOptionFlags;
   int thread_number;
 };
 
@@ -71,10 +71,10 @@ static unsigned SSBumpCalculationThreadFN(void *ctx1) {
       int nNumChannels =
           (ctx->m_nOptionFlags & SSBUMP_OPTION_NONDIRECTIONAL) ? 1 : 3;
       for (int c = 0; c < nNumChannels; c++) {
-        float sum_dots = 0;
-        float sum_possible_dots = 0;
+        f32 sum_dots = 0;
+        f32 sum_possible_dots = 0;
         Vector ldir = g_localBumpBasis[c];
-        float ndotl =
+        f32 ndotl =
             DotProduct(ldir, ctx->normals[x + y * ctx->src_bm->Width]);
         if (ndotl < 0)
           ctx->ret_bm->Pixel(x, y, c) = 0;
@@ -83,7 +83,7 @@ static unsigned SSBumpCalculationThreadFN(void *ctx1) {
             RayTracingSingleResult *this_rslt =
                 rslts + ctx->nrays_to_trace_per_pixel * (x);
             for (int r = 0; r < ctx->nrays_to_trace_per_pixel; r++) {
-              float dot;
+              f32 dot;
               if (ctx->m_nOptionFlags & SSBUMP_OPTION_NONDIRECTIONAL)
                 dot = ctx->trace_directions[r].z;
               else
@@ -117,7 +117,7 @@ static unsigned SSBumpCalculationThreadFN(void *ctx1) {
 }
 
 void FloatBitMap_t::ComputeVertexPositionsAndNormals(
-    float flHeightScale, Vector **ppPosOut, Vector **ppNormalOut) const {
+    f32 flHeightScale, Vector **ppPosOut, Vector **ppNormalOut) const {
   Vector *verts = new Vector[Width * Height];
   // first, calculate vertex positions
   for (int y = 0; y < Height; y++)
@@ -174,8 +174,8 @@ void FloatBitMap_t::ComputeVertexPositionsAndNormals(
 
 FloatBitMap_t *
 FloatBitMap_t::ComputeSelfShadowedBumpmapFromHeightInAlphaChannel(
-    float bump_scale, int nrays_to_trace_per_pixel,
-    uint32_t nOptionFlags) const {
+    f32 bump_scale, int nrays_to_trace_per_pixel,
+    u32 nOptionFlags) const {
   // first, add all the triangles from the height map to the "world".
   // we will make multiple copies to handle wrapping
   int tcnt = 1;
@@ -288,11 +288,11 @@ FloatBitMap_t::ComputeSelfShadowedBumpmapFromHeightInAlphaChannel(
   }
   if (nOptionFlags & SSBUMP_MOD2X_DETAIL_TEXTURE) {
     // normalize so that a flat normal yields 0.5
-    const float flOutputScale = 0.5f * (1.0f / .57735026f);
+    const f32 flOutputScale = 0.5f * (1.0f / .57735026f);
     // scale output weights by color channel
     for (int nY = 0; nY < Height; nY++)
       for (int nX = 0; nX < Width; nX++) {
-        float flScale =
+        f32 flScale =
             flOutputScale * (2.0 / 3.0) *
             (Pixel(nX, nY, 0) + Pixel(nX, nY, 1) + Pixel(nX, nY, 2));
         ret->Pixel(nX, nY, 0) *= flScale;
@@ -309,7 +309,7 @@ FloatBitMap_t::ComputeSelfShadowedBumpmapFromHeightInAlphaChannel(
 
 // generate a conventional normal map from a source with height stored in alpha.
 FloatBitMap_t *FloatBitMap_t::ComputeBumpmapFromHeightInAlphaChannel(
-    float bump_scale) const {
+    f32 bump_scale) const {
   Vector *verts;
   Vector *normals;
   ComputeVertexPositionsAndNormals(bump_scale, &verts, &normals);

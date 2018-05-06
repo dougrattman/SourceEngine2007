@@ -8,20 +8,19 @@
 
 #include <malloc.h>
 #include <memory.h>
+#include "base/include/compiler_specific.h"
 #include "bitmap/imageformat.h"
 #include "mathlib/compressed_vector.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "nvtc.h"
 #include "tier0/include/basetypes.h"
-#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "tier1/utlmemory.h"
 
 // Should be last include
 #include "tier0/include/memdbgon.h"
-
 
 // Various important function types for each color format
 
@@ -78,54 +77,32 @@ static ImageFormatInfo_t g_ImageFormatInfo[] = {
 };
 
 namespace ImageLoader {
-
-
 // Returns info about each image format
-
 const ImageFormatInfo_t &ImageFormatInfo(ImageFormat fmt) {
   static_assert((NUM_IMAGE_FORMATS + 1) ==
-                      sizeof(g_ImageFormatInfo) / sizeof(g_ImageFormatInfo[0]));
+                sizeof(g_ImageFormatInfo) / sizeof(g_ImageFormatInfo[0]));
   Assert(unsigned(fmt + 1) <= (NUM_IMAGE_FORMATS));
   return g_ImageFormatInfo[fmt + 1];
 }
 
 int GetMemRequired(int width, int height, int depth, ImageFormat imageFormat,
                    bool mipmap) {
-  if (depth <= 0) {
-    depth = 1;
-  }
+  if (depth <= 0) depth = 1;
 
   if (!mipmap) {
     // Block compressed formats
     if (imageFormat == IMAGE_FORMAT_DXT1 || imageFormat == IMAGE_FORMAT_DXT3 ||
         imageFormat == IMAGE_FORMAT_DXT5 || imageFormat == IMAGE_FORMAT_ATI2N ||
         imageFormat == IMAGE_FORMAT_ATI1N) {
-      /*
-                              DDSURFACEDESC desc;
-                              memset( &desc, 0, sizeof(desc) );
-
-                              DWORD dwEncodeType;
-                              dwEncodeType = GetDXTCEncodeType( imageFormat );
-                              desc.dwSize = sizeof( desc );
-                              desc.dwFlags = DDSD_WIDTH | DDSD_HEIGHT;
-                              desc.dwWidth = width;
-                              desc.dwHeight = height;
-                              return S3TCgetEncodeSize( &desc, dwEncodeType );
-      */
       Assert((width < 4) || !(width % 4));
       Assert((height < 4) || !(height % 4));
       Assert((depth < 4) || !(depth % 4));
-      if (width < 4 && width > 0) {
-        width = 4;
-      }
-      if (height < 4 && height > 0) {
-        height = 4;
-      }
-      if (depth < 4 && depth > 1) {
-        depth = 4;
-      }
-      int numBlocks = (width * height) >> 4;
-      numBlocks *= depth;
+
+      if (width < 4 && width > 0) width = 4;
+      if (height < 4 && height > 0) height = 4;
+      if (depth < 4 && depth > 1) depth = 4;
+
+      int numBlocks = ((width * height) >> 4) * depth;
       switch (imageFormat) {
         case IMAGE_FORMAT_DXT1:
         case IMAGE_FORMAT_ATI1N:
@@ -148,21 +125,15 @@ int GetMemRequired(int width, int height, int depth, ImageFormat imageFormat,
   int memSize = 0;
   while (1) {
     memSize += GetMemRequired(width, height, depth, imageFormat, false);
-    if (width == 1 && height == 1 && depth == 1) {
-      break;
-    }
+    if (width == 1 && height == 1 && depth == 1) break;
+
     width >>= 1;
     height >>= 1;
     depth >>= 1;
-    if (width < 1) {
-      width = 1;
-    }
-    if (height < 1) {
-      height = 1;
-    }
-    if (depth < 1) {
-      depth = 1;
-    }
+
+    if (width < 1) width = 1;
+    if (height < 1) height = 1;
+    if (depth < 1) depth = 1;
   }
 
   return memSize;
@@ -174,35 +145,30 @@ int GetMipMapLevelByteOffset(int width, int height, ImageFormat imageFormat,
 
   while (skipMipLevels > 0) {
     offset += width * height * SizeInBytes(imageFormat);
-    if (width == 1 && height == 1) {
-      break;
-    }
+    if (width == 1 && height == 1) break;
+
     width >>= 1;
     height >>= 1;
-    if (width < 1) {
-      width = 1;
-    }
-    if (height < 1) {
-      height = 1;
-    }
+
+    if (width < 1) width = 1;
+    if (height < 1) height = 1;
+
     skipMipLevels--;
   }
+
   return offset;
 }
 
 void GetMipMapLevelDimensions(int *width, int *height, int skipMipLevels) {
   while (skipMipLevels > 0) {
-    if (*width == 1 && *height == 1) {
-      break;
-    }
+    if (*width == 1 && *height == 1) break;
+
     *width >>= 1;
     *height >>= 1;
-    if (*width < 1) {
-      *width = 1;
-    }
-    if (*height < 1) {
-      *height = 1;
-    }
+
+    if (*width < 1) *width = 1;
+    if (*height < 1) *height = 1;
+
     skipMipLevels--;
   }
 }
@@ -221,26 +187,20 @@ int GetNumMipMapLevels(int width, int height, int depth) {
     width >>= 1;
     height >>= 1;
     depth >>= 1;
-    if (width < 1) {
-      width = 1;
-    }
-    if (height < 1) {
-      height = 1;
-    }
-    if (depth < 1) {
-      depth = 1;
-    }
+
+    if (width < 1) width = 1;
+    if (height < 1) height = 1;
+    if (depth < 1) depth = 1;
+
     numMipLevels++;
   }
+
   return numMipLevels;
 }
 
 #ifndef OS_POSIX
-
-
 // convert back and forth from D3D format to ImageFormat, regardless of
 // whether it's supported or not
-
 ImageFormat D3DFormatToImageFormat(D3DFORMAT format) {
   switch (format) {
     case D3DFMT_R8G8B8:
@@ -389,7 +349,6 @@ D3DFORMAT ImageFormatToD3DFormat(ImageFormat format) {
 
   return D3DFMT_UNKNOWN;
 }
-
-#endif
+#endif  // OS_POSIX
 
 }  // namespace ImageLoader

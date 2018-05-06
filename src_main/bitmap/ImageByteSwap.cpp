@@ -15,10 +15,8 @@
 #include "tier0/include/memdbgon.h"
 
 namespace ImageLoader {
-
 // Known formats that can be converted.  Used as a trap for 360 formats
 // that may occur but have not been validated yet.
-
 bool IsFormatValidForConversion(ImageFormat fmt) {
   switch (fmt) {
     case IMAGE_FORMAT_RGBA8888:
@@ -59,13 +57,11 @@ bool IsFormatValidForConversion(ImageFormat fmt) {
   return false;
 }
 
-
 // Swaps the image element type within the format.
 // This is to ensure that >8 bit channels are in the correct endian format
 // as expected by the conversion process, which varies according to format,
 // input, and output.
-
-void PreConvertSwapImageData(unsigned char *pImageData, int nImageSize,
+void PreConvertSwapImageData(u8 *pImageData, int nImageSize,
                              ImageFormat imageFormat, int width, int stride) {
   Assert(IsFormatValidForConversion(imageFormat));
 
@@ -73,21 +69,17 @@ void PreConvertSwapImageData(unsigned char *pImageData, int nImageSize,
   // for conversion code
 }
 
-
 // Swaps image bytes for use on a big endian platform. This is used after the
 // conversion process to match the 360 d3dformats.
-
-void PostConvertSwapImageData(unsigned char *pImageData, int nImageSize,
+void PostConvertSwapImageData(u8 *pImageData, int nImageSize,
                               ImageFormat imageFormat, int width, int stride) {
   Assert(IsFormatValidForConversion(imageFormat));
   AssertMsg(false, "PostConvertSwapImageData is not implemented for PC.");
 }
 
-
 // Swaps image bytes.
-
-void ByteSwapImageData(unsigned char *pImageData, int nImageSize,
-                       ImageFormat imageFormat, int width, int stride) {
+void ByteSwapImageData(u8 *pImageData, int nImageSize, ImageFormat imageFormat,
+                       int width, int stride) {
   Assert(IsFormatValidForConversion(imageFormat));
   AssertMsg(false, "ByteSwapImageData is not implemented for PC.");
 }

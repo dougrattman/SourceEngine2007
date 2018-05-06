@@ -10,21 +10,15 @@
 #include "tier2/tier2.h"
 #include "tier2/utlstreambuffer.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-
 // The PSD signature bytes
-
 #define PSD_SIGNATURE 0x38425053
 #define PSD_IMGRES_SIGNATURE 0x3842494D
 
-
 // Format of the PSD header on disk
 // NOTE: PSD file header, everything is bigendian
-
 #pragma pack(1)
-
 enum PSDMode_t {
   MODE_GREYSCALE = 1,
   MODE_PALETTIZED = 2,
@@ -46,9 +40,9 @@ enum PSDMode_t {
 // entries), (all green palette entries), (all blue palette entries) }, where
 // numEntries = numBytesPalette/3; 	unsigned int	numBytesImgResources;
 //	byte			imgresources[ numBytesImgResources ]; = {
-//sequence  of PSDImgResEntry_t } 	unsigned int	numBytesLayers;
+// sequence  of PSDImgResEntry_t } 	unsigned int	numBytesLayers;
 // byte
-// layers[ numBytesLayers ]; 	unsigned short	uCompressionInfo; 	< ~
+// layers[ numBytesLayers ]; 	u16	uCompressionInfo; 	< ~
 // image data ~ >
 //
 // END PSD FILE
@@ -57,21 +51,20 @@ enum PSDMode_t {
 
 struct PSDHeader_t {
   unsigned int m_nSignature;
-  unsigned short m_nVersion;
-  unsigned char m_pReserved[6];
-  unsigned short m_nChannels;
+  u16 m_nVersion;
+  u8 m_pReserved[6];
+  u16 m_nChannels;
   unsigned int m_nRows;
   unsigned int m_nColumns;
-  unsigned short m_nDepth;
-  unsigned short m_nMode;
+  u16 m_nDepth;
+  u16 m_nMode;
 };
 
 struct PSDPalette_t {
-  unsigned char *m_pRed;
-  unsigned char *m_pGreen;
-  unsigned char *m_pBlue;
+  u8 *m_pRed;
+  u8 *m_pGreen;
+  u8 *m_pBlue;
 };
-
 
 // NOTE: This is how we could load files using file mapping
 
@@ -81,7 +74,6 @@ struct PSDPalette_t {
 // HANDLE FileMap = CreateFileMapping(File,0,PAGE_READONLY,0,0,0);
 // Assert(FileMap != INVALID_HANDLE_VALUE);
 // void *FileData = MapViewOfFile(FileMap,FILE_MAP_READ,0,0,0);
-
 
 // Is it a PSD file?
 
@@ -106,11 +98,9 @@ bool IsPSDFile(const char *pFileName, const char *pPathID) {
   return IsPSDFile(buf);
 }
 
-
 // Returns information about the PSD file
-
 bool PSDGetInfo(CUtlBuffer &buf, int *pWidth, int *pHeight,
-                ImageFormat *pImageFormat, float *pSourceGamma) {
+                ImageFormat *pImageFormat, f32 *pSourceGamma) {
   int nGet = buf.TellGet();
   PSDHeader_t header;
   buf.Get(&header, sizeof(header));
@@ -130,7 +120,7 @@ bool PSDGetInfo(CUtlBuffer &buf, int *pWidth, int *pHeight,
 }
 
 bool PSDGetInfo(const char *pFileName, const char *pPathID, int *pWidth,
-                int *pHeight, ImageFormat *pImageFormat, float *pSourceGamma) {
+                int *pHeight, ImageFormat *pImageFormat, f32 *pSourceGamma) {
   CUtlBuffer buf;
   if (!g_pFullFileSystem->ReadFile(pFileName, pPathID, buf,
                                    sizeof(PSDHeader_t))) {
@@ -140,9 +130,7 @@ bool PSDGetInfo(const char *pFileName, const char *pPathID, int *pWidth,
   return PSDGetInfo(buf, pWidth, pHeight, pImageFormat, pSourceGamma);
 }
 
-
 // Get PSD file image resources
-
 PSDImageResources PSDGetImageResources(CUtlBuffer &buf) {
   int nGet = buf.TellGet();
 
@@ -156,8 +144,7 @@ PSDImageResources PSDGetImageResources(CUtlBuffer &buf) {
 
   // Then image resources
   unsigned int numBytesImgResources = BigLong(buf.GetUnsignedInt());
-  PSDImageResources imgres(numBytesImgResources,
-                           (unsigned char *)buf.PeekGet());
+  PSDImageResources imgres(numBytesImgResources, (u8 *)buf.PeekGet());
 
   // Restore the seek
   buf.SeekGet(CUtlBuffer::SEEK_HEAD, nGet);
@@ -165,14 +152,12 @@ PSDImageResources PSDGetImageResources(CUtlBuffer &buf) {
   return imgres;
 }
 
-
 // Converts from CMYK to RGB
-
 static inline void CMYKToRGB(RGBA8888_t &color) {
-  unsigned char nCyan = 255 - color.r;
-  unsigned char nMagenta = 255 - color.g;
-  unsigned char nYellow = 255 - color.b;
-  unsigned char nBlack = 255 - color.a;
+  u8 nCyan = 255 - color.r;
+  u8 nMagenta = 255 - color.g;
+  u8 nYellow = 255 - color.b;
+  u8 nBlack = 255 - color.a;
 
   int nCyanBlack = (int)nCyan + (int)nBlack;
   int nMagentaBlack = (int)nMagenta + (int)nBlack;
@@ -183,13 +168,11 @@ static inline void CMYKToRGB(RGBA8888_t &color) {
   color.a = 255;
 }
 
-
 // Deals with uncompressed channels
-
 static void PSDConvertToRGBA8888(int nChannelsCount, PSDMode_t mode,
                                  PSDPalette_t &palette, Bitmap_t &bitmap) {
   bool bShouldFillInAlpha = false;
-  unsigned char *pDest = bitmap.m_pBits;
+  u8 *pDest = bitmap.m_pBits;
 
   switch (mode) {
     case MODE_RGBA:
@@ -201,7 +184,7 @@ static void PSDConvertToRGBA8888(int nChannelsCount, PSDMode_t mode,
       bShouldFillInAlpha = (nChannelsCount == 1);
       for (int j = 0; j < bitmap.m_nHeight; ++j) {
         for (int k = 0; k < bitmap.m_nWidth; ++k, pDest += 4) {
-          unsigned char nPaletteIndex = pDest[0];
+          u8 nPaletteIndex = pDest[0];
           pDest[0] = palette.m_pRed[nPaletteIndex];
           pDest[1] = palette.m_pGreen[nPaletteIndex];
           pDest[2] = palette.m_pBlue[nPaletteIndex];
@@ -233,7 +216,7 @@ static void PSDConvertToRGBA8888(int nChannelsCount, PSDMode_t mode,
 
   if (bShouldFillInAlpha) {
     // No alpha channel, fill in white
-    unsigned char *pInAlphaDest = bitmap.m_pBits;
+    u8 *pInAlphaDest = bitmap.m_pBits;
     for (int j = 0; j < bitmap.m_nHeight; ++j) {
       for (int k = 0; k < bitmap.m_nWidth; ++k, pInAlphaDest += 4) {
         pInAlphaDest[3] = 0xFF;
@@ -242,9 +225,7 @@ static void PSDConvertToRGBA8888(int nChannelsCount, PSDMode_t mode,
   }
 }
 
-
 // Deals with uncompressed channels
-
 static int s_pChannelIndex[MODE_COUNT + 1][4] = {
     {-1, -1, -1, -1}, {0, 3, -1, -1},                      // MODE_GREYSCALE
     {0, 3, -1, -1},                                        // MODE_PALETTIZED
@@ -258,12 +239,12 @@ static int s_pChannelIndex[MODE_COUNT + 1][4] = {
 static void PSDReadUncompressedChannels(CUtlBuffer &buf, int nChannelsCount,
                                         PSDMode_t mode, PSDPalette_t &palette,
                                         Bitmap_t &bitmap) {
-  unsigned char *pChannelRow = (unsigned char *)_alloca(bitmap.m_nWidth);
+  u8 *pChannelRow = (u8 *)_alloca(bitmap.m_nWidth);
   for (int i = 0; i < nChannelsCount; ++i) {
     int nIndex = s_pChannelIndex[mode][i];
     Assert(nIndex != -1);
 
-    unsigned char *pDest = bitmap.m_pBits;
+    u8 *pDest = bitmap.m_pBits;
     for (int j = 0; j < bitmap.m_nHeight; ++j) {
       buf.Get(pChannelRow, bitmap.m_nWidth);
 
@@ -277,20 +258,18 @@ static void PSDReadUncompressedChannels(CUtlBuffer &buf, int nChannelsCount,
   PSDConvertToRGBA8888(nChannelsCount, mode, palette, bitmap);
 }
 
-
 // Deals with compressed channels
-
 static void PSDReadCompressedChannels(CUtlBuffer &buf, int nChannelsCount,
                                       PSDMode_t mode, PSDPalette_t &palette,
                                       Bitmap_t &bitmap) {
-  unsigned char *pChannelRow = (unsigned char *)_alloca(bitmap.m_nWidth);
+  u8 *pChannelRow = (u8 *)_alloca(bitmap.m_nWidth);
   for (int i = 0; i < nChannelsCount; ++i) {
     int nIndex = s_pChannelIndex[mode][i];
     Assert(nIndex != -1);
 
-    unsigned char *pDest = bitmap.m_pBits;
+    u8 *pDest = bitmap.m_pBits;
     for (int j = 0; j < bitmap.m_nHeight; ++j) {
-      unsigned char *pSrc = pChannelRow;
+      u8 *pSrc = pChannelRow;
       unsigned int nPixelsRemaining = bitmap.m_nWidth;
       while (nPixelsRemaining > 0) {
         int nCount = buf.GetChar();
@@ -305,7 +284,7 @@ static void PSDReadCompressedChannels(CUtlBuffer &buf, int nChannelsCount,
           // -Count+1 times
           nCount = -nCount + 1;
           Assert((unsigned int)nCount <= nPixelsRemaining);
-          unsigned char nPattern = buf.GetUnsignedChar();
+          u8 nPattern = buf.GetUnsignedChar();
           memset(pSrc, nPattern, nCount);
         }
         pSrc += nCount;
@@ -323,9 +302,7 @@ static void PSDReadCompressedChannels(CUtlBuffer &buf, int nChannelsCount,
   PSDConvertToRGBA8888(nChannelsCount, mode, palette, bitmap);
 }
 
-
 // Reads the PSD file into the specified buffer
-
 bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap) {
   PSDHeader_t header;
   buf.Get(&header, sizeof(header));
@@ -364,7 +341,7 @@ bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap) {
   // Skip parts of memory we don't care about
   int nColorModeSize = BigLong(buf.GetUnsignedInt());
   Assert(nColorModeSize % 3 == 0);
-  unsigned char *pPaletteBits = (unsigned char *)_alloca(nColorModeSize);
+  u8 *pPaletteBits = (u8 *)_alloca(nColorModeSize);
   PSDPalette_t palette;
   palette.m_pRed = palette.m_pGreen = palette.m_pBlue = 0;
   if (nColorModeSize) {
@@ -379,7 +356,7 @@ bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap) {
   int nLayersSize = BigLong(buf.GetUnsignedInt());
   buf.SeekGet(CUtlBuffer::SEEK_CURRENT, nLayersSize);
 
-  unsigned short nCompressionType = BigShort(buf.GetShort());
+  u16 nCompressionType = BigShort(buf.GetShort());
 
   bitmap.Init(nWidth, nHeight, IMAGE_FORMAT_RGBA8888);
 
@@ -391,7 +368,7 @@ bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap) {
     // Skip the data that indicates the length of each compressed row in bytes
     // NOTE: There are two bytes per row per channel
     unsigned int nLineLengthData =
-        sizeof(unsigned short) * bitmap.m_nHeight * nChannelsCount;
+        sizeof(u16) * bitmap.m_nHeight * nChannelsCount;
     buf.SeekGet(CUtlBuffer::SEEK_CURRENT, nLineLengthData);
     PSDReadCompressedChannels(buf, (nChannelsCount > 4) ? 4 : nChannelsCount,
                               mode, palette, bitmap);
@@ -409,9 +386,7 @@ bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap) {
   return true;
 }
 
-
 // Loads the heightfield from a file
-
 bool PSDReadFileRGBA8888(const char *pFileName, const char *pPathID,
                          Bitmap_t &bitmap) {
   CUtlStreamBuffer buf(pFileName, pPathID, CUtlBuffer::READ_ONLY);
@@ -423,19 +398,14 @@ bool PSDReadFileRGBA8888(const char *pFileName, const char *pPathID,
   return PSDReadFileRGBA8888(buf, bitmap);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 // PSD Helper structs implementation
-//
-//////////////////////////////////////////////////////////////////////////
 
 PSDImageResources::ResElement PSDImageResources::FindElement(
     Resource eType) const {
   ResElement res;
   memset(&res, 0, sizeof(res));
 
-  unsigned char const *pvBuffer = m_pvBuffer, *const pvBufferEnd =
-                                                  m_pvBuffer + m_numBytes;
+  u8 const *pvBuffer = m_pvBuffer, *const pvBufferEnd = m_pvBuffer + m_numBytes;
   while (pvBuffer < pvBufferEnd) {
     // 4 : signature
     // 2 : type
@@ -447,10 +417,10 @@ PSDImageResources::ResElement PSDImageResources::FindElement(
     pvBuffer += 4;
     if (uSignature != PSD_IMGRES_SIGNATURE) break;
 
-    unsigned short uType = BigShort(*(unsigned short *)(pvBuffer));
+    u16 uType = BigShort(*(u16 *)(pvBuffer));
     pvBuffer += 6;
 
-    unsigned short uLength = BigShort(*(unsigned short *)(pvBuffer));
+    u16 uLength = BigShort(*(u16 *)(pvBuffer));
     pvBuffer += 2;
 
     if (uType == eType) {
@@ -471,22 +441,21 @@ PSDResFileInfo::ResFileInfoElement PSDResFileInfo::FindElement(
   ResFileInfoElement res;
   memset(&res, 0, sizeof(res));
 
-  unsigned char const *pvBuffer = m_res.m_pvData, *const pvBufferEnd =
-                                                      pvBuffer +
-                                                      m_res.m_numBytes;
+  u8 const *pvBuffer = m_res.m_pvData, *const pvBufferEnd =
+                                           pvBuffer + m_res.m_numBytes;
   while (pvBuffer < pvBufferEnd) {
     // 2 : = 0x1C02
     // 1 : type
     // 2 : length
     // bytes[ length ]
 
-    unsigned short uResLabel = BigShort(*(unsigned short *)(pvBuffer));
+    u16 uResLabel = BigShort(*(u16 *)(pvBuffer));
     pvBuffer += 2;
 
-    unsigned char uType = *pvBuffer;
+    u8 uType = *pvBuffer;
     pvBuffer += 1;
 
-    unsigned short uLength = BigShort(*(unsigned short *)(pvBuffer));
+    u16 uLength = BigShort(*(u16 *)(pvBuffer));
     pvBuffer += 2;
 
     if (uType == eType && uResLabel == 0x1C02) {

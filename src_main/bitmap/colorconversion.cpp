@@ -19,7 +19,7 @@
 #include "tier1/utlmemory.h"
 
 #ifdef OS_POSIX
-typedef int32_t *DWORD_PTR;
+using DWORD_PTR = i32 *;
 #endif
 
 #include "ATI_Compress.h"
@@ -29,62 +29,52 @@ typedef int32_t *DWORD_PTR;
 #include "tier0/include/memdbgon.h"
 
 // Various important function types for each color format
-
-typedef void (*UserFormatToRGBA8888Func_t)(const uint8_t *src, uint8_t *dst,
-                                           int numPixels);
-typedef void (*RGBA8888ToUserFormatFunc_t)(const uint8_t *src, uint8_t *dst,
-                                           int numPixels);
+using UserFormatToRGBA8888Func_t = void (*)(const u8 *src, u8 *dst,
+                                            int numPixels);
+using RGBA8888ToUserFormatFunc_t = void (*)(const u8 *src, u8 *dst,
+                                            int numPixels);
 
 namespace ImageLoader {
 // Color Conversion functions
-static void RGBA8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToABGR8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToRGB888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToBGR888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToI8(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToIA88(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToA8(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToRGB888_BLUESCREEN(const uint8_t *src, uint8_t *dst,
-                                        int numPixels);
-static void RGBA8888ToBGR888_BLUESCREEN(const uint8_t *src, uint8_t *dst,
-                                        int numPixels);
-static void RGBA8888ToARGB8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToBGRA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToBGRX8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToBGR565(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToBGRX5551(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToBGRA5551(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToBGRA4444(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToUV88(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToUVWQ8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA8888ToUVLX8888(const uint8_t *src, uint8_t *dst, int numPixels);
-// static void RGBA8888ToRGBA16161616F( const uint8_t *src, uint8_t *dst, int
-// numPixels );
+static void RGBA8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToABGR8888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToRGB888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGR888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToI8(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToIA88(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToA8(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToRGB888_BLUESCREEN(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGR888_BLUESCREEN(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToARGB8888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGRA8888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGRX8888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGR565(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGRX5551(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGRA5551(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToBGRA4444(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToUV88(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToUVWQ8888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA8888ToUVLX8888(const u8 *src, u8 *dst, int numPixels);
 
-static void ABGR8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGB888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void BGR888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void I8ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void IA88ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void A8ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGB888_BLUESCREENToRGBA8888(const uint8_t *src, uint8_t *dst,
-                                        int numPixels);
-static void BGR888_BLUESCREENToRGBA8888(const uint8_t *src, uint8_t *dst,
-                                        int numPixels);
-static void ARGB8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void BGRA8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void BGRX8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void BGR565ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void BGRX5551ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void BGRA5551ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void BGRA4444ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void UV88ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void UVWQ8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void UVLX8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels);
-static void RGBA16161616ToRGBA8888(const uint8_t *src, uint8_t *dst,
-                                   int numPixels);
-// static void RGBA16161616FToRGBA8888( const uint8_t *src, uint8_t *dst, int
-// numPixels );
+static void ABGR8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void RGB888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGR888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void I8ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void IA88ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void A8ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void RGB888_BLUESCREENToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGR888_BLUESCREENToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void ARGB8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGRA8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGRX8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGR565ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGRX5551ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGRA5551ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void BGRA4444ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void UV88ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void UVWQ8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void UVLX8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
+static void RGBA16161616ToRGBA8888(const u8 *src, u8 *dst, int numPixels);
 
 static UserFormatToRGBA8888Func_t GetUserFormatToRGBA8888Func_t(
     ImageFormat srcImageFormat) {
@@ -98,7 +88,7 @@ static UserFormatToRGBA8888Func_t GetUserFormatToRGBA8888Func_t(
     case IMAGE_FORMAT_BGR888:
       return BGR888ToRGBA8888;
     case IMAGE_FORMAT_RGB565:
-      return NULL;
+      return nullptr;
     case IMAGE_FORMAT_I8:
       return I8ToRGBA8888;
     case IMAGE_FORMAT_IA88:
@@ -132,9 +122,9 @@ static UserFormatToRGBA8888Func_t GetUserFormatToRGBA8888Func_t(
     case IMAGE_FORMAT_RGBA16161616:
       return RGBA16161616ToRGBA8888;
     case IMAGE_FORMAT_RGBA16161616F:
-      return NULL;
+      return nullptr;
     default:
-      return NULL;
+      return nullptr;
   }
 }
 
@@ -150,7 +140,7 @@ static RGBA8888ToUserFormatFunc_t GetRGBA8888ToUserFormatFunc_t(
     case IMAGE_FORMAT_BGR888:
       return RGBA8888ToBGR888;
     case IMAGE_FORMAT_RGB565:
-      return NULL;
+      return nullptr;
     case IMAGE_FORMAT_I8:
       return RGBA8888ToI8;
     case IMAGE_FORMAT_IA88:
@@ -182,40 +172,38 @@ static RGBA8888ToUserFormatFunc_t GetRGBA8888ToUserFormatFunc_t(
     case IMAGE_FORMAT_UVLX8888:
       return RGBA8888ToUVLX8888;
     case IMAGE_FORMAT_RGBA16161616F:
-      return NULL;
+      return nullptr;
     default:
-      return NULL;
+      return nullptr;
   }
 }
 
 #pragma pack(1)
-
 struct DXTColBlock {
-  WORD col0;
-  WORD col1;
+  u16 col0;
+  u16 col1;
 
   // no bit fields - use bytes
-  BYTE row[4];
+  u8 row[4];
 };
 
 struct DXTAlphaBlock3BitLinear {
-  BYTE alpha0;
-  BYTE alpha1;
+  u8 alpha0;
+  u8 alpha1;
 
-  BYTE stuff[6];
+  u8 stuff[6];
 };
-
 #pragma pack()
 
 static inline void GetColorBlockColorsBGRA8888(DXTColBlock *pBlock,
                                                BGRA8888_t *col_0,
                                                BGRA8888_t *col_1,
                                                BGRA8888_t *col_2,
-                                               BGRA8888_t *col_3, WORD &wrd) {
+                                               BGRA8888_t *col_3, u16 &wrd) {
   // input data is assumed to be x86 order
   // swap to target platform for proper dxt decoding
-  WORD color0 = LittleShort(pBlock->col0);
-  WORD color1 = LittleShort(pBlock->col1);
+  u16 color0 = LittleShort(pBlock->col0);
+  u16 color1 = LittleShort(pBlock->col1);
 
   // shift to full precision
   col_0->a = 0xff;
@@ -234,26 +222,26 @@ static inline void GetColorBlockColorsBGRA8888(DXTColBlock *pBlock,
     // These two bit codes correspond to the 2-bit fields
     // stored in the 64-bit block.
 
-    wrd = ((WORD)col_0->r * 2 + (WORD)col_1->r) / 3;
+    wrd = ((u16)col_0->r * 2 + (u16)col_1->r) / 3;
     // no +1 for rounding
     // as bits have been shifted to 888
-    col_2->r = (BYTE)wrd;
+    col_2->r = (u8)wrd;
 
-    wrd = ((WORD)col_0->g * 2 + (WORD)col_1->g) / 3;
-    col_2->g = (BYTE)wrd;
+    wrd = ((u16)col_0->g * 2 + (u16)col_1->g) / 3;
+    col_2->g = (u8)wrd;
 
-    wrd = ((WORD)col_0->b * 2 + (WORD)col_1->b) / 3;
-    col_2->b = (BYTE)wrd;
+    wrd = ((u16)col_0->b * 2 + (u16)col_1->b) / 3;
+    col_2->b = (u8)wrd;
     col_2->a = 0xff;
 
-    wrd = ((WORD)col_0->r + (WORD)col_1->r * 2) / 3;
-    col_3->r = (BYTE)wrd;
+    wrd = ((u16)col_0->r + (u16)col_1->r * 2) / 3;
+    col_3->r = (u8)wrd;
 
-    wrd = ((WORD)col_0->g + (WORD)col_1->g * 2) / 3;
-    col_3->g = (BYTE)wrd;
+    wrd = ((u16)col_0->g + (u16)col_1->g * 2) / 3;
+    col_3->g = (u8)wrd;
 
-    wrd = ((WORD)col_0->b + (WORD)col_1->b * 2) / 3;
-    col_3->b = (BYTE)wrd;
+    wrd = ((u16)col_0->b + (u16)col_1->b * 2) / 3;
+    col_3->b = (u8)wrd;
     col_3->a = 0xff;
   } else {
     // Three-color block: derive the other color.
@@ -264,12 +252,12 @@ static inline void GetColorBlockColorsBGRA8888(DXTColBlock *pBlock,
 
     // explicit for each component, unlike some refrasts...????
 
-    wrd = ((WORD)col_0->r + (WORD)col_1->r) / 2;
-    col_2->r = (BYTE)wrd;
-    wrd = ((WORD)col_0->g + (WORD)col_1->g) / 2;
-    col_2->g = (BYTE)wrd;
-    wrd = ((WORD)col_0->b + (WORD)col_1->b) / 2;
-    col_2->b = (BYTE)wrd;
+    wrd = ((u16)col_0->r + (u16)col_1->r) / 2;
+    col_2->r = (u8)wrd;
+    wrd = ((u16)col_0->g + (u16)col_1->g) / 2;
+    col_2->g = (u8)wrd;
+    wrd = ((u16)col_0->b + (u16)col_1->b) / 2;
+    col_2->b = (u8)wrd;
     col_2->a = 0xff;
 
     col_3->r = 0x00;  // random color to indicate alpha
@@ -284,24 +272,21 @@ static inline void DecodeColorBlock(CDestPixel *pOutputImage,
                                     DXTColBlock *pColorBlock, int width,
                                     BGRA8888_t *col_0, BGRA8888_t *col_1,
                                     BGRA8888_t *col_2, BGRA8888_t *col_3) {
-  // width is width of image in pixels
-  DWORD bits;
-  int r, n;
-
   // bit masks = 00000011, 00001100, 00110000, 11000000
-  const DWORD masks[] = {3 << 0, 3 << 2, 3 << 4, 3 << 6};
-  const int shift[] = {0, 2, 4, 6};
+  constexpr u32 masks[] = {3 << 0, 3 << 2, 3 << 4, 3 << 6};
+  constexpr int shift[] = {0, 2, 4, 6};
 
   // r steps through lines in y
-  for (r = 0; r < 4;
-       r++, pOutputImage += width - 4)  // no width*4 as DWORD ptr inc will *4
+  for (int r = 0; r < 4;
+       r++, pOutputImage += width - 4)  // no width*4 as u32 ptr inc will *4
   {
     // width * 4 bytes per pixel per line
     // each j dxtc row is 4 lines of pixels
 
     // n steps through pixels
-    for (n = 0; n < 4; n++) {
-      bits = pColorBlock->row[r] & masks[n];
+    for (int n = 0; n < 4; n++) {
+      // width is width of image in pixels
+      u32 bits = pColorBlock->row[r] & masks[n];
       bits >>= shift[n];
 
       switch (bits) {
@@ -334,8 +319,8 @@ template <class CDestPixel>
 static inline void DecodeAlpha3BitLinear(CDestPixel *pImPos,
                                          DXTAlphaBlock3BitLinear *pAlphaBlock,
                                          int width, int nChannelSelect = 3) {
-  static BYTE gBits[4][4];
-  static WORD gAlphas[8];
+  static u8 gBits[4][4];
+  static u16 gAlphas[8];
   static BGRA8888_t gACol[4][4];
 
   gAlphas[0] = pAlphaBlock->alpha0;
@@ -369,50 +354,48 @@ static inline void DecodeAlpha3BitLinear(CDestPixel *pImPos,
 
   // first two rows of 4 pixels each:
   // pRows = (Alpha3BitRows*) & ( pAlphaBlock->stuff[0] );
-  const DWORD mask = 0x00000007;  // bits = 00 00 01 11
+  constexpr u32 mask = 0x00000007;  // bits = 00 00 01 11
+  u32 bits = *((u32 *)&(pAlphaBlock->stuff[0]));
 
-  DWORD bits = *((DWORD *)&(pAlphaBlock->stuff[0]));
-
-  gBits[0][0] = (BYTE)(bits & mask);
+  gBits[0][0] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[0][1] = (BYTE)(bits & mask);
+  gBits[0][1] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[0][2] = (BYTE)(bits & mask);
+  gBits[0][2] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[0][3] = (BYTE)(bits & mask);
+  gBits[0][3] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[1][0] = (BYTE)(bits & mask);
+  gBits[1][0] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[1][1] = (BYTE)(bits & mask);
+  gBits[1][1] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[1][2] = (BYTE)(bits & mask);
+  gBits[1][2] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[1][3] = (BYTE)(bits & mask);
+  gBits[1][3] = (u8)(bits & mask);
 
   // now for last two rows:
-  bits = *((DWORD *)&(pAlphaBlock->stuff[3]));  // last 3 bytes
+  bits = *((u32 *)&(pAlphaBlock->stuff[3]));  // last 3 bytes
 
-  gBits[2][0] = (BYTE)(bits & mask);
+  gBits[2][0] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[2][1] = (BYTE)(bits & mask);
+  gBits[2][1] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[2][2] = (BYTE)(bits & mask);
+  gBits[2][2] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[2][3] = (BYTE)(bits & mask);
+  gBits[2][3] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[3][0] = (BYTE)(bits & mask);
+  gBits[3][0] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[3][1] = (BYTE)(bits & mask);
+  gBits[3][1] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[3][2] = (BYTE)(bits & mask);
+  gBits[3][2] = (u8)(bits & mask);
   bits >>= 3;
-  gBits[3][3] = (BYTE)(bits & mask);
+  gBits[3][3] = (u8)(bits & mask);
 
   // decode the codes into alpha values
-  int row, pix;
-  for (row = 0; row < 4; row++) {
-    for (pix = 0; pix < 4; pix++) {
-      gACol[row][pix].a = (BYTE)gAlphas[gBits[row][pix]];
+  for (int row = 0; row < 4; row++) {
+    for (int pix = 0; pix < 4; pix++) {
+      gACol[row][pix].a = (u8)gAlphas[gBits[row][pix]];
 
       Assert(gACol[row][pix].r == 0);
       Assert(gACol[row][pix].g == 0);
@@ -421,8 +404,8 @@ static inline void DecodeAlpha3BitLinear(CDestPixel *pImPos,
   }
 
   // Write out alpha values to the image bits
-  for (row = 0; row < 4; row++, pImPos += width - 4) {
-    for (pix = 0; pix < 4; pix++) {
+  for (int row = 0; row < 4; row++, pImPos += width - 4) {
+    for (int pix = 0; pix < 4; pix++) {
       // zero the alpha bits of image pixel
       switch (nChannelSelect) {
         case 0:
@@ -449,7 +432,7 @@ static inline void DecodeAlpha3BitLinear(CDestPixel *pImPos,
 }
 
 template <class CDestPixel>
-static void ConvertFromDXT1(const uint8_t *src, CDestPixel *dst, int width,
+static void ConvertFromDXT1(const u8 *src, CDestPixel *dst, int width,
                             int height) {
   static_assert(sizeof(BGRA8888_t) == 4);
   static_assert(sizeof(RGBA8888_t) == 4);
@@ -461,7 +444,7 @@ static void ConvertFromDXT1(const uint8_t *src, CDestPixel *dst, int width,
 
   int realWidth = 0;
   int realHeight = 0;
-  CDestPixel *realDst = NULL;
+  CDestPixel *realDst = nullptr;
 
   // Deal with the case where we have a dimension smaller than 4.
   if (width < 4 || height < 4) {
@@ -481,17 +464,16 @@ static void ConvertFromDXT1(const uint8_t *src, CDestPixel *dst, int width,
   xblocks = width >> 2;
   yblocks = height >> 2;
   CDestPixel *pDstScan = dst;
-  DWORD *pSrcScan = (DWORD *)src;
+  u32 *pSrcScan = (u32 *)src;
 
   DXTColBlock *pBlock;
   BGRA8888_t col_0, col_1, col_2, col_3;
-  WORD wrdDummy;
+  u16 wrdDummy;
 
-  int i, j;
-  for (j = 0; j < yblocks; j++) {
+  for (int j = 0; j < yblocks; j++) {
     // 8 bytes per block
-    pBlock = (DXTColBlock *)((uint8_t *)pSrcScan + j * xblocks * 8);
-    for (i = 0; i < xblocks; i++, pBlock++) {
+    pBlock = (DXTColBlock *)((u8 *)pSrcScan + j * xblocks * 8);
+    for (int i = 0; i < xblocks; i++, pBlock++) {
       GetColorBlockColorsBGRA8888(pBlock, &col_0, &col_1, &col_2, &col_3,
                                   wrdDummy);
 
@@ -515,11 +497,10 @@ static void ConvertFromDXT1(const uint8_t *src, CDestPixel *dst, int width,
 }
 
 template <class CDestPixel>
-static void ConvertFromDXT5(const uint8_t *src, CDestPixel *dst, int width,
+static void ConvertFromDXT5(const u8 *src, CDestPixel *dst, int width,
                             int height) {
-  int realWidth = 0;
-  int realHeight = 0;
-  CDestPixel *realDst = NULL;
+  int realWidth = 0, realHeight = 0;
+  CDestPixel *realDst = nullptr;
 
   // Deal with the case where we have a dimension smaller than 4.
   if (width < 4 || height < 4) {
@@ -540,19 +521,19 @@ static void ConvertFromDXT5(const uint8_t *src, CDestPixel *dst, int width,
   yblocks = height >> 2;
 
   CDestPixel *pDstScan = dst;
-  DWORD *pSrcScan = (DWORD *)src;
+  u32 *pSrcScan = (u32 *)src;
 
   DXTColBlock *pBlock;
   DXTAlphaBlock3BitLinear *pAlphaBlock;
 
   BGRA8888_t col_0, col_1, col_2, col_3;
-  WORD wrd;
+  u16 wrd;
 
   int i, j;
   for (j = 0; j < yblocks; j++) {
     // 8 bytes per block
     // 1 block for alpha, 1 block for color
-    pBlock = (DXTColBlock *)((uint8_t *)pSrcScan + j * xblocks * 16);
+    pBlock = (DXTColBlock *)((u8 *)pSrcScan + j * xblocks * 16);
 
     for (i = 0; i < xblocks; i++, pBlock++) {
       // inline
@@ -590,11 +571,11 @@ static void ConvertFromDXT5(const uint8_t *src, CDestPixel *dst, int width,
 }
 
 template <class CDestPixel>
-static void ConvertFromDXT5IgnoreAlpha(const uint8_t *src, CDestPixel *dst,
+static void ConvertFromDXT5IgnoreAlpha(const u8 *src, CDestPixel *dst,
                                        int width, int height) {
   int realWidth = 0;
   int realHeight = 0;
-  CDestPixel *realDst = NULL;
+  CDestPixel *realDst = nullptr;
 
   // Deal with the case where we have a dimension smaller than 4.
   if (width < 4 || height < 4) {
@@ -615,18 +596,18 @@ static void ConvertFromDXT5IgnoreAlpha(const uint8_t *src, CDestPixel *dst,
   yblocks = height >> 2;
 
   CDestPixel *pDstScan = dst;
-  DWORD *pSrcScan = (DWORD *)src;
+  u32 *pSrcScan = (u32 *)src;
 
   DXTColBlock *pBlock;
 
   BGRA8888_t col_0, col_1, col_2, col_3;
-  WORD wrd;
+  u16 wrd;
 
   int i, j;
   for (j = 0; j < yblocks; j++) {
     // 8 bytes per block
     // 1 block for alpha, 1 block for color
-    pBlock = (DXTColBlock *)((uint8_t *)pSrcScan + j * xblocks * 16);
+    pBlock = (DXTColBlock *)((u8 *)pSrcScan + j * xblocks * 16);
 
     for (i = 0; i < xblocks; i++, pBlock++) {
       // inline func:
@@ -656,11 +637,11 @@ static void ConvertFromDXT5IgnoreAlpha(const uint8_t *src, CDestPixel *dst,
 }
 
 template <class CDestPixel>
-static void ConvertFromATIxN(const uint8_t *src, CDestPixel *dst, int width,
+static void ConvertFromATIxN(const u8 *src, CDestPixel *dst, int width,
                              int height, bool bATI2N) {
   int realWidth = 0;
   int realHeight = 0;
-  CDestPixel *realDst = NULL;
+  CDestPixel *realDst = nullptr;
 
   // Deal with the case where we have a dimension smaller than 4.
   if (width < 4 || height < 4) {
@@ -681,7 +662,7 @@ static void ConvertFromATIxN(const uint8_t *src, CDestPixel *dst, int width,
   yblocks = height >> 2;
 
   CDestPixel *pDstScan = dst;
-  DWORD *pSrcScan = (DWORD *)src;
+  u32 *pSrcScan = (u32 *)src;
 
   DXTAlphaBlock3BitLinear *pBlock;
 
@@ -691,7 +672,7 @@ static void ConvertFromATIxN(const uint8_t *src, CDestPixel *dst, int width,
   for (j = 0; j < yblocks; j++) {
     // 8 bytes per block
     // 1 block for x, 1 block for y
-    pBlock = (DXTAlphaBlock3BitLinear *)((uint8_t *)pSrcScan +
+    pBlock = (DXTAlphaBlock3BitLinear *)((u8 *)pSrcScan +
                                          j * xblocks * nBytesPerBlock);
 
     for (i = 0; i < xblocks; i++, pBlock++) {
@@ -716,7 +697,7 @@ static void ConvertFromATIxN(const uint8_t *src, CDestPixel *dst, int width,
   }
 }
 
-static DWORD GetDXTCEncodeType(ImageFormat imageFormat) {
+static u32 GetDXTCEncodeType(ImageFormat imageFormat) {
   switch (imageFormat) {
     case IMAGE_FORMAT_DXT1:
       return S3TC_ENCODE_RGB_FULL;
@@ -732,9 +713,9 @@ static DWORD GetDXTCEncodeType(ImageFormat imageFormat) {
 }
 
 // Convert RGBA input to ATI1N or ATI2N format
-bool ConvertToATIxN(const uint8_t *src, ImageFormat srcImageFormat,
-                    uint8_t *dst, ImageFormat dstImageFormat, int width,
-                    int height, int srcStride, int dstStride) {
+bool ConvertToATIxN(const u8 *src, ImageFormat srcImageFormat, u8 *dst,
+                    ImageFormat dstImageFormat, int width, int height,
+                    int srcStride, int dstStride) {
 #if !defined(_X360) && !defined(OS_POSIX)
 
   // from rgb(a) to ATIxN
@@ -766,8 +747,8 @@ bool ConvertToATIxN(const uint8_t *src, ImageFormat srcImageFormat,
   destTexture.dwDataSize = ATI_TC_CalculateBufferSize(&destTexture);
   destTexture.pData = (ATI_TC_BYTE *)dst;
 
-  ATI_TC_ERROR errATI = ATI_TC_ConvertTexture(&srcTexture, &destTexture, NULL,
-                                              NULL, NULL, NULL);  // Convert it!
+  ATI_TC_ERROR errATI = ATI_TC_ConvertTexture(
+      &srcTexture, &destTexture, nullptr, nullptr, 0, 0);  // Convert it!
 
   free(srcTexture.pData);  // Free temporary buffers
 
@@ -780,7 +761,7 @@ bool ConvertToATIxN(const uint8_t *src, ImageFormat srcImageFormat,
 #endif
 }
 
-bool ConvertToDXT(const uint8_t *src, ImageFormat srcImageFormat, uint8_t *dst,
+bool ConvertToDXT(const u8 *src, ImageFormat srcImageFormat, u8 *dst,
                   ImageFormat dstImageFormat, int width, int height,
                   int srcStride, int dstStride) {
 #if !defined(_X360) && !defined(OS_POSIX)
@@ -791,8 +772,8 @@ bool ConvertToDXT(const uint8_t *src, ImageFormat srcImageFormat, uint8_t *dst,
   DDSURFACEDESC descOut;
   memset(&descIn, 0, sizeof(descIn));
   memset(&descOut, 0, sizeof(descOut));
-  float weight[3] = {0.3086f, 0.6094f, 0.0820f};
-  DWORD dwEncodeType = GetDXTCEncodeType(dstImageFormat);
+  f32 weight[3] = {0.3086f, 0.6094f, 0.0820f};
+  u32 dwEncodeType = GetDXTCEncodeType(dstImageFormat);
 
   // Setup descIn
   descIn.dwSize = sizeof(descIn);
@@ -847,7 +828,7 @@ bool ConvertToDXT(const uint8_t *src, ImageFormat srcImageFormat, uint8_t *dst,
   descOut.dwSize = sizeof(descOut);
 
   // Encode the texture
-  S3TCencode(&descIn, NULL, &descOut, dst, dwEncodeType, weight);
+  S3TCencode(&descIn, nullptr, &descOut, dst, dwEncodeType, weight);
   return true;
 #else
   Assert(0);
@@ -856,46 +837,43 @@ bool ConvertToDXT(const uint8_t *src, ImageFormat srcImageFormat, uint8_t *dst,
 }
 
 // HDRFIXME: This assumes that the 16-bit integer values are 4.12 fixed-point.
-void ConvertImageFormat_RGBA16161616_To_RGB323232F(unsigned short *pSrcImage,
-                                                   float *pDstImage, int width,
+void ConvertImageFormat_RGBA16161616_To_RGB323232F(u16 *pSrcImage,
+                                                   f32 *pDstImage, int width,
                                                    int height) {
   int srcSize = width * height * 4;
-  unsigned short *pSrcEnd = pSrcImage + srcSize;
-  unsigned short *pSrcScan = pSrcImage;
-  float *pDstScan = pDstImage;
+  u16 *pSrcEnd = pSrcImage + srcSize;
+  u16 *pSrcScan = pSrcImage;
+  f32 *pDstScan = pDstImage;
   for (; pSrcScan < pSrcEnd; pSrcScan += 4, pDstScan += 3) {
-    pDstScan[0] = ((float)pSrcScan[0]) * (1.0f / ((float)(1 << 12)));
-    pDstScan[1] = ((float)pSrcScan[1]) * (1.0f / ((float)(1 << 12)));
-    pDstScan[2] = ((float)pSrcScan[2]) * (1.0f / ((float)(1 << 12)));
+    pDstScan[0] = ((f32)pSrcScan[0]) * (1.0f / ((f32)(1 << 12)));
+    pDstScan[1] = ((f32)pSrcScan[1]) * (1.0f / ((f32)(1 << 12)));
+    pDstScan[2] = ((f32)pSrcScan[2]) * (1.0f / ((f32)(1 << 12)));
   }
 }
 
 // HDRFIXME: This assumes that the 16-bit integer values are 4.12 fixed-point.
-void ConvertImageFormat_RGB323232F_To_RGBA16161616(float *pSrcImage,
-                                                   unsigned short *pDstImage,
-                                                   int width, int height) {
+void ConvertImageFormat_RGB323232F_To_RGBA16161616(f32 *pSrcImage,
+                                                   u16 *pDstImage, int width,
+                                                   int height) {
   int srcSize = width * height * 3;
-  float *pSrcEnd = pSrcImage + srcSize;
-  float *pSrcScan = pSrcImage;
-  unsigned short *pDstScan = pDstImage;
+  f32 *pSrcEnd = pSrcImage + srcSize;
+  f32 *pSrcScan = pSrcImage;
+  u16 *pDstScan = pDstImage;
   for (; pSrcScan < pSrcEnd; pSrcScan += 3, pDstScan += 4) {
-    pDstScan[0] = (unsigned short)std::min(
-        65535.0f, (pSrcScan[0] * (((float)(1 << 12)))));
-    pDstScan[1] = (unsigned short)std::min(
-        65535.0f, (pSrcScan[1] * (((float)(1 << 12)))));
-    pDstScan[2] = (unsigned short)std::min(
-        65535.0f, (pSrcScan[2] * (((float)(1 << 12)))));
+    pDstScan[0] = (u16)std::min(65535.0f, (pSrcScan[0] * (((f32)(1 << 12)))));
+    pDstScan[1] = (u16)std::min(65535.0f, (pSrcScan[1] * (((f32)(1 << 12)))));
+    pDstScan[2] = (u16)std::min(65535.0f, (pSrcScan[2] * (((f32)(1 << 12)))));
     pDstScan[3] = 65535;
   }
 }
 
 void ConvertImageFormat_RGBA16161616F_To_RGB323232F(float16 *pSrcImage,
-                                                    float *pDstImage, int width,
+                                                    f32 *pDstImage, int width,
                                                     int height) {
   int srcSize = width * height * 4;
   float16 *pSrcEnd = pSrcImage + srcSize;
   float16 *pSrcScan = pSrcImage;
-  float *pDstScan = pDstImage;
+  f32 *pDstScan = pDstImage;
   for (; pSrcScan < pSrcEnd; pSrcScan += 4, pDstScan += 3) {
     pDstScan[0] = pSrcScan[0].GetFloat();
     pDstScan[1] = pSrcScan[1].GetFloat();
@@ -904,13 +882,13 @@ void ConvertImageFormat_RGBA16161616F_To_RGB323232F(float16 *pSrcImage,
 }
 
 void ConvertImageFormat_RGBA16161616F_To_RGBA323232F(float16 *pSrcImage,
-                                                     float *pDstImage,
-                                                     int width, int height,
+                                                     f32 *pDstImage, int width,
+                                                     int height,
                                                      size_t src_stride) {
   size_t s_stride = src_stride / 2;
   for (int y = 0; y < height; y++) {
     float16 const *pSrcScan = pSrcImage;
-    float *pDstScan = pDstImage;
+    f32 *pDstScan = pDstImage;
     for (int x = 0; x < width; x++) {
       pDstScan[0] = pSrcScan[0].GetFloat();
       pDstScan[1] = pSrcScan[1].GetFloat();
@@ -924,12 +902,12 @@ void ConvertImageFormat_RGBA16161616F_To_RGBA323232F(float16 *pSrcImage,
   }
 }
 
-void ConvertImageFormat_RGB323232F_To_RGBA16161616F(float *pSrcImage,
+void ConvertImageFormat_RGB323232F_To_RGBA16161616F(f32 *pSrcImage,
                                                     float16 *pDstImage,
                                                     int width, int height) {
   int srcSize = width * height * 3;
-  float *pSrcEnd = pSrcImage + srcSize;
-  float *pSrcScan = pSrcImage;
+  f32 *pSrcEnd = pSrcImage + srcSize;
+  f32 *pSrcScan = pSrcImage;
   float16 *pDstScan = pDstImage;
   for (; pSrcScan < pSrcEnd; pSrcScan += 3, pDstScan += 4) {
     pDstScan[0].SetFloat(pSrcScan[0]);
@@ -938,7 +916,7 @@ void ConvertImageFormat_RGB323232F_To_RGBA16161616F(float *pSrcImage,
   }
 }
 
-void ConvertImageFormat_RGB323232F_To_RGBA8888(float *pSrcImage, uint8_t *dst,
+void ConvertImageFormat_RGB323232F_To_RGBA8888(f32 *pSrcImage, u8 *dst,
                                                int width, int height) {
   FloatBitMap_t flbm;
   flbm.AllocateRGB(width, height);
@@ -946,7 +924,7 @@ void ConvertImageFormat_RGB323232F_To_RGBA8888(float *pSrcImage, uint8_t *dst,
   // Set the pixels
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
-      float *pf = &pSrcImage[3 * (x + width * y)];
+      f32 *pf = &pSrcImage[3 * (x + width * y)];
       PixRGBAF fpix;
       fpix.Red = pf[0];
       fpix.Green = pf[1];
@@ -966,7 +944,7 @@ void ConvertImageFormat_RGB323232F_To_RGBA8888(float *pSrcImage, uint8_t *dst,
       PixRGBAF fpix = flbm.PixelRGBAF(x, y);
       PixRGBA8 pix8 = PixRGBAF_to_8(fpix);
 
-      uint8_t *pch = &dst[4 * (x + width * y)];
+      u8 *pch = &dst[4 * (x + width * y)];
 
       pch[0] = pix8.Red;
       pch[1] = pix8.Green;
@@ -976,7 +954,7 @@ void ConvertImageFormat_RGB323232F_To_RGBA8888(float *pSrcImage, uint8_t *dst,
   }
 }
 
-void ConvertImageFormat_RGB323232F_To_BGRA8888(float *pSrcImage, uint8_t *dst,
+void ConvertImageFormat_RGB323232F_To_BGRA8888(f32 *pSrcImage, u8 *dst,
                                                int width, int height) {
   FloatBitMap_t flbm;
   flbm.AllocateRGB(width, height);
@@ -984,7 +962,7 @@ void ConvertImageFormat_RGB323232F_To_BGRA8888(float *pSrcImage, uint8_t *dst,
   // Set the pixels
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
-      float *pf = &pSrcImage[3 * (x + width * y)];
+      f32 *pf = &pSrcImage[3 * (x + width * y)];
       PixRGBAF fpix;
       fpix.Red = pf[0];
       fpix.Green = pf[1];
@@ -1004,7 +982,7 @@ void ConvertImageFormat_RGB323232F_To_BGRA8888(float *pSrcImage, uint8_t *dst,
       PixRGBAF fpix = flbm.PixelRGBAF(x, y);
       PixRGBA8 pix8 = PixRGBAF_to_8(fpix);
 
-      uint8_t *pch = &dst[4 * (x + width * y)];
+      u8 *pch = &dst[4 * (x + width * y)];
 
       pch[0] = pix8.Blue;
       pch[1] = pix8.Green;
@@ -1015,100 +993,98 @@ void ConvertImageFormat_RGB323232F_To_BGRA8888(float *pSrcImage, uint8_t *dst,
 }
 
 // HDRFIXME: This assumes that the 16-bit integer values are 4.12 fixed-point.
-void ConvertImageFormat_RGBA16161616_To_RGBA16161616F(unsigned short *pSrcImage,
-                                                      float *pDstImage,
-                                                      int width, int height) {
+void ConvertImageFormat_RGBA16161616_To_RGBA16161616F(u16 *pSrcImage,
+                                                      f32 *pDstImage, int width,
+                                                      int height) {
   int srcSize = width * height * 4;
-  unsigned short *pSrcEnd = pSrcImage + srcSize;
-  unsigned short *pSrcScan = pSrcImage;
+  u16 *pSrcEnd = pSrcImage + srcSize;
+  u16 *pSrcScan = pSrcImage;
   float16 *pDstScan = (float16 *)pDstImage;
   for (; pSrcScan < pSrcEnd; pSrcScan += 4, pDstScan += 4) {
-    pDstScan[0].SetFloat(pSrcScan[0] * (1.0f / (float)(1 << 16)));
-    pDstScan[1].SetFloat(pSrcScan[1] * (1.0f / (float)(1 << 16)));
-    pDstScan[2].SetFloat(pSrcScan[2] * (1.0f / (float)(1 << 16)));
-    pDstScan[3].SetFloat(pSrcScan[3] * (1.0f / (float)(1 << 16)));
+    pDstScan[0].SetFloat(pSrcScan[0] * (1.0f / (f32)(1 << 16)));
+    pDstScan[1].SetFloat(pSrcScan[1] * (1.0f / (f32)(1 << 16)));
+    pDstScan[2].SetFloat(pSrcScan[2] * (1.0f / (f32)(1 << 16)));
+    pDstScan[3].SetFloat(pSrcScan[3] * (1.0f / (f32)(1 << 16)));
   }
 }
 
 void ConvertImageFormat_RGBA16161616F_To_RGBA16161616(float16 *pSrcImage,
-                                                      unsigned short *pDstImage,
-                                                      int width, int height) {
+                                                      u16 *pDstImage, int width,
+                                                      int height) {
   int srcSize = width * height * 4;
   float16 *pSrcEnd = pSrcImage + srcSize;
   float16 *pSrcScan = pSrcImage;
-  unsigned short *pDstScan = pDstImage;
+  u16 *pDstScan = pDstImage;
   for (; pSrcScan < pSrcEnd; pSrcScan += 4, pDstScan += 4) {
     int i;
     for (i = 0; i < 4; i++) {
-      float val;
+      f32 val;
       val = pSrcScan[i].GetFloat();
-      val *= (float)(1 << 12);
+      val *= (f32)(1 << 12);
       val = std::max(val, 0.0f);
       val = std::min(val, 65535.0f);
-      pDstScan[i] = (unsigned short)val;
+      pDstScan[i] = (u16)val;
     }
   }
 }
 
-bool ConvertImageFormat(const uint8_t *src, ImageFormat srcImageFormat,
-                        uint8_t *dst, ImageFormat dstImageFormat, int width,
-                        int height, int srcStride, int dstStride) {
+bool ConvertImageFormat(const u8 *src, ImageFormat srcImageFormat, u8 *dst,
+                        ImageFormat dstImageFormat, int width, int height,
+                        int srcStride, int dstStride) {
   // HDRFIXME: WE NEED A BIGGER INTERMEDIATE FORMAT!!!!!
   if (srcImageFormat == IMAGE_FORMAT_RGBA16161616) {
     if (dstImageFormat == IMAGE_FORMAT_RGB323232F) {
       Assert(srcStride == 0 && dstStride == 0);
-      ConvertImageFormat_RGBA16161616_To_RGB323232F(
-          (unsigned short *)src, (float *)dst, width, height);
+      ConvertImageFormat_RGBA16161616_To_RGB323232F((u16 *)src, (f32 *)dst,
+                                                    width, height);
       return true;
     }
     if (dstImageFormat == IMAGE_FORMAT_RGBA16161616F) {
       Assert(srcStride == 0 && dstStride == 0);
-      ConvertImageFormat_RGBA16161616_To_RGBA16161616F(
-          (unsigned short *)src, (float *)dst, width, height);
+      ConvertImageFormat_RGBA16161616_To_RGBA16161616F((u16 *)src, (f32 *)dst,
+                                                       width, height);
       return true;
     }
   } else if (srcImageFormat == IMAGE_FORMAT_RGBA16161616F) {
     if (dstImageFormat == IMAGE_FORMAT_RGB323232F) {
       Assert(srcStride == 0 && dstStride == 0);
-      ConvertImageFormat_RGBA16161616F_To_RGB323232F(
-          (float16 *)src, (float *)dst, width, height);
+      ConvertImageFormat_RGBA16161616F_To_RGB323232F((float16 *)src, (f32 *)dst,
+                                                     width, height);
       return true;
     }
     if (dstImageFormat == IMAGE_FORMAT_RGBA32323232F) {
       Assert(dstStride == 0);
       ConvertImageFormat_RGBA16161616F_To_RGBA323232F(
-          (float16 *)src, (float *)dst, width, height, srcStride);
+          (float16 *)src, (f32 *)dst, width, height, srcStride);
       return true;
     }
     if (dstImageFormat == IMAGE_FORMAT_RGBA16161616) {
       Assert(srcStride == 0 && dstStride == 0);
       ConvertImageFormat_RGBA16161616F_To_RGBA16161616(
-          (float16 *)src, (unsigned short *)dst, width, height);
+          (float16 *)src, (u16 *)dst, width, height);
       return true;
     }
   } else if (srcImageFormat == IMAGE_FORMAT_RGB323232F) {
     if (dstImageFormat == IMAGE_FORMAT_RGBA16161616) {
       Assert(srcStride == 0 && dstStride == 0);
-      ConvertImageFormat_RGB323232F_To_RGBA16161616(
-          (float *)src, (unsigned short *)dst, width, height);
+      ConvertImageFormat_RGB323232F_To_RGBA16161616((f32 *)src, (u16 *)dst,
+                                                    width, height);
       return true;
     }
     if (dstImageFormat == IMAGE_FORMAT_RGBA16161616F) {
       Assert(srcStride == 0 && dstStride == 0);
-      ConvertImageFormat_RGB323232F_To_RGBA16161616F(
-          (float *)src, (float16 *)dst, width, height);
+      ConvertImageFormat_RGB323232F_To_RGBA16161616F((f32 *)src, (float16 *)dst,
+                                                     width, height);
       return true;
     }
     if (dstImageFormat == IMAGE_FORMAT_RGBA8888) {
       Assert(srcStride == 0);
-      ConvertImageFormat_RGB323232F_To_RGBA8888((float *)src, dst, width,
-                                                height);
+      ConvertImageFormat_RGB323232F_To_RGBA8888((f32 *)src, dst, width, height);
       return true;
     }
     if (dstImageFormat == IMAGE_FORMAT_BGRA8888) {
       Assert(srcStride == 0);
-      ConvertImageFormat_RGB323232F_To_BGRA8888((float *)src, dst, width,
-                                                height);
+      ConvertImageFormat_RGB323232F_To_BGRA8888((f32 *)src, dst, width, height);
       return true;
     }
   }
@@ -1273,7 +1249,7 @@ bool ConvertImageFormat(const uint8_t *src, ImageFormat srcImageFormat,
     }
 
     // format conversion
-    uint8_t *lineBufRGBA8888 = (uint8_t *)_alloca(width * 4);
+    u8 *lineBufRGBA8888 = (u8 *)_alloca(width * 4);
 
     UserFormatToRGBA8888Func_t userFormatToRGBA8888Func;
     RGBA8888ToUserFormatFunc_t RGBA8888ToUserFormatFunc;
@@ -1295,17 +1271,16 @@ bool ConvertImageFormat(const uint8_t *src, ImageFormat srcImageFormat,
 
 // Color conversion routines
 
-void ConvertIA88ImageToNormalMapRGBA8888(const uint8_t *src, int width,
-                                         int height, uint8_t *dst,
-                                         float bumpScale) {
-  float heightScale = (1.0f / 255.0f) * bumpScale;
-  float c, cx, cy;
-  float maxDim = (width > height) ? width : height;
-  float ooMaxDim = 1.0f / maxDim;
+void ConvertIA88ImageToNormalMapRGBA8888(const u8 *src, int width, int height,
+                                         u8 *dst, f32 bumpScale) {
+  f32 heightScale = (1.0f / 255.0f) * bumpScale;
+  f32 c, cx, cy;
+  f32 maxDim = (width > height) ? width : height;
+  f32 ooMaxDim = 1.0f / maxDim;
 
   int s, t;
   for (t = 0; t < height; t++) {
-    uint8_t *dstPixel = &dst[t * width * 4];
+    u8 *dstPixel = &dst[t * width * 4];
     for (s = 0; s < width; s++) {
       c = src[(t * width + s) * 2];
       cx = src[(t * width + ((s + 1) % width)) * 2];
@@ -1337,17 +1312,17 @@ void ConvertIA88ImageToNormalMapRGBA8888(const uint8_t *src, int width,
 
       /* Repack the normalized vector into an RGB unsigned byte
       vector in the normal map image. */
-      dstPixel[0] = (uint8_t)(128 + 127 * normal[0]);
-      dstPixel[1] = (uint8_t)(128 + 127 * normal[1]);
-      dstPixel[2] = (uint8_t)(128 + 127 * normal[2]);
+      dstPixel[0] = (u8)(128 + 127 * normal[0]);
+      dstPixel[1] = (u8)(128 + 127 * normal[1]);
+      dstPixel[2] = (u8)(128 + 127 * normal[2]);
       dstPixel[3] = src[((t * width + s) * 2) + 1];
       dstPixel += 4;
     }
   }
 }
 
-void ConvertNormalMapRGBA8888ToDUDVMapUVWQ8888(const uint8_t *src, int width,
-                                               int height, uint8_t *dst_) {
+void ConvertNormalMapRGBA8888ToDUDVMapUVWQ8888(const u8 *src, int width,
+                                               int height, u8 *dst_) {
   unsigned const char *lastPixel = src + width * height * 4;
   char *dst = (char *)dst_;  // NOTE: this is signed!!!!
 
@@ -1359,8 +1334,8 @@ void ConvertNormalMapRGBA8888ToDUDVMapUVWQ8888(const uint8_t *src, int width,
   }
 }
 
-void ConvertNormalMapRGBA8888ToDUDVMapUVLX8888(const uint8_t *src, int width,
-                                               int height, uint8_t *dst_) {
+void ConvertNormalMapRGBA8888ToDUDVMapUVLX8888(const u8 *src, int width,
+                                               int height, u8 *dst_) {
   unsigned const char *lastPixel = src + width * height * 4;
   char *dst = (char *)dst_;  // NOTE: this is signed!!!!
 
@@ -1368,14 +1343,14 @@ void ConvertNormalMapRGBA8888ToDUDVMapUVLX8888(const uint8_t *src, int width,
     dst[0] = (char)(((int)src[0]) - 127);
     dst[1] = (char)(((int)src[1]) - 127);
 
-    uint8_t *pUDst = (uint8_t *)dst;
+    u8 *pUDst = (u8 *)dst;
     pUDst[2] = src[3];
     pUDst[3] = 0xFF;
   }
 }
 
-void ConvertNormalMapRGBA8888ToDUDVMapUV88(const uint8_t *src, int width,
-                                           int height, uint8_t *dst_) {
+void ConvertNormalMapRGBA8888ToDUDVMapUV88(const u8 *src, int width, int height,
+                                           u8 *dst_) {
   unsigned const char *lastPixel = src + width * height * 4;
   char *dst = (char *)dst_;  // NOTE: this is signed!!!!
 
@@ -1385,26 +1360,26 @@ void ConvertNormalMapRGBA8888ToDUDVMapUV88(const uint8_t *src, int width,
   }
 }
 
-void NormalizeNormalMapRGBA8888(uint8_t *src, int numTexels) {
-  uint8_t *lastPixel = src + numTexels * 4;
+void NormalizeNormalMapRGBA8888(u8 *src, int numTexels) {
+  u8 *lastPixel = src + numTexels * 4;
 
-  for (uint8_t *pixel = src; pixel < lastPixel; pixel += 4) {
+  for (u8 *pixel = src; pixel < lastPixel; pixel += 4) {
     Vector tmpVect;
-    tmpVect[0] = ((float)pixel[0] - 128.0f) * (1.0f / 127.0f);
-    tmpVect[1] = ((float)pixel[1] - 128.0f) * (1.0f / 127.0f);
-    tmpVect[2] = ((float)pixel[2] - 128.0f) * (1.0f / 127.0f);
+    tmpVect[0] = ((f32)pixel[0] - 128.0f) * (1.0f / 127.0f);
+    tmpVect[1] = ((f32)pixel[1] - 128.0f) * (1.0f / 127.0f);
+    tmpVect[2] = ((f32)pixel[2] - 128.0f) * (1.0f / 127.0f);
 
     VectorNormalize(tmpVect);
 
-    pixel[0] = (uint8_t)(128 + 127 * tmpVect[0]);
-    pixel[1] = (uint8_t)(128 + 127 * tmpVect[1]);
-    pixel[2] = (uint8_t)(128 + 127 * tmpVect[2]);
+    pixel[0] = (u8)(128 + 127 * tmpVect[0]);
+    pixel[1] = (u8)(128 + 127 * tmpVect[1]);
+    pixel[2] = (u8)(128 + 127 * tmpVect[2]);
   }
 }
 
 // Image rotation
 
-bool RotateImageLeft(const uint8_t *src, uint8_t *dst, int widthHeight,
+bool RotateImageLeft(const u8 *src, u8 *dst, int widthHeight,
                      ImageFormat imageFormat) {
 #define SRC(x, y) src[((x) + (y)*widthHeight) * sizeInBytes]
 #define DST(x, y) dst[((x) + (y)*widthHeight) * sizeInBytes]
@@ -1414,7 +1389,7 @@ bool RotateImageLeft(const uint8_t *src, uint8_t *dst, int widthHeight,
 
   int x, y;
 
-  uint8_t tmp[4][16];
+  u8 tmp[4][16];
   int halfWidthHeight = widthHeight >> 1;
   int sizeInBytes = SizeInBytes(imageFormat);
   Assert(sizeInBytes <= 16 && sizeInBytes > 0);
@@ -1438,7 +1413,7 @@ bool RotateImageLeft(const uint8_t *src, uint8_t *dst, int widthHeight,
   return true;
 }
 
-bool RotateImage180(const uint8_t *src, uint8_t *dst, int widthHeight,
+bool RotateImage180(const u8 *src, u8 *dst, int widthHeight,
                     ImageFormat imageFormat) {
   // OPTIMIZE: do this transformation directly.
   if (RotateImageLeft(src, dst, widthHeight, imageFormat)) {
@@ -1458,10 +1433,10 @@ bool FlipImageVertically(void *pSrc, void *pDst, int nWidth, int nHeight,
     nDstStride = nRowBytes;
   }
 
-  uint8_t *pSrcRow = (uint8_t *)pSrc;
-  uint8_t *pDstRow = (uint8_t *)pDst + ((nHeight - 1) * nDstStride);
+  u8 *pSrcRow = (u8 *)pSrc;
+  u8 *pDstRow = (u8 *)pDst + ((nHeight - 1) * nDstStride);
   if (pSrc == pDst) {
-    uint8_t *pTemp = (uint8_t *)_alloca(nRowBytes);
+    u8 *pTemp = (u8 *)_alloca(nRowBytes);
     int nHalfHeight = nHeight >> 1;
     for (int i = 0; i < nHalfHeight; i++) {
       memcpy(pTemp, pSrcRow, nRowBytes);
@@ -1486,7 +1461,7 @@ bool FlipImageHorizontally(void *pSrc, void *pDst, int nWidth, int nHeight,
                            ImageFormat imageFormat, int nDstStride) {
   if (IsCompressed(imageFormat)) return false;
 
-  uint8_t tmp[16];
+  u8 tmp[16];
   int nSizeInBytes = SizeInBytes(imageFormat);
   int nRowBytes = nSizeInBytes * nWidth;
   Assert(nSizeInBytes <= 16 && nSizeInBytes > 0);
@@ -1496,13 +1471,13 @@ bool FlipImageHorizontally(void *pSrc, void *pDst, int nWidth, int nHeight,
   }
 
   int x, y;
-  uint8_t *pSrcRow = (uint8_t *)pSrc;
-  uint8_t *pDstRow = (uint8_t *)pDst;
+  u8 *pSrcRow = (u8 *)pSrc;
+  u8 *pDstRow = (u8 *)pDst;
   if (pSrc == pDst) {
     int nHalfWidth = nWidth >> 1;
     for (y = 0; y < nHeight; y++) {
-      uint8_t *pSrcPixel = pSrcRow;
-      uint8_t *pDstPixel = pDstRow + nRowBytes - nSizeInBytes;
+      u8 *pSrcPixel = pSrcRow;
+      u8 *pDstPixel = pDstRow + nRowBytes - nSizeInBytes;
       for (x = 0; x < nHalfWidth; x++) {
         memcpy(tmp, pSrcPixel, nSizeInBytes);
         memcpy(pSrcPixel, pDstPixel, nSizeInBytes);
@@ -1517,8 +1492,8 @@ bool FlipImageHorizontally(void *pSrc, void *pDst, int nWidth, int nHeight,
     }
   } else {
     for (y = 0; y < nHeight; y++) {
-      uint8_t *pSrcPixel = pSrcRow;
-      uint8_t *pDstPixel = pDstRow + nRowBytes - nSizeInBytes;
+      u8 *pSrcPixel = pSrcRow;
+      u8 *pDstPixel = pDstRow + nRowBytes - nSizeInBytes;
       for (x = 0; x < nWidth; x++) {
         memcpy(pDstPixel, pSrcPixel, nSizeInBytes);
         pSrcPixel += nSizeInBytes;
@@ -1535,7 +1510,7 @@ bool FlipImageHorizontally(void *pSrc, void *pDst, int nWidth, int nHeight,
 
 // Image rotation
 
-bool SwapAxes(uint8_t *src, int widthHeight, ImageFormat imageFormat) {
+bool SwapAxes(u8 *src, int widthHeight, ImageFormat imageFormat) {
 #define SRC(x, y) src[((x) + (y)*widthHeight) * sizeInBytes]
   if (IsCompressed(imageFormat)) {
     return false;
@@ -1543,7 +1518,7 @@ bool SwapAxes(uint8_t *src, int widthHeight, ImageFormat imageFormat) {
 
   int x, y;
 
-  uint8_t tmp[4];
+  u8 tmp[4];
   int sizeInBytes = SizeInBytes(imageFormat);
   Assert(sizeInBytes <= 4 && sizeInBytes > 0);
 
@@ -1558,12 +1533,12 @@ bool SwapAxes(uint8_t *src, int widthHeight, ImageFormat imageFormat) {
   return true;
 }
 
-void RGBA8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
+void RGBA8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
   memcpy(dst, src, 4 * numPixels);
 }
 
-void RGBA8888ToABGR8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToABGR8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[3];
     dst[1] = src[2];
@@ -1572,8 +1547,8 @@ void RGBA8888ToABGR8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGBA8888ToRGB888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToRGB888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 3) {
     dst[0] = src[0];
     dst[1] = src[1];
@@ -1581,8 +1556,8 @@ void RGBA8888ToRGB888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGBA8888ToBGR888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGR888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 3) {
     dst[0] = src[2];
     dst[1] = src[1];
@@ -1590,32 +1565,31 @@ void RGBA8888ToBGR888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGBA8888ToI8(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToI8(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 1) {
-    dst[0] = (uint8_t)(0.299f * src[0] + 0.587f * src[1] + 0.114f * src[2]);
+    dst[0] = (u8)(0.299f * src[0] + 0.587f * src[1] + 0.114f * src[2]);
   }
 }
 
-void RGBA8888ToIA88(const uint8_t *src, uint8_t *dst, int numPixels) {
+void RGBA8888ToIA88(const u8 *src, u8 *dst, int numPixels) {
   // fixme: need to find the proper rgb weighting
-  const uint8_t *endSrc = src + numPixels * 4;
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 2) {
-    dst[0] = (uint8_t)(0.299f * src[0] + 0.587f * src[1] + 0.114f * src[2]);
+    dst[0] = (u8)(0.299f * src[0] + 0.587f * src[1] + 0.114f * src[2]);
     dst[1] = src[3];
   }
 }
 
-void RGBA8888ToA8(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToA8(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 1) {
     dst[0] = src[3];
   }
 }
 
-void RGBA8888ToRGB888_BLUESCREEN(const uint8_t *src, uint8_t *dst,
-                                 int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToRGB888_BLUESCREEN(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 3) {
     if (src[3] == 0) {
       dst[0] = 0;
@@ -1629,9 +1603,8 @@ void RGBA8888ToRGB888_BLUESCREEN(const uint8_t *src, uint8_t *dst,
   }
 }
 
-void RGBA8888ToBGR888_BLUESCREEN(const uint8_t *src, uint8_t *dst,
-                                 int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGR888_BLUESCREEN(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 3) {
     if (src[3] == 0) {
       dst[2] = 0;
@@ -1645,8 +1618,8 @@ void RGBA8888ToBGR888_BLUESCREEN(const uint8_t *src, uint8_t *dst,
   }
 }
 
-void RGBA8888ToARGB8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToARGB8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[3];
     dst[1] = src[0];
@@ -1655,8 +1628,8 @@ void RGBA8888ToARGB8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGBA8888ToBGRA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGRA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[2];
     dst[1] = src[1];
@@ -1665,8 +1638,8 @@ void RGBA8888ToBGRA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGBA8888ToBGRX8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGRX8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[2];
     dst[1] = src[1];
@@ -1674,58 +1647,58 @@ void RGBA8888ToBGRX8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGBA8888ToBGR565(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pDstShort = (unsigned short *)dst;
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGR565(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pDstShort = (u16 *)dst;
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, pDstShort++) {
     *pDstShort = ((src[0] >> 3) << 11) | ((src[1] >> 2) << 5) | (src[2] >> 3);
   }
 }
 
-void RGBA8888ToBGRX5551(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pDstShort = (unsigned short *)dst;
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGRX5551(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pDstShort = (u16 *)dst;
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, pDstShort++) {
     *pDstShort = ((src[0] >> 3) << 10) | ((src[1] >> 3) << 5) | (src[2] >> 3);
   }
 }
 
-void RGBA8888ToBGRA5551(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pDstShort = (unsigned short *)dst;
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGRA5551(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pDstShort = (u16 *)dst;
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, pDstShort++) {
     *pDstShort = ((src[0] >> 3) << 10) | ((src[1] >> 3) << 5) | (src[2] >> 3) |
                  (src[3] >> 7) << 15;
   }
 }
 
-void RGBA8888ToBGRA4444(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pDstShort = (unsigned short *)dst;
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToBGRA4444(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pDstShort = (u16 *)dst;
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, pDstShort++) {
     *pDstShort = ((src[0] >> 4) << 8) | ((src[1] >> 4) << 4) | (src[2] >> 4) |
                  ((src[3] >> 4) << 12);
   }
 }
 
-void RGBA8888ToUV88(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void RGBA8888ToUV88(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 2) {
     dst[0] = src[0];
     dst[1] = src[1];
   }
 }
 
-void RGBA8888ToUVWQ8888(const uint8_t *src, uint8_t *dst, int numPixels) {
+void RGBA8888ToUVWQ8888(const u8 *src, u8 *dst, int numPixels) {
   RGBA8888ToRGBA8888(src, dst, numPixels);
 }
 
-void RGBA8888ToUVLX8888(const uint8_t *src, uint8_t *dst, int numPixels) {
+void RGBA8888ToUVLX8888(const u8 *src, u8 *dst, int numPixels) {
   RGBA8888ToRGBA8888(src, dst, numPixels);
 }
 
-void ABGR8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void ABGR8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[3];
     dst[1] = src[2];
@@ -1734,8 +1707,8 @@ void ABGR8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGB888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 3;
+void RGB888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 3;
   for (; src < endSrc; src += 3, dst += 4) {
     dst[0] = src[0];
     dst[1] = src[1];
@@ -1744,8 +1717,8 @@ void RGB888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void BGR888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 3;
+void BGR888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 3;
   for (; src < endSrc; src += 3, dst += 4) {
     dst[0] = src[2];
     dst[1] = src[1];
@@ -1754,8 +1727,8 @@ void BGR888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void I8ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels;
+void I8ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels;
   for (; src < endSrc; src += 1, dst += 4) {
     dst[0] = src[0];
     dst[1] = src[0];
@@ -1764,8 +1737,8 @@ void I8ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void IA88ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 2;
+void IA88ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 2;
   for (; src < endSrc; src += 2, dst += 4) {
     dst[0] = src[0];
     dst[1] = src[0];
@@ -1774,8 +1747,8 @@ void IA88ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void A8ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels;
+void A8ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels;
   for (; src < endSrc; src += 1, dst += 4) {
     dst[0] = src[0];
     dst[1] = src[0];
@@ -1784,9 +1757,8 @@ void A8ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void RGB888_BLUESCREENToRGBA8888(const uint8_t *src, uint8_t *dst,
-                                 int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 3;
+void RGB888_BLUESCREENToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 3;
   for (; src < endSrc; src += 3, dst += 4) {
     if (src[0] == 0 && src[1] == 0 && src[2] == 255) {
       dst[0] = 0;
@@ -1802,9 +1774,8 @@ void RGB888_BLUESCREENToRGBA8888(const uint8_t *src, uint8_t *dst,
   }
 }
 
-void BGR888_BLUESCREENToRGBA8888(const uint8_t *src, uint8_t *dst,
-                                 int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 3;
+void BGR888_BLUESCREENToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 3;
   for (; src < endSrc; src += 3, dst += 4) {
     if (src[2] == 0 && src[1] == 0 && src[0] == 255) {
       dst[0] = 0;
@@ -1820,8 +1791,8 @@ void BGR888_BLUESCREENToRGBA8888(const uint8_t *src, uint8_t *dst,
   }
 }
 
-void ARGB8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void ARGB8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[1];
     dst[1] = src[2];
@@ -1830,8 +1801,8 @@ void ARGB8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void BGRA8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void BGRA8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[2];
     dst[1] = src[1];
@@ -1840,8 +1811,8 @@ void BGRA8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void BGRX8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *endSrc = src + numPixels * 4;
+void BGRX8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *endSrc = src + numPixels * 4;
   for (; src < endSrc; src += 4, dst += 4) {
     dst[0] = src[2];
     dst[1] = src[1];
@@ -1850,9 +1821,9 @@ void BGRX8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void BGR565ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pSrcShort = (unsigned short *)src;
-  unsigned short *pEndSrc = pSrcShort + numPixels;
+void BGR565ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pSrcShort = (u16 *)src;
+  u16 *pEndSrc = pSrcShort + numPixels;
   for (; pSrcShort < pEndSrc; pSrcShort++, dst += 4) {
     int blue = (*pSrcShort & 0x1F);
     int green = (*pSrcShort >> 5) & 0x3F;
@@ -1866,9 +1837,9 @@ void BGR565ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void BGRX5551ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pSrcShort = (unsigned short *)src;
-  unsigned short *pEndSrc = pSrcShort + numPixels;
+void BGRX5551ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pSrcShort = (u16 *)src;
+  u16 *pEndSrc = pSrcShort + numPixels;
   for (; pSrcShort < pEndSrc; pSrcShort++, dst += 4) {
     int blue = (*pSrcShort & 0x1F);
     int green = (*pSrcShort >> 5) & 0x1F;
@@ -1882,9 +1853,9 @@ void BGRX5551ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void BGRA5551ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pSrcShort = (unsigned short *)src;
-  unsigned short *pEndSrc = pSrcShort + numPixels;
+void BGRA5551ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pSrcShort = (u16 *)src;
+  u16 *pEndSrc = pSrcShort + numPixels;
   for (; pSrcShort < pEndSrc; pSrcShort++, dst += 4) {
     int blue = (*pSrcShort & 0x1F);
     int green = (*pSrcShort >> 5) & 0x1F;
@@ -1904,9 +1875,9 @@ void BGRA5551ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void BGRA4444ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  unsigned short *pSrcShort = (unsigned short *)src;
-  unsigned short *pEndSrc = pSrcShort + numPixels;
+void BGRA4444ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  u16 *pSrcShort = (u16 *)src;
+  u16 *pEndSrc = pSrcShort + numPixels;
   for (; pSrcShort < pEndSrc; pSrcShort++, dst += 4) {
     int blue = (*pSrcShort & 0xF);
     int green = (*pSrcShort >> 4) & 0xF;
@@ -1922,8 +1893,8 @@ void BGRA4444ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void UV88ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
-  const uint8_t *pEndSrc = src + numPixels * 2;
+void UV88ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
+  const u8 *pEndSrc = src + numPixels * 2;
   for (; src < pEndSrc; src += 2, dst += 4) {
     dst[0] = src[0];
     dst[1] = src[1];
@@ -1932,18 +1903,18 @@ void UV88ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
   }
 }
 
-void UVWQ8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
+void UVWQ8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
   RGBA8888ToRGBA8888(src, dst, numPixels);
 }
 
-void UVLX8888ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
+void UVLX8888ToRGBA8888(const u8 *src, u8 *dst, int numPixels) {
   RGBA8888ToRGBA8888(src, dst, numPixels);
 }
 
 // HDRFIXME: This assumes that the 16-bit integer values are 4.12 fixed-point.
-void RGBA16161616ToRGBA8888(const uint8_t *src_, uint8_t *dst, int numPixels) {
-  unsigned short *src = (unsigned short *)src_;
-  unsigned short *pEndSrc = src + numPixels * 4;
+void RGBA16161616ToRGBA8888(const u8 *src_, u8 *dst, int numPixels) {
+  u16 *src = (u16 *)src_;
+  u16 *pEndSrc = src + numPixels * 4;
   for (; src < pEndSrc; src += 4, dst += 4) {
     dst[0] = std::min(255, src[0] >> 4);
     dst[1] = std::min(255, src[1] >> 4);

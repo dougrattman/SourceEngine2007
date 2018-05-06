@@ -16,8 +16,8 @@ void FloatBitMap_t::InitializeWithRandomPixelsFromAnotherFloatBM(
     FloatBitMap_t const &other) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++) {
-      float x1 = RandomInt(0, other.Width - 1);
-      float y1 = RandomInt(0, other.Height - 1);
+      f32 x1 = RandomInt(0, other.Width - 1);
+      f32 y1 = RandomInt(0, other.Height - 1);
       for (int c = 0; c < 4; c++) {
         Pixel(x, y, c) = other.Pixel(x1, y1, c);
       }
@@ -26,20 +26,20 @@ void FloatBitMap_t::InitializeWithRandomPixelsFromAnotherFloatBM(
 
 FloatBitMap_t *FloatBitMap_t::QuarterSizeWithGaussian(void) const {
   // generate a new bitmap half on each axis, using a separable gaussian.
-  static float kernel[] = {.05f, .25f, .4f, .25f, .05f};
+  static f32 kernel[] = {.05f, .25f, .4f, .25f, .05f};
   FloatBitMap_t *newbm = new FloatBitMap_t(Width / 2, Height / 2);
 
   for (int y = 0; y < Height / 2; y++)
     for (int x = 0; x < Width / 2; x++) {
       for (int c = 0; c < 4; c++) {
-        float sum = 0;
-        float sumweights = 0;  // for versatility in handling the
-                               // offscreen case
+        f32 sum = 0;
+        f32 sumweights = 0;  // for versatility in handling the
+                             // offscreen case
         for (int xofs = -2; xofs <= 2; xofs++) {
           int orig_x = std::max(0, std::min(Width - 1, x * 2 + xofs));
           for (int yofs = -2; yofs <= 2; yofs++) {
             int orig_y = std::max(0, std::min(Height - 1, y * 2 + yofs));
-            float coeff = kernel[xofs + 2] * kernel[yofs + 2];
+            f32 coeff = kernel[xofs + 2] * kernel[yofs + 2];
             sum += Pixel(orig_x, orig_y, c) * coeff;
             sumweights += coeff;
           }
@@ -70,23 +70,22 @@ void FloatImagePyramid_t::ReconstructLowerResolutionLevels(int start_level) {
   m_nLevels = start_level + 1;
 }
 
-float &FloatImagePyramid_t::Pixel(int x, int y, int component,
-                                  int level) const {
+f32 &FloatImagePyramid_t::Pixel(int x, int y, int component, int level) const {
   assert(level < m_nLevels);
   x <<= level;
   y <<= level;
   return m_pLevels[level]->Pixel(x, y, component);
 }
 
-void FloatImagePyramid_t::WriteTGAs(char const *basename) const {
+void FloatImagePyramid_t::WriteTGAs(ch const *basename) const {
   for (int l = 0; l < m_nLevels; l++) {
-    char bname_out[1024];
+    ch bname_out[1024];
     Q_snprintf(bname_out, sizeof(bname_out), "%s_%02d.tga", basename, l);
     m_pLevels[l]->WriteTGAFile(bname_out);
   }
 }
 
-FloatImagePyramid_t::~FloatImagePyramid_t(void) {
+FloatImagePyramid_t::~FloatImagePyramid_t() {
   for (int l = 0; l < m_nLevels; l++)
     if (m_pLevels[l]) delete m_pLevels[l];
 }

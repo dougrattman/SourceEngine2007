@@ -2,6 +2,7 @@
 
 #include "bitmap/float_bm.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -13,22 +14,22 @@
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"
 
-#define SQ(x) ((x) * (x))
+template <typename T>
+inline constexpr T SQ(T x) {
+  return x * x;
+}
 
 // linear interpolate between 2 control points (L,R)
-
-inline float LinInterp(float frac, float L, float R) {
+inline constexpr f32 LinInterp(f32 frac, f32 L, f32 R) {
   return (((R - L) * frac) + L);
 }
 
 // bilinear interpolate between 4 control points (UL,UR,LL,LR)
-
-inline float BiLinInterp(float Xfrac, float Yfrac, float UL, float UR, float LL,
-                         float LR) {
-  float iu = LinInterp(Xfrac, UL, UR);
-  float il = LinInterp(Xfrac, LL, LR);
-
-  return (LinInterp(Yfrac, iu, il));
+inline constexpr f32 BiLinInterp(f32 Xfrac, f32 Yfrac, f32 UL, f32 UR, f32 LL,
+                                 f32 LR) {
+  const f32 iu = LinInterp(Xfrac, UL, UR);
+  const f32 il = LinInterp(Xfrac, LL, LR);
+  return LinInterp(Yfrac, iu, il);
 }
 
 FloatBitMap_t::FloatBitMap_t(int width, int height) {
@@ -39,7 +40,7 @@ FloatBitMap_t::FloatBitMap_t(int width, int height) {
 FloatBitMap_t::FloatBitMap_t(FloatBitMap_t const *orig) {
   RGBAData = 0;
   AllocateRGB(orig->Width, orig->Height);
-  memcpy(RGBAData, orig->RGBAData, Width * Height * sizeof(float) * 4);
+  memcpy(RGBAData, orig->RGBAData, Width * Height * sizeof(f32) * 4);
 }
 
 static char GetChar(FileHandle_t &f) {
@@ -76,8 +77,8 @@ bool FloatBitMap_t::LoadFromPFM(char const *fname) {
       AllocateRGB(Width, Height);
 
       for (int y = Height - 1; y >= 0; y--) {
-        float linebuffer[PFM_MAX_XSIZE * 3];
-        g_pFullFileSystem->Read(linebuffer, 3 * Width * sizeof(float), f);
+        f32 linebuffer[PFM_MAX_XSIZE * 3];
+        g_pFullFileSystem->Read(linebuffer, 3 * Width * sizeof(f32), f);
         for (int x = 0; x < Width; x++) {
           for (int c = 0; c < 3; c++) {
             Pixel(x, y, c) = linebuffer[x * 3 + c];
@@ -87,7 +88,8 @@ bool FloatBitMap_t::LoadFromPFM(char const *fname) {
     }
     g_pFullFileSystem->Close(f);  // close file after reading
   }
-  return (RGBAData != 0);
+
+  return RGBAData != nullptr;
 }
 
 bool FloatBitMap_t::WritePFM(char const *fname) {
@@ -96,13 +98,13 @@ bool FloatBitMap_t::WritePFM(char const *fname) {
   if (f) {
     g_pFullFileSystem->FPrintf(f, "PF\n%d %d\n-1.000000\n", Width, Height);
     for (int y = Height - 1; y >= 0; y--) {
-      float linebuffer[PFM_MAX_XSIZE * 3];
+      f32 linebuffer[PFM_MAX_XSIZE * 3];
       for (int x = 0; x < Width; x++) {
         for (int c = 0; c < 3; c++) {
           linebuffer[x * 3 + c] = Pixel(x, y, c);
         }
       }
-      g_pFullFileSystem->Write(linebuffer, 3 * Width * sizeof(float), f);
+      g_pFullFileSystem->Write(linebuffer, 3 * Width * sizeof(f32), f);
     }
     g_pFullFileSystem->Close(f);
 
@@ -112,28 +114,26 @@ bool FloatBitMap_t::WritePFM(char const *fname) {
   return false;
 }
 
-float FloatBitMap_t::InterpolatedPixel(float x, float y, int comp) const {
+f32 FloatBitMap_t::InterpolatedPixel(f32 x, f32 y, int comp) const {
   int Top = floor(y);
-  float Yfrac = y - Top;
+  f32 Yfrac = y - Top;
   int Bot = std::min(Height - 1, Top + 1);
   int Left = floor(x);
-  float Xfrac = x - Left;
+  f32 Xfrac = x - Left;
   int Right = std::min(Width - 1, Left + 1);
   return BiLinInterp(Xfrac, Yfrac, Pixel(Left, Top, comp),
                      Pixel(Right, Top, comp), Pixel(Left, Bot, comp),
                      Pixel(Right, Bot, comp));
 }
 
-//-----------------------------------------------------------------
-// resize (with bilinear filter) truecolor bitmap in place
-
+// Resize (with bilinear filter) truecolor bitmap in place
 void FloatBitMap_t::ReSize(int NewWidth, int NewHeight) {
-  float XRatio = (float)Width / (float)NewWidth;
-  float YRatio = (float)Height / (float)NewHeight;
-  float SourceX, SourceY, Xfrac, Yfrac;
+  f32 XRatio = (f32)Width / (f32)NewWidth;
+  f32 YRatio = (f32)Height / (f32)NewHeight;
+  f32 SourceX, SourceY, Xfrac, Yfrac;
   int Top, Bot, Left, Right;
 
-  float *newrgba = new float[NewWidth * NewHeight * 4];
+  f32 *newrgba = new f32[NewWidth * NewHeight * 4];
 
   SourceY = 0;
   for (int y = 0; y < NewHeight; y++) {
@@ -165,13 +165,12 @@ void FloatBitMap_t::ReSize(int NewWidth, int NewHeight) {
 }
 
 struct TGAHeader_t {
-  unsigned char id_length, colormap_type, image_type;
-  unsigned char colormap_index0, colormap_index1, colormap_length0,
-      colormap_length1;
-  unsigned char colormap_size;
-  unsigned char x_origin0, x_origin1, y_origin0, y_origin1, width0, width1,
-      height0, height1;
-  unsigned char pixel_size, attributes;
+  u8 id_length, colormap_type, image_type;
+  u8 colormap_index0, colormap_index1, colormap_length0, colormap_length1;
+  u8 colormap_size;
+  u8 x_origin0, x_origin1, y_origin0, y_origin1, width0, width1, height0,
+      height1;
+  u8 pixel_size, attributes;
 };
 
 bool FloatBitMap_t::WriteTGAFile(char const *filename) const {
@@ -217,7 +216,7 @@ FloatBitMap_t::FloatBitMap_t(char const *tgafilename) {
 
   int width1, height1;
   ImageFormat imageFormat1;
-  float gamma1;
+  f32 gamma1;
 
   if (!TGALoader::GetInfo(tgafilename, &width1, &height1, &imageFormat1,
                           &gamma1)) {
@@ -226,15 +225,15 @@ FloatBitMap_t::FloatBitMap_t(char const *tgafilename) {
   }
   AllocateRGB(width1, height1);
 
-  uint8_t *pImage1Tmp = new uint8_t[ImageLoader::GetMemRequired(
-      width1, height1, 1, imageFormat1, false)];
+  u8 *pImage1Tmp = new u8[ImageLoader::GetMemRequired(width1, height1, 1,
+                                                      imageFormat1, false)];
 
   if (!TGALoader::Load(pImage1Tmp, tgafilename, width1, height1, imageFormat1,
                        2.2f, false)) {
     fprintf(stderr, "error loading %s.\n", tgafilename);
     exit(-1);
   }
-  uint8_t *pImage1 = new uint8_t[ImageLoader::GetMemRequired(
+  u8 *pImage1 = new u8[ImageLoader::GetMemRequired(
       width1, height1, 1, IMAGE_FORMAT_ABGR8888, false)];
 
   ImageLoader::ConvertImageFormat(pImage1Tmp, imageFormat1, pImage1,
@@ -252,7 +251,7 @@ FloatBitMap_t::FloatBitMap_t(char const *tgafilename) {
   delete[] pImage1Tmp;
 }
 
-FloatBitMap_t::~FloatBitMap_t(void) {
+FloatBitMap_t::~FloatBitMap_t() {
   if (RGBAData) delete[] RGBAData;
 }
 
@@ -271,7 +270,7 @@ FloatBitMap_t *FloatBitMap_t::QuarterSize(void) const {
   return newbm;
 }
 
-FloatBitMap_t *FloatBitMap_t::QuarterSizeBlocky(void) const {
+FloatBitMap_t *FloatBitMap_t::QuarterSizeBlocky() const {
   // generate a new bitmap half on each axis
 
   FloatBitMap_t *newbm = new FloatBitMap_t(Width / 2, Height / 2);
@@ -283,7 +282,7 @@ FloatBitMap_t *FloatBitMap_t::QuarterSizeBlocky(void) const {
   return newbm;
 }
 
-Vector FloatBitMap_t::AverageColor(void) {
+Vector FloatBitMap_t::AverageColor() const {
   Vector ret(0, 0, 0);
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++)
@@ -292,8 +291,8 @@ Vector FloatBitMap_t::AverageColor(void) {
   return ret;
 }
 
-float FloatBitMap_t::BrightestColor(void) {
-  float ret = 0.0;
+f32 FloatBitMap_t::BrightestColor() const {
+  f32 ret = 0.0;
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++) {
       Vector v(Pixel(x, y, 0), Pixel(x, y, 1), Pixel(x, y, 2));
@@ -302,35 +301,26 @@ float FloatBitMap_t::BrightestColor(void) {
   return ret;
 }
 
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define MIN(a, b) (((a) > (b)) ? (b) : (a))
-template <class T>
-static inline void SWAP(T &a, T &b) {
-  T temp = a;
-  a = b;
-  b = temp;
-}
-
-void FloatBitMap_t::RaiseToPower(float power) {
+void FloatBitMap_t::RaiseToPower(f32 power) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++)
       for (int c = 0; c < 3; c++)
-        Pixel(x, y, c) = pow((float)MAX(0.0, Pixel(x, y, c)), (float)power);
+        Pixel(x, y, c) = pow((f32)std::max(0.0f, Pixel(x, y, c)), (f32)power);
 }
 
-void FloatBitMap_t::Logize(void) {
+void FloatBitMap_t::Logize() {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++)
       for (int c = 0; c < 3; c++) Pixel(x, y, c) = log(1.0 + Pixel(x, y, c));
 }
 
-void FloatBitMap_t::UnLogize(void) {
+void FloatBitMap_t::UnLogize() {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++)
       for (int c = 0; c < 3; c++) Pixel(x, y, c) = exp(Pixel(x, y, c)) - 1;
 }
 
-void FloatBitMap_t::Clear(float r, float g, float b, float alpha) {
+void FloatBitMap_t::Clear(f32 r, f32 g, f32 b, f32 alpha) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++) {
       Pixel(x, y, 0) = r;
@@ -340,7 +330,7 @@ void FloatBitMap_t::Clear(float r, float g, float b, float alpha) {
     }
 }
 
-void FloatBitMap_t::ScaleRGB(float scale_factor) {
+void FloatBitMap_t::ScaleRGB(f32 scale_factor) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++)
       for (int c = 0; c < 3; c++) Pixel(x, y, c) *= scale_factor;
@@ -352,7 +342,7 @@ static int dy[4] = {-1, 0, 0, 1};
 #define NDELTAS 4
 
 void FloatBitMap_t::SmartPaste(FloatBitMap_t const &b, int xofs, int yofs,
-                               uint32_t Flags) {
+                               u32 Flags) {
   // now, need to make Difference map
   FloatBitMap_t DiffMap0(this);
   FloatBitMap_t DiffMap1(this);
@@ -365,11 +355,11 @@ void FloatBitMap_t::SmartPaste(FloatBitMap_t const &b, int xofs, int yofs,
         for (int i = 0; i < NDELTAS; i++) {
           int x1 = x + dx[i];
           int y1 = y + dy[i];
-          x1 = MAX(0, x1);
-          x1 = MIN(Width - 1, x1);
-          y1 = MAX(0, y1);
-          y1 = MIN(Height - 1, y1);
-          float dx1 = Pixel(x, y, c) - Pixel(x1, y1, c);
+          x1 = std::max(0, x1);
+          x1 = std::min(Width - 1, x1);
+          y1 = std::max(0, y1);
+          y1 = std::min(Height - 1, y1);
+          f32 dx1 = Pixel(x, y, c) - Pixel(x1, y1, c);
           deltas[i]->Pixel(x, y, c) = dx1;
         }
       }
@@ -377,11 +367,11 @@ void FloatBitMap_t::SmartPaste(FloatBitMap_t const &b, int xofs, int yofs,
     for (int y = 1; y < b.Height - 1; y++)
       for (int c = 0; c < 3; c++) {
         for (int i = 0; i < NDELTAS; i++) {
-          float diff = b.Pixel(x, y, c) - b.Pixel(x + dx[i], y + dy[i], c);
+          f32 diff = b.Pixel(x, y, c) - b.Pixel(x + dx[i], y + dy[i], c);
           deltas[i]->Pixel(x + xofs, y + yofs, c) = diff;
           if (Flags & SPFLAGS_MAXGRADIENT) {
-            float dx1 = Pixel(x + xofs, y + yofs, c) -
-                        Pixel(x + dx[i] + xofs, y + dy[i] + yofs, c);
+            f32 dx1 = Pixel(x + xofs, y + yofs, c) -
+                      Pixel(x + dx[i] + xofs, y + dy[i] + yofs, c);
             if (fabs(dx1) > fabs(diff))
               deltas[i]->Pixel(x + xofs, y + yofs, c) = dx1;
           }
@@ -391,60 +381,45 @@ void FloatBitMap_t::SmartPaste(FloatBitMap_t const &b, int xofs, int yofs,
   // now, calculate modifiability
   for (int x = 0; x < Width; x++)
     for (int y = 0; y < Height; y++) {
-      float modify = 0;
+      f32 modify = 0;
       if ((x > xofs + 1) && (x <= xofs + b.Width - 2) && (y > yofs + 1) &&
           (y <= yofs + b.Height - 2))
         modify = 1;
       Alpha(x, y) = modify;
     }
 
-  //   // now, force a fex pixels in center to be constant
-  //   int midx=xofs+b.Width/2;
-  //   int midy=yofs+b.Height/2;
-  //   for(x=midx-10;x<midx+10;x++)
-  //     for(int y=midy-10;y<midy+10;y++)
-  //     {
-  //       Alpha(x,y)=0;
-  //       for(int c=0;c<3;c++)
-  //         Pixel(x,y,c)=b.Pixel(x-xofs,y-yofs,c);
-  //     }
   Poisson(deltas, 6000, Flags);
 }
 
-void FloatBitMap_t::ScaleGradients(void) {
+void FloatBitMap_t::ScaleGradients() {
   // now, need to make Difference map
   FloatBitMap_t DiffMap0(this);
   FloatBitMap_t DiffMap1(this);
   FloatBitMap_t DiffMap2(this);
   FloatBitMap_t DiffMap3(this);
   FloatBitMap_t *deltas[4] = {&DiffMap0, &DiffMap1, &DiffMap2, &DiffMap3};
-  double gsum = 0.0;
+
   for (int x = 0; x < Width; x++)
     for (int y = 0; y < Height; y++)
       for (int c = 0; c < 3; c++) {
         for (int i = 0; i < NDELTAS; i++) {
           int x1 = x + dx[i];
           int y1 = y + dy[i];
-          x1 = MAX(0, x1);
-          x1 = MIN(Width - 1, x1);
-          y1 = MAX(0, y1);
-          y1 = MIN(Height - 1, y1);
-          float dx1 = Pixel(x, y, c) - Pixel(x1, y1, c);
+          x1 = std::max(0, x1);
+          x1 = std::min(Width - 1, x1);
+          y1 = std::max(0, y1);
+          y1 = std::min(Height - 1, y1);
+          f32 dx1 = Pixel(x, y, c) - Pixel(x1, y1, c);
           deltas[i]->Pixel(x, y, c) = dx1;
-          gsum += fabs(dx1);
         }
       }
+
   // now, reduce gradient changes
-  //  float gavg=gsum/(Width*Height);
   for (int x = 0; x < Width; x++)
     for (int y = 0; y < Height; y++)
       for (int c = 0; c < 3; c++) {
         for (int i = 0; i < NDELTAS; i++) {
-          float norml = 1.1 * deltas[i]->Pixel(x, y, c);
-          //           if (norml<0.0)
-          //             norml=-pow(-norml,1.2);
-          //           else
-          //             norml=pow(norml,1.2);
+          f32 norml = 1.1 * deltas[i]->Pixel(x, y, c);
           deltas[i]->Pixel(x, y, c) = norml;
         }
       }
@@ -452,7 +427,7 @@ void FloatBitMap_t::ScaleGradients(void) {
   // now, calculate modifiability
   for (int x = 0; x < Width; x++)
     for (int y = 0; y < Height; y++) {
-      float modify = 0;
+      f32 modify = 0;
       if ((x > 0) && (x < Width - 1) && (y) && (y < Height - 1)) {
         modify = 1;
         Alpha(x, y) = modify;
@@ -462,7 +437,7 @@ void FloatBitMap_t::ScaleGradients(void) {
   Poisson(deltas, 2200, 0);
 }
 
-void FloatBitMap_t::MakeTileable(void) {
+void FloatBitMap_t::MakeTileable() {
   FloatBitMap_t rslta(this);
   // now, need to make Difference map
   FloatBitMap_t DiffMapX(this);
@@ -478,14 +453,14 @@ void FloatBitMap_t::MakeTileable(void) {
   // initialize edge conditions
   for (int x = 0; x < Width; x++) {
     for (int c = 0; c < 3; c++) {
-      float a = 0.5 * (Pixel(x, Height - 1, c) += Pixel(x, 0, c));
+      f32 a = 0.5 * (Pixel(x, Height - 1, c) += Pixel(x, 0, c));
       rslta.Pixel(x, Height - 1, c) = a;
       rslta.Pixel(x, 0, c) = a;
     }
   }
   for (int y = 0; y < Height; y++) {
     for (int c = 0; c < 3; c++) {
-      float a = 0.5 * (Pixel(Width - 1, y, c) + Pixel(0, y, c));
+      f32 a = 0.5 * (Pixel(Width - 1, y, c) + Pixel(0, y, c));
       rslta.Pixel(Width - 1, y, c) = a;
       rslta.Pixel(0, y, c) = a;
     }
@@ -495,17 +470,17 @@ void FloatBitMap_t::MakeTileable(void) {
 
   // now, ready to iterate
   for (int pass = 0; pass < 10; pass++) {
-    float error = 0.0;
+    f32 error = 0.0;
     for (int x = 1; x < Width - 1; x++)
       for (int y = 1; y < Height - 1; y++)
         for (int c = 0; c < 3; c++) {
-          float desiredx = DiffMapX.Pixel(x, y, c) + cursrc->Pixel(x + 1, y, c);
-          float desiredy = DiffMapY.Pixel(x, y, c) + cursrc->Pixel(x, y + 1, c);
-          float desired = 0.5 * (desiredy + desiredx);
+          f32 desiredx = DiffMapX.Pixel(x, y, c) + cursrc->Pixel(x + 1, y, c);
+          f32 desiredy = DiffMapY.Pixel(x, y, c) + cursrc->Pixel(x, y + 1, c);
+          f32 desired = 0.5 * (desiredy + desiredx);
           curdst->Pixel(x, y, c) = FLerp(cursrc->Pixel(x, y, c), desired, 0.5);
           error += SQ(desired - cursrc->Pixel(x, y, c));
         }
-    SWAP(cursrc, curdst);
+    std::swap(cursrc, curdst);
   }
   // paste result
   for (int x = 0; x < Width; x++)
@@ -541,14 +516,14 @@ void FloatBitMap_t::GetAlphaBounds(int &minx, int &miny, int &maxx, int &maxy) {
 }
 
 void FloatBitMap_t::Poisson(FloatBitMap_t *deltas[4], int n_iters,
-                            uint32_t flags  // SPF_xxx
+                            u32 flags  // SPF_xxx
 ) {
   int minx, miny, maxx, maxy;
   GetAlphaBounds(minx, miny, maxx, maxy);
-  minx = MAX(1, minx);
-  miny = MAX(1, miny);
-  maxx = MIN(Width - 2, maxx);
-  maxy = MIN(Height - 2, maxy);
+  minx = std::max(1, minx);
+  miny = std::max(1, miny);
+  maxx = std::min(Width - 2, maxx);
+  maxy = std::min(Height - 2, maxy);
   if (((maxx - minx) > 25) && (maxy - miny) > 25) {
     // perform at low resolution
     FloatBitMap_t *lowdeltas[NDELTAS];
@@ -580,12 +555,12 @@ void FloatBitMap_t::Poisson(FloatBitMap_t *deltas[4], int n_iters,
   FloatBitMap_t *cursrc = &work2;
   // now, ready to iterate
   while (n_iters--) {
-    float error = 0.0;
+    f32 error = 0.0;
     for (int x = minx; x <= maxx; x++) {
       for (int y = miny; y <= maxy; y++) {
         if (Alpha(x, y)) {
           for (int c = 0; c < 3; c++) {
-            float desired = 0.0;
+            f32 desired = 0.0;
             for (int i = 0; i < NDELTAS; i++)
               desired += deltas[i]->Pixel(x, y, c) +
                          cursrc->Pixel(x + dx[i], y + dy[i], c);
@@ -596,7 +571,7 @@ void FloatBitMap_t::Poisson(FloatBitMap_t *deltas[4], int n_iters,
             error += SQ(desired - cursrc->Pixel(x, y, c));
           }
         }
-        SWAP(cursrc, curdst);
+        std::swap(cursrc, curdst);
       }
     }
   }

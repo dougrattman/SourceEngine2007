@@ -15,7 +15,7 @@ struct TBFCalculationContext {
   int min_y, max_y;  // range to calculate in this thread
   int thread_number;
   int radius_in_pixels;
-  float edge_threshold_value;
+  f32 edge_threshold_value;
   FloatBitMap_t const *orig_bm;
   FloatBitMap_t *dest_bm;
 };
@@ -28,21 +28,21 @@ static unsigned TBFCalculationThreadFN(void *ctx1) {
                      (1 + ctx->max_y - ctx->min_y), y - ctx->min_y);
     for (int x = 0; x < ctx->dest_bm->Width; x++)
       for (int c = 0; c < 4; c++) {
-        float sum_weights = 0;
-        float filter_sum = 0;
-        float centerp = ctx->orig_bm->Pixel(x, y, c);
+        f32 sum_weights = 0;
+        f32 filter_sum = 0;
+        f32 centerp = ctx->orig_bm->Pixel(x, y, c);
         for (int iy = -ctx->radius_in_pixels; iy <= ctx->radius_in_pixels; iy++)
           for (int ix = -ctx->radius_in_pixels; ix <= ctx->radius_in_pixels;
                ix++) {
-            float this_p = ctx->orig_bm->PixelWrapped(x + ix, y + iy, c);
+            f32 this_p = ctx->orig_bm->PixelWrapped(x + ix, y + iy, c);
 
             // caluclate the g() term. We use a gaussian
-            float exp1 = (ix * ix + iy * iy) *
-                         (1.0 / (2.0 * ctx->radius_in_pixels * .033));
-            float g = exp(-exp1);
+            f32 exp1 = (ix * ix + iy * iy) *
+                       (1.0 / (2.0 * ctx->radius_in_pixels * .033));
+            f32 g = exp(-exp1);
             // calculate the "similarity" term. We use a triangle filter
-            float s = 1.0;
-            float cdiff = fabs(centerp - this_p);
+            f32 s = 1.0;
+            f32 cdiff = fabs(centerp - this_p);
             s = (cdiff > ctx->edge_threshold_value)
                     ? 0
                     : FLerp(1, 0, 0, ctx->edge_threshold_value, cdiff);
@@ -56,7 +56,7 @@ static unsigned TBFCalculationThreadFN(void *ctx1) {
 }
 
 void FloatBitMap_t::TileableBilateralFilter(int radius_in_pixels,
-                                            float edge_threshold_value) {
+                                            f32 edge_threshold_value) {
   FloatBitMap_t orig(this);  // need a copy for the source
   TBFCalculationContext ctxs[32];
   ctxs[0].radius_in_pixels = radius_in_pixels;

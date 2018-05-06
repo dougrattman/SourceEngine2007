@@ -5,7 +5,8 @@
 #ifndef PSD_H
 #define PSD_H
 
-#include "bitmap/imageformat.h"  // ImageFormat enum definition
+#include "base/include/base_types.h"
+#include "bitmap/imageformat.h"  // ImageFormat.
 
 class CUtlBuffer;
 struct Bitmap_t;
@@ -16,22 +17,20 @@ class PSDImageResources {
 
   struct ResElement {
     Resource m_eType;
-    // unsigned char	m_pReserved[4];
-    unsigned short m_numBytes;
-    unsigned char const *m_pvData;
+    u16 m_numBytes;
+    u8 const *m_pvData;
   };
 
  public:
-  explicit PSDImageResources(unsigned int numBytes,
-                             unsigned char const *pvBuffer)
+  explicit PSDImageResources(u32 numBytes, u8 const *pvBuffer)
       : m_numBytes(numBytes), m_pvBuffer(pvBuffer) {}
 
  public:
   ResElement FindElement(Resource eType) const;
 
  protected:
-  unsigned int m_numBytes;
-  unsigned char const *m_pvBuffer;
+  u32 m_numBytes;
+  u8 const *m_pvBuffer;
 };
 
 class PSDResFileInfo {
@@ -48,8 +47,8 @@ class PSDResFileInfo {
 
   struct ResFileInfoElement {
     ResFileInfo m_eType;
-    unsigned short m_numBytes;
-    unsigned char const *m_pvData;
+    u16 m_numBytes;
+    u8 const *m_pvData;
   };
 
  public:
@@ -62,30 +61,22 @@ class PSDResFileInfo {
   PSDImageResources::ResElement m_res;
 };
 
-
 // Is a file a PSD file?
-
-bool IsPSDFile(const char *pFileName, const char *pPathID);
+bool IsPSDFile(const ch *pFileName, const ch *pPathID);
 bool IsPSDFile(CUtlBuffer &buf);
 
-
-// Returns information about the PSD file
-
-bool PSDGetInfo(const char *pFileName, const char *pPathID, int *pWidth,
-                int *pHeight, ImageFormat *pImageFormat, float *pSourceGamma);
+// Returns information about the PSD file.
+bool PSDGetInfo(const ch *pFileName, const ch *pPathID, int *pWidth,
+                int *pHeight, ImageFormat *pImageFormat, f32 *pSourceGamma);
 bool PSDGetInfo(CUtlBuffer &buf, int *pWidth, int *pHeight,
-                ImageFormat *pImageFormat, float *pSourceGamma);
+                ImageFormat *pImageFormat, f32 *pSourceGamma);
 
-
-// Get PSD file image resources, pointers refer into the utlbuffer
-
+// Get PSD file image resources, pointers refer into the utlbuffer.
 PSDImageResources PSDGetImageResources(CUtlBuffer &buf);
 
-
-// Reads the PSD file into the specified buffer
-
+// Reads the PSD file into the specified buffer.
 bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap);
-bool PSDReadFileRGBA8888(const char *pFileName, const char *pPathID,
+bool PSDReadFileRGBA8888(const ch *pFileName, const ch *pPathID,
                          Bitmap_t &bitmap);
 
 #endif  // PSD_H

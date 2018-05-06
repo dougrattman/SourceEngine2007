@@ -1,57 +1,46 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef BITMAP_H
-#define BITMAP_H
+#ifndef BITMAP_BITMAP_H_
+#define BITMAP_BITMAP_H_
 
+#include "base/include/base_types.h"
 #include "bitmap/imageformat.h"
 
-
 // A Bitmap
-
 struct Bitmap_t {
-  Bitmap_t();
-  ~Bitmap_t();
-  void Init(int nWidth, int nHeight, ImageFormat imageFormat);
-  unsigned char *GetPixel(int x, int y);
+  Bitmap_t()
+      : m_nWidth{0},
+        m_nHeight{0},
+        m_ImageFormat{IMAGE_FORMAT_UNKNOWN},
+        m_pBits{nullptr} {}
+
+  ~Bitmap_t() {
+    delete[] m_pBits;
+    m_pBits = nullptr;
+  }
+
+  void Init(int width, int height, ImageFormat image_format) {
+    delete[] m_pBits;
+
+    m_nWidth = width;
+    m_nHeight = height;
+    m_ImageFormat = image_format;
+    m_pBits = new u8[width * height * ImageLoader::SizeInBytes(m_ImageFormat)];
+  }
+
+  u8 *GetPixel(int x, int y) const {
+    if (m_pBits) {
+      int nPixelSize = ImageLoader::SizeInBytes(m_ImageFormat);
+      return &m_pBits[(m_nWidth * y + x) * nPixelSize];
+    }
+
+    return nullptr;
+  }
 
   int m_nWidth;
   int m_nHeight;
   ImageFormat m_ImageFormat;
-  unsigned char *m_pBits;
+  u8 *m_pBits;
 };
 
-inline Bitmap_t::Bitmap_t() {
-  m_nWidth = 0;
-  m_nHeight = 0;
-  m_ImageFormat = IMAGE_FORMAT_UNKNOWN;
-  m_pBits = NULL;
-}
-
-inline Bitmap_t::~Bitmap_t() {
-  if (m_pBits) {
-    delete[] m_pBits;
-    m_pBits = NULL;
-  }
-}
-
-inline void Bitmap_t::Init(int nWidth, int nHeight, ImageFormat imageFormat) {
-  if (m_pBits) {
-    delete[] m_pBits;
-    m_pBits = NULL;
-  }
-
-  m_nWidth = nWidth;
-  m_nHeight = nHeight;
-  m_ImageFormat = imageFormat;
-  m_pBits = new unsigned char[nWidth * nHeight *
-                              ImageLoader::SizeInBytes(m_ImageFormat)];
-}
-
-inline unsigned char *Bitmap_t::GetPixel(int x, int y) {
-  if (!m_pBits) return NULL;
-
-  int nPixelSize = ImageLoader::SizeInBytes(m_ImageFormat);
-  return &m_pBits[(m_nWidth * y + x) * nPixelSize];
-}
-
-#endif  // BITMAP_H
+#endif  // BITMAP_BITMAP_H_

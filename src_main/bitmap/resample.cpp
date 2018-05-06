@@ -12,8 +12,9 @@
 #define NOMINMAX
 #include "nvtc.h"
 
-#include "tier0/include/basetypes.h"
 #include "base/include/compiler_specific.h"
+#include "base/include/macros.h"
+#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "tier1/utlmemory.h"
@@ -22,34 +23,23 @@
 #include "tier0/include/memdbgon.h"
 
 namespace ImageLoader {
-
 // Gamma correction
-
-static void ConstructFloatGammaTable(float *pTable, float srcGamma,
-                                     float dstGamma) {
-  for (int i = 0; i < 256; i++) {
-    pTable[i] = 255.0 * pow((float)i / 255.0f, srcGamma / dstGamma);
+static void ConstructFloatGammaTable(f32 *table, f32 srcGamma, f32 dstGamma) {
+  for (u32 i = 0; i < 256; i++) {
+    table[i] = 255.0f * pow(i / 255.0f, srcGamma / dstGamma);
   }
 }
 
-void ConstructGammaTable(unsigned char *pTable, float srcGamma,
-                         float dstGamma) {
-  int v;
-  for (int i = 0; i < 256; i++) {
-    double f;
-    f = 255.0 * pow((float)i / 255.0f, srcGamma / dstGamma);
-    v = (int)(f + 0.5f);
-    if (v < 0) {
-      v = 0;
-    } else if (v > 255) {
-      v = 255;
-    }
-    pTable[i] = (unsigned char)v;
+void ConstructGammaTable(u8 *table, f32 srcGamma, f32 dstGamma) {
+  for (u32 i = 0; i < 256; i++) {
+    f32 f = 255.0f * pow(i / 255.0f, srcGamma / dstGamma);
+    u8 v = std::clamp((int)(f + 0.5f), 0, 255);
+    table[i] = v;
   }
 }
 
-void GammaCorrectRGBA8888(unsigned char *pSrc, unsigned char *pDst, int width,
-                          int height, int depth, unsigned char *pGammaTable) {
+void GammaCorrectRGBA8888(u8 *pSrc, u8 *pDst, int width, int height, int depth,
+                          u8 *pGammaTable) {
   for (int h = 0; h < depth; ++h) {
     for (int i = 0; i < height; ++i) {
       for (int j = 0; j < width; ++j) {
@@ -64,9 +54,8 @@ void GammaCorrectRGBA8888(unsigned char *pSrc, unsigned char *pDst, int width,
   }
 }
 
-void GammaCorrectRGBA8888(unsigned char *src, unsigned char *dst, int width,
-                          int height, int depth, float srcGamma,
-                          float dstGamma) {
+void GammaCorrectRGBA8888(u8 *src, u8 *dst, int width, int height, int depth,
+                          f32 srcGamma, f32 dstGamma) {
   if (srcGamma == dstGamma) {
     if (src != dst) {
       memcpy(
@@ -76,9 +65,8 @@ void GammaCorrectRGBA8888(unsigned char *src, unsigned char *dst, int width,
     return;
   }
 
-  static unsigned char gamma[256];
-  static float lastSrcGamma = -1;
-  static float lastDstGamma = -1;
+  static u8 gamma[256];
+  static f32 lastSrcGamma = -1, lastDstGamma = -1;
 
   if (lastSrcGamma != srcGamma || lastDstGamma != dstGamma) {
     ConstructGammaTable(gamma, srcGamma, dstGamma);
@@ -90,12 +78,10 @@ void GammaCorrectRGBA8888(unsigned char *src, unsigned char *dst, int width,
 }
 
 // Generate a NICE filter kernel
-
-static void GenerateNiceFilter(float wratio, float hratio, float dratio,
-                               int kernelDiameter, float *pKernel,
-                               float *pInvKernel) {
+static void GenerateNiceFilter(f32 wratio, f32 hratio, f32 dratio,
+                               int kernelDiameter, f32 *pKernel,
+                               f32 *pInvKernel) {
   // Compute a kernel...
-  int h, i, j;
   int kernelWidth = kernelDiameter * wratio;
   int kernelHeight = kernelDiameter * hratio;
   int kernelDepth = (dratio != 0) ? kernelDiameter * dratio : 1;
@@ -105,56 +91,63 @@ static void GenerateNiceFilter(float wratio, float hratio, float dratio,
   // where x is the pixel # in the destination (shrunken) image.
   // only problem here is that the NICE filter has a very large kernel
   // (7x7 x wratio x hratio x dratio)
-  float dx = 1.0f / (float)wratio;
-  float dy = 1.0f / (float)hratio;
-  float z, dz;
+  f32 dx = 1.0f / wratio, dy = 1.0f / hratio;
+  f32 z, dz;
 
   if (dratio != 0.0f) {
-    dz = 1.0f / (float)dratio;
-    z = -((float)kernelDiameter - dz) * 0.5f;
+    dz = 1.0f / (f32)dratio;
+    z = -((f32)kernelDiameter - dz) * 0.5f;
   } else {
     dz = 0.0f;
     z = 0.0f;
   }
 
-  float total = 0.0f;
-  for (h = 0; h < kernelDepth; ++h) {
-    float y = -((float)kernelDiameter - dy) * 0.5f;
-    for (i = 0; i < kernelHeight; ++i) {
-      float x = -((float)kernelDiameter - dx) * 0.5f;
-      for (j = 0; j < kernelWidth; ++j) {
-        int nKernelIndex = kernelWidth * (i + h * kernelHeight) + j;
+  f32 total = 0.0f;
+  for (int h = 0; h < kernelDepth; ++h) {
+    f32 y = -((f32)kernelDiameter - dy) * 0.5f;
 
-        float d = sqrt(x * x + y * y + z * z);
+    for (int i = 0; i < kernelHeight; ++i) {
+      f32 x = -((f32)kernelDiameter - dx) * 0.5f;
+
+      for (int j = 0; j < kernelWidth; ++j) {
+        int nKernelIndex = kernelWidth * (i + h * kernelHeight) + j;
+        f32 d = sqrt(x * x + y * y + z * z);
+
         if (d > kernelDiameter * 0.5f) {
           pKernel[nKernelIndex] = 0.0f;
         } else {
-          float t = M_PI * d;
+          f32 t = M_PI_F * d;
+
           if (t != 0) {
-            float sinc = sin(t) / t;
-            float sinc3 = 3.0f * sin(t / 3.0f) / t;
+            f32 sinc = sin(t) / t;
+            f32 sinc3 = 3.0f * sin(t / 3.0f) / t;
+
             pKernel[nKernelIndex] = sinc * sinc3;
           } else {
             pKernel[nKernelIndex] = 1.0f;
           }
+
           total += pKernel[nKernelIndex];
         }
+
         x += dx;
       }
+
       y += dy;
     }
+
     z += dz;
   }
 
   // normalize
-  float flInvFactor =
-      (dratio == 0) ? wratio * hratio : dratio * wratio * hratio;
-  float flInvTotal = (total != 0.0f) ? 1.0f / total : 1.0f;
+  f32 flInvFactor = dratio == 0.0 ? wratio * hratio : dratio * wratio * hratio;
+  f32 flInvTotal = total != 0.0f ? 1.0f / total : 1.0f;
 
-  for (h = 0; h < kernelDepth; ++h) {
-    for (i = 0; i < kernelHeight; ++i) {
+  for (int h = 0; h < kernelDepth; ++h) {
+    for (int i = 0; i < kernelHeight; ++i) {
       int nPixel = kernelWidth * (h * kernelHeight + i);
-      for (j = 0; j < kernelWidth; ++j) {
+
+      for (int j = 0; j < kernelWidth; ++j) {
         pKernel[nPixel + j] *= flInvTotal;
         pInvKernel[nPixel + j] = flInvFactor * pKernel[nPixel + j];
       }
@@ -163,42 +156,33 @@ static void GenerateNiceFilter(float wratio, float hratio, float dratio,
 }
 
 // Resample an image
-
-static inline unsigned char Clamp(float x) {
-  int idx = (int)(x + 0.5f);
-  if (idx < 0)
-    idx = 0;
-  else if (idx > 255)
-    idx = 255;
-  return idx;
+static constexpr inline u8 Clamp(f32 x) {
+  return std::clamp((int)(x + 0.5f), 0, 255);
 }
 
-inline bool IsPowerOfTwo(int x) { return (x & (x - 1)) == 0; }
-
-struct KernelInfo_t {
-  float *m_pKernel;
-  float *m_pInvKernel;
+struct KernelInfo {
+  f32 *m_pKernel;
+  f32 *m_pInvKernel;
   int m_nWidth;
   int m_nHeight;
   int m_nDepth;
   int m_nDiameter;
 };
 
-enum KernelType_t {
+enum class KernelType {
   KERNEL_DEFAULT = 0,
   KERNEL_NORMALMAP,
   KERNEL_ALPHATEST,
 };
 
-typedef void (*ApplyKernelFunc_t)(const KernelInfo_t &kernel,
-                                  const ResampleInfo_t &info, int wratio,
-                                  int hratio, int dratio, float *gammaToLinear,
-                                  float *pAlphaResult);
+using ApplyKernelFunc = void (*)(const KernelInfo &kernel,
+                                 const ResampleInfo_t &info, int wratio,
+                                 int hratio, int dratio, f32 *gammaToLinear,
+                                 f32 *pAlphaResult);
 
 // Apply Kernel to an image
-
-template <int type, bool bNiceFilter>
-class CKernelWrapper {
+template <KernelType type, bool is_nice_filter>
+class KernelWrapper {
  public:
   static inline int ActualX(int x, const ResampleInfo_t &info) {
     if (info.m_nFlags & RESAMPLE_CLAMPS)
@@ -227,10 +211,10 @@ class CKernelWrapper {
     return z & (info.m_nSrcDepth - 1);
   }
 
-  static void ComputeAveragedColor(const KernelInfo_t &kernel,
+  static void ComputeAveragedColor(const KernelInfo &kernel,
                                    const ResampleInfo_t &info, int startX,
-                                   int startY, int startZ, float *gammaToLinear,
-                                   float *total) {
+                                   int startY, int startZ, f32 *gammaToLinear,
+                                   f32 *total) {
     total[0] = total[1] = total[2] = total[3] = 0.0f;
     for (int j = 0, srcZ = startZ; j < kernel.m_nDepth; ++j, ++srcZ) {
       int sz = ActualZ(srcZ, info);
@@ -241,7 +225,7 @@ class CKernelWrapper {
         sy *= info.m_nSrcWidth;
 
         int kernelIdx;
-        if (bNiceFilter) {
+        if (is_nice_filter) {
           kernelIdx = kernel.m_nWidth * (k + j * kernel.m_nHeight);
         } else {
           kernelIdx = 0;
@@ -252,8 +236,8 @@ class CKernelWrapper {
           int sx = ActualX(srcX, info);
           int srcPixel = (sz + sy + sx) << 2;
 
-          float flKernelFactor;
-          if (bNiceFilter) {
+          f32 flKernelFactor;
+          if (is_nice_filter) {
             flKernelFactor = kernel.m_pKernel[kernelIdx];
             if (flKernelFactor == 0.0f) continue;
           } else {
@@ -261,13 +245,13 @@ class CKernelWrapper {
           }
 
           switch (type) {
-            case KERNEL_NORMALMAP: {
+            case KernelType::KERNEL_NORMALMAP: {
               total[0] += flKernelFactor * info.m_pSrc[srcPixel + 0];
               total[1] += flKernelFactor * info.m_pSrc[srcPixel + 1];
               total[2] += flKernelFactor * info.m_pSrc[srcPixel + 2];
               total[3] += flKernelFactor * info.m_pSrc[srcPixel + 3];
             } break;
-            case KERNEL_ALPHATEST: {
+            case KernelType::KERNEL_ALPHATEST: {
               total[0] +=
                   flKernelFactor * gammaToLinear[info.m_pSrc[srcPixel + 0]];
               total[1] +=
@@ -293,10 +277,10 @@ class CKernelWrapper {
     }
   }
 
-  static void AddAlphaToAlphaResult(const KernelInfo_t &kernel,
+  static void AddAlphaToAlphaResult(const KernelInfo &kernel,
                                     const ResampleInfo_t &info, int startX,
-                                    int startY, int startZ, float flAlpha,
-                                    float *pAlphaResult) {
+                                    int startY, int startZ, f32 flAlpha,
+                                    f32 *pAlphaResult) {
     for (int j = 0, srcZ = startZ; j < kernel.m_nDepth; ++j, ++srcZ) {
       int sz = ActualZ(srcZ, info);
       sz *= info.m_nSrcWidth * info.m_nSrcHeight;
@@ -306,7 +290,7 @@ class CKernelWrapper {
         sy *= info.m_nSrcWidth;
 
         int kernelIdx;
-        if (bNiceFilter) {
+        if (is_nice_filter) {
           kernelIdx =
               k * kernel.m_nWidth + j * kernel.m_nWidth * kernel.m_nHeight;
         } else {
@@ -318,8 +302,8 @@ class CKernelWrapper {
           int sx = ActualX(srcX, info);
           int srcPixel = sz + sy + sx;
 
-          float flKernelFactor;
-          if (bNiceFilter) {
+          f32 flKernelFactor;
+          if (is_nice_filter) {
             flKernelFactor = kernel.m_pInvKernel[kernelIdx];
             if (flKernelFactor == 0.0f) continue;
           } else {
@@ -332,9 +316,9 @@ class CKernelWrapper {
     }
   }
 
-  static void AdjustAlphaChannel(const KernelInfo_t &kernel,
+  static void AdjustAlphaChannel(const KernelInfo &kernel,
                                  const ResampleInfo_t &info, int wratio,
-                                 int hratio, int dratio, float *pAlphaResult) {
+                                 int hratio, int dratio, f32 *pAlphaResult) {
     // Find the delta between the alpha + source image
     for (int k = 0; k < info.m_nSrcDepth; ++k) {
       for (int i = 0; i < info.m_nSrcHeight; ++i) {
@@ -352,12 +336,12 @@ class CKernelWrapper {
     int nInitialY = (hratio >> 1) - ((hratio * kernel.m_nDiameter) >> 1);
     int nInitialX = (wratio >> 1) - ((wratio * kernel.m_nDiameter) >> 1);
 
-    float flAlphaThreshhold = (info.m_flAlphaHiFreqThreshhold >= 0)
-                                  ? 255.0f * info.m_flAlphaHiFreqThreshhold
-                                  : 255.0f * 0.4f;
+    f32 flAlphaThreshhold = (info.m_flAlphaHiFreqThreshhold >= 0)
+                                ? 255.0f * info.m_flAlphaHiFreqThreshhold
+                                : 255.0f * 0.4f;
 
-    float flInvFactor = (dratio == 0) ? 1.0f / (hratio * wratio)
-                                      : 1.0f / (hratio * wratio * dratio);
+    f32 flInvFactor = (dratio == 0) ? 1.0f / (hratio * wratio)
+                                    : 1.0f / (hratio * wratio * dratio);
 
     for (int h = 0; h < info.m_nDestDepth; ++h) {
       int startZ = dratio * h + nInitialZ;
@@ -368,7 +352,7 @@ class CKernelWrapper {
           if (info.m_pDest[dstPixel + 3] == 255) continue;
 
           int startX = wratio * j + nInitialX;
-          float flAlphaDelta = 0.0f;
+          f32 flAlphaDelta = 0.0f;
 
           for (int m = 0, srcZ = startZ; m < dratio; ++m, ++srcZ) {
             int sz = ActualZ(srcZ, info);
@@ -395,20 +379,19 @@ class CKernelWrapper {
     }
   }
 
-  static void ApplyKernel(const KernelInfo_t &kernel,
-                          const ResampleInfo_t &info, int wratio, int hratio,
-                          int dratio, float *gammaToLinear,
-                          float *pAlphaResult) {
-    float invDstGamma = 1.0f / info.m_flDestGamma;
+  static void ApplyKernel(const KernelInfo &kernel, const ResampleInfo_t &info,
+                          int wratio, int hratio, int dratio,
+                          f32 *gammaToLinear, f32 *pAlphaResult) {
+    f32 invDstGamma = 1.0f / info.m_flDestGamma;
 
     // Apply the kernel to the image
     int nInitialZ = (dratio >> 1) - ((dratio * kernel.m_nDiameter) >> 1);
     int nInitialY = (hratio >> 1) - ((hratio * kernel.m_nDiameter) >> 1);
     int nInitialX = (wratio >> 1) - ((wratio * kernel.m_nDiameter) >> 1);
 
-    float flAlphaThreshhold = (info.m_flAlphaThreshhold >= 0)
-                                  ? 255.0f * info.m_flAlphaThreshhold
-                                  : 255.0f * 0.4f;
+    f32 flAlphaThreshhold = (info.m_flAlphaThreshhold >= 0)
+                                ? 255.0f * info.m_flAlphaThreshhold
+                                : 255.0f * 0.4f;
     for (int k = 0; k < info.m_nDestDepth; ++k) {
       int startZ = dratio * k + nInitialZ;
 
@@ -421,22 +404,22 @@ class CKernelWrapper {
         for (int j = 0; j < info.m_nDestWidth; ++j, dstPixel += 4) {
           int startX = wratio * j + nInitialX;
 
-          float total[4];
+          f32 total[4];
           ComputeAveragedColor(kernel, info, startX, startY, startZ,
                                gammaToLinear, total);
 
           switch (type) {
-            case KERNEL_NORMALMAP: {
+            case KernelType::KERNEL_NORMALMAP: {
               for (int ch = 0; ch < 4; ++ch)
                 info.m_pDest[dstPixel + ch] =
                     Clamp(info.m_flColorGoal[ch] +
                           (info.m_flColorScale[ch] *
                            (total[ch] - info.m_flColorGoal[ch])));
             } break;
-            case KERNEL_ALPHATEST: {
+            case KernelType::KERNEL_ALPHATEST: {
               // If there's more than 40% coverage, then keep the pixel
               // (renormalize the color based on coverage)
-              float flAlpha = (total[3] >= flAlphaThreshhold) ? 255 : 0;
+              f32 flAlpha = (total[3] >= flAlphaThreshhold) ? 255 : 0;
 
               for (int ch = 0; ch < 3; ++ch)
                 info.m_pDest[dstPixel + ch] =
@@ -468,27 +451,33 @@ class CKernelWrapper {
         }
       }
 
-      if (MSVC_SCOPED_DISABLE_WARNING(4127, type == KERNEL_ALPHATEST)) {
+      if (MSVC_SCOPED_DISABLE_WARNING(4127,
+                                      type == KernelType::KERNEL_ALPHATEST)) {
         AdjustAlphaChannel(kernel, info, wratio, hratio, dratio, pAlphaResult);
       }
     }
   }
 };
 
-typedef CKernelWrapper<KERNEL_DEFAULT, false> ApplyKernelDefault_t;
-typedef CKernelWrapper<KERNEL_NORMALMAP, false> ApplyKernelNormalmap_t;
-typedef CKernelWrapper<KERNEL_ALPHATEST, false> ApplyKernelAlphatest_t;
-typedef CKernelWrapper<KERNEL_DEFAULT, true> ApplyKernelDefaultNice_t;
-typedef CKernelWrapper<KERNEL_NORMALMAP, true> ApplyKernelNormalmapNice_t;
-typedef CKernelWrapper<KERNEL_ALPHATEST, true> ApplyKernelAlphatestNice_t;
+using ApplyKernelDefault_t = KernelWrapper<KernelType::KERNEL_DEFAULT, false>;
+using ApplyKernelNormalmap_t =
+    KernelWrapper<KernelType::KERNEL_NORMALMAP, false>;
+using ApplyKernelAlphatest_t =
+    KernelWrapper<KernelType::KERNEL_ALPHATEST, false>;
+using ApplyKernelDefaultNice_t =
+    KernelWrapper<KernelType::KERNEL_DEFAULT, true>;
+using ApplyKernelNormalmapNice_t =
+    KernelWrapper<KernelType::KERNEL_NORMALMAP, true>;
+using ApplyKernelAlphatestNice_t =
+    KernelWrapper<KernelType::KERNEL_ALPHATEST, true>;
 
-static ApplyKernelFunc_t g_KernelFunc[] = {
+static ApplyKernelFunc g_KernelFunc[] = {
     ApplyKernelDefault_t::ApplyKernel,
     ApplyKernelNormalmap_t::ApplyKernel,
     ApplyKernelAlphatest_t::ApplyKernel,
 };
 
-static ApplyKernelFunc_t g_KernelFuncNice[] = {
+static ApplyKernelFunc g_KernelFuncNice[] = {
     ApplyKernelDefaultNice_t::ApplyKernel,
     ApplyKernelNormalmapNice_t::ApplyKernel,
     ApplyKernelAlphatestNice_t::ApplyKernel,
@@ -521,8 +510,8 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
   }
 
   // Compute gamma tables...
-  static float gammaToLinear[256];
-  static float lastSrcGamma = -1;
+  static f32 gammaToLinear[256];
+  static f32 lastSrcGamma = -1;
 
   if (lastSrcGamma != info.m_flSrcGamma) {
     ConstructFloatGammaTable(gammaToLinear, info.m_flSrcGamma, 1.0f);
@@ -535,14 +524,14 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
                    ? info.m_nSrcDepth / info.m_nDestDepth
                    : 0;
 
-  KernelInfo_t kernel;
+  KernelInfo kernel;
 
-  float *pTempMemory = 0;
-  float *pTempInvMemory = 0;
-  static float *kernelCache[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  static float *pInvKernelCache[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  float pKernelMem[1];
-  float pInvKernelMem[1];
+  f32 *pTempMemory = 0;
+  f32 *pTempInvMemory = 0;
+  static f32 *kernelCache[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  static f32 *pInvKernelCache[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  f32 pKernelMem[1];
+  f32 pInvKernelMem[1];
   if (info.m_nFlags & RESAMPLE_NICE_FILTER) {
     // Kernel size is measured in dst pixels
     kernel.m_nDiameter = 6;
@@ -574,8 +563,8 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
 
     if (power >= 0) {
       if (!kernelCache[power]) {
-        kernelCache[power] = new float[kernel.m_nWidth * kernel.m_nHeight];
-        pInvKernelCache[power] = new float[kernel.m_nWidth * kernel.m_nHeight];
+        kernelCache[power] = new f32[kernel.m_nWidth * kernel.m_nHeight];
+        pInvKernelCache[power] = new f32[kernel.m_nWidth * kernel.m_nHeight];
         GenerateNiceFilter(wratio, hratio, dratio, kernel.m_nDiameter,
                            kernelCache[power], pInvKernelCache[power]);
       }
@@ -585,9 +574,9 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
     } else {
       // Don't cache non-square kernels, or 3d kernels
       pTempMemory =
-          new float[kernel.m_nWidth * kernel.m_nHeight * kernel.m_nDepth];
+          new f32[kernel.m_nWidth * kernel.m_nHeight * kernel.m_nDepth];
       pTempInvMemory =
-          new float[kernel.m_nWidth * kernel.m_nHeight * kernel.m_nDepth];
+          new f32[kernel.m_nWidth * kernel.m_nHeight * kernel.m_nDepth];
       GenerateNiceFilter(wratio, hratio, dratio, kernel.m_nDiameter,
                          pTempMemory, pTempInvMemory);
       kernel.m_pKernel = pTempMemory;
@@ -603,40 +592,39 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
 
     // Simple implementation of a box filter that doesn't block the stack!
     pKernelMem[0] =
-        1.0f / (float)(kernel.m_nWidth * kernel.m_nHeight * kernel.m_nDepth);
+        1.0f / (f32)(kernel.m_nWidth * kernel.m_nHeight * kernel.m_nDepth);
     pInvKernelMem[0] = 1.0f;
     kernel.m_pKernel = pKernelMem;
     kernel.m_pInvKernel = pInvKernelMem;
   }
 
-  float *pAlphaResult = NULL;
-  KernelType_t type;
+  f32 *pAlphaResult = nullptr;
+  KernelType type;
+
   if (info.m_nFlags & RESAMPLE_NORMALMAP) {
-    type = KERNEL_NORMALMAP;
+    type = KernelType::KERNEL_NORMALMAP;
   } else if (info.m_nFlags & RESAMPLE_ALPHATEST) {
     int nSize =
-        info.m_nSrcHeight * info.m_nSrcWidth * info.m_nSrcDepth * sizeof(float);
-    pAlphaResult = (float *)malloc(nSize);
+        info.m_nSrcHeight * info.m_nSrcWidth * info.m_nSrcDepth * sizeof(f32);
+    pAlphaResult = (f32 *)malloc(nSize);
     memset(pAlphaResult, 0, nSize);
-    type = KERNEL_ALPHATEST;
+    type = KernelType::KERNEL_ALPHATEST;
   } else {
-    type = KERNEL_DEFAULT;
+    type = KernelType::KERNEL_DEFAULT;
   }
 
   if (info.m_nFlags & RESAMPLE_NICE_FILTER) {
-    g_KernelFuncNice[type](kernel, info, wratio, hratio, dratio, gammaToLinear,
-                           pAlphaResult);
+    g_KernelFuncNice[static_cast<std::underlying_type_t<decltype(type)>>(type)](
+        kernel, info, wratio, hratio, dratio, gammaToLinear, pAlphaResult);
     if (pTempMemory) {
       delete[] pTempMemory;
     }
   } else {
-    g_KernelFunc[type](kernel, info, wratio, hratio, dratio, gammaToLinear,
-                       pAlphaResult);
+    g_KernelFunc[static_cast<std::underlying_type_t<decltype(type)>>(type)](
+        kernel, info, wratio, hratio, dratio, gammaToLinear, pAlphaResult);
   }
 
-  if (pAlphaResult) {
-    free(pAlphaResult);
-  }
+  if (pAlphaResult) free(pAlphaResult);
 
   return true;
 }
@@ -659,17 +647,14 @@ bool ResampleRGBA16161616(const ResampleInfo_t &info) {
   int nSampleWidth = info.m_nSrcWidth / info.m_nDestWidth;
   int nSampleHeight = info.m_nSrcHeight / info.m_nDestHeight;
 
-  unsigned short *pSrc = (unsigned short *)info.m_pSrc;
-  unsigned short *pDst = (unsigned short *)info.m_pDest;
-  int x, y;
-  for (y = 0; y < info.m_nDestHeight; y++) {
-    for (x = 0; x < info.m_nDestWidth; x++) {
-      int accum[4];
-      accum[0] = accum[1] = accum[2] = accum[3] = 0;
-      int nSampleY;
-      for (nSampleY = 0; nSampleY < nSampleHeight; nSampleY++) {
-        int nSampleX;
-        for (nSampleX = 0; nSampleX < nSampleWidth; nSampleX++) {
+  u16 *pSrc = (u16 *)info.m_pSrc, *pDst = (u16 *)info.m_pDest;
+
+  for (int y = 0; y < info.m_nDestHeight; y++) {
+    for (int x = 0; x < info.m_nDestWidth; x++) {
+      int accum[4]{0, 0, 0, 0};
+
+      for (int nSampleY = 0; nSampleY < nSampleHeight; nSampleY++) {
+        for (int nSampleX = 0; nSampleX < nSampleWidth; nSampleX++) {
           accum[0] +=
               (int)pSrc[((x * nSampleWidth + nSampleX) +
                          (y * nSampleHeight + nSampleY) * info.m_nSrcWidth) *
@@ -692,12 +677,11 @@ bool ResampleRGBA16161616(const ResampleInfo_t &info) {
                         3];
         }
       }
-      int i;
-      for (i = 0; i < 4; i++) {
+      for (u32 i = 0; i < 4; i++) {
         accum[i] /= (nSampleWidth * nSampleHeight);
         accum[i] = std::max(accum[i], 0);
         accum[i] = std::min(accum[i], 65535);
-        pDst[(x + y * info.m_nDestWidth) * 4 + i] = (unsigned short)accum[i];
+        pDst[(x + y * info.m_nDestWidth) * 4 + i] = (u16)accum[i];
       }
     }
   }
@@ -722,17 +706,15 @@ bool ResampleRGB323232F(const ResampleInfo_t &info) {
   int nSampleWidth = info.m_nSrcWidth / info.m_nDestWidth;
   int nSampleHeight = info.m_nSrcHeight / info.m_nDestHeight;
 
-  float *pSrc = (float *)info.m_pSrc;
-  float *pDst = (float *)info.m_pDest;
-  int x, y;
-  for (y = 0; y < info.m_nDestHeight; y++) {
-    for (x = 0; x < info.m_nDestWidth; x++) {
-      float accum[4];
-      accum[0] = accum[1] = accum[2] = accum[3] = 0;
-      int nSampleY;
-      for (nSampleY = 0; nSampleY < nSampleHeight; nSampleY++) {
-        int nSampleX;
-        for (nSampleX = 0; nSampleX < nSampleWidth; nSampleX++) {
+  f32 *pSrc = (f32 *)info.m_pSrc;
+  f32 *pDst = (f32 *)info.m_pDest;
+
+  for (int y = 0; y < info.m_nDestHeight; y++) {
+    for (int x = 0; x < info.m_nDestWidth; x++) {
+      f32 accum[4]{0, 0, 0, 0};
+
+      for (int nSampleY = 0; nSampleY < nSampleHeight; nSampleY++) {
+        for (int nSampleX = 0; nSampleX < nSampleWidth; nSampleX++) {
           accum[0] += pSrc[((x * nSampleWidth + nSampleX) +
                             (y * nSampleHeight + nSampleY) * info.m_nSrcWidth) *
                                3 +
@@ -747,21 +729,21 @@ bool ResampleRGB323232F(const ResampleInfo_t &info) {
                            2];
         }
       }
-      int i;
-      for (i = 0; i < 3; i++) {
+
+      for (u32 i = 0; i < 3; i++) {
         accum[i] /= (nSampleWidth * nSampleHeight);
         pDst[(x + y * info.m_nDestWidth) * 3 + i] = accum[i];
       }
     }
   }
+
   return true;
 }
 
 // Generates mipmap levels
-
-void GenerateMipmapLevels(unsigned char *pSrc, unsigned char *pDst, int width,
-                          int height, int depth, ImageFormat imageFormat,
-                          float srcGamma, float dstGamma, int numLevels) {
+void GenerateMipmapLevels(u8 *pSrc, u8 *pDst, int width, int height, int depth,
+                          ImageFormat imageFormat, f32 srcGamma, f32 dstGamma,
+                          int numLevels) {
   int dstWidth = width;
   int dstHeight = height;
   int dstDepth = depth;
@@ -769,7 +751,7 @@ void GenerateMipmapLevels(unsigned char *pSrc, unsigned char *pDst, int width,
   // temporary storage for the mipmaps
   int tempMem = GetMemRequired(dstWidth, dstHeight, dstDepth,
                                IMAGE_FORMAT_RGBA8888, false);
-  CUtlMemory<unsigned char> tmpImage;
+  CUtlMemory<u8> tmpImage;
   tmpImage.EnsureCapacity(tempMem);
 
   while (true) {
@@ -810,5 +792,4 @@ void GenerateMipmapLevels(unsigned char *pSrc, unsigned char *pDst, int width,
     dstDepth = dstDepth > 1 ? dstDepth >> 1 : 1;
   }
 }
-
 }  // namespace ImageLoader
