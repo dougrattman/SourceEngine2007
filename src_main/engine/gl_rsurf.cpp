@@ -1041,25 +1041,25 @@ typedef void (*SurfaceDebugFunc_t)(SurfaceHandle_t surfID,
                                    const Vector &vecCentroid);
 
 void DrawSurfaceID(SurfaceHandle_t surfID, const Vector &vecCentroid) {
-  char buf[32];
-  Q_snprintf(buf, sizeof(buf), "0x%p", surfID);
+  ch buf[32];
+  sprintf_s(buf, "0x%p", surfID);
   CDebugOverlay::AddTextOverlay(vecCentroid, 0, buf);
 }
 
 void DrawSurfaceIDAsInt(SurfaceHandle_t surfID, const Vector &vecCentroid) {
   int nInt = (msurface2_t *)surfID - host_state.worldbrush->surfaces2;
-  char buf[32];
-  Q_snprintf(buf, sizeof(buf), "%d", nInt);
+  ch buf[32];
+  sprintf_s(buf, "%d", nInt);
   CDebugOverlay::AddTextOverlay(vecCentroid, 0, buf);
 }
 
 void DrawSurfaceMaterial(SurfaceHandle_t surfID, const Vector &vecCentroid) {
   mtexinfo_t *pTexInfo = MSurf_TexInfo(surfID);
 
-  const char *pFullMaterialName =
+  const ch *pFullMaterialName =
       pTexInfo->material ? pTexInfo->material->GetName() : "no material";
-  const char *pSlash = strrchr(pFullMaterialName, '/');
-  const char *pMaterialName = strrchr(pFullMaterialName, '\\');
+  const ch *pSlash = strrchr(pFullMaterialName, '/');
+  const ch *pMaterialName = strrchr(pFullMaterialName, '\\');
   if (pSlash > pMaterialName) pMaterialName = pSlash;
   if (pMaterialName)
     ++pMaterialName;
@@ -2545,7 +2545,7 @@ IMaterial *R_GetFogVolumeMaterial(int nFogVolume, bool bEyeInFogVolume) {
   if (bEyeInFogVolume) {
     IMaterialVar *pVar = pMaterial->FindVar("$bottommaterial", NULL);
     if (pVar) {
-      const char *pMaterialName = pVar->GetStringValue();
+      const ch *pMaterialName = pVar->GetStringValue();
       if (pMaterialName) {
         pMaterial = materials->FindMaterial(pMaterialName, TEXTURE_GROUP_OTHER);
       }
@@ -3695,8 +3695,8 @@ void CBrushBatchRender::LevelInit() {
 
 void CBrushBatchRender::ClearRenderHandles(void) {
   for (int iBrush = 1; iBrush < host_state.worldbrush->numsubmodels; ++iBrush) {
-    char szBrushModel[5];  // inline model names "*1", "*2" etc
-    Q_snprintf(szBrushModel, sizeof(szBrushModel), "*%i", iBrush);
+    ch szBrushModel[5];  // inline model names "*1", "*2" etc
+    sprintf_s(szBrushModel, "*%i", iBrush);
     model_t *pModel = modelloader->GetModelForName(
         szBrushModel, IModelLoader::FMODELLOADER_SERVER);
     if (pModel) {

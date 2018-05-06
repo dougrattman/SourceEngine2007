@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "pure_server.h"
 
@@ -7,18 +7,18 @@
 static const char *g_SvPure2_ProtectedDirs[] = {"sound", "models", "materials"};
 
 static bool IsProtectedBySvPure2(const char *pFilename) {
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_SvPure2_ProtectedDirs); i++) {
+  for (usize i = 0; i < std::size(g_SvPure2_ProtectedDirs); i++) {
     const char *pProtectedDir = g_SvPure2_ProtectedDirs[i];
-    int len = V_strlen(pProtectedDir);
+    usize len = strlen(pProtectedDir);
 
-    if (V_strlen(pFilename) < len + 1) return false;
+    if (strlen(pFilename) < len + 1) return false;
 
     char tempStr[512];
-    Assert(len < SOURCE_ARRAYSIZE(tempStr));
+    Assert(len < std::size(tempStr));
     memcpy(tempStr, pFilename, len);
-    tempStr[len] = 0;
+    tempStr[len] = '\0';
 
-    if (V_stricmp(tempStr, pProtectedDir) == 0) {
+    if (_stricmp(tempStr, pProtectedDir) == 0) {
       if (pFilename[len] == '/' || pFilename[len] == '\\') return true;
     }
   }

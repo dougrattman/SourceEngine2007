@@ -990,53 +990,6 @@ void CHLTVServer::LinkInstanceBaselines(void) {
   }
 }
 
-/* CHLTVServer::GetOriginFromPackedEntity is such a bad, bad hack.
-
-extern float DecodeFloat(SendProp const *pProp, bf_read *pIn);
-
-Vector CHLTVServer::GetOriginFromPackedEntity(PackedEntity* pe)
-{
-        Vector origin; origin.Init();
-
-        SendTable *pSendTable = pe->m_pSendTable;
-
-        // recursively go down until BaseEntity sendtable
-        while ( Q_strcmp( pSendTable->GetName(), "DT_BaseEntity") )
-        {
-                SendProp *pProp = pSendTable->GetProp( 0 ); // 0 = baseclass
-                pSendTable = pProp->GetDataTable();
-        }
-
-        for ( int i=0; i < pSendTable->GetNumProps(); i++ )
-        {
-                SendProp *pProp = pSendTable->GetProp( i );
-
-                if ( Q_strcmp( pProp->GetName(), "m_vecOrigin" ) == 0 )
-                {
-                        Assert( pProp->GetType() == DPT_Vector );
-                
-
-
-
-
-
-
-
-
-                        bf_read buf( pe->LockData(),
-Bits2Bytes(pe->GetNumBits()), pProp->GetOffset() );
-
-                        origin[0] = DecodeFloat(pProp, &buf);
-                        origin[1] = DecodeFloat(pProp, &buf);
-                        origin[2] = DecodeFloat(pProp, &buf);
-
-                        break;
-                }
-        }
-
-        return origin;
-} */
-
 CHLTVEntityData *FindHLTVDataInSnapshot(CFrameSnapshot *pSnapshot,
                                         int iEntIndex) {
   int a = 0;

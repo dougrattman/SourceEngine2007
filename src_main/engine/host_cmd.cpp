@@ -594,8 +594,8 @@ CON_COMMAND(disconnect, "Disconnect game from server.") {
 #define APPID_KEY "AppID="
 
 void Host_Version() {
-  Q_strcpy(gpszVersionString, HALFLIFE_VER_PRODUCTVERSION_INFO_STR);
-  Q_strcpy(gpszProductString, HALFLIFE_VER_COMPANYNAME_STR);
+  strcpy_s(gpszVersionString, HALFLIFE_VER_PRODUCTVERSION_INFO_STR);
+  strcpy_s(gpszProductString, HALFLIFE_VER_COMPANYNAME_STR);
 
   const ch *steam_inf_file_name{"steam.inf"};
 
@@ -619,28 +619,23 @@ void Host_Version() {
       steam_inf_ptr = COM_Parse(steam_inf_ptr);
       if (!steam_inf_ptr) break;
 
-      if (Q_strlen(com_token) <= 0 || gotKeys >= 3) break;
+      if (strlen(com_token) == 0 || gotKeys >= 3) break;
 
-      if (!Q_strnicmp(com_token, VERSION_KEY, Q_strlen(VERSION_KEY))) {
-        Q_strncpy(gpszVersionString, com_token + Q_strlen(VERSION_KEY),
-                  SOURCE_ARRAYSIZE(gpszVersionString) - 1);
-        gpszVersionString[SOURCE_ARRAYSIZE(gpszVersionString) - 1] = '\0';
+      if (!_strnicmp(com_token, VERSION_KEY, strlen(VERSION_KEY))) {
+        strcpy_s(gpszVersionString, com_token + strlen(VERSION_KEY));
         ++gotKeys;
         continue;
       }
 
-      if (!Q_strnicmp(com_token, PRODUCT_KEY, Q_strlen(PRODUCT_KEY))) {
-        Q_strncpy(gpszProductString, com_token + Q_strlen(PRODUCT_KEY),
-                  SOURCE_ARRAYSIZE(gpszProductString) - 1);
-        gpszProductString[SOURCE_ARRAYSIZE(gpszProductString) - 1] = '\0';
+      if (!_strnicmp(com_token, PRODUCT_KEY, strlen(PRODUCT_KEY))) {
+        strcpy_s(gpszProductString, com_token + strlen(PRODUCT_KEY));
         ++gotKeys;
         continue;
       }
 
-      if (!Q_strnicmp(com_token, APPID_KEY, Q_strlen(APPID_KEY))) {
+      if (!_strnicmp(com_token, APPID_KEY, strlen(APPID_KEY))) {
         char app_id[32];
-        Q_strncpy(app_id, com_token + Q_strlen(APPID_KEY),
-                  SOURCE_ARRAYSIZE(app_id) - 1);
+        strcpy_s(app_id, com_token + strlen(APPID_KEY));
         g_iSteamAppID = atoi(app_id);
         ++gotKeys;
         continue;

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 
 // net.h -- Half-Life's interface to the networking layer
@@ -77,6 +77,9 @@
 
 #define NET_HEADER_FLAG_SPLITPACKET -2
 #define NET_HEADER_FLAG_COMPRESSEDPACKET -3
+
+// TODO(d.rattman): Don't hardcode CSER ip, get from Steam!!!
+const char ValveHomeCSERIpAddress[] = "207.173.177.12:27013";
 
 class INetChannel;
 

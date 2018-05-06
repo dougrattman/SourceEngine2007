@@ -652,7 +652,7 @@ static void ComputeAmbientFromAxisAlignedSamples(const Vector &start,
   // sample world only along cardinal axes
   const Vector *pBoxDirs = g_pStudioRender->GetAmbientLightDirections();
   for (int i = 0; i < 6; i++) {
-    VectorMA(start, COORD_EXTENT * 1.74, pBoxDirs[i], upend);
+    VectorMA(start, COORD_EXTENT * 1.74f, pBoxDirs[i], upend);
 
     // Now that we've got a ray, see what surface we've hit
     SurfaceHandle_t surfID = R_LightVec(start, upend, false, lightBoxColor[i]);

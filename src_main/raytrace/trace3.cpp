@@ -19,25 +19,23 @@ Vector colors[] = {Vector(0.5, 0.5, 1), Vector(0.5, 1, 0.5), Vector(0.5, 1, 1),
                    Vector(1, 0.5, 0.5), Vector(1, 0.5, 1),   Vector(1, 1, 1)};
 
 void RayTracingEnvironment::AddBSPFace(int id, dface_t const &face) {
-  if (face.dispinfo != -1)  // displacements must be dealt with elsewhere
-    return;
+  // displacements must be dealt with elsewhere
+  if (face.dispinfo != -1) return;
+
   texinfo_t *tx = (face.texinfo >= 0) ? &(texinfo[face.texinfo]) : 0;
-  // 	if (tx && (tx->flags & (SURF_SKY|SURF_NODRAW)))
-  // 		return;
-  if (tx) {
-    printf("id %d flags=%x\n", id, tx->flags);
-  }
+  if (tx) printf("id %d flags=%x\n", id, tx->flags);
+
   printf("side: ");
   for (int v = 0; v < face.numedges; v++) {
     printf("(%f %f %f) ", XYZ(VertCoord(face, v)));
   }
   printf("\n");
+
   int ntris = face.numedges - 2;
   for (int tri = 0; tri < ntris; tri++) {
     AddTriangle(id, VertCoord(face, 0),
                 VertCoord(face, (tri + 1) % face.numedges),
-                VertCoord(face, (tri + 2) % face.numedges),
-                Vector(1, 1, 1));  // colors[id % NELEMS(colors)]);
+                VertCoord(face, (tri + 2) % face.numedges), Vector{1, 1, 1});
   }
 }
 

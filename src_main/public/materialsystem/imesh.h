@@ -927,7 +927,7 @@ inline void CVertexBuilder::Reset() {
 
   m_pCurrPosition = m_pPosition;
   m_pCurrNormal = m_pNormal;
-  for (int i = 0; i < NELEMS(m_pCurrTexCoord); i++) {
+  for (usize i = 0; i < std::size(m_pCurrTexCoord); i++) {
     m_pCurrTexCoord[i] = m_pTexCoord[i];
   }
   m_pCurrColor = m_pColor;

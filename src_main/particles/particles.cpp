@@ -572,7 +572,7 @@ void CParticleSystemDefinition::SetupContextData(void) {
   // loop through all operators, fill in offset entries, and calulate total data
   // needed
   m_nContextDataSize = 0;
-  for (int i = 0; i < NELEMS(olists); i++) {
+  for (usize i = 0; i < std::size(olists); i++) {
     int nCount = olists[i]->Count();
     for (int j = 0; j < nCount; j++) {
       offsetLists[i]->AddToTail(m_nContextDataSize);
@@ -883,7 +883,7 @@ void CParticleCollection::Init(CParticleSystemDefinition *pDef, float flDelay,
 
   };
 
-  for (int i = 0; i < NELEMS(olists); i++) {
+  for (usize i = 0; i < std::size(olists); i++) {
     int nOperatorCount = olists[i]->Count();
     for (int j = 0; j < nOperatorCount; j++) {
       (*olists[i])[j]->InitializeContextData(
@@ -2183,7 +2183,7 @@ static int32_t *g_pKillBuffers[MAX_SIMULTANEOUS_KILL_LISTS];
 void CParticleSystemMgr::DetachKillList(CParticleCollection *pParticles) {
   if (pParticles->m_pParticleKillList) {
     // find which it is
-    for (int i = 0; i < NELEMS(g_pKillBuffers); i++) {
+    for (usize i = 0; i < std::size(g_pKillBuffers); i++) {
       if (g_pKillBuffers[i] == pParticles->m_pParticleKillList) {
         pParticles->m_pParticleKillList = NULL;
         g_nKillBufferInUse[i] = 0;  // no need to interlock
@@ -2197,7 +2197,7 @@ void CParticleSystemMgr::DetachKillList(CParticleCollection *pParticles) {
 void CParticleSystemMgr::AttachKillList(CParticleCollection *pParticles) {
   // look for a free slot
   for (;;) {
-    for (int i = 0; i < NELEMS(g_nKillBufferInUse); i++) {
+    for (usize i = 0; i < std::size(g_nKillBufferInUse); i++) {
       if (!g_nKillBufferInUse[i])  // available?
       {
         // try to take it!
@@ -2649,27 +2649,26 @@ bool CParticleSystemMgr::ReadParticleConfigFile(const char *pFileName,
   }
 
   char pFallbackBuf[SOURCE_MAX_PATH];
-  if (IsPC()) {
-    // Look for fallback particle systems
-    char pTemp[SOURCE_MAX_PATH];
-    Q_StripExtension(pFileName, pTemp, sizeof(pTemp));
-    const char *pExt = Q_GetFileExtension(pFileName);
-    if (!pExt) {
-      pExt = "pcf";
-    }
+  // Look for fallback particle systems
+  char pTemp[SOURCE_MAX_PATH];
+  Q_StripExtension(pFileName, pTemp, sizeof(pTemp));
+  const char *pExt = Q_GetFileExtension(pFileName);
+  if (!pExt) {
+    pExt = "pcf";
+  }
 
-    if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() < 90) {
-      Q_snprintf(pFallbackBuf, sizeof(pFallbackBuf), "%s_dx80.%s", pTemp, pExt);
-      if (g_pFullFileSystem->FileExists(pFallbackBuf)) {
-        pFileName = pFallbackBuf;
-      }
-    } else if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() == 90 &&
-               g_pMaterialSystemHardwareConfig->PreferReducedFillrate()) {
-      Q_snprintf(pFallbackBuf, sizeof(pFallbackBuf), "%s_dx90_slow.%s", pTemp,
-                 pExt);
-      if (g_pFullFileSystem->FileExists(pFallbackBuf)) {
-        pFileName = pFallbackBuf;
-      }
+  if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() < 90) {
+    sprintf_s(pFallbackBuf, "%s_dx80.%s", pTemp, pExt);
+
+    if (g_pFullFileSystem->FileExists(pFallbackBuf)) {
+      pFileName = pFallbackBuf;
+    }
+  } else if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() == 90 &&
+             g_pMaterialSystemHardwareConfig->PreferReducedFillrate()) {
+    sprintf_s(pFallbackBuf, "%s_dx90_slow.%s", pTemp, pExt);
+
+    if (g_pFullFileSystem->FileExists(pFallbackBuf)) {
+      pFileName = pFallbackBuf;
     }
   }
 

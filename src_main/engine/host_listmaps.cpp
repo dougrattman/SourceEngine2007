@@ -575,7 +575,6 @@ static void Host_Maps_f(const CCommand &args) {
   }
 }
 
-#ifndef BENCHMARK
 static ConCommand maps("maps", Host_Maps_f, "Displays list of maps.");
 static ConCommand map("map", Host_Map_f, "Start playing on specified map.",
                       FCVAR_DONTRECORD, Host_Map_f_CompletionFunc);
@@ -595,4 +594,3 @@ static ConCommand changelevel2(
     "changelevel2", Host_Changelevel2_f,
     "Transition to the specified map in single player", FCVAR_DONTRECORD,
     Host_Changelevel2_f_CompletionFunc);
-#endif

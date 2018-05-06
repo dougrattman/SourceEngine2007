@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Handles joining clients together in a matchmaking session before a
 // multiplayer game, tracking new players and dropped players during
@@ -18,7 +18,6 @@
 #include "tier1/convar.h"
 #include "vgui_baseui_interface.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static CMatchmaking s_Matchmaking;
@@ -1038,14 +1037,6 @@ void CMatchmaking::AddPlayersToSession(CClientInfo *pClient) {
     m_Session.JoinRemote(pClient);
   }
 
-#if defined(_X360)
-  if (Audio_GetXVoice()) {
-    Audio_GetXVoice()->AddPlayerToVoiceList(pClient, bIsLocal);
-    if (bIsLocal) {
-      m_bCreatedLocalTalker = true;
-    }
-  }
-#endif
   UpdateMuteList();
 }
 
@@ -1109,101 +1100,12 @@ static ConCommand voice_printtalkers("voice_printtalkers", Con_PrintTalkers,
 //-----------------------------------------------------------------------------
 // Purpose: Update a client's mute list
 //-----------------------------------------------------------------------------
-void CMatchmaking::GenerateMutelist(MM_Mutelist *pMsg) {
-#if defined(_X360)
-  // Get our remote talker list
-  if (!Audio_GetXVoice()) return;
-
-  int numRemoteTalkers;
-  XUID remoteTalkers[MAX_PLAYERS];
-  Audio_GetXVoice()->GetRemoteTalkers(&numRemoteTalkers, remoteTalkers);
-
-  pMsg->m_cPlayers = 0;
-
-  // Loop through local players and update mutes
-  for (int iLocal = 0; iLocal < m_Local.m_cPlayers; ++iLocal) {
-    pMsg->m_cMuted[iLocal] = 0;
-
-    pMsg->m_xuid[pMsg->m_cPlayers] = m_Local.m_xuids[iLocal];
-
-    for (int iRemote = 0; iRemote < numRemoteTalkers; ++iRemote) {
-      BOOL bIsMuted = false;
-
-      DWORD ret = XUserMuteListQuery(m_Local.m_iControllers[iLocal],
-                                     remoteTalkers[iRemote], &bIsMuted);
-      if (ERROR_SUCCESS != ret) {
-        Warning("Warning: XUserMuteListQuery() returned 0x%08x for user %d\n",
-                ret, iLocal);
-      }
-
-      if (bIsMuted) {
-        pMsg->m_Muted[pMsg->m_cPlayers].AddToTail(remoteTalkers[iRemote]);
-        ++pMsg->m_cMuted[pMsg->m_cPlayers];
-      } else {
-        bIsMuted = m_MutedBy[iLocal].HasElement(remoteTalkers[iRemote]);
-      }
-
-      if (bIsMuted) {
-        Audio_GetXVoice()->SetPlaybackPriority(remoteTalkers[iRemote],
-                                               m_Local.m_iControllers[iLocal],
-                                               XHV_PLAYBACK_PRIORITY_NEVER);
-      } else {
-        Audio_GetXVoice()->SetPlaybackPriority(remoteTalkers[iRemote],
-                                               m_Local.m_iControllers[iLocal],
-                                               XHV_PLAYBACK_PRIORITY_MAX);
-      }
-    }
-
-    pMsg->m_cRemoteTalkers[pMsg->m_cPlayers] =
-        m_MutedBy[pMsg->m_cPlayers].Count();
-    ++pMsg->m_cPlayers;
-  }
-#endif
-}
+void CMatchmaking::GenerateMutelist(MM_Mutelist *pMsg) {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Handle the mutelist from another client
 //-----------------------------------------------------------------------------
-bool CMatchmaking::ProcessMutelist(MM_Mutelist *pMsg) {
-#if defined(_X360)
-  // local players
-  for (int i = 0; i < m_Local.m_cPlayers; ++i) {
-    // remote players
-    for (int j = 0; j < pMsg->m_cPlayers; ++j) {
-      m_MutedBy[i].FindAndRemove(pMsg->m_xuid[j]);
-
-      // players muted by remote player
-      for (int k = 0; k < pMsg->m_cMuted[j]; ++k) {
-        if (m_Local.m_xuids[i] == pMsg->m_Muted[j][k]) {
-          m_MutedBy[i].AddToTail(pMsg->m_xuid[j]);
-        }
-      }
-
-      BOOL bIsMuted = m_MutedBy[i].HasElement(pMsg->m_xuid[j]);
-      if (!bIsMuted) {
-        XUserMuteListQuery(m_Local.m_iControllers[i], pMsg->m_xuid[j],
-                           &bIsMuted);
-      }
-      if (bIsMuted) {
-        Audio_GetXVoice()->SetPlaybackPriority(pMsg->m_xuid[j],
-                                               m_Local.m_iControllers[i],
-                                               XHV_PLAYBACK_PRIORITY_NEVER);
-      } else {
-        Audio_GetXVoice()->SetPlaybackPriority(pMsg->m_xuid[j],
-                                               m_Local.m_iControllers[i],
-                                               XHV_PLAYBACK_PRIORITY_MAX);
-      }
-    }
-  }
-
-  if (m_Session.IsHost()) {
-    // Pass this along to everyone else
-    SendToRemoteClients(pMsg);
-  }
-
-#endif
-  return true;
-}
+bool CMatchmaking::ProcessMutelist(MM_Mutelist *pMsg) { return true; }
 
 //-----------------------------------------------------------------------------
 // Purpose: A client is changing to another team
@@ -1704,61 +1606,7 @@ void CMatchmaking::SwitchToState(int newState) {
   m_CurrentState = newState;
 }
 
-void CMatchmaking::UpdateVoiceStatus(void) {
-#if defined(_X360)
-
-  if (m_flVoiceBlinkTime > GetTime()) return;
-
-  m_flVoiceBlinkTime = GetTime() + VOICE_ICON_BLINK_TIME;
-  CClientInfo *pClient = &m_Local;
-
-  bool bIsHost = m_Session.IsHost();
-  bool bShouldSendInfo = false;
-
-  if (pClient) {
-    for (int i = 0; i < pClient->m_cPlayers; ++i) {
-      if (pClient->m_xuids[i] == 0) continue;
-
-      uint8_t cOldVoiceState = pClient->m_cVoiceState[i];
-
-      if (Audio_GetXVoice()->IsHeadsetPresent(pClient->m_iControllers[i]) ==
-          false) {
-        pClient->m_cVoiceState[i] = VOICE_STATUS_OFF;
-      } else {
-        if (Audio_GetXVoice()->IsPlayerTalking(pClient->m_xuids[i], true)) {
-          pClient->m_cVoiceState[i] = VOICE_STATUS_TALKING;
-        } else {
-          pClient->m_cVoiceState[i] = VOICE_STATUS_IDLE;
-        }
-      }
-
-      if (cOldVoiceState != pClient->m_cVoiceState[i]) {
-        bShouldSendInfo = true;
-      }
-
-      if (bShouldSendInfo == true) {
-        EngineVGui()->UpdatePlayerInfo(
-            pClient->m_xuids[i], pClient->m_szGamertags[i], pClient->m_iTeam[i],
-            pClient->m_cVoiceState[i], GetPlayersNeeded(), bIsHost);
-      }
-    }
-
-    if (bShouldSendInfo) {
-      MM_ClientInfo info;
-      ClientInfoToNetMessage(&info, pClient);
-
-      if (bIsHost == true) {
-        // Tell all the clients
-        ProcessClientInfo(&info);
-      } else {
-        // Tell all the clients
-        SendMessage(&info, &m_Host);
-      }
-    }
-  }
-
-#endif
-}
+void CMatchmaking::UpdateVoiceStatus() {}
 
 //-----------------------------------------------------------------------------
 //	Update matchmaking and any active session
@@ -1776,29 +1624,6 @@ void CMatchmaking::RunFrame() {
       NET_ProcessSocket(NS_SYSTEMLINK, this);
     }
   }
-
-#if defined(_X360)
-  if (Audio_GetXVoice() != NULL) {
-    if (!GameIsActive()) {
-      if (Audio_GetXVoice()->VoiceUpdateData() == true) {
-        CLC_VoiceData voice;
-        Audio_GetXVoice()->GetVoiceData(&voice);
-
-        if (m_Session.IsHost()) {
-          // Send this message on to everyone else
-          SendToRemoteClients(&voice, true);
-        } else {
-          // Send to the host
-          SendMessage(&voice, &m_Host);
-        }
-
-        Audio_GetXVoice()->VoiceResetLocalData();
-      }
-
-      UpdateVoiceStatus();
-    }
-  }
-#endif
 
   // Tell the session to run its update
   m_Session.RunFrame();
@@ -1939,7 +1764,7 @@ void CMatchmaking::SetPreventFullServerStartup(bool bState, char const *fmt,
   char desc[256];
   va_list argptr;
   va_start(argptr, fmt);
-  Q_vsnprintf(desc, sizeof(desc), fmt, argptr);
+  vsprintf_s(desc, fmt, argptr);
   va_end(argptr);
 
   DevMsg(1, "Setting state from prevent %s to prevent %s:  %s",

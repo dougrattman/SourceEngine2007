@@ -1,17 +1,16 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: generates 4 randum numbers in the range 0..1 quickly, using SIMD
+// Purpose: generates 4 random numbers in the range 0..1 quickly, using SIMD
 
 #include <float.h>  // Needed for FLT_EPSILON
 #include <memory.h>
 #include <cmath>
-#include "tier0/include/basetypes.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
 #include "mathlib/vector.h"
+#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // see knuth volume 3 for insight.
@@ -68,7 +67,7 @@ fltx4 RandSIMD(int nContextIndex) {
 
 int GetSIMDRandContext(void) {
   for (;;) {
-    for (int i = 0; i < NELEMS(s_SIMDRandContexts); i++) {
+    for (usize i = 0; i < std::size(s_SIMDRandContexts); i++) {
       if (!s_nRandContextsInUse[i])  // available?
       {
         // try to take it!

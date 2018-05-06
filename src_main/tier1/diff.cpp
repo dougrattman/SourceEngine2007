@@ -6,7 +6,6 @@
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // format of diff output:
@@ -367,7 +366,7 @@ int FindDiffsLowMemory(uint8_t const *NewBlock, uint8_t const *OldBlock,
     while ((oldptr - OldBlock < walk - NewBlock + 40) &&
            (oldptr - OldBlock < OldSize - MIN_MATCH_LEN)) {
       uint16_t hash1 = (oldptr[0] + oldptr[1] + oldptr[2] + oldptr[3]) &
-                       (NELEMS(old_data_hash) - 1);
+                       (std::size(old_data_hash) - 1);
       old_data_hash[hash1] = oldptr;
       oldptr++;
     }
@@ -375,12 +374,12 @@ int FindDiffsLowMemory(uint8_t const *NewBlock, uint8_t const *OldBlock,
     uint8_t const *longest_block = 0;
     if (walk < NewBlock + NewSize - MIN_MATCH_LEN) {
       // check for a match
-      uint16_t hash1 =
-          (walk[0] + walk[1] + walk[2] + walk[3]) & (NELEMS(old_data_hash) - 1);
+      uint16_t hash1 = (walk[0] + walk[1] + walk[2] + walk[3]) &
+                       (std::size(old_data_hash) - 1);
       if (old_data_hash[hash1]) {
         int max_bytes_to_compare =
             std::min(NewBlock + NewSize - walk,
-                OldBlock + OldSize - old_data_hash[hash1]);
+                     OldBlock + OldSize - old_data_hash[hash1]);
         int nmatches;
         for (nmatches = 0; nmatches < max_bytes_to_compare; nmatches++)
           if (walk[nmatches] != old_data_hash[hash1][nmatches]) break;

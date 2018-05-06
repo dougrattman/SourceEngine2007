@@ -841,7 +841,7 @@ static void WriteShaderFiles(const char *pShaderName) {
   CUtlVector<StaticComboAliasRecord_t> duplicateCombos;
 
   // now, lets fill in our combo headers, sort, and write
-  for (int nChain = 0; nChain < NELEMS(pByteCodeArray->m_HashChains);
+  for (int nChain = 0; nChain < std::size(pByteCodeArray->m_HashChains);
        nChain++) {
     for (CStaticCombo *pStatic = pByteCodeArray->m_HashChains[nChain].m_pHead;
          pStatic; pStatic = pStatic->m_pNext) {

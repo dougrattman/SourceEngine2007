@@ -23,7 +23,7 @@ enum {
   (JOYSTICK_FIRST_AXIS_BUTTON + ((_joystick)*JOYSTICK_AXIS_BUTTON_COUNT) + \
    (_button))
 
-enum ButtonCode_t {
+enum ButtonCode_t : int {
   BUTTON_CODE_INVALID = -1,
   BUTTON_CODE_NONE = 0,
 

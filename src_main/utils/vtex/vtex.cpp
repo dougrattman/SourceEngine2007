@@ -1338,7 +1338,7 @@ void PreprocessSkyBox(char *pFullNameWithoutExtension, int *iSkyboxFace) {
     // Make sure there really is a 2 letter extension.
     char *pEnd = &pFullNameWithoutExtension[len - 2];
     *iSkyboxFace = -1;
-    for (int i = 0; i < SOURCE_ARRAYSIZE(g_CubemapFacingNames); i++) {
+    for (usize i = 0; i < std::size(g_CubemapFacingNames); i++) {
       if (_stricmp(pEnd, g_CubemapFacingNames[i]) == 0) {
         *iSkyboxFace = i;
         break;

@@ -5,7 +5,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 CSheet::CSheet(void) {
@@ -114,8 +113,8 @@ CSheet::CSheet(CUtlBuffer &buf) {
   }
 }
 
-CSheet::~CSheet(void) {
-  for (int i = 0; i < NELEMS(m_pSamples); i++) {
+CSheet::~CSheet() {
+  for (usize i = 0; i < std::size(m_pSamples); i++) {
     if (m_pSamples[i] && (!m_bSequenceIsCopyOfAnotherSequence[i])) {
       delete[] m_pSamples[i];
     }
