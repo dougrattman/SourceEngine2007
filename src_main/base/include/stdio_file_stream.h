@@ -131,7 +131,7 @@ class stdio_file_stream {
 
   ~stdio_file_stream() noexcept {
     const posix_errno_code errno_code{close()};
-    CHECK(errno_code == EOK, errno_code);
+    CHECK(errno_code == posix_errno_code_ok, errno_code);
   }
 
  private:
@@ -169,7 +169,7 @@ class stdio_file_stream {
 
   // Closes file.
   [[nodiscard]] posix_errno_code close() noexcept {
-    const posix_errno_code errno_code{fd_ ? fclose(fd_) : EOK};
+    const posix_errno_code errno_code{fd_ ? fclose(fd_) : posix_errno_code_ok};
     fd_ = nullptr;
     return errno_code;
   }
@@ -194,9 +194,8 @@ class stdio_file_stream_factory {
       const char* file_path, const char* mode) noexcept {
     FILE* fd;
     const posix_errno_code errno_code{fopen_s(&fd, file_path, mode)};
-    return errno_code == EOK
-               ? std::make_tuple(stdio_file_stream{fd},
-                                 make_posix_errno_info(EOK))
+    return errno_code == posix_errno_code_ok
+               ? std::make_tuple(stdio_file_stream{fd}, posix_errno_info_ok)
                : std::make_tuple(stdio_file_stream::null(),
                                  make_posix_errno_info(errno_code));
   }
