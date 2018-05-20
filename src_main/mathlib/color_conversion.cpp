@@ -4,9 +4,9 @@
 
 #include "mathlib/mathlib.h"
 
-#include <float.h>  // Needed for FLT_EPSILON
 #include <memory.h>
 #include <algorithm>
+#include <cfloat>  // Needed for FLT_EPSILON
 #include <cmath>
 #include "mathlib/vector.h"
 #include "tier0/include/basetypes.h"
@@ -168,7 +168,14 @@ alignas(128) f32 power2_n[256] =  // 2**(index - 128) / 255
      8.340254091199472000E+034f, 1.668050818239894400E+035f,
      3.336101636479788800E+035f, 6.672203272959577600E+035f};
 
+static f32 s_gamma, s_texGamma, s_brightness;
+static int s_overbright;
+
 void BuildGammaTable(f32 gamma, f32 texGamma, f32 brightness, int overbright) {
+  if (s_gamma == gamma && s_texGamma == texGamma &&
+      s_brightness == brightness && s_overbright == overbright)
+    return;
+
   f32 g = 1.0f / (gamma <= 3.0f ? gamma : 3.0f);
   f32 g1 = texGamma * g;
   f32 g3;
@@ -241,6 +248,11 @@ void BuildGammaTable(f32 gamma, f32 texGamma, f32 brightness, int overbright) {
     nLightmap = std::clamp(nLightmap, 0, 255);
     lineartolightmap[i] = (u8)nLightmap;
   }
+
+  s_gamma = gamma;
+  s_texGamma = texGamma;
+  s_brightness = brightness;
+  s_overbright = overbright;
 }
 
 f32 GammaToLinearFullRange(f32 gamma) { return pow(gamma, 2.2f); }
