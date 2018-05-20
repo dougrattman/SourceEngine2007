@@ -845,9 +845,9 @@ void CDataCache::Disconnect() {
 //-----------------------------------------------------------------------------
 // Init, Shutdown
 //-----------------------------------------------------------------------------
-InitReturnVal_t CDataCache::Init(void) { return BaseClass::Init(); }
+InitReturnVal_t CDataCache::Init() { return BaseClass::Init(); }
 
-void CDataCache::Shutdown(void) {
+void CDataCache::Shutdown() {
   Flush(false, false);
   BaseClass::Shutdown();
 }

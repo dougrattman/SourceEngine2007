@@ -10,6 +10,9 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{92d56404-fd6a-4cf0-8c1d-b972cd363493}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{31f37768-fa07-4ef2-a564-a92e60cf3433}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="datacache.cpp">
@@ -50,11 +53,16 @@
     <ClInclude Include="..\public\datacache\idatacache.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\datacache\idatacacheV1.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\datacache\imdlcache.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\datacache.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

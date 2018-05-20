@@ -86,7 +86,7 @@ struct studiodata_t {
   DataCacheHandle_t m_HardwareDataCache;
 #endif
 
-  unsigned short m_nFlags;
+  u16 m_nFlags;
 
   short m_nRefCount;
 
@@ -104,7 +104,7 @@ struct studiodata_t {
   bool m_VertexDataIsCompressed;
 
   int m_nAutoplaySequenceCount;
-  unsigned short *m_pAutoplaySequenceList;
+  u16 *m_pAutoplaySequenceList;
 
   void *m_pUserData;
 
@@ -331,7 +331,7 @@ class CMDLCache : public CTier3AppSystem<IMDLCache>,
   virtual virtualmodel_t *GetVirtualModel(MDLHandle_t handle);
   virtual virtualmodel_t *GetVirtualModelFast(const studiohdr_t *pStudioHdr,
                                               MDLHandle_t handle);
-  virtual int GetAutoplayList(MDLHandle_t handle, unsigned short **pOut);
+  virtual int GetAutoplayList(MDLHandle_t handle, u16 **pOut);
   virtual void TouchAllData(MDLHandle_t handle);
   virtual void SetUserData(MDLHandle_t handle, void *pData);
   virtual void *GetUserData(MDLHandle_t handle);
@@ -1130,7 +1130,7 @@ void CMDLCache::AllocateAutoplaySequences(studiodata_t *pStudioData,
   FreeAutoplaySequences(pStudioData);
 
   pStudioData->m_nAutoplaySequenceCount = nCount;
-  pStudioData->m_pAutoplaySequenceList = new unsigned short[nCount];
+  pStudioData->m_pAutoplaySequenceList = new u16[nCount];
 }
 
 void CMDLCache::FreeAutoplaySequences(studiodata_t *pStudioData) {
@@ -1146,7 +1146,7 @@ void CMDLCache::FreeAutoplaySequences(studiodata_t *pStudioData) {
 // Gets the autoplay list
 //-----------------------------------------------------------------------------
 int CMDLCache::GetAutoplayList(MDLHandle_t handle,
-                               unsigned short **pAutoplayList) {
+                               u16 **pAutoplayList) {
   if (pAutoplayList) {
     *pAutoplayList = NULL;
   }
@@ -2309,8 +2309,8 @@ vertexFileHeader_t *CMDLCache::CreateThinVertexes(
     Vector *pPositions = (Vector *)(pNewThinVerts + 1);
     float *pBoneWeights = (float *)(pPositions + numVerts);
     // Alloc the (short) normals here to avoid mis-aligning the float data
-    unsigned short *pNormals =
-        (unsigned short *)(pBoneWeights + numVerts * numStoredWeights);
+    u16 *pNormals =
+        (u16 *)(pBoneWeights + numVerts * numStoredWeights);
     // Alloc the (char) indices here to avoid mis-aligning the float/short data
     char *pBoneIndices = (char *)(pNormals + numVerts);
     if (numStoredWeights == 0) pBoneWeights = NULL;
@@ -3114,7 +3114,7 @@ const studiohdr_t *studiohdr_t::FindModel(void **cache,
   return g_MDLCache.GetStudioHdr(handle);
 }
 
-virtualmodel_t *studiohdr_t::GetVirtualModel(void) const {
+virtualmodel_t *studiohdr_t::GetVirtualModel() const {
   if (numincludemodels == 0) return NULL;
 
   return g_MDLCache.GetVirtualModelFast(this,
@@ -3125,10 +3125,10 @@ uint8_t *studiohdr_t::GetAnimBlock(int i) const {
   return g_MDLCache.GetAnimBlock((MDLHandle_t)(uintptr_t)virtualModel, i);
 }
 
-int studiohdr_t::GetAutoplayList(unsigned short **pOut) const {
+int studiohdr_t::GetAutoplayList(u16 **pOut) const {
   return g_MDLCache.GetAutoplayList((MDLHandle_t)(uintptr_t)virtualModel, pOut);
 }
 
-const studiohdr_t *virtualgroup_t::GetStudioHdr(void) const {
+const studiohdr_t *virtualgroup_t::GetStudioHdr() const {
   return g_MDLCache.GetStudioHdr((MDLHandle_t)(uintptr_t)cache);
 }
