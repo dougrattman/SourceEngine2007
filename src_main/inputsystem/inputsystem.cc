@@ -30,7 +30,7 @@ CInputSystem::CInputSystem() {
   m_PrimaryUserId = INVALID_USER_ID;
   m_uiMouseWheel = 0;
   m_bXController = false;
-  static_assert((MAX_JOYSTICKS + 7) >> 3 << sizeof(unsigned short));
+  static_assert((MAX_JOYSTICKS + 7) >> 3 << sizeof(u16));
 
   m_pXInputDLL = NULL;
 }
@@ -363,7 +363,7 @@ int CInputSystem::GetPollCount() const { return m_nPollCount; }
 //-----------------------------------------------------------------------------
 // Samples attached devices and appends events to the input queue
 //-----------------------------------------------------------------------------
-void CInputSystem::SampleDevices(void) {
+void CInputSystem::SampleDevices() {
   m_nLastSampleTick = ComputeSampleTick();
 
   if (m_bXController) {
@@ -396,7 +396,7 @@ void CInputSystem::SetRumble(float fLeftMotor, float fRightMotor, int userId) {
 //-----------------------------------------------------------------------------
 //	Purpose: Force an immediate stop, transmits immediately to all devices
 //-----------------------------------------------------------------------------
-void CInputSystem::StopRumble(void) {}
+void CInputSystem::StopRumble() {}
 
 //-----------------------------------------------------------------------------
 // Joystick interface

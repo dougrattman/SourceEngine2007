@@ -255,7 +255,7 @@ class CInputSystem : public CTier2AppSystem<IInputSystem> {
   UINT m_uiMouseWheel;
 
   // Joystick info
-  CUtlFlags<unsigned short> m_JoysticksEnabled;
+  CUtlFlags<u16> m_JoysticksEnabled;
   int m_nJoystickCount;
   bool m_bXController;
   JoystickInfo_t m_pJoystickInfo[MAX_JOYSTICKS];

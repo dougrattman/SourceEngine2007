@@ -23,7 +23,7 @@ ConVar joy_axisbutton_threshold(
 //-----------------------------------------------------------------------------
 // Initialize all joysticks
 //-----------------------------------------------------------------------------
-void CInputSystem::InitializeJoysticks(void) {
+void CInputSystem::InitializeJoysticks() {
   // assume no joystick
   m_nJoystickCount = 0;
 
@@ -273,7 +273,7 @@ void CInputSystem::UpdateJoystickPOVControl(int nJoystick) {
 //-----------------------------------------------------------------------------
 // Purpose: Sample the joystick
 //-----------------------------------------------------------------------------
-void CInputSystem::PollJoystick(void) {
+void CInputSystem::PollJoystick() {
   if (!m_JoysticksEnabled.IsAnyFlagSet()) return;
 
   InputState_t &state = m_InputState[m_bIsPolling];

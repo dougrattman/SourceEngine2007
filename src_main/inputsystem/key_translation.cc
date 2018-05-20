@@ -221,7 +221,6 @@ static const char *s_pAnalogCodeName[] = {
     "V AXIS",  // JOY_AXIS_V
 };
 
-#if !defined(_X360)
 static const char *s_pXControllerButtonCodeNames[] = {
     "A_BUTTON",  // JOYSTICK_FIRST_BUTTON
     "B_BUTTON",   "X_BUTTON",   "Y_BUTTON", "L_SHOULDER", "R_SHOULDER",
@@ -242,7 +241,6 @@ static const char *s_pXControllerButtonCodeNames[] = {
     "S2_UP",  // JOYSTICK_LAST_AXIS_BUTTON
     "V AXIS POS", "V AXIS NEG",
 };
-#endif
 
 // this maps non-translated keyboard scan codes to engine key codes
 // Google for 'Keyboard Scan Code Specification'
@@ -517,8 +515,7 @@ ButtonCode_t ButtonCode_StringToButtonCode(const char *pString,
   }
 
   if (bXController) {
-    for (usize i = 0; i < SOURCE_ARRAYSIZE(s_pXControllerButtonCodeNames);
-         ++i) {
+    for (usize i = 0; i < std::size(s_pXControllerButtonCodeNames); ++i) {
       if (!_stricmp(s_pXControllerButtonCodeNames[i], pString))
         return (ButtonCode_t)(JOYSTICK_FIRST_BUTTON + i);
     }
@@ -601,7 +598,7 @@ void ButtonCode_UpdateScanCodeLayout() {
   HKL englishKb = ::LoadKeyboardLayout("00000409", 0);
 
   if (englishKb && englishKb != currentKb) {
-    for (usize i = 0; i < SOURCE_ARRAYSIZE(s_pScanToButtonCode); i++) {
+    for (usize i = 0; i < std::size(s_pScanToButtonCode); i++) {
       // take the english/QWERTY
       ButtonCode_t code = s_pScanToButtonCode_QWERTY[i];
 

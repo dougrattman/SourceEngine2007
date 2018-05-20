@@ -85,7 +85,7 @@ XInputGetCapabilities_t PC_XInputGetCapabilities;
 //-----------------------------------------------------------------------------
 //	Purpose: Initialize all Xbox controllers
 //-----------------------------------------------------------------------------
-void CInputSystem::InitializeXDevices(void) {
+void CInputSystem::InitializeXDevices() {
   int i;
   xdevice_t* pXDevice;
 
@@ -200,7 +200,7 @@ void CInputSystem::CloseXDevice(xdevice_t* pXDevice) {
 //-----------------------------------------------------------------------------
 //	Purpose: Sample the Xbox controllers.
 //-----------------------------------------------------------------------------
-void CInputSystem::PollXDevices(void) {
+void CInputSystem::PollXDevices() {
   xdevice_t* pXDevice = m_XDevices;
 
   for (int userId = 0; userId < XUSER_MAX_COUNT; ++userId, ++pXDevice) {
