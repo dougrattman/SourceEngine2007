@@ -293,7 +293,7 @@ void CAviFile::CreateVideoStreams(const AVIParams_t &params, void *hWnd) {
   // Create the DIBSection
   void *bits;
   m_DIBSection = CreateDIBSection(m_memdc, (BITMAPINFO *)m_bih, DIB_RGB_COLORS,
-                                  &bits, nullptr, NULL);
+                                  &bits, nullptr, 0);
 
   // Get at the DIBSection object
   DIBSECTION dibs;
@@ -650,7 +650,7 @@ void CAVIMaterial::CreateVideoStream() {
   // Create the DIBSection
   void *bits;
   m_DIBSection = CreateDIBSection(m_memdc, (BITMAPINFO *)m_bih, DIB_RGB_COLORS,
-                                  &bits, nullptr, NULL);
+                                  &bits, nullptr, 0);
 
   // Get at the DIBSection object
   DIBSECTION dibs;
@@ -688,7 +688,7 @@ void CAVIMaterial::RegenerateTextureBits(ITexture *pTexture,
                                          Rect_t *pRect) {
   CPixelWriter pixelWriter;
   LPBITMAPINFOHEADER lpbih;
-  unsigned char *pData;
+  u8 *pData;
   int i, y, nIncY;
 
   // Error condition
@@ -720,7 +720,7 @@ void CAVIMaterial::RegenerateTextureBits(ITexture *pTexture,
     return;
   }
 
-  pData = (unsigned char *)lpbih + lpbih->biSize;
+  pData = (u8 *)lpbih + lpbih->biSize;
   if (lpbih->biBitCount == 8) {
     // This is the palette
     pData += 256 * sizeof(RGBQUAD);

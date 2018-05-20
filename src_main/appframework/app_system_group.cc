@@ -26,14 +26,14 @@ CSysModule *CAppSystemGroup::LoadModuleDLL(const ch *module_name) {
 AppModule_t CAppSystemGroup::LoadModule(const ch *module_name) {
   // Remove the extension when creating the name.
   const usize module_name_length = strlen(module_name) + 1;
-  ch *pModuleName = (ch *)securestackalloc(module_name_length);
+  ch *pModuleName = stack_alloc<ch>(module_name_length);
   Q_StripExtension(module_name, pModuleName, module_name_length);
 
   // See if we already loaded it...
   for (i32 i = m_Modules.Count(); --i >= 0;) {
     if (m_Modules[i].m_pModuleName) {
       if (!_stricmp(pModuleName, m_Modules[i].m_pModuleName)) {
-        securestackfree(pModuleName);
+        stack_free(pModuleName);
         return i;
       }
     }
@@ -51,7 +51,7 @@ AppModule_t CAppSystemGroup::LoadModule(const ch *module_name) {
   m_Modules[nIndex].m_pModuleName = (ch *)malloc(module_name_length);
   strcpy_s(m_Modules[nIndex].m_pModuleName, module_name_length, pModuleName);
 
-  securestackfree(pModuleName);
+  stack_free(pModuleName);
 
   return nIndex;
 }
