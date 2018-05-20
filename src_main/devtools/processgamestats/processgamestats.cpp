@@ -63,14 +63,14 @@ static DataParser_t g_ParseFuncs[] = {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void printusage(void) {
+void printusage() {
   printf("processgamestats:\n");
   printf("processgamestats game dbhost user password dbname rootdir\n");
   printf("processgamestats game datafile [describe only]\n\n");
   printf("valid gamenames:\n");
 
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ParseFuncs); ++i) {
-    printf("  %s\n", g_ParseFuncs[i].pchGameName);
+  for (const auto &func : g_ParseFuncs) {
+    printf("  %s\n", func.pchGameName);
   }
 
   // Exit app
@@ -336,7 +336,7 @@ void InsertData(CUtlDict<int, unsigned short> &mapOrder, IMySQL *sql,
 }
 CUtlDict<int, unsigned short> g_mapOrder;
 
-void BuildMapList(void) {
+void BuildMapList() {
   void *buffer = NULL;
   char *pFileList;
   FILE *pFile;
@@ -501,11 +501,11 @@ int main(int argc, char *argv[]) {
   DataParseFunc parseFunc = NULL;
   PostImportFunc postImportFunc = NULL;
   ParseCurrentUserIDFunc parseUserIDFunc = NULL;
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ParseFuncs); ++i) {
-    if (!Q_stricmp(g_ParseFuncs[i].pchGameName, gamename)) {
-      parseFunc = g_ParseFuncs[i].pfnParseFunc;
-      postImportFunc = g_ParseFuncs[i].pfnPostImport;
-      parseUserIDFunc = g_ParseFuncs[i].pfnParseUserID;
+  for (const auto &func : g_ParseFuncs) {
+    if (!_stricmp(func.pchGameName, gamename)) {
+      parseFunc = func.pfnParseFunc;
+      postImportFunc = func.pfnPostImport;
+      parseUserIDFunc = func.pfnParseUserID;
       break;
     }
   }
@@ -818,5 +818,5 @@ char const *s_PerfKeyList[] = {
 void ProcessPerfData(IMySQL *pSQL, char const *pTableName,
                      char const *pPerfData) {
   InsertKeyDataIntoTable(pSQL, pTableName, pPerfData, s_PerfKeyList,
-                         SOURCE_ARRAYSIZE(s_PerfKeyList));
+                         std::size(s_PerfKeyList));
 }
