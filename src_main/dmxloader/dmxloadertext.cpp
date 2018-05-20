@@ -558,8 +558,7 @@ static int SortAttributeByName(const void *p1, const void *p2) {
 bool CDmxSerializerKeyValues2::SerializeAttributes(
     CUtlBuffer &buf, CDmxSerializationDictionary &dict, CDmxElement *pElement) {
   int nCount = pElement->AttributeCount();
-  CDmxAttribute **ppAttributes =
-      (CDmxAttribute **)stackalloc(nCount * sizeof(CDmxAttribute *));
+  CDmxAttribute **ppAttributes = stack_alloc<CDmxAttribute *>(nCount);
   for (int i = 0; i < nCount; ++i) {
     ppAttributes[i] = pElement->GetAttribute(i);
   }
@@ -890,7 +889,7 @@ bool CDmxSerializerKeyValues2::UnserializeElementArrayAttribute(
     // Get the element type out
     pConv = GetCStringCharConversion();
     int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pElementType = (char *)stackalloc(nLength * sizeof(char));
+    char *pElementType = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pElementType, nLength);
 
     // Use the element type to figure out if we're using a element reference or
@@ -908,7 +907,7 @@ bool CDmxSerializerKeyValues2::UnserializeElementArrayAttribute(
       // Get the element type out
       pConv = GetCStringCharConversion();
       nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-      char *pElementId = (char *)stackalloc(nLength * sizeof(char));
+      char *pElementId = stack_alloc<char>(nLength);
       tokenBuf.GetDelimitedString(pConv, pElementId, nLength);
 
       DmObjectId_t id;
@@ -944,7 +943,7 @@ bool CDmxSerializerKeyValues2::UnserializeAttributeValueFromToken(
   // non-delimited buffers. Sucky. There must be a better way of doing this
   const char *pBuf = (const char *)tokenBuf.Base();
   int nLength = tokenBuf.TellMaxPut();
-  char *pTemp = (char *)stackalloc(nLength + 1);
+  char *pTemp = stack_alloc<char>(nLength + 1);
 
   bool bIsString = (type == AT_STRING) || (type == AT_STRING_ARRAY);
   if (!bIsString) {
@@ -1066,7 +1065,7 @@ bool CDmxSerializerKeyValues2::UnserializeAttribute(
   if ((nAttrType == AT_OBJECTID) && !Q_strnicmp(pAttributeName, "id", 3)) {
     CUtlCharConversion *pConv = GetCStringCharConversion();
     int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pElementId = (char *)stackalloc(nLength * sizeof(char));
+    char *pElementId = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pElementId, nLength);
 
     DmObjectId_t id;
@@ -1099,7 +1098,7 @@ bool CDmxSerializerKeyValues2::UnserializeAttribute(
       // Get the attribute value out
       CUtlCharConversion *pConv = GetCStringCharConversion();
       int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-      char *pAttributeValue = (char *)stackalloc(nLength * sizeof(char));
+      char *pAttributeValue = stack_alloc<char>(nLength);
       tokenBuf.GetDelimitedString(pConv, pAttributeValue, nLength);
 
       // No string? that's ok, it means we have a NULL pointer
@@ -1173,7 +1172,7 @@ bool CDmxSerializerKeyValues2::UnserializeElement(
     // First, read an attribute name
     pConv = GetCStringCharConversion();
     nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pAttributeName = (char *)stackalloc(nLength * sizeof(char));
+    char *pAttributeName = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pAttributeName, nLength);
 
     // Next, read an attribute type
@@ -1187,7 +1186,7 @@ bool CDmxSerializerKeyValues2::UnserializeElement(
 
     pConv = GetCStringCharConversion();
     nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pAttributeType = (char *)stackalloc(nLength * sizeof(char));
+    char *pAttributeType = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pAttributeType, nLength);
 
     DmAttributeType_t nAttrType = AT_UNKNOWN;
@@ -1252,7 +1251,7 @@ bool CDmxSerializerKeyValues2::UnserializeElement(
 
   pConv = GetCStringCharConversion();
   int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-  char *pTypeName = (char *)stackalloc(nLength * sizeof(char));
+  char *pTypeName = stack_alloc<char>(nLength);
   tokenBuf.GetDelimitedString(pConv, pTypeName, nLength);
 
   return UnserializeElement(buf, pTypeName, pHandle);

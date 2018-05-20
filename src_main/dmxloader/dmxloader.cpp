@@ -179,7 +179,7 @@ bool CDmxSerializer::SaveElement(CUtlBuffer &buf,
     const char *pName = pAttribute->GetName();
     if (!ShouldWriteAttribute(pName, pAttribute)) continue;
 
-    unsigned short sym = stringTable.Find(pName);
+    u16 sym = stringTable.Find(pName);
     if (sym == stringTable.InvalidIndex()) return false;
 
     buf.PutShort(sym);
@@ -205,7 +205,7 @@ bool CDmxSerializer::SaveElement(CUtlBuffer &buf,
 bool CDmxSerializer::SaveElementDict(CUtlBuffer &buf,
                                      CUtlRBTree<const char *> &stringTable,
                                      CDmxElement *pElement) {
-  unsigned short sym = stringTable.Find(pElement->GetTypeString());
+  u16 sym = stringTable.Find(pElement->GetTypeString());
   if (sym == stringTable.InvalidIndex()) return false;
 
   buf.PutShort(sym);
@@ -398,11 +398,11 @@ bool CDmxSerializer::Unserialize(CUtlBuffer &buf, int nEncodingVersion,
   char *stringTable = NULL;
   if (bReadStringTable) {
     nStrings = buf.GetShort();
-    offsetTable = (int *)stackalloc(nStrings * sizeof(int));
+    offsetTable = stack_alloc<int>(nStrings);
 
     // this causes entire string table to be mapped in memory at once
     int nStringMemoryUsage = GetStringOffsetTable(buf, offsetTable, nStrings);
-    stringTable = (char *)stackalloc(nStringMemoryUsage * sizeof(char));
+    stringTable = stack_alloc<char>(nStringMemoryUsage);
     buf.Get(stringTable, nStringMemoryUsage);
   }
 

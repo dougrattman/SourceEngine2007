@@ -156,7 +156,7 @@ void CDmxAttribute::AllocateDataMemory(DmAttributeType_t type) {
 #define DESTRUCT_ARRAY(_dataType)                                \
                                                                  \
   case CDmAttributeInfo<CUtlVector<_dataType> >::ATTRIBUTE_TYPE: \
-    Destruct((CUtlVector<_dataType> *)m_pData);                  \
+    Destroy((CUtlVector<_dataType> *)m_pData);                  \
     break;
 
 void CDmxAttribute::FreeDataMemory() {
@@ -164,9 +164,9 @@ void CDmxAttribute::FreeDataMemory() {
     if (m_pData != nullptr) {
       if (!IsArrayType(m_Type)) {
         if (m_Type == AT_STRING) {
-          Destruct((CUtlString *)m_pData);
+          Destroy((CUtlString *)m_pData);
         } else if (m_Type == AT_VOID) {
-          Destruct((CUtlBinaryBlock *)m_pData);
+          Destroy((CUtlBinaryBlock *)m_pData);
         }
       } else {
         switch (m_Type) {
