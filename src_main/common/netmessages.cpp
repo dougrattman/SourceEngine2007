@@ -16,7 +16,7 @@
 
 static char s_text[1024];
 
-const char *CLC_VoiceData::ToString(void) const {
+const char *CLC_VoiceData::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: %i bytes", GetName(),
              Bits2Bytes(m_nLength));
   return s_text;
@@ -40,7 +40,7 @@ bool CLC_VoiceData::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *CLC_Move::ToString(void) const {
+const char *CLC_Move::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: backup %i, new %i, bytes %i",
              GetName(), m_nNewCommands, m_nBackupCommands,
              Bits2Bytes(m_nLength));
@@ -69,7 +69,7 @@ bool CLC_Move::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *CLC_ClientInfo::ToString(void) const {
+const char *CLC_ClientInfo::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: SendTableCRC %i", GetName(),
              m_nSendTableCRC);
   return s_text;
@@ -131,7 +131,7 @@ bool CLC_BaselineAck::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *CLC_BaselineAck::ToString(void) const {
+const char *CLC_BaselineAck::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: tick %i", GetName(), m_nBaselineTick);
   return s_text;
 }
@@ -158,7 +158,7 @@ bool CLC_ListenEvents::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *CLC_ListenEvents::ToString(void) const {
+const char *CLC_ListenEvents::ToString() const {
   int count = 0;
 
   for (int i = 0; i < MAX_EVENT_NUMBER; i++) {
@@ -199,7 +199,7 @@ bool CLC_RespondCvarValue::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *CLC_RespondCvarValue::ToString(void) const {
+const char *CLC_RespondCvarValue::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: status: %d, value: %s, cookie: %d",
              GetName(), m_eStatusCode, m_szCvarValue, m_iCookie);
   return s_text;
@@ -211,14 +211,14 @@ const char *g_MostCommonPrefixes[] = {"materials", "models", "sounds",
                                       "scripts"};
 
 static int FindCommonPathID(const char *pPathID) {
-  for (usize i = 0; i < SOURCE_ARRAYSIZE(g_MostCommonPathIDs); i++) {
+  for (usize i = 0; i < std::size(g_MostCommonPathIDs); i++) {
     if (_stricmp(pPathID, g_MostCommonPathIDs[i]) == 0) return i;
   }
   return -1;
 }
 
 static int FindCommonPrefix(const char *pStr) {
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_MostCommonPrefixes); i++) {
+  for (usize i = 0; i < std::size(g_MostCommonPrefixes); i++) {
     if (V_stristr(pStr, g_MostCommonPrefixes[i]) == pStr) {
       int iNextChar = V_strlen(g_MostCommonPrefixes[i]);
       if (pStr[iNextChar] == '/' || pStr[iNextChar] == '\\') return i;
@@ -266,7 +266,7 @@ bool CLC_FileCRCCheck::ReadFromBuffer(bf_read &buffer) {
   int iCode = buffer.ReadUBitLong(2);
   if (iCode == 0) {
     buffer.ReadString(m_szPathID, sizeof(m_szPathID));
-  } else if ((iCode - 1) < SOURCE_ARRAYSIZE(g_MostCommonPathIDs)) {
+  } else if ((iCode - 1) < std::size(g_MostCommonPathIDs)) {
     V_strncpy(m_szPathID, g_MostCommonPathIDs[iCode - 1], sizeof(m_szPathID));
   } else {
     Assert(!"Invalid path ID code in CLC_FileCRCCheck");
@@ -277,7 +277,7 @@ bool CLC_FileCRCCheck::ReadFromBuffer(bf_read &buffer) {
   iCode = buffer.ReadUBitLong(3);
   if (iCode == 0) {
     buffer.ReadString(m_szFilename, sizeof(m_szFilename));
-  } else if ((iCode - 1) < SOURCE_ARRAYSIZE(g_MostCommonPrefixes)) {
+  } else if (iCode - 1 < std::size(g_MostCommonPrefixes)) {
     char szTemp[SOURCE_MAX_PATH];
     buffer.ReadString(szTemp, sizeof(szTemp));
     V_snprintf(m_szFilename, sizeof(m_szFilename), "%s%c%s",
@@ -292,7 +292,7 @@ bool CLC_FileCRCCheck::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *CLC_FileCRCCheck::ToString(void) const {
+const char *CLC_FileCRCCheck::ToString() const {
   V_snprintf(s_text, sizeof(s_text), "%s: path: %s, file: %s", GetName(),
              m_szPathID, m_szFilename);
   return s_text;
@@ -311,7 +311,7 @@ bool SVC_Print::ReadFromBuffer(bf_read &buffer) {
   return buffer.ReadString(m_szTextBuffer, sizeof(m_szTextBuffer));
 }
 
-const char *SVC_Print::ToString(void) const {
+const char *SVC_Print::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: \"%s\"", GetName(), m_szText);
   return s_text;
 }
@@ -329,7 +329,7 @@ bool NET_StringCmd::ReadFromBuffer(bf_read &buffer) {
   return buffer.ReadString(m_szCommandBuffer, sizeof(m_szCommandBuffer));
 }
 
-const char *NET_StringCmd::ToString(void) const {
+const char *NET_StringCmd::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: \"%s\"", GetName(), m_szCommand);
   return s_text;
 }
@@ -384,7 +384,7 @@ bool SVC_ServerInfo::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_ServerInfo::ToString(void) const {
+const char *SVC_ServerInfo::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: game \"%s\", map \"%s\", max %i",
              GetName(), m_szGameDir, m_szMapName, m_nMaxClients);
   return s_text;
@@ -407,7 +407,7 @@ bool NET_SignonState::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *NET_SignonState::ToString(void) const {
+const char *NET_SignonState::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: state %i, count %i", GetName(),
              m_nSignonState, m_nSpawnCount);
   return s_text;
@@ -448,7 +448,7 @@ bool SVC_BSPDecal::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_BSPDecal::ToString(void) const {
+const char *SVC_BSPDecal::ToString() const {
   Q_snprintf(s_text, sizeof(s_text),
              "%s: tex %i, ent %i, mod %i lowpriority %i", GetName(),
              m_nDecalTextureIndex, m_nEntityIndex, m_nModelIndex,
@@ -469,7 +469,7 @@ bool SVC_SetView::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_SetView::ToString(void) const {
+const char *SVC_SetView::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: view entity %i", GetName(),
              m_nEntityIndex);
   return s_text;
@@ -494,7 +494,7 @@ bool SVC_FixAngle::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_FixAngle::ToString(void) const {
+const char *SVC_FixAngle::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: %s %.1f %.1f %.1f ", GetName(),
              m_bRelative ? "relative" : "absolute", m_Angle[0], m_Angle[1],
              m_Angle[2]);
@@ -518,7 +518,7 @@ bool SVC_CrosshairAngle::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_CrosshairAngle::ToString(void) const {
+const char *SVC_CrosshairAngle::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: (%.1f %.1f %.1f)", GetName(),
              m_Angle[0], m_Angle[1], m_Angle[2]);
   return s_text;
@@ -541,7 +541,7 @@ bool SVC_VoiceInit::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_VoiceInit::ToString(void) const {
+const char *SVC_VoiceInit::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: codec \"%s\", qualitty %i", GetName(),
              m_szVoiceCodec, m_nQuality);
   return s_text;
@@ -567,7 +567,7 @@ bool SVC_VoiceData::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_VoiceData::ToString(void) const {
+const char *SVC_VoiceData::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: client %i, bytes %i", GetName(),
              m_nFromClient, Bits2Bytes(m_nLength));
   return s_text;
@@ -601,7 +601,7 @@ bool NET_Tick::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *NET_Tick::ToString(void) const {
+const char *NET_Tick::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: tick %i", GetName(), m_nTick);
   return s_text;
 }
@@ -626,7 +626,7 @@ bool SVC_UserMessage::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_UserMessage::ToString(void) const {
+const char *SVC_UserMessage::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: type %i, bytes %i", GetName(),
              m_nMsgType, Bits2Bytes(m_nLength));
   return s_text;
@@ -645,7 +645,7 @@ bool SVC_SetPause::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_SetPause::ToString(void) const {
+const char *SVC_SetPause::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: %s", GetName(),
              m_bPaused ? "paused" : "unpaused");
   return s_text;
@@ -684,7 +684,7 @@ bool NET_SetConVar::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *NET_SetConVar::ToString(void) const {
+const char *NET_SetConVar::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: %i cvars, \"%s\"=\"%s\"", GetName(),
              m_ConVars.Count(), m_ConVars[0].name, m_ConVars[0].value);
   return s_text;
@@ -725,7 +725,7 @@ bool SVC_UpdateStringTable::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_UpdateStringTable::ToString(void) const {
+const char *SVC_UpdateStringTable::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: table %i, changed %i, bytes %i",
              GetName(), m_nTableID, m_nChangedEntries, Bits2Bytes(m_nLength));
   return s_text;
@@ -793,7 +793,7 @@ bool SVC_CreateStringTable::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_CreateStringTable::ToString(void) const {
+const char *SVC_CreateStringTable::ToString() const {
   Q_snprintf(
       s_text, sizeof(s_text),
       "%s: table %s, entries %i, bytes %i userdatasize %i userdatabits %i",
@@ -841,7 +841,7 @@ bool SVC_Sounds::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_Sounds::ToString(void) const {
+const char *SVC_Sounds::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: number %i,%s bytes %i", GetName(),
              m_nNumSounds, m_bReliableSound ? " reliable," : "",
              Bits2Bytes(m_nLength));
@@ -866,7 +866,7 @@ bool SVC_Prefetch::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_Prefetch::ToString(void) const {
+const char *SVC_Prefetch::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: type %i index %i", GetName(),
              (int)m_fType, (int)m_nSoundIndex);
   return s_text;
@@ -892,7 +892,7 @@ bool SVC_TempEntities::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_TempEntities::ToString(void) const {
+const char *SVC_TempEntities::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: number %i, bytes %i", GetName(),
              m_nNumEntries, Bits2Bytes(m_nLength));
   return s_text;
@@ -953,51 +953,12 @@ bool SVC_ClassInfo::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_ClassInfo::ToString(void) const {
+const char *SVC_ClassInfo::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: num %i, %s", GetName(),
              m_nNumServerClasses,
              m_bCreateOnClient ? "use client classes" : "full update");
   return s_text;
 }
-
-/*
-bool SVC_SpawnBaseline::WriteToBuffer( bf_write &buffer )
-{
-        m_nLength = m_DataOut.GetNumBitsWritten();
-
-        buffer.WriteUBitLong( GetType(), NETMSG_TYPE_BITS );
-
-        buffer.WriteUBitLong( m_nEntityIndex, MAX_EDICT_BITS );
-
-        buffer.WriteUBitLong( m_nClassID, MAX_SERVER_CLASS_BITS );
-
-        buffer.WriteUBitLong( m_nLength, Q_log2(MAX_PACKEDENTITY_DATA<<3) ); //
-TODO see below
-
-        return buffer.WriteBits( m_DataOut.GetData(), m_nLength );
-}
-
-bool SVC_SpawnBaseline::ReadFromBuffer( bf_read &buffer )
-{
-        m_nEntityIndex = buffer.ReadUBitLong( MAX_EDICT_BITS );
-
-        m_nClassID = buffer.ReadUBitLong( MAX_SERVER_CLASS_BITS );
-
-        m_nLength = buffer.ReadUBitLong( Q_log2(MAX_PACKEDENTITY_DATA<<3) ); //
-TODO wrong, check bounds
-
-        m_DataIn = buffer;
-
-        return buffer.SeekRelative( m_nLength );
-}
-
-const char *SVC_SpawnBaseline::ToString(void) const
-{
-        static char text[256];
-        Q_snprintf(text, sizeof(text), "%s: ent %i, class %i, bytes %i",
-                GetName(), m_nEntityIndex, m_nClassID, Bits2Bytes(m_nLength) );
-        return text;
-} */
 
 bool SVC_GameEvent::WriteToBuffer(bf_write &buffer) {
   m_nLength = m_DataOut.GetNumBitsWritten();
@@ -1015,7 +976,7 @@ bool SVC_GameEvent::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_GameEvent::ToString(void) const {
+const char *SVC_GameEvent::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: bytes %i", GetName(),
              Bits2Bytes(m_nLength));
   return s_text;
@@ -1044,7 +1005,7 @@ bool SVC_SendTable::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_SendTable::ToString(void) const {
+const char *SVC_SendTable::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: needs Decoder %s,bytes %i", GetName(),
              m_bNeedsDecoder ? "yes" : "no", Bits2Bytes(m_nLength));
   return s_text;
@@ -1071,7 +1032,7 @@ bool SVC_EntityMessage::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_EntityMessage::ToString(void) const {
+const char *SVC_EntityMessage::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: entity %i, class %i, bytes %i",
              GetName(), m_nEntityIndex, m_nClassID, Bits2Bytes(m_nLength));
   return s_text;
@@ -1127,7 +1088,7 @@ bool SVC_PacketEntities::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_PacketEntities::ToString(void) const {
+const char *SVC_PacketEntities::ToString() const {
   Q_snprintf(s_text, sizeof(s_text),
              "%s: delta %i, max %i, changed %i,%s bytes %i", GetName(),
              m_nDeltaFrom, m_nMaxEntries, m_nUpdatedEntries,
@@ -1191,7 +1152,7 @@ bool SVC_Menu::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_Menu::ToString(void) const {
+const char *SVC_Menu::ToString() const {
   Q_snprintf(
       s_text, sizeof(s_text), "%s: %i \"%s\" (len:%i)", GetName(), m_Type,
       m_MenuKeyValues ? m_MenuKeyValues->GetName() : "No KeyValues", m_iLength);
@@ -1218,7 +1179,7 @@ bool SVC_GameEventList::ReadFromBuffer(bf_read &buffer) {
   return buffer.SeekRelative(m_nLength);
 }
 
-const char *SVC_GameEventList::ToString(void) const {
+const char *SVC_GameEventList::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: number %i, bytes %i", GetName(),
              m_nNumEvents, Bits2Bytes(m_nLength));
   return s_text;
@@ -1235,7 +1196,7 @@ bool MM_Heartbeat::WriteToBuffer(bf_write &buffer) {
 
 bool MM_Heartbeat::ReadFromBuffer(bf_read &buffer) { return true; }
 
-const char *MM_Heartbeat::ToString(void) const {
+const char *MM_Heartbeat::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "Heartbeat");
   return s_text;
 }
@@ -1273,7 +1234,7 @@ bool MM_ClientInfo::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *MM_ClientInfo::ToString(void) const {
+const char *MM_ClientInfo::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "Client Info: ID: %d, Players: %d", m_id,
              m_cPlayers);
   return s_text;
@@ -1286,7 +1247,7 @@ bool MM_RegisterResponse::WriteToBuffer(bf_write &buffer) {
 
 bool MM_RegisterResponse::ReadFromBuffer(bf_read &buffer) { return true; }
 
-const char *MM_RegisterResponse::ToString(void) const {
+const char *MM_RegisterResponse::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "Register Response");
   return s_text;
 }
@@ -1321,7 +1282,7 @@ bool MM_Mutelist::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *MM_Mutelist::ToString(void) const {
+const char *MM_Mutelist::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "Mutelist");
   return s_text;
 }
@@ -1337,7 +1298,7 @@ bool MM_Checkpoint::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *MM_Checkpoint::ToString(void) const {
+const char *MM_Checkpoint::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "Checkpoint: %d", m_Checkpoint);
   return s_text;
 }
@@ -1391,7 +1352,7 @@ bool MM_JoinResponse::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *MM_JoinResponse::ToString(void) const {
+const char *MM_JoinResponse::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "ID: %d, Nonce: %d, Flags: %d", m_id,
              m_Nonce, m_SessionFlags);
   return s_text;
@@ -1422,7 +1383,7 @@ bool MM_Migrate::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *MM_Migrate::ToString(void) const {
+const char *MM_Migrate::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "Migrate Message");
   return s_text;
 }
@@ -1446,7 +1407,7 @@ bool SVC_GetCvarValue::ReadFromBuffer(bf_read &buffer) {
   return !buffer.IsOverflowed();
 }
 
-const char *SVC_GetCvarValue::ToString(void) const {
+const char *SVC_GetCvarValue::ToString() const {
   Q_snprintf(s_text, sizeof(s_text), "%s: cvar: %s, cookie: %d", GetName(),
              m_szCvarName, m_iCookie);
   return s_text;

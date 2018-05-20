@@ -2184,14 +2184,14 @@ void ProcessMDLFields(void *pDataBase, datadescProcessFunc_t pfnProcessFunc) {
 
     u8 *pData = (u8 *)pBodypart + SrcNative(&pBodypart->modelindex);
     mstudiomodel_t *pModel = (mstudiomodel_t *)pData;
-    for (int i = 0; i < SrcNative(&pBodypart->nummodels); ++i, ++pModel) {
+    for (int l = 0; l < SrcNative(&pBodypart->nummodels); ++l, ++pModel) {
       ProcessFields(pModel, &mstudiomodel_t::m_DataMap, pfnProcessFunc);
 
       /** MESHES **/
 
       pData = (u8 *)pModel + SrcNative(&pModel->meshindex);
       mstudiomesh_t *pMesh = (mstudiomesh_t *)pData;
-      for (int i = 0; i < SrcNative(&pModel->nummeshes); ++i, ++pMesh) {
+      for (int k = 0; k < SrcNative(&pModel->nummeshes); ++k, ++pMesh) {
         ProcessFields(pMesh, &mstudiomesh_t::m_DataMap, pfnProcessFunc);
 
         if (!pMesh->numflexes) continue;
@@ -2200,7 +2200,7 @@ void ProcessMDLFields(void *pDataBase, datadescProcessFunc_t pfnProcessFunc) {
 
         pData = (u8 *)pMesh + SrcNative(&pMesh->flexindex);
         mstudioflex_t *pFlex = (mstudioflex_t *)pData;
-        for (int i = 0; i < SrcNative(&pMesh->numflexes); ++i, ++pFlex) {
+        for (int j = 0; j < SrcNative(&pMesh->numflexes); ++j, ++pFlex) {
           ProcessFields(pFlex, &mstudioflex_t::m_DataMap, pfnProcessFunc);
         }
       }
@@ -2209,7 +2209,7 @@ void ProcessMDLFields(void *pDataBase, datadescProcessFunc_t pfnProcessFunc) {
 
       pData = (u8 *)pModel + SrcNative(&pModel->eyeballindex);
       mstudioeyeball_t *pEyeball = (mstudioeyeball_t *)pData;
-      for (int i = 0; i < SrcNative(&pModel->numeyeballs); ++i, ++pEyeball) {
+      for (int j = 0; j < SrcNative(&pModel->numeyeballs); ++j, ++pEyeball) {
         ProcessFields(pEyeball, &mstudioeyeball_t::m_DataMap, pfnProcessFunc);
       }
     }
@@ -2309,8 +2309,8 @@ void ProcessMDLFields(void *pDataBase, datadescProcessFunc_t pfnProcessFunc) {
       pData = (u8 *)pHdr + SrcNative(&pStudioHdr2->srcbonetransformindex);
       mstudiosrcbonetransform_t *pSrcBoneTransform =
           (mstudiosrcbonetransform_t *)pData;
-      for (int i = 0; i < SrcNative(&pStudioHdr2->numsrcbonetransform);
-           ++i, ++pSrcBoneTransform) {
+      for (int j = 0; j < SrcNative(&pStudioHdr2->numsrcbonetransform);
+           ++j, ++pSrcBoneTransform) {
         ProcessFields(pSrcBoneTransform, &mstudiosrcbonetransform_t::m_DataMap,
                       pfnProcessFunc);
       }

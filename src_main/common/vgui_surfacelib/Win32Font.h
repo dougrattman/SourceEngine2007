@@ -11,6 +11,7 @@
 #endif
 
 #include "UtlRBTree.h"
+#include "base/include/base_types.h"
 #include "tier1/UtlSymbol.h"
 
 // Structure passed to CWin32Font::GetCharsRGBA
@@ -80,11 +81,11 @@ class CWin32Font {
   CUtlSymbol m_szName;
 
   short m_iTall;
-  unsigned short m_iWeight;
-  unsigned short m_iFlags;
-  unsigned short m_iScanLines;
-  unsigned short m_iBlur;
-  unsigned short m_rgiBitmapSize[2];
+  u16 m_iWeight;
+  u16 m_iFlags;
+  u16 m_iScanLines;
+  u16 m_iBlur;
+  u16 m_rgiBitmapSize[2];
   bool m_bUnderlined;
 
   unsigned int m_iHeight : 8;
@@ -111,7 +112,7 @@ class CWin32Font {
     wchar_t wch;
     abc_t abc;
   };
-  CUtlRBTree<abc_cache_t, unsigned short> m_ExtendedABCWidthsCache;
+  CUtlRBTree<abc_cache_t, u16> m_ExtendedABCWidthsCache;
   static bool ExtendedABCWidthsCacheLessFunc(const abc_cache_t &lhs,
                                              const abc_cache_t &rhs);
 };

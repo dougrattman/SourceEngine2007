@@ -454,8 +454,8 @@ class SVC_Prefetch : public CNetMessage {
   };
 
  public:
-  unsigned short m_fType;
-  unsigned short m_nSoundIndex;
+  u16 m_fType;
+  u16 m_nSoundIndex;
 };
 
 class SVC_SetView : public CNetMessage {

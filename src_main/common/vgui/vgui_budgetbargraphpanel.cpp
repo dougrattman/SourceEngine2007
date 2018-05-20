@@ -103,7 +103,7 @@ void CBudgetBarGraphPanel::DrawTickAtIndex(int id, float percent, int red,
   vgui::surface()->DrawFilledRect(left, top + 2, right, bottom - 2);
 }
 
-void CBudgetBarGraphPanel::DrawTimeLines(void) {
+void CBudgetBarGraphPanel::DrawTimeLines() {
   int panelWidth, panelHeight;
   GetSize(panelWidth, panelHeight);
   int i;
@@ -218,7 +218,7 @@ void CBudgetBarGraphPanel::DrawAverages() {
   }
 }
 
-void CBudgetBarGraphPanel::Paint(void) {
+void CBudgetBarGraphPanel::Paint() {
   int width, height;
   GetSize(width, height);
 

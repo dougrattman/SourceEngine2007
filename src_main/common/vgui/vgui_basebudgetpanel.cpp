@@ -51,7 +51,7 @@ const double *CBaseBudgetPanel::GetBudgetGroupData(int &nGroups,
   }
 }
 
-void CBaseBudgetPanel::ClearTimesForAllGroupsForThisFrame(void) {
+void CBaseBudgetPanel::ClearTimesForAllGroupsForThisFrame() {
   int i;
   for (i = 0; i < m_ConfigData.m_BudgetGroupInfo.Count(); i++) {
     m_BudgetGroupTimes[i].m_Time[m_BudgetHistoryOffset] = 0.0;

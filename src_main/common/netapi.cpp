@@ -181,13 +181,13 @@ bool CNetAPI::CompareAdr(netadr_t *a, netadr_t *b) {
 void CNetAPI::GetLocalIP(netadr_t *a) {
   char s[64];
 
-  if (!gethostname(s, SOURCE_ARRAYSIZE(s))) {
+  if (!gethostname(s, std::size(s))) {
     hostent *localip = gethostbyname(s);
     if (localip) {
       a->type = NA_IP;
       a->port = 0;
 
-      memcpy(a->ip, localip->h_addr_list[0], SOURCE_ARRAYSIZE(a->ip));
+      memcpy(a->ip, localip->h_addr_list[0], std::size(a->ip));
     }
   }
 }

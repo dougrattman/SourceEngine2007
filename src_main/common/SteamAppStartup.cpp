@@ -96,7 +96,7 @@ std::tuple<bool, std::array<char, SOURCE_MAX_PATH>> GetSteamExePath(
 // Purpose: Find or launch steam and launch app via it.
 bool FindSteamAndLaunchSelfViaIt() {
   char current_dir[SOURCE_MAX_PATH];
-  if (!GetCurrentDirectoryA(SOURCE_ARRAYSIZE(current_dir), current_dir)) {
+  if (!GetCurrentDirectoryA(std::size(current_dir), current_dir)) {
     return false;
   }
 
@@ -104,7 +104,7 @@ bool FindSteamAndLaunchSelfViaIt() {
   bool return_code;
   std::array<char, SOURCE_MAX_PATH> steam_exe_path;
   std::tie(return_code, steam_exe_path) =
-      GetSteamExePath(current_dir, SOURCE_ARRAYSIZE(current_dir));
+      GetSteamExePath(current_dir, std::size(current_dir));
 
   if (!return_code) {
     // Still not found, use the one in the registry
@@ -159,7 +159,7 @@ bool LaunchSelfViaSteam(_In_z_ const char *command_line) {
   }
 
   char app_path[SOURCE_MAX_PATH];
-  if (!GetModuleFileNameA(app_module, app_path, SOURCE_ARRAYSIZE(app_path))) {
+  if (!GetModuleFileNameA(app_module, app_path, std::size(app_path))) {
     return false;
   }
 

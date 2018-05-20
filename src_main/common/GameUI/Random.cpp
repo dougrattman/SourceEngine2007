@@ -31,7 +31,7 @@ void SeedRandomNumberGenerator(long lSeed) {
   }
 }
 
-long ran1(void) {
+long ran1() {
   int j;
   long k;
   static long iy = 0;
@@ -65,7 +65,7 @@ long ran1(void) {
 #define AM (1.0 / IM)
 #define EPS 1.2e-7
 #define RNMX (1.0 - EPS)
-float fran1(void) {
+float fran1() {
   float temp = (float)AM * ran1();
   if (temp > RNMX)
     return (float)RNMX;

@@ -115,7 +115,7 @@ CGameConfigManager::CGameConfigManager(void)
 //-----------------------------------------------------------------------------
 // Destructor
 //-----------------------------------------------------------------------------
-CGameConfigManager::~CGameConfigManager(void) {
+CGameConfigManager::~CGameConfigManager() {
   // Release the keyvalues
   if (m_pData != NULL) {
     m_pData->deleteThis();
@@ -247,7 +247,7 @@ bool CGameConfigManager::LoadConfigsInternal(const char *baseDir,
 //-----------------------------------------------------------------------------
 // Purpose: Add to the current config.
 //-----------------------------------------------------------------------------
-void CGameConfigManager::UpdateConfigsInternal(void) {
+void CGameConfigManager::UpdateConfigsInternal() {
   // Check to a valid gameconfig.txt file buffer.
   if (!IsLoaded()) return;
 
@@ -299,7 +299,7 @@ void CGameConfigManager::UpdateConfigsInternal(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Update the gameconfig.txt version number.
 //-----------------------------------------------------------------------------
-void CGameConfigManager::VersionConfig(void) {
+void CGameConfigManager::VersionConfig() {
   // Check to a valid gameconfig.txt file buffer.
   if (!IsLoaded()) return;
 
@@ -324,7 +324,7 @@ void CGameConfigManager::VersionConfig(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Check to see if the version of the gameconfig.txt is up to date.
 //-----------------------------------------------------------------------------
-bool CGameConfigManager::IsConfigCurrent(void) {
+bool CGameConfigManager::IsConfigCurrent() {
   // Check to a valid gameconfig.txt file buffer.
   if (!IsLoaded()) return false;
 
@@ -508,7 +508,7 @@ bool CGameConfigManager::IsAppSubscribed(int nAppID) {
 //-----------------------------------------------------------------------------
 // Purpose: Create default configurations for all Valve retail applications
 //-----------------------------------------------------------------------------
-bool CGameConfigManager::CreateAllDefaultConfigs(void) {
+bool CGameConfigManager::CreateAllDefaultConfigs() {
   // Start our new block
   KeyValues *configBlock = new KeyValues("Configs");
   KeyValues *gameBlock = configBlock->CreateNewKey();
@@ -535,7 +535,7 @@ bool CGameConfigManager::CreateAllDefaultConfigs(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Load game information from an INI file
 //-----------------------------------------------------------------------------
-bool CGameConfigManager::ConvertGameConfigsINI(void) {
+bool CGameConfigManager::ConvertGameConfigsINI() {
   const char *iniFilePath = GetIniFilePath();
 
   // Load our INI file
@@ -725,14 +725,14 @@ bool CGameConfigManager::SaveConfigs(const char *baseDir) {
 //-----------------------------------------------------------------------------
 // Purpose: Find the directory our .exe is based out of
 //-----------------------------------------------------------------------------
-const char *CGameConfigManager::GetBaseDirectory(void) {
+const char *CGameConfigManager::GetBaseDirectory() {
   return m_szBaseDirectory;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Find the root directory
 //-----------------------------------------------------------------------------
-const char *CGameConfigManager::GetRootDirectory(void) {
+const char *CGameConfigManager::GetRootDirectory() {
   static char path[SOURCE_MAX_PATH] = {0};
   if (path[0] == 0) {
     Q_strncpy(path, GetBaseDirectory(), sizeof(path));
@@ -756,7 +756,7 @@ const char *CGameConfigManager::GetRootDirectory(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns the game configuation block
 //-----------------------------------------------------------------------------
-KeyValues *CGameConfigManager::GetGameBlock(void) {
+KeyValues *CGameConfigManager::GetGameBlock() {
   if (!IsLoaded()) return NULL;
 
   return (m_pData->FindKey(TOKEN_GAMES));
@@ -781,7 +781,7 @@ KeyValues *CGameConfigManager::GetGameSubBlock(const char *keyName) {
 //-----------------------------------------------------------------------------
 // Purpose: Get the gamecfg.ini file for conversion
 //-----------------------------------------------------------------------------
-const char *CGameConfigManager::GetIniFilePath(void) {
+const char *CGameConfigManager::GetIniFilePath() {
   static char iniFilePath[SOURCE_MAX_PATH] = {0};
   if (iniFilePath[0] == 0) {
     Q_strncpy(iniFilePath, GetBaseDirectory(), sizeof(iniFilePath));
