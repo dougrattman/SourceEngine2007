@@ -6,7 +6,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-GDclass::GDclass(void) {
+GDclass::GDclass() {
   m_nVariables = 0;
   m_bBase = false;
   m_bSolid = false;
@@ -40,7 +40,7 @@ GDclass::GDclass(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Destructor. Frees variable and helper lists.
 //-----------------------------------------------------------------------------
-GDclass::~GDclass(void) {
+GDclass::~GDclass() {
   //
   // Free variables.
   //

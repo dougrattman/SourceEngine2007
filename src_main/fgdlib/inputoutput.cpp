@@ -31,7 +31,7 @@ static TypeMap_t TypeMap[] = {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CClassInputOutputBase::CClassInputOutputBase(void) {
+CClassInputOutputBase::CClassInputOutputBase() {
   m_eType = iotInvalid;
   m_pszDescription = NULL;
 }
@@ -49,7 +49,7 @@ CClassInputOutputBase::CClassInputOutputBase(const char *pszName,
 //-----------------------------------------------------------------------------
 // Purpose: Destructor.
 //-----------------------------------------------------------------------------
-CClassInputOutputBase::~CClassInputOutputBase(void) {
+CClassInputOutputBase::~CClassInputOutputBase() {
   delete m_pszDescription;
   m_pszDescription = NULL;
 }
@@ -57,7 +57,7 @@ CClassInputOutputBase::~CClassInputOutputBase(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns a string representing the type of this I/O, eg. "integer".
 //-----------------------------------------------------------------------------
-const char *CClassInputOutputBase::GetTypeText(void) {
+const char *CClassInputOutputBase::GetTypeText() {
   for (int i = 0; i < sizeof(TypeMap) / sizeof(TypeMap[0]); i++) {
     if (TypeMap[i].eType == m_eType) {
       return (TypeMap[i].pszName);
@@ -109,7 +109,7 @@ CClassInputOutputBase &CClassInputOutputBase::operator=(
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CClassInput::CClassInput(void) {}
+CClassInput::CClassInput() {}
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -122,7 +122,7 @@ CClassInput::CClassInput(const char *pszName, InputOutputType_t eType)
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CClassOutput::CClassOutput(void) {}
+CClassOutput::CClassOutput() {}
 
 //-----------------------------------------------------------------------------
 // Purpose:

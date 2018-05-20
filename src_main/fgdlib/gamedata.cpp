@@ -212,7 +212,7 @@ bool GDGetTokenDynamic(TokenReader &tr, char **ppszStore, trtoken_t ttexpecting,
 //-----------------------------------------------------------------------------
 // Purpose: Constructor.
 //-----------------------------------------------------------------------------
-GameData::GameData(void) {
+GameData::GameData() {
   m_nMaxMapCoord = 8192;
   m_nMinMapCoord = -8192;
   m_InstanceClass = NULL;
@@ -221,12 +221,12 @@ GameData::GameData(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Destructor.
 //-----------------------------------------------------------------------------
-GameData::~GameData(void) { ClearData(); }
+GameData::~GameData() { ClearData(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void GameData::ClearData(void) {
+void GameData::ClearData() {
   // delete classes.
   int nCount = m_Classes.Count();
   for (int i = 0; i < nCount; i++) {

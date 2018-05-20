@@ -4,7 +4,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-MDkeyvalue::~MDkeyvalue(void) {}
+MDkeyvalue::~MDkeyvalue() {}
 
 MDkeyvalue &MDkeyvalue::operator=(const MDkeyvalue &other) {
   V_strcpy(szKey, other.szKey);
@@ -79,13 +79,13 @@ void WCKVBase_Dict::InsertKeyValue(const MDkeyvalue &kv) {
 // Purpose: Constructor. Sets the initial size of the keyvalue array.
 //-----------------------------------------------------------------------------
 template <class Base>
-WCKeyValuesT<Base>::WCKeyValuesT(void) {}
+WCKeyValuesT<Base>::WCKeyValuesT() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor. Deletes the contents of this keyvalue array.
 //-----------------------------------------------------------------------------
 template <class Base>
-WCKeyValuesT<Base>::~WCKeyValuesT(void) {
+WCKeyValuesT<Base>::~WCKeyValuesT() {
   // int i = 0;
   // while (i < m_KeyValues.GetSize())
   //{
@@ -203,7 +203,7 @@ void WCKeyValuesT<Base>::SetValue(const char *pszKey, const char *pszValue) {
 // Purpose:
 //-----------------------------------------------------------------------------
 template <class Base>
-void WCKeyValuesT<Base>::RemoveAll(void) {
+void WCKeyValuesT<Base>::RemoveAll() {
   this->m_KeyValues.RemoveAll();
 }
 

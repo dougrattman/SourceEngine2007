@@ -56,7 +56,7 @@ const char *GDinputvariable::m_pszEmpty = "";
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-GDinputvariable::GDinputvariable(void) {
+GDinputvariable::GDinputvariable() {
   m_szDefault[0] = 0;
   m_nDefault = 0;
   m_szValue[0] = 0;
@@ -85,7 +85,7 @@ GDinputvariable::GDinputvariable(const char *szType, const char *szName) {
 //-----------------------------------------------------------------------------
 // Purpose: Destructor.
 //-----------------------------------------------------------------------------
-GDinputvariable::~GDinputvariable(void) {
+GDinputvariable::~GDinputvariable() {
   delete[] m_pszDescription;
   m_Items.RemoveAll();
 }
@@ -162,7 +162,7 @@ GDIV_TYPE GDinputvariable::GetTypeFromToken(const char *pszToken) {
 // Purpose: Returns a string representing the type of this variable, eg.
 // "integer".
 //-----------------------------------------------------------------------------
-const char *GDinputvariable::GetTypeText(void) {
+const char *GDinputvariable::GetTypeText() {
   for (int i = 0; i < sizeof(TypeMap) / sizeof(TypeMap[0]); i++) {
     if (TypeMap[i].eType == m_eType) {
       return (TypeMap[i].pszName);
@@ -532,7 +532,7 @@ void GDinputvariable::SetFlag(unsigned int uFlags, BOOL bSet) {
 //-----------------------------------------------------------------------------
 // Purpose: Sets this keyvalue to its default value.
 //-----------------------------------------------------------------------------
-void GDinputvariable::ResetDefaults(void) {
+void GDinputvariable::ResetDefaults() {
   if (m_eType == ivFlags) {
     m_nValue = 0;
 
