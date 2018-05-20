@@ -94,8 +94,8 @@ class DedicatedOsWindows : public IDedicatedOs {
 
     ch map_name[64], host_name[128];
     auto [fps, current_players_count, max_players_count] =
-        engine->GetStatus(map_name, SOURCE_ARRAYSIZE(map_name));
-    engine->GetHostname(host_name, SOURCE_ARRAYSIZE(host_name));
+        engine->GetStatus(map_name, std::size(map_name));
+    engine->GetHostname(host_name, std::size(host_name));
 
     console.SetTitle(host_name);
 

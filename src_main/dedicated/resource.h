@@ -3,4 +3,4 @@
 #include "base/include/windows/product_version.h"
 
 #define HALFLIFE_VER_FILEDESCRIPTION_STR \
-  "Awesome Half-Life 2 Dedicated Server Launcher"
+  "Awesome Half-Life 2 dedicated server library"

@@ -27,7 +27,7 @@ const ch *GetExeDirectory() {
   static ch exe_dir[SOURCE_MAX_PATH];
   exe_dir[0] = '\0';
 
-  if (!GetExeName(exe_dir, SOURCE_ARRAYSIZE(exe_dir))) return nullptr;
+  if (!GetExeName(exe_dir, std::size(exe_dir))) return nullptr;
 
   ch *slash{strrchr(exe_dir, '\\')};
   ch *reverse_slash{strrchr(exe_dir, '/')};

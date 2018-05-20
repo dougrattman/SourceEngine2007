@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
   // Figure out the directory the executable is running from and make that be
   // the current working directory
   char base_dir[SOURCE_MAX_PATH];
-  GetBaseDirectory(base_dir, SOURCE_ARRAYSIZE(base_dir));
+  GetBaseDirectory(base_dir, std::size(base_dir));
   _chdir(base_dir);
 
   // Rehook the command line through VCR mode.

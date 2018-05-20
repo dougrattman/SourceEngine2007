@@ -280,25 +280,13 @@ unsigned _stdcall RequestProc(void *arg) {
   return 0;
 }
 
-/*
-==============
-DeinitConProc
-
-==============
-*/
-void DeinitConProc(void) {
+void DeinitConProc() {
   if (heventDone) {
     SetEvent(heventDone);
   }
 }
 
-/*
-==============
-InitConProc
-
-==============
-*/
-void InitConProc(void) {
+void InitConProc() {
   unsigned threadAddr;
   HANDLE hFile = (HANDLE)0;
   HANDLE heventParent = (HANDLE)0;

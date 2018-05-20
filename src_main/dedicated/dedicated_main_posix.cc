@@ -111,7 +111,7 @@ class DedicatedOsPosix : public IDedicatedOs {
 
   uintptr_t LoadSharedLibrary(ch *so_name) override {
     ch cwd[SOURCE_MAX_PATH];
-    if (!_getcwd(cwd, SOURCE_ARRAYSIZE(cwd))) {
+    if (!_getcwd(cwd, std::size(cwd))) {
       Error("getcwd failed (%d).\n", errno);
       return 0;
     }
@@ -119,7 +119,7 @@ class DedicatedOsPosix : public IDedicatedOs {
     if (cwd[strlen(cwd) - 1] == '/') cwd[strlen(cwd) - 1] = '\0';
 
     ch so_path[SOURCE_MAX_PATH];
-    Q_snprintf(so_path, SOURCE_ARRAYSIZE(so_path), "%s/%s", cwd, so_name);
+    Q_snprintf(so_path, std::size(so_path), "%s/%s", cwd, so_name);
 
     void *handle = dlopen(so_path, RTLD_NOW);
     if (handle) return reinterpret_cast<uintptr_t>(handle);
@@ -144,7 +144,7 @@ class DedicatedOsPosix : public IDedicatedOs {
     ch text[1024];
 
     va_start(arg_list, fmt);
-    Q_vsnprintf(text, SOURCE_ARRAYSIZE(text), fmt, arg_list);
+    Q_vsnprintf(text, std::size(text), fmt, arg_list);
     va_end(arg_list);
 
     // Get Current text and append it.

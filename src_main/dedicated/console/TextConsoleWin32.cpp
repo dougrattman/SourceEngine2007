@@ -54,7 +54,7 @@ char *CTextConsoleWin32::GetLine() {
 
     if (numevents <= 0) break;
 
-    if (!ReadConsoleInput(hinput, recs, SOURCE_ARRAYSIZE(recs), &numread)) {
+    if (!ReadConsoleInput(hinput, recs, std::size(recs), &numread)) {
       Error("CTextConsoleWin32::GetLine: !ReadConsoleInput");
 
       return nullptr;
