@@ -15,9 +15,7 @@
 #include "tier3/tier3.h"
 #include "vtf/vtf.h"
 
-// We don't support the alpha channel in bink files due to dx8.  Can make it
-// work if necessary.
-//#define SUPPORT_BINK_ALPHA
+#define SUPPORT_BINK_ALPHA
 
 class CBIKMaterial;
 
@@ -99,11 +97,7 @@ class CBIKMaterialCbTextureRegenerator : public ITextureRegenerator {
   int m_nSourceHeight;
 };
 
-//-----------------------------------------------------------------------------
-//
 // Class used to associated BIK files with IMaterials
-//
-//-----------------------------------------------------------------------------
 class CBIKMaterial {
  public:
   CBIKMaterial();
@@ -185,9 +179,7 @@ class CBIKMaterial {
   CBIKMaterialCbTextureRegenerator m_CbTextureRegenerator;
 };
 
-//-----------------------------------------------------------------------------
 // Inherited from ITextureRegenerator
-//-----------------------------------------------------------------------------
 void CBIKMaterialYTextureRegenerator::RegenerateTextureBits(
     ITexture *pTexture, IVTFTexture *pVTFTexture, Rect_t *pRect) {
   // Error condition
@@ -198,9 +190,9 @@ void CBIKMaterialYTextureRegenerator::RegenerateTextureBits(
     return;
   }
 
-  unsigned char *pYData = (unsigned char *)m_pBIKMaterial->m_buffers
-                              .Frames[m_pBIKMaterial->m_buffers.FrameNum]
-                              .YPlane.Buffer;
+  u8 *pYData =
+      (u8 *)m_pBIKMaterial->m_buffers.Frames[m_pBIKMaterial->m_buffers.FrameNum]
+          .YPlane.Buffer;
 
   Assert(pVTFTexture->Format() == IMAGE_FORMAT_I8);
   Assert(pVTFTexture->RowSizeInBytes(0) == pVTFTexture->Width());
@@ -225,20 +217,22 @@ void CBIKMaterialYTextureRegenerator::RegenerateTextureBits(
 void CBIKMaterialYTextureRegenerator::Release() {}
 
 #ifdef SUPPORT_BINK_ALPHA
-//-----------------------------------------------------------------------------
+
 // Inherited from ITextureRegenerator
-//-----------------------------------------------------------------------------
 void CBIKMaterialATextureRegenerator::RegenerateTextureBits(
     ITexture *pTexture, IVTFTexture *pVTFTexture, Rect_t *pRect) {
+  u8 *pAData;
+  int nWidth, nHeight, y;
+
   // Error condition
   if ((pVTFTexture->FrameCount() > 1) || (pVTFTexture->FaceCount() > 1) ||
       (pVTFTexture->MipCount() > 1) || (pVTFTexture->Depth() > 1)) {
     goto BIKMaterialError;
   }
 
-  unsigned char *pAData = (unsigned char *)m_pBIKMaterial->m_buffers
-                              .Frames[m_pBIKMaterial->m_buffers.FrameNum]
-                              .APlane.Buffer;
+  pAData =
+      (u8 *)m_pBIKMaterial->m_buffers.Frames[m_pBIKMaterial->m_buffers.FrameNum]
+          .APlane.Buffer;
 
   Assert(pVTFTexture->Format() == IMAGE_FORMAT_I8);
   Assert(pVTFTexture->RowSizeInBytes(0) == pVTFTexture->Width());
@@ -250,9 +244,8 @@ void CBIKMaterialATextureRegenerator::RegenerateTextureBits(
   pixelWriter.SetPixelMemory(pVTFTexture->Format(), pVTFTexture->ImageData(),
                              pVTFTexture->RowSizeInBytes(0));
 
-  int nWidth = m_nSourceWidth;
-  int nHeight = m_nSourceHeight;
-  int y;
+  nWidth = m_nSourceWidth;
+  nHeight = m_nSourceHeight;
   if (pAData) {
     for (y = 0; y < nHeight; ++y) {
       pixelWriter.Seek(0, y);
@@ -277,9 +270,7 @@ BIKMaterialError:
 void CBIKMaterialATextureRegenerator::Release() {}
 #endif
 
-//-----------------------------------------------------------------------------
 // Inherited from ITextureRegenerator
-//-----------------------------------------------------------------------------
 void CBIKMaterialCrTextureRegenerator::RegenerateTextureBits(
     ITexture *pTexture, IVTFTexture *pVTFTexture, Rect_t *pRect) {
   // Error condition
@@ -290,9 +281,9 @@ void CBIKMaterialCrTextureRegenerator::RegenerateTextureBits(
     return;
   }
 
-  unsigned char *pCrData = (unsigned char *)m_pBIKMaterial->m_buffers
-                               .Frames[m_pBIKMaterial->m_buffers.FrameNum]
-                               .cRPlane.Buffer;
+  u8 *pCrData =
+      (u8 *)m_pBIKMaterial->m_buffers.Frames[m_pBIKMaterial->m_buffers.FrameNum]
+          .cRPlane.Buffer;
 
   Assert(pVTFTexture->Format() == IMAGE_FORMAT_I8);
   Assert(pVTFTexture->RowSizeInBytes(0) == pVTFTexture->Width());
@@ -329,9 +320,9 @@ void CBIKMaterialCbTextureRegenerator::RegenerateTextureBits(
     return;
   }
 
-  unsigned char *pCbData = (unsigned char *)m_pBIKMaterial->m_buffers
-                               .Frames[m_pBIKMaterial->m_buffers.FrameNum]
-                               .cBPlane.Buffer;
+  u8 *pCbData =
+      (u8 *)m_pBIKMaterial->m_buffers.Frames[m_pBIKMaterial->m_buffers.FrameNum]
+          .cBPlane.Buffer;
 
   Assert(pVTFTexture->Format() == IMAGE_FORMAT_I8);
   Assert(pVTFTexture->RowSizeInBytes(0) == pVTFTexture->Width());
@@ -359,19 +350,18 @@ void CBIKMaterialCbTextureRegenerator::Release() {}
 // Constructor
 //-----------------------------------------------------------------------------
 CBIKMaterial::CBIKMaterial() {
-  m_pHBINK = NULL;
-  Q_memset(&m_buffers, 0, sizeof(m_buffers));
+  m_pHBINK = nullptr;
+  memset(&m_buffers, 0, sizeof(m_buffers));
 }
 
-//-----------------------------------------------------------------------------
 // Initializes the material
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 bool CBIKMaterial::Init(const char *pMaterialName, const char *pFileName,
                         const char *pPathID) {
   // Determine the full path name of the BIK
-  char pBIKFileName[512];
-  char pFullBIKFileName[512];
-  Q_snprintf(pBIKFileName, sizeof(pBIKFileName), "%s", pFileName);
+  char pBIKFileName[SOURCE_MAX_PATH];
+  char pFullBIKFileName[SOURCE_MAX_PATH];
+  sprintf_s(pBIKFileName, "%s", pFileName);
   Q_DefaultExtension(pBIKFileName, ".bik", sizeof(pBIKFileName));
   if (!g_pFullFileSystem->RelativePathToFullPath(
           pBIKFileName, pPathID, pFullBIKFileName, sizeof(pFullBIKFileName))) {
@@ -422,22 +412,19 @@ bool CBIKMaterial::Init(const char *pMaterialName, const char *pFileName,
   return true;
 }
 
-void CBIKMaterial::Shutdown(void) {
+void CBIKMaterial::Shutdown() {
   DestroyVideoStream();
   DestroyProceduralMaterial();
   DestroyProceduralTextures();
 
   if (m_pHBINK) {
     BinkClose(m_pHBINK);
-    m_pHBINK = NULL;
+    m_pHBINK = nullptr;
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Updates our scene
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
-bool CBIKMaterial::Update(void) {
+bool CBIKMaterial::Update() {
   // Decompress this frame
   BinkDoFrame(m_pHBINK);
 
@@ -467,17 +454,13 @@ bool CBIKMaterial::Update(void) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Returns the material
-//-----------------------------------------------------------------------------
 IMaterial *CBIKMaterial::GetMaterial() { return m_Material; }
 
-//-----------------------------------------------------------------------------
 // Returns the texcoord range
-//-----------------------------------------------------------------------------
 void CBIKMaterial::GetTexCoordRange(float *pMaxU, float *pMaxV) {
   // Must have a luminosity channel
-  if (m_TextureY == NULL) {
+  if (m_TextureY == nullptr) {
     *pMaxU = *pMaxV = 1.0f;
     return;
   }
@@ -490,19 +473,15 @@ void CBIKMaterial::GetTexCoordRange(float *pMaxU, float *pMaxV) {
   *pMaxV = (float)m_nBIKHeight / (float)nTextureHeight;
 }
 
-//-----------------------------------------------------------------------------
 // Returns the frame size of the BIK (stored in a subrect of the material
 // itself)
-//-----------------------------------------------------------------------------
 void CBIKMaterial::GetFrameSize(int *pWidth, int *pHeight) {
   *pWidth = m_nBIKWidth;
   *pHeight = m_nBIKHeight;
 }
 
-//-----------------------------------------------------------------------------
 // Computes a power of two at least as big as the passed-in number
-//-----------------------------------------------------------------------------
-static inline int ComputeGreaterPowerOfTwo(int n) {
+static inline constexpr int ComputeGreaterPowerOfTwo(int n) {
   int i = 1;
   while (i < n) {
     i <<= 1;
@@ -510,41 +489,37 @@ static inline int ComputeGreaterPowerOfTwo(int n) {
   return i;
 }
 
-//-----------------------------------------------------------------------------
 // Initializes, shuts down the procedural texture
-//-----------------------------------------------------------------------------
 void CBIKMaterial::CreateProceduralTextures(const char *pTextureName) {
-  int nWidth, nHeight;
-
   char textureName[SOURCE_MAX_PATH];
-  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
+  strcpy_s(textureName, pTextureName);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "Y", SOURCE_MAX_PATH);
+  strcat_s(textureName, "Y");
 
   unsigned int nTextureFlags =
       (TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT | TEXTUREFLAGS_NOMIP |
        TEXTUREFLAGS_PROCEDURAL | TEXTUREFLAGS_SINGLECOPY | TEXTUREFLAGS_NOLOD);
 
   // Choose power-of-two textures which are at least as big as the BIK
-  nWidth = ComputeGreaterPowerOfTwo(m_buffers.YABufferWidth);
-  nHeight = ComputeGreaterPowerOfTwo(m_buffers.YABufferHeight);
+  int nWidth = ComputeGreaterPowerOfTwo(m_buffers.YABufferWidth);
+  int nHeight = ComputeGreaterPowerOfTwo(m_buffers.YABufferHeight);
   m_TextureY.InitProceduralTexture(textureName, "bik", nWidth, nHeight,
                                    IMAGE_FORMAT_I8, nTextureFlags);
   m_TextureY->SetTextureRegenerator(&m_YTextureRegenerator);
 
 #ifdef SUPPORT_BINK_ALPHA
-  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
+  strcpy_s(textureName, pTextureName);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "A", SOURCE_MAX_PATH);
+  strcat_s(textureName, "A");
 
   m_TextureA.InitProceduralTexture(textureName, "bik", nWidth, nHeight,
                                    IMAGE_FORMAT_I8, nTextureFlags);
   m_TextureA->SetTextureRegenerator(&m_ATextureRegenerator);
 #endif
 
-  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
+  strcpy_s(textureName, pTextureName);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "Cr", SOURCE_MAX_PATH);
+  strcat_s(textureName, "Cr");
 
   nWidth = ComputeGreaterPowerOfTwo(m_buffers.cRcBBufferWidth);
   nHeight = ComputeGreaterPowerOfTwo(m_buffers.cRcBBufferHeight);
@@ -552,9 +527,9 @@ void CBIKMaterial::CreateProceduralTextures(const char *pTextureName) {
                                     IMAGE_FORMAT_I8, nTextureFlags);
   m_TextureCr->SetTextureRegenerator(&m_CrTextureRegenerator);
 
-  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
+  strcpy_s(textureName, pTextureName);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "Cb", SOURCE_MAX_PATH);
+  strcat_s(textureName, "Cb");
 
   m_TextureCb.InitProceduralTexture(textureName, "bik", nWidth, nHeight,
                                     IMAGE_FORMAT_I8, nTextureFlags);
@@ -563,7 +538,7 @@ void CBIKMaterial::CreateProceduralTextures(const char *pTextureName) {
 
 void CBIKMaterial::DestroyProceduralTexture(CTextureReference &texture) {
   if (texture) {
-    texture->SetTextureRegenerator(NULL);
+    texture->SetTextureRegenerator(nullptr);
     texture.Shutdown(true);
   }
 }
@@ -577,14 +552,12 @@ void CBIKMaterial::DestroyProceduralTextures() {
   DestroyProceduralTexture(m_TextureCb);
 }
 
-//-----------------------------------------------------------------------------
 // Initializes, shuts down the procedural material
-//-----------------------------------------------------------------------------
 void CBIKMaterial::CreateProceduralMaterial(const char *pMaterialName) {
-  // TODO(d.rattman): gak, this is backwards.  Why doesn't the material just see that it
-  // has a funky basetexture?
-  char vmtfilename[512];
-  Q_strcpy(vmtfilename, pMaterialName);
+  // TODO(d.rattman): gak, this is backwards.  Why doesn't the material just see
+  // that it has a funky basetexture?
+  char vmtfilename[SOURCE_MAX_PATH];
+  strcpy_s(vmtfilename, pMaterialName);
   Q_SetExtension(vmtfilename, ".vmt", sizeof(vmtfilename));
 
   KeyValues *pVMTKeyValues = new KeyValues("Bik");
@@ -616,14 +589,12 @@ void CBIKMaterial::DestroyProceduralMaterial() {
 
   // Now be sure to free that material because we don't want to reference it
   // again later, we'll recreate it!
-  if (pMaterial != NULL) {
+  if (pMaterial != nullptr) {
     pMaterial->DeleteIfUnreferenced();
   }
 }
 
-//-----------------------------------------------------------------------------
 // Sets the current time
-//-----------------------------------------------------------------------------
 void CBIKMaterial::SetTime(float flTime) {
   Assert(0);
   BinkDoFrame(m_pHBINK);
@@ -635,16 +606,12 @@ void CBIKMaterial::SetTime(float flTime) {
   m_TextureCb->Download();
 }
 
-//-----------------------------------------------------------------------------
 // Returns the frame rate of the BIK
-//-----------------------------------------------------------------------------
 int CBIKMaterial::GetFrameRate() { return m_nFrameRate; }
 
 int CBIKMaterial::GetFrameCount() { return m_nFrameCount; }
 
-//-----------------------------------------------------------------------------
 // Sets the frame for an BIK material (use instead of SetTime)
-//-----------------------------------------------------------------------------
 void CBIKMaterial::SetFrame(float flFrame) {
   U32 iFrame = (U32)flFrame + 1;
 
@@ -659,9 +626,7 @@ void CBIKMaterial::SetFrame(float flFrame) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Initializes, shuts down the video stream
-//-----------------------------------------------------------------------------
 void CBIKMaterial::CreateVideoStream() {
   // get the frame buffers info
   BinkGetFrameBuffersInfo(m_pHBINK, &m_buffers);
@@ -723,20 +688,20 @@ void CBIKMaterial::DestroyVideoStream() {
         m_buffers.Frames[i].YPlane.Buffer) {
       // now allocate the pointer
       MemAlloc_FreeAligned(m_buffers.Frames[i].YPlane.Buffer);
-      m_buffers.Frames[i].YPlane.Buffer = NULL;
+      m_buffers.Frames[i].YPlane.Buffer = nullptr;
     }
     if (m_buffers.Frames[i].cRPlane.Allocate &&
         m_buffers.Frames[i].cRPlane.Buffer) {
       // now allocate the pointer
       MemAlloc_FreeAligned(m_buffers.Frames[i].cRPlane.Buffer);
-      m_buffers.Frames[i].cRPlane.Buffer = NULL;
+      m_buffers.Frames[i].cRPlane.Buffer = nullptr;
     }
 
     if (m_buffers.Frames[i].cBPlane.Allocate &&
         m_buffers.Frames[i].cBPlane.Buffer) {
       // now allocate the pointer
       MemAlloc_FreeAligned(m_buffers.Frames[i].cBPlane.Buffer);
-      m_buffers.Frames[i].cBPlane.Buffer = NULL;
+      m_buffers.Frames[i].cBPlane.Buffer = nullptr;
     }
 
 #ifdef SUPPORT_BINK_ALPHA
@@ -744,114 +709,87 @@ void CBIKMaterial::DestroyVideoStream() {
         m_buffers.Frames[i].APlane.Buffer) {
       // now allocate the pointer
       MemAlloc_FreeAligned(m_buffers.Frames[i].APlane.Buffer);
-      m_buffers.Frames[i].APlane.Buffer = NULL;
+      m_buffers.Frames[i].APlane.Buffer = nullptr;
     }
 #endif
   }
 }
 
-//-----------------------------------------------------------------------------
-//
 // Implementation of IAvi
-//
-//-----------------------------------------------------------------------------
 class CBik : public IBik {
  public:
-  CBik();
+  CBik() {}
 
   // Inherited from IAppSystem
-  virtual bool Connect(CreateInterfaceFn factory);
-  virtual void Disconnect();
-  virtual void *QueryInterface(const char *pInterfaceName);
-  virtual InitReturnVal_t Init();
-  virtual void Shutdown();
+  bool Connect(CreateInterfaceFn factory) override;
+  void Disconnect() override {}
+  void *QueryInterface(const char *pInterfaceName) override;
+  InitReturnVal_t Init() override;
+  void Shutdown() override;
 
   // Inherited from IBik
-  virtual BIKMaterial_t CreateMaterial(const char *pMaterialName,
-                                       const char *pFileName,
-                                       const char *pPathID);
-  virtual void DestroyMaterial(BIKMaterial_t hMaterial);
-  virtual bool Update(BIKMaterial_t hMaterial);
-  virtual IMaterial *GetMaterial(BIKMaterial_t hMaterial);
-  virtual void GetTexCoordRange(BIKMaterial_t hMaterial, float *pMaxU,
-                                float *pMaxV);
-  virtual void GetFrameSize(BIKMaterial_t hMaterial, int *pWidth, int *pHeight);
-  virtual int GetFrameRate(BIKMaterial_t hMaterial);
-  virtual void SetFrame(BIKMaterial_t hMaterial, float flFrame);
-  virtual int GetFrameCount(BIKMaterial_t hMaterial);
-  virtual bool SetDirectSoundDevice(void *pDevice);
+  BIKMaterial_t CreateMaterial(const char *pMaterialName, const char *pFileName,
+                               const char *pPathID) override;
+  void DestroyMaterial(BIKMaterial_t hMaterial) override;
+  bool Update(BIKMaterial_t hMaterial) override;
+  IMaterial *GetMaterial(BIKMaterial_t hMaterial) override;
+  void GetTexCoordRange(BIKMaterial_t hMaterial, float *pMaxU,
+                        float *pMaxV) override;
+  void GetFrameSize(BIKMaterial_t hMaterial, int *pWidth,
+                    int *pHeight) override;
+  int GetFrameRate(BIKMaterial_t hMaterial) override;
+  void SetFrame(BIKMaterial_t hMaterial, float flFrame) override;
+  int GetFrameCount(BIKMaterial_t hMaterial) override;
+  bool SetDirectSoundDevice(void *pDevice) override;
 
  private:
   static void *RADLINK BinkMemAlloc(U32 bytes) { return malloc(bytes); };
   static void RADLINK BinkMemFree(void PTR4 *ptr) { free(ptr); };
+
   // NOTE: Have to use pointers here since BIKMaterials inherit from
   // ITextureRegenerator The realloc screws up the pointers held to
   // ITextureRegenerators in the material system.
   CUtlLinkedList<CBIKMaterial *, BIKMaterial_t> m_BIKMaterials;
 };
 
-//-----------------------------------------------------------------------------
-// Singleton
-//-----------------------------------------------------------------------------
 static CBik g_BIK;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CBik, IBik, BIK_INTERFACE_VERSION, g_BIK);
 
-//-----------------------------------------------------------------------------
-// Constructor/destructor
-//-----------------------------------------------------------------------------
-CBik::CBik() {}
-
-//-----------------------------------------------------------------------------
-// Connect/disconnect
-//-----------------------------------------------------------------------------
 bool CBik::Connect(CreateInterfaceFn factory) {
   if (!(g_pFullFileSystem && materials)) {
     Msg("Bik failed to connect to a required system\n");
   }
+
   return (g_pFullFileSystem && materials);
 }
 
-//-----------------------------------------------------------------------------
-// Connect/disconnect
-//-----------------------------------------------------------------------------
-void CBik::Disconnect(void) {}
-
-//-----------------------------------------------------------------------------
-// Query Interface
-//-----------------------------------------------------------------------------
 void *CBik::QueryInterface(const char *pInterfaceName) {
-  if (!Q_strncmp(pInterfaceName, BIK_INTERFACE_VERSION,
-                 Q_strlen(BIK_INTERFACE_VERSION) + 1))
-    return (IBik *)this;
+  if (!strncmp(pInterfaceName, BIK_INTERFACE_VERSION,
+               strlen(BIK_INTERFACE_VERSION) + 1))
+    return implicit_cast<IBik *>(this);
 
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
-// Init/shutdown
-//-----------------------------------------------------------------------------
 InitReturnVal_t CBik::Init() {
   BinkSetMemory(BinkMemAlloc, BinkMemFree);
-
   return INIT_OK;
 }
 
 void CBik::Shutdown() {}
 
-//-----------------------------------------------------------------------------
 // Create/destroy an BIK material
-//-----------------------------------------------------------------------------
 BIKMaterial_t CBik::CreateMaterial(const char *pMaterialName,
                                    const char *pFileName, const char *pPathID) {
   BIKMaterial_t h = m_BIKMaterials.AddToTail();
   m_BIKMaterials[h] = new CBIKMaterial;
-  if (m_BIKMaterials[h]->Init(pMaterialName, pFileName, pPathID) == false) {
-    delete m_BIKMaterials[h];
-    m_BIKMaterials.Remove(h);
-    return BIKMATERIAL_INVALID;
-  }
 
-  return h;
+  if (m_BIKMaterials[h]->Init(pMaterialName, pFileName, pPathID)) return h;
+
+  delete m_BIKMaterials[h];
+  m_BIKMaterials.Remove(h);
+
+  return BIKMATERIAL_INVALID;
 }
 
 void CBik::DestroyMaterial(BIKMaterial_t h) {
@@ -862,29 +800,17 @@ void CBik::DestroyMaterial(BIKMaterial_t h) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : hMaterial -
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
 bool CBik::Update(BIKMaterial_t hMaterial) {
-  if (hMaterial == BIKMATERIAL_INVALID) return false;
-
-  return m_BIKMaterials[hMaterial]->Update();
+  return hMaterial != BIKMATERIAL_INVALID &&
+         m_BIKMaterials[hMaterial]->Update();
 }
 
-//-----------------------------------------------------------------------------
 // Gets the IMaterial associated with an BIK material
-//-----------------------------------------------------------------------------
 IMaterial *CBik::GetMaterial(BIKMaterial_t h) {
-  if (h != BIKMATERIAL_INVALID) return m_BIKMaterials[h]->GetMaterial();
-
-  return NULL;
+  return h != BIKMATERIAL_INVALID ? m_BIKMaterials[h]->GetMaterial() : nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Returns the max texture coordinate of the BIK
-//-----------------------------------------------------------------------------
 void CBik::GetTexCoordRange(BIKMaterial_t h, float *pMaxU, float *pMaxV) {
   if (h != BIKMATERIAL_INVALID) {
     m_BIKMaterials[h]->GetTexCoordRange(pMaxU, pMaxV);
@@ -893,9 +819,7 @@ void CBik::GetTexCoordRange(BIKMaterial_t h, float *pMaxU, float *pMaxV) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Returns the frame size of the BIK (is a subrect of the material itself)
-//-----------------------------------------------------------------------------
 void CBik::GetFrameSize(BIKMaterial_t h, int *pWidth, int *pHeight) {
   if (h != BIKMATERIAL_INVALID) {
     m_BIKMaterials[h]->GetFrameSize(pWidth, pHeight);
@@ -904,40 +828,23 @@ void CBik::GetFrameSize(BIKMaterial_t h, int *pWidth, int *pHeight) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Returns the frame size of the BIK (is a subrect of the material itself)
-//-----------------------------------------------------------------------------
 int CBik::GetFrameRate(BIKMaterial_t h) {
-  if (h == BIKMATERIAL_INVALID) return -1;
-
-  return m_BIKMaterials[h]->GetFrameRate();
-  ;
+  return h != BIKMATERIAL_INVALID ? m_BIKMaterials[h]->GetFrameRate() : -1;
 }
 
-//-----------------------------------------------------------------------------
 // Returns the frame rate of the BIK
-//-----------------------------------------------------------------------------
 int CBik::GetFrameCount(BIKMaterial_t h) {
-  if (h == BIKMATERIAL_INVALID) return -1;
-
-  return m_BIKMaterials[h]->GetFrameCount();
-  ;
+  return h != BIKMATERIAL_INVALID ? m_BIKMaterials[h]->GetFrameCount() : -1;
 }
 
-//-----------------------------------------------------------------------------
 // Sets the frame for an BIK material (use instead of SetTime)
-//-----------------------------------------------------------------------------
 void CBik::SetFrame(BIKMaterial_t h, float flFrame) {
   if (h != BIKMATERIAL_INVALID) {
     m_BIKMaterials[h]->SetFrame(flFrame);
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : pDevice -
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
 bool CBik::SetDirectSoundDevice(void *pDevice) {
-  return (BinkSoundUseDirectSound(pDevice) != 0);
+  return BinkSoundUseDirectSound(pDevice) != 0;
 }
