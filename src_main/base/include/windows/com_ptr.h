@@ -13,9 +13,9 @@ namespace source::windows {
 // COM pointer with automatic IID deducing from Tinterface.
 template <typename Tinterface, const IID *TIID = &__uuidof(Tinterface)>
 class com_ptr : public _com_ptr_t<_com_IIID<Tinterface, TIID>> {
-  static_assert(std::is_abstract<Tinterface>::value,
+  static_assert(std::is_abstract_v<Tinterface>,
                 "The interface should be abstract.");
-  static_assert(std::is_base_of<IUnknown, Tinterface>::value,
+  static_assert(std::is_base_of_v<IUnknown, Tinterface>,
                 "The interface should derive from IUnknown.");
 };
 }  // namespace source::windows

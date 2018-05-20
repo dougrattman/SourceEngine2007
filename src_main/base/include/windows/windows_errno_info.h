@@ -86,6 +86,10 @@ inline static const windows_errno_code windows_errno_code_ok{S_OK};
 // Success Windows errno info.
 inline static const windows_errno_info windows_errno_info_ok{
     make_windows_errno_info(windows_errno_code_ok)};
+
+// Simple wrapper for result & error.
+template <typename T>
+using windows_errno_result = std::tuple<T, windows_errno_code>;
 }  // namespace source::windows
 
 #endif  // BASE_INCLUDE_WINDOWS_WINDOWS_ERRNO_INFO_H_

@@ -3,7 +3,7 @@
 #ifndef BASE_WINDOWS_INCLUDE_SCOPED_ERROR_MODE_H_
 #define BASE_WINDOWS_INCLUDE_SCOPED_ERROR_MODE_H_
 
-#include <cstdint>
+#include "base/include/base_types.h"
 #include "base/include/windows/windows_light.h"
 
 namespace source::windows {
@@ -11,7 +11,7 @@ namespace source::windows {
 class ScopedErrorMode {
  public:
   // Set error mode to |error_mode| for scope.
-  explicit ScopedErrorMode(const UINT error_mode) noexcept
+  explicit ScopedErrorMode(const u32 error_mode) noexcept
       : old_error_mode_{SetErrorMode(GetErrorMode() | error_mode)},
         scoped_error_mode_{GetErrorMode()} {}
 
@@ -24,7 +24,7 @@ class ScopedErrorMode {
 
  private:
   // Old and scope error modes.
-  const UINT old_error_mode_, scoped_error_mode_;
+  const u32 old_error_mode_, scoped_error_mode_;
 
   ScopedErrorMode(const ScopedErrorMode& s) = delete;
   ScopedErrorMode& operator=(const ScopedErrorMode& s) = delete;

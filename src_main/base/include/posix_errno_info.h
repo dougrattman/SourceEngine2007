@@ -3,9 +3,9 @@
 #ifndef BASE_INCLUDE_POSIX_ERRNO_INFO_H_
 #define BASE_INCLUDE_POSIX_ERRNO_INFO_H_
 
-#include <cerrno>
+#include <cerrno>  // errno
 #include <cstdarg>
-#include <cstdio>
+#include <cstdio>  // sprintf_s
 #include <tuple>
 
 #include "base/include/errno_info.h"
@@ -67,6 +67,10 @@ using posix_errno_info = errno_info<posix_errno_code, char, 92, succeeded>;
 // Success POSIX errno info.
 static const posix_errno_info posix_errno_info_ok{
     make_posix_errno_info(posix_errno_code_ok)};
+
+// Simple wrapper for result & error.
+template <typename T>
+using posix_errno_result = std::tuple<T, posix_errno_code>;
 }  // namespace source
 
 #endif  // !BASE_INCLUDE_POSIX_ERRNO_INFO_H_

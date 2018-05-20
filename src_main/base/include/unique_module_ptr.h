@@ -34,7 +34,7 @@ using module_descriptor = HINSTANCE__;
 using module_descriptor = void;
 
 // Creates POSIX errno info from dlerror().
-posix_errno_info make_posix_dlerror_errno_info() noexcept {
+[[nodiscard]] posix_errno_info make_posix_dlerror_errno_info() noexcept {
   const char *last_dl_error{dlerror()};
   // TODO(d.rattman): Check dlerror sources to find way to get error code.
   posix_errno_info info = {last_dl_error == nullptr ? EOK : EXIT_FAILURE};
@@ -94,7 +94,8 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
 
 #ifdef OS_WIN
   // Loads library |library_name| and gets (unique_module_ptr, errno_info).
-  static std::tuple<unique_module_ptr, source::windows::windows_errno_info>
+  [[nodiscard]] static std::tuple<unique_module_ptr,
+                                  source::windows::windows_errno_info>
   from_load_library(_In_ const wstr &library_name) noexcept {
     const HMODULE library{LoadLibraryW(library_name.c_str())};
     return {unique_module_ptr{library},
@@ -104,7 +105,8 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
 
   // Loads library |library_name| with flags |load_flags| and gets
   // (unique_module_ptr, errno_info).
-  static std::tuple<unique_module_ptr, source::windows::windows_errno_info>
+  [[nodiscard]] static std::tuple<unique_module_ptr,
+                                  source::windows::windows_errno_info>
   from_load_library(_In_ const wstr &library_name,
                     _In_ u32 load_flags) noexcept {
     const HMODULE library{
@@ -117,8 +119,8 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
   // Gets (address, error_code) of function |function_name| in loaded library
   // module.
   template <typename T>
-  std::tuple<T, source::windows::windows_errno_info> get_address_as(
-      _In_z_ const ch *function_name) const noexcept {
+  [[nodiscard]] std::tuple<T, source::windows::windows_errno_info>
+  get_address_as(_In_z_ const ch *function_name) const noexcept {
     static_assert(source::type_traits::is_function_pointer_v<T>,
                   "The T should be a function pointer.");
     const auto address =
@@ -130,8 +132,8 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
 #elif defined(OS_POSIX)
   // Loads shared library |library_name| with flags |load_flags| and get
   // unique_module_ptr to it.
-  static std::tuple<unique_module_ptr, posix_errno_info> from_load_library(
-      const str &library_name, i32 load_flags) noexcept {
+  [[nodiscard]] static std::tuple<unique_module_ptr, posix_errno_info>
+  from_load_library(const str &library_name, i32 load_flags) noexcept {
     const void *library{dlopen(library_name.c_str(), load_flags)};
     return {unique_module_ptr{library}, library != nullptr
                                             ? posix_errno_info_ok
@@ -141,8 +143,8 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
   // Gets (address, error_code) of function |function_name| in loaded shared
   // library.
   template <typename T>
-  std::tuple<T, posix_errno_info> get_address_as(const ch *function_name) const
-      noexcept {
+  [[nodiscard]] std::tuple<T, posix_errno_info> get_address_as(
+      const ch *function_name) const noexcept {
     static_assert(source::type_traits::is_function_pointer<T>::value,
                   "The T should be a function pointer.");
     const auto address = reinterpret_cast<T>(dlsym(get(), function_name));

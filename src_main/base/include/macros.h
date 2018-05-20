@@ -175,12 +175,6 @@ constexpr inline u8 HighByte(T value) {
 // Gives you the line number in constant string form.
 #define SOURCE_LINE_AS_STRING SOURCE_HACK_LINE_AS_STRING__(__LINE__)
 
-// The SOURCE_ARRAYSIZE(arr) macro returns the # of elements in an array arr.
-// The expression is a compile-time constant, and therefore can be used in
-// defining new arrays, for example.  If you use SOURCE_ARRAYSIZE on a pointer
-// by mistake, you will get a compile-time error.
-#define SOURCE_ARRAYSIZE(array) (std::size(array))
-
 // NOTE: This macro is the same as Windows uses; so don't change the guts of it.
 // Declare handle with name |name|.
 #define SOURCE_DECLARE_POINTER_HANDLE(name) \
@@ -199,7 +193,7 @@ constexpr inline u8 HighByte(T value) {
 
 #ifdef COMPILER_MSVC
 #define SOURCE_UNIQUE_ID SOURCE_UID_CAT2(SOURCE_UID_PREFIX, __COUNTER__)
-#else  // Not COMPILER_MSVC
+#else  // !COMPILER_MSVC
 #define SOURCE_UNIQUE_ID SOURCE_UID_CAT2(SOURCE_UID_PREFIX, __LINE__)
 #endif  // COMPILER_MSVC
 

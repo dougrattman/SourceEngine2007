@@ -16,7 +16,7 @@
 namespace source::i18n {
 #ifdef OS_WIN
 // Localizes message |message_id| for the application instance |instance|.
-wstr Localize(const HINSTANCE instance, const UINT message_id) {
+[[nodiscard]] wstr Localize(const HINSTANCE instance, const UINT message_id) {
   constexpr usize kMaxMessageSize{128};
 
   wstr message;
