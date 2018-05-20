@@ -64,18 +64,15 @@ LogToCurveInfoTypeMap_t g_typeMap[] = {
 };
 
 const char *GetCurveInfoTypeFromLogType(const char *pLogType) {
-  int c = SOURCE_ARRAYSIZE(g_typeMap);
-  for (int i = 0; i < c; ++i) {
-    if (!Q_stricmp(pLogType, g_typeMap[i].pLogType))
-      return g_typeMap[i].pCurveInfoType;
+  for (const auto &type : g_typeMap) {
+    if (!Q_stricmp(pLogType, type.pLogType)) return type.pCurveInfoType;
   }
   return NULL;
 }
 
 bool IsLogLayerType(const char *pLogLayerType) {
-  int c = SOURCE_ARRAYSIZE(g_typeMap);
-  for (int i = 0; i < c; ++i) {
-    if (!Q_stricmp(pLogLayerType, g_typeMap[i].pLogLayerType)) return true;
+  for (const auto &type : g_typeMap) {
+    if (!Q_stricmp(pLogLayerType, type.pLogLayerType)) return true;
   }
   return false;
 }
