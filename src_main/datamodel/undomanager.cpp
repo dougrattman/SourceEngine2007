@@ -1,6 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "undomanager.h"
+
 #include "datamodel.h"
 
 extern CDataModel *g_pDataModelImp;
@@ -51,7 +52,7 @@ void CUndoManager::Trace(const char *fmt, ...) {
   char str[2048];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf_s(str, SOURCE_ARRAYSIZE(str) - 1, fmt, argptr);
+  vsprintf_s(str, fmt, argptr);
   va_end(argptr);
   str[sizeof(str) - 1] = 0;
 

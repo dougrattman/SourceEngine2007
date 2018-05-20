@@ -28,7 +28,7 @@ CDmElementFactoryHelper::CDmElementFactoryHelper(
 // Purpose: Returns next object in list
 // Output : CDmElementFactoryHelper
 //-----------------------------------------------------------------------------
-CDmElementFactoryHelper *CDmElementFactoryHelper::GetNext(void) {
+CDmElementFactoryHelper *CDmElementFactoryHelper::GetNext() {
   return m_pNext;
 }
 

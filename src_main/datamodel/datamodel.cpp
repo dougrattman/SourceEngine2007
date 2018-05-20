@@ -747,13 +747,13 @@ bool CDataModel::ReadDMXHeader(CUtlBuffer &inBuf, DmxHeader_t *pHeader) const {
 #ifdef _WIN32
     int nAssigned =
         sscanf_s(headerStr, "encoding %s %d format %s %d\n",
-                 pHeader->encodingName, SOURCE_ARRAYSIZE(pHeader->encodingName),
+                 pHeader->encodingName, std::size(pHeader->encodingName),
                  &(pHeader->nEncodingVersion), pHeader->formatName,
                  DMX_MAX_FORMAT_NAME_MAX_LENGTH, &(pHeader->nFormatVersion));
 #else
     int nAssigned = sscanf_s(
         headerStr, "encoding %s %d format %s %d\n", pHeader->encodingName,
-        SOURCE_ARRAYSIZE(pHeader->encodingName), &(pHeader->nEncodingVersion),
+        std::size(pHeader->encodingName), &(pHeader->nEncodingVersion),
         pHeader->formatName, &(pHeader->nFormatVersion));
 #endif
     bOk = nAssigned == 4;

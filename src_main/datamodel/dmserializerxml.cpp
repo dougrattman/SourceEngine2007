@@ -834,7 +834,7 @@ int CXMLUnserializationState::CharactersAttribute(const XMLCH *pChars,
   }
 
   // TODO(d.rattman): This totally sucks. Finish getting CUtlBuffer into the attributes.
-  char *pBuf = (char *)stackalloc(cbChars + 1);
+  char *pBuf = stack_alloc<char>(cbChars + 1);
   memcpy(pBuf, (char *)pChars, cbChars);
   pBuf[cbChars] = 0;
 

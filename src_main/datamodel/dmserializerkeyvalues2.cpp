@@ -1,6 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dmserializerkeyvalues2.h"
+
 #include <ctype.h>
 #include <climits>
 #include "DmElementFramework.h"
@@ -195,14 +196,14 @@ class CDmSerializerKeyValues2 : public IDmSerializer {
 
  private:
   enum TokenType_t {
-    TOKEN_INVALID = -1,   // A bogus token
-    TOKEN_OPEN_BRACE,     // {
-    TOKEN_CLOSE_BRACE,    // }
-    TOKEN_OPEN_BRACKET,   // [
-    TOKEN_CLOSE_BRACKET,  // ]
-    TOKEN_COMMA,          // ,
-                          //		TOKEN_STRING,			// Any
-                  //non-quoted string
+    TOKEN_INVALID = -1,      // A bogus token
+    TOKEN_OPEN_BRACE,        // {
+    TOKEN_CLOSE_BRACE,       // }
+    TOKEN_OPEN_BRACKET,      // [
+    TOKEN_CLOSE_BRACKET,     // ]
+    TOKEN_COMMA,             // ,
+                             //		TOKEN_STRING,			// Any
+                             // non-quoted string
     TOKEN_DELIMITED_STRING,  // Any quoted string
     TOKEN_INCLUDE,           // #include
     TOKEN_EOF,               // End of buffer
@@ -698,7 +699,7 @@ bool CDmSerializerKeyValues2::UnserializeElementArrayAttribute(
     // Get the element type out
     pConv = GetCStringCharConversion();
     int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pElementType = (char *)stackalloc(nLength * sizeof(char));
+    char *pElementType = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pElementType, nLength);
 
     // Use the element type to figure out if we're using a element reference or
@@ -718,7 +719,7 @@ bool CDmSerializerKeyValues2::UnserializeElementArrayAttribute(
       // Get the element type out
       pConv = GetCStringCharConversion();
       nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-      char *pElementId = (char *)stackalloc(nLength * sizeof(char));
+      char *pElementId = stack_alloc<char>(nLength);
       tokenBuf.GetDelimitedString(pConv, pElementId, nLength);
 
       DmObjectId_t id;
@@ -754,7 +755,7 @@ bool CDmSerializerKeyValues2::UnserializeAttributeValueFromToken(
   // non-delimited buffers. Sucky. There must be a better way of doing this
   const char *pBuf = (const char *)tokenBuf.Base();
   int nLength = tokenBuf.TellMaxPut();
-  char *pTemp = (char *)stackalloc(nLength + 1);
+  char *pTemp = stack_alloc<char>(nLength + 1);
 
   bool bIsString = (pAttribute->GetType() == AT_STRING) ||
                    (pAttribute->GetType() == AT_STRING_ARRAY);
@@ -872,7 +873,7 @@ bool CDmSerializerKeyValues2::UnserializeAttribute(
   if ((nAttrType == AT_OBJECTID) && !V_stricmp(pAttributeName, "id")) {
     CUtlCharConversion *pConv = GetCStringCharConversion();
     int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pElementId = (char *)stackalloc(nLength * sizeof(char));
+    char *pElementId = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pElementId, nLength);
 
     DmObjectId_t id;
@@ -902,7 +903,7 @@ bool CDmSerializerKeyValues2::UnserializeAttribute(
       // Get the attribute value out
       CUtlCharConversion *pConv = GetCStringCharConversion();
       int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-      char *pAttributeValue = (char *)stackalloc(nLength * sizeof(char));
+      char *pAttributeValue = stack_alloc<char>(nLength);
       tokenBuf.GetDelimitedString(pConv, pAttributeValue, nLength);
 
       // No string? that's ok, it means we have a NULL pointer
@@ -928,190 +929,6 @@ bool CDmSerializerKeyValues2::UnserializeAttribute(
       return false;
   }
 }
-
-/*
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : includedKeys -
-//-----------------------------------------------------------------------------
-void KeyValues::AppendIncludedKeys( CUtlVector< KeyValues * >& includedKeys )
-{
-        // Append any included keys, too...
-        int includeCount = includedKeys.Count();
-        int i;
-        for ( i = 0; i < includeCount; i++ )
-        {
-                KeyValues *kv = includedKeys[ i ];
-                Assert( kv );
-
-                KeyValues *insertSpot = this;
-                while ( insertSpot->GetNextKey() )
-                {
-                        insertSpot = insertSpot->GetNextKey();
-                }
-
-                insertSpot->SetNextKey( kv );
-        }
-}
-
-void KeyValues::ParseIncludedKeys( char const *resourceName, const char
-*filetoinclude, IBaseFileSystem* pFileSystem, const char *pPathID, CUtlVector<
-KeyValues * >& includedKeys )
-{
-        Assert( resourceName );
-        Assert( filetoinclude );
-        Assert( pFileSystem );
-        
-
-
-
-        // Load it...
-        if ( !pFileSystem )
-        {
-                return;
-        }
-
-        // Get relative subdirectory
-        char fullpath[ 512 ];
-        Q_strncpy( fullpath, resourceName, sizeof( fullpath ) );
-
-        // Strip off characters back to start or first /
-        bool done = false;
-        int len = Q_strlen( fullpath );
-        while ( !done )
-        {
-                if ( len <= 0 )
-                {
-                        break;
-                }
-                
-
-
-
-                if ( fullpath[ len - 1 ] == '\\' ||
-                         fullpath[ len - 1 ] == '/' )
-                {
-                        break;
-                }
-
-                // zero it
-                fullpath[ len - 1 ] = 0;
-                --len;
-        }
-
-        // Append included file
-        Q_strncat( fullpath, filetoinclude, sizeof( fullpath ),
-COPY_ALL_CHARACTERS );
-
-        KeyValues *newKV = new KeyValues( fullpath );
-
-        // CUtlSymbol save = s_CurrentFileSymbol;	// did that had any use
-???
-
-        newKV->UsesEscapeSequences( m_bHasEscapeSequences );	// use same
-format as parent
-
-        if ( newKV->LoadFromFile( pFileSystem, fullpath, pPathID ) )
-        {
-                includedKeys.AddToTail( newKV );
-        }
-        else
-        {
-                DevMsg( "KeyValues::ParseIncludedKeys: Couldn't load included
-keyvalue file %s\n", fullpath ); newKV->deleteThis();
-        }
-
-        // s_CurrentFileSymbol = save;
-}
-
-//-----------------------------------------------------------------------------
-// Read from a buffer...
-//-----------------------------------------------------------------------------
-bool KeyValues::LoadFromBuffer( char const *resourceName, const char *pBuffer,
-IBaseFileSystem* pFileSystem , const char *pPathID )
-{
-        char *pfile = const_cast<char *>(pBuffer);
-
-        KeyValues *pPreviousKey = NULL;
-        KeyValues *pCurrentKey = this;
-        CUtlVector< KeyValues * > includedKeys;
-        bool wasQuoted;
-        g_KeyValues2ErrorStack.SetFilename( resourceName );
-        do
-        {
-                // the first thing must be a key
-                const char *s = ReadToken( &pfile, wasQuoted );
-                
-
-
-
-                if ( !pfile || !s || *s == 0 )
-                        break;
-
-                if ( !Q_stricmp( s, "#include" ) )	// special include macro
-(not a key name)
-                {
-                        s = ReadToken( &pfile, wasQuoted );
-                        // Name of subfile to load is now in s
-
-                        if ( !s || *s == 0 )
-                        {
-                                g_KeyValues2ErrorStack.ReportError("#include is
-NULL " );
-                        }
-                        else
-                        {
-                                ParseIncludedKeys( resourceName, s, pFileSystem,
-pPathID, includedKeys );
-                        }
-
-                        continue;
-                }
-
-                if ( !pCurrentKey )
-                {
-                        pCurrentKey = new KeyValues( s );
-                        Assert( pCurrentKey );
-
-                        pCurrentKey->UsesEscapeSequences( m_bHasEscapeSequences
-); // same format has parent use
-
-                        if ( pPreviousKey )
-                        {
-                                pPreviousKey->SetNextKey( pCurrentKey );
-                        }
-                }
-                else
-                {
-                        pCurrentKey->SetName( s );
-                }
-
-                // get the '{'
-                s = ReadToken( &pfile, wasQuoted );
-
-                if ( s && *s == '{' && !wasQuoted )
-                {
-                        // header is valid so load the file
-                        pCurrentKey->RecursiveLoadFromBuffer( resourceName,
-&pfile );
-                }
-                else
-                {
-                        g_KeyValues2ErrorStack.ReportError("LoadFromBuffer:
-missing {" );
-                }
-
-                pPreviousKey = pCurrentKey;
-                pCurrentKey = NULL;
-        } while ( pfile != NULL );
-
-        AppendIncludedKeys( includedKeys );
-
-        g_KeyValues2ErrorStack.SetFilename( "" );
-
-        return true;
-}
-*/
 
 //-----------------------------------------------------------------------------
 // Unserializes a single element given the type name
@@ -1159,7 +976,7 @@ bool CDmSerializerKeyValues2::UnserializeElement(
     // First, read an attribute name
     pConv = GetCStringCharConversion();
     nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pAttributeName = (char *)stackalloc(nLength * sizeof(char));
+    char *pAttributeName = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pAttributeName, nLength);
 
     // Next, read an attribute type
@@ -1173,7 +990,7 @@ bool CDmSerializerKeyValues2::UnserializeElement(
 
     pConv = GetCStringCharConversion();
     nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-    char *pAttributeType = (char *)stackalloc(nLength * sizeof(char));
+    char *pAttributeType = stack_alloc<char>(nLength);
     tokenBuf.GetDelimitedString(pConv, pAttributeType, nLength);
     DmAttributeType_t nAttrType =
         g_pDataModel->GetAttributeTypeForName(pAttributeType);
@@ -1232,7 +1049,7 @@ bool CDmSerializerKeyValues2::UnserializeElement(
 
   pConv = GetCStringCharConversion();
   int nLength = tokenBuf.PeekDelimitedStringLength(pConv);
-  char *pTypeName = (char *)stackalloc(nLength * sizeof(char));
+  char *pTypeName = stack_alloc<char>(nLength);
   tokenBuf.GetDelimitedString(pConv, pTypeName, nLength);
 
   return UnserializeElement(buf, pTypeName, pHandle);

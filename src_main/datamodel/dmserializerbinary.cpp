@@ -1,6 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dmserializerbinary.h"
+
 #include "DmElementFramework.h"
 #include "datamodel.h"
 #include "datamodel/dmattributevar.h"
@@ -238,10 +239,8 @@ bool CDmSerializerBinary::Serialize(CUtlBuffer &outBuf, CDmElement *pRoot) {
   // only datamodel symbols will be the ones from the file
 
   unsigned short nTotalSymbols = g_pDataModelImp->GetSymbolCount();
-  UtlSymId_t *indexToSymbolMap =
-      (UtlSymId_t *)stackalloc(nTotalSymbols * sizeof(UtlSymId_t));
-  unsigned short *symbolToIndexMap =
-      (unsigned short *)stackalloc(nTotalSymbols * sizeof(unsigned short));
+  UtlSymId_t *indexToSymbolMap = stack_alloc<UtlSymId_t>(nTotalSymbols);
+  unsigned short *symbolToIndexMap = stack_alloc<unsigned short>(nTotalSymbols);
   V_memset(indexToSymbolMap, 0xff, nTotalSymbols * sizeof(UtlSymId_t));
   V_memset(symbolToIndexMap, 0xff, nTotalSymbols * sizeof(unsigned short));
 
@@ -447,7 +446,7 @@ bool CDmSerializerBinary::Unserialize(
     char stringBuf[256];
 
     nStrings = buf.GetShort();
-    symbolTable = (UtlSymId_t *)stackalloc(nStrings * sizeof(UtlSymId_t));
+    symbolTable = stack_alloc<UtlSymId_t>(nStrings);
     for (int i = 0; i < nStrings; ++i) {
       buf.GetString(stringBuf);
       symbolTable[i] = g_pDataModel->GetSymbol(stringBuf);
@@ -479,9 +478,8 @@ bool CDmSerializerBinary::UnserializeElements(
                                   idConflictResolution == CR_COPY_NEW)
                                      ? nMaxIdConflicts
                                      : 0;
-  int nBuckets = std::min(
-      0x10000, std::max(16, nExpectedIdCopyConflicts /
-                           16));  // CUtlHash can only address up to 65k buckets
+  // CUtlHash can only address up to 65k buckets
+  int nBuckets = std::min(0x10000, std::max(16, nExpectedIdCopyConflicts / 16));
   CUtlHash<DmIdPair_t> idmap(nBuckets, 0, 0, DmIdPair_t::Compare,
                              DmIdPair_t::HashKey);
 
