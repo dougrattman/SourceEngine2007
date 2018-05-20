@@ -57,7 +57,9 @@ bool CHammerApp::Create() {
 
   bool is_steam;
   char filesystem_dll_path[SOURCE_MAX_PATH];
-  if (FileSystem_GetFileSystemDLLName(filesystem_dll_path, std::size(filesystem_dll_path), is_steam) != FS_OK)
+  if (FileSystem_GetFileSystemDLLName(filesystem_dll_path,
+                                      std::size(filesystem_dll_path),
+                                      is_steam) != FS_OK)
     return false;
 
   FileSystem_SetupSteamInstallPath();
@@ -148,11 +150,8 @@ bool CHammerApp::PreInit() {
     if (FileSystem_MountContent(fsInfo) == FS_OK) {
       bDone = true;
     } else {
-      char error[512];
-      Q_snprintf(error, SOURCE_ARRAYSIZE(error), "%s",
-                 FileSystem_GetLastErrorString());
-      MessageBox(nullptr, error, "Awesome Hammer - Warning",
-                 MB_OK | MB_ICONEXCLAMATION);
+      MessageBox(nullptr, FileSystem_GetLastErrorString(),
+                 "Awesome Hammer - Warning", MB_OK | MB_ICONEXCLAMATION);
 
       if (hammer_->RequestNewConfig() == REQUEST_QUIT) return false;
     }
