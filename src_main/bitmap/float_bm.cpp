@@ -255,7 +255,7 @@ FloatBitMap_t::~FloatBitMap_t() {
   if (RGBAData) delete[] RGBAData;
 }
 
-FloatBitMap_t *FloatBitMap_t::QuarterSize(void) const {
+FloatBitMap_t *FloatBitMap_t::QuarterSize() const {
   // generate a new bitmap half on each axis
 
   FloatBitMap_t *newbm = new FloatBitMap_t(Width / 2, Height / 2);

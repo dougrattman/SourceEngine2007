@@ -24,7 +24,7 @@ void FloatBitMap_t::InitializeWithRandomPixelsFromAnotherFloatBM(
     }
 }
 
-FloatBitMap_t *FloatBitMap_t::QuarterSizeWithGaussian(void) const {
+FloatBitMap_t *FloatBitMap_t::QuarterSizeWithGaussian() const {
   // generate a new bitmap half on each axis, using a separable gaussian.
   static f32 kernel[] = {.05f, .25f, .4f, .25f, .05f};
   FloatBitMap_t *newbm = new FloatBitMap_t(Width / 2, Height / 2);
