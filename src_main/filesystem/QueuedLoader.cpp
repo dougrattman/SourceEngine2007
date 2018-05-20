@@ -162,8 +162,8 @@ class CQueuedLoader : public CTier2AppSystem<IQueuedLoader> {
     bool Less(const FileNameHandle_t &hFilenameLHS,
               const FileNameHandle_t &hFilenameRHS, void *pCtx);
   };
-  typedef CUtlSortVector<FileNameHandle_t, CResourceNameLessFunc>
-      ResourceList_t;
+  using ResourceList_t =
+      CUtlSortVector<FileNameHandle_t, CResourceNameLessFunc>;
 
   static void BuildResources(IResourcePreload *pLoader, ResourceList_t *pList,
                              double *pBuildTime);
@@ -295,7 +295,7 @@ void CQueuedLoader::BuildResources(IResourcePreload *preloader,
 
     for (int i = 0; i < resources_list->Count(); i++) {
       g_QueuedLoader.GetFilename(resources_list->Element(i), file_name,
-                                 SOURCE_ARRAYSIZE(file_name));
+                                 std::size(file_name));
 
       if (file_name[0] && !preloader->CreateResource(file_name)) {
         Warning("QueuedLoader: Failed to create resource %s\n", file_name);
@@ -327,7 +327,7 @@ void CQueuedLoader::BuildMaterialResources(IResourcePreload *preloader,
     char file_name_buffer[SOURCE_MAX_PATH];
     char *file_name =
         g_QueuedLoader.GetFilename(resources_list->Element(i), file_name_buffer,
-                                   SOURCE_ARRAYSIZE(file_name_buffer));
+                                   std::size(file_name_buffer));
 
     if (!V_stristr(file_name, "maps\\")) {
       // list is sorted, first non-cubemap marks end of relevant list
@@ -363,7 +363,7 @@ void CQueuedLoader::BuildMaterialResources(IResourcePreload *preloader,
       V_strncpy(last_file_name, file_name, sizeof(last_file_name));
       strcat_s(
           file_name,
-          &file_name_buffer[0] + SOURCE_ARRAYSIZE(file_name_buffer) - file_name,
+          &file_name_buffer[0] + std::size(file_name_buffer) - file_name,
           ".vmt");
 
       FileNameHandle_t handle = g_QueuedLoader.FindFilename(file_name);
@@ -492,7 +492,7 @@ void FinishAnonymousJob(FileJob_t *pFileJob, QueuedLoaderCallback_t pCallback,
   if (pFileJob->m_bFreeTargetAfterIO && pFileJob->m_pTargetData) {
     // free our data only
     g_pFullFileSystem->FreeOptimalReadBuffer(pFileJob->m_pTargetData);
-    pFileJob->m_pTargetData = NULL;
+    pFileJob->m_pTargetData = nullptr;
   }
 
   pFileJob->m_bClaimed = true;
@@ -580,8 +580,8 @@ bool CQueuedLoader::CResourceNameLessFunc::Less(
       const char *pNameRHS = g_QueuedLoader.GetFilename(hFilenameRHS, szNameRHS,
                                                         sizeof(szNameRHS));
 
-      bool bIsCubemapLHS = V_stristr(pNameLHS, "maps\\") != NULL;
-      bool bIsCubemapRHS = V_stristr(pNameRHS, "maps\\") != NULL;
+      bool bIsCubemapLHS = V_stristr(pNameLHS, "maps\\") != nullptr;
+      bool bIsCubemapRHS = V_stristr(pNameRHS, "maps\\") != nullptr;
       if (bIsCubemapLHS != bIsCubemapRHS) {
         return (bIsCubemapLHS == true && bIsCubemapRHS == false);
       }
@@ -794,7 +794,7 @@ bool CQueuedLoader::AddJob(const LoaderJob_t *pLoaderJob) {
   if (V_IsAbsolutePath(pLoaderJob->m_pFilename)) {
     // an absolute path is trusted, take as is
     pFullPath = (char *)pLoaderJob->m_pFilename;
-    bFileIsFromBSP = V_stristr(pFullPath, ".bsp") != NULL;
+    bFileIsFromBSP = V_stristr(pFullPath, ".bsp") != nullptr;
     bExists = true;
   } else {
     // must resolve now, all submitted paths must be absolute for proper sort
@@ -966,7 +966,7 @@ bool CQueuedLoader::ClaimAnonymousJob(const char *pFilename, void **pData,
   }
 
   // caller owns the data, regardless of how the job was setup
-  pFileJob->m_pTargetData = NULL;
+  pFileJob->m_pTargetData = nullptr;
 
   // memory has been consumed
   g_nAnonymousIOMemory -= pFileJob->m_nActualBytesRead;
@@ -1258,7 +1258,7 @@ void CQueuedLoader::GetJobRequests() {
   f64 flProgress = PROGRESS_PARSEDRESLIST;
   while (true) {
     bool bIsDone = true;
-    for (size_t i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
+    for (size_t i = 0; i < std::size(jobs); i++) {
       if (!jobs[i]->IsFinished()) {
         bIsDone = false;
         break;
@@ -1278,7 +1278,7 @@ void CQueuedLoader::GetJobRequests() {
     }
   }
 
-  for (size_t i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
+  for (size_t i = 0; i < std::size(jobs); i++) {
     jobs[i]->Release();
   }
 
@@ -1303,7 +1303,7 @@ void CQueuedLoader::AddResourceToTable(const char *pFilename) {
     return;
   }
 
-  const char *pTypeDir = NULL;
+  const char *pTypeDir = nullptr;
   const char *pName = pFilename;
   ResourcePreload_t type = RESOURCEPRELOAD_UNKNOWN;
 
@@ -1438,7 +1438,7 @@ void CQueuedLoader::EndMapLoading(bool is_abort) {
       FileJob_t *pFileJob = m_AnonymousJobs[iIndex];
       if (pFileJob->m_bFreeTargetAfterIO && pFileJob->m_pTargetData) {
         g_pFullFileSystem->FreeOptimalReadBuffer(pFileJob->m_pTargetData);
-        pFileJob->m_pTargetData = NULL;
+        pFileJob->m_pTargetData = nullptr;
       }
       g_nAnonymousIOMemory -= pFileJob->m_nActualBytesRead;
       iIndex = m_AnonymousJobs.Next(iIndex);

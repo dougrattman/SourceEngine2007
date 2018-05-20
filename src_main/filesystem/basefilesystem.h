@@ -91,7 +91,7 @@ class CWhitelistSpecs {
   IFileList *m_pWantCRCList;
   IFileList *m_pAllowFromDiskList;
 };
-typedef CThreadSafeRefCountedObject<CWhitelistSpecs *> CWhitelistHolder;
+using CWhitelistHolder = CThreadSafeRefCountedObject<CWhitelistSpecs *>;
 
 class CFileHandle {
  public:
@@ -254,24 +254,23 @@ class CZipPackFile : public CPackFile {
  protected:
 #pragma pack(1)
 
-  typedef struct {
+  struct packfile64_t {
     char name[112];
     int64_t filepos;
     int64_t filelen;
-  } packfile64_t;
+  };
 
-  typedef struct {
+  struct packheader64_t {
     char id[4];
     int64_t dirofs;
     int64_t dirlen;
-  } packheader64_t;
+  };
 
-  typedef struct {
+  struct packappenededheader_t {
     char id[8];
     int64_t packheaderpos;
     int64_t originalfilesize;
-  } packappenededheader_t;
-
+  };
 #pragma pack()
 
   // A Pack file directory entry:
@@ -337,7 +336,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   friend class CFileTracker;
   friend class CFileOpenInfo;
 
-  typedef CTier1AppSystem<IFileSystem> BaseClass;
+  using BaseClass = CTier1AppSystem<IFileSystem>;
 
  public:
   CBaseFileSystem();
@@ -359,7 +358,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
                             const char *pathID);
   virtual FileHandle_t OpenEx(const char *pFileName, const char *pOptions,
                               unsigned flags = 0, const char *pathID = 0,
-                              char **ppszResolvedFilename = NULL);
+                              char **ppszResolvedFilename = nullptr);
   virtual void Close(FileHandle_t);
   virtual void Seek(FileHandle_t file, int pos, FileSystemSeek_t method);
   virtual unsigned int Tell(FileHandle_t file);
@@ -381,7 +380,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   // Reads/writes files to utlbuffers
   virtual bool ReadFile(const char *pFileName, const char *pPath,
                         CUtlBuffer &buf, int nMaxBytes, int nStartingByte,
-                        FSAllocFunc_t pfnAlloc = NULL);
+                        FSAllocFunc_t pfnAlloc = nullptr);
   virtual bool WriteFile(const char *pFileName, const char *pPath,
                          CUtlBuffer &buf);
   virtual bool UnzipFile(const char *pFileName, const char *pPath,
@@ -389,9 +388,10 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   virtual int ReadFileEx(const char *pFileName, const char *pPath, void **ppBuf,
                          bool bNullTerminate, bool bOptimalAlloc,
                          int nMaxBytes = 0, int nStartingByte = 0,
-                         FSAllocFunc_t pfnAlloc = NULL);
+                         FSAllocFunc_t pfnAlloc = nullptr);
   virtual bool ReadToBuffer(FileHandle_t hFile, CUtlBuffer & buf,
-                            int nMaxBytes = 0, FSAllocFunc_t pfnAlloc = NULL);
+                            int nMaxBytes = 0,
+                            FSAllocFunc_t pfnAlloc = nullptr);
 
   // Optimal buffer
   bool GetOptimalIOConstraints(FileHandle_t hFile, unsigned *pOffsetAlign,
@@ -437,10 +437,11 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
 
   virtual void MarkPathIDByRequestOnly(const char *pPathID, bool bRequestOnly);
 
-  virtual bool FileExists(const char *pFileName, const char *pPathID = NULL);
-  virtual long GetFileTime(const char *pFileName, const char *pPathID = NULL);
+  virtual bool FileExists(const char *pFileName, const char *pPathID = nullptr);
+  virtual long GetFileTime(const char *pFileName,
+                           const char *pPathID = nullptr);
   virtual bool IsFileWritable(char const *pFileName,
-                              const char *pPathID = NULL);
+                              const char *pPathID = nullptr);
   virtual bool SetFileWritable(char const *pFileName, bool writable,
                                const char *pPathID = 0);
   virtual void FileTimeToString(char *pString, size_t maxChars, long fileTime);
@@ -487,7 +488,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   virtual void InstallDirtyDiskReportFunc(FSDirtyDiskReportFunc_t func);
 
   // Returns the file system statistics retreived by the implementation.
-  // Returns NULL if not supported.
+  // Returns nullptr if not supported.
   virtual const FileSystemStatistics *GetFilesystemStatistics();
 
   // Load dlls
@@ -503,7 +504,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
                                             FSAsyncControl_t *pControls);
   virtual FSAsyncStatus_t AsyncReadMultipleCreditAlloc(
       const FileAsyncRequest_t *pRequests, int nRequests, const char *pszFile,
-      int line, FSAsyncControl_t *phControls = NULL);
+      int line, FSAsyncControl_t *phControls = nullptr);
   virtual FSAsyncStatus_t AsyncFinish(FSAsyncControl_t hControl, bool wait);
   virtual FSAsyncStatus_t AsyncGetResult(FSAsyncControl_t hControl,
                                          void **ppData, int *pSize);
@@ -550,7 +551,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   virtual const char *RelativePathToFullPath(
       const char *pFileName, const char *pPathID, char *pFullPath,
       int fullPathBufferSize, PathTypeFilter_t pathFilter = FILTER_NONE,
-      PathTypeQuery_t *pPathType = NULL);
+      PathTypeQuery_t *pPathType = nullptr);
 
   // Returns the search path, each path is separated by ;s. Returns the length
   // of the string returned
@@ -893,7 +894,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   void (*m_pfnWarning)(const char *fmt, ...);
 
   FILE *Trace_FOpen(const char *filename, const char *options, unsigned flags,
-                    int64_t *size, CFileLoadInfo *pInfo = NULL);
+                    int64_t *size, CFileLoadInfo *pInfo = nullptr);
   void Trace_FClose(FILE * fp);
   void Trace_FRead(int size, FILE *file);
   void Trace_FWrite(int size, FILE *file);
@@ -924,7 +925,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   // FindFile on them. Returns the first successful result, if any.
   FileHandle_t FindFileInSearchPaths(
       const char *pFileName, const char *pOptions, const char *pathID,
-      unsigned flags, char **ppszResolvedFilename = NULL,
+      unsigned flags, char **ppszResolvedFilename = nullptr,
       bool bTrackCRCs = false);
 
   bool HandleOpenFromZipFile(CFileOpenInfo & openInfo);
@@ -933,7 +934,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
 
   FileHandle_t FindFile(const CSearchPath *path, const char *pFileName,
                         const char *pOptions, unsigned flags,
-                        char **ppszResolvedFilename = NULL,
+                        char **ppszResolvedFilename = nullptr,
                         bool bTrackCRCs = false);
   int FastFindFile(const CSearchPath *path, const char *pFileName);
   long FastFileTime(const CSearchPath *path, const char *pFileName);
@@ -950,7 +951,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   // Opens a file for read or write
   FileHandle_t OpenForRead(const char *pFileName, const char *pOptions,
                            unsigned flags, const char *pathID,
-                           char **ppszResolvedFilename = NULL);
+                           char **ppszResolvedFilename = nullptr);
   FileHandle_t OpenForWrite(const char *pFileName, const char *pOptions,
                             const char *pathID);
   CSearchPath *FindWritePath(const char *pFilename, const char *pathID);
@@ -1073,7 +1074,7 @@ inline CPackFileHandle::~CPackFileHandle() {
   --m_pOwner->m_nOpenFiles;
   if (m_pOwner->m_nOpenFiles == 0 && m_pOwner->m_bIsMapPath) {
     m_pOwner->m_fs->Trace_FClose(m_pOwner->m_hPackFileHandle);
-    m_pOwner->m_hPackFileHandle = NULL;
+    m_pOwner->m_hPackFileHandle = nullptr;
   }
   m_pOwner->Release();
   m_pOwner->m_mutex.Unlock();
@@ -1094,8 +1095,8 @@ inline int64_t CPackFileHandle::AbsoluteBaseOffset() {
 // Pack file implementation:
 inline CPackFile::CPackFile() {
   m_FileLength = 0;
-  m_hPackFileHandle = NULL;
-  m_fs = NULL;
+  m_hPackFileHandle = nullptr;
+  m_fs = nullptr;
   m_nBaseOffset = 0;
   m_bIsMapPath = false;
   m_lPackFileTime = 0L;
@@ -1110,7 +1111,7 @@ inline CPackFile::~CPackFile() {
 
   if (m_hPackFileHandle) {
     m_fs->FS_fclose(m_hPackFileHandle);
-    m_hPackFileHandle = NULL;
+    m_hPackFileHandle = nullptr;
   }
 
   m_fs->m_ZipFiles.FindAndRemove(this);
@@ -1135,7 +1136,7 @@ class CAutoBlockReporter {
   CAutoBlockReporter(CBaseFileSystem *fs, bool synchronous, FileHandle_t handle,
                      int eBlockType, int nTypeOfAccess)
       : m_pFS(fs),
-        m_Item(eBlockType, NULL, 0.0f, nTypeOfAccess),
+        m_Item(eBlockType, nullptr, 0.0f, nTypeOfAccess),
         m_bSynchronous(synchronous) {
     Assert(m_pFS);
     char name[512];

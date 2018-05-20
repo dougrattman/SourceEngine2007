@@ -3056,7 +3056,7 @@ bool CBaseFileSystem::ShouldGameReloadFile(const char *pFilename) {
 
   FileInfo *fileInfos[256];
   int nFileInfos = m_FileTracker.GetFileInfos(
-      fileInfos, SOURCE_ARRAYSIZE(fileInfos), pFilename);
+      fileInfos, std::size(fileInfos), pFilename);
   if (nFileInfos == 0) {
     // Ain't heard of this file. It probably came from a BSP or a pak file.
     if (m_WhitelistSpewFlags & WHITELIST_SPEW_DONT_RELOAD_FILES) {
@@ -3324,7 +3324,7 @@ void CBaseFileSystem::FileTimeToString(char *pString,
   time_t the_time = file_time;
   char time_string[32];
 
-  if (!ctime_s(time_string, SOURCE_ARRAYSIZE(time_string), &the_time)) {
+  if (!ctime_s(time_string, std::size(time_string), &the_time)) {
     strcpy_s(pString, maxCharsIncludingTerminator, time_string);
   }
 }
@@ -3877,7 +3877,7 @@ void CBaseFileSystem::RemoveFile(char const *pRelativePath,
   }
 
   const int unlink_code{_unlink(file_path)};
-  if (unlink_code != EOK) {
+  if (unlink_code != source::posix_errno_code_ok) {
     Warning(FILESYSTEM_WARNING, "Unable to remove file %s: %s.\n", file_path,
             source::posix_errno_info_last_error().description);
   }
@@ -3933,7 +3933,7 @@ bool CBaseFileSystem::RenameFile(char const *pOldPath, char const *pNewPath,
 
   // Now copy the file over
   const int rename_code{rename(szScratchFileName, pNewFileName)};
-  if (rename_code != EOK) {
+  if (rename_code != source::posix_errno_code_ok) {
     Warning(FILESYSTEM_WARNING, "Unable to rename file %s to %s: %s.\n",
             szScratchFileName, pNewFileName,
             source::posix_errno_info_last_error().description);
@@ -4317,8 +4317,8 @@ bool CBaseFileSystem::GetFileTypeForFullPath(char const *pFullPath,
 #ifndef OS_POSIX
   wchar_t unc_path[512];
   ::MultiByteToWideChar(CP_UTF8, 0, pFullPath, -1, unc_path,
-                        SOURCE_ARRAYSIZE(unc_path));
-  unc_path[SOURCE_ARRAYSIZE(unc_path)] = L'\0';
+                        std::size(unc_path));
+  unc_path[std::size(unc_path)] = L'\0';
 
   SHFILEINFOW info{0};
   DWORD_PTR return_code =
@@ -4330,7 +4330,7 @@ bool CBaseFileSystem::GetFileTypeForFullPath(char const *pFullPath,
 #endif
 
   char ext[32];
-  Q_ExtractFileExtension(pFullPath, ext, SOURCE_ARRAYSIZE(ext));
+  Q_ExtractFileExtension(pFullPath, ext, std::size(ext));
   _snwprintf_s(buf, buffer_size_in_words, buffer_size_in_words - 1, L".%S",
                ext);
   return false;

@@ -59,46 +59,46 @@ class CFileSystem_Steam : public CBaseFileSystem {
   ~CFileSystem_Steam();
 
   // Methods of IAppSystem
-  virtual InitReturnVal_t Init();
-  virtual void Shutdown();
-  virtual void *QueryInterface(const char *pInterfaceName);
+  InitReturnVal_t Init() override;
+  void Shutdown() override;
+  void *QueryInterface(const char *pInterfaceName) override;
 
   // Higher level filesystem methods requiring specific behavior
-  virtual void GetLocalCopy(const char *pFileName);
-  virtual int HintResourceNeed(const char *hintlist, int forgetEverything);
-  virtual CSysModule *LoadModule(const char *pFileName, const char *pPathID,
-                                 bool bValidatedDllOnly);
-  virtual bool IsFileImmediatelyAvailable(const char *pFileName);
+  void GetLocalCopy(const char *pFileName) override;
+  int HintResourceNeed(const char *hintlist, int forgetEverything) override;
+  CSysModule *LoadModule(const char *pFileName, const char *pPathID,
+                         bool bValidatedDllOnly) override;
+  bool IsFileImmediatelyAvailable(const char *pFileName) override;
 
   // resource waiting
-  virtual WaitForResourcesHandle_t WaitForResources(const char *resourcelist);
-  virtual bool GetWaitForResourcesProgress(WaitForResourcesHandle_t handle,
-                                           float *progress /* out */,
-                                           bool *complete /* out */);
-  virtual void CancelWaitForResources(WaitForResourcesHandle_t handle);
-  virtual bool IsSteam() const { return true; }
-  virtual FilesystemMountRetval_t MountSteamContent(int nExtraAppId = -1);
+  WaitForResourcesHandle_t WaitForResources(const char *resourcelist) override;
+  bool GetWaitForResourcesProgress(WaitForResourcesHandle_t handle,
+                                   float *progress /* out */,
+                                   bool *complete /* out */) override;
+  void CancelWaitForResources(WaitForResourcesHandle_t handle) override;
+  bool IsSteam() const override { return true; }
+  FilesystemMountRetval_t MountSteamContent(int nExtraAppId = -1) override;
 
  protected:
   // implementation of CBaseFileSystem virtual functions
-  virtual FILE *FS_fopen(const char *filename, const char *options,
-                         unsigned flags, __int64 *size, CFileLoadInfo *pInfo);
-  virtual void FS_setbufsize(FILE *fp, unsigned nBytes);
-  virtual void FS_fclose(FILE *fp);
-  virtual void FS_fseek(FILE *fp, __int64 pos, int seekType);
-  virtual long FS_ftell(FILE *fp);
-  virtual int FS_feof(FILE *fp);
-  virtual size_t FS_fread(void *dest, size_t destSize, size_t size, FILE *fp);
-  virtual size_t FS_fwrite(const void *src, size_t size, FILE *fp);
-  virtual size_t FS_vfprintf(FILE *fp, const char *fmt, va_list list);
-  virtual int FS_ferror(FILE *fp);
-  virtual int FS_fflush(FILE *fp);
-  virtual char *FS_fgets(char *dest, int destSize, FILE *fp);
-  virtual int FS_stat(const char *path, struct _stat *buf);
-  virtual int FS_chmod(const char *path, int pmode);
-  virtual HANDLE FS_FindFirstFile(const char *findname, WIN32_FIND_DATA *dat);
-  virtual bool FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat);
-  virtual bool FS_FindClose(HANDLE handle);
+  FILE *FS_fopen(const char *filename, const char *options, unsigned flags,
+                 __int64 *size, CFileLoadInfo *pInfo) override;
+  void FS_setbufsize(FILE *fp, unsigned nBytes) override;
+  void FS_fclose(FILE *fp) override;
+  void FS_fseek(FILE *fp, __int64 pos, int seekType) override;
+  int64_t FS_ftell(FILE *fp) override;
+  int FS_feof(FILE *fp) override;
+  size_t FS_fread(void *dest, size_t destSize, size_t size, FILE *fp) override;
+  size_t FS_fwrite(const void *src, size_t size, FILE *fp) override;
+  size_t FS_vfprintf(FILE *fp, const char *fmt, va_list list) override;
+  int FS_ferror(FILE *fp) override;
+  int FS_fflush(FILE *fp) override;
+  char *FS_fgets(char *dest, int destSize, FILE *fp) override;
+  int FS_stat(const char *path, struct _stat *buf) override;
+  int FS_chmod(const char *path, int pmode) override;
+  HANDLE FS_FindFirstFile(const char *findname, WIN32_FIND_DATA *dat) override;
+  bool FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) override;
+  bool FS_FindClose(HANDLE handle) override;
 
  private:
   bool IsFileInSteamCache(const char *file);
@@ -122,7 +122,7 @@ class CFileSystem_Steam : public CBaseFileSystem {
 //-----------------------------------------------------------------------------
 static CFileSystem_Steam g_FileSystem_Steam;
 #if defined(_WIN32) && defined(DEDICATED)
-CBaseFileSystem *BaseFileSystem_Steam(void) { return &g_FileSystem_Steam; }
+CBaseFileSystem *BaseFileSystem_Steam() { return &g_FileSystem_Steam; }
 #endif
 
 #ifdef DEDICATED  // "hack" to allow us to not export a stdio version of the
@@ -528,11 +528,10 @@ void CFileSystem_Steam::FS_fseek(FILE *fp, __int64 pos, int seekType) {
 //-----------------------------------------------------------------------------
 // Purpose: low-level filesystem wrapper
 //-----------------------------------------------------------------------------
-long CFileSystem_Steam::FS_ftell(FILE *fp) {
-  long steam_offset;
+int64_t CFileSystem_Steam::FS_ftell(FILE *fp) {
   TSteamError steamError;
 
-  steam_offset = steam->TellFile((SteamHandle_t)fp, &steamError);
+  long steam_offset = steam->TellFile((SteamHandle_t)fp, &steamError);
   if (steamError.eSteamError != eSteamErrorNone) {
     CheckError((SteamHandle_t)fp, steamError);
     return -1L;
@@ -695,10 +694,10 @@ int CFileSystem_Steam::FS_stat(const char *path, struct _stat *buf) {
   TSteamError steamError;
 
   if (!steam) {
-    // The dedicated server gets here once at startup. When setting up the
-    // executable path before loading base modules like engine.dll, the
-    // filesystem looks for zipX.zip but we haven't mounted steam content yet so
-    // steam is 0.
+  // The dedicated server gets here once at startup. When setting up the
+  // executable path before loading base modules like engine.dll, the
+  // filesystem looks for zipX.zip but we haven't mounted steam content yet so
+  // steam is 0.
 #if !defined(DEDICATED)
     AssertMsg(0, "CFileSystem_Steam::FS_stat used with 0 steam interface!");
 #endif
