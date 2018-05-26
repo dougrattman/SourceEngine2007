@@ -207,14 +207,14 @@ void ReadLightFile(char *filename) {
     scan += strspn(scan, " \t");
     char NoShadName[1024];
     if (sscanf_s(scan, "noshadow %s", NoShadName,
-                 SOURCE_ARRAYSIZE(NoShadName)) == 1) {
+                 std::size(NoShadName)) == 1) {
       char *dot = strchr(NoShadName, '.');
       if (dot)  // if they specify .vmt, kill it
         *dot = 0;
       // printf("add %s as a non shadow casting material\n",NoShadName);
       g_NonShadowCastingMaterialStrings.AddToTail(strdup(NoShadName));
     } else if (sscanf_s(scan, "forcetextureshadow %s", NoShadName,
-                        SOURCE_ARRAYSIZE(NoShadName)) == 1) {
+                        std::size(NoShadName)) == 1) {
       // printf("add %s as a non shadow casting material\n",NoShadName);
       ForceTextureShadowsOnModel(NoShadName);
     } else {
@@ -224,7 +224,7 @@ void ReadLightFile(char *filename) {
         Error("Too many texlights, max = %d", MAX_TEXLIGHTS);
 
       int argCnt =
-          sscanf_s(scan, "%s ", szTexlight, SOURCE_ARRAYSIZE(szTexlight));
+          sscanf_s(scan, "%s ", szTexlight, std::size(szTexlight));
 
       if (argCnt != 1) {
         if (strlen(scan) > 4)
@@ -612,7 +612,7 @@ entity_t *EntityForModel(int modnum) {
 MakePatches
 =============
 */
-void MakePatches(void) {
+void MakePatches() {
   int i, j;
   dface_t *f;
   int fn;
@@ -824,7 +824,7 @@ void SubdividePatch(int ndxPatch) {
 SubdividePatches
 =============
 */
-void SubdividePatches(void) {
+void SubdividePatches() {
   unsigned i, num;
 
   if (numbounce == 0) return;
@@ -1482,7 +1482,7 @@ void GatherLight(int threadnum, void *pUserData) {
 BounceLight
 =============
 */
-void BounceLight(void) {
+void BounceLight() {
   unsigned i;
   Vector added;
   char name[64];
@@ -1562,7 +1562,7 @@ void BounceLight(void) {
 // Purpose: Counts the number of clusters in a map with no visibility
 // Output : int
 //-----------------------------------------------------------------------------
-int CountClusters(void) {
+int CountClusters() {
   int clusterCount = 0;
 
   for (int i = 0; i < numleafs; i++) {
@@ -1719,7 +1719,7 @@ void BuildFacesVisibleToLights(bool bAllVisible) {
   }
 }
 
-void MakeAllScales(void) {
+void MakeAllScales() {
   // determine visibility between patches
   BuildVisMatrix();
 
@@ -1879,7 +1879,7 @@ bool RadWorld_Go() {
 // be reworked at some point!!
 FileHandle_t pFileSamples[4][4];
 
-void LoadPhysicsDLL(void) { PhysicsDLLPath("VPHYSICS.DLL"); }
+void LoadPhysicsDLL() { PhysicsDLLPath("VPHYSICS.DLL"); }
 
 void InitDumpPatchesFiles() {
   for (int iStyle = 0; iStyle < 4; ++iStyle) {

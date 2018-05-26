@@ -263,7 +263,7 @@ void UpdateProgress(const BugReportParameters& params, char const* fmt, ...) {
   char buffer[2048];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf_s(buffer, SOURCE_ARRAYSIZE(buffer) - 1, fmt, argptr);
+  vsprintf_s(buffer, fmt, argptr);
   va_end(argptr);
 
   char status[2060];

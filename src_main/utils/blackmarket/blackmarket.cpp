@@ -387,7 +387,7 @@ enum sorttype {
 
 void SortWeaponRanks(int iWeaponType, weapons_t *pWeaponsArray, int iSortType);
 
-bool GetCurrentPurchaseCount(void) {
+bool GetCurrentPurchaseCount() {
   if (mysql->InitMySQL("gamestats_cstrike", pHostName, pUserName, pPassword)) {
     Msg("Successfully connected to database %s on host %s, user %s\n",
         "gamestats_cstrike", pHostName, pUserName);
@@ -502,7 +502,7 @@ int GetWeaponTypeCount(int iType) {
 weapons_t g_PistolRanks[6];
 weapons_t g_RifleAndEquipmentRanks[24];
 
-void PrintNewPrices(void) {
+void PrintNewPrices() {
   int iTotalPistols = 0;
   int iTotalRiflesEquipment = 0;
   int iTotalCurrentPistols = 0;
@@ -675,7 +675,7 @@ void CalculateNewPrices(weapons_t *pWeaponsArray, int iWeaponType) {
   }
 }
 
-void ProcessBlackMarket(void) {
+void ProcessBlackMarket() {
   int iPistol = 0;
   int iRifles = 0;
 
@@ -712,7 +712,7 @@ void ProcessBlackMarket(void) {
 //=================================
 // Add the current snapshot to the db
 //=================================
-void AddSnapshotToDatabase(void) {
+void AddSnapshotToDatabase() {
   char szSnapshot[1024];
 
   // Only update the prices and close.

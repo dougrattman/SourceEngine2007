@@ -378,7 +378,7 @@ void CVRADDispColl::DispUVToSurfNormal(Vector2D const &dispUV,
 // Purpose:
 // Output : float
 //-----------------------------------------------------------------------------
-float CVRADDispColl::CreateParentPatches(void) {
+float CVRADDispColl::CreateParentPatches() {
   // Save the total surface area of the displacement.
   float flTotalArea = 0.0f;
 
@@ -997,7 +997,7 @@ bool CVRADDispColl::InitPatch(int iPatch, int iParentPatch, int iChild,
   return true;
 }
 
-void CVRADDispColl::AddPolysForRayTrace(void) {
+void CVRADDispColl::AddPolysForRayTrace() {
   if (!(m_nContents & MASK_OPAQUE)) return;
 
   for (int ndxTri = 0; ndxTri < m_aTris.Size(); ndxTri++) {

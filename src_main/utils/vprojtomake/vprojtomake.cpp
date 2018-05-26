@@ -89,7 +89,7 @@ IBaseFileSystem *g_pFileSystem = &g_MyFS;
 //-----------------------------------------------------------------------------
 // Purpose: help text
 //-----------------------------------------------------------------------------
-void printusage(void) { Msg("usage:  vcprojtomake <vcproj filename> \n"); }
+void printusage() { Msg("usage:  vcprojtomake <vcproj filename> \n"); }
 
 //-----------------------------------------------------------------------------
 // Purpose: debug helper, spits out a human readable keyvalues version of the

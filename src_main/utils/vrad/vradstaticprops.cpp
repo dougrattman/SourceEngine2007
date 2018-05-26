@@ -1231,7 +1231,7 @@ void CVradStaticPropMgr::SerializeLighting() {
     pVertexData = (unsigned char *)pVhvHdr +
                   ALIGN_TO_POW2((unsigned int)pVertexData, 512);
 
-    AddBufferToPak(GetPakFile(), filename, (void *)pVhvHdr,
+    AddBufferToPak(GetPakFile(), filename, pVhvHdr,
                    pVertexData - (unsigned char *)pVhvHdr, false);
   }
 }
@@ -1356,7 +1356,7 @@ void CVradStaticPropMgr::ComputeLighting(int iThread) {
 //-----------------------------------------------------------------------------
 // Adds all static prop polys to the ray trace store.
 //-----------------------------------------------------------------------------
-void CVradStaticPropMgr::AddPolysForRayTrace(void) {
+void CVradStaticPropMgr::AddPolysForRayTrace() {
   int count = m_StaticProps.Count();
   if (!count) {
     // nothing to do

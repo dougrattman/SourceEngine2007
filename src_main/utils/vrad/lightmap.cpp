@@ -127,7 +127,7 @@ int EdgeVertex(dface_t *f, int edge) {
   PairEdges
   ============
 */
-void PairEdges(void) {
+void PairEdges() {
   int i, j, k, n, m;
   dface_t *f;
   int numneighbors;
@@ -248,7 +248,7 @@ void PairEdges(void) {
           // add to neighbor list
           tmpneighbor[m] = vertexface[n][k];
           numneighbors++;
-          if (numneighbors > SOURCE_ARRAYSIZE(tmpneighbor)) {
+          if (numneighbors > std::size(tmpneighbor)) {
             Error("Stack overflow in neighbors\n");
           }
         }
@@ -272,7 +272,7 @@ void PairEdges(void) {
   }
 }
 
-void SaveVertexNormals(void) {
+void SaveVertexNormals() {
   faceneighbor_t *fn;
   int i, j;
   dface_t *f;
@@ -1218,7 +1218,7 @@ bool CanLeafTraceToSky(int iLeaf) {
   return false;
 }
 
-void BuildVisForLightEnvironment(void) {
+void BuildVisForLightEnvironment() {
   // Create the vis.
   for (int iLeaf = 0; iLeaf < numleafs; ++iLeaf) {
     dleafs[iLeaf].flags &= ~(LEAF_FLAGS_SKY | LEAF_FLAGS_SKY2D);
@@ -1246,12 +1246,10 @@ void BuildVisForLightEnvironment(void) {
   byte pvs[MAX_MAP_CLUSTERS / 8];
 
   int nLeafBytes = (numleafs >> 3) + 1;
-  unsigned char *pLeafBits =
-      (unsigned char *)stackalloc(nLeafBytes * sizeof(unsigned char));
-  unsigned char *pLeaf2DBits =
-      (unsigned char *)stackalloc(nLeafBytes * sizeof(unsigned char));
-  memset(pLeafBits, 0, nLeafBytes);
-  memset(pLeaf2DBits, 0, nLeafBytes);
+  u8 *pLeafBits = stack_alloc<u8>(nLeafBytes);
+  memset(pLeafBits, 0, nLeafBytes * sizeof(u8));
+  u8 *pLeaf2DBits = stack_alloc<u8>(nLeafBytes);
+  memset(pLeaf2DBits, 0, nLeafBytes * sizeof(u8));
 
   for (int iLeaf = 0; iLeaf < numleafs; ++iLeaf) {
     // If this leaf has light (3d skybox) in it, then don't bother
@@ -1388,7 +1386,7 @@ static void ParseLightPoint(entity_t *e, directlight_t *dl) {
   =============
 */
 #define DIRECT_SCALE (100.0 * 100.0)
-void CreateDirectLights(void) {
+void CreateDirectLights() {
   unsigned i;
   CPatch *p = NULL;
   directlight_t *dl = NULL;
@@ -2652,17 +2650,15 @@ static void BuildSupersampleFaceLights(lightinfo_t &l, SSE_SampleInfo_t &info,
 
   // This is used to make sure we don't supersample a light sample more than
   // once
-  int processedSampleSize = info.m_LightmapSize * sizeof(bool);
-  bool *pHasProcessedSample = (bool *)stackalloc(processedSampleSize);
-  memset(pHasProcessedSample, 0, processedSampleSize);
+  bool *pHasProcessedSample = stack_alloc<bool>(info.m_LightmapSize);
+  memset(pHasProcessedSample, 0, info.m_LightmapSize * sizeof(bool));
 
   // This is used to compute a simple gradient computation of the light samples
   // We're going to store the maximum intensity of all bumped samples at each
   // sample location
-  float *pGradient =
-      (float *)stackalloc(info.m_pFaceLight->numsamples * sizeof(float));
-  float *pSampleIntensity = (float *)stackalloc(
-      info.m_NormalCount * info.m_LightmapSize * sizeof(float));
+  float *pGradient = stack_alloc<float>(info.m_pFaceLight->numsamples);
+  float *pSampleIntensity =
+      stack_alloc<float>(info.m_NormalCount * info.m_LightmapSize);
 
   // Compute the maximum intensity of all lighting associated with this
   // lightstyle for all bumped lighting
@@ -2671,9 +2667,9 @@ static void BuildSupersampleFaceLights(lightinfo_t &l, SSE_SampleInfo_t &info,
 
   Vector *pVisualizePass = NULL;
   if (debug_extra) {
-    int visualizationSize = info.m_pFaceLight->numsamples * sizeof(Vector);
-    pVisualizePass = (Vector *)stackalloc(visualizationSize);
-    memset(pVisualizePass, 0, visualizationSize);
+    int visualizationSize = info.m_pFaceLight->numsamples;
+    pVisualizePass = stack_alloc<Vector>(visualizationSize);
+    memset(pVisualizePass, 0, visualizationSize * sizeof(Vector));
   }
 
   // What's going on here is that we're looking for large lighting
@@ -2706,7 +2702,7 @@ static void BuildSupersampleFaceLights(lightinfo_t &l, SSE_SampleInfo_t &info,
       pHasProcessedSample[i] = true;
       do_anotherpass = true;
 
-      if (debug_extra) {
+      if (pVisualizePass) {
         // Mark the little visualization bitmap with a color indicating
         // which pass it was updated on.
         pVisualizePass[i][0] = (pass & 1) * 255;
@@ -2744,7 +2740,7 @@ static void BuildSupersampleFaceLights(lightinfo_t &l, SSE_SampleInfo_t &info,
     pass++;
   }
 
-  if (debug_extra) {
+  if (pVisualizePass) {
     // Copy colors representing which supersample pass the sample was messed
     // with into the actual lighting values so we can visualize it
     for (int i = 0; i < info.m_pFaceLight->numsamples; ++i) {
@@ -3069,8 +3065,8 @@ void BuildPatchLights(int facenum) {
     }
   }
 
-  // light from dlight_threshold and above is sent out, but the
-  // texture itself should still be full bright
+    // light from dlight_threshold and above is sent out, but the
+    // texture itself should still be full bright
 
 #if 0
 	// if( VectorAvg( g_FacePatches[facenum]->baselight ) >= dlight_threshold)	// Now all lighted surfaces glow

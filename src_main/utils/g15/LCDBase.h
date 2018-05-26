@@ -38,8 +38,8 @@ public:
     virtual void SetSize(int nCX, int nCY);
     virtual SIZE& GetSize(void);
     
-    virtual int GetWidth(void) { return GetSize().cx; }
-    virtual int GetHeight(void) { return GetSize().cy; };
+    virtual int GetWidth() { return GetSize().cx; }
+    virtual int GetHeight() { return GetSize().cy; };
 
     virtual void Show(BOOL bShow);
     virtual BOOL IsVisible();

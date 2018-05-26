@@ -7,7 +7,7 @@
 //		numleafs
 //		dleafs
 
-void EmitDistanceToWaterInfo(void) {
+void EmitDistanceToWaterInfo() {
   int leafID;
   for (leafID = 0; leafID < numleafs; leafID++) {
     dleaf_t *pLeaf = &dleafs[leafID];

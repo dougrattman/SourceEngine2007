@@ -34,10 +34,10 @@ class CVRADDispColl : public CDispCollTree {
   void DispUVToSurfNormal(Vector2D const &dispUV, Vector &vecNormal);
 
   // Data.
-  inline float GetSampleRadius2(void) { return m_flSampleRadius2; }
-  inline float GetPatchSampleRadius2(void) { return m_flPatchSampleRadius2; }
+  inline float GetSampleRadius2() { return m_flSampleRadius2; }
+  inline float GetPatchSampleRadius2() { return m_flPatchSampleRadius2; }
 
-  inline int GetParentIndex(void) { return m_iParent; }
+  inline int GetParentIndex() { return m_iParent; }
   inline void GetParentFaceNormal(Vector &vecNormal) {
     vecNormal = m_vecStabDir;
   }

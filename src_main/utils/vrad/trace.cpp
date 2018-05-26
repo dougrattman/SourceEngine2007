@@ -491,7 +491,7 @@ void ExtractBrushEntityShadowCasters() {
   }
 }
 
-void AddBrushesForRayTrace(void) {
+void AddBrushesForRayTrace() {
   if (!nummodels) return;
 
   VMatrix identity;

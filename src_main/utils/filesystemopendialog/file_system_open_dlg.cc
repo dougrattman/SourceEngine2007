@@ -144,8 +144,7 @@ void FileSystemOpenDlg::OnOK() {
       char *dot = strrchr(temp_file_path, '.');
       if (dot) {
         if (_stricmp(dot, ".jpeg") == 0 || _stricmp(dot, ".jpg") == 0) {
-          strncpy_s(dot,
-                    temp_file_path + SOURCE_ARRAYSIZE(temp_file_path) - dot,
+          strncpy_s(dot, temp_file_path + std::size(temp_file_path) - dot,
                     ".mdl", 5);
           file_name_ = temp_file_path;
         }
@@ -778,8 +777,7 @@ class FileSystemOpenDialog : public IFileSystemOpenDialog {
     const char *full_file_path =
         file_system_open_dlg_->file_system_->RelativePathToFullPath(
             file_system_open_dlg_->current_dir_,
-            file_system_open_dlg_->path_id_, file_path,
-            SOURCE_ARRAYSIZE(file_path));
+            file_system_open_dlg_->path_id_, file_path, std::size(file_path));
     strcat_s(file_path, "\\");
 
     // Build the list of file filters.
@@ -818,7 +816,7 @@ class FileSystemOpenDialog : public IFileSystemOpenDialog {
       // Make sure we can make this into a relative path.
       if (file_system_open_dlg_->file_system_->FullPathToRelativePath(
               file_dialog.GetPathName(), relative_file_path_,
-              SOURCE_ARRAYSIZE(relative_file_path_))) {
+              std::size(relative_file_path_))) {
         // Replace .jpg or .jpeg extension with .mdl?
         char *end = relative_file_path_;
 

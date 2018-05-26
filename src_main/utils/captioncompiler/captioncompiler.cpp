@@ -141,7 +141,7 @@ void Con_Printf(const char *fmt, ...) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void printusage(void) {
+void printusage() {
   vprint(0,
          "usage:  captioncompiler closecaptionfile.txt\n\
 		\t-v = verbose output\n\
@@ -155,7 +155,7 @@ void printusage(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CheckLogFile(void) {
+void CheckLogFile() {
   if (uselogfile) {
     _unlink("log.txt");
     vprint(0, "    Outputting to log.txt\n");

@@ -185,7 +185,7 @@ class CVRadDispMgr : public IVRadDispMgr {
 
 static CVRadDispMgr s_DispMgr;
 
-IVRadDispMgr *StaticDispMgr(void) { return &s_DispMgr; }
+IVRadDispMgr *StaticDispMgr() { return &s_DispMgr; }
 
 //
 // Displacement/Face List
@@ -270,7 +270,7 @@ void CVRadDispMgr::RemoveDispFromTree(int ndxDisp) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CVRadDispMgr::Init(void) {
+void CVRadDispMgr::Init() {
   // initialize the bsp tree
   m_pBSPTreeData->Init(ToolBSPTree());
 
@@ -280,7 +280,7 @@ void CVRadDispMgr::Init(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CVRadDispMgr::Shutdown(void) {
+void CVRadDispMgr::Shutdown() {
   // remove all displacements from the tree
   for (int ndxDisp = m_DispTrees.Size(); ndxDisp >= 0; ndxDisp--) {
     RemoveDispFromTree(ndxDisp);
@@ -363,7 +363,7 @@ void CVRadDispMgr::DispBuilderInit(CCoreDispInfo *pBuilderDisp, dface_t *pFace,
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CVRadDispMgr::UnserializeDisps(void) {
+void CVRadDispMgr::UnserializeDisps() {
   // temporarily create the "builder" displacements
   CUtlVector<CCoreDispInfo *> builderDisps;
   for (int iDisp = 0; iDisp < g_dispinfo.Count(); ++iDisp) {
@@ -427,7 +427,7 @@ void CVRadDispMgr::UnserializeDisps(void) {
 // Purpose: create a set of patches for each displacement surface to transfer
 //          bounced light around with
 //-----------------------------------------------------------------------------
-void CVRadDispMgr::MakePatches(void) {
+void CVRadDispMgr::MakePatches() {
   // Collect stats - keep track of the total displacement surface area.
   float flTotalArea = 0.0f;
 
@@ -533,7 +533,7 @@ void CVRadDispMgr::ClipRayToDispInLeaf(DispTested_t &dispTested,
   }
 }
 
-void CVRadDispMgr::AddPolysForRayTrace(void) {
+void CVRadDispMgr::AddPolysForRayTrace() {
   int nTreeCount = m_DispTrees.Size();
   for (int iTree = 0; iTree < nTreeCount; ++iTree) {
     // Get the current displacement collision tree.
@@ -1268,7 +1268,7 @@ bool SampleInSolid(sample_t *pSample) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CVRadDispMgr::InsertSamplesDataIntoHashTable(void) {
+void CVRadDispMgr::InsertSamplesDataIntoHashTable() {
   int totalSamples = 0;
 #if 0
 	int totalSamplesInSolid = 0;
@@ -1324,7 +1324,7 @@ void CVRadDispMgr::InsertSamplesDataIntoHashTable(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CVRadDispMgr::InsertPatchSampleDataIntoHashTable(void) {
+void CVRadDispMgr::InsertPatchSampleDataIntoHashTable() {
   // don't insert patch samples if we are not bouncing light
   if (numbounce <= 0) return;
 
@@ -1371,7 +1371,7 @@ void CVRadDispMgr::StartTimer(const char *name) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CVRadDispMgr::EndTimer(void) {
+void CVRadDispMgr::EndTimer() {
   m_Timer.End();
   CCycleCount duration = m_Timer.GetDuration();
   double seconds = duration.GetSeconds();

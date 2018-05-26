@@ -336,10 +336,10 @@ char const *BugReporter::GetReportType(int index) {
   return bug_strings_.String(report_types_[index]);
 }
 
-char const *BugReporter::GetRepositoryURL(void) { return m_BugRootDirectory; }
+char const *BugReporter::GetRepositoryURL() { return m_BugRootDirectory; }
 
 // only valid after calling CBugReporter::StartNewBugReport()
-char const *BugReporter::GetSubmissionURL(void) {
+char const *BugReporter::GetSubmissionURL() {
   return m_CurrentBugDirectory;
 }
 

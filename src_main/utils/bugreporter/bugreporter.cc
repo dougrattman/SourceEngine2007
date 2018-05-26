@@ -488,7 +488,7 @@ class BugReporter : public IBugReporter {
           break;
         default:
           size_t i = 0;
-          for (i; i < SOURCE_ARRAYSIZE(trk_error_id_name_map_); ++i) {
+          for (i; i < std::size(trk_error_id_name_map_); ++i) {
             if (trk_error_id_name_map_[i].id == rc) {
               Msg("%s returned %i - %s!\n", func, rc,
                   trk_error_id_name_map_[i].str);
@@ -496,7 +496,7 @@ class BugReporter : public IBugReporter {
             }
           }
 
-          if (i >= SOURCE_ARRAYSIZE(trk_error_id_name_map_)) {
+          if (i >= std::size(trk_error_id_name_map_)) {
             Msg("%s returned %i - %s!\n", func, rc, "???");
           }
           break;
@@ -515,7 +515,7 @@ class BugReporter : public IBugReporter {
 
     GetPrivateProfileStringA("login", "userid1",
                              kDefaultUserName,  // default
-                             user_name, SOURCE_ARRAYSIZE(user_name),
+                             user_name, std::size(user_name),
                              "PVCSTRK.ini");
 
     // if userid1 didn't have a valid name in it try userid0
@@ -523,12 +523,12 @@ class BugReporter : public IBugReporter {
         !Q_stricmp(user_name, "BELMAPNTKY")) {
       GetPrivateProfileStringA("login", "userid0",
                                kDefaultUserName,  // default
-                               user_name, SOURCE_ARRAYSIZE(user_name),
+                               user_name, std::size(user_name),
                                "PVCSTRK.ini");
     }
 
     // TODO(d.rattman): Exceptionally insecure, rewrite.
-    Q_strncpy(password, user_name, SOURCE_ARRAYSIZE(password));
+    Q_strncpy(password, user_name, std::size(password));
 
     if (file_system_) {
       KeyValues *kv = new KeyValues("tracker_login");
@@ -537,9 +537,9 @@ class BugReporter : public IBugReporter {
           Q_strncpy(
               database_server,
               kv->GetString("database_server", kDefaultDatabaseServerName),
-              SOURCE_ARRAYSIZE(database_server));
+              std::size(database_server));
           Q_strncpy(project, kv->GetString("project_name", kDefaultProjectName),
-                    SOURCE_ARRAYSIZE(project));
+                    std::size(project));
         }
 
         kv->Clear();
@@ -567,7 +567,7 @@ class BugReporter : public IBugReporter {
 
       if (!getenv_s(&username_size, user_name_env, "username") &&
           username_size > 0) {
-        Q_strncpy(user_name, user_name_env, SOURCE_ARRAYSIZE(user_name));
+        Q_strncpy(user_name, user_name_env, std::size(user_name));
         maybe_no_pvcs_install = true;
       }
     }
@@ -594,7 +594,7 @@ class BugReporter : public IBugReporter {
       }
     }
 
-    rc = TrkGetLoginDBMSName(*trk_handle, SOURCE_ARRAYSIZE(database_server),
+    rc = TrkGetLoginDBMSName(*trk_handle, std::size(database_server),
                              database_server);
     if (rc != TRK_SUCCESS) {
       ReportError(rc, "TrkGetLoginDBMSName",
@@ -602,7 +602,7 @@ class BugReporter : public IBugReporter {
       return rc;
     }
     rc =
-        TrkGetLoginProjectName(*trk_handle, SOURCE_ARRAYSIZE(project), project);
+        TrkGetLoginProjectName(*trk_handle, std::size(project), project);
     if (rc != TRK_SUCCESS) {
       ReportError(rc, "TrkGetLoginProjectName",
                   "Login failed (TrkGetLoginProjectName).");

@@ -223,7 +223,7 @@ static CUtlVector<ClusterDispList_t> g_ClusterDispFaces;
 //-----------------------------------------------------------------------------
 // Helps us find all displacements associated with a particular cluster
 //-----------------------------------------------------------------------------
-void AddDispsToClusterTable(void) {
+void AddDispsToClusterTable() {
   g_ClusterDispFaces.SetCount(g_ClusterLeaves.Count());
 
   //
@@ -402,7 +402,7 @@ void BuildVisLeafs(int threadnum, void *pUserData) {
 BuildVisMatrix
 ==============
 */
-void BuildVisMatrix(void) {
+void BuildVisMatrix() {
   if (g_bUseMPI) {
     RunMPIBuildVisLeafs();
   } else {
@@ -410,4 +410,4 @@ void BuildVisMatrix(void) {
   }
 }
 
-void FreeVisMatrix(void) {}
+void FreeVisMatrix() {}

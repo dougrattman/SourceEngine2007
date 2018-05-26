@@ -130,7 +130,7 @@ void BuildTracePortals(int clusterStart) {
   }
 }
 
-void SortPortals(void) {
+void SortPortals() {
   int i;
 
   for (i = 0; i < g_numportals * 2; i++) sorted_portals[i] = &portals[i];
@@ -254,7 +254,7 @@ static int CompressAndCrosscheckClusterVis(int clusternum) {
 CalcPortalVis
 ==================
 */
-void CalcPortalVis(void) {
+void CalcPortalVis() {
   int i;
 
   // fastvis just uses mightsee for a very loose bound
@@ -273,7 +273,7 @@ void CalcPortalVis(void) {
   }
 }
 
-void CalcVisTrace(void) {
+void CalcVisTrace() {
   RunThreadsOnIndividual(g_numportals * 2, true, BasePortalVis);
   BuildTracePortals(g_TraceClusterStart);
   // NOTE: We only schedule the one-way portals out of the start cluster here
@@ -286,7 +286,7 @@ void CalcVisTrace(void) {
 CalcVis
 ==================
 */
-void CalcVis(void) {
+void CalcVis() {
   int i;
 
   if (g_bUseMPI) {
@@ -498,7 +498,7 @@ Calculate the PAS (Potentially Audible Set)
 by ORing together all the PVS visible from a leaf
 ================
 */
-void CalcPAS(void) {
+void CalcPAS() {
   int i, j, k, l, index;
   int bitbyte;
   long *dest, *src;
@@ -676,7 +676,7 @@ static float CalcDistanceFromLeafToWater(int leafNum) {
   return minDist;
 }
 
-static void CalcDistanceFromLeavesToWater(void) {
+static void CalcDistanceFromLeavesToWater() {
   int i;
   for (i = 0; i < numleafs; i++) {
     g_LeafMinDistToWater[i] = (unsigned short)CalcDistanceFromLeafToWater(i);

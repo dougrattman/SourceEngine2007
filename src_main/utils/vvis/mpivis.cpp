@@ -311,7 +311,7 @@ void ReceivePortalFlow(u64 iWorkUnit, MessageBuffer *pBuf, int iWorker) {
                              sizeof(iWorkUnit), portalbytes};
 
       g_pPortalMCSocket->SendChunksTo(&g_PortalMCAddr, chunks, chunkLengths,
-                                      SOURCE_ARRAYSIZE(chunks));
+                                      std::size(chunks));
     }
   }
 }

@@ -183,14 +183,14 @@ void CBugReporter::ReportError(TRK_UINT rc, char const *func, char const *msg) {
         break;
       default:
         int i = 0;
-        for (i; i < SOURCE_ARRAYSIZE(g_Lookup); ++i) {
+        for (i; i < std::size(g_Lookup); ++i) {
           if (g_Lookup[i].id == rc) {
             Msg("%s returned %i - %s (%s)!\n", func, rc, g_Lookup[i].str, msg);
             break;
           }
         }
 
-        if (i >= SOURCE_ARRAYSIZE(g_Lookup)) {
+        if (i >= std::size(g_Lookup)) {
           Msg("%s returned %i - %s! (%s)\n", func, rc, "???", msg);
         }
         break;
@@ -490,7 +490,7 @@ void vprint(int depth, const char *fmt, ...) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void printusage(void) {
+void printusage() {
   vprint(
       0,
       "usage:  getbugs pvcsproject hostname database username password contentadminexe <startbug endbug>\n\
@@ -503,7 +503,7 @@ void printusage(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CheckLogFile(void) {
+void CheckLogFile() {
   if (uselogfile) {
     _unlink("log.txt");
     vprint(0, "    Outputting to log.txt\n");

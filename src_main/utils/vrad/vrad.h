@@ -76,7 +76,7 @@ struct directlight_t {
   float m_flEndFadeDistance;
   float m_flCapDist;  // max distance to feed in
 
-  directlight_t(void) {
+  directlight_t() {
     m_flEndFadeDistance = -1.0;  // end<start indicates not set
     m_flStartFadeDistance = 0.0;
     m_flCapDist = 1.0e22;
@@ -102,7 +102,7 @@ struct LightingValue_t {
             m_vecLighting.y < 1e10 && m_vecLighting.z < 1e10);
   }
 
-  SOURCE_FORCEINLINE void Zero(void) {
+  SOURCE_FORCEINLINE void Zero() {
     m_vecLighting.Init(0, 0, 0);
     m_flDirectSunAmount = 0.0;
   }

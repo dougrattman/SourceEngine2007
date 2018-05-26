@@ -84,7 +84,7 @@ UtlHashHandle_t SampleData_AddSample(sample_t *pSample,
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void SampleData_Log(void) {
+void SampleData_Log() {
   if (g_bLogHashData) {
     g_SampleHashTable.Log("samplehash.txt");
   }

@@ -848,7 +848,7 @@ static void WriteDetailLightingLump(
   if (lightsize) buf.Put(lumpData.Base(), lightsize);
 }
 
-static void WriteDetailLightingLumps(void) {
+static void WriteDetailLightingLumps() {
   WriteDetailLightingLump(GAMELUMP_DETAIL_PROP_LIGHTING,
                           GAMELUMP_DETAIL_PROP_LIGHTING_VERSION,
                           s_DetailPropLightStyleLumpLDR);
