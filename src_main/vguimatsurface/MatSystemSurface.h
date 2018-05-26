@@ -507,7 +507,7 @@ class CMatSystemSurface : public CTier3AppSystem<IMatSystemSurface> {
   CUtlDict<int, int> m_BitmapFontFileMapping;
 
   float m_flZPos;
-  CUtlDict<vgui::IImage *, unsigned short> m_FileTypeImages;
+  CUtlDict<vgui::IImage *, u16> m_FileTypeImages;
 
   int GetTitleEntry(vgui::VPANEL panel);
 

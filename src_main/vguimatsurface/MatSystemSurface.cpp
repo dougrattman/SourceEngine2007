@@ -3,14 +3,12 @@
 // Purpose: Implementation of the VGUI ISurface interface using the
 // material system to implement it.
 
-#if !defined(_X360)
 #include "base/include/windows/windows_light.h"
 
+#include <malloc.h>
 #include <shellapi.h>
-#endif
 
 #include <Color.h>
-#include <malloc.h>
 #include <vgui/IHTML.h>
 #include <vgui/IInput.h>
 #include <vgui/IInputInternal.h>
@@ -45,7 +43,6 @@
 #include "tier1/strtools.h"
 #include "vgui/htmlwindow.h"
 #include "vgui_surfacelib/FontManager.h"
-#include "xbox/xboxstubs.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -61,7 +58,7 @@ class CVguiMatInfoVar : public IVguiMatInfoVar {
   CVguiMatInfoVar(IMaterialVar *pMaterialVar) { m_pMaterialVar = pMaterialVar; }
 
   // from IVguiMatInfoVar
-  virtual int GetIntValue(void) const { return m_pMaterialVar->GetIntValue(); }
+  virtual int GetIntValue() const { return m_pMaterialVar->GetIntValue(); }
   virtual void SetIntValue(int val) { m_pMaterialVar->SetIntValue(val); }
 
  private:
@@ -230,19 +227,17 @@ InitReturnVal_t CMatSystemSurface::Init() {
   pVMTKeyValues->SetInt("$nocull", 1);
   m_pWhite.Init("VGUI_White", TEXTURE_GROUP_OTHER, pVMTKeyValues);
 
-  if (IsPC()) {
-    // Set up a material with which to reference the final image for subsequent
-    // display using vgui
-    pVMTKeyValues = new KeyValues("UnlitGeneric");
-    pVMTKeyValues->SetString("$basetexture", "_rt_FullScreen");
-    pVMTKeyValues->SetInt("$nocull", 1);
-    pVMTKeyValues->SetInt("$nofog", 1);
-    pVMTKeyValues->SetInt("$ignorez", 1);
-    m_FullScreenBufferMaterial.Init("VGUI_3DPaint_FullScreen",
-                                    TEXTURE_GROUP_OTHER, pVMTKeyValues);
-    m_FullScreenBufferMaterial->Refresh();
-    m_nFullScreenBufferMaterialId = -1;
-  }
+  // Set up a material with which to reference the final image for subsequent
+  // display using vgui
+  pVMTKeyValues = new KeyValues("UnlitGeneric");
+  pVMTKeyValues->SetString("$basetexture", "_rt_FullScreen");
+  pVMTKeyValues->SetInt("$nocull", 1);
+  pVMTKeyValues->SetInt("$nofog", 1);
+  pVMTKeyValues->SetInt("$ignorez", 1);
+  m_FullScreenBufferMaterial.Init("VGUI_3DPaint_FullScreen",
+                                  TEXTURE_GROUP_OTHER, pVMTKeyValues);
+  m_FullScreenBufferMaterial->Refresh();
+  m_nFullScreenBufferMaterialId = -1;
 
   m_DrawColor[0] = m_DrawColor[1] = m_DrawColor[2] = m_DrawColor[3] = 255;
   m_nTranslateX = m_nTranslateY = 0;
@@ -273,15 +268,9 @@ InitReturnVal_t CMatSystemSurface::Init() {
 
   // fonts initialization
   char language[64];
-  bool bValid;
-  if (IsPC()) {
-    bValid = system()->GetRegistryString(
-        "HKEY_CURRENT_USER\\Software\\Valve\\Steam\\Language", language,
-        sizeof(language) - 1);
-  } else {
-    Q_strncpy(language, XBX_GetLanguageString(), sizeof(language));
-    bValid = true;
-  }
+  bool bValid = system()->GetRegistryString(
+      "HKEY_CURRENT_USER\\Software\\Valve\\Steam\\Language", language,
+      sizeof(language) - 1);
 
   if (bValid) {
     FontManager().SetLanguage(language);
@@ -371,7 +360,6 @@ bool CMatSystemSurface::SupportsFeature(SurfaceFeature_e feature) {
       return true;
 
     case ISurface::OUTLINE_FONTS:
-      if (IsX360()) return false;
     case ISurface::ESCAPE_KEY:
       return true;
 
@@ -1412,7 +1400,7 @@ bool CMatSystemSurface::AddCustomFontFile(const char *fontFileName) {
   char full_font_path[SOURCE_MAX_PATH];
   // windows needs an absolute path for ttf
   const bool is_font_found = g_pFullFileSystem->GetLocalPath(
-      fontFileName, full_font_path, SOURCE_ARRAYSIZE(full_font_path));
+      fontFileName, full_font_path, std::size(full_font_path));
   if (!is_font_found) {
     Msg("Couldn't find custom font file '%s'\n", fontFileName);
     return false;
@@ -1770,8 +1758,7 @@ void CMatSystemSurface::DrawPrintText(
   int iLastTexId = -1;
 
   int iCount = 0;
-  vgui::Vertex_t *pQuads =
-      (vgui::Vertex_t *)stackalloc((2 * iTextLen) * sizeof(vgui::Vertex_t));
+  vgui::Vertex_t *pQuads = stack_alloc<vgui::Vertex_t>(2 * iTextLen);
 
   int iTotalWidth = 0;
   for (int i = 0; i < iTextLen; ++i) {
@@ -1844,7 +1831,7 @@ void CMatSystemSurface::DrawPrintText(
 
   m_pDrawTextPos[0] += iTotalWidth;
 
-  stackfree(pQuads);
+  stack_free(pQuads);
 }
 
 //-----------------------------------------------------------------------------
@@ -2291,26 +2278,25 @@ void CMatSystemSurface::PaintTraverseEx(VPANEL panel,
   if (!ipanel()->IsVisible(panel)) return;
 
   VPROF("CMatSystemSurface::PaintTraverse");
-  CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
-  bool bTopLevelDraw = false;
+  CMatRenderContextPtr render_context{g_pMaterialSystem};
+  // only set the 2d ortho mode once
+  const bool is_top_level_draw = !g_bInDrawing;
 
-  if (g_bInDrawing == false) {
-    // only set the 2d ortho mode once
-    bTopLevelDraw = true;
+  if (is_top_level_draw) {
     StartDrawing();
 
     // clear z + stencil buffer
     // NOTE: Stencil is used to get 3D painting in vgui panels working correctly
-    pRenderContext->ClearBuffers(false, true, true);
-    pRenderContext->SetStencilEnable(true);
-    pRenderContext->SetStencilFailOperation(STENCILOPERATION_KEEP);
-    pRenderContext->SetStencilZFailOperation(STENCILOPERATION_KEEP);
-    pRenderContext->SetStencilPassOperation(STENCILOPERATION_REPLACE);
-    pRenderContext->SetStencilCompareFunction(
+    render_context->ClearBuffers(false, true, true);
+    render_context->SetStencilEnable(true);
+    render_context->SetStencilFailOperation(STENCILOPERATION_KEEP);
+    render_context->SetStencilZFailOperation(STENCILOPERATION_KEEP);
+    render_context->SetStencilPassOperation(STENCILOPERATION_REPLACE);
+    render_context->SetStencilCompareFunction(
         STENCILCOMPARISONFUNCTION_GREATEREQUAL);
-    pRenderContext->SetStencilReferenceValue(0);
-    pRenderContext->SetStencilTestMask(0xFFFFFFFF);
-    pRenderContext->SetStencilWriteMask(0xFFFFFFFF);
+    render_context->SetStencilReferenceValue(0);
+    render_context->SetStencilTestMask(0xFFFFFFFF);
+    render_context->SetStencilWriteMask(0xFFFFFFFF);
   }
 
   float flOldZPos = m_flZPos;
@@ -2366,7 +2352,7 @@ void CMatSystemSurface::PaintTraverseEx(VPANEL panel,
         bool bIsTopmostPopup = ((VPanel *)popupPanel)->IsTopmostPopup();
 
         // set our z position
-        pRenderContext->SetStencilReferenceValue(bIsTopmostPopup ? 255
+        render_context->SetStencilReferenceValue(bIsTopmostPopup ? 255
                                                                  : nStencilRef);
         --nStencilRef;
 
@@ -2379,12 +2365,12 @@ void CMatSystemSurface::PaintTraverseEx(VPANEL panel,
   // Restore the old Z Pos
   m_flZPos = flOldZPos;
 
-  if (bTopLevelDraw) {
+  if (is_top_level_draw) {
     // only undo the 2d ortho mode once
     VPROF("FinishDrawing");
 
     // Reset stencil to normal state
-    pRenderContext->SetStencilEnable(false);
+    render_context->SetStencilEnable(false);
 
     FinishDrawing();
   }
@@ -2525,11 +2511,8 @@ void CMatSystemSurface::DrawFullScreenBuffer(int nLeft, int nTop, int nRight,
   }
 
   float flGetAlphaMultiplier = DrawGetAlphaMultiplier();
-  unsigned char oldColor[4];
-  oldColor[0] = m_DrawColor[0];
-  oldColor[1] = m_DrawColor[1];
-  oldColor[2] = m_DrawColor[2];
-  oldColor[3] = m_DrawColor[3];
+  u8 oldColor[4]{m_DrawColor[0], m_DrawColor[1], m_DrawColor[2],
+                 m_DrawColor[3]};
 
   DrawSetAlphaMultiplier(1.0f);
   DrawSetColor(255, 255, 255, 255);
@@ -3222,7 +3205,7 @@ vgui::IImage *CMatSystemSurface::GetIconImageForFullPath(
                  ShouldMakeUnique(ext) ? pFullPath : info.szTypeName);
 
       // Now check the dictionary
-      unsigned short idx = m_FileTypeImages.Find(lookup);
+      u16 idx = m_FileTypeImages.Find(lookup);
       if (idx == m_FileTypeImages.InvalidIndex()) {
         ICONINFO iconInfo;
         if (0 != GetIconInfo(info.hIcon, &iconInfo)) {
@@ -3254,7 +3237,7 @@ vgui::IImage *CMatSystemSurface::GetIconImageForFullPath(
   return newIcon;
 }
 
-const char *CMatSystemSurface::GetResolutionKey(void) const {
+const char *CMatSystemSurface::GetResolutionKey() const {
   Assert(!IsPC());
   int x, y, width, height;
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
