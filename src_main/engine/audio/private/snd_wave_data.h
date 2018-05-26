@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 the_interface IWaveData {
  public:
-  virtual ~IWaveData(void) {}
+  virtual ~IWaveData() {}
   virtual CAudioSource &Source(void) = 0;
   virtual int ReadSourceData(void **pData, int sampleIndex, int sampleCount,
                              char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) = 0;

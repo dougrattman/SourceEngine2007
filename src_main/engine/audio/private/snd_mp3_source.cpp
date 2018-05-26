@@ -70,7 +70,7 @@ bool CAudioSourceMP3::IsAsyncLoad() {
 }
 
 // check reference count, return true if nothing is referencing this
-bool CAudioSourceMP3::CanDelete(void) { return m_refCount > 0 ? false : true; }
+bool CAudioSourceMP3::CanDelete() { return m_refCount > 0 ? false : true; }
 
 bool CAudioSourceMP3::GetStartupData(void *dest, int destsize,
                                      int &bytesCopied) {
@@ -156,9 +156,9 @@ CAudioSourceMP3Cache::CAudioSourceMP3Cache(CSfxTable *pSfx,
 //-----------------------------------------------------------------------------
 // Purpose: Free any wave data we've allocated
 //-----------------------------------------------------------------------------
-CAudioSourceMP3Cache::~CAudioSourceMP3Cache(void) { CacheUnload(); }
+CAudioSourceMP3Cache::~CAudioSourceMP3Cache() { CacheUnload(); }
 
-int CAudioSourceMP3Cache::GetCacheStatus(void) {
+int CAudioSourceMP3Cache::GetCacheStatus() {
   bool bCacheValid;
   int loaded = wavedatacache->IsDataLoadCompleted(m_hCache, &bCacheValid)
                    ? AUDIO_IS_LOADED
@@ -170,7 +170,7 @@ int CAudioSourceMP3Cache::GetCacheStatus(void) {
   return loaded;
 }
 
-void CAudioSourceMP3Cache::CacheLoad(void) {
+void CAudioSourceMP3Cache::CacheLoad() {
   // Commence lazy load?
   if (m_hCache != 0) {
     GetCacheStatus();
@@ -181,13 +181,13 @@ void CAudioSourceMP3Cache::CacheLoad(void) {
                                            m_dataStart);
 }
 
-void CAudioSourceMP3Cache::CacheUnload(void) {
+void CAudioSourceMP3Cache::CacheUnload() {
   if (m_hCache != 0) {
     wavedatacache->Unload(m_hCache);
   }
 }
 
-ch *CAudioSourceMP3Cache::GetDataPointer(void) {
+ch *CAudioSourceMP3Cache::GetDataPointer() {
   ch *pMP3Data = NULL;
   bool dummy = false;
 

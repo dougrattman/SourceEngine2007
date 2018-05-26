@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Create an output wave stream. Used to record audio for in-engine
 // movies or mixer debugging.
@@ -11,53 +11,52 @@
 
 extern IFileSystem *g_pFileSystem;
 // TODO(d.rattman): shouldn't this API be part of IFileSystem?
-extern bool COM_CopyFile(const char *netpath, const char *cachepath);
+extern bool COM_CopyFile(const ch *netpath, const ch *cachepath);
 
 // Create a wave file
-void WaveCreateTmpFile(const char *filename, int rate, int bits,
+void WaveCreateTmpFile(const ch *filename, int rate, int bits,
                        int channels_num) {
-  char tmpfilename[SOURCE_MAX_PATH];
-  Q_StripExtension(filename, tmpfilename, SOURCE_ARRAYSIZE(tmpfilename));
-  Q_DefaultExtension(tmpfilename, ".WAV", SOURCE_ARRAYSIZE(tmpfilename));
+  ch tmpfilename[SOURCE_MAX_PATH];
+  Q_StripExtension(filename, tmpfilename, std::size(tmpfilename));
+  Q_DefaultExtension(tmpfilename, ".WAV", std::size(tmpfilename));
 
-  FileHandle_t file;
-  file = g_pFileSystem->Open(tmpfilename, "wb");
-  if (file == FILESYSTEM_INVALID_HANDLE) return;
+  FileHandle_t file = g_pFileSystem->Open(tmpfilename, "wb");
+  if (file != FILESYSTEM_INVALID_HANDLE) {
+    int chunkid = LittleLong(RIFF_ID);
+    int chunksize = LittleLong(0);
+    g_pFileSystem->Write(&chunkid, sizeof(int), file);
+    g_pFileSystem->Write(&chunksize, sizeof(int), file);
 
-  int chunkid = LittleLong(RIFF_ID);
-  int chunksize = LittleLong(0);
-  g_pFileSystem->Write(&chunkid, sizeof(int), file);
-  g_pFileSystem->Write(&chunksize, sizeof(int), file);
+    chunkid = LittleLong(RIFF_WAVE);
+    g_pFileSystem->Write(&chunkid, sizeof(int), file);
 
-  chunkid = LittleLong(RIFF_WAVE);
-  g_pFileSystem->Write(&chunkid, sizeof(int), file);
+    // create a 16-bit PCM stereo output file
+    PCMWAVEFORMAT fmt = {0};
+    fmt.wf.wFormatTag = LittleWord((short)WAVE_FORMAT_PCM);
+    fmt.wf.nChannels = LittleWord((short)channels_num);
+    fmt.wf.nSamplesPerSec = LittleDWord(rate);
+    fmt.wf.nAvgBytesPerSec = LittleDWord(rate * bits * channels_num / 8);
+    fmt.wf.nBlockAlign = LittleWord((short)(2 * channels_num));
+    fmt.wBitsPerSample = LittleWord((short)bits);
 
-  // create a 16-bit PCM stereo output file
-  PCMWAVEFORMAT fmt = {0};
-  fmt.wf.wFormatTag = LittleWord((short)WAVE_FORMAT_PCM);
-  fmt.wf.nChannels = LittleWord((short)channels_num);
-  fmt.wf.nSamplesPerSec = LittleDWord(rate);
-  fmt.wf.nAvgBytesPerSec = LittleDWord(rate * bits * channels_num / 8);
-  fmt.wf.nBlockAlign = LittleWord((short)(2 * channels_num));
-  fmt.wBitsPerSample = LittleWord((short)bits);
+    chunkid = LittleLong(WAVE_FMT);
+    chunksize = LittleLong(sizeof(fmt));
+    g_pFileSystem->Write(&chunkid, sizeof(int), file);
+    g_pFileSystem->Write(&chunksize, sizeof(int), file);
+    g_pFileSystem->Write(&fmt, sizeof(PCMWAVEFORMAT), file);
 
-  chunkid = LittleLong(WAVE_FMT);
-  chunksize = LittleLong(sizeof(fmt));
-  g_pFileSystem->Write(&chunkid, sizeof(int), file);
-  g_pFileSystem->Write(&chunksize, sizeof(int), file);
-  g_pFileSystem->Write(&fmt, sizeof(PCMWAVEFORMAT), file);
+    chunkid = LittleLong(WAVE_DATA);
+    chunksize = LittleLong(0);
+    g_pFileSystem->Write(&chunkid, sizeof(int), file);
+    g_pFileSystem->Write(&chunksize, sizeof(int), file);
 
-  chunkid = LittleLong(WAVE_DATA);
-  chunksize = LittleLong(0);
-  g_pFileSystem->Write(&chunkid, sizeof(int), file);
-  g_pFileSystem->Write(&chunksize, sizeof(int), file);
-
-  g_pFileSystem->Close(file);
+    g_pFileSystem->Close(file);
+  }
 }
 
-void WaveAppendTmpFile(const char *filename, void *pBuffer, int sampleBits,
+void WaveAppendTmpFile(const ch *filename, void *pBuffer, int sampleBits,
                        int numSamples) {
-  char tmpfilename[SOURCE_MAX_PATH];
+  ch tmpfilename[SOURCE_MAX_PATH];
   Q_StripExtension(filename, tmpfilename, sizeof(tmpfilename));
   Q_DefaultExtension(tmpfilename, ".WAV", sizeof(tmpfilename));
 
@@ -70,8 +69,8 @@ void WaveAppendTmpFile(const char *filename, void *pBuffer, int sampleBits,
   g_pFileSystem->Close(file);
 }
 
-void WaveFixupTmpFile(const char *filename) {
-  char tmpfilename[SOURCE_MAX_PATH];
+void WaveFixupTmpFile(const ch *filename) {
+  ch tmpfilename[SOURCE_MAX_PATH];
   Q_StripExtension(filename, tmpfilename, sizeof(tmpfilename));
   Q_DefaultExtension(tmpfilename, ".WAV", sizeof(tmpfilename));
 
@@ -110,13 +109,13 @@ CON_COMMAND(movie_fixwave,
     return;
   }
 
-  char const *wavname = args.Arg(1);
+  ch const *wavname = args.Arg(1);
   if (!g_pFileSystem->FileExists(wavname)) {
     Warning("movie_fixwave: File '%s' does not exist\n", wavname);
     return;
   }
 
-  char tmpfilename[256];
+  ch tmpfilename[256];
   Q_StripExtension(wavname, tmpfilename, sizeof(tmpfilename));
   Q_strncat(tmpfilename, "_fixed", sizeof(tmpfilename), COPY_ALL_CHARACTERS);
   Q_DefaultExtension(tmpfilename, ".wav", sizeof(tmpfilename));

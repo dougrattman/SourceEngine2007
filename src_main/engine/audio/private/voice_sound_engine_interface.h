@@ -57,7 +57,7 @@ int Voice_GetOutputData(
     //! The voice channel it wants samples from.
     const int iChannel,
     //! The buffer to copy the samples into.
-    char *copyBuf,
+    ch *copyBuf,
     //! Maximum size of copyBuf.
     const int copyBufSize,
     //! Which sample to start at.

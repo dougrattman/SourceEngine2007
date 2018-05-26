@@ -21,7 +21,7 @@ class CAudioMixerWaveADPCM : public CAudioMixerWave {
                    int outputOffset, int inputOffset, fixedint fracRate,
                    int outCount, int timecompress);
   virtual int GetOutputData(void **pData, int sampleCount,
-                            char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
+                            ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
 
   // need to override this to fixup blocks
   void SetSampleStart(int newPosition);
@@ -30,8 +30,8 @@ class CAudioMixerWaveADPCM : public CAudioMixerWave {
  private:
   bool DecodeBlock(void);
   int NumChannels(void);
-  void DecompressBlockMono(short *pOut, const char *pIn, int count);
-  void DecompressBlockStereo(short *pOut, const char *pIn, int count);
+  void DecompressBlockMono(short *pOut, const ch *pIn, int count);
+  void DecompressBlockStereo(short *pOut, const ch *pIn, int count);
 
   const ADPCMWAVEFORMAT *m_pFormat;
   const ADPCMCOEFSET *m_pCoefficients;
@@ -65,7 +65,7 @@ CAudioMixerWaveADPCM::CAudioMixerWaveADPCM(IWaveData *data)
   m_pFormat = (const ADPCMWAVEFORMAT *)source.GetHeader();
   if (m_pFormat) {
     m_pCoefficients =
-        (ADPCMCOEFSET *)((char *)m_pFormat + sizeof(WAVEFORMATEX) + 4);
+        (ADPCMCOEFSET *)((ch *)m_pFormat + sizeof(WAVEFORMATEX) + 4);
 
     // create the decode buffer
     m_pSamples =
@@ -82,9 +82,9 @@ CAudioMixerWaveADPCM::CAudioMixerWaveADPCM(IWaveData *data)
   }
 }
 
-CAudioMixerWaveADPCM::~CAudioMixerWaveADPCM(void) { delete[] m_pSamples; }
+CAudioMixerWaveADPCM::~CAudioMixerWaveADPCM() { delete[] m_pSamples; }
 
-int CAudioMixerWaveADPCM::NumChannels(void) {
+int CAudioMixerWaveADPCM::NumChannels() {
   if (m_pFormat) {
     return m_pFormat->wfx.nChannels;
   }
@@ -115,7 +115,7 @@ static int error_coefficients_lut[] = {230, 230, 230, 230, 307, 409, 512, 614,
 //			count - number of samples to decode (to support partial
 // blocks)
 //-----------------------------------------------------------------------------
-void CAudioMixerWaveADPCM::DecompressBlockMono(short *pOut, const char *pIn,
+void CAudioMixerWaveADPCM::DecompressBlockMono(short *pOut, const ch *pIn,
                                                int count) {
   int pred = *pIn++;
   int co1 = m_pCoefficients[pred].iCoef1;
@@ -199,7 +199,7 @@ void CAudioMixerWaveADPCM::DecompressBlockMono(short *pOut, const char *pIn,
 //			*pIn - ADPCM encoded block data
 //			count - number of sample pairs to decode
 //-----------------------------------------------------------------------------
-void CAudioMixerWaveADPCM::DecompressBlockStereo(short *pOut, const char *pIn,
+void CAudioMixerWaveADPCM::DecompressBlockStereo(short *pOut, const ch *pIn,
                                                  int count) {
   int pred[2], co1[2], co2[2];
   int i;
@@ -294,9 +294,9 @@ void CAudioMixerWaveADPCM::DecompressBlockStereo(short *pOut, const char *pIn,
 //			routine.
 // Output : Returns true if data was decoded, false if none.
 //-----------------------------------------------------------------------------
-bool CAudioMixerWaveADPCM::DecodeBlock(void) {
-  char tmpBlock[MAX_BLOCK_SIZE];
-  char *pData;
+bool CAudioMixerWaveADPCM::DecodeBlock() {
+  ch tmpBlock[MAX_BLOCK_SIZE];
+  ch *pData;
   int blockSize;
   int firstSample;
 
@@ -373,7 +373,7 @@ bool CAudioMixerWaveADPCM::DecodeBlock(void) {
 // Output : int - available samples (zero to stop decoding)
 //-----------------------------------------------------------------------------
 int CAudioMixerWaveADPCM::GetOutputData(
-    void **pData, int sampleCount, char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+    void **pData, int sampleCount, ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   if (m_samplePosition >= m_sampleCount) {
     if (!DecodeBlock()) return 0;
   }

@@ -215,15 +215,15 @@ CVoiceChannel g_VoiceChannels[VOICE_NUM_CHANNELS];
 
 // These are used for recording the wave data into files for debugging.
 #define MAX_WAVEFILEDATA_LEN 1024 * 1024
-char *g_pUncompressedFileData = NULL;
+ch *g_pUncompressedFileData = NULL;
 int g_nUncompressedDataBytes = 0;
-const char *g_pUncompressedDataFilename = NULL;
+const ch *g_pUncompressedDataFilename = NULL;
 
-char *g_pDecompressedFileData = NULL;
+ch *g_pDecompressedFileData = NULL;
 int g_nDecompressedDataBytes = 0;
-const char *g_pDecompressedDataFilename = NULL;
+const ch *g_pDecompressedDataFilename = NULL;
 
-char *g_pMicInputFileData = NULL;
+ch *g_pMicInputFileData = NULL;
 int g_nMicInputFileBytes = 0;
 int g_CurMicInputFileByte = 0;
 double g_MicStartTime;
@@ -271,18 +271,18 @@ class CVoiceWriter {
       if (data->m_Buffer.TellPut() <= 0) continue;
 
       int index = data->m_pChannel - g_VoiceChannels;
-      Assert(index >= 0 && index < SOURCE_ARRAYSIZE(g_VoiceChannels));
+      Assert(index >= 0 && index < std::size(g_VoiceChannels));
 
-      char path[SOURCE_MAX_PATH];
+      ch path[SOURCE_MAX_PATH];
       Q_snprintf(path, sizeof(path), "%s/voice",
                  g_pSoundServices->GetGameDir());
       g_pFileSystem->CreateDirHierarchy(path);
 
-      char fn[SOURCE_MAX_PATH];
+      ch fn[SOURCE_MAX_PATH];
       Q_snprintf(fn, sizeof(fn), "%s/pl%02d_slot%d-time%d.wav", path, index,
                  data->m_nCount, (int)g_pSoundServices->GetClientTime());
 
-      WriteWaveFile(fn, (const char *)data->m_Buffer.Base(),
+      WriteWaveFile(fn, (const ch *)data->m_Buffer.Base(),
                     data->m_Buffer.TellPut(),
                     g_VoiceSampleFormat.wBitsPerSample,
                     g_VoiceSampleFormat.nChannels, Voice_SamplesPerSec());
@@ -323,11 +323,11 @@ inline void ApplyFadeToSamples(short *pSamples, int nSamples, int fadeOffset,
   }
 }
 
-bool Voice_Enabled(void) { return voice_enable.GetBool(); }
+bool Voice_Enabled() { return voice_enable.GetBool(); }
 
 int Voice_GetOutputData(
     const int iChannel,        //! The voice channel it wants samples from.
-    char *copyBufBytes,        //! The buffer to copy the samples into.
+    ch *copyBufBytes,        //! The buffer to copy the samples into.
     const int copyBufSize,     //! Maximum size of copyBuf.
     const int samplePosition,  //! Which sample to start at.
     const int sampleCount      //! How many samples to get.
@@ -421,7 +421,7 @@ CVoiceChannel *GetVoiceChannel(int iChannel, bool bAssert = true) {
   }
 }
 
-bool Voice_Init(const char *pCodecName) {
+bool Voice_Init(const ch *pCodecName) {
   if (voice_enable.GetInt() == 0) {
     return false;
   }
@@ -579,7 +579,7 @@ void Voice_UpdateVoiceTweakMode() {
     return;
   }
 
-  char uchVoiceData[4096];
+  ch uchVoiceData[4096];
   bool bFinal = false;
   int nDataLength =
       Voice_GetCompressedData(uchVoiceData, sizeof(uchVoiceData), bFinal);
@@ -673,9 +673,9 @@ void Voice_Idle(float frametime) {
 
 bool Voice_IsRecording() { return g_bVoiceRecording && !g_bInTweakMode; }
 
-bool Voice_RecordStart(const char *pUncompressedFile,
-                       const char *pDecompressedFile,
-                       const char *pMicInputFile) {
+bool Voice_RecordStart(const ch *pUncompressedFile,
+                       const ch *pDecompressedFile,
+                       const ch *pMicInputFile) {
   if (!g_pEncodeCodec) return false;
 
   g_VoiceWriter.Flush();
@@ -693,13 +693,13 @@ bool Voice_RecordStart(const char *pUncompressedFile,
   }
 
   if (pUncompressedFile) {
-    g_pUncompressedFileData = new char[MAX_WAVEFILEDATA_LEN];
+    g_pUncompressedFileData = new ch[MAX_WAVEFILEDATA_LEN];
     g_nUncompressedDataBytes = 0;
     g_pUncompressedDataFilename = pUncompressedFile;
   }
 
   if (pDecompressedFile) {
-    g_pDecompressedFileData = new char[MAX_WAVEFILEDATA_LEN];
+    g_pDecompressedFileData = new ch[MAX_WAVEFILEDATA_LEN];
     g_nDecompressedDataBytes = 0;
     g_pDecompressedDataFilename = pDecompressedFile;
   }
@@ -752,7 +752,7 @@ bool Voice_RecordStop() {
   return (true);
 }
 
-int Voice_GetCompressedData(char *pchDest, int nCount, bool bFinal) {
+int Voice_GetCompressedData(ch *pchDest, int nCount, bool bFinal) {
   IVoiceCodec *pCodec = g_pEncodeCodec;
   if (g_pVoiceRecord && pCodec) {
     short tempData[8192];
@@ -777,11 +777,11 @@ int Voice_GetCompressedData(char *pchDest, int nCount, bool bFinal) {
 #ifdef VOICE_SEND_RAW_TEST
     int nCompressedBytes = std::min(gotten, nCount);
     for (int i = 0; i < nCompressedBytes; i++) {
-      pchDest[i] = (char)(tempData[i] >> 8);
+      pchDest[i] = (ch)(tempData[i] >> 8);
     }
 #else
     int nCompressedBytes =
-        pCodec->Compress((char *)tempData, gotten, pchDest, nCount, !!bFinal);
+        pCodec->Compress((ch *)tempData, gotten, pchDest, nCount, !!bFinal);
 #endif
 
     // Write to our file buffers..
@@ -877,7 +877,7 @@ double UpsampleIntoBuffer(const short *pSrc, int nSrcSamples,
 // Input  :
 // Output :
 //------------------------------------------------------------------------------
-int Voice_AddIncomingData(int nChannel, const char *pchData, int nCount,
+int Voice_AddIncomingData(int nChannel, const ch *pchData, int nCount,
                           int iSequenceNumber) {
   CVoiceChannel *pChannel;
 
@@ -901,7 +901,7 @@ int Voice_AddIncomingData(int nChannel, const char *pchData, int nCount,
                                  // called.
 
   // Decompress.
-  char decompressed[8192];
+  ch decompressed[8192];
 
 #ifdef VOICE_SEND_RAW_TEST
 

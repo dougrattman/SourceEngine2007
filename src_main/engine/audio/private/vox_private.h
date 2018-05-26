@@ -34,7 +34,7 @@ struct sentence_t {
   sentence_t()
       : pName{0}, length{0.0f}, closecaption{false}, isPrecached{false} {}
 
-  char *pName;
+  ch *pName;
   float length;
   bool closecaption : 7;
   bool isPrecached : 1;
@@ -46,9 +46,9 @@ extern CUtlVector<sentence_t> g_Sentences;
 extern int VOX_FPaintPitchChannelFrom8(channel_t *ch, sfxcache_t *sc, int count,
                                        int pitch, int timecompress);
 extern void VOX_TrimStartEndTimes(channel_t *ch, sfxcache_t *sc);
-extern int VOX_ParseWordParams(char *psz, voxword_t *pvoxword, int fFirst);
+extern int VOX_ParseWordParams(ch *psz, voxword_t *pvoxword, int fFirst);
 extern void VOX_SetChanVol(channel_t *ch);
-extern char **VOX_ParseString(char *psz);
+extern ch **VOX_ParseString(ch *psz);
 extern CAudioMixer *CreateSentenceMixer(voxword_t *pwords);
 
 #endif  // VOX_PRIVATE_H

@@ -28,29 +28,29 @@ the_interface CAudioSourceMP3 : public CAudioSource {
   virtual int GetOutputData(void **pData, int samplePosition, int sampleCount,
                             char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) = 0;
 
-  virtual int SampleRate(void) { return m_sampleRate; }
+  virtual int SampleRate() { return m_sampleRate; }
 
   // Returns true if the source is a voice source.
   // This affects the voice_overdrive behavior (all sounds get quieter when
   // someone is speaking).
   virtual bool IsVoiceSource() { return false; }
-  virtual int SampleSize(void) { return 1; }
+  virtual int SampleSize() { return 1; }
 
   // Total number of samples in this source.  NOTE: Some sources are infinite
   // (mic input), they should return a count equal to one second of audio at
   // their current rate.
-  virtual int SampleCount(void) { return m_dataSize; }
+  virtual int SampleCount() { return m_dataSize; }
 
   virtual int Format() { return 0; }
-  virtual int DataSize(void) { return 0; }
+  virtual int DataSize() { return 0; }
 
-  virtual bool IsLooped(void) { return false; }
-  virtual bool IsStereoWav(void) { return false; }
-  virtual bool IsStreaming(void) { return false; }
-  virtual int GetCacheStatus(void) { return AUDIO_IS_LOADED; }
-  virtual void CacheLoad(void) {}
-  virtual void CacheUnload(void) {}
-  virtual CSentence *GetSentence(void) { return NULL; }
+  virtual bool IsLooped() { return false; }
+  virtual bool IsStereoWav() { return false; }
+  virtual bool IsStreaming() { return false; }
+  virtual int GetCacheStatus() { return AUDIO_IS_LOADED; }
+  virtual void CacheLoad() {}
+  virtual void CacheUnload() {}
+  virtual CSentence *GetSentence() { return NULL; }
 
   virtual int ZeroCrossingBefore(int sample) { return sample; }
   virtual int ZeroCrossingAfter(int sample) { return sample; }
@@ -119,7 +119,7 @@ class CAudioSourceStreamMP3 : public CAudioSourceMP3, public IWaveStreamSource {
   CAudioSourceStreamMP3(CSfxTable *pSfx, CAudioSourceCachedInfo *info);
   ~CAudioSourceStreamMP3() {}
 
-  bool IsStreaming(void) { return true; }
+  bool IsStreaming() { return true; }
   bool IsStereoWav() { return false; }
   CAudioMixer *CreateMixer(int initialStreamPosition = 0);
   int GetOutputData(void **pData, int samplePosition, int sampleCount,

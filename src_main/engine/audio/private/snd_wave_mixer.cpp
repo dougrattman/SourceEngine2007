@@ -21,7 +21,7 @@ class CAudioMixerWave8Mono : public CAudioMixerWave {
   virtual void Mix(IAudioDevice *pDevice, channel_t *pChannel, void *pData,
                    int outputOffset, int inputOffset, fixedint fracRate,
                    int outCount, int timecompress) {
-    pDevice->Mix8Mono(pChannel, (char *)pData, outputOffset, inputOffset,
+    pDevice->Mix8Mono(pChannel, (ch *)pData, outputOffset, inputOffset,
                       fracRate, outCount, timecompress);
   }
 };
@@ -36,7 +36,7 @@ class CAudioMixerWave8Stereo : public CAudioMixerWave {
   virtual void Mix(IAudioDevice *pDevice, channel_t *pChannel, void *pData,
                    int outputOffset, int inputOffset, fixedint fracRate,
                    int outCount, int timecompress) {
-    pDevice->Mix8Stereo(pChannel, (char *)pData, outputOffset, inputOffset,
+    pDevice->Mix8Stereo(pChannel, (ch *)pData, outputOffset, inputOffset,
                         fracRate, outCount, timecompress);
   }
 };
@@ -133,7 +133,7 @@ CAudioMixerWave::CAudioMixerWave(IWaveData *data) : m_pData(data) {
 //-----------------------------------------------------------------------------
 // Purpose: Frees the data access object (we own it after construction)
 //-----------------------------------------------------------------------------
-CAudioMixerWave::~CAudioMixerWave(void) {
+CAudioMixerWave::~CAudioMixerWave() {
   GetSource()->ReferenceRemove(this);
   delete m_pData;
 }
@@ -152,7 +152,7 @@ bool CAudioMixerWave::IsReadyToMix() { return m_pData->IsReadyToMix(); }
 // Output : number of samples available in this batch
 //-----------------------------------------------------------------------------
 int CAudioMixerWave::GetOutputData(void **pData, int sampleCount,
-                                   char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+                                   ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   int samples_loaded;
 
   samples_loaded =
@@ -171,7 +171,7 @@ int CAudioMixerWave::GetOutputData(void **pData, int sampleCount,
 // Purpose: calls through the wavedata to get the audio source
 // Output : CAudioSource
 //-----------------------------------------------------------------------------
-CAudioSource *CAudioMixerWave::GetSource(void) {
+CAudioSource *CAudioMixerWave::GetSource() {
   if (m_pData) return &m_pData->Source();
 
   return NULL;
@@ -182,7 +182,7 @@ CAudioSource *CAudioMixerWave::GetSource(void) {
 //			to be loaded).
 // Output : int (samples from start of wave)
 //-----------------------------------------------------------------------------
-int CAudioMixerWave::GetSamplePosition(void) { return m_sample_max_loaded; }
+int CAudioMixerWave::GetSamplePosition() { return m_sample_max_loaded; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -248,13 +248,13 @@ int CAudioMixerWave::SkipSamples(channel_t *pChannel, int sampleCount,
 // Returns: NULL ptr to data if no samples available, otherwise always fills
 // remainder of copy buffer with 0 to pad remainder. NOTE: DO NOT MODIFY THIS
 // ROUTINE (KELLYB)
-char *CAudioMixerWave::LoadMixBuffer(channel_t *pChannel,
+ch *CAudioMixerWave::LoadMixBuffer(channel_t *pChannel,
                                      int sample_load_request,
                                      int *pSamplesLoaded,
-                                     char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+                                     ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   int samples_loaded;
-  char *pSample = NULL;
-  char *pData = NULL;
+  ch *pSample = NULL;
+  ch *pData = NULL;
   int cCopySamps = 0;
 
   // save index of last sample loaded (updated in GetOutputData)
@@ -273,7 +273,7 @@ char *CAudioMixerWave::LoadMixBuffer(channel_t *pChannel,
   }
 
   int samplesize = GetMixSampleSize();
-  char *pCopy = (char *)g_temppaintbuffer;
+  ch *pCopy = (ch *)g_temppaintbuffer;
 
   if (IsDebug()) {
     // for safety, 360 always validates sample request, due to new xma audio
@@ -370,7 +370,7 @@ char *CAudioMixerWave::LoadMixBuffer(channel_t *pChannel,
   // copy loaded samples from pData into pCopy
   // and update pointer to free space in copy buffer
   if ((samples_loaded * samplesize) != 0 && !pData) {
-    char const *pWavName = "";
+    ch const *pWavName = "";
     CSfxTable *source = pChannel->sfx;
     if (source) {
       pWavName = source->getname();
@@ -453,7 +453,7 @@ char *CAudioMixerWave::LoadMixBuffer(channel_t *pChannel,
 
   *pSamplesLoaded = samples_loaded;
 
-  return (char *)g_temppaintbuffer;
+  return (ch *)g_temppaintbuffer;
 }
 
 // Helper routine to round (rate * samples) down to fixed point precision
@@ -598,7 +598,7 @@ int CAudioMixerWave::MixDataToDevice_(IAudioDevice *pDevice,
   while (sampleCount > 0) {
     bool advanceSample = true;
     int samples_loaded, outputSampleCount;
-    char *pData = NULL;
+    ch *pData = NULL;
     double fsample_index_prev =
         m_fsample_index;  // save so we can modify in LoadMixBuffer
     bool bInterpolated_pitch = FUseHighQualityPitch(pChannel);
@@ -631,7 +631,7 @@ int CAudioMixerWave::MixDataToDevice_(IAudioDevice *pDevice,
       // make sure we don't overflow temp copy buffer (g_temppaintbuffer)
       Assert((TEMP_COPY_BUFFER_SIZE * sizeof(portable_samplepair_t)) >
              readBytes);
-      pData = (char *)g_temppaintbuffer;
+      pData = (ch *)g_temppaintbuffer;
 
       // Now copy in some zeroes
       memset(pData, 0, readBytes);
@@ -649,7 +649,7 @@ int CAudioMixerWave::MixDataToDevice_(IAudioDevice *pDevice,
     } else {
       // ask the source for the data...
       // temp buffer req'd by some data loaders
-      char copyBuf[AUDIOSOURCE_COPYBUF_SIZE];
+      ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE];
 
       // compute number of new samples to load at 'rate' so we can
       // output 'sampleCount' samples, from m_fsample_index to fsample_index_end
@@ -727,8 +727,8 @@ int CAudioMixerWave::MixDataToDevice_(IAudioDevice *pDevice,
   return outputOffset - startingOffset;
 }
 
-bool CAudioMixerWave::ShouldContinueMixing(void) { return !m_finished; }
+bool CAudioMixerWave::ShouldContinueMixing() { return !m_finished; }
 
 float CAudioMixerWave::ModifyPitch(float pitch) { return pitch; }
 
-float CAudioMixerWave::GetVolumeScale(void) { return 1.0f; }
+float CAudioMixerWave::GetVolumeScale() { return 1.0f; }

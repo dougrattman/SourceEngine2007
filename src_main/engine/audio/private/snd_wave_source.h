@@ -21,7 +21,7 @@ class CAudioSourceWave : public CAudioSource {
   virtual int GetType(void);
   virtual void GetCacheData(CAudioSourceCachedInfo *info);
 
-  void Setup(const char *pFormat, int formatSize, IterateRIFF &walk);
+  void Setup(const ch *pFormat, int formatSize, IterateRIFF &walk);
   virtual int SampleRate(void);
   virtual int SampleSize(void);
   virtual int SampleCount(void);
@@ -35,7 +35,7 @@ class CAudioSourceWave : public CAudioSource {
   virtual void ParseChunk(IterateRIFF &walk, int chunkName);
   virtual void ParseSentence(IterateRIFF &walk);
 
-  void ConvertSamples(char *pData, int sampleCount);
+  void ConvertSamples(ch *pData, int sampleCount);
   bool IsLooped(void);
   bool IsStereoWav(void);
   bool IsStreaming(void);
@@ -49,13 +49,13 @@ class CAudioSourceWave : public CAudioSource {
   virtual void ReferenceRemove(CAudioMixer *pMixer);
   virtual bool CanDelete(void);
   virtual CSentence *GetSentence(void);
-  const char *GetName();
+  const ch *GetName();
 
   virtual bool IsAsyncLoad();
 
   virtual void CheckAudioSourceCache();
 
-  virtual char const *GetFileName();
+  virtual ch const *GetFileName();
 
   // 360 uses alternate play once semantics
   virtual void SetPlayOnce(bool bIsPlayOnce) {
@@ -76,7 +76,7 @@ class CAudioSourceWave : public CAudioSource {
   void ParseCueChunk(IterateRIFF &walk);
   void ParseSamplerChunk(IterateRIFF &walk);
 
-  void Init(const char *pHeaderBuffer, int headerSize);
+  void Init(const ch *pHeaderBuffer, int headerSize);
   bool GetStartupData(void *dest, int destsize, int &bytesCopied);
   bool GetXboxAudioStartupData();
 
@@ -112,7 +112,7 @@ class CAudioSourceWave : public CAudioSource {
   int m_dataStart;  // offset of sample data
   int m_dataSize;   // size of sample data
 
-  char *m_pHeader;
+  ch *m_pHeader;
   int m_nHeaderSize;
 
   CAudioSourceCachedInfoHandle_t m_AudioCacheHandle;
@@ -125,12 +125,12 @@ class CAudioSourceWave : public CAudioSource {
   int m_numDecodedSamples;
 
   // additional data needed by xma decoder to for looping
-  unsigned short m_loopBlock;           // the block the loop occurs in
-  unsigned short m_numLeadingSamples;   // number of leader samples in the loop
+  u16 m_loopBlock;           // the block the loop occurs in
+  u16 m_numLeadingSamples;   // number of leader samples in the loop
                                         // block to discard
-  unsigned short m_numTrailingSamples;  // number of trailing samples in the
+  u16 m_numTrailingSamples;  // number of trailing samples in the
                                         // final block to discard
-  unsigned short unused;
+  u16 unused;
 
   unsigned int m_bNoSentence : 1;
   unsigned int m_bIsPlayOnce : 1;
@@ -142,7 +142,7 @@ class CAudioSourceWave : public CAudioSource {
 
 #ifdef _DEBUG
   // Only set in debug mode so you can see the name.
-  const char *m_pDebugName;
+  const ch *m_pDebugName;
 #endif
 };
 

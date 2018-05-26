@@ -21,8 +21,8 @@ void S_Startup();
 void S_FlushSoundData(int rate);
 
 CAudioSource *S_LoadSound(CSfxTable *s, channel_t *ch);
-void S_TouchSound(char *sample);
-CSfxTable *S_FindName(const char *name, int *pfInCache);
+void S_TouchSound(ch *sample);
+CSfxTable *S_FindName(const ch *name, int *pfInCache);
 
 // spatializes a channel
 void SND_Spatialize(channel_t *ch);
@@ -41,7 +41,7 @@ extern bool snd_initialized;
 
 extern class Vector listener_origin;
 
-void S_LocalSound(char *s);
+void S_LocalSound(ch *s);
 
 void SND_InitScaletable();
 

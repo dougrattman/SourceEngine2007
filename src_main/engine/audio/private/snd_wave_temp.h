@@ -6,10 +6,10 @@
 #ifndef SND_WAVE_TEMP_H
 #define SND_WAVE_TEMP_H
 
-extern void WaveCreateTmpFile(const char *filename, int rate, int bits,
+extern void WaveCreateTmpFile(const ch *filename, int rate, int bits,
                               int channels);
-extern void WaveAppendTmpFile(const char *filename, void *buffer,
+extern void WaveAppendTmpFile(const ch *filename, void *buffer,
                               int sampleBits, int numSamples);
-extern void WaveFixupTmpFile(const char *filename);
+extern void WaveFixupTmpFile(const ch *filename);
 
 #endif  // SND_WAVE_TEMP_H

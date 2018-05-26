@@ -129,7 +129,7 @@ void MIX_ScalePaintBuffer(int bufferIndex, int count, float fgain);
 //-----------------------------------------------------------------------------
 // Free allocated memory buffers
 //-----------------------------------------------------------------------------
-void MIX_FreeAllPaintbuffers(void) {
+void MIX_FreeAllPaintbuffers() {
   if (g_paintBuffers) {
     if (g_temppaintbuffer) {
       _aligned_free(g_temppaintbuffer);
@@ -158,7 +158,7 @@ void MIX_FreeAllPaintbuffers(void) {
 // Initialize paintbuffers array, set current paint buffer to main output buffer
 // IPAINTBUFFER
 //-----------------------------------------------------------------------------
-bool MIX_InitAllPaintbuffers(void) {
+bool MIX_InitAllPaintbuffers() {
   bool bSurround;
   bool bSurroundCenter;
   int i;
@@ -816,10 +816,8 @@ inline void MIX_SetCurrentPaintbuffer(int ipaintbuffer) {
 
 // return index to current paintbuffer
 
-inline int MIX_GetCurrentPaintbufferIndex(void) {
-  int i;
-
-  for (i = 0; i < CPAINTBUFFERS; i++) {
+inline int MIX_GetCurrentPaintbufferIndex() {
+  for (int i = 0; i < CPAINTBUFFERS; i++) {
     if (g_curpaintbuffer == g_paintBuffers[i].pbuf) return i;
   }
 
@@ -828,7 +826,7 @@ inline int MIX_GetCurrentPaintbufferIndex(void) {
 
 // return pointer to current paintbuffer struct
 
-inline paintbuffer_t *MIX_GetCurrentPaintbufferPtr(void) {
+inline paintbuffer_t *MIX_GetCurrentPaintbufferPtr() {
   int ipaint = MIX_GetCurrentPaintbufferIndex();
 
   Assert(ipaint < CPAINTBUFFERS);
@@ -933,7 +931,7 @@ inline void MIX_DeactivatePaintbuffer(int ipaintbuffer) {
 
 // Don't mix into any paintbuffers
 
-inline void MIX_DeactivateAllPaintbuffers(void) {
+inline void MIX_DeactivateAllPaintbuffers() {
   int i;
   for (i = 0; i < CPAINTBUFFERS; i++) g_paintBuffers[i].factive = false;
 }
@@ -2358,7 +2356,7 @@ bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
 //===============================================================================
 // Low level mixing routines
 //===============================================================================
-void Snd_WriteLinearBlastStereo16(void) {
+void Snd_WriteLinearBlastStereo16() {
 #if !id386
   int i;
   int val;
@@ -2436,7 +2434,7 @@ WLBS16_ClampDone2:
 #endif
 }
 
-void SND_InitScaletable(void) {
+void SND_InitScaletable() {
   int i, j;
 
   for (i = 0; i < SND_SCALE_LEVELS; i++)
@@ -3817,18 +3815,14 @@ bool SND_ShouldPause(channel_t *pChannel) {
 // Movie recording support
 //===============================================================================
 
-void SND_MovieStart(void) {
-  if (IsX360()) return;
-
+void SND_MovieStart() {
   if (!cl_movieinfo.IsRecording()) return;
 
   g_paintedtime = 0;
   g_soundtime = 0;
 
   // TMP Wave file supports stereo only, so force stereo
-  if (snd_surround.GetInt() != 2) {
-    snd_surround.SetValue(2);
-  }
+  if (snd_surround.GetInt() != 2) snd_surround.SetValue(2);
 
   // 44k: engine playback rate is now 44100...changed from 22050
   if (cl_movieinfo.DoWav()) {
@@ -3836,12 +3830,8 @@ void SND_MovieStart(void) {
   }
 }
 
-void SND_MovieEnd(void) {
-  if (IsX360()) return;
-
-  if (!cl_movieinfo.IsRecording()) {
-    return;
-  }
+void SND_MovieEnd() {
+  if (!cl_movieinfo.IsRecording()) return;
 
   if (cl_movieinfo.DoWav()) {
     WaveFixupTmpFile(cl_movieinfo.moviename);
@@ -3853,9 +3843,7 @@ bool SND_IsRecording() {
   return false;
 }
 
-void SND_RecordBuffer(void) {
-  if (IsX360()) return;
-
+void SND_RecordBuffer() {
   if (!SND_IsRecording()) return;
 
   int i;

@@ -88,8 +88,8 @@ CVBRHeader::CVBRHeader(CMPAFile* pMPAFile, VBRHeaderType HeaderType,
   }
 }
 
-bool CVBRHeader::CheckID(CMPAFile* pMPAFile, char ch0, char ch1, char ch2,
-                         char ch3, DWORD& dwOffset) {
+bool CVBRHeader::CheckID(CMPAFile* pMPAFile, ch ch0, ch ch1, ch ch2,
+                         ch ch3, DWORD& dwOffset) {
   return (pMPAFile->ExtractBytes(dwOffset, 4) ==
           MAKEFOURCC(ch3, ch2, ch1, ch0));
 }
@@ -212,7 +212,7 @@ bool CVBRHeader::ExtractVBRIHeader(DWORD dwOffset) {
   return true;
 }
 
-CVBRHeader::~CVBRHeader(void) { delete[] m_pnToc; }
+CVBRHeader::~CVBRHeader() { delete[] m_pnToc; }
 
 // get uint8_t position for percentage value (fPercent) of file
 bool CVBRHeader::SeekPoint(float fPercent, DWORD& dwSeekPoint) {

@@ -196,7 +196,7 @@ bool CMPAFile::GetLastFrame() {
 }
 
 // destructor
-CMPAFile::~CMPAFile(void) {
+CMPAFile::~CMPAFile() {
   delete m_pMPAHeader;
 
   delete m_pVBRHeader;

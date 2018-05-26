@@ -284,7 +284,7 @@ class CDummySfx : public CSfxTable {
 static CDummySfx dummySfx;
 
 // returns true if ok to procede with TraceRay calls
-bool SND_IsInGame(void) { return cl.IsActive(); }
+bool SND_IsInGame() { return cl.IsActive(); }
 
 CSfxTable::CSfxTable() {
   m_namePoolIndex = s_Sounds.InvalidIndex();
@@ -313,7 +313,7 @@ void CSfxTable::OnNameChanged(const char *pName) {
     Q_strncpy(szString, pName, sizeof(szString));
     Q_FixSlashes(szString, '/');
     m_mixGroupCount = MXR_GetMixGroupListFromDirName(
-        szString, m_mixGroupList, SOURCE_ARRAYSIZE(m_mixGroupList));
+        szString, m_mixGroupList, std::size(m_mixGroupList));
     m_bMixGroupsCached = true;
   }
 }
@@ -505,7 +505,7 @@ static CResourcePreloadSound s_ResourcePreloadSound;
 // Purpose:
 // Output : float
 //-----------------------------------------------------------------------------
-float S_GetMasterVolume(void) {
+float S_GetMasterVolume() {
   float scale = 1.0f;
   if (soundfade.percent != 0) {
     scale = std::clamp((float)soundfade.percent / 100.0f, 0.0f, 1.0f);
@@ -514,7 +514,7 @@ float S_GetMasterVolume(void) {
   return volume.GetFloat() * scale;
 }
 
-void S_SoundInfo_f(void) {
+void S_SoundInfo_f() {
   if (!g_AudioDevice->IsActive()) {
     Msg("Sound system not started\n");
     return;
@@ -534,7 +534,7 @@ S_Startup
 ================
 */
 
-void S_Startup(void) {
+void S_Startup() {
   if (!snd_initialized) return;
 
   if (!g_AudioDevice || g_AudioDevice == Audio_GetNullDevice()) {
@@ -566,15 +566,10 @@ bool IsValidSampleRate(int rate) {
   return rate == SOUND_11k || rate == SOUND_22k || rate == SOUND_44k;
 }
 
-/*
-================
-S_Init
-================
-*/
-void S_Init(void) {
+void S_Init() {
   if (sv.IsDedicated()) return;
 
-  DevMsg("Sound Initialization: Start\n");
+  DevMsg("Begin initialize sound...\n");
 
   // KDB: init sentence array
   TRACEINIT(VOX_Init(), VOX_Shutdown());
@@ -610,19 +605,17 @@ void S_Init(void) {
 
   AllocDsps(true);
 
-  DevMsg("Sound Initialization: Finish, Sampling Rate: %i\n",
+  DevMsg("End initialize sound, sampling rate: %i\n",
          g_AudioDevice->DeviceDmaSpeed());
 }
 
-// =======================================================================
 // Shutdown sound engine
-// =======================================================================
-void S_Shutdown(void) {
-#if !defined(_X360)
+void S_Shutdown() {
+  DevMsg("Begin shutdown sound...\n");
+
   if (VoiceTweak_IsStillTweaking()) {
     VoiceTweak_EndVoiceTweakMode();
   }
-#endif
 
   S_StopAllSounds(true);
   S_ShutdownMixThread();
@@ -663,16 +656,15 @@ void S_Shutdown(void) {
   s_buffers = 0;
   s_oldsampleOutCount = 0;
   s_lastsoundtime = 0.0f;
-#if !defined(_X360)
+
   Voice_Deinit();
-#endif
+
+  DevMsg("End shutdown sound\n");
 }
 
 bool S_IsInitted() { return snd_initialized; }
 
-// =======================================================================
 // Load a sound
-// =======================================================================
 
 //-----------------------------------------------------------------------------
 // Return sfx and set pfInCache to 1 if
@@ -1631,44 +1623,43 @@ float SND_GetGain(channel_t *ch, bool fplayersound, bool fmusicsound,
 
     // Now get the goldsrc dist_mult and use the same calculation it uses in
     // SND_Spatialize. Straight outta Goldsrc!!!
-    f32 sound_nominal_clip_dist = 1000.0;
     float flGoldsrcDistMult = flAttenuation / sound_nominal_clip_dist;
     dist *= flGoldsrcDistMult;
     float flReturnValue = 1.0f - dist;
     flReturnValue = std::clamp(flReturnValue, 0.0f, 1.0f);
     return flReturnValue;
-  } else {
-    float gain = snd_gain.GetFloat();
-
-    if (fmusicsound) {
-      gain = gain * snd_musicvolume.GetFloat();
-      gain = gain * g_DashboardMusicMixValue;
-    }
-
-    if (ch->dist_mult) {
-      gain = SND_GetGainFromMult(gain, ch->dist_mult, dist);
-    }
-
-    if (fplayersound) {
-      // player weapon sounds get extra gain - this compensates
-      // for npc distance effect weapons which mix louder as L+R into L,R
-      // Hack.
-
-      if (ch->entchannel == CHAN_WEAPON)
-        gain = gain * dB_To_Gain(SND_GAIN_PLAYER_WEAPON_DB);
-    }
-
-    // modify gain if sound source not visible to player
-
-    gain = gain * SND_GetGainObscured(ch, fplayersound, flooping, bAttenuated);
-
-    if (snd_showstart.GetInt() == 6) {
-      DevMsg("(gain %1.3f : dist ft %1.1f) ", gain, (float)dist / 12.0);
-      snd_showstart.SetValue(5);  // display once
-    }
-
-    return gain;
   }
+
+  float gain = snd_gain.GetFloat();
+
+  if (fmusicsound) {
+    gain = gain * snd_musicvolume.GetFloat();
+    gain = gain * g_DashboardMusicMixValue;
+  }
+
+  if (ch->dist_mult) {
+    gain = SND_GetGainFromMult(gain, ch->dist_mult, dist);
+  }
+
+  if (fplayersound) {
+    // player weapon sounds get extra gain - this compensates
+    // for npc distance effect weapons which mix louder as L+R into L,R
+    // Hack.
+
+    if (ch->entchannel == CHAN_WEAPON)
+      gain = gain * dB_To_Gain(SND_GAIN_PLAYER_WEAPON_DB);
+  }
+
+  // modify gain if sound source not visible to player
+
+  gain = gain * SND_GetGainObscured(ch, fplayersound, flooping, bAttenuated);
+
+  if (snd_showstart.GetInt() == 6) {
+    DevMsg("(gain %1.3f : dist ft %1.1f) ", gain, (float)dist / 12.0);
+    snd_showstart.SetValue(5);  // display once
+  }
+
+  return gain;
 }
 
 // always ramp channel gain changes over time
@@ -1758,7 +1749,7 @@ bool SND_ChannelOkToTrace(channel_t *ch) {
 // this happens if we hit a frame whein no tracelines occur ie: all currently
 // playing sounds are blocked.
 
-void SND_ChannelTraceReset(void) {
+void SND_ChannelTraceReset() {
   if (g_snd_trace_count) return;
 
   // if no tracelines performed this frame, then reset all
@@ -2123,8 +2114,8 @@ void SND_SetSpatialDelays() {
 
     case 4:  // front center: trace max 100' 'cone' to player's front
       v_dir = listener_forward2d;
-      v_dir2 = g_ssp.cycle ? (g_ssp.cycle == 1 ? listener_right * 0.15
-                                               : -listener_right * 0.15)
+      v_dir2 = g_ssp.cycle ? (g_ssp.cycle == 1 ? listener_right * 0.15f
+                                               : -listener_right * 0.15f)
                            : v_dir;
       v_dir = (v_dir + v_dir2);
       break;
@@ -2326,7 +2317,7 @@ void DAS_DebugDrawTrace(trace_t *ptr, int r, int g, int b, float duration,
 
 Vector g_das_vec3[DAS_CWALLS];  // trace vectors to walls, ceiling, floor
 
-void DAS_InitNodes(void) {
+void DAS_InitNodes() {
   Q_memset(g_das_nodes, 0, sizeof(das_node_t) * DAS_CNODES);
   g_das_check_next = 0;
   g_das_store_next = 0;
@@ -2387,7 +2378,7 @@ void DAS_InitAutoRoom(das_room_t *proom) {
 
 // reset all nodes for next round of visibility checks between player & nodes
 
-void DAS_ResetNodes(void) {
+void DAS_ResetNodes() {
   for (int i = 0; i < DAS_CNODES; i++) {
     g_das_nodes[i].fseesplayer = false;
     g_das_nodes[i].dist = 0;
@@ -3627,32 +3618,23 @@ void RemapPlayerOrMusicVols(channel_t *ch, int volumes[CCHANVOLUMES / 2],
   VPROF_("RemapPlayerOrMusicVols", 2, VPROF_BUDGETGROUP_OTHER_SOUND, false,
          BUDGETFLAG_OTHER);
 
-  if (!fplayersound && !fmusicsound) return;  // no remapping
-
-  if (ch->flags.bSpeaker)
-    return;  // don't remap speaker sounds rebroadcast on player
+  // no remapping
+  if (!fplayersound && !fmusicsound) return;
+  // don't remap speaker sounds rebroadcast on player
+  if (ch->flags.bSpeaker) return;
 
   // get total volume
 
-  float vol_total = 0.0;
-  int k;
-
-  for (k = 0; k < CCHANVOLUMES / 2; k++) vol_total += (float)volumes[k];
+  float vol_total = 0.0f;
+  for (int k = 0; k < CCHANVOLUMES / 2; k++) vol_total += (float)volumes[k];
 
   if (!g_AudioDevice->IsSurround()) {
-    if (mono < 1.0) return;
+    if (mono < 1.0f) return;
 
     // remap 2 chan non-spatialized versions of player and music sounds
     // note: this is required to keep volumes same as 4 & 5 ch cases!
-
-    float vol_dist_music[] = {1.0, 1.0};   // FL, FR music volumes
-    float vol_dist_player[] = {1.0, 1.0};  // FL, FR player volumes
-    float *pvol_dist;
-
-    pvol_dist = (fplayersound ? vol_dist_player : vol_dist_music);
-
-    for (k = 0; k < 2; k++)
-      volumes[k] = std::clamp((int)(vol_total * pvol_dist[k]), 0, 255);
+    volumes[0] = std::clamp((int)(vol_total), 0, 255);
+    volumes[1] = std::clamp((int)(vol_total), 0, 255);
 
     return;
   }
@@ -3670,21 +3652,23 @@ void RemapPlayerOrMusicVols(channel_t *ch, int volumes[CCHANVOLUMES / 2],
     // {0.29, 0.29, 0.09, 0.09, 0.63};	// FL, FR, RL, RR, FC - 5 channel
     // (stereo source) volume distribution
 
-    float vol_dist5[] = {0.30, 0.30, 0.09, 0.09, 0.59};  // FL, FR, RL, RR, FC -
-                                                         // 5 channel (mono
-                                                         // source) volume
-                                                         // distribution
-    float vol_dist5st[] = {0.30, 0.30, 0.09, 0.09,
-                           0.59};  // FL, FR, RL, RR, FC - 5 channel (stereo
-                                   // source) volume distribution
+    float vol_dist5[] = {0.30f, 0.30f, 0.09f, 0.09f,
+                         0.59f};  // FL, FR, RL, RR, FC -
+                                  // 5 channel (mono
+                                  // source) volume
+                                  // distribution
+    float vol_dist5st[] = {0.30f, 0.30f, 0.09f, 0.09f,
+                           0.59f};  // FL, FR, RL, RR, FC - 5 channel (stereo
+                                    // source) volume distribution
 
-    float vol_dist4[] = {0.50, 0.50, 0.15, 0.15, 0.00};  // FL, FR, RL, RR, 0  -
-                                                         // 4 channel (mono
-                                                         // source) volume
-                                                         // distribution
-    float vol_dist4st[] = {0.50, 0.50, 0.15, 0.15,
-                           0.00};  // FL, FR, RL, RR, 0  - 4 channel (stereo
-                                   // source)volume distribution
+    float vol_dist4[] = {0.50f, 0.50f, 0.15f, 0.15f,
+                         0.00f};  // FL, FR, RL, RR, 0  -
+                                  // 4 channel (mono
+                                  // source) volume
+                                  // distribution
+    float vol_dist4st[] = {0.50f, 0.50f, 0.15f, 0.15f,
+                           0.00f};  // FL, FR, RL, RR, 0  - 4 channel (stereo
+                                    // source)volume distribution
 
     float *pvol_dist;
 
@@ -3697,7 +3681,7 @@ void RemapPlayerOrMusicVols(channel_t *ch, int volumes[CCHANVOLUMES / 2],
       pvol_dist = (g_AudioDevice->IsSurroundCenter() ? vol_dist5 : vol_dist4);
     }
 
-    for (k = 0; k < 5; k++)
+    for (int k = 0; k < 5; k++)
       volumes[k] = std::clamp((int)(vol_total * pvol_dist[k]), 0, 255);
 
     return;
@@ -3706,15 +3690,15 @@ void RemapPlayerOrMusicVols(channel_t *ch, int volumes[CCHANVOLUMES / 2],
   // Special case for music in surround mode
 
   if (fmusicsound) {
-    float vol_dist5[] = {0.5, 0.5, 0.25, 0.25,
-                         0.0};  // FL, FR, RL, RR, FC - 5 channel distribution
-    float vol_dist4[] = {0.5, 0.5, 0.25, 0.25,
-                         0.0};  // FL, FR, RL, RR, 0  - 4 channel distribution
+    float vol_dist5[] = {0.5f, 0.5f, 0.25f, 0.25f,
+                         0.0f};  // FL, FR, RL, RR, FC - 5 channel distribution
+    float vol_dist4[] = {0.5f, 0.5f, 0.25f, 0.25f,
+                         0.0f};  // FL, FR, RL, RR, 0  - 4 channel distribution
     float *pvol_dist;
 
     pvol_dist = (g_AudioDevice->IsSurroundCenter() ? vol_dist5 : vol_dist4);
 
-    for (k = 0; k < 5; k++)
+    for (int k = 0; k < 5; k++)
       volumes[k] = std::clamp((int)(vol_total * pvol_dist[k]), 0, 255);
 
     return;
@@ -4581,8 +4565,8 @@ int S_StartDynamicSound(StartSoundParams_t &params) {
              ch->origin.z);
 
     if (snd_visualize.GetInt()) {
-      channel_t *ch = target_chan;
-      CDebugOverlay::AddTextOverlay(ch->origin, 2.0f, sndname);
+      channel_t *chn = target_chan;
+      CDebugOverlay::AddTextOverlay(chn->origin, 2.0f, sndname);
     }
   }
 
@@ -5184,11 +5168,11 @@ void S_StopAllSounds(bool bClear) {
   Assert(g_ActiveChannels.GetActiveCount() == 0);
 }
 
-void S_StopAllSoundsC(void) { S_StopAllSounds(true); }
+void S_StopAllSoundsC() { S_StopAllSounds(true); }
 
 void S_OnLoadScreen(bool value) { s_bOnLoadScreen = value; }
 
-void S_ClearBuffer(void) {
+void S_ClearBuffer() {
   if (!g_AudioDevice) return;
 
   g_AudioDevice->ClearBuffer();
@@ -5215,7 +5199,7 @@ void S_SoundFade(float percent, float holdtime, float intime, float outtime) {
 //-----------------------------------------------------------------------------
 // Purpose: Modulates sound volume on the client.
 //-----------------------------------------------------------------------------
-void S_UpdateSoundFade(void) {
+void S_UpdateSoundFade() {
   float totaltime;
   float f;
   // Determine current fade value.
@@ -5343,13 +5327,11 @@ Called once each time through the main loop
 */
 void S_Update(const AudioState_t *pAudioState) {
   VPROF("S_Update");
-  int i;
-  channel_t *ch;
-  channel_t *combine;
-  static unsigned int s_roundrobin =
-      0;  ///< number of times this function is called.
-          ///< used instead of host_frame because that number
-          ///< isn't necessarily available here (sez Yahn).
+
+  channel_t *ch, *combine;
+  //< number of times this function is called. used instead of host_frame
+  // because that number < isn't necessarily available here (sez Yahn).
+  static unsigned int s_roundrobin = 0;
 
   if (!g_AudioDevice->IsActive()) return;
 
@@ -5395,7 +5377,7 @@ void S_Update(const AudioState_t *pAudioState) {
 
   if (snd_spatialize_roundrobin.GetInt() == 0) {
     // spatialize each channel each time
-    for (i = 0; i < list.Count(); i++) {
+    for (int i = 0; i < list.Count(); i++) {
       ch = list.GetChannel(i);
       Assert(ch->sfx);
       Assert(ch->activeIndex > 0);
@@ -5414,7 +5396,7 @@ void S_Update(const AudioState_t *pAudioState) {
     unsigned int robinmask = (1 << snd_spatialize_roundrobin.GetInt()) - 1;
 
     // now do static channels
-    for (i = 0; i < list.Count(); ++i) {
+    for (int i = 0; i < list.Count(); ++i) {
       ch = list.GetChannel(i);
       Assert(ch->sfx);
       Assert(ch->activeIndex > 0);
@@ -5464,13 +5446,13 @@ void S_Update(const AudioState_t *pAudioState) {
 
       np.index = total + 2;
       if (ch->flags.fromserver) {
-        np.color[0] = 1.0;
-        np.color[1] = 0.8;
-        np.color[2] = 0.1;
+        np.color[0] = 1.0f;
+        np.color[1] = 0.8f;
+        np.color[2] = 0.1f;
       } else {
-        np.color[0] = 0.1;
-        np.color[1] = 0.9;
-        np.color[2] = 1.0;
+        np.color[0] = 0.1f;
+        np.color[1] = 0.9f;
+        np.color[2] = 1.0f;
       }
 
       unsigned int sampleCount = RemainingSamples(ch);
@@ -5569,7 +5551,7 @@ CON_COMMAND(snd_dumpclientsounds, "Dump sounds to VXConsole") {
 // Set g_soundtime to number of full samples that have been transfered out to
 // hardware since start.
 //-----------------------------------------------------------------------------
-void GetSoundTime(void) {
+void GetSoundTime() {
   int fullsamples;
   int sampleOutCount;
 
@@ -5614,15 +5596,12 @@ void GetSoundTime(void) {
   }
 }
 
-void S_ExtraUpdate(void) {
+void S_ExtraUpdate() {
   if (!g_AudioDevice || !g_pSoundServices) return;
-
   if (!g_AudioDevice->IsActive()) return;
-
   if (s_bOnLoadScreen) return;
-
-  if (snd_noextraupdate.GetInt() || cl_movieinfo.IsRecording())
-    return;  // don't pollute timings
+  // don't pollute timings
+  if (snd_noextraupdate.GetInt() || cl_movieinfo.IsRecording()) return;
 
   // If listener position and orientation has not yet been updated (ie: no call
   // to S_Update since level load) then don't mix.  Important - mixing with
@@ -5916,7 +5895,7 @@ static void S_PlayDelay(const CCommand &args) {
 }
 static ConCommand sndplaydelay("sndplaydelay", S_PlayDelay);
 
-void S_SoundList(void) {
+void S_SoundList() {
   CSfxTable *sfx;
   CAudioSource *pSource;
   int size, total;
@@ -6519,12 +6498,12 @@ struct debug_showvols_t {
 
 // display routine for MXR_DebugShowMixVolumes
 
-#define MXR_DEBUG_INCY (1.0 / 40.0)  // vertical text spacing
-#define MXR_DEBUG_GREENSTART 0.3     // start position on screen of bar
+#define MXR_DEBUG_INCY (1.0f / 40.0f)  // vertical text spacing
+#define MXR_DEBUG_GREENSTART 0.3f      // start position on screen of bar
 
-#define MXR_DEBUG_MAXVOL 1.0       // max volume scale
-#define MXR_DEBUG_REDLIMIT 1.0     // volume limit into yellow
-#define MXR_DEBUG_YELLOWLIMIT 0.7  // volume limit into red
+#define MXR_DEBUG_MAXVOL 1.0f       // max volume scale
+#define MXR_DEBUG_REDLIMIT 1.0f     // volume limit into yellow
+#define MXR_DEBUG_YELLOWLIMIT 0.7f  // volume limit into red
 
 #define MXR_DEBUG_VOLSCALE 48  // length of graph in characters
 #define MXR_DEBUG_CHAR '-'     // bar character
@@ -6541,7 +6520,7 @@ void MXR_DebugGraphMixVolumes(debug_showvols_t *groupvols, int cgroups) {
   char text[128];
   char bartext[MXR_DEBUG_VOLSCALE * 3];
 
-  duration = 0.01;
+  duration = 0.01f;
 
   g_debug_mxr_displaycount++;
 
@@ -6676,7 +6655,7 @@ double g_mxr_ducktime = 0.0;  // time of last update to ducker
 // process duck volumes for all groups
 // Call once per frame - updates occur at 10hz
 
-void MXR_UpdateAllDuckerVolumes(void) {
+void MXR_UpdateAllDuckerVolumes() {
   if (snd_disable_mixer_duck.GetInt()) return;
 
   // check timer since last update, only update at 10hz
@@ -6811,7 +6790,7 @@ ConVar snd_showmixer("snd_showmixer",
 
 // show the current soundmixer output
 
-void MXR_DebugShowMixVolumes(void) {
+void MXR_DebugShowMixVolumes() {
   if (snd_showmixer.GetInt() == 0) return;
 
   // for the current soundmixer:
@@ -6990,7 +6969,7 @@ char *MXR_GetGroupnameFromId(int mixgroupid) {
 // within grouprules. Note: all mixgroupids in grouprules must be -1
 // when this routine starts.
 
-void MXR_AssignGroupIds(void) {
+void MXR_AssignGroupIds() {
   int cmixgroupid = 0;
 
   for (int i = 0; i < g_cgrouprules; i++) {
@@ -7032,7 +7011,7 @@ int MXR_AddClassname(const char *pName) {
 
 // load group rules and sound mixers from file
 
-bool MXR_LoadAllSoundMixers(void) {
+bool MXR_LoadAllSoundMixers() {
   // init soundmixer globals
 
   g_isoundmixer = -1;
@@ -7264,7 +7243,7 @@ bool MXR_LoadAllSoundMixers(void) {
   return bResult;
 }
 
-void MXR_ReleaseMemory(void) {
+void MXR_ReleaseMemory() {
   // free all resources
 }
 

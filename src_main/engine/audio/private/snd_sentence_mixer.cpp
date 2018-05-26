@@ -79,7 +79,7 @@ CSentenceMixer::CSentenceMixer(voxword_t *pWords) {
     // get a private copy of the words
     m_VoxWords[m_nNumWords] = pWords[m_nNumWords];
     ++m_nNumWords;
-    if (m_nNumWords >= SOURCE_ARRAYSIZE(m_VoxWords)) {
+    if (m_nNumWords >= std::size(m_VoxWords)) {
       // very long sentence, prevent overflow
       break;
     }
@@ -92,7 +92,7 @@ CSentenceMixer::CSentenceMixer(voxword_t *pWords) {
     // the sentence will skip these words
     m_pWordMixers[nWord] = LoadWord(nWord);
   }
-  Assert(m_nNumWords < SOURCE_ARRAYSIZE(m_pWordMixers));
+  Assert(m_nNumWords < std::size(m_pWordMixers));
 
   // find first valid word mixer
   m_currentWordIndex = 0;
@@ -108,7 +108,7 @@ CSentenceMixer::CSentenceMixer(voxword_t *pWords) {
   m_bNewWord = (m_pCurrentWordMixer != NULL);
 }
 
-CSentenceMixer::~CSentenceMixer(void) {
+CSentenceMixer::~CSentenceMixer() {
   // free all words
   for (int nWord = 0; nWord < m_nNumWords; nWord++) {
     FreeWord(nWord);
@@ -158,7 +158,7 @@ bool CSentenceMixer::IsReadyToMix() {
   return true;
 }
 
-bool CSentenceMixer::ShouldContinueMixing(void) {
+bool CSentenceMixer::ShouldContinueMixing() {
   if (m_pCurrentWordMixer) {
     // keep mixing until the words run out
     return true;
@@ -167,7 +167,7 @@ bool CSentenceMixer::ShouldContinueMixing(void) {
   return false;
 }
 
-CAudioSource *CSentenceMixer::GetSource(void) {
+CAudioSource *CSentenceMixer::GetSource() {
   if (m_pCurrentWordMixer) {
     return m_pCurrentWordMixer->GetSource();
   }
@@ -176,7 +176,7 @@ CAudioSource *CSentenceMixer::GetSource(void) {
 }
 
 // get the current position (next sample to be mixed)
-int CSentenceMixer::GetSamplePosition(void) {
+int CSentenceMixer::GetSamplePosition() {
   if (m_pCurrentWordMixer) {
     return m_pCurrentWordMixer->GetSamplePosition();
   }
@@ -250,7 +250,7 @@ float CSentenceMixer::ModifyPitch(float pitch) {
   return pitch;
 }
 
-float CSentenceMixer::GetVolumeScale(void) {
+float CSentenceMixer::GetVolumeScale() {
   if (m_pCurrentWordMixer) {
     if (m_VoxWords[m_currentWordIndex].volume) {
       float volume = m_VoxWords[m_currentWordIndex].volume * 0.01;

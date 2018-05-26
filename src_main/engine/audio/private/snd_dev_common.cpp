@@ -591,25 +591,25 @@ void CAudioDeviceBase::Mix16Stereo(channel_t *pChannel, short *pData,
 // Null Audio Device
 class CAudioDeviceNull : public CAudioDeviceBase {
  public:
-  bool IsActive(void) { return false; }
-  bool Init(void) { return true; }
-  void Shutdown(void) {}
-  void Pause(void) {}
-  void UnPause(void) {}
-  float MixDryVolume(void) { return 0; }
-  bool Should3DMix(void) { return false; }
-  void StopAllSounds(void) {}
+  bool IsActive() { return false; }
+  bool Init() { return true; }
+  void Shutdown() {}
+  void Pause() {}
+  void UnPause() {}
+  float MixDryVolume() { return 0; }
+  bool Should3DMix() { return false; }
+  void StopAllSounds() {}
 
   int PaintBegin(float, int, int) { return 0; }
-  void PaintEnd(void) {}
+  void PaintEnd() {}
 
   void SpatializeChannel(int volume[CCHANVOLUMES / 2], int master_vol,
                          const Vector &sourceDir, float gain, float mono) {}
   void ApplyDSPEffects(int idsp, portable_samplepair_t *pbuffront,
                        portable_samplepair_t *pbufrear,
                        portable_samplepair_t *pbufcenter, int samplecount) {}
-  int GetOutputPosition(void) { return 0; }
-  void ClearBuffer(void) {}
+  int GetOutputPosition() { return 0; }
+  void ClearBuffer() {}
   void UpdateListener(const Vector &, const Vector &, const Vector &,
                       const Vector &) {}
 
@@ -632,21 +632,21 @@ class CAudioDeviceNull : public CAudioDeviceBase {
   void ChannelReset(int, int, float) {}
   void TransferSamples(int end) {}
 
-  const ch *DeviceName(void) { return "Audio Disabled"; }
-  int DeviceChannels(void) { return 2; }
-  int DeviceSampleBits(void) { return 16; }
-  int DeviceSampleBytes(void) { return 2; }
-  int DeviceDmaSpeed(void) { return SOUND_DMA_SPEED; }
-  int DeviceSampleCount(void) { return 0; }
+  const ch *DeviceName() { return "Audio Disabled"; }
+  int DeviceChannels() { return 2; }
+  int DeviceSampleBits() { return 16; }
+  int DeviceSampleBytes() { return 2; }
+  int DeviceDmaSpeed() { return SOUND_DMA_SPEED; }
+  int DeviceSampleCount() { return 0; }
 
-  bool IsSurround(void) { return false; }
-  bool IsSurroundCenter(void) { return false; }
-  bool IsHeadphone(void) { return false; }
+  bool IsSurround() { return false; }
+  bool IsSurroundCenter() { return false; }
+  bool IsHeadphone() { return false; }
 };
 
 IAudioDevice::~IAudioDevice() {}
 
-IAudioDevice *Audio_GetNullDevice(void) {
+IAudioDevice *Audio_GetNullDevice() {
   // singeton device here
   static CAudioDeviceNull nullDevice;
   return &nullDevice;

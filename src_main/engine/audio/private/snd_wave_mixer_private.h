@@ -25,7 +25,7 @@ the_interface CAudioMixerWave : public CAudioMixer {
                    int outputOffset, int inputOffset, fixedint fracRate,
                    int outCount, int timecompress) = 0;
   virtual int GetOutputData(void **pData, int sampleCount,
-                            char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
+                            ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
 
   virtual CAudioSource *GetSource(void);
   virtual int GetSamplePosition(void);
@@ -42,9 +42,9 @@ the_interface CAudioMixerWave : public CAudioMixer {
 
   // private helper routines
 
-  char *LoadMixBuffer(channel_t * pChannel, int sample_load_request,
+  ch *LoadMixBuffer(channel_t * pChannel, int sample_load_request,
                       int *psamples_loaded,
-                      char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
+                      ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
   int MixDataToDevice_(IAudioDevice * pDevice, channel_t * pChannel,
                        int sampleCount, int outputRate, int outputOffset,
                        bool bSkipAllSamples);

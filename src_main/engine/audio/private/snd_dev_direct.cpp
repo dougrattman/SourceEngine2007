@@ -9,6 +9,7 @@
 #include <ksmedia.h>
 #include "../../sys_dll.h"
 #include "avi/ibik.h"
+#include "base/include/windows/windows_errno_info.h"
 #include "eax.h"
 #include "iprediction.h"
 #include "tier0/include/icommandline.h"
@@ -28,19 +29,13 @@ extern float sxroom_typeprev;
 
 extern HWND *pmainwindow;
 
-typedef enum { SIS_SUCCESS, SIS_FAILURE, SIS_NOTAVAIL } sndinitstat;
+enum sndinitstat { SIS_SUCCESS, SIS_FAILURE, SIS_NOTAVAIL };
 
-#define SECONDARY_BUFFER_SIZE 0x10000  // output buffer size in bytes
-#define SECONDARY_BUFFER_SIZE_SURROUND \
-  0x04000  // output buffer size in bytes, one per channel
+// output buffer size in bytes
+#define SECONDARY_BUFFER_SIZE 0x10000
+// output buffer size in bytes, one per channel
+#define SECONDARY_BUFFER_SIZE_SURROUND 0x04000
 
-// hack - need to include latest dsound.h
-#undef DSSPEAKER_5POINT1
-#undef DSSPEAKER_7POINT1
-#define DSSPEAKER_5POINT1 6
-#define DSSPEAKER_7POINT1 7
-
-extern void ReleaseSurround();
 extern bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
                                    int volume[CCHANVOLUMES], int mixchans);
 void OnSndSurroundCvarChanged(IConVar *var, const ch *pOldString,
@@ -48,19 +43,13 @@ void OnSndSurroundCvarChanged(IConVar *var, const ch *pOldString,
 void OnSndSurroundLegacyChanged(IConVar *var, const ch *pOldString,
                                 float flOldValue);
 
-LPDIRECTSOUND8 pDS;
-LPDIRECTSOUNDBUFFER pDSBuf, pDSPBuf;
+IDirectSound8 *pDS;
 
-GUID IID_IDirectSound3DBufferDef = {
-    0x279AFA86,
-    0x4981,
-    0x11CE,
-    {0xA5, 0x21, 0x00, 0x20, 0xAF, 0x0B, 0xE5, 0x60}};
-
-// Purpose: Implementation of direct sound
+// Purpose: Implementation of Direct Sound audio device.
 class CAudioDirectSound : public CAudioDeviceBase {
  public:
   ~CAudioDirectSound();
+
   bool IsActive() { return true; }
   bool Init();
   void Shutdown();
@@ -82,29 +71,30 @@ class CAudioDirectSound : public CAudioDeviceBase {
   void TransferSamples(int end);
 
   const ch *DeviceName();
-  int DeviceChannels() { return m_deviceChannels; }
-  int DeviceSampleBits() { return m_deviceSampleBits; }
-  int DeviceSampleBytes() { return m_deviceSampleBits / 8; }
-  int DeviceDmaSpeed() { return m_deviceDmaSpeed; }
-  int DeviceSampleCount() { return m_deviceSampleCount; }
+  int DeviceChannels() { return device_channels_count_; }
+  int DeviceSampleBits() { return device_bits_per_sample_; }
+  int DeviceSampleBytes() { return device_bits_per_sample_ / 8; }
+  int DeviceDmaSpeed() { return device_samples_per_second_; }
+  int DeviceSampleCount() { return device_samples_count_; }
 
-  bool IsInterleaved() { return m_isInterleaved; }
+  bool IsInterleaved() { return is_interleaved_; }
 
   // Singleton object
-  static CAudioDirectSound *m_pSingleton;
+  static CAudioDirectSound *singleton_;
 
  private:
   void DetectWindowsSpeakerSetup();
-  bool LockDSBuffer(LPDIRECTSOUNDBUFFER pBuffer, DWORD **pdwWriteBuffer,
+  bool LockDSBuffer(IDirectSoundBuffer *pBuffer, DWORD **pdwWriteBuffer,
                     DWORD *pdwSizeBuffer, const ch *pBufferName,
                     int lockFlags = 0);
   bool IsUsingBufferPerSpeaker();
 
   sndinitstat SNDDMA_InitDirect();
-  bool SNDDMA_InitInterleaved(LPDIRECTSOUND8 lpDS, WAVEFORMATEX *lpFormat,
-                              int channelCount);
-  bool SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS, WAVEFORMATEX *lpFormat,
+  bool SNDDMA_InitInterleaved(IDirectSound8 *lpDS, WAVEFORMATEX *lpFormat,
+                              u16 channelCount);
+  bool SNDDMA_InitSurround(IDirectSound8 *lpDS, WAVEFORMATEX *lpFormat,
                            DSBCAPS *lpdsbc, int cchan);
+  void ReleaseSurround();
   void S_TransferSurround16(portable_samplepair_t *pfront,
                             portable_samplepair_t *prear,
                             portable_samplepair_t *pcenter, int lpaintedtime,
@@ -117,38 +107,38 @@ class CAudioDirectSound : public CAudioDeviceBase {
       const portable_samplepair_t *pfront, const portable_samplepair_t *prear,
       const portable_samplepair_t *pcenter, int lpaintedtime, int endtime);
 
-  int m_deviceChannels;  // channels per hardware output buffer (1 for quad/5.1,
-                         // 2 for stereo)
-  int m_deviceSampleBits;   // bits per sample (16)
-  int m_deviceSampleCount;  // count of mono samples in output buffer
-  int m_deviceDmaSpeed;     // samples per second per output buffer
-  int m_bufferSizeBytes;    // size of a single hardware output buffer, in bytes
+  IDirectSoundBuffer *ds_buffer_, *ds_p_buffer_;
+
+  u16 device_channels_count_;      // channels per hardware output buffer (1 for
+                                   // quad/5.1, 2 for stereo)
+  u16 device_bits_per_sample_;     // bits per sample (16)
+  u32 device_samples_count_;       // count of mono samples in output buffer
+  u32 device_samples_per_second_;  // samples per second per output buffer
+  u32 device_buffer_size_bytes_;   // size of a single hardware output buffer
 
   // output buffer playback starting uint8_t offset
-  DWORD m_outputBufferStartOffset;
-  HMODULE m_direct_sound_module;
-  bool m_isInterleaved;
+  DWORD output_buffer_start_offset_bytes_;
+  HMODULE directsound8_module_;
+  bool is_interleaved_;
+
+  IDirectSoundBuffer *ds_buf_fl_ = nullptr;
+  IDirectSoundBuffer *ds_buf_fr_ = nullptr;
+  IDirectSoundBuffer *ds_buf_rl_ = nullptr;
+  IDirectSoundBuffer *ds_buf_rr_ = nullptr;
+  IDirectSoundBuffer *ds_bug_fc_ = nullptr;
+  IDirectSound3DBuffer8 *ds_3d_buf_fl_ = nullptr;
+  IDirectSound3DBuffer8 *ds_3d_buf_fr_ = nullptr;
+  IDirectSound3DBuffer8 *ds_3d_buf_rl_ = nullptr;
+  IDirectSound3DBuffer8 *ds_3d_buf_rr_ = nullptr;
+  IDirectSound3DBuffer8 *ds_3d_buf_fc_ = nullptr;
 };
 
-CAudioDirectSound *CAudioDirectSound::m_pSingleton = nullptr;
+CAudioDirectSound *CAudioDirectSound::singleton_ = nullptr;
 
-LPDIRECTSOUNDBUFFER pDSBufFL = nullptr;
-LPDIRECTSOUNDBUFFER pDSBufFR = nullptr;
-LPDIRECTSOUNDBUFFER pDSBufRL = nullptr;
-LPDIRECTSOUNDBUFFER pDSBufRR = nullptr;
-LPDIRECTSOUNDBUFFER pDSBufFC = nullptr;
-LPDIRECTSOUND3DBUFFER8 pDSBuf3DFL = nullptr;
-LPDIRECTSOUND3DBUFFER8 pDSBuf3DFR = nullptr;
-LPDIRECTSOUND3DBUFFER8 pDSBuf3DRL = nullptr;
-LPDIRECTSOUND3DBUFFER8 pDSBuf3DRR = nullptr;
-LPDIRECTSOUND3DBUFFER8 pDSBuf3DFC = nullptr;
-
-// Helpers.
-
-CAudioDirectSound::~CAudioDirectSound() { m_pSingleton = nullptr; }
+CAudioDirectSound::~CAudioDirectSound() { singleton_ = nullptr; }
 
 bool CAudioDirectSound::Init() {
-  m_direct_sound_module = nullptr;
+  directsound8_module_ = nullptr;
 
   static bool is_first_time_init{true};
 
@@ -161,7 +151,8 @@ bool CAudioDirectSound::Init() {
   if (SNDDMA_InitDirect() == SIS_SUCCESS) {
     // Tells Bink to use DirectSound for its audio decoding.
     if (!bik->SetDirectSoundDevice(pDS)) {
-      AssertMsg(false, "Bink can't use DirectSound8 device.");
+      AssertMsg(false,
+                "Audio Direct Sound: bink can't use DirectSound8 device.");
     }
 
     return true;
@@ -173,15 +164,15 @@ bool CAudioDirectSound::Init() {
 void CAudioDirectSound::Shutdown() {
   ReleaseSurround();
 
-  if (pDSBuf) {
-    pDSBuf->Stop();
-    pDSBuf->Release();
+  if (ds_buffer_) {
+    ds_buffer_->Stop();
+    ds_buffer_->Release();
   }
 
   // only release primary buffer if it's not also the mixing buffer we just
   // released
-  if (pDSPBuf && (pDSBuf != pDSPBuf)) {
-    pDSPBuf->Release();
+  if (ds_p_buffer_ && (ds_buffer_ != ds_p_buffer_)) {
+    ds_p_buffer_->Release();
   }
 
   if (pDS) {
@@ -190,51 +181,49 @@ void CAudioDirectSound::Shutdown() {
   }
 
   pDS = nullptr;
-  pDSBuf = nullptr;
-  pDSPBuf = nullptr;
+  ds_buffer_ = nullptr;
+  ds_p_buffer_ = nullptr;
 
-  if (m_direct_sound_module) {
-    FreeLibrary(m_direct_sound_module);
-    m_direct_sound_module = nullptr;
+  if (directsound8_module_) {
+    FreeLibrary(directsound8_module_);
+    directsound8_module_ = nullptr;
   }
 
-  if (this == CAudioDirectSound::m_pSingleton) {
-    CAudioDirectSound::m_pSingleton = nullptr;
+  if (this == CAudioDirectSound::singleton_) {
+    CAudioDirectSound::singleton_ = nullptr;
   }
 }
 
-// Total number of samples that have played out to hardware
-// for current output buffer (ie: from buffer offset start).
-// return playback position within output playback buffer:
-// the output units are dependant on the device channels
-// so the ouput units for a 2 channel device are as 16 bit LR pairs
-// and the output unit for a 1 channel device are as 16 bit mono samples.
-// take into account the original start position within the buffer, and
-// calculate difference between current position (with buffer wrap) and
-// start position.
+// Total number of samples that have played out to hardware for current output
+// buffer (ie: from buffer offset start). return playback position within output
+// playback buffer: the output units are dependant on the device channels so the
+// ouput units for a 2 channel device are as 16 bit LR pairs and the output unit
+// for a 1 channel device are as 16 bit mono samples. take into account the
+// original start position within the buffer, and calculate difference between
+// current position (with buffer wrap) and start position.
 int CAudioDirectSound::GetOutputPosition() {
-  int samp16;
-  int start, current;
+  u32 start, current;
   DWORD dwCurrent;
 
   // get size in bytes of output buffer
-  const int size_bytes = m_bufferSizeBytes;
+  const u32 size_bytes = device_buffer_size_bytes_;
   if (IsUsingBufferPerSpeaker()) {
     // mono output buffers
     // get uint8_t offset of playback cursor in Front Left output buffer
-    pDSBufFL->GetCurrentPosition(&dwCurrent, NULL);
+    ds_buf_fl_->GetCurrentPosition(&dwCurrent, nullptr);
 
-    start = (int)m_outputBufferStartOffset;
-    current = (int)dwCurrent;
+    start = output_buffer_start_offset_bytes_;
+    current = dwCurrent;
   } else {
     // multi-channel interleavd output buffer
     // get uint8_t offset of playback cursor in output buffer
-    pDSBuf->GetCurrentPosition(&dwCurrent, NULL);
+    ds_buffer_->GetCurrentPosition(&dwCurrent, nullptr);
 
-    start = (int)m_outputBufferStartOffset;
-    current = (int)dwCurrent;
+    start = output_buffer_start_offset_bytes_;
+    current = dwCurrent;
   }
 
+  u32 samp16;
   // get 16 bit samples played, relative to buffer starting offset
   if (current > start) {
     // get difference & convert to 16 bit mono samples
@@ -244,56 +233,50 @@ int CAudioDirectSound::GetOutputPosition() {
     samp16 = ((size_bytes - start) + current) >> SAMPLE_16BIT_SHIFT;
   }
 
-  int outputPosition = samp16 / DeviceChannels();
-
-  return outputPosition;
+  return samp16 / DeviceChannels();
 }
 
 void CAudioDirectSound::Pause() {
-  if (pDSBuf) {
-    pDSBuf->Stop();
-  }
+  if (ds_buffer_) ds_buffer_->Stop();
 
-  if (pDSBufFL) pDSBufFL->Stop();
-  if (pDSBufFR) pDSBufFR->Stop();
-  if (pDSBufRL) pDSBufRL->Stop();
-  if (pDSBufRR) pDSBufRR->Stop();
-  if (pDSBufFC) pDSBufFC->Stop();
+  if (ds_buf_fl_) ds_buf_fl_->Stop();
+  if (ds_buf_fr_) ds_buf_fr_->Stop();
+  if (ds_buf_rl_) ds_buf_rl_->Stop();
+  if (ds_buf_rr_) ds_buf_rr_->Stop();
+  if (ds_bug_fc_) ds_bug_fc_->Stop();
 }
 
 void CAudioDirectSound::UnPause() {
-  if (pDSBuf) pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
+  if (ds_buffer_) ds_buffer_->Play(0, 0, DSBPLAY_LOOPING);
 
-  if (pDSBufFL) pDSBufFL->Play(0, 0, DSBPLAY_LOOPING);
-  if (pDSBufFR) pDSBufFR->Play(0, 0, DSBPLAY_LOOPING);
-  if (pDSBufRL) pDSBufRL->Play(0, 0, DSBPLAY_LOOPING);
-  if (pDSBufRR) pDSBufRR->Play(0, 0, DSBPLAY_LOOPING);
-  if (pDSBufFC) pDSBufFC->Play(0, 0, DSBPLAY_LOOPING);
+  if (ds_buf_fl_) ds_buf_fl_->Play(0, 0, DSBPLAY_LOOPING);
+  if (ds_buf_fr_) ds_buf_fr_->Play(0, 0, DSBPLAY_LOOPING);
+  if (ds_buf_rl_) ds_buf_rl_->Play(0, 0, DSBPLAY_LOOPING);
+  if (ds_buf_rr_) ds_buf_rr_->Play(0, 0, DSBPLAY_LOOPING);
+  if (ds_bug_fc_) ds_bug_fc_->Play(0, 0, DSBPLAY_LOOPING);
 }
 
-float CAudioDirectSound::MixDryVolume() { return 0; }
+float CAudioDirectSound::MixDryVolume() { return 0.0f; }
 
-bool CAudioDirectSound::Should3DMix() {
-  if (m_bSurround) return true;
-  return false;
-}
+bool CAudioDirectSound::Should3DMix() { return m_bSurround; }
 
 IAudioDevice *Audio_CreateDirectSoundDevice() {
-  if (!CAudioDirectSound::m_pSingleton)
-    CAudioDirectSound::m_pSingleton = new CAudioDirectSound;
+  if (!CAudioDirectSound::singleton_)
+    CAudioDirectSound::singleton_ = new CAudioDirectSound;
 
-  if (CAudioDirectSound::m_pSingleton->Init()) {
-    if (snd_firsttime) DevMsg("DirectSound initialized\n");
+  if (CAudioDirectSound::singleton_->Init()) {
+    if (snd_firsttime)
+      DevMsg("Audio Direct Sound: using DirectSound8 as audio interface.\n");
 
-    return CAudioDirectSound::m_pSingleton;
+    return CAudioDirectSound::singleton_;
   }
 
-  DevMsg("DirectSound failed to init\n");
+  DevMsg("Audio Direct Sound: DirectSound8 failed to init.\n");
 
-  delete CAudioDirectSound::m_pSingleton;
-  CAudioDirectSound::m_pSingleton = NULL;
+  delete CAudioDirectSound::singleton_;
+  CAudioDirectSound::singleton_ = nullptr;
 
-  return NULL;
+  return nullptr;
 }
 
 int CAudioDirectSound::PaintBegin(float mixAheadTime, int soundtime,
@@ -322,52 +305,58 @@ int CAudioDirectSound::PaintBegin(float mixAheadTime, int soundtime,
   DWORD dwStatus;
 
   // If using surround, there are 4 or 5 different buffers being used and the
-  // pDSBuf is NULL.
+  // pDSBuf is nullptr.
   if (IsUsingBufferPerSpeaker()) {
-    if (pDSBufFL->GetStatus(&dwStatus) != DS_OK)
-      Msg("Couldn't get SURROUND FL sound buffer status\n");
+    if (ds_buf_fl_->GetStatus(&dwStatus) != DS_OK)
+      Msg("Audio Direct Sound: Couldn't get SURROUND FL sound buffer status\n");
 
-    if (dwStatus & DSBSTATUS_BUFFERLOST) pDSBufFL->Restore();
+    if (dwStatus & DSBSTATUS_BUFFERLOST) ds_buf_fl_->Restore();
 
-    if (!(dwStatus & DSBSTATUS_PLAYING)) pDSBufFL->Play(0, 0, DSBPLAY_LOOPING);
+    if (!(dwStatus & DSBSTATUS_PLAYING))
+      ds_buf_fl_->Play(0, 0, DSBPLAY_LOOPING);
 
-    if (pDSBufFR->GetStatus(&dwStatus) != DS_OK)
-      Msg("Couldn't get SURROUND FR sound buffer status\n");
+    if (ds_buf_fr_->GetStatus(&dwStatus) != DS_OK)
+      Msg("Audio Direct Sound: Couldn't get SURROUND FR sound buffer status\n");
 
-    if (dwStatus & DSBSTATUS_BUFFERLOST) pDSBufFR->Restore();
+    if (dwStatus & DSBSTATUS_BUFFERLOST) ds_buf_fr_->Restore();
 
-    if (!(dwStatus & DSBSTATUS_PLAYING)) pDSBufFR->Play(0, 0, DSBPLAY_LOOPING);
+    if (!(dwStatus & DSBSTATUS_PLAYING))
+      ds_buf_fr_->Play(0, 0, DSBPLAY_LOOPING);
 
-    if (pDSBufRL->GetStatus(&dwStatus) != DS_OK)
-      Msg("Couldn't get SURROUND RL sound buffer status\n");
+    if (ds_buf_rl_->GetStatus(&dwStatus) != DS_OK)
+      Msg("Audio Direct Sound: Couldn't get SURROUND RL sound buffer status\n");
 
-    if (dwStatus & DSBSTATUS_BUFFERLOST) pDSBufRL->Restore();
+    if (dwStatus & DSBSTATUS_BUFFERLOST) ds_buf_rl_->Restore();
 
-    if (!(dwStatus & DSBSTATUS_PLAYING)) pDSBufRL->Play(0, 0, DSBPLAY_LOOPING);
+    if (!(dwStatus & DSBSTATUS_PLAYING))
+      ds_buf_rl_->Play(0, 0, DSBPLAY_LOOPING);
 
-    if (pDSBufRR->GetStatus(&dwStatus) != DS_OK)
-      Msg("Couldn't get SURROUND RR sound buffer status\n");
+    if (ds_buf_rr_->GetStatus(&dwStatus) != DS_OK)
+      Msg("Audio Direct Sound: Couldn't get SURROUND RR sound buffer status\n");
 
-    if (dwStatus & DSBSTATUS_BUFFERLOST) pDSBufRR->Restore();
+    if (dwStatus & DSBSTATUS_BUFFERLOST) ds_buf_rr_->Restore();
 
-    if (!(dwStatus & DSBSTATUS_PLAYING)) pDSBufRR->Play(0, 0, DSBPLAY_LOOPING);
+    if (!(dwStatus & DSBSTATUS_PLAYING))
+      ds_buf_rr_->Play(0, 0, DSBPLAY_LOOPING);
 
     if (m_bSurroundCenter) {
-      if (pDSBufFC->GetStatus(&dwStatus) != DS_OK)
-        Msg("Couldn't get SURROUND FC sound buffer status\n");
+      if (ds_bug_fc_->GetStatus(&dwStatus) != DS_OK)
+        Msg("Audio Direct Sound: Couldn't get SURROUND FC sound buffer "
+            "status\n");
 
-      if (dwStatus & DSBSTATUS_BUFFERLOST) pDSBufFC->Restore();
+      if (dwStatus & DSBSTATUS_BUFFERLOST) ds_bug_fc_->Restore();
 
       if (!(dwStatus & DSBSTATUS_PLAYING))
-        pDSBufFC->Play(0, 0, DSBPLAY_LOOPING);
+        ds_bug_fc_->Play(0, 0, DSBPLAY_LOOPING);
     }
-  } else if (pDSBuf) {
-    if (pDSBuf->GetStatus(&dwStatus) != DS_OK)
-      Msg("Couldn't get sound buffer status\n");
+  } else if (ds_buffer_) {
+    if (ds_buffer_->GetStatus(&dwStatus) != DS_OK)
+      Msg("Audio Direct Sound: Couldn't get sound buffer status\n");
 
-    if (dwStatus & DSBSTATUS_BUFFERLOST) pDSBuf->Restore();
+    if (dwStatus & DSBSTATUS_BUFFERLOST) ds_buffer_->Restore();
 
-    if (!(dwStatus & DSBSTATUS_PLAYING)) pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
+    if (!(dwStatus & DSBSTATUS_PLAYING))
+      ds_buffer_->Play(0, 0, DSBPLAY_LOOPING);
   }
 
   return endtime;
@@ -382,77 +371,78 @@ void CAudioDirectSound::ClearBuffer() {
   ch *pDataFL, *pDataFR, *pDataRL, *pDataRR, *pDataFC;
 
   dwSizeFC = 0;  // compiler warning
-  pDataFC = NULL;
+  pDataFC = nullptr;
 
   if (IsUsingBufferPerSpeaker()) {
     int SURROUNDreps;
     HRESULT SURROUNDhresult;
     SURROUNDreps = 0;
 
-    if (!pDSBufFL && !pDSBufFR && !pDSBufRL && !pDSBufRR && !pDSBufFC) return;
+    if (!ds_buf_fl_ && !ds_buf_fr_ && !ds_buf_rl_ && !ds_buf_rr_ && !ds_bug_fc_)
+      return;
 
-    while ((SURROUNDhresult =
-                pDSBufFL->Lock(0, m_bufferSizeBytes, (void **)&pDataFL,
-                               &dwSizeFL, NULL, NULL, 0)) != DS_OK) {
+    while ((SURROUNDhresult = ds_buf_fl_->Lock(0, device_buffer_size_bytes_,
+                                               (void **)&pDataFL, &dwSizeFL,
+                                               nullptr, nullptr, 0)) != DS_OK) {
       if (SURROUNDhresult != DSERR_BUFFERLOST) {
-        Msg("S_ClearBuffer: DS::Lock FL Sound Buffer Failed\n");
+        Msg("Audio Direct Sound: lock FL Sound Buffer Failed\n");
         S_Shutdown();
         return;
       }
 
       if (++SURROUNDreps > 10000) {
-        Msg("S_ClearBuffer: DS: couldn't restore FL buffer\n");
+        Msg("Audio Direct Sound: couldn't restore FL buffer\n");
         S_Shutdown();
         return;
       }
     }
 
     SURROUNDreps = 0;
-    while ((SURROUNDhresult =
-                pDSBufFR->Lock(0, m_bufferSizeBytes, (void **)&pDataFR,
-                               &dwSizeFR, NULL, NULL, 0)) != DS_OK) {
+    while ((SURROUNDhresult = ds_buf_fr_->Lock(0, device_buffer_size_bytes_,
+                                               (void **)&pDataFR, &dwSizeFR,
+                                               nullptr, nullptr, 0)) != DS_OK) {
       if (SURROUNDhresult != DSERR_BUFFERLOST) {
-        Msg("S_ClearBuffer: DS::Lock FR Sound Buffer Failed\n");
+        Msg("Audio Direct Sound: lock FR Sound Buffer Failed\n");
         S_Shutdown();
         return;
       }
 
       if (++SURROUNDreps > 10000) {
-        Msg("S_ClearBuffer: DS: couldn't restore FR buffer\n");
+        Msg("Audio Direct Sound: couldn't restore FR buffer\n");
         S_Shutdown();
         return;
       }
     }
 
     SURROUNDreps = 0;
-    while ((SURROUNDhresult =
-                pDSBufRL->Lock(0, m_bufferSizeBytes, (void **)&pDataRL,
-                               &dwSizeRL, NULL, NULL, 0)) != DS_OK) {
+    while ((SURROUNDhresult = ds_buf_rl_->Lock(0, device_buffer_size_bytes_,
+                                               (void **)&pDataRL, &dwSizeRL,
+                                               nullptr, nullptr, 0)) != DS_OK) {
       if (SURROUNDhresult != DSERR_BUFFERLOST) {
-        Msg("S_ClearBuffer: DS::Lock RL Sound Buffer Failed\n");
+        Msg("Audio Direct Sound: lock RL Sound Buffer Failed\n");
         S_Shutdown();
         return;
       }
 
       if (++SURROUNDreps > 10000) {
-        Msg("S_ClearBuffer: DS: couldn't restore RL buffer\n");
+        Msg("Audio Direct Sound: couldn't restore RL buffer\n");
         S_Shutdown();
         return;
       }
     }
 
     SURROUNDreps = 0;
-    while ((SURROUNDhresult =
-                pDSBufRR->Lock(0, m_bufferSizeBytes, (void **)&pDataRR,
-                               &dwSizeRR, NULL, NULL, 0)) != DS_OK) {
+    while ((SURROUNDhresult = ds_buf_rr_->Lock(0, device_buffer_size_bytes_,
+                                               (void **)&pDataRR, &dwSizeRR,
+                                               nullptr, nullptr, 0)) != DS_OK) {
       if (SURROUNDhresult != DSERR_BUFFERLOST) {
-        Msg("S_ClearBuffer: DS::Lock RR Sound Buffer Failed\n");
+        Msg("Audio Direct Sound: lock RR Sound Buffer Failed\n");
         S_Shutdown();
         return;
       }
 
       if (++SURROUNDreps > 10000) {
-        Msg("S_ClearBuffer: DS: couldn't restore RR buffer\n");
+        Msg("Audio Direct Sound: couldn't restore RR buffer\n");
         S_Shutdown();
         return;
       }
@@ -460,80 +450,81 @@ void CAudioDirectSound::ClearBuffer() {
 
     if (m_bSurroundCenter) {
       SURROUNDreps = 0;
-      while ((SURROUNDhresult =
-                  pDSBufFC->Lock(0, m_bufferSizeBytes, (void **)&pDataFC,
-                                 &dwSizeFC, NULL, NULL, 0)) != DS_OK) {
+      while ((SURROUNDhresult = ds_bug_fc_->Lock(
+                  0, device_buffer_size_bytes_, (void **)&pDataFC, &dwSizeFC,
+                  nullptr, nullptr, 0)) != DS_OK) {
         if (SURROUNDhresult != DSERR_BUFFERLOST) {
-          Msg("S_ClearBuffer: DS::Lock FC Sound Buffer Failed\n");
+          Msg("Audio Direct Sound: lock FC Sound Buffer Failed\n");
           S_Shutdown();
           return;
         }
 
         if (++SURROUNDreps > 10000) {
-          Msg("S_ClearBuffer: DS: couldn't restore FC buffer\n");
+          Msg("Audio Direct Sound: couldn't restore FC buffer\n");
           S_Shutdown();
           return;
         }
       }
     }
 
-    Q_memset(pDataFL, 0, m_bufferSizeBytes);
-    Q_memset(pDataFR, 0, m_bufferSizeBytes);
-    Q_memset(pDataRL, 0, m_bufferSizeBytes);
-    Q_memset(pDataRR, 0, m_bufferSizeBytes);
+    memset(pDataFL, 0, device_buffer_size_bytes_);
+    memset(pDataFR, 0, device_buffer_size_bytes_);
+    memset(pDataRL, 0, device_buffer_size_bytes_);
+    memset(pDataRR, 0, device_buffer_size_bytes_);
 
-    if (m_bSurroundCenter) Q_memset(pDataFC, 0, m_bufferSizeBytes);
+    if (m_bSurroundCenter) memset(pDataFC, 0, device_buffer_size_bytes_);
 
-    pDSBufFL->Unlock(pDataFL, dwSizeFL, NULL, 0);
-    pDSBufFR->Unlock(pDataFR, dwSizeFR, NULL, 0);
-    pDSBufRL->Unlock(pDataRL, dwSizeRL, NULL, 0);
-    pDSBufRR->Unlock(pDataRR, dwSizeRR, NULL, 0);
+    ds_buf_fl_->Unlock(pDataFL, dwSizeFL, nullptr, 0);
+    ds_buf_fr_->Unlock(pDataFR, dwSizeFR, nullptr, 0);
+    ds_buf_rl_->Unlock(pDataRL, dwSizeRL, nullptr, 0);
+    ds_buf_rr_->Unlock(pDataRR, dwSizeRR, nullptr, 0);
 
-    if (m_bSurroundCenter) pDSBufFC->Unlock(pDataFC, dwSizeFC, NULL, 0);
+    if (m_bSurroundCenter) ds_bug_fc_->Unlock(pDataFC, dwSizeFC, nullptr, 0);
 
     return;
   }
 
-  if (!pDSBuf) return;
+  if (!ds_buffer_) return;
 
   if (DeviceSampleBits() == 8)
     clear = 0x80;
   else
     clear = 0;
 
-  if (pDSBuf) {
+  if (ds_buffer_) {
     DWORD dwSize;
     DWORD *pData;
     int reps;
     HRESULT hresult;
 
     reps = 0;
-    while ((hresult = pDSBuf->Lock(0, m_bufferSizeBytes, (void **)&pData,
-                                   &dwSize, NULL, NULL, 0)) != DS_OK) {
+    while ((hresult =
+                ds_buffer_->Lock(0, device_buffer_size_bytes_, (void **)&pData,
+                                 &dwSize, nullptr, nullptr, 0)) != DS_OK) {
       if (hresult != DSERR_BUFFERLOST) {
-        Msg("S_ClearBuffer: DS::Lock Sound Buffer Failed\n");
+        Msg("Audio Direct Sound: lock Sound Buffer Failed\n");
         S_Shutdown();
         return;
       }
 
       if (++reps > 10000) {
-        Msg("S_ClearBuffer: DS: couldn't restore buffer\n");
+        Msg("Audio Direct Sound: couldn't restore buffer\n");
         S_Shutdown();
         return;
       }
     }
 
-    Q_memset(pData, clear, dwSize);
+    memset(pData, clear, dwSize);
 
-    pDSBuf->Unlock(pData, dwSize, NULL, 0);
+    ds_buffer_->Unlock(pData, dwSize, nullptr, 0);
   }
 }
 
 void CAudioDirectSound::StopAllSounds() {}
 
-bool CAudioDirectSound::SNDDMA_InitInterleaved(LPDIRECTSOUND8 lpDS,
+bool CAudioDirectSound::SNDDMA_InitInterleaved(IDirectSound8 *lpDS,
                                                WAVEFORMATEX *lpFormat,
-                                               int channelCount) {
+                                               u16 channelCount) {
   WAVEFORMATEXTENSIBLE wfx = {0};  // DirectSoundBuffer wave format (extensible)
 
   // set the channel mask and number of channels based on the command line
@@ -580,53 +571,64 @@ bool CAudioDirectSound::SNDDMA_InitInterleaved(LPDIRECTSOUND8 lpDS,
   dsbdesc.dwBufferBytes = SECONDARY_BUFFER_SIZE_SURROUND * channelCount;
   dsbdesc.lpwfxFormat = (WAVEFORMATEX *)&wfx;
 
-  HRESULT hr = lpDS->CreateSoundBuffer(&dsbdesc, &pDSBuf, nullptr);
+  HRESULT hr = lpDS->CreateSoundBuffer(&dsbdesc, &ds_buffer_, nullptr);
   if (FAILED(hr)) {
-    Msg("DS::Can't create interleaved sound buffer (0x%.8x).\n", hr);
+    Msg("Audio Direct Sound: can't create interleaved sound buffer (0x%.8x).\n",
+        hr);
     return false;
   }
 
   DWORD dwSize = 0, dwWrite;
   DWORD *pBuffer = 0;
-  if (!LockDSBuffer(pDSBuf, &pBuffer, &dwSize, "DS_INTERLEAVED",
+  if (!LockDSBuffer(ds_buffer_, &pBuffer, &dwSize, "DS_INTERLEAVED",
                     DSBLOCK_ENTIREBUFFER))
     return false;
 
-  m_deviceChannels = wfx.Format.nChannels;
-  m_deviceSampleBits = wfx.Format.wBitsPerSample;
-  m_deviceDmaSpeed = wfx.Format.nSamplesPerSec;
-  m_bufferSizeBytes = dsbdesc.dwBufferBytes;
-  m_isInterleaved = true;
+  device_channels_count_ = wfx.Format.nChannels;
+  device_bits_per_sample_ = wfx.Format.wBitsPerSample;
+  device_samples_per_second_ = wfx.Format.nSamplesPerSec;
+  device_buffer_size_bytes_ = dsbdesc.dwBufferBytes;
+  is_interleaved_ = true;
 
-  Q_memset(pBuffer, 0, dwSize);
+  memset(pBuffer, 0, dwSize);
 
-  hr = pDSBuf->Unlock(pBuffer, dwSize, NULL, 0);
+  hr = ds_buffer_->Unlock(pBuffer, dwSize, nullptr, 0);
   if (FAILED(hr)) {
-    Warning("DS::Can't unlock interleaved sound buffer (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: can't unlock interleaved sound buffer (0x%.8x).\n",
+        hr);
   }
 
   // Make sure mixer is active (this was moved after the zeroing to avoid
   // popping on startup -- at least when using the dx9.0b debug .dlls)
-  hr = pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
-  if (FAILED(hr)) {
-    Warning("DS::Can't play interleaved sound buffer (0x%.8x).\n", hr);
-  }
-
-  hr = pDSBuf->Stop();
-  if (FAILED(hr)) {
-    Warning("DS::Can't stop interleaved sound buffer (0x%.8x).\n", hr);
-  }
-
-  hr = pDSBuf->GetCurrentPosition(&m_outputBufferStartOffset, &dwWrite);
+  hr = ds_buffer_->Play(0, 0, DSBPLAY_LOOPING);
   if (FAILED(hr)) {
     Warning(
-        "DS::Can't get current position interleaved sound buffer (0x%.8x).\n",
+        "Audio Direct Sound: can't play interleaved sound buffer (0x%.8x).\n",
         hr);
   }
 
-  hr = pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
+  hr = ds_buffer_->Stop();
   if (FAILED(hr)) {
-    Warning("DS::Can't play interleaved sound buffer (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: can't stop interleaved sound buffer (0x%.8x).\n",
+        hr);
+  }
+
+  hr = ds_buffer_->GetCurrentPosition(&output_buffer_start_offset_bytes_,
+                                      &dwWrite);
+  if (FAILED(hr)) {
+    Warning(
+        "Audio Direct Sound: can't get current position interleaved sound "
+        "buffer (0x%.8x).\n",
+        hr);
+  }
+
+  hr = ds_buffer_->Play(0, 0, DSBPLAY_LOOPING);
+  if (FAILED(hr)) {
+    Warning(
+        "Audio Direct Sound: can't play interleaved sound buffer (0x%.8x).\n",
+        hr);
   }
 
   return true;
@@ -634,27 +636,29 @@ bool CAudioDirectSound::SNDDMA_InitInterleaved(LPDIRECTSOUND8 lpDS,
 
 // Direct-Sound support
 sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
-  void *lpData = NULL;
+  void *lpData = nullptr;
   bool primary_format_set = false;
-  int pri_channels = 2;
 
   using DirectSoundCreate8Fn = HRESULT(WINAPI *)(
-      LPCGUID pcGuidDevice, LPDIRECTSOUND8 * ppDS8, LPUNKNOWN pUnkOuter);
+      LPCGUID pcGuidDevice, IDirectSound8 * *ppDS8, LPUNKNOWN pUnkOuter);
   DirectSoundCreate8Fn ds_create_8_fn = nullptr;
 
-  if (!m_direct_sound_module) {
-    m_direct_sound_module =
+  if (!directsound8_module_) {
+    directsound8_module_ =
         LoadLibraryExW(L"dsound.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
-    if (m_direct_sound_module == nullptr) {
-      Warning("Couldn't load dsound.dll (0x%.8x).\n", GetLastError());
+    if (directsound8_module_ == nullptr) {
+      Warning("Audio Direct Sound: couldn't load dsound.dll: %s.\n",
+              source::windows::windows_errno_info_last_error().description);
       return SIS_FAILURE;
     }
 
     ds_create_8_fn = reinterpret_cast<decltype(ds_create_8_fn)>(
-        GetProcAddress(m_direct_sound_module, "DirectSoundCreate8"));
+        GetProcAddress(directsound8_module_, "DirectSoundCreate8"));
     if (!ds_create_8_fn) {
-      Warning("Couldn't find DirectSoundCreate8 in dsound.dll (0x%.8x).\n",
-              GetLastError());
+      Warning(
+          "Audio Direct Sound: couldn't find DirectSoundCreate8 in dsound.dll: "
+          "%s.\n",
+          source::windows::windows_errno_info_last_error().description);
       return SIS_FAILURE;
     }
   }
@@ -662,8 +666,10 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   HRESULT hr = (*ds_create_8_fn)(nullptr, &pDS, nullptr);
   if (hr != DS_OK) {
     if (hr != DSERR_ALLOCATED) {
-      DevMsg("DirectSoundCreate8 failed to create DirectSound8 (0x%.8x).\n",
-             hr);
+      DevMsg(
+          "Audio Direct Sound: DirectSoundCreate8 failed to create "
+          "DirectSound8: %s.\n",
+          source::windows::make_windows_errno_info(hr).description);
       return SIS_FAILURE;
     }
 
@@ -676,8 +682,9 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   m_bSurround = false;
   m_bSurroundCenter = false;
   m_bHeadphone = false;
-  m_isInterleaved = false;
+  is_interleaved_ = false;
 
+  u16 pri_channels = 2;
   switch (snd_surround.GetInt()) {
     case 0:
       m_bHeadphone = true;  // stereo headphone
@@ -700,16 +707,16 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   }
 
   // secondary buffers should have same # channels as primary
-  m_deviceChannels = pri_channels;
-  m_deviceSampleBits = 16;             // hardware bits per sample
-  m_deviceDmaSpeed = SOUND_DMA_SPEED;  // hardware playback rate
+  device_channels_count_ = pri_channels;
+  device_bits_per_sample_ = 16;                  // hardware bits per sample
+  device_samples_per_second_ = SOUND_DMA_SPEED;  // hardware playback rate
 
   WAVEFORMATEX format;
-  Q_memset(&format, 0, sizeof(format));
+  memset(&format, 0, sizeof(format));
   format.wFormatTag = WAVE_FORMAT_PCM;
   format.nChannels = pri_channels;
-  format.wBitsPerSample = m_deviceSampleBits;
-  format.nSamplesPerSec = m_deviceDmaSpeed;
+  format.wBitsPerSample = device_bits_per_sample_;
+  format.nSamplesPerSec = device_samples_per_second_;
   format.nBlockAlign = format.nChannels * format.wBitsPerSample / 8;
   format.cbSize = 0;
   format.nAvgBytesPerSec = format.nSamplesPerSec * format.nBlockAlign;
@@ -718,13 +725,14 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   hr = pDS->GetCaps(&dscaps);
 
   if (DS_OK != hr) {
-    Warning("Couldn't get DirectSound8 caps (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: couldn't get DirectSound8 caps %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
     Shutdown();
     return SIS_FAILURE;
   }
 
   if (dscaps.dwFlags & DSCAPS_EMULDRIVER) {
-    Warning("No DirectSound8 driver installed.\n");
+    Warning("Audio Direct Sound: no DirectSound8 driver installed.\n");
     Shutdown();
     return SIS_FAILURE;
   }
@@ -733,8 +741,9 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
 
   if (DS_OK != hr) {
     Warning(
-        "Set DirectSound8 cooperative level to exclusive failed (0x%.8x).\n",
-        hr);
+        "Audio Direct Sound: set DirectSound8 cooperative level to exclusive "
+        "failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     Shutdown();
     return SIS_FAILURE;
   }
@@ -754,24 +763,31 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   DSBCAPS base_capabilities = {sizeof(base_capabilities)};
 
   if (!CommandLine()->CheckParm("-snoforceformat")) {
-    hr = pDS->CreateSoundBuffer(&primary_buffer, &pDSPBuf, nullptr);
+    hr = pDS->CreateSoundBuffer(&primary_buffer, &ds_p_buffer_, nullptr);
 
     if (DS_OK == hr) {
       WAVEFORMATEX pformat = format;
 
-      hr = pDSPBuf->SetFormat(&pformat);
+      hr = ds_p_buffer_->SetFormat(&pformat);
 
       if (DS_OK != hr) {
         if (snd_firsttime)
-          DevMsg("Set primary DirectSound8 buffer format: no (0x%.8x).\n", hr);
+          DevMsg(
+              "Audio Direct Sound: set primary DirectSound8 buffer format: no "
+              "%s.\n",
+              source::windows::make_windows_errno_info(hr).description);
       } else {
         if (snd_firsttime)
-          DevMsg("Set primary DirectSound8 buffer format: yes\n");
+          DevMsg(
+              "Audio Direct Sound: set primary DirectSound8 buffer format: "
+              "yes\n");
 
         primary_format_set = true;
       }
     } else {
-      Warning("Create primary DirectSound8 buffer failed (0x%.8x).\n", hr);
+      Warning(
+          "Audio Direct Sound: create primary DirectSound8 buffer failed %s.\n",
+          source::windows::make_windows_errno_info(hr).description);
     }
   }
 
@@ -803,51 +819,65 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
     // snd_surround.SetValue( 0 );
     if (!primary_format_set || !CommandLine()->CheckParm("-primarysound")) {
       // create the secondary buffer we'll actually work with
-      Q_memset(&primary_buffer, 0, sizeof(primary_buffer));
+      memset(&primary_buffer, 0, sizeof(primary_buffer));
       primary_buffer.dwSize = sizeof(DSBUFFERDESC);
       // NOTE: don't use CTRLFREQUENCY (slow)
       primary_buffer.dwFlags = DSBCAPS_LOCSOFTWARE;
       primary_buffer.dwBufferBytes = SECONDARY_BUFFER_SIZE;
       primary_buffer.lpwfxFormat = &format;
 
-      hr = pDS->CreateSoundBuffer(&primary_buffer, &pDSBuf, nullptr);
+      hr = pDS->CreateSoundBuffer(&primary_buffer, &ds_buffer_, nullptr);
 
       if (DS_OK != hr) {
-        Warning("Create secondary DirectSound8 buffer failed (0x%.8x).\n", hr);
+        Warning(
+            "Audio Direct Sound: create secondary DirectSound8 buffer failed "
+            "%s.\n",
+            source::windows::make_windows_errno_info(hr).description);
         Shutdown();
         return SIS_FAILURE;
       }
 
-      m_deviceChannels = format.nChannels;
-      m_deviceSampleBits = format.wBitsPerSample;
-      m_deviceDmaSpeed = format.nSamplesPerSec;
+      device_channels_count_ = format.nChannels;
+      device_bits_per_sample_ = format.wBitsPerSample;
+      device_samples_per_second_ = format.nSamplesPerSec;
 
-      Q_memset(&base_capabilities, 0, sizeof(base_capabilities));
+      memset(&base_capabilities, 0, sizeof(base_capabilities));
       base_capabilities.dwSize = sizeof(base_capabilities);
 
-      if (DS_OK != pDSBuf->GetCaps(&base_capabilities)) {
-        Warning("DS:GetCaps failed\n");
+      hr = ds_buffer_->GetCaps(&base_capabilities);
+
+      if (DS_OK != hr) {
+        Warning("Audio Direct Sound: GetCaps failed %s.\n",
+                source::windows::make_windows_errno_info(hr).description);
         Shutdown();
         return SIS_FAILURE;
       }
 
-      if (snd_firsttime) DevMsg("Using secondary sound buffer\n");
+      if (snd_firsttime)
+        DevMsg("Audio Direct Sound: using secondary sound buffer\n");
     } else {
-      if (DS_OK != pDS->SetCooperativeLevel(*pmainwindow, DSSCL_WRITEPRIMARY)) {
-        Warning("Set coop level failed\n");
+      hr = pDS->SetCooperativeLevel(*pmainwindow, DSSCL_WRITEPRIMARY);
+
+      if (DS_OK != hr) {
+        Warning("Audio Direct Sound: set coop level failed %s.\n",
+                source::windows::make_windows_errno_info(hr).description);
         Shutdown();
         return SIS_FAILURE;
       }
 
-      Q_memset(&base_capabilities, 0, sizeof(base_capabilities));
+      memset(&base_capabilities, 0, sizeof(base_capabilities));
       base_capabilities.dwSize = sizeof(base_capabilities);
-      if (DS_OK != pDSPBuf->GetCaps(&base_capabilities)) {
-        Msg("DS:GetCaps failed\n");
+
+      hr = ds_p_buffer_->GetCaps(&base_capabilities);
+
+      if (DS_OK != hr) {
+        Msg("Audio Direct Sound: GetCaps failed %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
         return SIS_FAILURE;
       }
 
-      pDSBuf = pDSPBuf;
-      DevMsg("Using primary sound buffer\n");
+      ds_buffer_ = ds_p_buffer_;
+      DevMsg("Audio Direct Sound: using primary sound buffer\n");
     }
 
     if (snd_firsttime) {
@@ -861,40 +891,42 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
     DWORD dwSize, dwWrite;
 
     // initialize the buffer
-    m_bufferSizeBytes = base_capabilities.dwBufferBytes;
+    device_buffer_size_bytes_ = base_capabilities.dwBufferBytes;
     int reps = 0;
-    while ((hr = pDSBuf->Lock(0, m_bufferSizeBytes, (void **)&lpData, &dwSize,
-                              NULL, NULL, 0)) != DS_OK) {
+    while (
+        (hr = ds_buffer_->Lock(0, device_buffer_size_bytes_, (void **)&lpData,
+                               &dwSize, nullptr, nullptr, 0)) != DS_OK) {
       if (hr != DSERR_BUFFERLOST) {
-        Warning("SNDDMA_InitDirect: DS::Lock Sound Buffer Failed\n");
+        Warning("Audio Direct Sound: lock Sound Buffer Failed\n");
         Shutdown();
         return SIS_FAILURE;
       }
 
       if (++reps > 10000) {
-        Warning("SNDDMA_InitDirect: DS: couldn't restore buffer\n");
+        Warning("Audio Direct Sound: couldn't restore buffer\n");
         Shutdown();
         return SIS_FAILURE;
       }
     }
 
-    Q_memset(lpData, 0, dwSize);
-    pDSBuf->Unlock(lpData, dwSize, NULL, 0);
+    memset(lpData, 0, dwSize);
+    ds_buffer_->Unlock(lpData, dwSize, nullptr, 0);
 
     // Make sure mixer is active (this was moved after the zeroing to avoid
     // popping on startup -- at least when using the dx9.0b debug .dlls)
-    pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
+    ds_buffer_->Play(0, 0, DSBPLAY_LOOPING);
 
     // we don't want anyone to access the buffer directly w/o locking it first.
-    lpData = NULL;
+    lpData = nullptr;
 
-    pDSBuf->Stop();
-    pDSBuf->GetCurrentPosition(&m_outputBufferStartOffset, &dwWrite);
-    pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
+    ds_buffer_->Stop();
+    ds_buffer_->GetCurrentPosition(&output_buffer_start_offset_bytes_,
+                                   &dwWrite);
+    ds_buffer_->Play(0, 0, DSBPLAY_LOOPING);
   }
 
   // number of mono samples output buffer may hold
-  m_deviceSampleCount = m_bufferSizeBytes / (DeviceSampleBytes());
+  device_samples_count_ = device_buffer_size_bytes_ / (DeviceSampleBytes());
 
   return SIS_SUCCESS;
 }
@@ -911,25 +943,25 @@ void CAudioDirectSound::DetectWindowsSpeakerSetup() {
 
     // DEBUG
     if (speaker_config == DSSPEAKER_MONO)
-      DevMsg("DS:mono configuration detected\n");
+      DevMsg("Audio Direct Sound: mono configuration detected\n");
 
     if (speaker_config == DSSPEAKER_HEADPHONE)
-      DevMsg("DS:headphone configuration detected\n");
+      DevMsg("Audio Direct Sound: headphone configuration detected\n");
 
     if (speaker_config == DSSPEAKER_STEREO)
-      DevMsg("DS:stereo speaker configuration detected\n");
+      DevMsg("Audio Direct Sound: stereo speaker configuration detected\n");
 
     if (speaker_config == DSSPEAKER_QUAD)
-      DevMsg("DS:quad speaker configuration detected\n");
+      DevMsg("Audio Direct Sound: quad speaker configuration detected\n");
 
     if (speaker_config == DSSPEAKER_SURROUND)
-      DevMsg("DS:surround speaker configuration detected\n");
+      DevMsg("Audio Direct Sound: surround speaker configuration detected\n");
 
     if (speaker_config == DSSPEAKER_5POINT1)
-      DevMsg("DS:5.1 speaker configuration detected\n");
+      DevMsg("Audio Direct Sound: 5.1 speaker configuration detected\n");
 
     if (speaker_config == DSSPEAKER_7POINT1)
-      DevMsg("DS:7.1 speaker configuration detected\n");
+      DevMsg("Audio Direct Sound: 7.1 speaker configuration detected\n");
 
     // set the cvar to be the windows setting
     switch (speaker_config) {
@@ -958,11 +990,9 @@ void CAudioDirectSound::DetectWindowsSpeakerSetup() {
   }
 }
 
-/*
- Updates windows settings based on snd_surround_speakers cvar changing
- This should only happen if the user has changed it via the console or the UI
- Changes won't take effect until the engine has restarted
-*/
+// Updates windows settings based on snd_surround_speakers cvar changing. This
+// should only happen if the user has changed it via the console or the UI
+// Changes won't take effect until the engine has restarted.
 void OnSndSurroundCvarChanged(IConVar *pVar, const ch *pOldString,
                               float flOldValue) {
   if (!pDS) return;
@@ -1013,7 +1043,8 @@ void OnSndSurroundCvarChanged(IConVar *pVar, const ch *pOldString,
   // set new configuration
   pDS->SetSpeakerConfig(DSSPEAKER_COMBINED(newSpeakerConfig, 0));
 
-  Msg("Speaker configuration has been changed to %s.\n", speakerConfigDesc);
+  Msg("Audio Direct Sound: speaker configuration has been changed to %s.\n",
+      speakerConfigDesc);
 
   // restart sound system so it takes effect
   g_pSoundServices->RestartSoundSystem();
@@ -1021,64 +1052,63 @@ void OnSndSurroundCvarChanged(IConVar *pVar, const ch *pOldString,
 
 void OnSndSurroundLegacyChanged(IConVar *pVar, const ch *pOldString,
                                 float flOldValue) {
-  if (pDS && CAudioDirectSound::m_pSingleton) {
+  if (pDS && CAudioDirectSound::singleton_) {
     ConVarRef var(pVar);
     // should either be interleaved or have legacy surround set, not both
-    if (CAudioDirectSound::m_pSingleton->IsInterleaved() == var.GetBool()) {
-      Msg("Legacy Surround %s.\n", var.GetBool() ? "enabled" : "disabled");
+    if (CAudioDirectSound::singleton_->IsInterleaved() == var.GetBool()) {
+      Msg("Audio Direct Sound: legacy Surround %s.\n",
+          var.GetBool() ? "enabled" : "disabled");
       // restart sound system so it takes effect
       g_pSoundServices->RestartSoundSystem();
     }
   }
 }
 
-/*
- Release all Surround buffer pointers
-*/
-void ReleaseSurround() {
-  if (pDSBuf3DFL != NULL) {
-    pDSBuf3DFL->Release();
-    pDSBuf3DFL = NULL;
+// Release all Surround buffer pointers
+void CAudioDirectSound::ReleaseSurround() {
+  if (ds_3d_buf_fl_ != nullptr) {
+    ds_3d_buf_fl_->Release();
+    ds_3d_buf_fl_ = nullptr;
   }
 
-  if (pDSBuf3DFR != NULL) {
-    pDSBuf3DFR->Release();
-    pDSBuf3DFR = NULL;
+  if (ds_3d_buf_fr_ != nullptr) {
+    ds_3d_buf_fr_->Release();
+    ds_3d_buf_fr_ = nullptr;
   }
 
-  if (pDSBuf3DRL != NULL) {
-    pDSBuf3DRL->Release();
-    pDSBuf3DRL = NULL;
+  if (ds_3d_buf_rl_ != nullptr) {
+    ds_3d_buf_rl_->Release();
+    ds_3d_buf_rl_ = nullptr;
   }
 
-  if (pDSBuf3DRR != NULL) {
-    pDSBuf3DRR->Release();
-    pDSBuf3DRR = NULL;
+  if (ds_3d_buf_rr_ != nullptr) {
+    ds_3d_buf_rr_->Release();
+    ds_3d_buf_rr_ = nullptr;
   }
 
-  if (pDSBufFL != NULL) {
-    pDSBufFL->Release();
-    pDSBufFL = NULL;
+  if (ds_buf_fl_ != nullptr) {
+    ds_buf_fl_->Release();
+    ds_buf_fl_ = nullptr;
   }
 
-  if (pDSBufFR != NULL) {
-    pDSBufFR->Release();
-    pDSBufFR = NULL;
+  if (ds_buf_fr_ != nullptr) {
+    ds_buf_fr_->Release();
+    ds_buf_fr_ = nullptr;
   }
 
-  if (pDSBufRL != NULL) {
-    pDSBufRL->Release();
-    pDSBufRL = NULL;
+  if (ds_buf_rl_ != nullptr) {
+    ds_buf_rl_->Release();
+    ds_buf_rl_ = nullptr;
   }
 
-  if (pDSBufRR != NULL) {
-    pDSBufRR->Release();
-    pDSBufRR = NULL;
+  if (ds_buf_rr_ != nullptr) {
+    ds_buf_rr_->Release();
+    ds_buf_rr_ = nullptr;
   }
 
-  if (pDSBufFC != NULL) {
-    pDSBufFC->Release();
-    pDSBufFC = NULL;
+  if (ds_bug_fc_ != nullptr) {
+    ds_bug_fc_->Release();
+    ds_bug_fc_ = nullptr;
   }
 }
 
@@ -1097,7 +1127,7 @@ void DEBUG_DS_FillSquare2(void *lpData, DWORD dwSize) {
 }
 
 // helper to set default buffer params
-void DS3D_SetBufferParams(LPDIRECTSOUND3DBUFFER8 pDSBuf3D, D3DVECTOR *pbpos,
+void DS3D_SetBufferParams(IDirectSound3DBuffer8 *pDSBuf3D, D3DVECTOR *pbpos,
                           D3DVECTOR *pbdir) {
   D3DVECTOR velocity = {0.0f, 0.0f, 0.0f};
   D3DVECTOR position = *pbpos, bdir = *pbdir;
@@ -1105,7 +1135,8 @@ void DS3D_SetBufferParams(LPDIRECTSOUND3DBUFFER8 pDSBuf3D, D3DVECTOR *pbpos,
 
   HRESULT hr = pDSBuf3D->GetAllParameters(&buffer);
   if (DS_OK != hr) {
-    Warning("DS:3DBuffer get all parameters failed (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: 3d buffer get all parameters failed %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
   }
 
   buffer.vPosition = position;
@@ -1120,21 +1151,21 @@ void DS3D_SetBufferParams(LPDIRECTSOUND3DBUFFER8 pDSBuf3D, D3DVECTOR *pbpos,
 
   hr = pDSBuf3D->SetAllParameters(&buffer, DS3D_DEFERRED);
   if (DS_OK != hr) {
-    Warning("DS:3DBuffer set all parameters failed (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: 3d buffer set all parameters failed %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
   }
 }
 
 // Initialization for Surround sound support (4 channel or 5 channel).
 // Creates 4 or 5 mono 3D buffers to be used as Front Left, (Front Center),
 // Front Right, Rear Left, Rear Right
-bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
+bool CAudioDirectSound::SNDDMA_InitSurround(IDirectSound8 *lpDS,
                                             WAVEFORMATEX *lpFormat,
                                             DSBCAPS *lpdsbc, int cchan) {
   if (lpDS == nullptr) return FALSE;
 
   DWORD dwSize, dwWrite;
   int reps;
-  HRESULT hresult, hr;
   void *lpData = nullptr;
 
   // Force format to mono channel
@@ -1144,95 +1175,114 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   wvex.nBlockAlign = wvex.nChannels * wvex.wBitsPerSample / 8;
   wvex.nAvgBytesPerSec = wvex.nSamplesPerSec * wvex.nBlockAlign;
 
-  DSBUFFERDESC dsbuf = {sizeof(DSBUFFERDESC)};
+  DSBUFFERDESC ds_buf_desc = {sizeof(DSBUFFERDESC)};
   // NOTE: LOCHARDWARE causes SB AWE64 to crash in it's DSOUND driver.
   // Don't use CTRLFREQUENCY (slow)
-  dsbuf.dwFlags = DSBCAPS_CTRL3D;
+  ds_buf_desc.dwFlags = DSBCAPS_CTRL3D;
   // Reserve space for each buffer
-  dsbuf.dwBufferBytes = SECONDARY_BUFFER_SIZE_SURROUND;
-  dsbuf.lpwfxFormat = &wvex;
+  ds_buf_desc.dwBufferBytes = SECONDARY_BUFFER_SIZE_SURROUND;
+  ds_buf_desc.lpwfxFormat = &wvex;
 
   // create 4 mono buffers FL, FR, RL, RR
-
-  hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufFL, NULL);
+  HRESULT hr = lpDS->CreateSoundBuffer(&ds_buf_desc, &ds_buf_fl_, nullptr);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d front left failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: CreateSoundBuffer for 3d front left failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
-    return FALSE;
+    return false;
   }
 
-  hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufFR, NULL);
+  hr = lpDS->CreateSoundBuffer(&ds_buf_desc, &ds_buf_fr_, nullptr);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d front right failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: CreateSoundBuffer for 3d front right failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
-    return FALSE;
+    return false;
   }
 
-  hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufRL, NULL);
+  hr = lpDS->CreateSoundBuffer(&ds_buf_desc, &ds_buf_rl_, nullptr);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d rear left failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: CreateSoundBuffer for 3d rear left failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
-    return FALSE;
+    return false;
   }
 
-  hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufRR, NULL);
+  hr = lpDS->CreateSoundBuffer(&ds_buf_desc, &ds_buf_rr_, nullptr);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d rear right failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: CreateSoundBuffer for 3d rear right failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
-    return FALSE;
+    return false;
   }
 
   // create center channel
 
   if (cchan == 5) {
-    hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufFC, NULL);
+    hr = lpDS->CreateSoundBuffer(&ds_buf_desc, &ds_bug_fc_, nullptr);
     if (DS_OK != hr) {
-      Warning("DS:CreateSoundBuffer for 3d front center failed (0x%.8x).\n",
-              hr);
+      Warning(
+          "Audio Direct Sound: CreateSoundBuffer for 3d front center failed "
+          "%s.\n",
+          source::windows::make_windows_errno_info(hr).description);
       ReleaseSurround();
-      return FALSE;
+      return false;
     }
   }
 
   // Try to get 4 or 5 3D buffers from the mono DS buffers
 
-  hr = pDSBufFL->QueryInterface(IID_IDirectSound3DBufferDef,
-                                (void **)&pDSBuf3DFL);
+  hr = ds_buf_fl_->QueryInterface(IID_IDirectSound3DBuffer,
+                                  (void **)&ds_3d_buf_fl_);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d front left failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: query 3d buffer for 3d front left failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
     return FALSE;
   }
 
-  hr = pDSBufFR->QueryInterface(IID_IDirectSound3DBufferDef,
-                                (void **)&pDSBuf3DFR);
+  hr = ds_buf_fr_->QueryInterface(IID_IDirectSound3DBuffer,
+                                  (void **)&ds_3d_buf_fr_);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d front right failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: query 3d buffer for 3d front right failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
     return FALSE;
   }
 
-  hr = pDSBufRL->QueryInterface(IID_IDirectSound3DBufferDef,
-                                (void **)&pDSBuf3DRL);
+  hr = ds_buf_rl_->QueryInterface(IID_IDirectSound3DBuffer,
+                                  (void **)&ds_3d_buf_rl_);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d rear left failed (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: query 3d buffer for 3d rear left failed %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
     return FALSE;
   }
 
-  hr = pDSBufRR->QueryInterface(IID_IDirectSound3DBufferDef,
-                                (void **)&pDSBuf3DRR);
+  hr = ds_buf_rr_->QueryInterface(IID_IDirectSound3DBuffer,
+                                  (void **)&ds_3d_buf_rr_);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d rear right failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: query 3d buffer for 3d rear right failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
     return FALSE;
   }
 
   if (cchan == 5) {
-    hr = pDSBufFC->QueryInterface(IID_IDirectSound3DBufferDef,
-                                  (void **)&pDSBuf3DFC);
+    hr = ds_bug_fc_->QueryInterface(IID_IDirectSound3DBuffer,
+                                    (void **)&ds_3d_buf_fc_);
     if (DS_OK != hr) {
-      Warning("DS:Query 3DBuffer for 3d front center failed (0x%.8x).\n", hr);
+      Warning(
+          "Audio Direct Sound: query 3d buffer for 3d front center failed "
+          "%s.\n",
+          source::windows::make_windows_errno_info(hr).description);
       ReleaseSurround();
       return FALSE;
     }
@@ -1243,29 +1293,33 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
 
   IDirectSound3DListener *sound_3d_listener = nullptr;
 
-  hr = pDSPBuf->QueryInterface(IID_IDirectSound3DListener,
-                               (void **)&sound_3d_listener);
+  hr = ds_p_buffer_->QueryInterface(IID_IDirectSound3DListener,
+                                    (void **)&sound_3d_listener);
   if (SUCCEEDED(hr)) {
     DS3DLISTENER lparm = {sizeof(DS3DLISTENER)};
 
     hr = sound_3d_listener->GetAllParameters(&lparm);
     if (DS_OK != hr) {
-      Warning("DS:3DListener get all parameters failed (0x%.8x).\n", hr);
+      Warning("Audio Direct Sound: 3d listener get all parameters failed %s.\n",
+              source::windows::make_windows_errno_info(hr).description);
     }
 
     // front x,y,z top x,y,z
     hr = sound_3d_listener->SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
                                            DS3D_IMMEDIATE);
     if (DS_OK != hr) {
-      Warning("DS:3DListener set orientation failed (0x%.8x).\n", hr);
+      Warning("Audio Direct Sound: 3d listener set orientation failed %s.\n",
+              source::windows::make_windows_errno_info(hr).description);
     }
 
     hr = sound_3d_listener->SetPosition(0.0f, 0.0f, 0.0f, DS3D_IMMEDIATE);
     if (DS_OK != hr) {
-      Warning("DS:3DListener set position failed (0x%.8x).\n", hr);
+      Warning("Audio Direct Sound: 3d listener set position failed %s.\n",
+              source::windows::make_windows_errno_info(hr).description);
     }
   } else {
-    Warning("DS: failed to get 3D listener interface (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: failed to get 3D listener interface %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
     return FALSE;
   }
@@ -1281,7 +1335,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   bdir.y = 0.0;
   bdir.z = -1.0;
 
-  DS3D_SetBufferParams(pDSBuf3DFL, &bpos, &bdir);
+  DS3D_SetBufferParams(ds_3d_buf_fl_, &bpos, &bdir);
 
   bpos.x = 1.0;
   bpos.y = 0.0;
@@ -1290,7 +1344,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   bdir.y = 0.0;
   bdir.z = -1.0;
 
-  DS3D_SetBufferParams(pDSBuf3DFR, &bpos, &bdir);
+  DS3D_SetBufferParams(ds_3d_buf_fr_, &bpos, &bdir);
 
   bpos.x = -1.0;
   bpos.y = 0.0;
@@ -1299,7 +1353,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   bdir.y = 0.0;
   bdir.z = 1.0;
 
-  DS3D_SetBufferParams(pDSBuf3DRL, &bpos, &bdir);
+  DS3D_SetBufferParams(ds_3d_buf_rl_, &bpos, &bdir);
 
   bpos.x = 1.0;
   bpos.y = 0.0;
@@ -1308,7 +1362,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   bdir.y = 0.0;
   bdir.z = 1.0;
 
-  DS3D_SetBufferParams(pDSBuf3DRR, &bpos, &bdir);
+  DS3D_SetBufferParams(ds_3d_buf_rr_, &bpos, &bdir);
 
   if (cchan == 5) {
     bpos.x = 0.0;
@@ -1318,54 +1372,64 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
     bdir.y = 0.0;
     bdir.z = -1.0;
 
-    DS3D_SetBufferParams(pDSBuf3DFC, &bpos, &bdir);
+    DS3D_SetBufferParams(ds_3d_buf_fc_, &bpos, &bdir);
   }
 
   // commit all buffer param settings
 
   hr = sound_3d_listener->CommitDeferredSettings();
   if (DS_OK != hr) {
-    Warning("DS:3DListener commit defered settings failed (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: 3d listener commit defered settings failed %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
   }
 
-  m_deviceChannels = 1;  // 1 mono 3d output buffer
-  m_deviceSampleBits = lpFormat->wBitsPerSample;
-  m_deviceDmaSpeed = lpFormat->nSamplesPerSec;
+  device_channels_count_ = 1;  // 1 mono 3d output buffer
+  device_bits_per_sample_ = lpFormat->wBitsPerSample;
+  device_samples_per_second_ = lpFormat->nSamplesPerSec;
 
   memset(lpdsbc, 0, sizeof(DSBCAPS));
   lpdsbc->dwSize = sizeof(DSBCAPS);
 
-  hr = pDSBufFL->GetCaps(lpdsbc);
+  hr = ds_buf_fl_->GetCaps(lpdsbc);
   if (DS_OK != hr) {
-    Warning("DS:GetCaps failed for 3d sound buffer (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: GetCaps failed for 3d sound buffer %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
     ReleaseSurround();
     return FALSE;
   }
 
-  hr = pDSBufFL->Play(0, 0, DSBPLAY_LOOPING);
+  hr = ds_buf_fl_->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for front left sound buffer (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: play failed for front left sound buffer %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
   }
 
-  hr = pDSBufFR->Play(0, 0, DSBPLAY_LOOPING);
+  hr = ds_buf_fr_->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for front right sound buffer (0x%.8x).\n", hr);
+    Warning(
+        "Audio Direct Sound: play failed for front right sound buffer %s.\n",
+        source::windows::make_windows_errno_info(hr).description);
   }
 
-  hr = pDSBufRL->Play(0, 0, DSBPLAY_LOOPING);
+  hr = ds_buf_rl_->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for rear left sound buffer (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: play failed for rear left sound buffer %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
   }
 
-  hr = pDSBufRR->Play(0, 0, DSBPLAY_LOOPING);
+  hr = ds_buf_rr_->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for rear right sound buffer (0x%.8x).\n", hr);
+    Warning("Audio Direct Sound: play failed for rear right sound buffer %s.\n",
+            source::windows::make_windows_errno_info(hr).description);
   }
 
   if (cchan == 5) {
-    hr = pDSBufFC->Play(0, 0, DSBPLAY_LOOPING);
+    hr = ds_bug_fc_->Play(0, 0, DSBPLAY_LOOPING);
     if (DS_OK != hr) {
-      Warning("DS:Play failed for front center sound buffer (0x%.8x).\n", hr);
+      Warning(
+          "Audio Direct Sound: play failed for front center sound buffer %s.\n",
+          source::windows::make_windows_errno_info(hr).description);
     }
   }
 
@@ -1376,132 +1440,135 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
         "   %d samples/sec\n",
         cchan, DeviceSampleBits(), DeviceDmaSpeed());
 
-  m_bufferSizeBytes = lpdsbc->dwBufferBytes;
+  device_buffer_size_bytes_ = lpdsbc->dwBufferBytes;
 
   // Test everything just like in the normal initialization.
   if (cchan == 5) {
     reps = 0;
-    while ((hresult = pDSBufFC->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
-                                     &dwSize, NULL, NULL, 0)) != DS_OK) {
-      if (hresult != DSERR_BUFFERLOST) {
-        Warning("SNDDMA_InitDirect: DS::Lock Sound Buffer Failed for FC\n");
+    while ((hr = ds_bug_fc_->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
+                                  &dwSize, nullptr, nullptr, 0)) != DS_OK) {
+      if (hr != DSERR_BUFFERLOST) {
+        Warning("Audio Direct Sound: lock Sound Buffer Failed for FC\n");
         ReleaseSurround();
         return FALSE;
       }
 
       if (++reps > 10000) {
-        Warning("SNDDMA_InitDirect: DS: couldn't restore buffer for FC\n");
+        Warning("Audio Direct Sound: couldn't restore buffer for FC\n");
         ReleaseSurround();
         return FALSE;
       }
     }
     memset(lpData, 0, dwSize);
     //		DEBUG_DS_FillSquare( lpData, dwSize );
-    pDSBufFC->Unlock(lpData, dwSize, NULL, 0);
+    ds_bug_fc_->Unlock(lpData, dwSize, nullptr, 0);
   }
 
   reps = 0;
-  while ((hresult = pDSBufFL->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
-                                   &dwSize, NULL, NULL, 0)) != DS_OK) {
-    if (hresult != DSERR_BUFFERLOST) {
-      Warning("SNDDMA_InitSurround: DS::Lock Sound Buffer Failed for 3d FL\n");
+  while ((hr = ds_buf_fl_->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
+                                &dwSize, nullptr, nullptr, 0)) != DS_OK) {
+    if (hr != DSERR_BUFFERLOST) {
+      Warning("Audio Direct Sound: lock Sound Buffer Failed for 3d FL\n");
       ReleaseSurround();
       return FALSE;
     }
 
     if (++reps > 10000) {
-      Warning("SNDDMA_InitSurround: DS: couldn't restore buffer for 3d FL\n");
+      Warning("Audio Direct Sound: couldn't restore buffer for 3d FL\n");
       ReleaseSurround();
       return FALSE;
     }
   }
   memset(lpData, 0, dwSize);
   //	DEBUG_DS_FillSquare( lpData, dwSize );
-  pDSBufFL->Unlock(lpData, dwSize, NULL, 0);
+  ds_buf_fl_->Unlock(lpData, dwSize, nullptr, 0);
 
   reps = 0;
-  while ((hresult = pDSBufFR->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
-                                   &dwSize, NULL, NULL, 0)) != DS_OK) {
-    if (hresult != DSERR_BUFFERLOST) {
-      Warning("SNDDMA_InitSurround: DS::Lock Sound Buffer Failed for 3d FR\n");
+  while ((hr = ds_buf_fr_->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
+                                &dwSize, nullptr, nullptr, 0)) != DS_OK) {
+    if (hr != DSERR_BUFFERLOST) {
+      Warning("Audio Direct Sound: lock Sound Buffer Failed for 3d FR\n");
       ReleaseSurround();
       return FALSE;
     }
 
     if (++reps > 10000) {
-      Warning("SNDDMA_InitSurround: DS: couldn't restore buffer for FR\n");
+      Warning("Audio Direct Sound: couldn't restore buffer for FR\n");
       ReleaseSurround();
       return FALSE;
     }
   }
   memset(lpData, 0, dwSize);
   //	DEBUG_DS_FillSquare( lpData, dwSize );
-  pDSBufFR->Unlock(lpData, dwSize, NULL, 0);
+  ds_buf_fr_->Unlock(lpData, dwSize, nullptr, 0);
 
   reps = 0;
-  while ((hresult = pDSBufRL->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
-                                   &dwSize, NULL, NULL, 0)) != DS_OK) {
-    if (hresult != DSERR_BUFFERLOST) {
-      Warning("SNDDMA_InitDirect: DS::Lock Sound Buffer Failed for RL\n");
+  while ((hr = ds_buf_rl_->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
+                                &dwSize, nullptr, nullptr, 0)) != DS_OK) {
+    if (hr != DSERR_BUFFERLOST) {
+      Warning("Audio Direct Sound: lock Sound Buffer Failed for RL\n");
       ReleaseSurround();
       return FALSE;
     }
 
     if (++reps > 10000) {
-      Warning("SNDDMA_InitDirect: DS: couldn't restore buffer for RL\n");
+      Warning("Audio Direct Sound: couldn't restore buffer for RL\n");
       ReleaseSurround();
       return FALSE;
     }
   }
   memset(lpData, 0, dwSize);
   //	DEBUG_DS_FillSquare( lpData, dwSize );
-  pDSBufRL->Unlock(lpData, dwSize, NULL, 0);
+  ds_buf_rl_->Unlock(lpData, dwSize, nullptr, 0);
 
   reps = 0;
-  while ((hresult = pDSBufRR->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
-                                   &dwSize, NULL, NULL, 0)) != DS_OK) {
-    if (hresult != DSERR_BUFFERLOST) {
-      Warning("SNDDMA_InitDirect: DS::Lock Sound Buffer Failed for RR\n");
+  while ((hr = ds_buf_rr_->Lock(0, lpdsbc->dwBufferBytes, (void **)&lpData,
+                                &dwSize, nullptr, nullptr, 0)) != DS_OK) {
+    if (hr != DSERR_BUFFERLOST) {
+      Warning("Audio Direct Sound: lock Sound Buffer Failed for RR\n");
       ReleaseSurround();
       return FALSE;
     }
 
     if (++reps > 10000) {
-      Warning("SNDDMA_InitDirect: DS: couldn't restore buffer for RR\n");
+      Warning("Audio Direct Sound: couldn't restore buffer for RR\n");
       ReleaseSurround();
       return FALSE;
     }
   }
   memset(lpData, 0, dwSize);
   //	DEBUG_DS_FillSquare( lpData, dwSize );
-  pDSBufRR->Unlock(lpData, dwSize, NULL, 0);
+  ds_buf_rr_->Unlock(lpData, dwSize, nullptr, 0);
 
-  lpData = NULL;  // this is invalid now
+  lpData = nullptr;  // this is invalid now
 
   // OK Stop and get our positions and were good to go.
-  pDSBufFL->Stop();
-  pDSBufFR->Stop();
-  pDSBufRL->Stop();
-  pDSBufRR->Stop();
-  if (cchan == 5) pDSBufFC->Stop();
+  ds_buf_fl_->Stop();
+  ds_buf_fr_->Stop();
+  ds_buf_rl_->Stop();
+  ds_buf_rr_->Stop();
+  if (cchan == 5) ds_bug_fc_->Stop();
 
   // get hardware playback position, store it, syncronize all buffers to FL
 
-  pDSBufFL->GetCurrentPosition(&m_outputBufferStartOffset, &dwWrite);
-  pDSBufFR->SetCurrentPosition(m_outputBufferStartOffset);
-  pDSBufRL->SetCurrentPosition(m_outputBufferStartOffset);
-  pDSBufRR->SetCurrentPosition(m_outputBufferStartOffset);
-  if (cchan == 5) pDSBufFC->SetCurrentPosition(m_outputBufferStartOffset);
+  ds_buf_fl_->GetCurrentPosition(&output_buffer_start_offset_bytes_, &dwWrite);
+  ds_buf_fr_->SetCurrentPosition(output_buffer_start_offset_bytes_);
+  ds_buf_rl_->SetCurrentPosition(output_buffer_start_offset_bytes_);
+  ds_buf_rr_->SetCurrentPosition(output_buffer_start_offset_bytes_);
+  if (cchan == 5)
+    ds_bug_fc_->SetCurrentPosition(output_buffer_start_offset_bytes_);
 
-  pDSBufFL->Play(0, 0, DSBPLAY_LOOPING);
-  pDSBufFR->Play(0, 0, DSBPLAY_LOOPING);
-  pDSBufRL->Play(0, 0, DSBPLAY_LOOPING);
-  pDSBufRR->Play(0, 0, DSBPLAY_LOOPING);
-  if (cchan == 5) pDSBufFC->Play(0, 0, DSBPLAY_LOOPING);
+  ds_buf_fl_->Play(0, 0, DSBPLAY_LOOPING);
+  ds_buf_fr_->Play(0, 0, DSBPLAY_LOOPING);
+  ds_buf_rl_->Play(0, 0, DSBPLAY_LOOPING);
+  ds_buf_rr_->Play(0, 0, DSBPLAY_LOOPING);
+  if (cchan == 5) ds_bug_fc_->Play(0, 0, DSBPLAY_LOOPING);
 
-  if (snd_firsttime) Warning("3d surround sound initialization successful\n");
+  if (snd_firsttime)
+    Warning(
+        "Audio Direct Sound: 3d surround sound initialization successful\n");
 
-  return TRUE;
+  return true;
 }
 
 void CAudioDirectSound::UpdateListener(const Vector &position,
@@ -1513,7 +1580,6 @@ void CAudioDirectSound::ChannelReset(int entnum, int channelIndex,
 
 const ch *CAudioDirectSound::DeviceName() {
   if (m_bSurroundCenter) return "5 Channel Surround";
-
   if (m_bSurround) return "4 Channel Surround";
 
   return "Direct Sound";
@@ -1535,7 +1601,7 @@ void CAudioDirectSound::TransferSamples(int end) {
 
   // When Surround is enabled, divert to 4 or 5 chan xfer scheme.
   if (m_bSurround) {
-    if (m_isInterleaved) {
+    if (is_interleaved_) {
       S_TransferSurround16Interleaved(PAINTBUFFER, REARPAINTBUFFER,
                                       CENTERPAINTBUFFER, lpaintedtime, endtime);
     } else {
@@ -1547,12 +1613,12 @@ void CAudioDirectSound::TransferSamples(int end) {
     return;
   } else if (snd_lockpartial.GetBool() && DeviceChannels() == 2 &&
              DeviceSampleBits() == 16 && !SND_IsRecording()) {
-    S_TransferSurround16Interleaved(PAINTBUFFER, NULL, NULL, lpaintedtime,
+    S_TransferSurround16Interleaved(PAINTBUFFER, nullptr, nullptr, lpaintedtime,
                                     endtime);
   } else {
-    DWORD *pBuffer = NULL;
+    DWORD *pBuffer = nullptr;
     DWORD dwSize = 0;
-    if (!LockDSBuffer(pDSBuf, &pBuffer, &dwSize, "DS_STEREO")) {
+    if (!LockDSBuffer(ds_buffer_, &pBuffer, &dwSize, "DS_STEREO")) {
       S_Shutdown();
       S_Startup();
       return;
@@ -1564,16 +1630,16 @@ void CAudioDirectSound::TransferSamples(int end) {
         // UNDONE: obsolete - no 8 bit mono output supported
         S_TransferPaintBuffer(pBuffer, PAINTBUFFER, lpaintedtime, endtime);
       }
-      pDSBuf->Unlock(pBuffer, dwSize, NULL, 0);
+      ds_buffer_->Unlock(pBuffer, dwSize, nullptr, 0);
     }
   }
 }
 
 bool CAudioDirectSound::IsUsingBufferPerSpeaker() {
-  return m_bSurround && !m_isInterleaved;
+  return m_bSurround && !is_interleaved_;
 }
 
-bool CAudioDirectSound::LockDSBuffer(LPDIRECTSOUNDBUFFER pBuffer,
+bool CAudioDirectSound::LockDSBuffer(IDirectSoundBuffer *pBuffer,
                                      DWORD **pdwWriteBuffer,
                                      DWORD *pdwSizeBuffer,
                                      const ch *pBufferName, int lockFlags) {
@@ -1582,16 +1648,18 @@ bool CAudioDirectSound::LockDSBuffer(LPDIRECTSOUNDBUFFER pBuffer,
   HRESULT hr;
   uint32_t reps = 0;
 
-  while ((hr = pBuffer->Lock(0, m_bufferSizeBytes, (void **)pdwWriteBuffer,
-                             pdwSizeBuffer, nullptr, nullptr, lockFlags)) !=
-         DS_OK) {
+  while ((hr = pBuffer->Lock(0, device_buffer_size_bytes_,
+                             (void **)pdwWriteBuffer, pdwSizeBuffer, nullptr,
+                             nullptr, lockFlags)) != DS_OK) {
     if (hr != DSERR_BUFFERLOST) {
-      Msg("DS::Lock sound buffer %s failed (0x%.8x).\n", pBufferName, hr);
+      Msg("Audio Direct Sound: lock sound buffer %s failed (0x%.8x).\n",
+          pBufferName, hr);
       return false;
     }
 
     if (++reps > 10000) {
-      Msg("DS::Couldn't restore sound buffer %s (0x%.8x).\n", pBufferName, hr);
+      Msg("Audio Direct Sound: couldn't restore sound buffer %s (0x%.8x).\n",
+          pBufferName, hr);
       return false;
     }
   }
@@ -1599,7 +1667,6 @@ bool CAudioDirectSound::LockDSBuffer(LPDIRECTSOUNDBUFFER pBuffer,
   return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 // Given front, rear and center stereo paintbuffers, split samples into 4 or 5
 // mono directsound buffers (FL, FC, FR, RL, RR)
 void CAudioDirectSound::S_TransferSurround16(portable_samplepair_t *pfront,
@@ -1608,30 +1675,30 @@ void CAudioDirectSound::S_TransferSurround16(portable_samplepair_t *pfront,
                                              int lpaintedtime, int endtime,
                                              int cchan) {
   int lpos;
-  DWORD *pdwWriteFL = NULL, *pdwWriteFR = NULL, *pdwWriteRL = NULL,
-        *pdwWriteRR = NULL, *pdwWriteFC = NULL;
+  DWORD *pdwWriteFL = nullptr, *pdwWriteFR = nullptr, *pdwWriteRL = nullptr,
+        *pdwWriteRR = nullptr, *pdwWriteFC = nullptr;
   DWORD dwSizeFL = 0, dwSizeFR = 0, dwSizeRL = 0, dwSizeRR = 0, dwSizeFC = 0;
   int i, j, *snd_p, *snd_rp, *snd_cp, volumeFactor;
   short *snd_out_fleft, *snd_out_fright, *snd_out_rleft, *snd_out_rright,
       *snd_out_fcenter;
 
-  pdwWriteFC = NULL;  // compiler warning
+  pdwWriteFC = nullptr;  // compiler warning
   dwSizeFC = 0;
-  snd_out_fcenter = NULL;
+  snd_out_fcenter = nullptr;
 
   volumeFactor = S_GetMasterVolume() * 256;
 
   // lock all 4 or 5 mono directsound buffers FL, FR, RL, RR, FC
-  if (!LockDSBuffer(pDSBufFL, &pdwWriteFL, &dwSizeFL, "FL") ||
-      !LockDSBuffer(pDSBufFR, &pdwWriteFR, &dwSizeFR, "FR") ||
-      !LockDSBuffer(pDSBufRL, &pdwWriteRL, &dwSizeRL, "RL") ||
-      !LockDSBuffer(pDSBufRR, &pdwWriteRR, &dwSizeRR, "RR")) {
+  if (!LockDSBuffer(ds_buf_fl_, &pdwWriteFL, &dwSizeFL, "FL") ||
+      !LockDSBuffer(ds_buf_fr_, &pdwWriteFR, &dwSizeFR, "FR") ||
+      !LockDSBuffer(ds_buf_rl_, &pdwWriteRL, &dwSizeRL, "RL") ||
+      !LockDSBuffer(ds_buf_rr_, &pdwWriteRR, &dwSizeRR, "RR")) {
     S_Shutdown();
     S_Startup();
     return;
   }
 
-  if (cchan == 5 && !LockDSBuffer(pDSBufFC, &pdwWriteFC, &dwSizeFC, "FC")) {
+  if (cchan == 5 && !LockDSBuffer(ds_bug_fc_, &pdwWriteFC, &dwSizeFC, "FC")) {
     S_Shutdown();
     S_Startup();
     return;
@@ -1698,12 +1765,12 @@ void CAudioDirectSound::S_TransferSurround16(portable_samplepair_t *pfront,
     lpaintedtime += linearCount;
   }
 
-  pDSBufFL->Unlock(pdwWriteFL, dwSizeFL, NULL, 0);
-  pDSBufFR->Unlock(pdwWriteFR, dwSizeFR, NULL, 0);
-  pDSBufRL->Unlock(pdwWriteRL, dwSizeRL, NULL, 0);
-  pDSBufRR->Unlock(pdwWriteRR, dwSizeRR, NULL, 0);
+  ds_buf_fl_->Unlock(pdwWriteFL, dwSizeFL, nullptr, 0);
+  ds_buf_fr_->Unlock(pdwWriteFR, dwSizeFR, nullptr, 0);
+  ds_buf_rl_->Unlock(pdwWriteRL, dwSizeRL, nullptr, 0);
+  ds_buf_rr_->Unlock(pdwWriteRR, dwSizeRR, nullptr, 0);
 
-  if (cchan == 5) pDSBufFC->Unlock(pdwWriteFC, dwSizeFC, NULL, 0);
+  if (cchan == 5) ds_bug_fc_->Unlock(pdwWriteFC, dwSizeFC, nullptr, 0);
 }
 
 struct surround_transfer_t {
@@ -1773,7 +1840,7 @@ void CAudioDirectSound::S_TransferSurround16Interleaved_FullLock(
     const portable_samplepair_t *pfront, const portable_samplepair_t *prear,
     const portable_samplepair_t *pcenter, int lpaintedtime, int endtime) {
   int lpos;
-  DWORD *pdwWrite = NULL;
+  DWORD *pdwWrite = nullptr;
   DWORD dwSize = 0;
   int i, j, *snd_p, *snd_rp, *snd_cp, volumeFactor;
 
@@ -1784,7 +1851,7 @@ void CAudioDirectSound::S_TransferSurround16Interleaved_FullLock(
   }
 
   // lock single interleaved buffer
-  if (!LockDSBuffer(pDSBuf, &pdwWrite, &dwSize, "DS_INTERLEAVED")) {
+  if (!LockDSBuffer(ds_buffer_, &pdwWrite, &dwSize, "DS_INTERLEAVED")) {
     S_Shutdown();
     S_Startup();
     return;
@@ -1798,11 +1865,11 @@ void CAudioDirectSound::S_TransferSurround16Interleaved_FullLock(
   snd_p = (int *)pfront;
 
   int linearCount;  // space in output buffer for linearCount mono samples
-  int sampleMonoCount =
-      m_bufferSizeBytes / (DeviceSampleBytes() *
-                           DeviceChannels());  // number of mono samples per
-                                               // output buffer
-                                               // (was;(DeviceSampleCount()>>1))
+  int sampleMonoCount = device_buffer_size_bytes_ /
+                        (DeviceSampleBytes() *
+                         DeviceChannels());  // number of mono samples per
+                                             // output buffer
+                                             // (was;(DeviceSampleCount()>>1))
   int sampleMask = sampleMonoCount - 1;
 
   // paintedtime - number of full samples that have played since start
@@ -1857,13 +1924,13 @@ void CAudioDirectSound::S_TransferSurround16Interleaved_FullLock(
     lpaintedtime += linearCount;
   }
 
-  pDSBuf->Unlock(pdwWrite, dwSize, NULL, 0);
+  ds_buffer_->Unlock(pdwWrite, dwSize, nullptr, 0);
 }
 
 void CAudioDirectSound::S_TransferSurround16Interleaved(
     const portable_samplepair_t *pfront, const portable_samplepair_t *prear,
     const portable_samplepair_t *pcenter, int lpaintedtime, int endtime) {
-  if (!pDSBuf) return;
+  if (!ds_buffer_) return;
   if (!snd_lockpartial.GetBool()) {
     S_TransferSurround16Interleaved_FullLock(pfront, prear, pcenter,
                                              lpaintedtime, endtime);
@@ -1892,8 +1959,8 @@ void CAudioDirectSound::S_TransferSurround16Interleaved(
     channelCount = 2;
   }
   transfer.channelCount = channelCount;
-  void *pBuffer0 = NULL;
-  void *pBuffer1 = NULL;
+  void *pBuffer0 = nullptr;
+  void *pBuffer1 = nullptr;
   DWORD size0, size1;
   int lpos =
       transfer.paintedtime &
@@ -1903,12 +1970,12 @@ void CAudioDirectSound::S_TransferSurround16Interleaved(
   int lockSize = transfer.linearCount * 2 * channelCount;
   int reps = 0;
   HRESULT hr;
-  while ((hr = pDSBuf->Lock(offset, lockSize, &pBuffer0, &size0, &pBuffer1,
-                            &size1, 0)) != DS_OK) {
+  while ((hr = ds_buffer_->Lock(offset, lockSize, &pBuffer0, &size0, &pBuffer1,
+                                &size1, 0)) != DS_OK) {
     if (hr == DSERR_BUFFERLOST) {
       if (++reps < 10000) continue;
     }
-    Msg("DS::Lock Sound Buffer Failed\n");
+    Msg("Audio Direct Sound: lock Sound Buffer Failed\n");
     return;
   }
 
@@ -1920,5 +1987,5 @@ void CAudioDirectSound::S_TransferSurround16Interleaved(
     transfer.pOutput = (short *)pBuffer1;
     TransferSamplesToSurroundBuffer(size1 / (channelCount * 2), transfer);
   }
-  pDSBuf->Unlock(pBuffer0, size0, pBuffer1, size1);
+  ds_buffer_->Unlock(pBuffer0, size0, pBuffer1, size1);
 }

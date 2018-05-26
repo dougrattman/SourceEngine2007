@@ -22,12 +22,12 @@ class CAudioSourceVoice : public CAudioSourceWave {
   CAudioSourceVoice(CSfxTable *pSfx, int iEntity);
   virtual ~CAudioSourceVoice();
 
-  virtual int GetType(void) { return AUDIO_SOURCE_VOICE; }
+  virtual int GetType() { return AUDIO_SOURCE_VOICE; }
   virtual void GetCacheData(CAudioSourceCachedInfo *info) { Assert(0); }
 
   virtual CAudioMixer *CreateMixer(int initialStreamPosition = 0);
   virtual int GetOutputData(void **pData, int samplePosition, int sampleCount,
-                            char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
+                            ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
   virtual int SampleRate(void);
 
   // Sample size is in bytes.  It will not be accurate for compressed audio.
@@ -70,13 +70,13 @@ class CAudioSourceVoice : public CAudioSourceWave {
   class CWaveDataVoice : public IWaveData {
    public:
     CWaveDataVoice(CAudioSourceWave &source) : m_source(source) {}
-    ~CWaveDataVoice(void) {}
+    ~CWaveDataVoice() {}
 
-    virtual CAudioSource &Source(void) { return m_source; }
+    virtual CAudioSource &Source() { return m_source; }
 
     // this file is in memory, simply pass along the data request to the source
     virtual int ReadSourceData(void **pData, int sampleIndex, int sampleCount,
-                               char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+                               ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
       return m_source.GetOutputData(pData, sampleIndex, sampleCount, copyBuf);
     }
 
@@ -101,7 +101,7 @@ extern WAVEFORMATEX g_VoiceSampleFormat;
 
 class CVoiceSfx : public CSfxTable {
  public:
-  virtual const char *getname() { return "?VoiceSfx"; }
+  virtual const ch *getname() { return "?VoiceSfx"; }
 };
 
 static CVoiceSfx g_CVoiceSfx[VOICE_NUM_CHANNELS];
@@ -135,7 +135,7 @@ CAudioSourceVoice::CAudioSourceVoice(CSfxTable *pSfx, int iChannel)
   WAVEFORMATEX tmp = g_VoiceSampleFormat;
   tmp.nSamplesPerSec = Voice_SamplesPerSec();
   tmp.nAvgBytesPerSec = Voice_AvgBytesPerSec();
-  Init((char *)&tmp, sizeof(tmp));
+  Init((ch *)&tmp, sizeof(tmp));
   m_sampleCount = tmp.nSamplesPerSec;
 }
 
@@ -160,7 +160,7 @@ CAudioMixer *CAudioSourceVoice::CreateMixer(int initialStreamPosition) {
 
 int CAudioSourceVoice::GetOutputData(void **pData, int samplePosition,
                                      int sampleCount,
-                                     char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+                                     ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   int nSamplesGotten =
       Voice_GetOutputData(m_iChannel, copyBuf, AUDIOSOURCE_COPYBUF_SIZE,
                           samplePosition, sampleCount);

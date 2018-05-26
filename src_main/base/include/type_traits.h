@@ -12,7 +12,7 @@ struct is_function_pointer {
   // Is type a pointer to the function?
   static constexpr bool value =
       std::is_pointer_v<T> &&
-      std::is_function_v<typename std::remove_pointer<T>::type>;
+      std::is_function_v<typename std::remove_pointer_t<T>>;
 };
 
 // Alias for is_function_pointer<T>::value.

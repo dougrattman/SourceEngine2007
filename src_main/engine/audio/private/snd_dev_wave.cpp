@@ -60,12 +60,12 @@ class CAudioDeviceWave : public CAudioDeviceBase {
                        portable_samplepair_t *pbufrear,
                        portable_samplepair_t *pbufcenter, int samplecount);
 
-  const ch *DeviceName(void) { return "Windows WAVE"; }
-  int DeviceChannels(void) { return 2; }
-  int DeviceSampleBits(void) { return 16; }
-  int DeviceSampleBytes(void) { return 2; }
-  int DeviceDmaSpeed(void) { return SOUND_DMA_SPEED; }
-  int DeviceSampleCount(void) { return m_deviceSampleCount; }
+  const ch *DeviceName() { return "Windows WAVE"; }
+  int DeviceChannels() { return 2; }
+  int DeviceSampleBits() { return 16; }
+  int DeviceSampleBytes() { return 2; }
+  int DeviceDmaSpeed() { return SOUND_DMA_SPEED; }
+  int DeviceSampleCount() { return m_deviceSampleCount; }
 
  private:
   void OpenWaveOut(void);
@@ -98,7 +98,7 @@ class CAudioDeviceWave : public CAudioDeviceBase {
 };
 
 // Class factory
-IAudioDevice *Audio_CreateWaveDevice(void) {
+IAudioDevice *Audio_CreateWaveDevice() {
   static CAudioDeviceWave *wave = nullptr;
   if (!wave) {
     wave = new CAudioDeviceWave;
@@ -115,7 +115,7 @@ IAudioDevice *Audio_CreateWaveDevice(void) {
 //-----------------------------------------------------------------------------
 // Init, shutdown
 //-----------------------------------------------------------------------------
-bool CAudioDeviceWave::Init(void) {
+bool CAudioDeviceWave::Init() {
   m_bSurround = false;
   m_bSurroundCenter = false;
   m_bHeadphone = false;
@@ -136,19 +136,19 @@ bool CAudioDeviceWave::Init(void) {
   return ValidWaveOut();
 }
 
-void CAudioDeviceWave::Shutdown(void) { CloseWaveOut(); }
+void CAudioDeviceWave::Shutdown() { CloseWaveOut(); }
 
 //-----------------------------------------------------------------------------
 // WAV out device
 //-----------------------------------------------------------------------------
-inline bool CAudioDeviceWave::ValidWaveOut(void) const {
+inline bool CAudioDeviceWave::ValidWaveOut() const {
   return m_waveOutHandle != 0;
 }
 
 //-----------------------------------------------------------------------------
 // Opens the windows wave out device
 //-----------------------------------------------------------------------------
-void CAudioDeviceWave::OpenWaveOut(void) {
+void CAudioDeviceWave::OpenWaveOut() {
   WAVEFORMATEX waveFormat;
   memset(&waveFormat, 0, sizeof(waveFormat));
 
@@ -195,7 +195,7 @@ void CAudioDeviceWave::OpenWaveOut(void) {
 //-----------------------------------------------------------------------------
 // Closes the windows wave out device
 //-----------------------------------------------------------------------------
-void CAudioDeviceWave::CloseWaveOut(void) {
+void CAudioDeviceWave::CloseWaveOut() {
   if (ValidWaveOut()) {
     waveOutReset(m_waveOutHandle);
     FreeOutputBuffers();
@@ -320,7 +320,7 @@ int CAudioDeviceWave::PaintBegin(float mixAheadTime, int soundtime,
 //-----------------------------------------------------------------------------
 // Actually performs the mixing
 //-----------------------------------------------------------------------------
-void CAudioDeviceWave::PaintEnd(void) {
+void CAudioDeviceWave::PaintEnd() {
   LPWAVEHDR h;
   int wResult;
   int cblocks;
@@ -368,7 +368,7 @@ void CAudioDeviceWave::PaintEnd(void) {
   }
 }
 
-int CAudioDeviceWave::GetOutputPosition(void) {
+int CAudioDeviceWave::GetOutputPosition() {
   int s = m_buffersSent * WAV_BUFFER_SIZE;
 
   s >>= SAMPLE_16BIT_SHIFT;
@@ -381,26 +381,26 @@ int CAudioDeviceWave::GetOutputPosition(void) {
 //-----------------------------------------------------------------------------
 // Pausing
 //-----------------------------------------------------------------------------
-void CAudioDeviceWave::Pause(void) {
+void CAudioDeviceWave::Pause() {
   m_pauseCount++;
   if (m_pauseCount == 1) {
     waveOutReset(m_waveOutHandle);
   }
 }
 
-void CAudioDeviceWave::UnPause(void) {
+void CAudioDeviceWave::UnPause() {
   if (m_pauseCount > 0) {
     m_pauseCount--;
   }
 }
 
-bool CAudioDeviceWave::IsActive(void) { return (m_pauseCount == 0); }
+bool CAudioDeviceWave::IsActive() { return (m_pauseCount == 0); }
 
-float CAudioDeviceWave::MixDryVolume(void) { return 0; }
+float CAudioDeviceWave::MixDryVolume() { return 0; }
 
-bool CAudioDeviceWave::Should3DMix(void) { return false; }
+bool CAudioDeviceWave::Should3DMix() { return false; }
 
-void CAudioDeviceWave::ClearBuffer(void) {
+void CAudioDeviceWave::ClearBuffer() {
   if (!m_pBuffer) return;
 
   int clear = 0;
@@ -503,7 +503,7 @@ void CAudioDeviceWave::SpatializeChannel(int volume[CCHANVOLUMES / 2],
   S_SpatializeChannel(volume, master_vol, &sourceDir, gain, mono);
 }
 
-void CAudioDeviceWave::StopAllSounds(void) {}
+void CAudioDeviceWave::StopAllSounds() {}
 
 void CAudioDeviceWave::ApplyDSPEffects(int idsp,
                                        portable_samplepair_t *pbuffront,

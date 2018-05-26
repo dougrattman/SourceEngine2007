@@ -698,10 +698,10 @@ inline int DelayAllpass_xfade(int delaysize, int tdelay, int tdelaynew, int xf,
   return ((out * outgain) >> PBITS);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// fixed point math for real-time wave table traversing, pitch shifting,
-// resampling
-///////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////
+  // fixed point math for real-time wave table traversing, pitch shifting,
+  // resampling
+  ///////////////////////////////////////////////////////////////////////////////////
 
 #define FIX20_BITS 20  // 20 bits of fractional part
 #define FIX20_SCALE (1 << FIX20_BITS)
@@ -833,25 +833,25 @@ struct flt_t {
 flt_t flts[CFLTS];
 
 void FLT_Init(flt_t *pf) {
-  if (pf) Q_memset(pf, 0, sizeof(flt_t));
+  if (pf) memset(pf, 0, sizeof(flt_t));
 }
-void FLT_InitAll(void) {
+void FLT_InitAll() {
   for (int i = 0; i < CFLTS; i++) FLT_Init(&flts[i]);
 }
 
 void FLT_Free(flt_t *pf) {
   if (pf) {
-    if (pf->pf1) Q_memset(pf->pf1, 0, sizeof(flt_t));
+    if (pf->pf1) memset(pf->pf1, 0, sizeof(flt_t));
 
-    if (pf->pf2) Q_memset(pf->pf2, 0, sizeof(flt_t));
+    if (pf->pf2) memset(pf->pf2, 0, sizeof(flt_t));
 
-    if (pf->pf3) Q_memset(pf->pf3, 0, sizeof(flt_t));
+    if (pf->pf3) memset(pf->pf3, 0, sizeof(flt_t));
 
-    Q_memset(pf, 0, sizeof(flt_t));
+    memset(pf, 0, sizeof(flt_t));
   }
 }
 
-void FLT_FreeAll(void) {
+void FLT_FreeAll() {
   for (int i = 0; i < CFLTS; i++) FLT_Free(&flts[i]);
 }
 
@@ -1268,9 +1268,9 @@ inline int POS_ONE_GetNext(pos_one_t *p1) {
   return pos;
 }
 
-/////////////////////
-// Reverbs and delays
-/////////////////////
+  /////////////////////
+  // Reverbs and delays
+  /////////////////////
 
 #define CDLYS 128  // max delay lines active. Also used for lfos.
 
@@ -1323,7 +1323,7 @@ dly_t dlys[CDLYS];  // delay lines
 void DLY_Init(dly_t *pdly) {
   if (pdly) Q_memset(pdly, 0, sizeof(dly_t));
 }
-void DLY_InitAll(void) {
+void DLY_InitAll() {
   for (int i = 0; i < CDLYS; i++) DLY_Init(&dlys[i]);
 }
 void DLY_Free(dly_t *pdly) {
@@ -1340,7 +1340,7 @@ void DLY_Free(dly_t *pdly) {
   }
 }
 
-void DLY_FreeAll(void) {
+void DLY_FreeAll() {
   for (int i = 0; i < CDLYS; i++) DLY_Free(&dlys[i]);
 }
 
@@ -1571,22 +1571,23 @@ prm_rng_t dly_rng[] = {
 
     {dly_idtype, 0,
      DLY_MAX},  // delay type DLY_PLAIN, DLY_LOWPASS, DLY_ALLPASS etc
-    {dly_idelay, -1.0, 1000.0},  // delay in milliseconds (-1 forces auto dsp to
-                                 // set delay value from room size)
-    {dly_ifeedback, 0.0, 0.99},  // feedback 0-1.0
-    {dly_igain, 0.0, 10.0},      // final gain of output stage, 0-10.0
+    {dly_idelay, -1.0f,
+     1000.0f},  // delay in milliseconds (-1 forces auto dsp to
+                // set delay value from room size)
+    {dly_ifeedback, 0.0, 0.99f},  // feedback 0-1.0
+    {dly_igain, 0.0, 10.0f},      // final gain of output stage, 0-10.0
 
     // filter params if dly type DLY_LOWPASS or DLY_FLINEAR
 
     {dly_iftype, 0, FTR_MAX},
-    {dly_icutoff, 10.0, 22050.0},
-    {dly_iqwidth, 100.0, 11025.0},
+    {dly_icutoff, 10.0f, 22050.0f},
+    {dly_iqwidth, 100.0f, 11025.0f},
     {dly_iquality, 0, QUA_MAX},
     // note: -1 flag tells auto dsp to get value directly from room size
-    {dly_itap1, -1.0,
-     1000.0},  // delay in milliseconds NOTE: delay > tap3 > tap2 > tap1
-    {dly_itap2, -1.0, 1000.0},  // delay in milliseconds
-    {dly_itap3, -1.0, 1000.0},  // delay in milliseconds
+    {dly_itap1, -1.0f,
+     1000.0f},  // delay in milliseconds NOTE: delay > tap3 > tap2 > tap1
+    {dly_itap2, -1.0f, 1000.0f},  // delay in milliseconds
+    {dly_itap3, -1.0f, 1000.0f},  // delay in milliseconds
 };
 
 dly_t *DLY_Params(prc_t *pprc) {
@@ -1918,12 +1919,12 @@ inline int RMP_GetNext(rmp_t *prmp) {
 
 inline int RMP_GetCurrent(rmp_t *prmp) { return prmp->yprev; }
 
-//////////////
-// mod delay
-//////////////
+  //////////////
+  // mod delay
+  //////////////
 
-// modulate delay time anywhere from 0..D using MDY_ChangeVal. no output
-// glitches (uses RMP)
+  // modulate delay time anywhere from 0..D using MDY_ChangeVal. no output
+  // glitches (uses RMP)
 
 #define CMDYS 64  // max # of mod delays active (steals from delays)
 
@@ -2174,24 +2175,24 @@ prm_rng_t mdy_rng[] = {
     // delay params
 
     {mdy_idtype, 0, DLY_MAX},  // delay type DLY_PLAIN, DLY_LOWPASS, DLY_ALLPASS
-    {mdy_idelay, 0.0, 1000.0},   // delay in milliseconds
-    {mdy_ifeedback, 0.0, 0.99},  // feedback 0-1.0
-    {mdy_igain, 0.0, 1.0},       // final gain of output stage, 0-1.0
+    {mdy_idelay, 0.0, 1000.0f},   // delay in milliseconds
+    {mdy_ifeedback, 0.0, 0.99f},  // feedback 0-1.0
+    {mdy_igain, 0.0, 1.0f},       // final gain of output stage, 0-1.0
 
     // filter params if mdy type DLY_LOWPASS
 
     {mdy_iftype, 0, FTR_MAX},
-    {mdy_icutoff, 10.0, 22050.0},
-    {mdy_iqwidth, 100.0, 11025.0},
+    {mdy_icutoff, 10.0f, 22050.0f},
+    {mdy_iqwidth, 100.0f, 11025.0f},
     {mdy_iquality, 0, QUA_MAX},
 
-    {mdy_imodrate, 0.01, 200.0},  // frequency at which delay values change to
-                                  // new random value. 0 is no self-modulation
+    {mdy_imodrate, 0.01f, 200.0f},  // frequency at which delay values change to
+                                    // new random value. 0 is no self-modulation
     {mdy_imoddepth, 0.0,
-     1.0},  // how much delay changes (decreases) from current value (0-1.0)
-    {mdy_imodglide, 0.01,
-     100.0},              // glide time between dcur and dnew in milliseconds
-    {mdy_imix, 0.0, 1.0}  // 1.0 = full fx mix, 0.5 = 50% fx, 50% dry
+     1.0f},  // how much delay changes (decreases) from current value (0-1.0)
+    {mdy_imodglide, 0.01f,
+     100.0f},              // glide time between dcur and dnew in milliseconds
+    {mdy_imix, 0.0, 1.0f}  // 1.0 = full fx mix, 0.5 = 50% fx, 50% dry
 };
 
 // convert user parameters to internal parameters, allocate and return
@@ -2256,12 +2257,12 @@ void MDY_Mod(mdy_t *pmdy, float v) {
   return;
 }
 
-///////////////////
-// Parallel reverbs
-///////////////////
+  ///////////////////
+  // Parallel reverbs
+  ///////////////////
 
-// Reverb A
-// M parallel reverbs, mixed to mono output
+  // Reverb A
+  // M parallel reverbs, mixed to mono output
 
 #define CRVAS 64  // max number of parallel series reverbs active
 
@@ -2285,7 +2286,7 @@ rva_t rvas[CRVAS];
 void RVA_Init(rva_t *prva) {
   if (prva) Q_memset(prva, 0, sizeof(rva_t));
 }
-void RVA_InitAll(void) {
+void RVA_InitAll() {
   for (int i = 0; i < CRVAS; i++) RVA_Init(&rvas[i]);
 }
 
@@ -2312,7 +2313,7 @@ void RVA_Free(rva_t *prva) {
   }
 }
 
-void RVA_FreeAll(void) {
+void RVA_FreeAll() {
   for (int i = 0; i < CRVAS; i++) RVA_Free(&rvas[i]);
 }
 
@@ -2580,11 +2581,11 @@ prm_rng_t rva_rng[] = {
     {rva_cparam, 0, 0},  // first entry is # of parameters
 
     // reverb params
-    {rva_size_max, 0.0, 1000.0},  // max room delay in milliseconds
-    {rva_size_min, 0.0, 1000.0},  // min room delay in milliseconds
-    {rva_inumdelays, 1.0, 12.0},  // controls # of parallel or series delays
-    {rva_ifeedback, 0.0, 1.0},    // feedback of delays
-    {rva_igain, 0.0, 10.0},       // output gain
+    {rva_size_max, 0.0, 1000.0f},   // max room delay in milliseconds
+    {rva_size_min, 0.0, 1000.0f},   // min room delay in milliseconds
+    {rva_inumdelays, 1.0f, 12.0f},  // controls # of parallel or series delays
+    {rva_ifeedback, 0.0, 1.0f},     // feedback of delays
+    {rva_igain, 0.0, 10.0f},        // output gain
 
     // filter params for each parallel reverb (quality set to 0 for max
     // execution speed)
@@ -2593,31 +2594,33 @@ prm_rng_t rva_rng[] = {
 
     {rva_ifparallel, 0, 1},  // if 1, then all filters operate in parallel with
                              // delays. otherwise filter output only
-    {rva_imoddly, 0.0, 50.0},  // if > 0 then all delays are modulating delays,
-                               // mod param controls milliseconds of mod depth
+    {rva_imoddly, 0.0, 50.0f},  // if > 0 then all delays are modulating delays,
+                                // mod param controls milliseconds of mod depth
     {rva_imodrate, 0.0,
-     10.0},  // how many delay repetitions pass between mod changes to delayl
+     10.0f},  // how many delay repetitions pass between mod changes to delayl
 
     // override params - for more detailed description of room
     // note: width/depth/height < 0 only for some automatic dsp presets
-    {rva_width, -1000.0, 1000.0},  // 0-1000.0 millisec (room width in feet) -
-                                   // used instead of size if non-zero
-    {rva_depth, -1000.0,
-     1000.0},  // 0-1000.0 room depth in feet - used instead of size if non-zero
-    {rva_height, -1000.0, 1000.0},  // 0-1000.0 room height in feet - used
-                                    // instead of size if non-zero
+    {rva_width, -1000.0f, 1000.0f},  // 0-1000.0 millisec (room width in feet) -
+                                     // used instead of size if non-zero
+    {rva_depth, -1000.0f, 1000.0f},  // 0-1000.0 room depth in feet - used
+                                     // instead of size if non-zero
+    {rva_height, -1000.0f, 1000.0f},  // 0-1000.0 room height in feet - used
+                                      // instead of size if non-zero
 
-    {rva_fbwidth, -1.0, 1.0},  // 0-1.0 material reflectivity - used as feedback
-                               // param instead of decay if non-zero
-    {rva_fbdepth, -1.0, 1.0},  // 0-1.0 material reflectivity - used as feedback
-                               // param instead of decay if non-zero
-    {rva_fbheight, -1.0, 1.0},  // 0-1.0 material reflectivity - used as
-                                // feedback param instead of decay if non-zero
-                                // if < 0, a predelay is allocated, then
-                                // feedback is -1*param given
+    {rva_fbwidth, -1.0f,
+     1.0f},  // 0-1.0 material reflectivity - used as feedback
+             // param instead of decay if non-zero
+    {rva_fbdepth, -1.0f,
+     1.0f},  // 0-1.0 material reflectivity - used as feedback
+             // param instead of decay if non-zero
+    {rva_fbheight, -1.0f, 1.0f},  // 0-1.0 material reflectivity - used as
+                                  // feedback param instead of decay if non-zero
+                                  // if < 0, a predelay is allocated, then
+                                  // feedback is -1*param given
 
-    {rva_iftaps, 0.0, 0.333}  // if > 0, use 3 extra taps with delay values = d
-                              // * (1 - faps*n) n = 0,1,2,3
+    {rva_iftaps, 0.0, 0.333f}  // if > 0, use 3 extra taps with delay values = d
+                               // * (1 - faps*n) n = 0,1,2,3
 };
 
 #define RVA_BASEM 1  // base number of parallel delays
@@ -2626,8 +2629,8 @@ prm_rng_t rva_rng[] = {
 
 #define RVADLYSMAX 49
 float rvadlys[] = {18, 23, 28, 33, 42, 21, 26, 36, 39, 45, 47, 30};
-float rvafbs[] = {0.9, 0.9,  0.9, 0.85, 0.8, 0.9,
-                  0.9, 0.85, 0.8, 0.8,  0.8, 0.85};
+float rvafbs[] = {0.9f, 0.9f,  0.9f, 0.85f, 0.8f, 0.9f,
+                  0.9f, 0.85f, 0.8f, 0.8f,  0.8f, 0.85f};
 
 #define SWAP(a, b, t) \
   {                   \
@@ -2912,11 +2915,11 @@ inline void *RVA_VParams(void *p) {
 
 inline void RVA_Mod(void *p, float v) { return; }
 
-////////////
-// Diffusor
-///////////
+  ////////////
+  // Diffusor
+  ///////////
 
-// (N series allpass reverbs)
+  // (N series allpass reverbs)
 
 #define CDFRS 64  // max number of series reverbs active
 
@@ -2935,7 +2938,7 @@ dfr_t dfrs[CDFRS];
 void DFR_Init(dfr_t *pdfr) {
   if (pdfr) Q_memset(pdfr, 0, sizeof(dfr_t));
 }
-void DFR_InitAll(void) {
+void DFR_InitAll() {
   for (int i = 0; i < CDFRS; i++) DFR_Init(&dfrs[i]);
 }
 
@@ -2951,7 +2954,7 @@ void DFR_Free(dfr_t *pdfr) {
   }
 }
 
-void DFR_FreeAll(void) {
+void DFR_FreeAll() {
   for (int i = 0; i < CDFRS; i++) DFR_Free(&dfrs[i]);
 }
 
@@ -3142,15 +3145,15 @@ inline void *DFR_VParams(void *p) {
 
 inline void DFR_Mod(void *p, float v) { return; }
 
-//////////////////////
-// LFO wav definitions
-//////////////////////
+  //////////////////////
+  // LFO wav definitions
+  //////////////////////
 
 #define CLFOSAMPS 512  // samples per wav table - single cycle only
 #define LFOBITS 14     // bits of peak amplitude of lfo wav
 #define LFOAMP ((1 << LFOBITS) - 1)  // peak amplitude of lfo wav
 
-// types of lfo wavs
+  // types of lfo wavs
 
 #define LFO_SIN 0      // sine wav
 #define LFO_TRI 1      // triangle wav
@@ -3185,7 +3188,7 @@ void LFOWAV_Free(lfowav_t *plw) {
 
 // deallocate all lfo wave tables. Called only when sound engine exits.
 
-void LFOWAV_FreeAll(void) {
+void LFOWAV_FreeAll() {
   for (int i = 0; i < CLFOWAV; i++) LFOWAV_Free(&lfowavs[i]);
 }
 
@@ -3274,9 +3277,9 @@ void LFOWAV_InitAll() {
   }
 }
 
-////////////////////////////////////////
-// LFO iterators - one shot and looping
-////////////////////////////////////////
+  ////////////////////////////////////////
+  // LFO iterators - one shot and looping
+  ////////////////////////////////////////
 
 #define CLFO 16  // max active lfos (this steals from active delays)
 
@@ -3300,13 +3303,13 @@ lfo_t lfos[CLFO];
 void LFO_Init(lfo_t *plfo) {
   if (plfo) Q_memset(plfo, 0, sizeof(lfo_t));
 }
-void LFO_InitAll(void) {
+void LFO_InitAll() {
   for (int i = 0; i < CLFO; i++) LFO_Init(&lfos[i]);
 }
 void LFO_Free(lfo_t *plfo) {
   if (plfo) Q_memset(plfo, 0, sizeof(lfo_t));
 }
-void LFO_FreeAll(void) {
+void LFO_FreeAll() {
   for (int i = 0; i < CLFO; i++) LFO_Free(&lfos[i]);
 }
 
@@ -3488,11 +3491,11 @@ inline void LFO_Mod(lfo_t *plfo, float v) {
   return;
 }
 
-////////////////////////////////////////
-// Time Compress/expand with pitch shift
-////////////////////////////////////////
+  ////////////////////////////////////////
+  // Time Compress/expand with pitch shift
+  ////////////////////////////////////////
 
-// realtime pitch shift - ie: pitch shift without change to playback rate
+  // realtime pitch shift - ie: pitch shift without change to playback rate
 
 #define CPTCS 64
 
@@ -3906,12 +3909,13 @@ prm_rng_t ptc_rng[] = {
 
     {ptc_cparam, 0, 0},  // first entry is # of parameters
 
-    {ptc_ipitch, 0.1,
-     4.0},  // 0-n.0 where 1.0 = 1 octave up and 0.5 is one octave down
-    {ptc_itimeslice, 20.0, 300.0},  // in milliseconds - size of sound chunk to
-                                    // analyze and cut/duplicate - 100ms nominal
-    {ptc_ixfade, 1.0, 200.0},  // in milliseconds - size of crossfade region
-                               // between spliced chunks - 20ms nominal
+    {ptc_ipitch, 0.1f,
+     4.0f},  // 0-n.0 where 1.0 = 1 octave up and 0.5 is one octave down
+    {ptc_itimeslice, 20.0f,
+     300.0f},                    // in milliseconds - size of sound chunk to
+                                 // analyze and cut/duplicate - 100ms nominal
+    {ptc_ixfade, 1.0f, 200.0f},  // in milliseconds - size of crossfade region
+                                 // between spliced chunks - 20ms nominal
 };
 
 ptc_t *PTC_Params(prc_t *pprc) {
@@ -3936,18 +3940,15 @@ inline void *PTC_VParams(void *p) {
 // v changes current pitch up/down by +/- v%
 
 void PTC_Mod(ptc_t *pptc, float v) {
-  float fstep;
-  float fstepnew;
+  float fstep = pptc->fstep;
+  float fstepnew = fstep * (1.0f + v);
 
-  fstep = pptc->fstep;
-  fstepnew = fstep * (1.0 + v);
-
-  PTC_ChangeVal(pptc, fstepnew, 0.01);
+  PTC_ChangeVal(pptc, fstepnew, 0.01f);
 }
 
-////////////////////
-// ADSR envelope
-////////////////////
+  ////////////////////
+  // ADSR envelope
+  ////////////////////
 
 #define CENVS 64    // max # of envelopes active
 #define CENVRMPS 4  // A, D, S, R
@@ -4147,9 +4148,9 @@ inline void *ENV_VParams(void *p) {
 
 inline void ENV_Mod(void *p, float v) { return; }
 
-//////////////////////////
-// Gate & envelope follower
-//////////////////////////
+  //////////////////////////
+  // Gate & envelope follower
+  //////////////////////////
 
 #define CEFOS 64  // max # of envelope followers active
 
@@ -4196,7 +4197,7 @@ inline bool EFO_GateOff(efo_t *pefo) {
   return (!pefo->bgateon && RMP_HitEnd(&pefo->rmp_decay));
 }
 
-// allocate enveloper follower
+  // allocate enveloper follower
 
 #define EFO_HYST_AMP 1000  // hysteresis amplitude
 
@@ -4241,36 +4242,36 @@ efo_t *EFO_Alloc(float threshold, float attack_sec, float decay_sec,
   return NULL;
 }
 
-// values of L for CEFO_BITS_DIVIDE: L = (1 - 1/(1 << CEFO_BITS_DIVIDE))
-// 1	L = 0.5
-// 2	L = 0.75
-// 3	L = 0.875
-// 4	L = 0.9375
-// 5	L = 0.96875
-// 6	L = 0.984375
-// 7	L = 0.9921875
-// 8	L = 0.99609375
-// 9	L = 0.998046875
-// 10	L = 0.9990234375
-// 11	L = 0.99951171875
-// 12	L = 0.999755859375
+  // values of L for CEFO_BITS_DIVIDE: L = (1 - 1/(1 << CEFO_BITS_DIVIDE))
+  // 1	L = 0.5
+  // 2	L = 0.75
+  // 3	L = 0.875
+  // 4	L = 0.9375
+  // 5	L = 0.96875
+  // 6	L = 0.984375
+  // 7	L = 0.9921875
+  // 8	L = 0.99609375
+  // 9	L = 0.998046875
+  // 10	L = 0.9990234375
+  // 11	L = 0.99951171875
+  // 12	L = 0.999755859375
 
-// decay time constant for values of L, for E = 10^-3 = 60dB of attenuation
-//
-//	Neff = Ln E / Ln L  = -6.9077552 / Ln L
-//
-//  1	L = 0.5				Neff = 10 samples
-//  2	L = 0.75			Neff = 24
-//  3	L = 0.875			Neff = 51
-//  4	L = 0.9375			Neff = 107
-//  5	L = 0.96875			Neff = 217
-//  6	L = 0.984375		Neff = 438
-// 	7	L = 0.9921875		Neff = 880
-// 	8	L = 0.99609375		Neff = 1764
-//  9	L = 0.998046875		Neff = 3533
-// 10	L = 0.9990234375	Neff = 7070
-// 11	L = 0.99951171875	Neff = 14143
-// 12	L = 0.999755859375	Neff = 28290
+  // decay time constant for values of L, for E = 10^-3 = 60dB of attenuation
+  //
+  //	Neff = Ln E / Ln L  = -6.9077552 / Ln L
+  //
+  //  1	L = 0.5				Neff = 10 samples
+  //  2	L = 0.75			Neff = 24
+  //  3	L = 0.875			Neff = 51
+  //  4	L = 0.9375			Neff = 107
+  //  5	L = 0.96875			Neff = 217
+  //  6	L = 0.984375		Neff = 438
+  // 	7	L = 0.9921875		Neff = 880
+  // 	8	L = 0.99609375		Neff = 1764
+  //  9	L = 0.998046875		Neff = 3533
+  // 10	L = 0.9990234375	Neff = 7070
+  // 11	L = 0.99951171875	Neff = 14143
+  // 12	L = 0.999755859375	Neff = 28290
 
 #define CEFO_BITS 11  // 14143 samples in gate window (3hz)
 
@@ -4472,9 +4473,9 @@ inline void *EFO_VParams(void *p) {
 
 inline void EFO_Mod(void *p, float v) { return; }
 
-///////////////////////////////////////////
-// Chorus - lfo modulated delay
-///////////////////////////////////////////
+  ///////////////////////////////////////////
+  // Chorus - lfo modulated delay
+  ///////////////////////////////////////////
 
 #define CCRSS 64  // max number chorus' active
 
@@ -4507,10 +4508,10 @@ void CRS_FreeAll() {
   for (int i = 0; i < CCRSS; i++) CRS_Free(&crss[i]);
 }
 
-// fstep is base pitch shift, ie: floating point step value, where 1.0 = +1
-// octave, 0.5 = -1 octave lfotype is LFO_SIN, LFO_RND, LFO_TRI etc (LFO_RND for
-// chorus, LFO_SIN for flange) fHz is modulation frequency in Hz depth is
-// modulation depth, 0-1.0 mix is mix of chorus and clean signal
+  // fstep is base pitch shift, ie: floating point step value, where 1.0 = +1
+  // octave, 0.5 = -1 octave lfotype is LFO_SIN, LFO_RND, LFO_TRI etc (LFO_RND
+  // for chorus, LFO_SIN for flange) fHz is modulation frequency in Hz depth is
+  // modulation depth, 0-1.0 mix is mix of chorus and clean signal
 
 #define CRS_DELAYMAX 100  // max milliseconds of sweepable delay
 #define CRS_RAMPTIME 5    // milliseconds to ramp between new delay values
@@ -4542,13 +4543,13 @@ crs_t *CRS_Alloc(int lfotype, float fHz, float fdepth, float mix) {
   D = fdepth * MSEC_TO_SAMPS(CRS_DELAYMAX);  // sweep from 0 - n milliseconds
 
   ramptime = (float)CRS_RAMPTIME /
-             1000.0;  // # milliseconds to ramp between new values
+             1000.0f;  // # milliseconds to ramp between new values
 
   pdly = DLY_Alloc(D, 0, 1, DLY_LINEAR);
 
   pmdy = MDY_Alloc(pdly, ramptime, 0.0, 0.0, mix);
 
-  plfo = LFO_Alloc(lfotype, fHz, false, 1.0);
+  plfo = LFO_Alloc(lfotype, fHz, false, 1.0f);
 
   if (!plfo || !pmdy) {
     LFO_Free(plfo);
@@ -4676,9 +4677,9 @@ inline void *CRS_VParams(void *p) {
 
 inline void CRS_Mod(void *p, float v) { return; }
 
-////////////////////////////////////////////////////
-// amplifier - modulatable gain, distortion
-////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////
+  // amplifier - modulatable gain, distortion
+  ////////////////////////////////////////////////////
 
 #define CAMPS 64  // max number amps active
 
@@ -4906,20 +4907,21 @@ prm_rng_t amp_rng[] = {
 
     {amp_cparam, 0, 0},  // first entry is # of parameters
 
-    {amp_gain, 0.0, 1000.0},  // amplification
-    {amp_vthresh, 0.0, 1.0},  // threshold for distortion (1.0 = no distortion)
-    {amp_distmix, 0.0, 1.0},  // mix of clean and distortion (1.0 = full
-                              // distortion, 0.0 = full clean)
-    {amp_vfeed, 0.0, 1.0},    // distortion feedback
+    {amp_gain, 0.0, 1000.0f},  // amplification
+    {amp_vthresh, 0.0, 1.0f},  // threshold for distortion (1.0 = no distortion)
+    {amp_distmix, 0.0, 1.0f},  // mix of clean and distortion (1.0 = full
+                               // distortion, 0.0 = full clean)
+    {amp_vfeed, 0.0, 1.0f},    // distortion feedback
 
-    {amp_imodrate, 0.0, 200.0},  // frequency at which amplitude values change
+    {amp_imodrate, 0.0,
+     200.0f},                    // frequency at which amplitude values change
                                  // to new random value. 0 is no self-modulation
-    {amp_imoddepth, 0.0,
-     1.0},  // how much amplitude changes (decreases) from current value (0-1.0)
-    {amp_imodglide, 0.01,
-     100.0},  // glide time between mapcur and ampnew in milliseconds
+    {amp_imoddepth, 0.0, 1.0f},  // how much amplitude changes (decreases) from
+                                 // current value (0-1.0)
+    {amp_imodglide, 0.01f,
+     100.0f},  // glide time between mapcur and ampnew in milliseconds
     {amp_irand, 0.0,
-     1.0},  // if 1, use random modulation otherwise alternate from max-min-max
+     1.0f},  // if 1, use random modulation otherwise alternate from max-min-max
 };
 
 amp_t *AMP_Params(prc_t *pprc) {
@@ -5163,74 +5165,74 @@ void PRC_CheckParams(prc_t *pprc, prm_rng_t *prng) {
 //
 #define PSET_SIMPLE 0
 
-// x(n)--->P(0)--->y(n)
+  // x(n)--->P(0)--->y(n)
 
 #define PSET_LINEAR 1
 
-// x(n)--->P(0)-->P(1)-->...P(m)--->y(n)
+  // x(n)--->P(0)-->P(1)-->...P(m)--->y(n)
 
 #define PSET_PARALLEL2 5
 
-// x(n)--->P(0)-->(+)-->y(n)
-//      	       ^
-//		           |
-// x(n)--->P(1)-----
+  // x(n)--->P(0)-->(+)-->y(n)
+  //      	       ^
+  //		           |
+  // x(n)--->P(1)-----
 
 #define PSET_PARALLEL4 6
 
-// x(n)--->P(0)-->P(1)-->(+)-->y(n)
-//      				  ^
-//		                  |
-// x(n)--->P(2)-->P(3)-----
+  // x(n)--->P(0)-->P(1)-->(+)-->y(n)
+  //      				  ^
+  //		                  |
+  // x(n)--->P(2)-->P(3)-----
 
 #define PSET_PARALLEL5 7
 
-// x(n)--->P(0)-->P(1)-->(+)-->P(4)-->y(n)
-//      				  ^
-//		                  |
-// x(n)--->P(2)-->P(3)-----
+  // x(n)--->P(0)-->P(1)-->(+)-->P(4)-->y(n)
+  //      				  ^
+  //		                  |
+  // x(n)--->P(2)-->P(3)-----
 
 #define PSET_FEEDBACK 8
 
-// x(n)-P(0)--(+)-->P(1)-->P(2)---->y(n)
-//             ^				|
-//             |                v
-//		       -----P(4)<--P(3)--
+  // x(n)-P(0)--(+)-->P(1)-->P(2)---->y(n)
+  //             ^				|
+  //             |                v
+  //		       -----P(4)<--P(3)--
 
 #define PSET_FEEDBACK3 9
 
-// x(n)---(+)-->P(0)--------->y(n)
-//         ^                |
-//         |                v
-//		   -----P(2)<--P(1)--
+  // x(n)---(+)-->P(0)--------->y(n)
+  //         ^                |
+  //         |                v
+  //		   -----P(2)<--P(1)--
 
 #define PSET_FEEDBACK4 10
 
-// x(n)---(+)-->P(0)-------->P(3)--->y(n)
-//         ^              |
-//         |              v
-//		   ---P(2)<--P(1)--
+  // x(n)---(+)-->P(0)-------->P(3)--->y(n)
+  //         ^              |
+  //         |              v
+  //		   ---P(2)<--P(1)--
 
 #define PSET_MOD 11
 
-//
-// x(n)------>P(1)--P(2)--P(3)--->y(n)
-//                    ^
-// x(n)------>P(0)....:
+  //
+  // x(n)------>P(1)--P(2)--P(3)--->y(n)
+  //                    ^
+  // x(n)------>P(0)....:
 
 #define PSET_MOD2 12
 
-//
-// x(n)-------P(1)-->y(n)
-//              ^
-// x(n)-->P(0)..:
+  //
+  // x(n)-------P(1)-->y(n)
+  //              ^
+  // x(n)-->P(0)..:
 
 #define PSET_MOD3 13
 
-//
-// x(n)-------P(1)-->P(2)-->y(n)
-//              ^
-// x(n)-->P(0)..:
+  //
+  // x(n)-------P(1)-->P(2)-->y(n)
+  //              ^
+  // x(n)-->P(0)..:
 
 #define CPSETS 64  // max number of presets simultaneously active
 
@@ -5296,13 +5298,13 @@ void PSET_UpdateDuration(pset_t *ppset, int SampleCount) {
 void PSET_Init(pset_t *ppset) {
   // clear state array
 
-  if (ppset) Q_memset(ppset->w, 0, sizeof(int) * (CPSET_STATES));
+  if (ppset) memset(ppset->w, 0, sizeof(int) * (CPSET_STATES));
 }
 
 // clear runtime slots
 
-void PSET_InitAll(void) {
-  for (int i = 0; i < CPSETS; i++) Q_memset(&psets[i], 0, sizeof(pset_t));
+void PSET_InitAll() {
+  for (int i = 0; i < CPSETS; i++) memset(&psets[i], 0, sizeof(pset_t));
 }
 
 // free the preset - free all processors
@@ -5315,7 +5317,7 @@ void PSET_Free(pset_t *ppset) {
 
     // clear
 
-    Q_memset(ppset, 0, sizeof(pset_t));
+    memset(ppset, 0, sizeof(pset_t));
   }
 }
 
@@ -5354,7 +5356,7 @@ pset_t *PSET_Alloc(int ipsettemplate) {
 
   // clear preset
 
-  Q_memset(ppset, 0, sizeof(pset_t));
+  memset(ppset, 0, sizeof(pset_t));
 
   // copy template into preset
 
@@ -5894,7 +5896,7 @@ void DSP_InitAll(bool bLoadPresetFile) {
 
 // free all resources associated with dsp - called once, during engine shutdown
 
-void DSP_FreeAll(void) {
+void DSP_FreeAll() {
   // order is important, don't rearange.
 
   for (int idsp = 0; idsp < CDSPS; idsp++) DSP_Free(idsp);
@@ -6011,9 +6013,7 @@ void DSP_ChangePresetValue(int idsp, int channel, int iproc, float value) {
 
 // return true if automatic room detection is enabled
 
-bool DSP_CheckDspAutoEnabled(void) {
-  return (dsp_room.GetInt() == DSP_AUTOMATIC);
-}
+bool DSP_CheckDspAutoEnabled() { return (dsp_room.GetInt() == DSP_AUTOMATIC); }
 
 // set dsp_automatic preset, used in place of dsp_room when automatic room
 // detection enabled
@@ -6026,7 +6026,7 @@ void DSP_SetDspAuto(int dsp_preset) {
 
 // wrapper on dsp_room GetInt so that dsp_automatic can override
 
-int dsp_room_GetInt(void) {
+int dsp_room_GetInt() {
   // if dsp_automatic is not enabled, get room
 
   if (!DSP_CheckDspAutoEnabled()) return dsp_room.GetInt();
@@ -6038,7 +6038,7 @@ int dsp_room_GetInt(void) {
 
 // wrapper on idsp_room preset so that idsp_automatic can override
 
-int Get_idsp_room(void) {
+int Get_idsp_room() {
   // if dsp_automatic is not enabled, get room
 
   if (!DSP_CheckDspAutoEnabled()) return idsp_room;
@@ -6617,11 +6617,11 @@ int MapReflectivityToDLYCutoff[] = {
 };
 
 float MapSizeToDLYFeedback[] = {
-    0.9,  // 0.6,	// SMALL
-    0.8,  // 0.5,	// MEDIUM
-    0.7,  // 0.4,	// LARGE
-    0.6,  // 0.3,	// HUGE
-    0.5,  // 0.2,	// GIGANTIC
+    0.9f,  // 0.6,	// SMALL
+    0.8f,  // 0.5,	// MEDIUM
+    0.7f,  // 0.4,	// LARGE
+    0.6f,  // 0.3,	// HUGE
+    0.5f,  // 0.2,	// GIGANTIC
 };
 
 void ADSP_SetupAutoDelay(prc_t *pprc_dly, auto_params_t *pa) {
@@ -6701,11 +6701,11 @@ float MapSizeToRVANumDelays[] = {
 };
 
 float MapSizeToRVAFeedback[] = {
-    0.75,  // SMALL
-    0.8,   // MEDIUM
-    0.9,   // LARGE
-    0.95,  // HUGE
-    0.98,  // GIGANTIC
+    0.75f,  // SMALL
+    0.8f,   // MEDIUM
+    0.9f,   // LARGE
+    0.95f,  // HUGE
+    0.98f,  // GIGANTIC
 };
 
 void ADSP_SetupAutoReverb(prc_t *pprc_rva, auto_params_t *pa) {
@@ -6731,64 +6731,64 @@ void ADSP_SetupAutoReverb(prc_t *pprc_rva, auto_params_t *pa) {
   else
     pprc_rva->prm[rva_inumdelays] = MapSizeToRVANumDelays[pa->len];
 
-  pprc_rva->prm[rva_ifeedback] = 0.9;
+  pprc_rva->prm[rva_ifeedback] = 0.9f;
 
   pprc_rva->prm[rva_icutoff] = MapReflectivityToRVACutoff[pa->reflectivity];
 
   pprc_rva->prm[rva_ifparallel] = 1;
   pprc_rva->prm[rva_imoddly] = ADSP_IsEmpty(pa) ? 0 : 4;
-  pprc_rva->prm[rva_imodrate] = 3.48;
+  pprc_rva->prm[rva_imodrate] = 3.48f;
 
   pprc_rva->prm[rva_iftaps] =
       0;  // 0.1 // use extra delay taps to increase density
 
   pprc_rva->prm[rva_width] =
-      std::clamp(((float)(pa->width) / 12.0), 6.0, 500.0);  // in feet
+      std::clamp(((float)(pa->width) / 12.0f), 6.0f, 500.0f);  // in feet
   pprc_rva->prm[rva_depth] =
-      std::clamp(((float)(pa->length) / 12.0), 6.0, 500.0);
+      std::clamp(((float)(pa->length) / 12.0f), 6.0f, 500.0f);
   pprc_rva->prm[rva_height] =
-      std::clamp(((float)(pa->height) / 12.0), 6.0, 500.0);
+      std::clamp(((float)(pa->height) / 12.0f), 6.0f, 500.0f);
 
   // room
   pprc_rva->prm[rva_fbwidth] =
-      0.9;  // MapSizeToRVAFeedback[pa->size];	// larger size = more feedback
-  pprc_rva->prm[rva_fbdepth] = 0.9;   // MapSizeToRVAFeedback[pa->size];
-  pprc_rva->prm[rva_fbheight] = 0.5;  // MapSizeToRVAFeedback[pa->size];
+      0.9f;  // MapSizeToRVAFeedback[pa->size];	// larger size = more feedback
+  pprc_rva->prm[rva_fbdepth] = 0.9f;   // MapSizeToRVAFeedback[pa->size];
+  pprc_rva->prm[rva_fbheight] = 0.5f;  // MapSizeToRVAFeedback[pa->size];
 
   // feedback is based on size of room:
 
   if (ADSP_IsInside(pa)) {
     if (pa->shape == ADSP_HALL) {
-      pprc_rva->prm[rva_fbwidth] = 0.7;   // MapSizeToRVAFeedback[pa->wid];
-      pprc_rva->prm[rva_fbdepth] = -0.5;  // MapSizeToRVAFeedback[pa->len];
-      pprc_rva->prm[rva_fbheight] = 0.3;  // MapSizeToRVAFeedback[pa->ht];
+      pprc_rva->prm[rva_fbwidth] = 0.7f;   // MapSizeToRVAFeedback[pa->wid];
+      pprc_rva->prm[rva_fbdepth] = -0.5f;  // MapSizeToRVAFeedback[pa->len];
+      pprc_rva->prm[rva_fbheight] = 0.3f;  // MapSizeToRVAFeedback[pa->ht];
     }
 
     if (pa->shape == ADSP_TUNNEL) {
-      pprc_rva->prm[rva_fbwidth] = 0.9;
-      pprc_rva->prm[rva_fbdepth] = -0.8;  // fixed pre-delay, no feedback
-      pprc_rva->prm[rva_fbheight] = 0.3;
+      pprc_rva->prm[rva_fbwidth] = 0.9f;
+      pprc_rva->prm[rva_fbdepth] = -0.8f;  // fixed pre-delay, no feedback
+      pprc_rva->prm[rva_fbheight] = 0.3f;
     }
   } else {
     if (pa->shape == ADSP_ALLEY) {
-      pprc_rva->prm[rva_fbwidth] = 0.9;
-      pprc_rva->prm[rva_fbdepth] = -0.8;  // fixed pre-delay, no feedback
-      pprc_rva->prm[rva_fbheight] = 0.0;
+      pprc_rva->prm[rva_fbwidth] = 0.9f;
+      pprc_rva->prm[rva_fbdepth] = -0.8f;  // fixed pre-delay, no feedback
+      pprc_rva->prm[rva_fbheight] = 0.0f;
     }
   }
 
-  if (!ADSP_IsInside(pa)) pprc_rva->prm[rva_fbheight] = 0.0;
+  if (!ADSP_IsInside(pa)) pprc_rva->prm[rva_fbheight] = 0.0f;
 
   pprc_rva->prm[rva_igain] = gain;
 }
 
-// diffusor templates for auto create
+  // diffusor templates for auto create
 
-// size: 0-1.0 scales all delays				(13ms to 41ms *
-// scale = delay) numdelays: 0-4.0 controls # of series delays decay: 0-1.0
-// scales all feedback parameters
+  // size: 0-1.0 scales all delays				(13ms to 41ms *
+  // scale = delay) numdelays: 0-4.0 controls # of series delays decay: 0-1.0
+  // scales all feedback parameters
 
-//					prctype		size	#dly	feedback
+  //					prctype		size	#dly	feedback
 
 #define PRC_DFRA_S \
   { PRC_DFR, {0.5, 2, 0.10}, NULL, NULL, NULL, NULL, NULL }  // S room
@@ -8306,7 +8306,7 @@ void DSP_CheckRestorePresets() {
   g_bNeedPresetRestore = false;
 
   int i;
-  int c = SOURCE_ARRAYSIZE(g_PreserveDSP);
+  int c = std::size(g_PreserveDSP);
 
   // Restore
   for (i = 0; i < c; ++i) {
@@ -8352,7 +8352,7 @@ void DSP_ClearState() {
   // convars and bootstrap the dsp system into using them for a few frames
 
   int i;
-  int c = SOURCE_ARRAYSIZE(g_PreserveDSP);
+  int c = std::size(g_PreserveDSP);
 
   for (i = 0; i < c; ++i) {
     PreserveDSP_t &slot = g_PreserveDSP[i];
@@ -8828,24 +8828,24 @@ float DSP_LookupStringToken(ch *psz, int ipset) {
   return 0;
 }
 
-// load dsp preset file, parse presets into g_psettemplate array
-// format for each preset:
-// { <preset #> <preset type> <#processors> <gain> { <processor type>
-// <param0>...<param15> } {...} {...} }
+  // load dsp preset file, parse presets into g_psettemplate array
+  // format for each preset:
+  // { <preset #> <preset type> <#processors> <gain> { <processor type>
+  // <param0>...<param15> } {...} {...} }
 
 #define CHAR_LEFT_PAREN '{'
 #define CHAR_RIGHT_PAREN '}'
 
 // free preset template memory
 
-void DSP_ReleaseMemory(void) {
+void DSP_ReleaseMemory() {
   if (g_psettemplates) {
     delete[] g_psettemplates;
     g_psettemplates = NULL;
   }
 }
 
-bool DSP_LoadPresetFile(void) {
+bool DSP_LoadPresetFile() {
   ch szFile[MAX_OSPATH];
   ch *pbuffer;
   const ch *pstart;
@@ -9022,7 +9022,7 @@ load_exit:
 //  could be extended to other stuff
 //-----------------------------------------------------------------------------
 void DSP_FastReset(int dspType) {
-  int c = SOURCE_ARRAYSIZE(g_PreserveDSP);
+  int c = std::size(g_PreserveDSP);
 
   // Restore
   for (int i = 0; i < c; ++i) {
@@ -9039,7 +9039,7 @@ void DSP_FastReset(int dspType) {
 // if switching to a new preset, alloc new preset, simulate both presets in
 // DSP_Process & xfade, called a few times per frame.
 
-void CheckNewDspPresets(void) {
+void CheckNewDspPresets() {
   bool b_slow_cpu = dsp_slow_cpu.GetInt() == 0 ? false : true;
 
   DSP_CheckRestorePresets();
@@ -9181,7 +9181,7 @@ void DSP_DEBUGSetParams(int ipreset, int iproc, float *pvalues, int cparams) {
 // reload entire preset file, reset all current dsp presets
 // NOTE: this is debug code only.  It doesn't do all mem free work correctly!
 
-void DSP_DEBUGReloadPresetFile(void) {
+void DSP_DEBUGReloadPresetFile() {
   int iroom = dsp_room.GetInt();
   int iwater = dsp_water.GetInt();
   int iplayer = dsp_player.GetInt();
@@ -9347,7 +9347,7 @@ inline int S_Compress(int xin) {
 
   float Yn, Xn, Cn, Fn;
   float C0 = 20000;  // threshold
-  float p = .3;      // compression ratio
+  float p = .3f;     // compression ratio
   float g = 1;       // gain after compression
 
   Xn = (float)xin;

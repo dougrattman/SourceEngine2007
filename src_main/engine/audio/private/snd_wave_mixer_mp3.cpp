@@ -24,7 +24,7 @@ class CAudioMixerWaveMP3 : public CAudioMixerWave, public IAudioStreamEvent {
                    int outputOffset, int inputOffset, fixedint fracRate,
                    int outCount, int timecompress);
   virtual int GetOutputData(void **pData, int sampleCount,
-                            char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
+                            ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
 
   // need to override this to fixup blocks
   // UNDONE: This doesn't quite work with MP3 - we need a MP3 position, not a
@@ -49,7 +49,7 @@ class CAudioMixerWaveMP3 : public CAudioMixerWave, public IAudioStreamEvent {
   void GetID3HeaderOffset();
 
   IAudioStream *m_pStream;
-  char m_samples[MP3_BUFFER_SIZE];
+  ch m_samples[MP3_BUFFER_SIZE];
   int m_sampleCount;
   int m_samplePosition;
   int m_channelCount;
@@ -73,7 +73,7 @@ CAudioMixerWaveMP3::CAudioMixerWaveMP3(IWaveData *data)
   }
 }
 
-CAudioMixerWaveMP3::~CAudioMixerWaveMP3(void) {}
+CAudioMixerWaveMP3::~CAudioMixerWaveMP3() {}
 
 void CAudioMixerWaveMP3::Mix(IAudioDevice *pDevice, channel_t *pChannel,
                              void *pData, int outputOffset, int inputOffset,
@@ -89,7 +89,7 @@ void CAudioMixerWaveMP3::Mix(IAudioDevice *pDevice, channel_t *pChannel,
 
 // Some MP3 files are wrapped in ID3
 void CAudioMixerWaveMP3::GetID3HeaderOffset() {
-  char copyBuf[AUDIOSOURCE_COPYBUF_SIZE];
+  ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE];
   uint8_t *pData;
 
   int bytesRead = m_pData->ReadSourceData((void **)&pData, 0, 10, copyBuf);
@@ -124,7 +124,7 @@ int CAudioMixerWaveMP3::StreamRequestData(void *pBuffer, int bytesRequested,
   offset += m_headerOffset;  // skip any id3 header/wrapper
 
   while (bytesRequested > 0) {
-    char *pOutputBuffer = (char *)pBuffer;
+    ch *pOutputBuffer = (ch *)pBuffer;
     pOutputBuffer += totalBytesRead;
 
     void *pData = NULL;
@@ -160,7 +160,7 @@ bool CAudioMixerWaveMP3::DecodeBlock() {
 // Output : int - available samples (zero to stop decoding)
 //-----------------------------------------------------------------------------
 int CAudioMixerWaveMP3::GetOutputData(void **pData, int sampleCount,
-                                      char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+                                      ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   if (m_samplePosition >= m_sampleCount) {
     if (!DecodeBlock()) return 0;
   }

@@ -31,8 +31,8 @@ class CVBRHeader {
  private:
   static DWORD m_dwXINGOffsets[2][2];
 
-  static bool CheckID(CMPAFile* pMPAFile, char ch0, char ch1, char ch2,
-                      char ch3, DWORD& dwOffset);
+  static bool CheckID(CMPAFile* pMPAFile, ch ch0, ch ch1, ch ch2,
+                      ch ch3, DWORD& dwOffset);
   static bool CheckXING(CMPAFile* pMPAFile, DWORD& dwOffset);
   static bool CheckVBRI(CMPAFile* pMPAFile, DWORD& dwOffset);
 

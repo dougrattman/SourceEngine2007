@@ -14,17 +14,17 @@ static unsigned long ReadDWord(FILE *fp) {
   return ret;
 }
 
-static unsigned short ReadWord(FILE *fp) {
-  unsigned short ret;
+static u16 ReadWord(FILE *fp) {
+  u16 ret;
   fread(&ret, 2, 1, fp);
   return ret;
 }
 
 static void WriteDWord(FILE *fp, unsigned long val) { fwrite(&val, 4, 1, fp); }
 
-static void WriteWord(FILE *fp, unsigned short val) { fwrite(&val, 2, 1, fp); }
+static void WriteWord(FILE *fp, u16 val) { fwrite(&val, 2, 1, fp); }
 
-bool ReadWaveFile(const char *pFilename, char *&pData, int &nDataBytes,
+bool ReadWaveFile(const ch *pFilename, ch *&pData, int &nDataBytes,
                   int &wBitsPerSample, int &nChannels, int &nSamplesPerSec) {
   FILE *fp;
   if (fopen_s(&fp, pFilename, "rb")) return false;
@@ -40,7 +40,7 @@ bool ReadWaveFile(const char *pFilename, char *&pData, int &nDataBytes,
   fseek(fp, 40, SEEK_SET);
   nDataBytes = ReadDWord(fp);
   ReadDWord(fp);
-  pData = new char[nDataBytes];
+  pData = new ch[nDataBytes];
   if (!pData) {
     fclose(fp);
     return false;
@@ -50,7 +50,7 @@ bool ReadWaveFile(const char *pFilename, char *&pData, int &nDataBytes,
   return true;
 }
 
-bool WriteWaveFile(const char *pFilename, const char *pData, int nBytes,
+bool WriteWaveFile(const ch *pFilename, const ch *pData, int nBytes,
                    int wBitsPerSample, int nChannels, int nSamplesPerSec) {
   FILE *fp;
   if (fopen_s(&fp, pFilename, "wb")) return false;
@@ -65,12 +65,12 @@ bool WriteWaveFile(const char *pFilename, const char *pData, int nBytes,
 
   WriteDWord(fp, 0x10);
   WriteWord(fp, 1);  // WAVE_FORMAT_PCM
-  WriteWord(fp, (unsigned short)nChannels);
+  WriteWord(fp, (u16)nChannels);
   WriteDWord(fp, (unsigned long)nSamplesPerSec);
   WriteDWord(
       fp, (unsigned long)((wBitsPerSample / 8) * nChannels * nSamplesPerSec));
-  WriteWord(fp, (unsigned short)((wBitsPerSample / 8) * nChannels));
-  WriteWord(fp, (unsigned short)wBitsPerSample);
+  WriteWord(fp, (u16)((wBitsPerSample / 8) * nChannels));
+  WriteWord(fp, (u16)wBitsPerSample);
 
   // Write the DATA chunk.
   fwrite("data", 4, 1, fp);

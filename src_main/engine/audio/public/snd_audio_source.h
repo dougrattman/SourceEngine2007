@@ -26,7 +26,7 @@ class CUtlBuffer;
 //-----------------------------------------------------------------------------
 the_interface CAudioMixer {
  public:
-  virtual ~CAudioMixer(void) {}
+  virtual ~CAudioMixer() {}
 
   // return number of samples mixed
   virtual int MixDataToDevice(IAudioDevice * pDevice, channel_t * pChannel,
@@ -126,7 +126,7 @@ class CAudioSourceCachedInfo : public IBaseCacheInfo {
   inline int CachedDataSize() const { return (int)m_usCachedDataSize; }
 
   void SetCachedDataSize(int size) {
-    m_usCachedDataSize = (unsigned short)size;
+    m_usCachedDataSize = (u16)size;
   }
 
   inline const uint8_t *CachedData() const { return m_pCachedData; }
@@ -138,7 +138,7 @@ class CAudioSourceCachedInfo : public IBaseCacheInfo {
 
   inline int HeaderSize() const { return (int)m_usHeaderSize; }
 
-  void SetHeaderSize(int size) { m_usHeaderSize = (unsigned short)size; }
+  void SetHeaderSize(int size) { m_usHeaderSize = (u16)size; }
 
   inline const uint8_t *HeaderData() const { return m_pHeader; }
 
@@ -190,8 +190,8 @@ class CAudioSourceCachedInfo : public IBaseCacheInfo {
   int m_dataStart;  // offset of wave data chunk
   int m_dataSize;   // size of wave data chunk
 
-  unsigned short m_usCachedDataSize;
-  unsigned short m_usHeaderSize;
+  u16 m_usCachedDataSize;
+  u16 m_usHeaderSize;
 
   CSentence *m_pSentence;
   uint8_t *m_pCachedData;
@@ -340,7 +340,7 @@ the_interface CAudioSource {
     AUDIO_LOADING = 2,
   };
 
-  virtual ~CAudioSource(void) {}
+  virtual ~CAudioSource() {}
 
   // Create an instance (mixer) of this audio source
   virtual CAudioMixer *CreateMixer(int initialStreamPosition = 0) = 0;
@@ -380,7 +380,7 @@ the_interface CAudioSource {
   virtual bool IsStereoWav(void) = 0;
   virtual bool IsStreaming(void) = 0;
   virtual int GetCacheStatus(void) = 0;
-  int IsCached(void) {
+  int IsCached() {
     return GetCacheStatus() == AUDIO_IS_LOADED ? true : false;
   }
   virtual void CacheLoad(void) = 0;

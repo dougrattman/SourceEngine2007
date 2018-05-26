@@ -40,8 +40,8 @@ void ChunkError(unsigned int id) {
     return;
   }
 
-  char tmp[256];
-  char idname[5];
+  ch tmp[256];
+  ch idname[5];
   idname[4] = 0;
   memcpy(idname, &id, 4);
 
@@ -127,7 +127,7 @@ CAudioSourceWave::CAudioSourceWave(CSfxTable *pSfx,
   m_nHeaderSize = 0;
 
   if (info->HeaderData()) {
-    m_pHeader = new char[info->HeaderSize()];
+    m_pHeader = new ch[info->HeaderSize()];
     Assert(m_pHeader);
     Q_memcpy(m_pHeader, info->HeaderData(), info->HeaderSize());
     m_nHeaderSize = info->HeaderSize();
@@ -160,7 +160,7 @@ CAudioSourceWave::CAudioSourceWave(CSfxTable *pSfx,
   m_bIsSentenceWord = false;
 }
 
-CAudioSourceWave::~CAudioSourceWave(void) {
+CAudioSourceWave::~CAudioSourceWave() {
 #if _DEBUG
   if (!CanDelete()) Assert(0);
 #endif
@@ -170,7 +170,7 @@ CAudioSourceWave::~CAudioSourceWave(void) {
   delete m_pTempSentence;
 }
 
-int CAudioSourceWave::GetType(void) { return AUDIO_SOURCE_WAV; }
+int CAudioSourceWave::GetType() { return AUDIO_SOURCE_WAV; }
 
 void CAudioSourceWave::GetCacheData(CAudioSourceCachedInfo *info) {
   Assert(info->Type() == CAudioSource::AUDIO_SOURCE_WAV);
@@ -215,9 +215,9 @@ void CAudioSourceWave::GetCacheData(CAudioSourceCachedInfo *info) {
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : char const
+// Output : ch const
 //-----------------------------------------------------------------------------
-char const *CAudioSourceWave::GetFileName() {
+ch const *CAudioSourceWave::GetFileName() {
   return m_pSfx ? m_pSfx->GetFileName() : "NULL m_pSfx";
 }
 
@@ -259,7 +259,7 @@ void CAudioSourceWave::CheckAudioSourceCache() {
 // Input  : *pHeaderBuffer - the RIFF fmt chunk
 //			headerSize - size of that chunk
 //-----------------------------------------------------------------------------
-void CAudioSourceWave::Init(const char *pHeaderBuffer, int headerSize) {
+void CAudioSourceWave::Init(const ch *pHeaderBuffer, int headerSize) {
   const WAVEFORMATEX *pHeader = (const WAVEFORMATEX *)pHeaderBuffer;
 
   // copy the relevant header data
@@ -278,7 +278,7 @@ void CAudioSourceWave::Init(const char *pHeaderBuffer, int headerSize) {
   if (m_format == WAVE_FORMAT_ADPCM) {
     // For non-standard waves (like ADPCM) store the header, it has the decoding
     // coefficients
-    m_pHeader = new char[headerSize];
+    m_pHeader = new ch[headerSize];
     memcpy(m_pHeader, pHeader, headerSize);
     m_nHeaderSize = headerSize;
 
@@ -287,26 +287,26 @@ void CAudioSourceWave::Init(const char *pHeaderBuffer, int headerSize) {
   }
 }
 
-int CAudioSourceWave::SampleRate(void) { return m_rate; }
+int CAudioSourceWave::SampleRate() { return m_rate; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Size of each sample
 // Output :
 //-----------------------------------------------------------------------------
-int CAudioSourceWave::SampleSize(void) { return m_sampleSize; }
+int CAudioSourceWave::SampleSize() { return m_sampleSize; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Total number of samples in this source
 // Output : int
 //-----------------------------------------------------------------------------
-int CAudioSourceWave::SampleCount(void) {
+int CAudioSourceWave::SampleCount() {
   // caller wants real samples
   return m_numDecodedSamples;
 }
 
-int CAudioSourceWave::Format(void) { return m_format; }
+int CAudioSourceWave::Format() { return m_format; }
 
-int CAudioSourceWave::DataSize(void) { return m_dataSize; }
+int CAudioSourceWave::DataSize() { return m_dataSize; }
 
 bool CAudioSourceWave::IsVoiceSource() {
   if (GetSentence()) {
@@ -322,7 +322,7 @@ bool CAudioSourceWave::IsVoiceSource() {
 // Input  : *pData - pointer to sample data
 //			sampleCount - number of samples
 //-----------------------------------------------------------------------------
-void CAudioSourceWave::ConvertSamples(char *pData, int sampleCount) {
+void CAudioSourceWave::ConvertSamples(ch *pData, int sampleCount) {
   if (m_format == WAVE_FORMAT_PCM) {
     if (m_bits == 8) {
       for (int i = 0; i < sampleCount * m_channels; i++) {
@@ -358,21 +358,21 @@ void CAudioSourceWave::ParseChunk(IterateRIFF &walk, int chunkName) {
   }
 }
 
-bool CAudioSourceWave::IsLooped(void) {
+bool CAudioSourceWave::IsLooped() {
   return (m_loopStart >= 0) ? true : false;
 }
 
-bool CAudioSourceWave::IsStereoWav(void) {
+bool CAudioSourceWave::IsStereoWav() {
   return (m_channels == 2) ? true : false;
 }
 
-bool CAudioSourceWave::IsStreaming(void) { return false; }
+bool CAudioSourceWave::IsStreaming() { return false; }
 
-int CAudioSourceWave::GetCacheStatus(void) { return AUDIO_IS_LOADED; }
+int CAudioSourceWave::GetCacheStatus() { return AUDIO_IS_LOADED; }
 
-void CAudioSourceWave::CacheLoad(void) {}
+void CAudioSourceWave::CacheLoad() {}
 
-void CAudioSourceWave::CacheUnload(void) {}
+void CAudioSourceWave::CacheUnload() {}
 
 int CAudioSourceWave::ZeroCrossingBefore(int sample) { return sample; }
 
@@ -402,7 +402,7 @@ void CAudioSourceWave::ParseSentence(IterateRIFF &walk) {
 // Purpose:
 // Output : CSentence
 //-----------------------------------------------------------------------------
-CSentence *CAudioSourceWave::GetSentence(void) {
+CSentence *CAudioSourceWave::GetSentence() {
   // Already checked and this wav doesn't have sentence data...
   if (m_bNoSentence == true) {
     return NULL;
@@ -436,7 +436,7 @@ CSentence *CAudioSourceWave::GetSentence(void) {
   return NULL;
 }
 
-const char *CAudioSourceWave::GetName() {
+const ch *CAudioSourceWave::GetName() {
   return m_pSfx ? m_pSfx->getname() : NULL;
 }
 
@@ -445,8 +445,8 @@ const char *CAudioSourceWave::GetName() {
 //-----------------------------------------------------------------------------
 bool CAudioSourceWave::GetXboxAudioStartupData() {
   CUtlBuffer buf;
-  char fileName[SOURCE_MAX_PATH];
-  char tempFileName[SOURCE_MAX_PATH];
+  ch fileName[SOURCE_MAX_PATH];
+  ch tempFileName[SOURCE_MAX_PATH];
 
   MEM_ALLOC_CREDIT();
 
@@ -514,7 +514,7 @@ bool CAudioSourceWave::GetXboxAudioStartupData() {
       if (pHeader->GetSeekTableSize()) {
         // store off the seek table
         m_nHeaderSize = pHeader->GetSeekTableSize();
-        m_pHeader = new char[m_nHeaderSize];
+        m_pHeader = new ch[m_nHeaderSize];
         V_memcpy(m_pHeader, pData, m_nHeaderSize);
 
         // advance past optional seek table
@@ -556,7 +556,7 @@ bool CAudioSourceWave::GetXboxAudioStartupData() {
 //			formatSize - header size
 //			&walk - RIFF file
 //-----------------------------------------------------------------------------
-void CAudioSourceWave::Setup(const char *pFormatBuffer, int formatSize,
+void CAudioSourceWave::Setup(const ch *pFormatBuffer, int formatSize,
                              IterateRIFF &walk) {
   Init(pFormatBuffer, formatSize);
 
@@ -570,8 +570,8 @@ bool CAudioSourceWave::GetStartupData(void *dest, int destsize,
                                       int &bytesCopied) {
   bytesCopied = 0;
 
-  char formatBuffer[1024];
-  const char *pName = m_pSfx->GetFileName();
+  ch formatBuffer[1024];
+  const ch *pName = m_pSfx->GetFileName();
   InFileRIFF riff(pName, *g_pSndIO);
 
   if (riff.RIFFName() != RIFF_WAVE) {
@@ -637,7 +637,7 @@ bool CAudioSourceWave::GetStartupData(void *dest, int destsize,
     g_pSndIO->close(file);
 
     // some samples need to be converted
-    ConvertSamples((char *)dest, (bytesCopied / m_sampleSize));
+    ConvertSamples((ch *)dest, (bytesCopied / m_sampleSize));
   }
 
   return true;
@@ -723,7 +723,7 @@ void CAudioSourceWave::ParseSamplerChunk(IterateRIFF &walk) {
 //-----------------------------------------------------------------------------
 // Purpose: get the wave header
 //-----------------------------------------------------------------------------
-void *CAudioSourceWave::GetHeader(void) { return m_pHeader; }
+void *CAudioSourceWave::GetHeader() { return m_pHeader; }
 
 //-----------------------------------------------------------------------------
 // Gets the looping information. Some parameters are interpreted based on format
@@ -803,7 +803,7 @@ void CAudioSourceWave::ReferenceAdd(CAudioMixer *pMixer) { m_refCount++; }
 //-----------------------------------------------------------------------------
 // Purpose: return true if no mixers reference this source
 //-----------------------------------------------------------------------------
-bool CAudioSourceWave::CanDelete(void) {
+bool CAudioSourceWave::CanDelete() {
   if (m_refCount > 0) return false;
 
   return true;
@@ -825,7 +825,7 @@ class CAudioSourceMemWave : public CAudioSourceWave {
   // These are all implemented by CAudioSourceMemWave.
   virtual CAudioMixer *CreateMixer(int initialStreamPosition = 0);
   virtual int GetOutputData(void **pData, int samplePosition, int sampleCount,
-                            char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
+                            ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
   virtual int ZeroCrossingBefore(int sample);
   virtual int ZeroCrossingAfter(int sample);
 
@@ -841,7 +841,7 @@ class CAudioSourceMemWave : public CAudioSourceWave {
 
  protected:
   // Whoeover derives must implement this.
-  virtual char *GetDataPointer(void);
+  virtual ch *GetDataPointer(void);
 
   memhandle_t m_hCache;
   StreamHandle_t m_hStream;
@@ -894,7 +894,7 @@ CAudioMixer *CAudioSourceMemWave::CreateMixer(int initialStreamPosition) {
 //-----------------------------------------------------------------------------
 int CAudioSourceMemWave::GetOutputData(void **pData, int samplePosition,
                                        int sampleCount,
-                                       char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+                                       ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   // handle position looping
   samplePosition = ConvertLoopedPosition(samplePosition);
 
@@ -933,7 +933,7 @@ int CAudioSourceMemWave::GetOutputData(void **pData, int samplePosition,
     }
 
     if (*pData) {
-      *pData = (char *)*pData + samplePosition;
+      *pData = (ch *)*pData + samplePosition;
     } else {
       // End of data or some other problem
       sampleCount = 0;
@@ -953,11 +953,11 @@ int CAudioSourceMemWave::GetOutputData(void **pData, int samplePosition,
 // Output : position of zero crossing
 //-----------------------------------------------------------------------------
 int CAudioSourceMemWave::ZeroCrossingBefore(int sample) {
-  char *pWaveData = GetDataPointer();
+  ch *pWaveData = GetDataPointer();
 
   if (m_format == WAVE_FORMAT_PCM) {
     if (m_bits == 8) {
-      char *pData = pWaveData + sample * m_sampleSize;
+      ch *pData = pWaveData + sample * m_sampleSize;
       bool zero = false;
 
       if (m_channels == 1) {
@@ -1013,11 +1013,11 @@ int CAudioSourceMemWave::ZeroCrossingBefore(int sample) {
 // Output : position of found zero crossing
 //-----------------------------------------------------------------------------
 int CAudioSourceMemWave::ZeroCrossingAfter(int sample) {
-  char *pWaveData = GetDataPointer();
+  ch *pWaveData = GetDataPointer();
 
   if (m_format == WAVE_FORMAT_PCM) {
     if (m_bits == 8) {
-      char *pData = pWaveData + sample * m_sampleSize;
+      ch *pData = pWaveData + sample * m_sampleSize;
       bool zero = false;
 
       if (m_channels == 1) {
@@ -1091,7 +1091,7 @@ void CAudioSourceMemWave::ParseDataChunk(IterateRIFF &walk) {
   m_dataSize = walk.ChunkSize();
 
   // 360 streaming model loads data later, but still needs critical member setup
-  char *pData = GetDataPointer();
+  ch *pData = GetDataPointer();
   if (!pData) {
     Error("CAudioSourceMemWave (%s): GetDataPointer() failed.",
           m_pSfx ? m_pSfx->GetFileName() : "m_pSfx = NULL");
@@ -1128,7 +1128,7 @@ void CAudioSourceMemWave::ParseDataChunk(IterateRIFF &walk) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-int CAudioSourceMemWave::GetCacheStatus(void) {
+int CAudioSourceMemWave::GetCacheStatus() {
   VPROF("CAudioSourceMemWave::GetCacheStatus");
 
   // NOTE: This will start the load if it isn't started
@@ -1147,7 +1147,7 @@ int CAudioSourceMemWave::GetCacheStatus(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CAudioSourceMemWave::CacheLoad(void) {
+void CAudioSourceMemWave::CacheLoad() {
   // Commence lazy load?
   if (m_hCache != 0) {
     bool bCacheValid;
@@ -1166,7 +1166,7 @@ void CAudioSourceMemWave::CacheLoad(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CAudioSourceMemWave::CacheUnload(void) {
+void CAudioSourceMemWave::CacheUnload() {
   if (m_hCache != 0) {
     wavedatacache->Unload(m_hCache);
   }
@@ -1174,10 +1174,10 @@ void CAudioSourceMemWave::CacheUnload(void) {
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : char
+// Output : ch
 //-----------------------------------------------------------------------------
-char *CAudioSourceMemWave::GetDataPointer(void) {
-  char *pWaveData = NULL;
+ch *CAudioSourceMemWave::GetDataPointer() {
+  ch *pWaveData = NULL;
 
   bool bSamplesConverted = false;
 
@@ -1215,9 +1215,9 @@ class CAudioSourceStreamWave : public CAudioSourceWave,
 
   CAudioMixer *CreateMixer(int initialStreamPosition = 0);
   int GetOutputData(void **pData, int samplePosition, int sampleCount,
-                    char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
+                    ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]);
   void ParseChunk(IterateRIFF &walk, int chunkName);
-  bool IsStreaming(void) { return true; }
+  bool IsStreaming() { return true; }
 
   virtual int GetCacheStatus(void);
 
@@ -1225,7 +1225,7 @@ class CAudioSourceStreamWave : public CAudioSourceWave,
   virtual int UpdateLoopingSamplePosition(int samplePosition) {
     return ConvertLoopedPosition(samplePosition);
   }
-  virtual void UpdateSamples(char *pData, int sampleCount) {
+  virtual void UpdateSamples(ch *pData, int sampleCount) {
     ConvertSamples(pData, sampleCount);
   }
   virtual int GetLoopingInfo(int *pLoopBlock, int *pNumLeadingSamples,
@@ -1269,14 +1269,14 @@ CAudioSourceStreamWave::CAudioSourceStreamWave(CSfxTable *pSfx,
 //-----------------------------------------------------------------------------
 // Purpose: free the filename buffer
 //-----------------------------------------------------------------------------
-CAudioSourceStreamWave::~CAudioSourceStreamWave(void) {}
+CAudioSourceStreamWave::~CAudioSourceStreamWave() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Create an instance (mixer & wavedata) of this sound
 // Output : CAudioMixer * - pointer to the mixer
 //-----------------------------------------------------------------------------
 CAudioMixer *CAudioSourceStreamWave::CreateMixer(int initialStreamPosition) {
-  const char *pFileName = m_pSfx->GetFileName();
+  const ch *pFileName = m_pSfx->GetFileName();
 
   // BUGBUG: Source constructs the IWaveData, mixer frees it, fix this?
   IWaveData *pWaveData = CreateWaveDataStream(
@@ -1389,11 +1389,11 @@ void CAudioSourceStreamWave::ParseChunk(IterateRIFF &walk, int chunkName) {
 //-----------------------------------------------------------------------------
 int CAudioSourceStreamWave::GetOutputData(
     void **pData, int samplePosition, int sampleCount,
-    char copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
+    ch copyBuf[AUDIOSOURCE_COPYBUF_SIZE]) {
   return 0;
 }
 
-int CAudioSourceStreamWave::GetCacheStatus(void) {
+int CAudioSourceStreamWave::GetCacheStatus() {
   if (!m_dataSize || !m_dataStart) {
     // didn't get precached properly
     return AUDIO_NOT_LOADED;
@@ -1415,7 +1415,7 @@ CAudioSource *CreateWave(CSfxTable *pSfx, bool bStreaming) {
   // For some reason you can't usually do pSfx->getname() in the dev studio
   // debugger, so for convenience we'll grab the name here in debug builds at
   // least...
-  [[maybe_unused]] char const *pName = pSfx->getname();
+  [[maybe_unused]] ch const *pName = pSfx->getname();
 #endif
 
   CAudioSourceWave *pWave = NULL;
@@ -1470,13 +1470,13 @@ CAudioSource *Audio_CreateMemoryWave(CSfxTable *pSfx) {
   return CreateWave(pSfx, false);
 }
 
-float GetMP3Duration_Helper(char const *filename);
-static float Audio_GetMP3Duration(char const *pName) {
+float GetMP3Duration_Helper(ch const *filename);
+static float Audio_GetMP3Duration(ch const *pName) {
   // Deduce from file
   return GetMP3Duration_Helper(pName);
 }
 
-void MaybeReportMissingWav(char const *wav) {
+void MaybeReportMissingWav(ch const *wav) {
   static CUtlSymbolTable wavErrors;
 
   CUtlSymbol sym;
@@ -1492,8 +1492,8 @@ void MaybeReportMissingWav(char const *wav) {
   }
 }
 
-static float Audio_GetWaveDuration(char const *pName) {
-  char formatBuffer[1024];
+static float Audio_GetWaveDuration(ch const *pName) {
+  ch formatBuffer[1024];
   WAVEFORMATEX *pfmt = (WAVEFORMATEX *)formatBuffer;
 
   InFileRIFF riff(pName, *g_pSndIO);
@@ -1557,7 +1557,7 @@ static float Audio_GetWaveDuration(char const *pName) {
 // Purpose: Fast method for determining duration of .wav/.mp3, exposed to server
 // as well Input  : *pName - Output : float
 //-----------------------------------------------------------------------------
-float AudioSource_GetSoundDuration(char const *pName) {
+float AudioSource_GetSoundDuration(ch const *pName) {
 #if defined(MP3_SUPPORT)
   if (Audio_IsMP3(pName)) {
     return Audio_GetMP3Duration(pName);
@@ -1794,7 +1794,7 @@ int CAudioSourceCachedInfo::s_CurrentType = CAudioSource::AUDIO_SOURCE_MAXTYPE;
 CSfxTable *CAudioSourceCachedInfo::s_pSfx = NULL;
 bool CAudioSourceCachedInfo::s_bIsPrecacheSound = false;
 
-void CAudioSourceCachedInfo::Rebuild(char const *filename) {
+void CAudioSourceCachedInfo::Rebuild(ch const *filename) {
   // Wipe any old data
   Clear();
 
@@ -1858,7 +1858,7 @@ class CAudioSourceCache : public IAudioSourceCache {
 
   static unsigned int AsyncLookaheadMetaChecksum(void);
 
-  void LevelInit(char const *mapname);
+  void LevelInit(ch const *mapname);
   void LevelShutdown();
 
   virtual CAudioSourceCachedInfo *GetInfo(int audiosourcetype,
@@ -1874,7 +1874,7 @@ class CAudioSourceCache : public IAudioSourceCache {
 
  private:
   // Purpose:
-  CacheType_t *LookUpCacheEntry(const char *fn, int audiosourcetype,
+  CacheType_t *LookUpCacheEntry(const ch *fn, int audiosourcetype,
                                 bool soundisprecached, CSfxTable *sfx);
 
   struct AudioSourceUsage_t {
@@ -1888,7 +1888,7 @@ class CAudioSourceCache : public IAudioSourceCache {
     return lhs.handle < rhs.handle;
   }
 
-  CacheType_t *AllocAudioCache(char const *cachename);
+  CacheType_t *AllocAudioCache(ch const *cachename);
 
   void AnalyzeReslists(CUtlRBTree<FileNameHandle_t, int> &other,
                        CUtlRBTree<FileNameHandle_t, int> &sharedprecache);
@@ -1898,26 +1898,26 @@ class CAudioSourceCache : public IAudioSourceCache {
                                       bool forcerebuild = false,
                                       float flProgressStart = 0.0f,
                                       float flProgressEnd = 1.0f);
-  bool FastBuildSoundCache(float progressfrac, char const *currentcache,
+  bool FastBuildSoundCache(float progressfrac, ch const *currentcache,
                            CacheType_t *fullCache, CacheType_t *precacheCache,
-                           CacheType_t *cache, char const *manifest);
-  CacheType_t *BuildCacheFromList(char const *cachename,
+                           CacheType_t *cache, ch const *manifest);
+  CacheType_t *BuildCacheFromList(ch const *cachename,
                                   CUtlRBTree<FileNameHandle_t, int> &list,
                                   bool fulldata, bool showprogress = false,
                                   float flProgressStart = 0.0f,
                                   float flProgressEnd = 1.0f);
-  CacheType_t *BuildNoDataCacheFromFullDataCache(char const *cachename,
+  CacheType_t *BuildNoDataCacheFromFullDataCache(ch const *cachename,
                                                  CacheType_t *fulldata,
                                                  bool showprogress = false,
                                                  float flProgressStart = 0.0f,
                                                  float flProgressEnd = 1.0f);
-  bool IsValidCache(char const *cachename);
-  void RemoveCache(char const *cachename);
+  bool IsValidCache(ch const *cachename);
+  void RemoveCache(ch const *cachename);
   bool HasMissingCaches();
 
   void KillCache();
 
-  char const *GetAudioCacheLanguageSuffix(char *buf, size_t bufsize);
+  ch const *GetAudioCacheLanguageSuffix(ch *buf, size_t bufsize);
 
   enum {
     MAX_LANGUAGE_NAME = 64,
@@ -1926,12 +1926,12 @@ class CAudioSourceCache : public IAudioSourceCache {
     MAX_LIST_SIZE = 1024
   };
 
-  char m_szCurrentLevel[MAX_LEVEL_NAME];
-  char m_szMapCache[MAX_REPOSITORY_NAME];
-  char m_szMapCacheBase[MAX_REPOSITORY_NAME];
-  char m_szOtherSoundsCache[MAX_REPOSITORY_NAME];
-  char m_szSharedPrecacheCache[MAX_REPOSITORY_NAME];
-  char m_szCurrentLanguage[MAX_LANGUAGE_NAME];
+  ch m_szCurrentLevel[MAX_LEVEL_NAME];
+  ch m_szMapCache[MAX_REPOSITORY_NAME];
+  ch m_szMapCacheBase[MAX_REPOSITORY_NAME];
+  ch m_szOtherSoundsCache[MAX_REPOSITORY_NAME];
+  ch m_szSharedPrecacheCache[MAX_REPOSITORY_NAME];
+  ch m_szCurrentLanguage[MAX_LANGUAGE_NAME];
 
   typedef enum {
     CACHE_MAP = 0,
@@ -2069,7 +2069,7 @@ void CAudioSourceCache::Shutdown() {
 // Output : CacheType_t
 //-----------------------------------------------------------------------------
 CAudioSourceCache::CacheType_t *CAudioSourceCache::AllocAudioCache(
-    char const *cachename) {
+    ch const *cachename) {
   CacheType_t *cache =
       new CacheType_t(cachename, AUDIOSOURCE_CACHE_VERSION,
                       AsyncLookaheadMetaChecksum, UTL_CACHED_FILE_USE_FILESIZE);
@@ -2093,7 +2093,7 @@ void CAudioSourceCache::CheckCacheBuild() {
 // Purpose: Static method
 // Output : unsigned int
 //-----------------------------------------------------------------------------
-unsigned int CAudioSourceCache::AsyncLookaheadMetaChecksum(void) {
+unsigned int CAudioSourceCache::AsyncLookaheadMetaChecksum() {
   CRC32_t crc;
   CRC32_Init(&crc);
 
@@ -2109,7 +2109,7 @@ unsigned int CAudioSourceCache::AsyncLookaheadMetaChecksum(void) {
 // Purpose:
 // Input  : *mapname -
 //-----------------------------------------------------------------------------
-void CAudioSourceCache::LevelInit(char const *mapname) {
+void CAudioSourceCache::LevelInit(ch const *mapname) {
   if (!Q_stricmp(mapname, m_szCurrentLevel)) {
     if (!m_pLastWorldModel) {
       m_pLastWorldModel = host_state.worldmodel;
@@ -2214,9 +2214,9 @@ void CAudioSourceCache::WriteManifest() {
   CUtlBuffer buf(0, 0, CUtlBuffer::TEXT_BUFFER);
 
   for (int i = 0; i < count; ++i) {
-    char const *fn = g_pSoundServices->GetPrecachedSound(i);
+    ch const *fn = g_pSoundServices->GetPrecachedSound(i);
     if (fn && fn[0]) {
-      char full[512];
+      ch full[512];
       Q_snprintf(full, sizeof(full), "sound\\%s", PSkipSoundChars(fn));
       Q_strlower(full);
       Q_FixSlashes(full);
@@ -2228,7 +2228,7 @@ void CAudioSourceCache::WriteManifest() {
 
   g_pFullFileSystem->CreateDirHierarchy(AUDIOSOURCE_CACHE_ROOTDIR, "MOD");
 
-  char manifest_name[512];
+  ch manifest_name[512];
   Q_snprintf(manifest_name, sizeof(manifest_name), "%s.manifest",
              m_szMapCacheBase);
 
@@ -2258,7 +2258,7 @@ void CAudioSourceCache::WriteManifest() {
 // Purpose:
 //-----------------------------------------------------------------------------
 CAudioSourceCache::CacheType_t *CAudioSourceCache::LookUpCacheEntry(
-    const char *fn, int audiosourcetype, bool soundisprecached,
+    const ch *fn, int audiosourcetype, bool soundisprecached,
     CSfxTable *sfx) {
   // Hack to remember the type of audiosource to create if we need to recreate
   // it
@@ -2312,7 +2312,7 @@ CAudioSourceCachedInfo *CAudioSourceCache::GetInfo(int audiosourcetype,
 
   Assert(sfx);
 
-  char fn[512];
+  ch fn[512];
   Q_snprintf(fn, sizeof(fn), "sound/%s", sfx->GetFileName());
 
   CAudioSourceCachedInfo *info = NULL;
@@ -2340,7 +2340,7 @@ void CAudioSourceCache::RebuildCacheEntry(int audiosourcetype,
 
   Assert(sfx);
 
-  char fn[512];
+  ch fn[512];
   Q_snprintf(fn, sizeof(fn), "sound/%s", sfx->GetFileName());
   CacheType_t *pCache =
       LookUpCacheEntry(fn, audiosourcetype, soundisprecached, sfx);
@@ -2390,7 +2390,7 @@ void CAudioSourceCache::AnalyzeReslists(
   // Now walk through each manifest and try to build sounds
   for (i = manifests.FirstInorder(); i != manifests.InvalidIndex();
        i = manifests.NextInorder(i)) {
-    char manifest_file[512];
+    ch manifest_file[512];
     if (g_pFullFileSystem->String(manifests[i], manifest_file,
                                   sizeof(manifest_file))) {
       CUtlRBTree<FileNameHandle_t, int> filenames(
@@ -2422,7 +2422,7 @@ void CAudioSourceCache::AnalyzeReslists(
 
   for (i = usage.FirstInorder(); i != usage.InvalidIndex();
        i = usage.NextInorder(i)) {
-    char soundfile[512];
+    ch soundfile[512];
     if (g_pFullFileSystem->String(usage[i].handle, soundfile,
                                   sizeof(soundfile))) {
       //  Msg( "%02i : %s\n", usage[ i ].count, soundfile );
@@ -2467,7 +2467,7 @@ void CAudioSourceCache::AnalyzeReslists(
 // Input  : *cachename -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CAudioSourceCache::IsValidCache(char const *cachename) {
+bool CAudioSourceCache::IsValidCache(ch const *cachename) {
   CacheType_t *cache = AllocAudioCache(cachename);
 
   // This will delete any outdated .cache files
@@ -2482,7 +2482,7 @@ bool CAudioSourceCache::IsValidCache(char const *cachename) {
 // Purpose:
 // Input  : *cachename -
 //-----------------------------------------------------------------------------
-void CAudioSourceCache::RemoveCache(char const *cachename) {
+void CAudioSourceCache::RemoveCache(ch const *cachename) {
   if (g_pFullFileSystem->FileExists(cachename, "MOD")) {
     if (!g_pFullFileSystem->IsFileWritable(cachename, "MOD")) {
       g_pFullFileSystem->SetFileWritable(cachename, true, "MOD");
@@ -2548,14 +2548,14 @@ bool CAudioSourceCache::HasMissingCaches() {
   // Now walk through each manifest and try to build sounds
   for (int i = manifests.FirstInorder(); i != manifests.InvalidIndex();
        i = manifests.NextInorder(i)) {
-    char manifest_file[512];
+    ch manifest_file[512];
     if (g_pFullFileSystem->String(manifests[i], manifest_file,
                                   sizeof(manifest_file))) {
-      char mapname[512];
+      ch mapname[512];
       Q_StripExtension(manifest_file, mapname, sizeof(mapname));
 
       // See if there is a valid cache file for this manifest
-      char cachename[512];
+      ch cachename[512];
       Q_snprintf(cachename, sizeof(cachename), "%s%s.cache", mapname,
                  m_szCurrentLanguage);
 
@@ -2580,7 +2580,7 @@ bool CAudioSourceCache::FastBuildSharedPrecachedSoundsCache(bool rebuild,
 
   bool needsRebuildWork = false;
 
-  char fn[512];
+  ch fn[512];
   Q_snprintf(fn, sizeof(fn), "%s/%s%s.cache", AUDIOSOURCE_CACHE_ROOTDIR,
              OTHER_REBUILD_CACHE_NAME, m_szCurrentLanguage);
 
@@ -2715,14 +2715,14 @@ bool CAudioSourceCache::FastBuildAllMissingSoundCaches(
   // Now walk through each manifest and try to build sounds
   for (i = manifests.FirstInorder(); i != manifests.InvalidIndex();
        i = manifests.NextInorder(i)) {
-    char manifest_file[512];
+    ch manifest_file[512];
     if (g_pFullFileSystem->String(manifests[i], manifest_file,
                                   sizeof(manifest_file))) {
-      char mapname[512];
+      ch mapname[512];
       Q_StripExtension(manifest_file, mapname, sizeof(mapname));
 
       //  Cache is same filename, with .cache extension instead.
-      char cachename[512];
+      ch cachename[512];
       Q_snprintf(cachename, sizeof(cachename), "%s%s.cache", mapname,
                  m_szCurrentLanguage);
 
@@ -2751,14 +2751,14 @@ bool CAudioSourceCache::FastBuildAllMissingSoundCaches(
 
   // Now walk through each manifest and try to build sounds
   for (i = 0; i < worklist.Count(); ++i) {
-    char manifest_file[512];
+    ch manifest_file[512];
     if (g_pFullFileSystem->String(worklist[i], manifest_file,
                                   sizeof(manifest_file))) {
-      char mapname[512];
+      ch mapname[512];
       Q_StripExtension(manifest_file, mapname, sizeof(mapname));
 
       //  Cache is same filename, with .cache extension instead.
-      char cachename[512];
+      ch cachename[512];
       Q_snprintf(cachename, sizeof(cachename), "%s%s.cache", mapname,
                  m_szCurrentLanguage);
 
@@ -2779,7 +2779,7 @@ bool CAudioSourceCache::FastBuildAllMissingSoundCaches(
       float frac = (float)(num - 1) / (float)worklist.Count();
 
       if (showprogress) {
-        char base[256];
+        ch base[256];
         Q_FileBase(cachename, base, sizeof(base));
         Q_strlower(base);
         g_pSoundServices->CacheBuildingUpdateProgress(
@@ -2809,11 +2809,11 @@ bool CAudioSourceCache::FastBuildAllMissingSoundCaches(
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CAudioSourceCache::FastBuildSoundCache(float progressfrac,
-                                            char const *currentcache,
+                                            ch const *currentcache,
                                             CacheType_t *fullCache,
                                             CacheType_t *sharedPrecacheCache,
                                             CacheType_t *cache,
-                                            char const *manifest) {
+                                            ch const *manifest) {
   Assert(currentcache);
   Assert(fullCache);
   Assert(cache);
@@ -2829,7 +2829,7 @@ bool CAudioSourceCache::FastBuildSoundCache(float progressfrac,
   for (int i = list.FirstInorder(); i != list.InvalidIndex();
        i = list.NextInorder(i)) {
     FileNameHandle_t &h = list[i];
-    char fn[512];
+    ch fn[512];
     if (g_pFullFileSystem->String(h, fn, sizeof(fn))) {
       // If entry is in the sharedprecache cache, don't add to the per-level
       // cache
@@ -2859,7 +2859,7 @@ bool CAudioSourceCache::FastBuildSoundCache(float progressfrac,
 
 CAudioSourceCache::CacheType_t *
 CAudioSourceCache::BuildNoDataCacheFromFullDataCache(
-    char const *cachename, CacheType_t *fullCache,
+    ch const *cachename, CacheType_t *fullCache,
     bool showprogress /*= false*/, float flProgressStart /*= 0.0f*/,
     float flProgressEnd /*= 1.0f*/) {
   CacheType_t *newCache = NULL;
@@ -2871,7 +2871,7 @@ CAudioSourceCache::BuildNoDataCacheFromFullDataCache(
     int c = fullCache->Count();
 
     for (int i = 0; i < c; ++i) {
-      char fn[512];
+      ch fn[512];
 
       fullCache->GetElementName(i, fn, sizeof(fn));
 
@@ -2897,7 +2897,7 @@ CAudioSourceCache::BuildNoDataCacheFromFullDataCache(
 
         frac = flProgressStart + frac * (flProgressEnd - flProgressStart);
 
-        char base[256];
+        ch base[256];
         Q_FileBase(fn, base, sizeof(base));
         Q_strlower(base);
         g_pSoundServices->CacheBuildingUpdateProgress(frac, base);
@@ -2926,7 +2926,7 @@ CAudioSourceCache::BuildNoDataCacheFromFullDataCache(
 // Output : CAudioSourceCache::CacheType_t
 //-----------------------------------------------------------------------------
 CAudioSourceCache::CacheType_t *CAudioSourceCache::BuildCacheFromList(
-    char const *cachename, CUtlRBTree<FileNameHandle_t, int> &soundlist,
+    ch const *cachename, CUtlRBTree<FileNameHandle_t, int> &soundlist,
     bool fulldata, bool showprogress /*= false*/,
     float flProgressStart /*= 0.0f*/, float flProgressEnd /*= 1.0f*/) {
   CacheType_t *newCache = NULL;
@@ -2943,7 +2943,7 @@ CAudioSourceCache::CacheType_t *CAudioSourceCache::BuildCacheFromList(
     for (int i = soundlist.FirstInorder(); i != soundlist.InvalidIndex();
          i = soundlist.NextInorder(i)) {
       FileNameHandle_t &handle = soundlist[i];
-      char soundname[512];
+      ch soundname[512];
       soundname[0] = 0;
       if (g_pFullFileSystem->String(handle, soundname, sizeof(soundname))) {
         // Touch the cache
@@ -2970,7 +2970,7 @@ CAudioSourceCache::CacheType_t *CAudioSourceCache::BuildCacheFromList(
 
         frac = flProgressStart + frac * (flProgressEnd - flProgressStart);
 
-        char base[256];
+        ch base[256];
         Q_FileBase(soundname, base, sizeof(base));
         Q_strlower(base);
         g_pSoundServices->CacheBuildingUpdateProgress(frac, base);
@@ -3007,9 +3007,9 @@ void CAudioSourceCache::KillCache() {
   SetCachePointer(CACHE_MAP, NULL);
 }
 
-char const *CAudioSourceCache::GetAudioCacheLanguageSuffix(char *buf,
+ch const *CAudioSourceCache::GetAudioCacheLanguageSuffix(ch *buf,
                                                            size_t bufsize) {
-  char const *pchLanguage = g_pSoundServices->GetUILanguage();
+  ch const *pchLanguage = g_pSoundServices->GetUILanguage();
 
   if (!pchLanguage || !*pchLanguage || !Q_stricmp(pchLanguage, "english")) {
     buf[0] = 0;
@@ -3017,11 +3017,11 @@ char const *CAudioSourceCache::GetAudioCacheLanguageSuffix(char *buf,
   }
 
   // Check language right here to see if we need the caches for it.
-  char szLanguageList[MAX_REPOSITORY_NAME];
+  ch szLanguageList[MAX_REPOSITORY_NAME];
   Q_snprintf(szLanguageList, sizeof(szLanguageList),
              "%s/localization_cache_list.txt", AUDIOSOURCE_CACHE_ROOTDIR);
   FileHandle_t fh = g_pFullFileSystem->Open(szLanguageList, "r");
-  char szCacheLanguage[MAX_LIST_SIZE];
+  ch szCacheLanguage[MAX_LIST_SIZE];
   if (fh) {
     g_pFullFileSystem->Read(szCacheLanguage, MAX_LIST_SIZE, fh);
     g_pFullFileSystem->Close(fh);

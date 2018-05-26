@@ -277,7 +277,7 @@ CAudioMixerWaveXMA::CAudioMixerWaveXMA(IWaveData *data,
   }
 }
 
-CAudioMixerWaveXMA::~CAudioMixerWaveXMA(void) {
+CAudioMixerWaveXMA::~CAudioMixerWaveXMA() {
   if (m_pXMAPlayback) {
     XMAPlaybackDestroy(m_pXMAPlayback);
 
@@ -755,7 +755,7 @@ bool CAudioMixerWaveXMA::IsReadyToMix() {
 bool CAudioMixerWaveXMA::ShouldContinueMixing() {
   if (!IsRetail() && m_Error && snd_xma_spew_warnings.GetBool()) {
     const char *pErrorString;
-    if (m_Error < 0 && -m_Error < SOURCE_ARRAYSIZE(g_XMAErrorStrings)) {
+    if (m_Error < 0 && -m_Error < std::size(g_XMAErrorStrings)) {
       pErrorString = g_XMAErrorStrings[-m_Error];
     } else {
       pErrorString = g_XMAErrorStrings[0];
