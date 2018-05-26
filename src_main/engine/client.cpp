@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -37,13 +37,11 @@
 #include "sound.h"
 #include "steam/steam_api.h"
 #include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
 #include "tier1/fmtstr.h"
 #include "vgui/ILocalize.h"
 #include "vgui_baseui_interface.h"
 #include "vgui_controls/Controls.h"
-
-#include "tier0/include/platform.h"
-#include "tier0/include/systeminformation.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -103,55 +101,51 @@ Connections will now use a hashed cd key value
 A LAN server will know not to allows more then xxx users with the same CD Key
 =======================
 */
-const char *CClientState::GetCDKeyHash(void) {
-  if (IsPC()) {
-    char szKeyBuffer[256];  // Keys are about 13 chars long.
-    static char szHashedKeyBuffer[64];
-    int nKeyLength;
-    bool bDedicated = false;
+const ch *CClientState::GetCDKeyHash() {
+  ch szKeyBuffer[256];  // Keys are about 13 chars long.
+  static ch szHashedKeyBuffer[64];
+  int nKeyLength;
+  bool bDedicated = false;
 
-    MD5Context_t ctx;
-    unsigned char digest[16];  // The MD5 Hash
+  MD5Context_t ctx;
+  unsigned char digest[16];  // The MD5 Hash
 
-    nKeyLength = Q_snprintf(szKeyBuffer, sizeof(szKeyBuffer), "%s",
-                            registry->ReadString("key", ""));
+  nKeyLength = Q_snprintf(szKeyBuffer, sizeof(szKeyBuffer), "%s",
+                          registry->ReadString("key", ""));
 
-    if (bDedicated) {
-      ConMsg("Key has no meaning on dedicated server...\n");
-      return "";
-    }
-
-    if (nKeyLength == 0) {
-      nKeyLength = 13;
-      Q_strncpy(szKeyBuffer, "1234567890123", sizeof(szKeyBuffer));
-      Assert(Q_strlen(szKeyBuffer) == nKeyLength);
-
-      DevMsg("Missing CD Key from registry, inserting blank key\n");
-
-      registry->WriteString("key", szKeyBuffer);
-    }
-
-    if (nKeyLength <= 0 || nKeyLength >= 256) {
-      ConMsg("Bogus key length on CD Key...\n");
-      return "";
-    }
-
-    // Now get the md5 hash of the key
-    memset(&ctx, 0, sizeof(ctx));
-    memset(digest, 0, sizeof(digest));
-
-    MD5Init(&ctx);
-    MD5Update(&ctx, (unsigned char *)szKeyBuffer, nKeyLength);
-    MD5Final(digest, &ctx);
-    Q_strncpy(szHashedKeyBuffer, MD5_Print(digest, sizeof(digest)),
-              sizeof(szHashedKeyBuffer));
-    return szHashedKeyBuffer;
+  if (bDedicated) {
+    ConMsg("Key has no meaning on dedicated server...\n");
+    return "";
   }
 
-  return "12345678901234567890123456789012";
+  if (nKeyLength == 0) {
+    nKeyLength = 13;
+    Q_strncpy(szKeyBuffer, "1234567890123", sizeof(szKeyBuffer));
+    Assert(Q_strlen(szKeyBuffer) == nKeyLength);
+
+    DevMsg("Missing CD Key from registry, inserting blank key\n");
+
+    registry->WriteString("key", szKeyBuffer);
+  }
+
+  if (nKeyLength <= 0 || nKeyLength >= 256) {
+    ConMsg("Bogus key length on CD Key...\n");
+    return "";
+  }
+
+  // Now get the md5 hash of the key
+  memset(&ctx, 0, sizeof(ctx));
+  memset(digest, 0, sizeof(digest));
+
+  MD5Init(&ctx);
+  MD5Update(&ctx, (unsigned char *)szKeyBuffer, nKeyLength);
+  MD5Final(digest, &ctx);
+  Q_strncpy(szHashedKeyBuffer, MD5_Print(digest, sizeof(digest)),
+            sizeof(szHashedKeyBuffer));
+  return szHashedKeyBuffer;
 }
 
-void CClientState::SendClientInfo(void) {
+void CClientState::SendClientInfo() {
   CLC_ClientInfo info;
 
   info.m_nSendTableCRC = SendTable_GetCRC();
@@ -242,7 +236,7 @@ bool CClientState::SetSignonState(int state, int count) {
       EngineVGui()->UpdateProgressBar(PROGRESS_SIGNONSPAWN);
 
       // Tell client .dll about the transition
-      char mapname[256];
+      ch mapname[256];
       CL_SetupMapName(modelloader->GetName(host_state.worldmodel), mapname,
                       sizeof(mapname));
 
@@ -256,7 +250,7 @@ bool CClientState::SetSignonState(int state, int count) {
           "end.",
           state, mapname);
 
-      phonehome->Message(IPhoneHome::PHONE_MSG_MAPSTART, mapname);
+      phonehome->Message(PhoneHomeMessage::MapStart, mapname);
 
       audiosourcecache->LevelInit(mapname);
 
@@ -301,7 +295,7 @@ bool CClientState::SetSignonState(int state, int count) {
   return true;
 }
 
-bool CClientState::HookClientStringTable(char const *tableName) {
+bool CClientState::HookClientStringTable(ch const *tableName) {
   INetworkStringTable *table = GetStringTable(tableName);
   if (!table) {
     // If engine takes a pass, allow client dll to hook in its callbacks
@@ -311,11 +305,11 @@ bool CClientState::HookClientStringTable(char const *tableName) {
     return false;
   }
 
-  char szDownloadableFileTablename[255] = DOWNLOADABLE_FILE_TABLENAME;
-  char szModelPrecacheTablename[255] = MODEL_PRECACHE_TABLENAME;
-  char szGenericPrecacheTablename[255] = GENERIC_PRECACHE_TABLENAME;
-  char szSoundPrecacheTablename[255] = SOUND_PRECACHE_TABLENAME;
-  char szDecalPrecacheTablename[255] = DECAL_PRECACHE_TABLENAME;
+  ch szDownloadableFileTablename[255] = DOWNLOADABLE_FILE_TABLENAME;
+  ch szModelPrecacheTablename[255] = MODEL_PRECACHE_TABLENAME;
+  ch szGenericPrecacheTablename[255] = GENERIC_PRECACHE_TABLENAME;
+  ch szSoundPrecacheTablename[255] = SOUND_PRECACHE_TABLENAME;
+  ch szDecalPrecacheTablename[255] = DECAL_PRECACHE_TABLENAME;
 
   // This was added into staging at some point and is not enabled in main or
   // rel.
@@ -387,16 +381,16 @@ bool CClientState::HookClientStringTable(char const *tableName) {
   return false;
 }
 
-bool CClientState::InstallEngineStringTableCallback(char const *tableName) {
+bool CClientState::InstallEngineStringTableCallback(ch const *tableName) {
   INetworkStringTable *table = GetStringTable(tableName);
 
   if (!table) return false;
 
-  char szDownloadableFileTablename[255] = DOWNLOADABLE_FILE_TABLENAME;
-  char szModelPrecacheTablename[255] = MODEL_PRECACHE_TABLENAME;
-  char szGenericPrecacheTablename[255] = GENERIC_PRECACHE_TABLENAME;
-  char szSoundPrecacheTablename[255] = SOUND_PRECACHE_TABLENAME;
-  char szDecalPrecacheTablename[255] = DECAL_PRECACHE_TABLENAME;
+  ch szDownloadableFileTablename[255] = DOWNLOADABLE_FILE_TABLENAME;
+  ch szModelPrecacheTablename[255] = MODEL_PRECACHE_TABLENAME;
+  ch szGenericPrecacheTablename[255] = GENERIC_PRECACHE_TABLENAME;
+  ch szSoundPrecacheTablename[255] = SOUND_PRECACHE_TABLENAME;
+  ch szDecalPrecacheTablename[255] = DECAL_PRECACHE_TABLENAME;
 
   // This was added into staging at some point and is not enabled in main or
   // rel.
@@ -462,7 +456,7 @@ bool CClientState::InstallEngineStringTableCallback(char const *tableName) {
   return false;
 }
 
-void CClientState::InstallStringTableCallback(char const *tableName) {
+void CClientState::InstallStringTableCallback(ch const *tableName) {
   // Let engine hook callbacks before we read in any data values at all
   if (!InstallEngineStringTableCallback(tableName)) {
     // If engine takes a pass, allow client dll to hook in its callbacks
@@ -523,7 +517,7 @@ float CClientState::GetClientInterpAmount() {
 //-----------------------------------------------------------------------------
 // Purpose: // Clear all the variables in the CClientState.
 //-----------------------------------------------------------------------------
-void CClientState::Clear(void) {
+void CClientState::Clear() {
   CBaseClientState::Clear();
 
   m_pModelPrecacheTable = NULL;
@@ -572,7 +566,7 @@ void CClientState::Clear(void) {
 }
 
 void CClientState::ClearSounds() {
-  int c = SOURCE_ARRAYSIZE(sound_precache);
+  int c = std::size(sound_precache);
   for (int i = 0; i < c; ++i) {
     sound_precache[i].SetSound(NULL);
   }
@@ -629,7 +623,7 @@ model_t *CClientState::GetModel(int index) {
     return m;
   }
 
-  char const *name = m_pModelPrecacheTable->GetString(index);
+  ch const *name = m_pModelPrecacheTable->GetString(index);
 
   if (host_showcachemiss.GetBool()) {
     ConDMsg("client model cache miss on %s\n", name);
@@ -655,7 +649,7 @@ model_t *CClientState::GetModel(int index) {
 // Input  : *name -
 // Output : int -- note -1 if missing
 //-----------------------------------------------------------------------------
-int CClientState::LookupModelIndex(char const *name) {
+int CClientState::LookupModelIndex(ch const *name) {
   if (!m_pModelPrecacheTable) {
     return -1;
   }
@@ -691,7 +685,7 @@ void CClientState::SetModel(int tableIndex) {
   }
 
   if (bLoadNow) {
-    char const *name = m_pModelPrecacheTable->GetString(tableIndex);
+    ch const *name = m_pModelPrecacheTable->GetString(tableIndex);
     p->SetModel(
         modelloader->GetModelForName(name, IModelLoader::FMODELLOADER_CLIENT));
   } else {
@@ -700,7 +694,7 @@ void CClientState::SetModel(int tableIndex) {
 
   // log the file reference, if necssary
   if (MapReslistGenerator().IsEnabled()) {
-    char const *name = m_pModelPrecacheTable->GetString(tableIndex);
+    ch const *name = m_pModelPrecacheTable->GetString(tableIndex);
     MapReslistGenerator().OnModelPrecached(name);
   }
 }
@@ -710,7 +704,7 @@ void CClientState::SetModel(int tableIndex) {
 // Input  : index -
 // Output : model_t
 //-----------------------------------------------------------------------------
-char const *CClientState::GetGeneric(int index) {
+ch const *CClientState::GetGeneric(int index) {
   if (!m_pGenericPrecacheTable) {
     Warning("Can't GetGeneric( %d ), no precache table [no level loaded?]\n",
             index);
@@ -724,7 +718,7 @@ char const *CClientState::GetGeneric(int index) {
   }
 
   CPrecacheItem *p = &generic_precache[index];
-  char const *g = p->GetGeneric();
+  ch const *g = p->GetGeneric();
   return g;
 }
 
@@ -733,7 +727,7 @@ char const *CClientState::GetGeneric(int index) {
 // Input  : *name -
 // Output : int -- note -1 if missing
 //-----------------------------------------------------------------------------
-int CClientState::LookupGenericIndex(char const *name) {
+int CClientState::LookupGenericIndex(ch const *name) {
   if (!m_pGenericPrecacheTable) {
     Warning(
         "Can't LookupGenericIndex( %s ), no precache table [no level "
@@ -762,7 +756,7 @@ void CClientState::SetGeneric(int tableIndex) {
     return;
   }
 
-  char const *name = m_pGenericPrecacheTable->GetString(tableIndex);
+  ch const *name = m_pGenericPrecacheTable->GetString(tableIndex);
   CPrecacheItem *p = &generic_precache[tableIndex];
   p->SetGeneric(name);
 }
@@ -770,16 +764,16 @@ void CClientState::SetGeneric(int tableIndex) {
 //-----------------------------------------------------------------------------
 // Purpose:
 // Input  : index -
-// Output : char const
+// Output : ch const
 //-----------------------------------------------------------------------------
-char const *CClientState::GetSoundName(int index) {
+ch const *CClientState::GetSoundName(int index) {
   if (index <= 0 || !m_pSoundPrecacheTable) return "";
 
   if (index >= m_pSoundPrecacheTable->GetNumStrings()) {
     return "";
   }
 
-  char const *name = m_pSoundPrecacheTable->GetString(index);
+  ch const *name = m_pSoundPrecacheTable->GetString(index);
   return name;
 }
 
@@ -799,7 +793,7 @@ CSfxTable *CClientState::GetSound(int index) {
   CSfxTable *s = p->GetSound();
   if (s) return s;
 
-  char const *name = m_pSoundPrecacheTable->GetString(index);
+  ch const *name = m_pSoundPrecacheTable->GetString(index);
 
   if (host_showcachemiss.GetBool()) {
     ConDMsg("client sound cache miss on %s\n", name);
@@ -816,7 +810,7 @@ CSfxTable *CClientState::GetSound(int index) {
 // Input  : *name -
 // Output : int -- note -1 if missing
 //-----------------------------------------------------------------------------
-int CClientState::LookupSoundIndex(char const *name) {
+int CClientState::LookupSoundIndex(ch const *name) {
   if (!m_pSoundPrecacheTable) return -1;
 
   int idx = m_pSoundPrecacheTable->FindStringIndex(name);
@@ -849,7 +843,7 @@ void CClientState::SetSound(int tableIndex) {
   }
 
   if (bLoadNow) {
-    char const *name = m_pSoundPrecacheTable->GetString(tableIndex);
+    ch const *name = m_pSoundPrecacheTable->GetString(tableIndex);
     p->SetSound(S_PrecacheSound(name));
   } else {
     p->SetSound(NULL);
@@ -857,7 +851,7 @@ void CClientState::SetSound(int tableIndex) {
 
   // log the file reference, if necssary
   if (MapReslistGenerator().IsEnabled()) {
-    char const *name = m_pSoundPrecacheTable->GetString(tableIndex);
+    ch const *name = m_pSoundPrecacheTable->GetString(tableIndex);
     MapReslistGenerator().OnSoundPrecached(name);
   }
 }
@@ -867,7 +861,7 @@ void CClientState::SetSound(int tableIndex) {
 // Input  : index -
 // Output : model_t
 //-----------------------------------------------------------------------------
-char const *CClientState::GetDecalName(int index) {
+ch const *CClientState::GetDecalName(int index) {
   if (index <= 0 || !m_pDecalPrecacheTable) {
     return NULL;
   }
@@ -877,7 +871,7 @@ char const *CClientState::GetDecalName(int index) {
   }
 
   CPrecacheItem *p = &decal_precache[index];
-  char const *d = p->GetDecal();
+  ch const *d = p->GetDecal();
   return d;
 }
 
@@ -893,17 +887,17 @@ void CClientState::SetDecal(int tableIndex) {
     return;
   }
 
-  char const *name = m_pDecalPrecacheTable->GetString(tableIndex);
+  ch const *name = m_pDecalPrecacheTable->GetString(tableIndex);
   CPrecacheItem *p = &decal_precache[tableIndex];
   p->SetDecal(name);
 
-  Draw_DecalSetName(tableIndex, (char *)name);
+  Draw_DecalSetName(tableIndex, (ch *)name);
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: sets friends info locally to be sent to other users
 //-----------------------------------------------------------------------------
-void CClientState::SetFriendsID(uint32_t friendsID, const char *friendsName) {
+void CClientState::SetFriendsID(uint32_t friendsID, const ch *friendsName) {
   m_nFriendsID = friendsID;
   Q_strncpy(m_FriendsName, friendsName, sizeof(m_FriendsName));
 }
@@ -923,7 +917,7 @@ void CClientState::CheckOthersCustomFile(CRC32_t crcValue) {
   m_NetChannel->RequestFile(filehex.m_Filename);
 }
 
-void CClientState::AddCustomFile(int slot, const char *resourceFile) {
+void CClientState::AddCustomFile(int slot, const ch *resourceFile) {
   if (Q_strlen(resourceFile) <= 0) return;  // no resource file given
 
   if (!COM_IsValidPath(resourceFile)) {
@@ -973,7 +967,7 @@ void CClientState::AddCustomFile(int slot, const char *resourceFile) {
   }
 
   /* Finally, validate the VTF file. TODO
-  CUtlVector<char> fileData;
+  CUtlVector<ch> fileData;
   if ( LogoFile_ReadFile( crcValue, fileData ) )
   {
           bValid = true;
@@ -1003,7 +997,7 @@ void CClientState::CheckOwnCustomFiles() {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CClientState::DumpPrecacheStats(const char *name) {
+void CClientState::DumpPrecacheStats(const ch *name) {
   if (!name || !name[0]) {
     ConMsg("Can only dump stats when active in a level\n");
     return;
@@ -1036,7 +1030,7 @@ void CClientState::DumpPrecacheStats(const char *name) {
          count, maxcount);
 
   for (int i = 0; i < count; i++) {
-    char const *string_name = table->GetString(i);
+    ch const *string_name = table->GetString(i);
     CPrecacheItem *slot = &items[i];
     const CPrecacheUserData *p = CL_GetPrecacheUserData(table, i);
 
@@ -1177,9 +1171,9 @@ void CClientState::CheckUpdatingSteamResources() {
         }
 
         if (allowDownloads) {
-          char extension[4];
+          ch extension[4];
           for (int i = 0; i < m_pDownloadableFileTable->GetNumStrings(); ++i) {
-            const char *fname = m_pDownloadableFileTable->GetString(i);
+            const ch *fname = m_pDownloadableFileTable->GetString(i);
 
             if (!allowSoundDownloads) {
               Q_ExtractFileExtension(fname, extension, sizeof(extension));
@@ -1251,8 +1245,8 @@ void CClientState::CheckFileCRCsWithServer() {
   m_flLastCRCBatchTime = flCurTime;
 
   CUnverifiedCRCFile crcFiles[nBatchSize];
-  int count = g_pFileSystem->GetUnverifiedCRCFiles(crcFiles,
-                                                   SOURCE_ARRAYSIZE(crcFiles));
+  int count =
+      g_pFileSystem->GetUnverifiedCRCFiles(crcFiles, std::size(crcFiles));
   if (count == 0) return;
 
   // Send the messages to the server.
@@ -1276,7 +1270,7 @@ void CClientState::CheckFileCRCsWithServer() {
 bool CheckSimpleMaterial(IMaterial *pMaterial) {
   if (!pMaterial) return false;
 
-  const char *name = pMaterial->GetShaderName();
+  const ch *name = pMaterial->GetShaderName();
   if (Q_strncasecmp(name, "VertexLitGeneric", 16) &&
       Q_strncasecmp(name, "UnlitGeneric", 12))
     return false;
@@ -1301,15 +1295,15 @@ bool CheckSimpleMaterial(IMaterial *pMaterial) {
 // mismatches.  Returns the index, or INVALID_STRING_INDEX if not found.
 //-----------------------------------------------------------------------------
 int FindFilenameInStringTable(INetworkStringTable *table,
-                              const char *searchFname) {
-  char searchFilename[SOURCE_MAX_PATH];
-  char tableFilename[SOURCE_MAX_PATH];
+                              const ch *searchFname) {
+  ch searchFilename[SOURCE_MAX_PATH];
+  ch tableFilename[SOURCE_MAX_PATH];
 
   Q_strncpy(searchFilename, searchFname, SOURCE_MAX_PATH);
   Q_FixSlashes(searchFilename);
 
   for (int i = 0; i < table->GetNumStrings(); ++i) {
-    const char *tableFname = table->GetString(i);
+    const ch *tableFname = table->GetString(i);
     Q_strncpy(tableFilename, tableFname, SOURCE_MAX_PATH);
     Q_FixSlashes(tableFilename);
 
@@ -1327,7 +1321,7 @@ int FindFilenameInStringTable(INetworkStringTable *table,
 // Found result.
 //-----------------------------------------------------------------------------
 ConsistencyType GetFileConsistencyType(INetworkStringTable *table,
-                                       const char *searchFname) {
+                                       const ch *searchFname) {
   int index = FindFilenameInStringTable(table, searchFname);
   if (index == INVALID_STRING_INDEX) {
     return CONSISTENCY_NONE;
@@ -1352,7 +1346,7 @@ ConsistencyType GetFileConsistencyType(INetworkStringTable *table,
 //-----------------------------------------------------------------------------
 // Purpose: Does a CRC check compared to the CRC stored in the user data.
 //-----------------------------------------------------------------------------
-bool CheckCRCs(unsigned char *userData, int length, const char *filename) {
+bool CheckCRCs(unsigned char *userData, int length, const ch *filename) {
   if (userData && length == sizeof(ExactFileUserData)) {
     if (userData[0] != CONSISTENCY_EXACT &&
         userData[0] != CONSISTENCY_SIMPLE_MATERIAL) {
@@ -1492,7 +1486,7 @@ void CClientState::ConsistencyCheck(bool bChanged) {
 
   if (!bChanged) return;
 
-  const char *errorFilename = NULL;
+  const ch *errorFilename = NULL;
 
   // check CRCs and model sizes
   Color red(200, 20, 20, 255);
@@ -1502,7 +1496,7 @@ void CClientState::ConsistencyCheck(bool bChanged) {
     unsigned char *userData = NULL;
     userData = (unsigned char *)m_pDownloadableFileTable->GetStringUserData(
         i, &length);
-    const char *filename = m_pDownloadableFileTable->GetString(i);
+    const ch *filename = m_pDownloadableFileTable->GetString(i);
 
     //
     // CRC Check
@@ -1558,7 +1552,7 @@ void CClientState::ConsistencyCheck(bool bChanged) {
         // Check each texture
         IMaterial *model_materials[128];
         int materialCount = Mod_GetModelMaterials(
-            pModel, SOURCE_ARRAYSIZE(model_materials), model_materials);
+            pModel, std::size(model_materials), model_materials);
 
         for (int j = 0; j < materialCount; ++j) {
           IMaterial *pMaterial = model_materials[j];

@@ -53,7 +53,7 @@ ConVar r_DrawBeams("r_DrawBeams", "1", FCVAR_CHEAT,
 static ConVar mat_force_tonemap_scale("mat_force_tonemap_scale", "0.0",
                                       FCVAR_CHEAT);
 
-static const char *facingName[6] = {"rt", "lf", "bk", "ft", "up", "dn"};
+static const ch *facingName[6] = {"rt", "lf", "bk", "ft", "up", "dn"};
 
 //-----------------------------------------------------------------------------
 // Load, unload vtex
@@ -83,7 +83,7 @@ static void VTex_Unload(CSysModule *pModule) {
 //-----------------------------------------------------------------------------
 // Main entry point for taking cubemap snapshots
 //-----------------------------------------------------------------------------
-static void TakeCubemapSnapshot(const Vector &origin, const char *pFileNameBase,
+static void TakeCubemapSnapshot(const Vector &origin, const ch *pFileNameBase,
                                 int screenBufSize, int tgaSize, bool bPFM) {
   if (g_LostVideoMemory) return;
 
@@ -102,7 +102,7 @@ static void TakeCubemapSnapshot(const Vector &origin, const char *pFileNameBase,
   // water.
   screenBufSize = 512;
 
-  char name[1024];
+  ch name[1024];
   CViewSetup view;
   memset(&view, 0, sizeof(view));
   view.origin = origin;
@@ -119,7 +119,7 @@ static void TakeCubemapSnapshot(const Vector &origin, const char *pFileNameBase,
   view.width = (float)screenBufSize;
   view.height = (float)screenBufSize;
 
-  const char *pExtension = ".tga";
+  const ch *pExtension = ".tga";
   if (bPFM) {
     pExtension = ".pfm";
   }
@@ -255,7 +255,7 @@ static void TakeCubemapSnapshot(const Vector &origin, const char *pFileNameBase,
 //-----------------------------------------------------------------------------
 // Interface factory for VTex
 //-----------------------------------------------------------------------------
-void *CubemapsFSFactory(const char *pName, int *pReturnCode) {
+void *CubemapsFSFactory(const ch *pName, int *pReturnCode) {
   if (Q_stricmp(pName, FILESYSTEM_INTERFACE_VERSION) == 0) return g_pFileSystem;
 
   return NULL;
@@ -264,13 +264,13 @@ void *CubemapsFSFactory(const char *pName, int *pReturnCode) {
 //-----------------------------------------------------------------------------
 // Generates a cubemap .vtf from .TGA snapshots
 //-----------------------------------------------------------------------------
-static void BuildSingleCubemap(const char *pVTFName, const Vector &vecOrigin,
-                               int nSize, bool bHDR, const char *pGameDir,
+static void BuildSingleCubemap(const ch *pVTFName, const Vector &vecOrigin,
+                               int nSize, bool bHDR, const ch *pGameDir,
                                IVTex *ivt) {
   int nScreenBufSize = 4 * nSize;
   TakeCubemapSnapshot(vecOrigin, pVTFName, nScreenBufSize, nSize, bHDR);
 
-  char pTXTName[SOURCE_MAX_PATH];
+  ch pTXTName[SOURCE_MAX_PATH];
   Q_strncpy(pTXTName, pVTFName, sizeof(pTXTName));
   Q_SetExtension(pTXTName, ".txt", sizeof(pTXTName));
 
@@ -285,20 +285,20 @@ static void BuildSingleCubemap(const char *pVTFName, const Vector &vecOrigin,
   g_pFileSystem->Close(fp);
 
   if (ivt) {
-    const char *argv[64] = {
+    const ch *argv[64] = {
         "", "-quiet",
         // These are only here for the -currently released- version of vtex.dll.
         "-UseStandardError", "-WarningsAsErrors", pTXTName};
     int iArg = 5;
     // TODO: Terrible hack (UB).
-    ivt->VTex(CubemapsFSFactory, pGameDir, iArg, const_cast<char **>(argv));
+    ivt->VTex(CubemapsFSFactory, pGameDir, iArg, const_cast<ch **>(argv));
   }
 
   g_pFileSystem->RemoveFile(pTXTName, NULL);
 
-  const char *pSrcExtension = bHDR ? ".pfm" : ".tga";
+  const ch *pSrcExtension = bHDR ? ".pfm" : ".tga";
   for (int i = 0; i < 6; i++) {
-    char pTempName[SOURCE_MAX_PATH];
+    ch pTempName[SOURCE_MAX_PATH];
     Q_snprintf(pTempName, sizeof(pTempName), "%s%s", pVTFName, facingName[i]);
     Q_SetExtension(pTempName, pSrcExtension, sizeof(pTempName));
     g_pFileSystem->RemoveFile(pTempName, NULL);
@@ -312,7 +312,7 @@ static void BuildSingleCubemap(const char *pVTFName, const Vector &vecOrigin,
 // Grab six views for environment mapping tests
 //-----------------------------------------------------------------------------
 CON_COMMAND(envmap, "") {
-  char base[256];
+  ch base[256];
   IClientEntity *world = entitylist->GetClientEntity(0);
 
   if (world && world->GetModel()) {
@@ -323,7 +323,7 @@ CON_COMMAND(envmap, "") {
   }
 
   int strLen = strlen(base) + strlen("cubemap_screenshots/") + 1;
-  char *str = (char *)_alloca(strLen);
+  ch *str = (ch *)_alloca(strLen);
   Q_snprintf(str, strLen, "cubemap_screenshots/%s", base);
   g_pFileSystem->CreateDirHierarchy("cubemap_screenshots",
                                     "DEFAULT_WRITE_PATH");
@@ -337,22 +337,22 @@ CON_COMMAND(envmap, "") {
 //-----------------------------------------------------------------------------
 // Write lighting information to a DMX file
 //-----------------------------------------------------------------------------
-static void WriteLightProbe(const char *pBasePath, const LightingState_t &state,
+static void WriteLightProbe(const ch *pBasePath, const LightingState_t &state,
                             bool bHDR) {
-  char pFullPath[SOURCE_MAX_PATH];
+  ch pFullPath[SOURCE_MAX_PATH];
   Q_strncpy(pFullPath, pBasePath, sizeof(pFullPath));
   Q_SetExtension(pFullPath, ".prb", sizeof(pFullPath));
 
   DECLARE_DMX_CONTEXT();
   CDmxElement *pLightProbe = CreateDmxElement("DmeElement");
 
-  const char *pCubemap = pBasePath + Q_strlen("materials/");
+  const ch *pCubemap = pBasePath + Q_strlen("materials/");
   CDmxElementModifyScope modify(pLightProbe);
   pLightProbe->SetValue("name", "lightprobe");
   pLightProbe->SetValue("cubemap", pCubemap);
 
   if (bHDR) {
-    char pTemp[SOURCE_MAX_PATH];
+    ch pTemp[SOURCE_MAX_PATH];
     Q_snprintf(pTemp, sizeof(pTemp), "%s_hdr", pCubemap);
     pLightProbe->SetValue("cubemapHdr", pTemp);
   }
@@ -451,24 +451,24 @@ CON_COMMAND(lightprobe,
   IVTex *pIVTex = VTex_Load(&pModule);
   if (!pIVTex) return;
 
-  char pBasePath[SOURCE_MAX_PATH];
+  ch pBasePath[SOURCE_MAX_PATH];
   Q_snprintf(pBasePath, sizeof(pBasePath), "materials/lightprobes/%s", args[1]);
   Q_StripFilename(pBasePath);
   g_pFileSystem->CreateDirHierarchy(pBasePath, "DEFAULT_WRITE_PATH");
 
-  char pTemp[SOURCE_MAX_PATH];
-  char pMaterialSrcPath[SOURCE_MAX_PATH];
+  ch pTemp[SOURCE_MAX_PATH];
+  ch pMaterialSrcPath[SOURCE_MAX_PATH];
   Q_snprintf(pTemp, sizeof(pTemp), "materialsrc/lightprobes/%s", args[1]);
   GetModContentSubdirectory(pTemp, pMaterialSrcPath, sizeof(pMaterialSrcPath));
   Q_StripFilename(pMaterialSrcPath);
   g_pFileSystem->CreateDirHierarchy(pMaterialSrcPath, NULL);
 
-  char pGameDir[MAX_OSPATH];
+  ch pGameDir[MAX_OSPATH];
   COM_GetGameDir(pGameDir, sizeof(pGameDir));
 
   bool bHDR = g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE;
   if (bHDR) {
-    char pTemp2[SOURCE_MAX_PATH];
+    ch pTemp2[SOURCE_MAX_PATH];
     Q_snprintf(pTemp2, sizeof(pTemp2), "materialsrc/lightprobes/%s_hdr",
                args[1]);
 
@@ -498,15 +498,13 @@ CON_COMMAND(lightprobe,
 
 #ifdef _WIN32
 static bool LoadSrcVTFFiles(IVTFTexture *pSrcVTFTextures[6],
-                            const char *pSkyboxBaseName) {
-  if (IsX360()) return false;
-
+                            const ch *pSkyboxBaseName) {
   int i;
   for (i = 0; i < 6; i++) {
     // !!! TODO(d.rattman): This needs to open the vmt (or some other method) to
     // find the correct LDR or HDR set of skybox textures! Look in
     // vbsp\cubemap.cpp!
-    char srcVTFFileName[1024];
+    ch srcVTFFileName[1024];
     Q_snprintf(srcVTFFileName, sizeof(srcVTFFileName),
                "materials/skybox/%s%s.vtf", pSkyboxBaseName, facingName[i]);
 
@@ -540,7 +538,7 @@ static bool LoadSrcVTFFiles(IVTFTexture *pSrcVTFTextures[6],
 
 #define DEFAULT_CUBEMAP_SIZE 32
 
-void Cubemap_CreateDefaultCubemap(const char *pMapName, IBSPPack *iBSPPack) {
+void Cubemap_CreateDefaultCubemap(const ch *pMapName, IBSPPack *iBSPPack) {
   // NOTE: This implementation depends on the fact that all VTF files contain
   // all mipmap levels
   ConVarRef skyboxBaseNameConVar("sv_skyname");
@@ -552,7 +550,7 @@ void Cubemap_CreateDefaultCubemap(const char *pMapName, IBSPPack *iBSPPack) {
     return;
   }
 
-  const char *pSkyboxBaseName = skyboxBaseNameConVar.GetString();
+  const ch *pSkyboxBaseName = skyboxBaseNameConVar.GetString();
 
   if (!LoadSrcVTFFiles(pSrcVTFTextures, pSkyboxBaseName)) {
     Warning("Can't load skybox file %s to build the default cubemap!\n",
@@ -626,7 +624,7 @@ void Cubemap_CreateDefaultCubemap(const char *pMapName, IBSPPack *iBSPPack) {
   pDstCubemap->ConvertImageFormat(IMAGE_FORMAT_DXT5, false);
 
   // Write the puppy out!
-  char dstVTFFileName[1024];
+  ch dstVTFFileName[1024];
   Q_snprintf(dstVTFFileName, sizeof(dstVTFFileName),
              "materials/maps/%s/cubemapdefault.vtf", pMapName);
 
@@ -648,18 +646,16 @@ void Cubemap_CreateDefaultCubemap(const char *pMapName, IBSPPack *iBSPPack) {
 }
 
 static void AddSampleToBSPFile(bool bHDR, mcubemapsample_t *pSample,
-                               const char *matDir, IBSPPack *iBSPPack) {
-  if (IsX360()) return;
-
-  char textureName[512];
-  const char *pHDRExtension = "";
+                               const ch *matDir, IBSPPack *iBSPPack) {
+  ch textureName[512];
+  const ch *pHDRExtension = "";
   if (bHDR) {
     pHDRExtension = ".hdr";
   }
   Q_snprintf(textureName, sizeof(textureName), "%s/c%d_%d_%d%s.vtf", matDir,
              (int)pSample->origin[0], (int)pSample->origin[1],
              (int)pSample->origin[2], pHDRExtension);
-  char localPath[1024];
+  ch localPath[1024];
   if (!g_pFileSystem->GetLocalPath(textureName, localPath, sizeof(localPath))) {
     Warning("vtex failed to compile cubemap!\n");
   } else {
@@ -773,12 +769,12 @@ void R_BuildCubemapSamples(int numIterations) {
     }
     UpdateMaterialSystemConfig();
 
-    char mapName[256];
+    ch mapName[256];
     IClientEntity *world = entitylist->GetClientEntity(0);
 
     if (world && world->GetModel()) {
       const model_t *pModel = world->GetModel();
-      const char *pModelName = modelloader->GetName(pModel);
+      const ch *pModelName = modelloader->GetName(pModel);
 
       // This handles the case where you have a map in a directory under maps.
       // We need to keep everything after "maps/" so it looks for the BSP file
@@ -809,19 +805,19 @@ void R_BuildCubemapSamples(int numIterations) {
     IVTex *ivt = VTex_Load(&pModule);
     if (!ivt) return;
 
-    char matDir[SOURCE_MAX_PATH];
+    ch matDir[SOURCE_MAX_PATH];
     Q_snprintf(matDir, sizeof(matDir), "materials/maps/%s", mapName);
     g_pFileSystem->CreateDirHierarchy(matDir, "DEFAULT_WRITE_PATH");
 
-    char pTemp[SOURCE_MAX_PATH];
+    ch pTemp[SOURCE_MAX_PATH];
     Q_snprintf(pTemp, sizeof(pTemp), "materialsrc/maps/%s", mapName);
 
-    char pMaterialSrcDir[SOURCE_MAX_PATH];
+    ch pMaterialSrcDir[SOURCE_MAX_PATH];
     GetModContentSubdirectory(pTemp, pMaterialSrcDir, sizeof(pMaterialSrcDir));
 
     g_pFileSystem->CreateDirHierarchy(pMaterialSrcDir, NULL);
 
-    char gameDir[MAX_OSPATH];
+    ch gameDir[MAX_OSPATH];
     COM_GetGameDir(gameDir, sizeof(gameDir));
 
     model_t *pWorldModel = (model_t *)world->GetModel();
@@ -864,7 +860,7 @@ void R_BuildCubemapSamples(int numIterations) {
       mcubemapsample_t *pCubemapSample =
           &pWorldModel->brush.pShared->m_pCubemapSamples[i];
 
-      char pVTFName[SOURCE_MAX_PATH];
+      ch pVTFName[SOURCE_MAX_PATH];
       Q_snprintf(pVTFName, sizeof(pVTFName), "%s/c%d_%d_%d", pMaterialSrcDir,
                  (int)pCubemapSample->origin[0], (int)pCubemapSample->origin[1],
                  (int)pCubemapSample->origin[2]);
@@ -901,7 +897,7 @@ void R_BuildCubemapSamples(int numIterations) {
     iBSPPack->SetHDRMode(g_pMaterialSystemHardwareConfig->GetHDRType() !=
                          HDR_TYPE_NONE);
 
-    char mapPath[1024];
+    ch mapPath[1024];
     Q_snprintf(mapPath, sizeof(mapPath), "maps/%s.bsp", mapName);
     iBSPPack->LoadBSPFile(g_pFileSystem, mapPath);
 

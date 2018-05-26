@@ -52,7 +52,7 @@ void CBaseClient::SetRate(int nRate, bool bForce) {
   if (m_NetChannel) m_NetChannel->SetDataRate(nRate);
 }
 
-int CBaseClient::GetRate(void) const {
+int CBaseClient::GetRate() const {
   if (m_NetChannel) {
     return m_NetChannel->GetDataRate();
   } else {
@@ -87,9 +87,9 @@ bool CBaseClient::FillUserInfo(player_info_s &userInfo) {
 // Input  : *fmt -
 //			... -
 //-----------------------------------------------------------------------------
-void CBaseClient::ClientPrintf(const char *fmt, ...) {
+void CBaseClient::ClientPrintf(const ch *fmt, ...) {
   va_list argptr;
-  char string[1024];
+  ch string[1024];
 
   va_start(argptr, fmt);
   Q_vsnprintf(string, sizeof(string), fmt, argptr);
@@ -121,12 +121,12 @@ bool CBaseClient::SendNetMsg(INetMessage &msg, bool bForceReliable) {
   return bret;
 }
 
-char const *CBaseClient::GetUserSetting(char const *con_var) const {
+ch const *CBaseClient::GetUserSetting(ch const *con_var) const {
   if (!m_ConVars || !con_var || !con_var[0]) {
     return "";
   }
 
-  const char *value = m_ConVars->GetString(con_var, "");
+  const ch *value = m_ConVars->GetString(con_var, "");
 
   if (value[0] == 0) {
     // check if this var even existed
@@ -138,7 +138,7 @@ char const *CBaseClient::GetUserSetting(char const *con_var) const {
   return value;
 }
 
-void CBaseClient::SetUserCVar(const char *con_var, const char *value) {
+void CBaseClient::SetUserCVar(const ch *con_var, const ch *value) {
   if (!con_var || !value) return;
 
   m_ConVars->SetString(con_var, value);
@@ -150,7 +150,7 @@ void CBaseClient::SetUpdateRate(int udpaterate, bool bForce) {
   m_fSnapshotInterval = 1.0f / udpaterate;
 }
 
-int CBaseClient::GetUpdateRate(void) const {
+int CBaseClient::GetUpdateRate() const {
   if (m_fSnapshotInterval > 0)
     return (int)(1.0f / m_fSnapshotInterval);
   else
@@ -242,7 +242,7 @@ bool CBaseClient::SetSignonState(int state, int spawncount) {
   return true;
 }
 
-void CBaseClient::Reconnect(void) {
+void CBaseClient::Reconnect() {
   ConMsg("Forcing client reconnect (%i)\n", m_nSignonState);
 
   m_NetChannel->Clear();
@@ -253,7 +253,7 @@ void CBaseClient::Reconnect(void) {
   m_NetChannel->SendNetMsg(signon);
 }
 
-void CBaseClient::Inactivate(void) {
+void CBaseClient::Inactivate() {
   FreeBaselines();
 
   m_nDeltaTick = -1;
@@ -280,19 +280,19 @@ void CBaseClient::Inactivate(void) {
   g_GameEventManager.RemoveListener(this);
 }
 
-void CBaseClient::SetName(const char *name) {
+void CBaseClient::SetName(const ch *name) {
   if (Q_strncmp(name, m_Name, sizeof(m_Name)) == 0) return;  // didn't change
 
   int i;
   int dupc = 1;
-  char *p, *val;
+  ch *p, *val;
 
-  char newname[MAX_PLAYER_NAME_LENGTH];
+  ch newname[MAX_PLAYER_NAME_LENGTH];
 
-  // remove evil char '%'
-  char *pFrom = (char *)name;
-  char *pTo = m_Name;
-  char *pLimit = &m_Name[sizeof(m_Name) - 1];
+  // remove evil ch '%'
+  ch *pFrom = (ch *)name;
+  ch *pTo = m_Name;
+  ch *pLimit = &m_Name[sizeof(m_Name) - 1];
 
   while (*pFrom && pTo < pLimit) {
     // Don't copy '%' or '~' chars across
@@ -365,7 +365,7 @@ void CBaseClient::ActivatePlayer() {
   NotifyDedicatedServerUI("UpdatePlayers");
 }
 
-void CBaseClient::SpawnPlayer(void) {
+void CBaseClient::SpawnPlayer() {
   Plat_TimestampedLog("Engine::CBaseClient::SpawnPlayer");
 
   if (!IsFakeClient()) {
@@ -387,7 +387,7 @@ void CBaseClient::SpawnPlayer(void) {
   SendNetMsg(signonState);
 }
 
-bool CBaseClient::SendSignonData(void) {
+bool CBaseClient::SendSignonData() {
   Plat_TimestampedLog("Engine::CBaseClient::SendSignonData");
 #ifndef SWDS
   EngineVGui()->UpdateProgressBar(PROGRESS_SENDSIGNONDATA);
@@ -407,7 +407,7 @@ bool CBaseClient::SendSignonData(void) {
   return m_NetChannel->SendNetMsg(signonState);
 }
 
-void CBaseClient::Connect(const char *szName, int nUserID,
+void CBaseClient::Connect(const ch *szName, int nUserID,
                           INetChannel *pNetChannel, bool bFakePlayer) {
   Plat_TimestampedLog("Engine::CBaseClient::Connect");
 #ifndef SWDS
@@ -441,9 +441,9 @@ void CBaseClient::Connect(const char *szName, int nUserID,
 //			*fmt -
 //			... -
 //-----------------------------------------------------------------------------
-void CBaseClient::Disconnect(const char *fmt, ...) {
+void CBaseClient::Disconnect(const ch *fmt, ...) {
   va_list argptr;
-  char string[1024];
+  ch string[1024];
 
   if (m_nSignonState == SIGNONSTATE_NONE) return;  // no recursion
 
@@ -483,7 +483,7 @@ void CBaseClient::Disconnect(const char *fmt, ...) {
 }
 
 void CBaseClient::FireGameEvent(IGameEvent *event) {
-  char buffer_data[MAX_EVENT_BYTES];
+  ch buffer_data[MAX_EVENT_BYTES];
 
   SVC_GameEvent eventMsg;
 
@@ -500,7 +500,7 @@ void CBaseClient::FireGameEvent(IGameEvent *event) {
   }
 }
 
-bool CBaseClient::SendServerInfo(void) {
+bool CBaseClient::SendServerInfo() {
   Plat_TimestampedLog("Engine::CBaseClient::SendServerInfo begin.");
 
   // supporting smaller stack
@@ -510,7 +510,7 @@ bool CBaseClient::SendServerInfo(void) {
 
   // Only send this message to developer console, or multiplayer clients.
   if (developer.GetBool() || m_Server->IsMultiplayer()) {
-    char devtext[2048];
+    ch devtext[2048];
     int curplayers = m_Server->GetNumClients();
 
     Q_snprintf(
@@ -610,8 +610,8 @@ bool CBaseClient::ProcessStringCmd(NET_StringCmd *msg) {
 
 bool CBaseClient::ProcessSetConVar(NET_SetConVar *msg) {
   for (int i = 0; i < msg->m_ConVars.Count(); i++) {
-    const char *name = msg->m_ConVars[i].name;
-    const char *value = msg->m_ConVars[i].value;
+    const ch *name = msg->m_ConVars[i].name;
+    const ch *value = msg->m_ConVars[i].value;
     m_ConVars->SetString(name, value);
 
     // DevMsg( 1, " UserInfo update %s: %s = %s\n", m_Client->m_Name, name,
@@ -796,13 +796,13 @@ void CBaseClient::EndTrace(bf_write &msg) {
                    sp.m_nBits, (float)sp.m_nBits / 8.0f);
   }
 
-  COM_LogString(SERVER_PACKETS_LOG, (char *)logData.Base());
+  COM_LogString(SERVER_PACKETS_LOG, (ch *)logData.Base());
   m_Trace.m_Records.RemoveAll();
 }
 
-void CBaseClient::TraceNetworkData(bf_write &msg, char const *fmt, ...) {
+void CBaseClient::TraceNetworkData(bf_write &msg, ch const *fmt, ...) {
   if (!IsTracing()) return;
-  char buf[64];
+  ch buf[64];
   va_list argptr;
   va_start(argptr, fmt);
   Q_vsnprintf(buf, sizeof(buf), fmt, argptr);
@@ -815,9 +815,9 @@ void CBaseClient::TraceNetworkData(bf_write &msg, char const *fmt, ...) {
   m_Trace.m_nCurBit = msg.GetNumBitsWritten();
 }
 
-void CBaseClient::TraceNetworkMsg(int nBits, char const *fmt, ...) {
+void CBaseClient::TraceNetworkMsg(int nBits, ch const *fmt, ...) {
   if (!IsTracing()) return;
-  char buf[64];
+  ch buf[64];
   va_list argptr;
   va_start(argptr, fmt);
   Q_vsnprintf(buf, sizeof(buf), fmt, argptr);
@@ -962,7 +962,7 @@ void CBaseClient::SendSnapshot(CClientFrame *pFrame) {
   }
 }
 
-bool CBaseClient::ExecuteStringCommand(const char *pCommand) {
+bool CBaseClient::ExecuteStringCommand(const ch *pCommand) {
   if (!pCommand || !pCommand[0]) return false;
 
   if (!Q_stricmp(pCommand, "demorestart")) {
@@ -976,7 +976,7 @@ bool CBaseClient::ExecuteStringCommand(const char *pCommand) {
 
 void CBaseClient::DemoRestart() {}
 
-bool CBaseClient::ShouldSendMessages(void) {
+bool CBaseClient::ShouldSendMessages() {
   if (!IsConnected()) return false;
 
   // if the reliable message overflowed, drop the client
@@ -1008,7 +1008,7 @@ bool CBaseClient::ShouldSendMessages(void) {
   return bSendMessage;
 }
 
-void CBaseClient::UpdateSendState(void) {
+void CBaseClient::UpdateSendState() {
   // wait for next incoming packet
   m_bReceivedPacket = false;
 
@@ -1144,8 +1144,8 @@ bool CBaseClient::UpdateAcknowledgedFramecount(int tick) {
 //-----------------------------------------------------------------------------
 // Purpose: return a string version of the userid
 //-----------------------------------------------------------------------------
-const char *GetUserIDString(const USERID_t &id) {
-  static char idstr[MAX_NETWORKID_LENGTH];
+const ch *GetUserIDString(const USERID_t &id) {
+  static ch idstr[MAX_NETWORKID_LENGTH];
 
   idstr[0] = 0;
 
@@ -1181,7 +1181,7 @@ const char *GetUserIDString(const USERID_t &id) {
 //-----------------------------------------------------------------------------
 // Purpose: return a string version of the userid
 //-----------------------------------------------------------------------------
-const char *CBaseClient::GetNetworkIDString() const {
+const ch *CBaseClient::GetNetworkIDString() const {
   if (IsFakeClient()) return "BOT";
 
   return (GetUserIDString(m_NetworkID));

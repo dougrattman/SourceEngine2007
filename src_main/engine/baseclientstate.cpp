@@ -43,7 +43,7 @@ void CL_NotifyRPTOfDisconnect();
 void UpdateNameFromSteamID(IConVar *pConVar, CSteamID *pSteamID) {
   if (!pConVar || !pSteamID) return;
 
-  const char *pszName = SteamFriends()->GetFriendPersonaName(*pSteamID);
+  const ch *pszName = SteamFriends()->GetFriendPersonaName(*pSteamID);
   pConVar->SetValue(pszName);
 }
 
@@ -55,7 +55,7 @@ void SetNameToSteamIDName(IConVar *pConVar) {
 }
 #endif
 
-void CL_NameCvarChanged(IConVar *pConVar, const char *pOldString,
+void CL_NameCvarChanged(IConVar *pConVar, const ch *pOldString,
                         float flOldValue) {
 #if !defined(NO_STEAM)
   static bool bPreventRent = false;
@@ -73,15 +73,15 @@ void CL_NameCvarChanged(IConVar *pConVar, const char *pOldString,
   if (0 != Q_stricmp(var.GetString(), var.GetDefault()) &&
       0 != Q_stricmp(var.GetString(), "player")) {
     Sys_SetRegKeyValue("Software\\Valve\\Steam", "LastGameNameUsed",
-                       (char *)var.GetString());
+                       (ch *)var.GetString());
   }
 }
 
 #ifndef SWDS
 void askconnect_accept_f() {
-  char szHostName[256];
+  ch szHostName[256];
   if (IsAskConnectPanelActive(szHostName, sizeof(szHostName))) {
-    char szCommand[512];
+    ch szCommand[512];
     V_snprintf(szCommand, sizeof(szCommand), "connect %s", szHostName);
     Cbuf_AddText(szCommand);
     HideAskConnectPanel();
@@ -226,7 +226,7 @@ CBaseClientState::CBaseClientState() {
 
 CBaseClientState::~CBaseClientState() {}
 
-void CBaseClientState::Clear(void) {
+void CBaseClientState::Clear() {
   m_nServerCount = -1;
   m_nDeltaTick = -1;
 
@@ -265,17 +265,17 @@ void CBaseClientState::Clear(void) {
   m_flConnectTime = 0.0f;
 }
 
-void CBaseClientState::FileReceived(const char *fileName,
+void CBaseClientState::FileReceived(const ch *fileName,
                                     unsigned int transferID) {
   ConMsg("CBaseClientState::FileReceived: %s.\n", fileName);
 }
 
-void CBaseClientState::FileDenied(const char *fileName,
+void CBaseClientState::FileDenied(const ch *fileName,
                                   unsigned int transferID) {
   ConMsg("CBaseClientState::FileDenied: %s.\n", fileName);
 }
 
-void CBaseClientState::FileRequested(const char *fileName,
+void CBaseClientState::FileRequested(const ch *fileName,
                                      unsigned int transferID) {
   ConMsg("File '%s' requested from %s.\n", fileName,
          m_NetChannel->GetAddress());
@@ -315,7 +315,7 @@ void CBaseClientState::ConnectionStart(INetChannel *chan) {
   REGISTER_SVC_MSG(GetCvarValue);
 }
 
-void CBaseClientState::ConnectionClosing(const char *reason) {
+void CBaseClientState::ConnectionClosing(const ch *reason) {
   ConMsg("Disconnect: %s.\n", reason ? reason : "unknown reason");
   Disconnect();
 }
@@ -359,13 +359,13 @@ bool CBaseClientState::SetSignonState(int state, int count) {
 // Output : void CL_SendConnectPacket
 //-----------------------------------------------------------------------------
 void CBaseClientState::SendConnectPacket(int challengeNr, int authProtocol,
-                                         int keySize, const char *encryptionKey,
+                                         int keySize, const ch *encryptionKey,
                                          uint64_t unGSSteamID, bool bGSSecure) {
   Plat_TimestampedLog("Engine::CBaseClientState::SendConnectPacket");
 
   netadr_t adr;
-  char szServerName[MAX_OSPATH];
-  const char *CDKey = "NOCDKEY";
+  ch szServerName[MAX_OSPATH];
+  const ch *CDKey = "NOCDKEY";
 
   Q_strncpy(szServerName, m_szRetryAddress, MAX_OSPATH);
 
@@ -376,11 +376,11 @@ void CBaseClientState::SendConnectPacket(int challengeNr, int authProtocol,
     return;
   }
 
-  if (adr.GetPort() == (unsigned short)0) {
+  if (adr.GetPort() == (u16)0) {
     adr.SetPort(PORT_SERVER);
   }
 
-  char msg_buffer[MAX_ROUTABLE_PAYLOAD];
+  ch msg_buffer[MAX_ROUTABLE_PAYLOAD];
   bf_write msg(msg_buffer, sizeof(msg_buffer));
 
   msg.WriteLong(CONNECTIONLESS_HEADER);
@@ -424,7 +424,7 @@ void CBaseClientState::SendConnectPacket(int challengeNr, int authProtocol,
 // Purpose: append steam specific data to a connection response
 //-----------------------------------------------------------------------------
 bool CBaseClientState::PrepareSteamConnectResponse(
-    int keySize, const char *encryptionKey, uint64_t unGSSteamID,
+    int keySize, const ch *encryptionKey, uint64_t unGSSteamID,
     bool bGSSecure, const netadr_t &adr, bf_write &msg) {
 #ifndef NO_STEAM
   if (!SteamUser()) {
@@ -449,7 +449,7 @@ bool CBaseClientState::PrepareSteamConnectResponse(
 
 #ifndef SWDS
   // now append the steam3 cookie
-  char steam3Cookie[STEAM_KEYSIZE];
+  ch steam3Cookie[STEAM_KEYSIZE];
   int steam3CookieLen = Steam3Client().InitiateConnection(
       steam3Cookie, sizeof(steam3Cookie), checkAdr.GetIP(), checkAdr.GetPort(),
       unGSSteamID, bGSSecure, (void *)encryptionKey, keySize);
@@ -460,7 +460,7 @@ bool CBaseClientState::PrepareSteamConnectResponse(
   return true;
 }
 
-void CBaseClientState::Connect(const char *adr) {
+void CBaseClientState::Connect(const ch *adr) {
 #if !defined(NO_STEAM)
   // Get our name from steam. Needs to be done before connecting
   // because we won't have triggered a check by changing our name.
@@ -481,7 +481,7 @@ void CBaseClientState::Connect(const char *adr) {
   m_nRetryNumber = 0;
 }
 
-INetworkStringTable *CBaseClientState::GetStringTable(const char *name) const {
+INetworkStringTable *CBaseClientState::GetStringTable(const ch *name) const {
   if (!m_StringTableContainer) {
     Assert(m_StringTableContainer);
     return NULL;
@@ -490,7 +490,7 @@ INetworkStringTable *CBaseClientState::GetStringTable(const char *name) const {
   return m_StringTableContainer->FindTable(name);
 }
 
-void CBaseClientState::ForceFullUpdate(void) {
+void CBaseClientState::ForceFullUpdate() {
   if (m_nDeltaTick == -1) return;
 
   FreeEntityBaselines();
@@ -526,7 +526,7 @@ void CBaseClientState::FullConnect(netadr_t &adr) {
 #endif
 }
 
-void CBaseClientState::ConnectionCrashed(const char *reason) {
+void CBaseClientState::ConnectionCrashed(const ch *reason) {
   ConMsg("Connection lost: %s.\n", reason ? reason : "unknown reason");
   Disconnect();
 }
@@ -573,7 +573,7 @@ void CBaseClientState::Disconnect(bool bShowMainMenu) {
 #endif
 }
 
-void CBaseClientState::RunFrame(void) {
+void CBaseClientState::RunFrame() {
   VPROF("CBaseClientState::RunFrame");
   if ((m_nSignonState > SIGNONSTATE_NEW) && m_NetChannel &&
       g_GameEventManager.HasClientListenersChanged()) {
@@ -595,7 +595,7 @@ CL_CheckForResend
 Resend a connect message if the last one has timed out
 =================
 */
-void CBaseClientState::CheckForResend(void) {
+void CBaseClientState::CheckForResend() {
   // resend if we haven't gotten a reply yet
   // We only resend during the connection process.
   if (m_nSignonState != SIGNONSTATE_CHALLENGE) return;
@@ -650,7 +650,7 @@ bool CBaseClientState::ProcessConnectionlessPacket(netpacket_t *packet) {
 
   int c = msg.ReadByte();
 
-  char string[MAX_ROUTABLE_PAYLOAD];
+  ch string[MAX_ROUTABLE_PAYLOAD];
 
   // TODO(d.rattman):  For some of these, we should confirm that the sender of
   // the message is what we think the server is...
@@ -667,7 +667,7 @@ bool CBaseClientState::ProcessConnectionlessPacket(netpacket_t *packet) {
                          // are connecting to
       // Blow it off if we are not connected.
       if (m_nSignonState == SIGNONSTATE_CHALLENGE) {
-        char keyData[STEAM_KEYSIZE];
+        ch keyData[STEAM_KEYSIZE];
         int challenge = msg.ReadLong();
         int authprotocol = msg.ReadLong();
         int keysize = 0;
@@ -754,7 +754,7 @@ bool CBaseClientState::ProcessTick(NET_Tick *msg) {
   return (GetServerTickCount() > 0);
 }
 
-void CBaseClientState::SendStringCmd(const char *command) {
+void CBaseClientState::SendStringCmd(const ch *command) {
   if (m_NetChannel) {
     NET_StringCmd stringCmd(command);
     m_NetChannel->SendNetMsg(stringCmd);
@@ -805,8 +805,8 @@ bool CBaseClientState::ProcessSetConVar(NET_SetConVar *msg) {
   if (m_NetChannel->IsLoopback()) return true;
 
   for (int i = 0; i < msg->m_ConVars.Count(); i++) {
-    const char *name = msg->m_ConVars[i].name;
-    const char *value = msg->m_ConVars[i].value;
+    const ch *name = msg->m_ConVars[i].name;
+    const ch *value = msg->m_ConVars[i].value;
 
     // De-constify
     ConVarRef var(name);
@@ -1018,10 +1018,10 @@ bool CBaseClientState::ProcessClassInfo(SVC_ClassInfo *msg) {
     C_ServerClassInfo *svclassinfo = &m_pServerClasses[svclass->classID];
 
     int len = Q_strlen(svclass->classname) + 1;
-    svclassinfo->m_ClassName = new char[len];
+    svclassinfo->m_ClassName = new ch[len];
     Q_strncpy(svclassinfo->m_ClassName, svclass->classname, len);
     len = Q_strlen(svclass->datatablename) + 1;
-    svclassinfo->m_DatatableName = new char[len];
+    svclassinfo->m_DatatableName = new ch[len];
     Q_strncpy(svclassinfo->m_DatatableName, svclass->datatablename, len);
   }
 
@@ -1208,7 +1208,7 @@ void CBaseClientState::ReadPacketEntities(CEntityReadInfo &u) {
 //			*pClassName -
 // Output : static ClientClass*
 //-----------------------------------------------------------------------------
-ClientClass *CBaseClientState::FindClientClass(const char *pClassName) {
+ClientClass *CBaseClientState::FindClientClass(const ch *pClassName) {
   for (ClientClass *pCur = ClientDLL_GetAllClasses(); pCur;
        pCur = pCur->m_pNext) {
     if (Q_stricmp(pCur->m_pNetworkName, pClassName) == 0) return pCur;
@@ -1238,8 +1238,8 @@ bool CBaseClientState::LinkClasses() {
       // If the class names match, then their datatables must match too.
       // It's ok if the client is missing a class that the server has. In that
       // case, if the server actually tries to use it, the client will bomb out.
-      const char *pServerName = pServerClass->m_DatatableName;
-      const char *pClientName =
+      const ch *pServerName = pServerClass->m_DatatableName;
+      const ch *pClientName =
           pServerClass->m_pClientClass->m_pRecvTable->GetName();
 
       if (Q_stricmp(pServerName, pClientName) != 0) {
@@ -1280,7 +1280,7 @@ void CBaseClientState::FreeEntityBaselines() {
 
 void CBaseClientState::SetEntityBaseline(int iBaseline,
                                          ClientClass *pClientClass, int index,
-                                         char *packedData, int length) {
+                                         ch *packedData, int length) {
   Assert(index >= 0 && index < MAX_EDICTS);
   Assert(pClientClass);
   Assert((iBaseline == 0) || (iBaseline == 1));
@@ -1358,7 +1358,7 @@ bool CBaseClientState::GetClassBaseline(int iClass, void const **pData,
 
   if (pInfo->m_InstanceBaselineIndex == INVALID_STRING_INDEX) {
     // The key is the class index string.
-    char str[64];
+    ch str[64];
     Q_snprintf(str, sizeof(str), "%d", iClass);
 
     pInfo->m_InstanceBaselineIndex = pBaselineTable->FindStringIndex(str);
@@ -1389,7 +1389,7 @@ bool CBaseClientState::ProcessGetCvarValue(SVC_GetCvarValue *msg) {
   returnMsg.m_szCvarValue = "";
   returnMsg.m_eStatusCode = eQueryCvarValueStatus_CvarNotFound;
 
-  char tempValue[256];
+  ch tempValue[256];
 
   // Does any ConCommand exist with this name?
   const ConVar *pVar = g_pCVar->FindVar(msg->m_szCvarName);

@@ -156,7 +156,7 @@ void DisplaySystemVersion(char *osversion, size_t maxlen) {
 
       // Display version, service pack (if any), and build number.
       char build[256];
-      Q_snprintf(build, SOURCE_ARRAYSIZE(build), "%s (Build %u) version %u.%u",
+      Q_snprintf(build, std::size(build), "%s (Build %u) version %u.%u",
                  osvi.szCSDVersion, osvi.dwBuildNumber, osvi.dwMajorVersion,
                  osvi.dwMinorVersion);
       Q_strncat(osversion, build, maxlen, COPY_ALL_CHARACTERS);
@@ -540,14 +540,11 @@ CBugUIPanel::CBugUIPanel(bool bIsPublic, vgui::Panel *parent)
 
   memset(&m_SteamID, 0x00, sizeof(m_SteamID));
 
-  // Default server address (hardcoded in case not running on steam)
-  char const *cserIP = "207.173.177.12:27013";
-
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // NOTE:  If you need to override the CSER Ip, make sure you tweak the code in
   //  CheckContinueQueryingSteamForCSERList!!!!!!!!!!
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  NET_StringToAdr(cserIP, &m_cserIP);
+  NET_StringToAdr(ValveHomeCSERIpAddress, &m_cserIP);
 
   m_bValidated = false;
   m_szScreenShotName[0] = 0;
@@ -876,7 +873,7 @@ void CBugUIPanel::GetDataFileBase(char const *suffix, char *buf, int bufsize) {
 // Purpose:
 // Output : const char
 //-----------------------------------------------------------------------------
-const char *CBugUIPanel::GetRepositoryURL(void) {
+const char *CBugUIPanel::GetRepositoryURL() {
   const char *pURL = m_pBugReporter->GetRepositoryURL();
   if (pURL) return pURL;
 
@@ -1441,33 +1438,33 @@ void CBugUIPanel::OnSubmit() {
   m_pBugReporter->StartNewBugReport();
 
   char temp[80];
-  m_pTitle->GetText(temp, SOURCE_ARRAYSIZE(temp));
+  m_pTitle->GetText(temp, std::size(temp));
 
   if (host_state.worldmodel) {
     char mapname[256];
     CL_SetupMapName(modelloader->GetName(host_state.worldmodel), mapname,
-                    SOURCE_ARRAYSIZE(mapname));
+                    std::size(mapname));
 
-    Q_snprintf(title, SOURCE_ARRAYSIZE(title), "%s: %s", mapname, temp);
+    sprintf_s(title, "%s: %s", mapname, temp);
   } else {
-    Q_snprintf(title, SOURCE_ARRAYSIZE(title), "%s", temp);
+    sprintf_s(title, "%s", temp);
   }
 
   Msg("title:  %s\n", title);
 
-  m_pDescription->GetText(desc, SOURCE_ARRAYSIZE(desc));
+  m_pDescription->GetText(desc, std::size(desc));
 
   Msg("description:  %s\n", desc);
 
-  m_pLevelName->GetText(level, SOURCE_ARRAYSIZE(level));
-  m_pPosition->GetText(position, SOURCE_ARRAYSIZE(position));
-  m_pOrientation->GetText(orientation, SOURCE_ARRAYSIZE(orientation));
-  m_pBuildNumber->GetText(build, SOURCE_ARRAYSIZE(build));
+  m_pLevelName->GetText(level, std::size(level));
+  m_pPosition->GetText(position, std::size(position));
+  m_pOrientation->GetText(orientation, std::size(orientation));
+  m_pBuildNumber->GetText(build, std::size(build));
 
   if (g_pFileSystem->IsSteam()) {
-    Q_strncat(build, " (Steam)", SOURCE_ARRAYSIZE(build), COPY_ALL_CHARACTERS);
+    Q_strncat(build, " (Steam)", std::size(build), COPY_ALL_CHARACTERS);
   } else {
-    Q_strncat(build, " (VSS)", SOURCE_ARRAYSIZE(build), COPY_ALL_CHARACTERS);
+    Q_strncat(build, " (VSS)", std::size(build), COPY_ALL_CHARACTERS);
   }
 
   MaterialAdapterInfo_t info;
@@ -1480,7 +1477,7 @@ void CBugUIPanel::OnSubmit() {
         g_pMaterialSystemHardwareConfig->GetDXSupportLevel());
   }
 
-  Q_snprintf(driverinfo, SOURCE_ARRAYSIZE(driverinfo),
+  Q_snprintf(driverinfo, std::size(driverinfo),
              "Driver Name:  %s\nVendorId / DeviceId:  0x%x / 0x%x\nSubSystem / "
              "Rev:  0x%x / 0x%x\nDXLevel:  %s\nVid:  %i x %i\nFramerate:  %.3f",
              info.m_pDriverName, info.m_VendorID, info.m_DeviceID,
@@ -1664,7 +1661,7 @@ void CBugUIPanel::OnSubmit() {
   m_pBugReporter->SetDXVersion(vHigh, vLow, info.m_VendorID, info.m_DeviceID);
 
   char osversion[256];
-  DisplaySystemVersion(osversion, SOURCE_ARRAYSIZE(osversion));
+  DisplaySystemVersion(osversion, std::size(osversion));
   m_pBugReporter->SetOSVersion(osversion);
 
   m_pBugReporter->ResetIncludedFiles();
@@ -2230,7 +2227,7 @@ void CBugUIPanel::OnKeyCodeTyped(KeyCode code) {
 }
 
 // Load game-specific bug reporter defaults as params
-void CBugUIPanel::ParseDefaultParams(void) {
+void CBugUIPanel::ParseDefaultParams() {
   const char *szDefaults = "scripts/bugreporter_defaults.txt";
 
   FileHandle_t hLocal = g_pFileSystem->Open(szDefaults, "rb");
@@ -2438,7 +2435,7 @@ void CEngineBugReporter::InstallBugReportingUI(
     default:
     case IEngineBugReporter::BR_AUTOSELECT: {
       // check
-      bIsPublic = phonehome->IsExternalBuild() ? true : false;
+      bIsPublic = phonehome->IsExternalBuild();
       if (bCanUseInternal) {
         // if command line param specifies internal, use that
         if (CommandLine()->FindParm("-internalbuild")) {

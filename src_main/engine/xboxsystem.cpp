@@ -127,9 +127,9 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CXboxSystem, IXboxSystem,
 #define ASYNC_RESULT(ph) ((AsyncResult_t *)*ph);
 
 // Stubbed interface for win32
-CXboxSystem::~CXboxSystem(void) {}
-CXboxSystem::CXboxSystem(void) {}
-AsyncHandle_t CXboxSystem::CreateAsyncHandle(void) { return NULL; }
+CXboxSystem::~CXboxSystem() {}
+CXboxSystem::CXboxSystem() {}
+AsyncHandle_t CXboxSystem::CreateAsyncHandle() { return NULL; }
 void CXboxSystem::ReleaseAsyncHandle(AsyncHandle_t handle) {}
 int CXboxSystem::GetOverlappedResult(AsyncHandle_t handle,
                                      uint32_t *pResultCode, bool bWait) {
@@ -149,7 +149,7 @@ bool CXboxSystem::DeviceCapacityAdequate(DWORD nDeviceID,
                                          const char *pModName) {
   return true;
 }
-uint CXboxSystem::GetContainerRemainingSpace(void) { return 0; }
+uint CXboxSystem::GetContainerRemainingSpace() { return 0; }
 bool CXboxSystem::ShowDeviceSelector(bool bForce, uint32_t *pStorageID,
                                      AsyncHandle_t *pHandle) {
   return false;
@@ -241,10 +241,10 @@ int CXboxSystem::EnumerateAchievements(uint32_t nUserIdx, uint64_t xuid,
 }
 void CXboxSystem::AwardAchievement(uint32_t nUserIdx, uint32_t nAchievementId) {
 }
-void CXboxSystem::FinishContainerWrites(void) {}
-uint CXboxSystem::GetContainerOpenResult(void) { return 0; }
-uint CXboxSystem::OpenContainers(void) { return 0; }
-void CXboxSystem::CloseContainers(void) {}
+void CXboxSystem::FinishContainerWrites() {}
+uint CXboxSystem::GetContainerOpenResult() { return 0; }
+uint CXboxSystem::OpenContainers() { return 0; }
+void CXboxSystem::CloseContainers() {}
 uint CXboxSystem::CreateSavegameContainer(uint32_t nCreationFlags) { return 0; }
 uint CXboxSystem::CreateUserSettingsContainer(uint32_t nCreationFlags) {
   return 0;

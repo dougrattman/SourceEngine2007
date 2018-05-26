@@ -15,12 +15,12 @@ class CBenchmarkResults {
   bool IsBenchmarkRunning();
   void StartBenchmark(const CCommand &args);
   void StopBenchmark();
-  void SetResultsFilename(const char *pFilename);
+  void SetResultsFilename(const ch *pFilename);
   void Upload();
 
  private:
   bool m_bIsTestRunning;
-  char m_szFilename[256];
+  ch m_szFilename[256];
 
   float m_flStartTime;
   int m_iStartFrame;

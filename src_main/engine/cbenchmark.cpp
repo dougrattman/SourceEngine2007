@@ -48,7 +48,7 @@ bool CBenchmarkResults::IsBenchmarkRunning() { return m_bIsTestRunning; }
 // Purpose: starts recording data
 //-----------------------------------------------------------------------------
 void CBenchmarkResults::StartBenchmark(const CCommand &args) {
-  const char *pszFilename = DEFAULT_RESULTS_FILENAME;
+  const ch *pszFilename = DEFAULT_RESULTS_FILENAME;
 
   if (args.ArgC() > 1) {
     pszFilename = args[1];
@@ -88,7 +88,7 @@ void CBenchmarkResults::StopBenchmark() {
 
   // work out where to write the file
   g_pFileSystem->CreateDirHierarchy(DEFAULT_RESULTS_FOLDER, "MOD");
-  char szFilename[256];
+  ch szFilename[256];
   Q_snprintf(szFilename, sizeof(szFilename), "%s\\%s", DEFAULT_RESULTS_FOLDER,
              m_szFilename);
 
@@ -108,7 +108,7 @@ void CBenchmarkResults::StopBenchmark() {
 //-----------------------------------------------------------------------------
 // Purpose: Sets which file the results will be written to
 //-----------------------------------------------------------------------------
-void CBenchmarkResults::SetResultsFilename(const char *pFilename) {
+void CBenchmarkResults::SetResultsFilename(const ch *pFilename) {
   Q_strncpy(m_szFilename, pFilename, sizeof(m_szFilename));
   Q_DefaultExtension(m_szFilename, ".txt", sizeof(m_szFilename));
 }
@@ -128,7 +128,7 @@ void CBenchmarkResults::Upload() {
 
   netadr_t netadr_CserIP(cserIP, cserPort);
   // upload
-  char szFilename[256];
+  ch szFilename[256];
   Q_snprintf(szFilename, sizeof(szFilename), "%s\\%s", DEFAULT_RESULTS_FOLDER,
              m_szFilename);
   KeyValues *kv = new KeyValues("benchmark");

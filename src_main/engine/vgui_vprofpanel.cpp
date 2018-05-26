@@ -42,7 +42,7 @@ static ConVar vprof_warningmsec(
 // Singleton accessor
 //-----------------------------------------------------------------------------
 static CVProfPanel *g_pVProfPanel = NULL;
-CVProfPanel *GetVProfPanel(void) { return g_pVProfPanel; }
+CVProfPanel *GetVProfPanel() { return g_pVProfPanel; }
 
 static void ClearNodeClientData(CVProfNode *pNode) {
   pNode->SetClientData(-1);
@@ -79,9 +79,9 @@ CON_COMMAND(vprof_expand_group,
   }
 }
 
-void IN_VProfDown(void) { GetVProfPanel()->UserCmd_ShowVProf(); }
+void IN_VProfDown() { GetVProfPanel()->UserCmd_ShowVProf(); }
 
-void IN_VProfUp(void) { GetVProfPanel()->UserCmd_HideVProf(); }
+void IN_VProfUp() { GetVProfPanel()->UserCmd_HideVProf(); }
 
 static ConCommand startshowvprof("+showvprof", IN_VProfDown);
 static ConCommand endshowvprof("-showvprof", IN_VProfUp);
@@ -494,7 +494,7 @@ CVProfPanel::CVProfPanel(vgui::Panel *pParent, const char *pElementName)
   vgui::ivgui()->AddTickSignal(GetVPanel());
 }
 
-CVProfPanel::~CVProfPanel(void) {
+CVProfPanel::~CVProfPanel() {
   Assert(g_pVProfPanel == this);
   g_pVProfPanel = NULL;
 }
@@ -675,7 +675,7 @@ void CVProfPanel::OnCheckButtonChecked(Panel *panel) {
 //-----------------------------------------------------------------------------
 // Methods related to expand/collapse in hierarchy
 //-----------------------------------------------------------------------------
-void CVProfPanel::ExpandAll(void) {
+void CVProfPanel::ExpandAll() {
   vgui::TreeView *tree_view{m_pHierarchy->GetTree()};
   int count = tree_view->GetHighestItemID();
   for (int i = 0; i < count; i++) {
@@ -685,7 +685,7 @@ void CVProfPanel::ExpandAll(void) {
   }
 }
 
-void CVProfPanel::CollapseAll(void) {
+void CVProfPanel::CollapseAll() {
   vgui::TreeView *tree_view{m_pHierarchy->GetTree()};
   int count = tree_view->GetHighestItemID();
   for (int i = 1; i < count; i++) {
@@ -946,7 +946,7 @@ void CVProfPanel::UpdateProfile(float filteredtime) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CVProfPanel::UserCmd_ShowVProf(void) {
+void CVProfPanel::UserCmd_ShowVProf() {
   m_fShowVprofHeld = true;
 
   SetVisible(true);
@@ -961,7 +961,7 @@ void CVProfPanel::UserCmd_ShowVProf(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CVProfPanel::UserCmd_HideVProf(void) {
+void CVProfPanel::UserCmd_HideVProf() {
   m_fShowVprofHeld = false;
 
   SetVisible(false);

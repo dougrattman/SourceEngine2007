@@ -35,8 +35,8 @@ class C_ServerClassInfo {
 
  public:
   ClientClass *m_pClientClass;
-  char *m_ClassName;
-  char *m_DatatableName;
+  ch *m_ClassName;
+  ch *m_DatatableName;
 
   // This is an index into the network string table
   // (cl.GetInstanceBaselineTable()).
@@ -63,15 +63,15 @@ the_interface CBaseClientState : public INetChannelHandler,
 
  public:  // INetMsgHandler interface:
   virtual void ConnectionStart(INetChannel * chan);
-  virtual void ConnectionClosing(const char *reason);
-  virtual void ConnectionCrashed(const char *reason);
+  virtual void ConnectionClosing(const ch *reason);
+  virtual void ConnectionCrashed(const ch *reason);
 
   virtual void PacketStart(int incoming_sequence, int outgoing_acknowledged){};
   virtual void PacketEnd(void){};
 
-  virtual void FileReceived(const char *fileName, unsigned int transferID);
-  virtual void FileRequested(const char *fileName, unsigned int transferID);
-  virtual void FileDenied(const char *fileName, unsigned int transferID);
+  virtual void FileReceived(const ch *fileName, unsigned int transferID);
+  virtual void FileRequested(const ch *fileName, unsigned int transferID);
+  virtual void FileDenied(const ch *fileName, unsigned int transferID);
 
  public:  // IServerMessageHandlers
   PROCESS_NET_MESSAGE(Tick);
@@ -93,30 +93,30 @@ the_interface CBaseClientState : public INetChannelHandler,
   PROCESS_SVC_MESSAGE(GetCvarValue);
 
  public:
-  inline bool IsActive(void) const {
+  inline bool IsActive() const {
     return m_nSignonState == SIGNONSTATE_FULL;
   };
-  inline bool IsConnected(void) const {
+  inline bool IsConnected() const {
     return m_nSignonState >= SIGNONSTATE_CONNECTED;
   };
   virtual void Clear(void);
   virtual void FullConnect(netadr_t & adr);  // a connection was established
-  virtual void Connect(const char *adr);     // start a connection challenge
+  virtual void Connect(const ch *adr);     // start a connection challenge
   virtual bool SetSignonState(int state, int count);
   virtual void Disconnect(bool bShowMainMenu = true);
   virtual void SendConnectPacket(int challengeNr, int authProtocol, int keySize,
-                                 const char *encryptionKey,
+                                 const ch *encryptionKey,
                                  uint64_t unGSSteamID, bool bGSSecure);
-  virtual const char *GetCDKeyHash() { return "123"; }
+  virtual const ch *GetCDKeyHash() { return "123"; }
   virtual void RunFrame(void);
   virtual void CheckForResend(void);
-  virtual void InstallStringTableCallback(char const *tableName) {}
-  virtual bool HookClientStringTable(char const *tableName) { return false; }
+  virtual void InstallStringTableCallback(ch const *tableName) {}
+  virtual bool HookClientStringTable(ch const *tableName) { return false; }
   virtual bool LinkClasses(void);
   virtual int GetConnectionRetryNumber() const { return CL_CONNECTION_RETRIES; }
-  virtual const char *GetClientName() { return cl_name.GetString(); }
+  virtual const ch *GetClientName() { return cl_name.GetString(); }
 
-  static ClientClass *FindClientClass(const char *pClassName);
+  static ClientClass *FindClientClass(const ch *pClassName);
 
   CClockDriftMgr &GetClockDriftMgr();
 
@@ -128,18 +128,18 @@ the_interface CBaseClientState : public INetChannelHandler,
 
   void SetClientAndServerTickCount(int tick);
 
-  INetworkStringTable *GetStringTable(const char *name) const;
+  INetworkStringTable *GetStringTable(const ch *name) const;
 
   PackedEntity *GetEntityBaseline(int iBaseline, int nEntityIndex);
   void SetEntityBaseline(int iBaseline, ClientClass *pClientClass, int index,
-                         char *packedData, int length);
+                         ch *packedData, int length);
   void CopyEntityBaseline(int iFrom, int iTo);
   void FreeEntityBaselines();
   bool GetClassBaseline(int iClass, void const **pData, int *pDatalen);
   ClientClass *GetClientClass(int i);
 
   void ForceFullUpdate(void);
-  void SendStringCmd(const char *command);
+  void SendStringCmd(const ch *command);
 
   void ReadPacketEntities(CEntityReadInfo & u);
 
@@ -153,7 +153,7 @@ the_interface CBaseClientState : public INetChannelHandler,
   bool InternalProcessStringCmd(NET_StringCmd * msg, bool bIsHLTV);
 
  private:
-  bool PrepareSteamConnectResponse(int keySize, const char *encryptionKey,
+  bool PrepareSteamConnectResponse(int keySize, const ch *encryptionKey,
                                    uint64_t unGSSteamID, bool bGSSecure,
                                    const netadr_t &adr, bf_write &msg);
 
@@ -165,7 +165,7 @@ the_interface CBaseClientState : public INetChannelHandler,
   double m_flConnectTime;  // If gap of connect_time to net_time > 3000, then
                            // resend connect packet
   int m_nRetryNumber;      // number of retry connection attemps
-  char m_szRetryAddress[MAX_OSPATH];
+  ch m_szRetryAddress[MAX_OSPATH];
   int m_nSignonState;      // see SIGNONSTATE_* definitions
   double m_flNextCmdTime;  // When can we send the next command packet?
   int m_nServerCount;  // server identification for prespawns, must match the
@@ -186,8 +186,8 @@ the_interface CBaseClientState : public INetChannelHandler,
   int m_nPlayerSlot;  // own player entity index-1. skips world. Add 1 to get
                       // cl_entitites index;
 
-  char m_szLevelName[40];       // for display on solo scoreboard
-  char m_szLevelNameShort[40];  // removes maps/ and .bsp extension
+  ch m_szLevelName[40];       // for display on solo scoreboard
+  ch m_szLevelNameShort[40];  // removes maps/ and .bsp extension
 
   int m_nMaxClients;  // max clients on server
 
@@ -198,7 +198,7 @@ the_interface CBaseClientState : public INetChannelHandler,
   C_ServerClassInfo *m_pServerClasses;
   int m_nServerClasses;
   int m_nServerClassBits;
-  char m_szEncrytionKey[STEAM_KEYSIZE];
+  ch m_szEncrytionKey[STEAM_KEYSIZE];
   unsigned int m_iEncryptionKeySize;
 
   CNetworkStringTableContainer *m_StringTableContainer;

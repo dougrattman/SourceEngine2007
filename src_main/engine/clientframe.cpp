@@ -27,7 +27,7 @@ CClientFrame::CClientFrame(int tickcount) {
   m_pNext = NULL;
 }
 
-CClientFrame::CClientFrame(void) {
+CClientFrame::CClientFrame() {
   last_entity = 0;
   transmit_always = NULL;  // bit array used only by HLTV client
   from_baseline = NULL;
@@ -101,7 +101,7 @@ CClientFrame *CClientFrameManager::GetClientFrame(int nTick, bool bExact) {
   return lastFrame;
 }
 
-int CClientFrameManager::CountClientFrames(void) {
+int CClientFrameManager::CountClientFrames() {
   int count = 0;
 
   CClientFrame *f = m_Frames;
@@ -142,7 +142,7 @@ int CClientFrameManager::AddClientFrame(CClientFrame *frame) {
   return count;
 }
 
-void CClientFrameManager::RemoveOldestFrame(void) {
+void CClientFrameManager::RemoveOldestFrame() {
   CClientFrame *frame = m_Frames;  // first
 
   if (!frame) return;  // no frames at all

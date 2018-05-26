@@ -5,19 +5,20 @@
 
 #include "tier0/include/memdbgon.h"
 
+namespace {
 // char *date = "Nov 07 1998"; // "Oct 24 1996";
 const char *now_date = __DATE__;
-
 const char *short_month_names[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-char month_day_couns[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const char month_day_counts[12] = {31, 28, 31, 30, 31, 30,
+                                   31, 31, 30, 31, 30, 31};
 
-static int ComputeBuildNumber() {
+int ComputeBuildNumber() {
   int m = 0, d = 0;
 
   for (m = 0; m < 11; m++) {
     if (Q_strncasecmp(&now_date[0], short_month_names[m], 3) == 0) break;
-    d += month_day_couns[m];
+    d += month_day_counts[m];
   }
 
   d += atoi(&now_date[4]) - 1;
@@ -34,6 +35,7 @@ static int ComputeBuildNumber() {
 
   return build_number;
 }
+}  // namespace
 
 // Purpose: Only compute build number the first time we run the app.
 int build_number() {

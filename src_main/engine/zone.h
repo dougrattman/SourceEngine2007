@@ -4,6 +4,7 @@
 #define SOURCE_ENGINE_ZONE_H_
 
 #include "base/include/base_types.h"
+#include "tier0/include/dbg.h"
 
 void Memory_Init();
 void Memory_Shutdown();

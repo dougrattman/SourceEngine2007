@@ -68,7 +68,7 @@ than polling it every frame.  Note, still need to make sure it gets called very
 first time through frame loop.
 =================
 */
-bool V_CheckGamma(void) {
+bool V_CheckGamma() {
   if (IsX360()) return false;
 
   static int lastLightmap = -1;
@@ -87,12 +87,12 @@ bool V_CheckGamma(void) {
 // Purpose: Initializes the view renderer
 // Output : void V_Init
 //-----------------------------------------------------------------------------
-void V_Init(void) { BuildGammaTable(2.2f, 2.2f, 0.0f, 2); }
+void V_Init() { BuildGammaTable(2.2f, 2.2f, 0.0f, 2); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void V_Shutdown(void) {
+void V_Shutdown() {
   // TODO, cleanup
 }
 
@@ -116,7 +116,7 @@ void V_RenderVGuiOnly_NoSwap() {
 // Purpose: Renders only vgui (for loading progress) including buffer swapping
 // and vgui simulation
 //-----------------------------------------------------------------------------
-void V_RenderVGuiOnly(void) {
+void V_RenderVGuiOnly() {
   materials->BeginFrame(host_frametime);
   EngineVGui()->Simulate();
 
@@ -137,7 +137,7 @@ void V_RenderVGuiOnly(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Render the world
 //-----------------------------------------------------------------------------
-void V_RenderView(void) {
+void V_RenderView() {
   VPROF("V_RenderView");
   MDLCACHE_COARSE_LOCK_(g_pMDLCache);
 
@@ -193,7 +193,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     R_DrawIdentityBrushModel(pList, model);
   }
 
-  void Draw3DDebugOverlays(void) {
+  void Draw3DDebugOverlays() {
     DrawSavedModelDebugOverlays();
 
     if (g_pDemoUI) {
@@ -212,7 +212,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     OcclusionSystem()->DrawDebugOverlays();
   }
 
-  SOURCE_FORCEINLINE void CheckBlend(void) {
+  SOURCE_FORCEINLINE void CheckBlend() {
     g_bIsBlendingOrModulating = (r_blend != 1.0) || (r_colormod[0] != 1.0) ||
                                 (r_colormod[1] != 1.0) ||
                                 (r_colormod[2] != 1.0);
@@ -222,7 +222,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     CheckBlend();
   }
 
-  float GetBlend(void) { return r_blend; }
+  float GetBlend() { return r_blend; }
 
   void SetColorModulation(float const *blend) {
     VectorCopy(blend, r_colormod);
@@ -231,9 +231,9 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
 
   void GetColorModulation(float *blend) { VectorCopy(r_colormod, blend); }
 
-  void SceneBegin(void) { g_EngineRenderer->DrawSceneBegin(); }
+  void SceneBegin() { g_EngineRenderer->DrawSceneBegin(); }
 
-  void SceneEnd(void) { g_EngineRenderer->DrawSceneEnd(); }
+  void SceneEnd() { g_EngineRenderer->DrawSceneEnd(); }
 
   void GetVisibleFogVolume(const Vector &vEyePoint,
                            VisibleFogVolumeInfo_t *pInfo) {
@@ -263,13 +263,13 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     R_TopViewBounds(mins, maxs);
   }
 
-  void DrawLights(void) {
+  void DrawLights() {
     DrawLightSprites();
 
     DrawLightDebuggingInfo();
   }
 
-  void DrawMaskEntities(void) {
+  void DrawMaskEntities() {
     // UNDONE: Don't do this with masked brush models, they should probably be
     // in a separate list R_DrawMaskEntities()
   }
@@ -284,7 +284,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     return Shader_LeafContainsTranslucentSurfaces(pList, sortIndex, flags);
   }
 
-  void DrawLineFile(void) { Linefile_Draw(); }
+  void DrawLineFile() { Linefile_Draw(); }
 
   void DrawLightmaps(IWorldRenderList *pList, int pageId) {
     R_DrawLightmaps(pList, pageId);
@@ -304,7 +304,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
   }
 
   // For backward compatibility only!!!
-  void VguiPaint(void) { EngineVGui()->BackwardCompatibility_Paint(); }
+  void VguiPaint() { EngineVGui()->BackwardCompatibility_Paint(); }
 
   void VGui_Paint(int mode) { EngineVGui()->Paint((PaintMode_t)mode); }
 
@@ -331,11 +331,11 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
 
   color32 GetLightAtPoint(Vector &pos) { return R_LightPoint(pos); }
 
-  int GetViewEntity(void) { return cl.m_nViewEntity; }
+  int GetViewEntity() { return cl.m_nViewEntity; }
 
-  float GetFieldOfView(void) { return g_EngineRenderer->GetFov(); }
+  float GetFieldOfView() { return g_EngineRenderer->GetFov(); }
 
-  unsigned char **GetAreaBits(void) {
+  unsigned char **GetAreaBits() {
     return cl.GetAreaBits_BackwardCompatibility();
   }
 
@@ -420,9 +420,9 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     g_EngineRenderer->UpdateBrushModelLightmap(model, pRenderable);
   }
 
-  void BeginUpdateLightmaps(void) { g_EngineRenderer->BeginUpdateLightmaps(); }
+  void BeginUpdateLightmaps() { g_EngineRenderer->BeginUpdateLightmaps(); }
 
-  void EndUpdateLightmaps(void) { g_EngineRenderer->EndUpdateLightmaps(); }
+  void EndUpdateLightmaps() { g_EngineRenderer->EndUpdateLightmaps(); }
 
   virtual void Push3DView(const CViewSetup &view, int nFlags,
                           ITexture *pRenderTarget, Frustum frustumPlanes,

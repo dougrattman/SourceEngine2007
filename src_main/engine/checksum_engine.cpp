@@ -60,7 +60,6 @@ uint8_t COM_BlockSequenceCRCByte(uint8_t *base, int length, int sequence) {
 // YWB:  5/18
 /*
 ===================
-bool CRC_File(unsigned short *crcvalue, char *pszFileName)
 
   Computes CRC for given file.  If there is an error opening/reading the file,
 returns false, otherwise returns true and sets the crc value passed to it.  The
@@ -112,7 +111,7 @@ bool CRC_File(CRC32_t *crcvalue, const char *pszFileName) {
 
 // YWB:  5/18
 /*
-bool CRC_MapFile(unsigned short *crcvalue, char *pszFileName)
+bool CRC_MapFile(u16 *crcvalue, char *pszFileName)
 
   Computes CRC for given map file.  If there is an error opening/reading the
 file, returns false, otherwise returns true and sets the crc value passed to it.

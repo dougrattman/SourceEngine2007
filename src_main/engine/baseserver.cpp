@@ -617,7 +617,7 @@ void SV_CountPlayers
 Counts number of connections.  Clients includes regular connections
 ==================
 */
-int CBaseServer::GetNumClients(void) const {
+int CBaseServer::GetNumClients() const {
   int count = 0;
 
   for (int i = 0; i < m_Clients.Count(); i++) {
@@ -636,7 +636,7 @@ void SV_CountPlayers
 Counts number of HLTV connections.  Clients includes regular connections
 ==================
 */
-int CBaseServer::GetNumProxies(void) const {
+int CBaseServer::GetNumProxies() const {
   int count = 0;
 
   for (int i = 0; i < m_Clients.Count(); i++) {
@@ -849,7 +849,7 @@ void CBaseServer::ReplyServerChallenge(netadr_t &adr) {
   NET_SendPacket(NULL, m_Socket, adr, msg.GetData(), msg.GetNumBytesWritten());
 }
 
-const char *CBaseServer::GetName(void) const { return host_name.GetString(); }
+const char *CBaseServer::GetName() const { return host_name.GetString(); }
 
 int CBaseServer::GetChallengeType(netadr_t &adr) {
   if (AllowDebugDedicatedServerOutsideSteam()) return PROTOCOL_HASHEDCDKEY;
@@ -919,7 +919,7 @@ void CBaseServer::GetNetStats(float &avgIn, float &avgOut) {
   }
 }
 
-void CBaseServer::CalculateCPUUsage(void) {
+void CBaseServer::CalculateCPUUsage() {
   if (!sv_stats.GetBool()) {
     return;
   }
@@ -1048,7 +1048,7 @@ void CBaseServer::CalculateCPUUsage(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Prepare for level transition, etc.
 //-----------------------------------------------------------------------------
-void CBaseServer::InactivateClients(void) {
+void CBaseServer::InactivateClients() {
   for (int i = 0; i < m_Clients.Count(); i++) {
     CBaseClient *cl = m_Clients[i];
 
@@ -1067,7 +1067,7 @@ void CBaseServer::InactivateClients(void) {
   }
 }
 
-void CBaseServer::ReconnectClients(void) {
+void CBaseServer::ReconnectClients() {
   for (int i = 0; i < m_Clients.Count(); i++) {
     CBaseClient *cl = m_Clients[i];
 
@@ -1091,7 +1091,7 @@ for a few seconds to make sure any final reliable message gets resent
 if necessary
 ==================
 */
-void CBaseServer::CheckTimeouts(void) {
+void CBaseServer::CheckTimeouts() {
   // Don't timeout in _DEBUG builds
   int i;
 
@@ -1126,7 +1126,7 @@ void CBaseServer::CheckTimeouts(void) {
 // ==================
 // check if clients update thier user setting (convars) and call
 // ==================
-void CBaseServer::UpdateUserSettings(void) {
+void CBaseServer::UpdateUserSettings() {
   for (int i = 0; i < m_Clients.Count(); i++) {
     CBaseClient *cl = m_Clients[i];
 
@@ -1382,7 +1382,7 @@ void CBaseServer::DisconnectClient(IClient *client, const char *reason) {
   client->Disconnect(reason);
 }
 
-void CBaseServer::Clear(void) {
+void CBaseServer::Clear() {
   if (m_StringTables) {
     m_StringTables->RemoveAllTables();
     m_StringTables = NULL;
@@ -1475,7 +1475,7 @@ void CBaseServer::Init(bool bIsDedicated) {
   Clear();
 }
 
-INetworkStringTable *CBaseServer::GetInstanceBaselineTable(void) {
+INetworkStringTable *CBaseServer::GetInstanceBaselineTable() {
   if (m_pInstanceBaselineTable == NULL) {
     m_pInstanceBaselineTable =
         m_StringTables->FindTable(INSTANCE_BASELINE_TABLENAME);
@@ -1484,7 +1484,7 @@ INetworkStringTable *CBaseServer::GetInstanceBaselineTable(void) {
   return m_pInstanceBaselineTable;
 }
 
-INetworkStringTable *CBaseServer::GetLightStyleTable(void) {
+INetworkStringTable *CBaseServer::GetLightStyleTable() {
   if (m_pLightStyleTable == NULL) {
     m_pLightStyleTable = m_StringTables->FindTable(LIGHT_STYLES_TABLENAME);
   }
@@ -1492,7 +1492,7 @@ INetworkStringTable *CBaseServer::GetLightStyleTable(void) {
   return m_pLightStyleTable;
 }
 
-INetworkStringTable *CBaseServer::GetUserInfoTable(void) {
+INetworkStringTable *CBaseServer::GetUserInfoTable() {
   if (m_pUserInfoTable == NULL) {
     if (m_StringTables == NULL) {
       return NULL;
@@ -1652,7 +1652,7 @@ void CBaseServer::UpdateMasterServerBasicData() {
 
   Assert(SteamMasterServerUpdater() != NULL);
 
-  unsigned short nMaxReportedClients = GetMaxClients();
+  u16 nMaxReportedClients = GetMaxClients();
   if (sv_visiblemaxplayers.GetInt() > 0 &&
       sv_visiblemaxplayers.GetInt() < GetMaxClients())
     nMaxReportedClients = sv_visiblemaxplayers.GetInt();
@@ -1692,7 +1692,7 @@ Read's packets from clients and executes messages as appropriate.
 =================
 */
 
-void CBaseServer::RunFrame(void) {
+void CBaseServer::RunFrame() {
   VPROF_BUDGET("CBaseServer::RunFrame", VPROF_BUDGETGROUP_OTHER_NETWORKING);
 
   NET_ProcessSocket(m_Socket, this);
@@ -1820,7 +1820,7 @@ CBaseClient *CBaseServer::CreateFakeClient(const char *name) {
   return fakeclient;
 }
 
-void CBaseServer::Shutdown(void) {
+void CBaseServer::Shutdown() {
   if (!IsActive()) return;
 
   m_State = ss_dead;
@@ -2097,7 +2097,7 @@ convar_tags_t convars_to_check_for_tags[] = {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseServer::RecalculateTags(void) {
+void CBaseServer::RecalculateTags() {
   // We're going to modify the sv_tags convar here, which will cause this to be
   // called again. Prevent recursion.
   static bool bRecalculatingTags = false;
@@ -2106,7 +2106,7 @@ void CBaseServer::RecalculateTags(void) {
   bRecalculatingTags = true;
 
   // Check convars first
-  for (int i = 0; i < SOURCE_ARRAYSIZE(convars_to_check_for_tags); i++) {
+  for (usize i = 0; i < std::size(convars_to_check_for_tags); i++) {
     ConVar *pConVar = g_pCVar->FindVar(convars_to_check_for_tags[i].pszConVar);
     if (pConVar) {
       const char *pszDef = pConVar->GetDefault();
@@ -2125,7 +2125,7 @@ void CBaseServer::RecalculateTags(void) {
   int defaultmaxplayers = 1;
   serverGameClients->GetPlayerLimits(minmaxplayers, maxmaxplayers,
                                      defaultmaxplayers);
-  unsigned short nMaxReportedClients = GetMaxClients();
+  u16 nMaxReportedClients = GetMaxClients();
   if (sv_visiblemaxplayers.GetInt() > 0 &&
       sv_visiblemaxplayers.GetInt() < GetMaxClients()) {
     nMaxReportedClients = sv_visiblemaxplayers.GetInt();

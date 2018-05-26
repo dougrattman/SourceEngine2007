@@ -32,7 +32,7 @@ struct CheatCodeData_t {
 
 static CUtlVector<CheatCodeData_t> s_CheatCodeCommands;
 
-void ClearCheatCommands(void) { s_CheatCodeCommands.RemoveAll(); }
+void ClearCheatCommands() { s_CheatCodeCommands.RemoveAll(); }
 
 void ReadCheatCommandsFromFile(const char *pchFileName) {
   KeyValues *pCheatCodeKeys = new KeyValues("cheat_codes");

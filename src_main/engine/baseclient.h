@@ -27,7 +27,7 @@ class CSteamID;
 struct Spike_t {
  public:
   Spike_t() : m_nBits(0) { m_szDesc[0] = 0; }
-  char m_szDesc[64];
+  ch m_szDesc[64];
   int m_nBits;
 };
 
@@ -56,20 +56,20 @@ class CBaseClient : public IGameEventListener2,
   int GetPlayerSlot() const { return m_nClientSlot; };
   int GetUserID() const { return m_UserID; };
   const USERID_t GetNetworkID() const { return m_NetworkID; };
-  const char *GetClientName() const { return m_Name; };
+  const ch *GetClientName() const { return m_Name; };
   INetChannel *GetNetChannel() { return m_NetChannel; };
   IServer *GetServer() { return (IServer *)m_Server; };
-  const char *GetUserSetting(const char *cvar) const;
-  const char *GetNetworkIDString() const;
+  const ch *GetUserSetting(const ch *cvar) const;
+  const ch *GetNetworkIDString() const;
   uint32_t GetFriendsID() const { return m_nFriendsID; }
-  const char *GetFriendsName() const { return m_FriendsName; }
-  void UpdateName(const char *pszDefault);
+  const ch *GetFriendsName() const { return m_FriendsName; }
+  void UpdateName(const ch *pszDefault);
 
-  virtual void Connect(const char *szName, int nUserID,
+  virtual void Connect(const ch *szName, int nUserID,
                        INetChannel *pNetChannel, bool bFakePlayer);
   virtual void Inactivate(void);
   virtual void Reconnect(void);
-  virtual void Disconnect(const char *reason, ...);
+  virtual void Disconnect(const ch *reason, ...);
 
   virtual void SetRate(int nRate, bool bForce);
   virtual int GetRate(void) const;
@@ -84,22 +84,22 @@ class CBaseClient : public IGameEventListener2,
     return std::max(m_nSignonTick, m_nDeltaTick);
   };
 
-  virtual bool ExecuteStringCommand(const char *s);
+  virtual bool ExecuteStringCommand(const ch *s);
   virtual bool SendNetMsg(INetMessage &msg, bool bForceReliable = false);
 
-  virtual void ClientPrintf(const char *fmt, ...);
+  virtual void ClientPrintf(const ch *fmt, ...);
 
-  virtual bool IsConnected(void) const {
+  virtual bool IsConnected() const {
     return m_nSignonState >= SIGNONSTATE_CONNECTED;
   };
-  virtual bool IsSpawned(void) const {
+  virtual bool IsSpawned() const {
     return m_nSignonState >= SIGNONSTATE_NEW;
   };
-  virtual bool IsActive(void) const {
+  virtual bool IsActive() const {
     return m_nSignonState == SIGNONSTATE_FULL;
   };
-  virtual bool IsFakeClient(void) const { return m_bFakePlayer; };
-  virtual bool IsHLTV(void) const { return m_bIsHLTV; }
+  virtual bool IsFakeClient() const { return m_bFakePlayer; };
+  virtual bool IsHLTV() const { return m_bIsHLTV; }
   virtual bool IsHearingClient(int index) const { return false; };
   virtual bool IsProximityHearingClient(int index) const { return false; };
 
@@ -124,7 +124,7 @@ class CBaseClient : public IGameEventListener2,
   virtual bool UpdateAcknowledgedFramecount(int tick);
   virtual bool ShouldSendMessages(void);
   virtual void UpdateSendState(void);
-  void ForceFullUpdate(void) { UpdateAcknowledgedFramecount(-1); }
+  void ForceFullUpdate() { UpdateAcknowledgedFramecount(-1); }
 
   virtual bool FillUserInfo(player_info_s &userInfo);
   virtual void UpdateUserSettings();
@@ -137,8 +137,8 @@ class CBaseClient : public IGameEventListener2,
   virtual bool SendSignonData(void);
   virtual void SpawnPlayer(void);
   virtual void ActivatePlayer(void);
-  virtual void SetName(const char *name);
-  virtual void SetUserCVar(const char *cvar, const char *value);
+  virtual void SetName(const ch *name);
+  virtual void SetUserCVar(const ch *cvar, const ch *value);
   virtual void FreeBaselines();
   virtual bool IgnoreTempEntity(CEventInfo *event);
 
@@ -146,11 +146,11 @@ class CBaseClient : public IGameEventListener2,
 
   bool IsTracing() const;
   void SetTraceThreshold(int nThreshold);
-  void TraceNetworkData(bf_write &msg, char const *fmt, ...);
-  void TraceNetworkMsg(int nBits, char const *fmt, ...);
+  void TraceNetworkData(bf_write &msg, ch const *fmt, ...);
+  void TraceNetworkMsg(int nBits, ch const *fmt, ...);
 
-  bool IsFullyAuthenticated(void) { return m_bFullyAuthenticated; }
-  void SetFullyAuthenticated(void) { m_bFullyAuthenticated = true; }
+  bool IsFullyAuthenticated() { return m_bFullyAuthenticated; }
+  void SetFullyAuthenticated() { m_bFullyAuthenticated = true; }
 
  private:
   void OnRequestFullUpdate();
@@ -162,15 +162,15 @@ class CBaseClient : public IGameEventListener2,
   int m_nEntityIndex;
 
   int m_UserID;                         // identifying number on server
-  char m_Name[MAX_PLAYER_NAME_LENGTH];  // for printing to other people
-  char m_GUID[SIGNED_GUID_LEN + 1];     // the clients CD key
+  ch m_Name[MAX_PLAYER_NAME_LENGTH];  // for printing to other people
+  ch m_GUID[SIGNED_GUID_LEN + 1];     // the clients CD key
 
   USERID_t m_NetworkID;  // STEAM assigned userID ( 0x00000000 ) if none
   CSteamID *m_SteamID;   // This is allocated when the client is authenticated,
                          // and NULL until then.
 
   uint32_t m_nFriendsID;  // client's friends' ID
-  char m_FriendsName[MAX_PLAYER_NAME_LENGTH];
+  ch m_FriendsName[MAX_PLAYER_NAME_LENGTH];
 
   KeyValues *m_ConVars;  // stores all client side convars
   bool
