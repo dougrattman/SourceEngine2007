@@ -302,12 +302,12 @@ void FileCompletionEdit::OnKillFocus() {
   BaseClass::OnKillFocus();
 }
 
-void FileCompletionEdit::HideMenu(void) {
+void FileCompletionEdit::HideMenu() {
   // hide the menu
   m_pDropDown->SetVisible(false);
 }
 
-void FileCompletionEdit::ShowMenu(void) {
+void FileCompletionEdit::ShowMenu() {
   // reset the dropdown's position
   m_pDropDown->InvalidateLayout();
 
@@ -452,7 +452,7 @@ void FileOpenDialog::Init(const char *title, KeyValues *pContextKeyValues) {
 
   // list panel
   m_pFileList = new ListPanel(this, "FileList");
-  for (int i = 0; i < (int)SOURCE_ARRAYSIZE(g_ColInfo); ++i) {
+  for (int i = 0; i < (int)std::size(g_ColInfo); ++i) {
     const ColumnInfo_t &info = g_ColInfo[i];
 
     m_pFileList->AddColumnHeader(i, info.columnName, info.columnText,
@@ -923,8 +923,8 @@ void FileOpenDialog::ValidatePath() {
   HANDLE findHandle = ::FindFirstFile(pData, &findData);
   if (findHandle != INVALID_HANDLE_VALUE) {
     // directory is valid, remove * and store
-    char *pos = strrchr(pData, '*');
-    if (pos) *pos = 0;
+    char *pa = strrchr(pData, '*');
+    if (pa) *pa = '\0';
 
     strcpy_s(m_szLastPath, pData);
   } else {

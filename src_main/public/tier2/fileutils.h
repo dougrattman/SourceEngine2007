@@ -46,11 +46,11 @@ class CBaseFile {
  public:
   FileHandle_t m_FileHandle;
 
-  CBaseFile(void) { m_FileHandle = FILESYSTEM_INVALID_HANDLE; }
+  CBaseFile() { m_FileHandle = FILESYSTEM_INVALID_HANDLE; }
 
-  ~CBaseFile(void) { Close(); }
+  ~CBaseFile() { Close(); }
 
-  void Close(void) {
+  void Close() {
     if (m_FileHandle != FILESYSTEM_INVALID_HANDLE)
       g_pFullFileSystem->Close(m_FileHandle);
     m_FileHandle = FILESYSTEM_INVALID_HANDLE;
@@ -85,13 +85,13 @@ class CBaseFile {
     Write(&n1, sizeof(n1));
   }
 
-  int GetInt(void) {
+  int GetInt() {
     int ret;
     MustRead(&ret, sizeof(ret));
     return LittleDWord(ret);
   }
 
-  float GetFloat(void) {
+  float GetFloat() {
     float ret;
     MustRead(&ret, sizeof(ret));
     LittleFloat(&ret, &ret);
@@ -102,7 +102,7 @@ class CBaseFile {
     Write(&f, sizeof(f));
   }
 
-  bool IsOk(void) {
+  bool IsOk() {
     return (m_FileHandle != FILESYSTEM_INVALID_HANDLE) &&
            (g_pFullFileSystem->IsOk(m_FileHandle));
   }

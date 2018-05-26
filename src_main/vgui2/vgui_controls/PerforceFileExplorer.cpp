@@ -156,16 +156,16 @@ void PerforceFileExplorer::PopulateFileList() {
   CUtlVector<P4File_t> &fileList = p4->GetFileList(m_CurrentDirectory);
   int nCount = fileList.Count();
   for (int i = 0; i < nCount; ++i) {
-    const char *pFileName = p4->String(fileList[i].m_sLocalFile);
-    if (!pFileName[0]) continue;
+    const char *file_name = p4->String(fileList[i].m_sLocalFile);
+    if (!file_name[0]) continue;
 
-    int nItemID = m_pFileList->FindFile(pFileName);
+    int nItemID = m_pFileList->FindFile(file_name);
     bool bFileExists = true;
     if (nItemID == m_pFileList->InvalidItemID()) {
       // If it didn't find it, the file must not exist
       // since it already would have added it above
       bFileExists = false;
-      nItemID = m_pFileList->AddFile(pFileName, false, fileList[i].m_bDir);
+      nItemID = m_pFileList->AddFile(file_name, false, fileList[i].m_bDir);
     }
     m_pFileList->RefreshPerforceState(nItemID, bFileExists, &fileList[i]);
   }

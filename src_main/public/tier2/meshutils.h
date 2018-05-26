@@ -5,18 +5,18 @@
 #ifndef SOURCE_TIER2_MESHUTILS_H_
 #define SOURCE_TIER2_MESHUTILS_H_
 
+#include "base/include/base_types.h"
 
 // Helper methods to create various standard index buffer types
-
-void GenerateSequentialIndexBuffer(unsigned short* pIndexMemory,
-                                   int nIndexCount, int nFirstVertex);
-void GenerateQuadIndexBuffer(unsigned short* pIndexMemory, int nIndexCount,
+void GenerateSequentialIndexBuffer(u16* pIndexMemory, int nIndexCount,
+                                   int nFirstVertex);
+void GenerateQuadIndexBuffer(u16* pIndexMemory, int nIndexCount,
                              int nFirstVertex);
-void GeneratePolygonIndexBuffer(unsigned short* pIndexMemory, int nIndexCount,
+void GeneratePolygonIndexBuffer(u16* pIndexMemory, int nIndexCount,
                                 int nFirstVertex);
-void GenerateLineStripIndexBuffer(unsigned short* pIndexMemory, int nIndexCount,
+void GenerateLineStripIndexBuffer(u16* pIndexMemory, int nIndexCount,
                                   int nFirstVertex);
-void GenerateLineLoopIndexBuffer(unsigned short* pIndexMemory, int nIndexCount,
+void GenerateLineLoopIndexBuffer(u16* pIndexMemory, int nIndexCount,
                                  int nFirstVertex);
 
 #endif  // SOURCE_TIER2_MESHUTILS_H_

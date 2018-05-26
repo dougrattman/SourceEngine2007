@@ -31,9 +31,7 @@ bool VGui_InitInterfacesList(const char *moduleName,
   }
 #endif
   // keep a record of this module name
-  strncpy_s(g_szControlsModuleName, moduleName,
-            SOURCE_ARRAYSIZE(g_szControlsModuleName));
-  g_szControlsModuleName[SOURCE_ARRAYSIZE(g_szControlsModuleName) - 1] = 0;
+  strcpy_s(g_szControlsModuleName, moduleName);
 
   // initialize our locale (must be done for every vgui dll/exe)
   // "" makes it use the default locale, required to make iswprint() work

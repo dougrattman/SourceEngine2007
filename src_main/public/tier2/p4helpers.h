@@ -35,8 +35,8 @@ class CP4File_Dummy : public CP4File {
   explicit CP4File_Dummy(char const *szFilename) : CP4File(szFilename) {}
 
  public:
-  virtual bool Edit(void) { return true; }
-  virtual bool Add(void) { return true; }
+  virtual bool Edit() { return true; }
+  virtual bool Add() { return true; }
   virtual bool IsFileInPerforce() { return false; }
 };
 
@@ -111,7 +111,7 @@ class CP4AutoEditAddFile {
       : m_spImpl(g_p4factory->AccessFile(szFilename)) {
     m_spImpl->Edit();
   }
-  ~CP4AutoEditAddFile(void) { m_spImpl->Add(); }
+  ~CP4AutoEditAddFile() { m_spImpl->Add(); }
 
   CP4File *File() const { return m_spImpl.Get(); }
 

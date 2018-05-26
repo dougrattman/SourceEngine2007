@@ -809,7 +809,7 @@ int ListPanel::GetItemIDFromUserData(unsigned int userData) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int ListPanel::GetItemCount(void) { return m_VisibleItems.Count(); }
+int ListPanel::GetItemCount() { return m_VisibleItems.Count(); }
 
 //-----------------------------------------------------------------------------
 // Purpose: gets the item ID of an item by name (data->GetName())
@@ -2174,7 +2174,7 @@ void ListPanel::GetSortColumnEx(int &iPrimarySortColumn,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void ListPanel::SortList(void) {
+void ListPanel::SortList() {
   m_bNeedsSort = false;
 
   if (m_VisibleItems.Count() <= 1) {

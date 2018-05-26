@@ -1013,7 +1013,7 @@ void Label::ApplySettings(KeyValues *inResourceData) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns a description of the label string
 //-----------------------------------------------------------------------------
-const char *Label::GetDescription(void) {
+const char *Label::GetDescription() {
   static char buf[1024];
   Q_snprintf(buf, sizeof(buf),
              "%s, string labelText, string associate, alignment textAlignment, "

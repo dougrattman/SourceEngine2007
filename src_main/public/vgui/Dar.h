@@ -72,7 +72,7 @@ class Dar : public CUtlVector<ELEMTYPE> {
 
   void RemoveElement(ELEMTYPE elem) { this->FindAndRemove(elem); }
 
-  void *GetBaseData() { return Base(); }
+  void *GetBaseData() { return this->Base(); }
 
   void CopyFrom(Dar<ELEMTYPE> &dar) {
     this->CoypArray(dar.Base(), dar.Count());

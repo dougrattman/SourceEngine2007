@@ -70,7 +70,7 @@ TimeModifier_t g_TimeModifiers[] = {
 };
 
 int Motion_GetNumberOfTimeModifiers() {
-  return SOURCE_ARRAYSIZE(g_TimeModifiers);
+  return std::size(g_TimeModifiers);
 }
 
 bool Motion_GetTimeModifierDetails(int timeInterpNum, const char **outName) {
@@ -342,7 +342,7 @@ PositionInterpolatorCreateFn g_PositionInterpolatorCreateFns[] = {
     GetLinearInterpolator, GetCatmullRomInterpolator, GetRopeInterpolator};
 
 int Motion_GetNumberOfPositionInterpolators() {
-  return SOURCE_ARRAYSIZE(g_PositionInterpolatorCreateFns);
+  return std::size(g_PositionInterpolatorCreateFns);
 }
 
 IPositionInterpolator *Motion_GetPositionInterpolator(int interpNum) {
@@ -381,7 +381,7 @@ RotationInterpolator_t g_RotationInterpolators[] = {
 };
 
 int Motion_GetNumberOfRotationInterpolators() {
-  return SOURCE_ARRAYSIZE(g_RotationInterpolators);
+  return std::size(g_RotationInterpolators);
 }
 
 bool Motion_GetRotationInterpolatorDetails(int rotInterpNum,

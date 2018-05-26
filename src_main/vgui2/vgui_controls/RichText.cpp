@@ -2137,8 +2137,8 @@ void RichText::InsertPossibleURLString(const char *text, Color URLTextColor,
   // parse out the string for URL's
   int len = Q_strlen(text), pos = 0;
   bool clickable = false;
-  char *pchURLText = (char *)stackalloc(len + 1);
-  char *pchURL = (char *)stackalloc(len + 1);
+  char *pchURLText = stack_alloc<char>(len + 1);
+  char *pchURL = stack_alloc<char>(len + 1);
 
   while (pos < len) {
     pos = ParseTextStringForUrls(text, pos, pchURLText, len, pchURL, len,

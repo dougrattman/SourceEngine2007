@@ -336,7 +336,7 @@ void AnalogBar::SetBarInset(int pixels) { m_iBarInset = pixels; }
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
 //-----------------------------------------------------------------------------
-int AnalogBar::GetBarInset(void) { return m_iBarInset; }
+int AnalogBar::GetBarInset() { return m_iBarInset; }
 
 //-----------------------------------------------------------------------------
 // Purpose:

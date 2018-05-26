@@ -19,7 +19,7 @@ class Panel;
 }
 SOURCE_FORWARD_DECLARE_HANDLE(AssetList_t);
 
-typedef unsigned short DirHandle_t;
+typedef u16 DirHandle_t;
 
 //-----------------------------------------------------------------------------
 // Purpose: Base class for choosing raw assets

@@ -205,8 +205,7 @@ void ProgressBox::UpdateTitle() {
   // update progress text
   wchar_t unicode[256], completion[64];
   if (m_flCurrentProgress > 0.0f) {
-    _snwprintf_s(completion, SOURCE_ARRAYSIZE(completion), L"- %.2f%% complete",
-                 m_flCurrentProgress * 100.0f);
+    swprintf_s(completion, L"- %.2f%% complete", m_flCurrentProgress * 100.0f);
   } else {
     completion[0] = 0;
   }

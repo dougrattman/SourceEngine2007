@@ -301,7 +301,7 @@ void HTML::OpenURL(const char *URL, bool force) {
       // put this file on disk for IE to load
       g_pFullFileSystem->GetLocalCopy(offline_dir);
       g_pFullFileSystem->GetLocalPath(offline_dir, html_file_path,
-                                      SOURCE_ARRAYSIZE(html_file_path));
+                                      std::size(html_file_path));
 
       sprintf_s(html_locatiion, "file://%s", html_file_path);
       browser->OpenURL(html_locatiion);

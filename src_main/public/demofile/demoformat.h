@@ -104,7 +104,7 @@ struct democmdinfo_t {
     return localViewAngles;
   }
 
-  void Reset(void) {
+  void Reset() {
     flags = 0;
     viewOrigin2 = viewOrigin;
     viewAngles2 = viewAngles;

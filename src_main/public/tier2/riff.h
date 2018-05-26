@@ -27,14 +27,14 @@ class InFileRIFF {
   InFileRIFF(const char *pFileName, IFileReadBinary &io);
   ~InFileRIFF(void);
 
-  unsigned int RIFFName(void) { return m_riffName; }
-  unsigned int RIFFSize(void) { return m_riffSize; }
+  unsigned int RIFFName() { return m_riffName; }
+  unsigned int RIFFSize() { return m_riffSize; }
 
   int ReadInt(void);
   int ReadData(void *pOutput, int dataSize);
   int PositionGet(void);
   void PositionSet(int position);
-  bool IsValid(void) { return m_file != 0; }
+  bool IsValid() { return m_file != 0; }
 
  private:
   const InFileRIFF &operator=(const InFileRIFF &);
@@ -61,7 +61,7 @@ class IterateRIFF {
   int ChunkRead(void *pOutput);
   int ChunkReadPartial(void *pOutput, int dataSize);
   int ChunkReadInt(void);
-  int ChunkFilePosition(void) { return m_chunkPosition; }
+  int ChunkFilePosition() { return m_chunkPosition; }
 
  private:
   const IterateRIFF &operator=(const IterateRIFF &);
@@ -98,7 +98,7 @@ class OutFileRIFF {
   bool WriteData(void *pOutput, int dataSize);
   int PositionGet(void);
   void PositionSet(int position);
-  bool IsValid(void) { return m_file != 0; }
+  bool IsValid() { return m_file != 0; }
 
   void HasLISETData(int position);
 
@@ -131,7 +131,7 @@ class IterateOutputRIFF {
   void ChunkWriteInt(int number);
   void ChunkWriteData(void *pOutput, int size);
 
-  int ChunkFilePosition(void) { return m_chunkPosition; }
+  int ChunkFilePosition() { return m_chunkPosition; }
 
   unsigned int ChunkGetPosition(void);
   void ChunkSetPosition(int position);

@@ -1452,7 +1452,7 @@ void Frame::ApplySchemeSettings(IScheme *pScheme) {
 }
 
 // Disables the fade-in/out-effect even if configured in the scheme settings
-void Frame::DisableFadeEffect(void) {
+void Frame::DisableFadeEffect() {
   m_flFocusTransitionEffectTime = 0.f;
   m_flTransitionEffectTime = 0.f;
 }

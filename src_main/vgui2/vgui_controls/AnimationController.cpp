@@ -174,7 +174,7 @@ AnimationController::RelativeAlignmentLookup
 //-----------------------------------------------------------------------------
 AnimationController::RelativeAlignment AnimationController::LookupAlignment(
     char const *token) {
-  int c = SOURCE_ARRAYSIZE(g_AlignmentLookup);
+  int c = std::size(g_AlignmentLookup);
 
   for (int i = 0; i < c; i++) {
     if (!Q_stricmp(token, g_AlignmentLookup[i].name)) {

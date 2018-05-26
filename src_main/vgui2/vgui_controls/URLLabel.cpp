@@ -116,7 +116,7 @@ void URLLabel::GetSettings(KeyValues *outResourceData) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns a description of the label string
 //-----------------------------------------------------------------------------
-const char *URLLabel::GetDescription(void) {
+const char *URLLabel::GetDescription() {
   static char buf[1024];
   sprintf_s(buf, "%s, string URLText", BaseClass::GetDescription());
   return buf;

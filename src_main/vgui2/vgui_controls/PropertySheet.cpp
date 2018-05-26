@@ -333,7 +333,7 @@ class PageTab : public Button {
     Repaint();
   }
 
-  virtual bool CanBeDefaultButton(void) { return false; }
+  virtual bool CanBeDefaultButton() { return false; }
 
   // Fire action signal when mouse is pressed down instead  of on release.
   virtual void OnMousePressed(MouseCode code) {

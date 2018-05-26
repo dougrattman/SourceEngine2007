@@ -83,7 +83,7 @@ class TabCatchingTextEntry : public TextEntry {
 };
 
 // Things the user typed in and hit submit/return with
-CHistoryItem::CHistoryItem(void) {
+CHistoryItem::CHistoryItem() {
   m_text = NULL;
   m_extraText = NULL;
   m_bHasExtra = false;
@@ -104,7 +104,7 @@ CHistoryItem::CHistoryItem(const CHistoryItem &src) {
   SetText(src.GetText(), src.GetExtra());
 }
 
-CHistoryItem::~CHistoryItem(void) {
+CHistoryItem::~CHistoryItem() {
   delete[] m_text;
   delete[] m_extraText;
   m_text = NULL;
@@ -151,7 +151,7 @@ void CHistoryItem::SetText(const char *text, const char *extra) {
 // Console page completion item starts here
 //
 //-----------------------------------------------------------------------------
-CConsolePanel::CompletionItem::CompletionItem(void) {
+CConsolePanel::CompletionItem::CompletionItem() {
   m_bIsCommand = true;
   m_pCommand = NULL;
   m_pText = NULL;
@@ -182,7 +182,7 @@ CConsolePanel::CompletionItem &CConsolePanel::CompletionItem::operator=(
   return *this;
 }
 
-CConsolePanel::CompletionItem::~CompletionItem(void) {
+CConsolePanel::CompletionItem::~CompletionItem() {
   if (m_pText) {
     delete m_pText;
     m_pText = NULL;
@@ -194,7 +194,7 @@ const char *CConsolePanel::CompletionItem::GetName() const {
   return m_pCommand ? m_pCommand->GetName() : GetCommand();
 }
 
-const char *CConsolePanel::CompletionItem::GetItemText(void) {
+const char *CConsolePanel::CompletionItem::GetItemText() {
   static char text[256];
   text[0] = 0;
   if (m_pText) {
@@ -208,7 +208,7 @@ const char *CConsolePanel::CompletionItem::GetItemText(void) {
   return text;
 }
 
-const char *CConsolePanel::CompletionItem::GetCommand(void) const {
+const char *CConsolePanel::CompletionItem::GetCommand() const {
   static char text[256];
   text[0] = 0;
   if (m_pText) {

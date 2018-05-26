@@ -437,7 +437,7 @@ void CWin32Font::GetCharABCWidths(int ch, int &a, int &b, int &c) {
   // look for it in the cache
   abc_cache_t finder = {(wchar_t)ch};
 
-  unsigned short i = m_ExtendedABCWidthsCache.Find(finder);
+  u16 i = m_ExtendedABCWidthsCache.Find(finder);
   if (m_ExtendedABCWidthsCache.IsValidIndex(i)) {
     a = m_ExtendedABCWidthsCache[i].abc.a;
     b = m_ExtendedABCWidthsCache[i].abc.b;

@@ -4,6 +4,8 @@
 #define ISOUNDEMITTERSYSTEMBASE_H
 
 #include "appframework/IAppSystem.h"
+#include "base/include/base_types.h"
+#include "base/include/macros.h"
 #include "mathlib/compressed_vector.h"
 #include "soundflags.h"
 #include "tier1/utldict.h"
@@ -13,12 +15,9 @@
 #define SOUNDGENDER_MACRO "$gender"
 #define SOUNDGENDER_MACRO_LENGTH 7  // Length of above including $
 
-typedef short HSOUNDSCRIPTHANDLE;
+using HSOUNDSCRIPTHANDLE = short;
 #define SOUNDEMITTER_INVALID_HANDLE (HSOUNDSCRIPTHANDLE) - 1
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 struct CSoundParameters {
   CSoundParameters() {
     channel = CHAN_AUTO;  // 0
@@ -37,7 +36,7 @@ struct CSoundParameters {
   }
 
   int channel;
-  float volume;
+  f32 volume;
   int pitch;
   int pitchlow, pitchhigh;
   soundlevel_t soundlevel;
@@ -50,12 +49,12 @@ struct CSoundParameters {
 
 // A bit of a hack, but these are just utility function which are implemented in
 // the SouneParametersInternal.cpp file which all users of this lib also compile
-const char *SoundLevelToString(soundlevel_t level);
-const char *ChannelToString(int channel);
-const char *VolumeToString(float volume);
-const char *PitchToString(float pitch);
-soundlevel_t TextToSoundLevel(const char *key);
-int TextToChannel(const char *name);
+const ch *SoundLevelToString(soundlevel_t level);
+const ch *ChannelToString(int channel);
+const ch *VolumeToString(f32 volume);
+const ch *PitchToString(f32 pitch);
+soundlevel_t TextToSoundLevel(const ch *key);
+int TextToChannel(const ch *name);
 
 enum gender_t {
   GENDER_NONE = 0,
@@ -73,8 +72,8 @@ struct SoundFile {
   }
 
   CUtlSymbol symbol;
-  uint8_t gender;
-  uint8_t available;
+  u8 gender;
+  u8 available;
 };
 
 #pragma pack()
@@ -82,30 +81,30 @@ struct SoundFile {
 #pragma pack(1)
 template <typename T>
 struct sound_interval_t {
-  T start;
-  T range;
+  T start, range;
 
   interval_t &ToInterval(interval_t &dest) const {
     dest.start = start;
     dest.range = range;
     return dest;
   }
+
   void FromInterval(const interval_t &from) {
     start = from.start;
     range = from.range;
   }
+
   T Random() const {
-    interval_t temp = {static_cast<f32>(start),
-                       static_cast<f32>(range)};
-    return static_cast<T>(RandomInterval(temp));
+    interval_t temp = {implicit_cast<f32>(start), implicit_cast<f32>(range)};
+    return implicit_cast<T>(RandomInterval(temp));
   }
 };
 
 #pragma pack()
 
 typedef sound_interval_t<float16_with_assign> volume_interval_t;
-typedef sound_interval_t<uint16_t> soundlevel_interval_t;
-typedef sound_interval_t<uint8_t> pitch_interval_t;
+typedef sound_interval_t<u16> soundlevel_interval_t;
+typedef sound_interval_t<u8> pitch_interval_t;
 
 #pragma pack(1)
 struct CSoundParametersInternal {
@@ -116,15 +115,15 @@ struct CSoundParametersInternal {
 
   bool operator==(const CSoundParametersInternal &other) const;
 
-  const char *VolumeToString(void) const;
-  const char *ChannelToString(void) const;
-  const char *SoundLevelToString(void) const;
-  const char *PitchToString(void) const;
+  const ch *VolumeToString(void) const;
+  const ch *ChannelToString(void) const;
+  const ch *SoundLevelToString(void) const;
+  const ch *PitchToString(void) const;
 
-  void VolumeFromString(const char *sz);
-  void ChannelFromString(const char *sz);
-  void PitchFromString(const char *sz);
-  void SoundLevelFromString(const char *sz);
+  void VolumeFromString(const ch *sz);
+  void ChannelFromString(const ch *sz);
+  void PitchFromString(const ch *sz);
+  void SoundLevelFromString(const ch *sz);
 
   int GetChannel() const { return channel; }
   const volume_interval_t &GetVolume() const { return volume; }
@@ -137,15 +136,15 @@ struct CSoundParametersInternal {
   bool ShouldPreload() const { return m_bShouldPreload; }
 
   void SetChannel(int newChannel) { channel = newChannel; }
-  void SetVolume(float start, float range = 0.0) {
+  void SetVolume(f32 start, f32 range = 0.0) {
     volume.start = start;
     volume.range = range;
   }
-  void SetPitch(float start, float range = 0.0) {
+  void SetPitch(f32 start, f32 range = 0.0) {
     pitch.start = start;
     pitch.range = range;
   }
-  void SetSoundLevel(float start, float range = 0.0) {
+  void SetSoundLevel(f32 start, f32 range = 0.0) {
     soundlevel.start = start;
     soundlevel.range = range;
   }
@@ -186,19 +185,18 @@ struct CSoundParametersInternal {
       const CSoundParametersInternal &src);  // disallow implicit copies
   CSoundParametersInternal(const CSoundParametersInternal &src);
 
-  void AddToTail(SoundFile **pDest, uint16_t *pDestCount,
-                 const SoundFile &source);
+  void AddToTail(SoundFile **pDest, u16 *pDestCount, const SoundFile &source);
 
   SoundFile *m_pSoundNames;      // 4
   SoundFile *m_pConvertedNames;  // 8
-  uint16_t m_nSoundNames;        // 10
-  uint16_t m_nConvertedNames;    // 12
+  u16 m_nSoundNames;             // 10
+  u16 m_nConvertedNames;         // 12
 
   volume_interval_t volume;          // 16
   soundlevel_interval_t soundlevel;  // 20
   pitch_interval_t pitch;            // 22
-  uint16_t channel;                  // 24
-  uint16_t delay_msec;               // 26
+  u16 channel;                       // 24
+  u16 delay_msec;                    // 26
 
   bool play_to_owner_only : 1;  // For weapon sounds...	// 27
   // Internal use, for warning about missing .wav files
@@ -206,7 +204,7 @@ struct CSoundParametersInternal {
   bool uses_gender_token : 1;
   bool m_bShouldPreload : 1;
 
-  uint8_t reserved;  // 28
+  u8 reserved;  // 28
 };
 #pragma pack()
 
@@ -219,25 +217,25 @@ the_interface ISoundEmitterSystemBase : public IAppSystem {
   virtual bool ModInit() = 0;
   virtual void ModShutdown() = 0;
 
-  virtual int GetSoundIndex(const char *pName) const = 0;
+  virtual int GetSoundIndex(const ch *pName) const = 0;
   virtual bool IsValidIndex(int index) = 0;
   virtual int GetSoundCount(void) = 0;
 
-  virtual const char *GetSoundName(int index) = 0;
-  virtual bool GetParametersForSound(const char *soundname,
+  virtual const ch *GetSoundName(int index) = 0;
+  virtual bool GetParametersForSound(const ch *soundname,
                                      CSoundParameters &params, gender_t gender,
                                      bool isbeingemitted = false) = 0;
 
-  virtual const char *GetWaveName(CUtlSymbol & sym) = 0;
-  virtual CUtlSymbol AddWaveName(const char *name) = 0;
+  virtual const ch *GetWaveName(CUtlSymbol & sym) = 0;
+  virtual CUtlSymbol AddWaveName(const ch *name) = 0;
 
-  virtual soundlevel_t LookupSoundLevel(const char *soundname) = 0;
-  virtual const char *GetWavFileForSound(const char *soundname,
-                                         char const *actormodel) = 0;
-  virtual const char *GetWavFileForSound(const char *soundname,
-                                         gender_t gender) = 0;
+  virtual soundlevel_t LookupSoundLevel(const ch *soundname) = 0;
+  virtual const ch *GetWavFileForSound(const ch *soundname,
+                                       char const *actormodel) = 0;
+  virtual const ch *GetWavFileForSound(const ch *soundname,
+                                       gender_t gender) = 0;
   virtual int CheckForMissingWavFiles(bool verbose) = 0;
-  virtual const char *GetSourceFileForSound(int index) const = 0;
+  virtual const ch *GetSourceFileForSound(int index) const = 0;
 
   // Iteration methods
   virtual int First() const = 0;
@@ -249,19 +247,19 @@ the_interface ISoundEmitterSystemBase : public IAppSystem {
 
   // The host application is responsible for dealing with dirty sound scripts,
   // etc.
-  virtual bool AddSound(const char *soundname, const char *scriptfile,
+  virtual bool AddSound(const ch *soundname, const ch *scriptfile,
                         const CSoundParametersInternal &params) = 0;
-  virtual void RemoveSound(const char *soundname) = 0;
-  virtual void MoveSound(const char *soundname, const char *newscript) = 0;
-  virtual void RenameSound(const char *soundname, const char *newname) = 0;
+  virtual void RemoveSound(const ch *soundname) = 0;
+  virtual void MoveSound(const ch *soundname, const ch *newscript) = 0;
+  virtual void RenameSound(const ch *soundname, const ch *newname) = 0;
 
   virtual void UpdateSoundParameters(
-      const char *soundname, const CSoundParametersInternal &params) = 0;
+      const ch *soundname, const CSoundParametersInternal &params) = 0;
 
   virtual int GetNumSoundScripts() const = 0;
   virtual char const *GetSoundScriptName(int index) const = 0;
   virtual bool IsSoundScriptDirty(int index) const = 0;
-  virtual int FindSoundScript(const char *name) const = 0;
+  virtual int FindSoundScript(const ch *name) const = 0;
   virtual void SaveChangesToSoundScript(int scriptindex) = 0;
 
   virtual void ExpandSoundNameMacros(CSoundParametersInternal & params,
@@ -276,7 +274,7 @@ the_interface ISoundEmitterSystemBase : public IAppSystem {
   // For blowing away caches based on filetimstamps of the manifest, or of any
   // of the
   //  .txt files that are read into the sound emitter system
-  virtual unsigned int GetManifestFileTimeChecksum() = 0;
+  virtual u32 GetManifestFileTimeChecksum() = 0;
 
   // Called from both client and server (single player) or just one (server only
   // in dedicated server and client only if connected to a remote server) Called
@@ -289,9 +287,8 @@ the_interface ISoundEmitterSystemBase : public IAppSystem {
   virtual void ClearSoundOverrides() = 0;
 
   virtual bool GetParametersForSoundEx(
-      const char *soundname, HSOUNDSCRIPTHANDLE &handle,
-      CSoundParameters &params, gender_t gender,
-      bool isbeingemitted = false) = 0;
+      const ch *soundname, HSOUNDSCRIPTHANDLE &handle, CSoundParameters &params,
+      gender_t gender, bool isbeingemitted = false) = 0;
   virtual soundlevel_t LookupSoundLevelByHandle(char const *soundname,
                                                 HSOUNDSCRIPTHANDLE &handle) = 0;
 };

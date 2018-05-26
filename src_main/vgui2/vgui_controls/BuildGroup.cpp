@@ -634,7 +634,7 @@ bool BuildGroup::KeyCodeReleased(KeyCode code, Panel *panel) {
 //-----------------------------------------------------------------------------
 // Purpose: Searches for a BuildModeDialog in the hierarchy
 //-----------------------------------------------------------------------------
-Panel *BuildGroup::CreateBuildDialog(void) {
+Panel *BuildGroup::CreateBuildDialog() {
   // request the panel
   Panel *buildDialog = NULL;
   KeyValues *data = new KeyValues("BuildDialog");
@@ -654,7 +654,7 @@ Panel *BuildGroup::CreateBuildDialog(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Activates the build mode settings dialog
 //-----------------------------------------------------------------------------
-void BuildGroup::ActivateBuildDialog(void) {
+void BuildGroup::ActivateBuildDialog() {
   // create the build mode dialog first time through
   if (!m_hBuildDialog.Get()) {
     m_hBuildDialog = CreateBuildDialog();
@@ -897,7 +897,7 @@ void BuildGroup::ChangeControlSettingsFile(const char *controlResourceName) {
 //-----------------------------------------------------------------------------
 // Purpose: saves control settings to file
 //-----------------------------------------------------------------------------
-bool BuildGroup::SaveControlSettings(void) {
+bool BuildGroup::SaveControlSettings() {
   bool bSuccess = false;
   if (m_pResourceName) {
     KeyValues *rDat = new KeyValues(m_pResourceName);

@@ -1097,11 +1097,11 @@ void SectionedListPanel::OnMousePressed(MouseCode code) { ClearSelection(); }
 //-----------------------------------------------------------------------------
 // Purpose: deselects any items
 //-----------------------------------------------------------------------------
-void SectionedListPanel::ClearSelection(void) {
+void SectionedListPanel::ClearSelection() {
   SetSelectedItem((CItemButton *)NULL);
 }
 
-void SectionedListPanel::MoveSelectionDown(void) {
+void SectionedListPanel::MoveSelectionDown() {
   int itemID = GetSelectedItem();
   Assert(itemID != -1);
 
@@ -1123,7 +1123,7 @@ void SectionedListPanel::MoveSelectionDown(void) {
   ScrollToItem(newItemID);
 }
 
-void SectionedListPanel::MoveSelectionUp(void) {
+void SectionedListPanel::MoveSelectionUp() {
   int itemID = GetSelectedItem();
   Assert(itemID != -1);
 

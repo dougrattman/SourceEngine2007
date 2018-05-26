@@ -129,7 +129,7 @@ PerforceFileList::PerforceFileList(Panel *pParent, const char *pPanelName)
   m_bShowDeletedFiles = false;
 
   // list panel
-  for (int i = 0; i < (int)SOURCE_ARRAYSIZE(g_ColInfo); ++i) {
+  for (int i = 0; i < (int)std::size(g_ColInfo); ++i) {
     const ColumnInfo_t &info = g_ColInfo[i];
 
     AddColumnHeader(i, info.columnName, info.columnText, info.startingWidth,

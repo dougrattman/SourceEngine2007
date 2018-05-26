@@ -49,7 +49,7 @@ bool lessFunc(const int &lhs, const int &rhs) { return lhs < rhs; }
 // Purpose: converts a button name string to the equivalent keycode
 //-----------------------------------------------------------------------------
 int StringToButtonCode(const char *name) {
-  for (usize i = 0; i < SOURCE_ARRAYSIZE(s_ControllerButtons); ++i) {
+  for (usize i = 0; i < std::size(s_ControllerButtons); ++i) {
     if (!_stricmp(s_ControllerButtons[i].name, name))
       return s_ControllerButtons[i].code;
   }

@@ -162,16 +162,16 @@ typedef struct {
 // in the circular progress bar.
 circular_progress_segment_t Segments[8] = {
     {0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1, 0},
-    {M_PI * 0.25f, 1.0f, 0.0f, 1.0f, 0.5f, 0, 1},
-    {M_PI * 0.5f, 1.0f, 0.5f, 1.0f, 1.0f, 0, 1},
-    {M_PI * 0.75f, 1.0f, 1.0f, 0.5f, 1.0f, -1, 0},
-    {M_PI, 0.5f, 1.0f, 0.0f, 1.0f, -1, 0},
-    {M_PI * 1.25f, 0.0f, 1.0f, 0.0f, 0.5f, 0, -1},
-    {M_PI * 1.5f, 0.0f, 0.5f, 0.0f, 0.0f, 0, -1},
-    {M_PI * 1.75f, 0.0f, 0.0f, 0.5f, 0.0f, 1, 0},
+    {M_PI_F * 0.25f, 1.0f, 0.0f, 1.0f, 0.5f, 0, 1},
+    {M_PI_F * 0.5f, 1.0f, 0.5f, 1.0f, 1.0f, 0, 1},
+    {M_PI_F * 0.75f, 1.0f, 1.0f, 0.5f, 1.0f, -1, 0},
+    {M_PI_F, 0.5f, 1.0f, 0.0f, 1.0f, -1, 0},
+    {M_PI_F * 1.25f, 0.0f, 1.0f, 0.0f, 0.5f, 0, -1},
+    {M_PI_F * 1.5f, 0.0f, 0.5f, 0.0f, 0.0f, 0, -1},
+    {M_PI_F * 1.75f, 0.0f, 0.0f, 0.5f, 0.0f, 1, 0},
 };
 
-#define SEGMENT_ANGLE (M_PI / 4)
+#define SEGMENT_ANGLE (M_PI_F / 4)
 
 // function to draw from A to B degrees, with a direction
 // we draw starting from the top ( 0 progress )

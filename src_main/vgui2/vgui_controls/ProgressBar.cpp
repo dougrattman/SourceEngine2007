@@ -274,7 +274,7 @@ void ProgressBar::SetBarInset(int pixels) { m_iBarInset = pixels; }
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
 //-----------------------------------------------------------------------------
-int ProgressBar::GetBarInset(void) { return m_iBarInset; }
+int ProgressBar::GetBarInset() { return m_iBarInset; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -307,7 +307,7 @@ void ProgressBar::GetSettings(KeyValues *outResourceData) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns a string description of the panel fields for use in the UI
 //-----------------------------------------------------------------------------
-const char *ProgressBar::GetDescription(void) {
+const char *ProgressBar::GetDescription() {
   static char buf[1024];
   sprintf_s(buf, "%s, string progress, string variable",
             BaseClass::GetDescription());

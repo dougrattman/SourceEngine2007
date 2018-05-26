@@ -73,7 +73,7 @@ IImage *ImagePanel::GetImage() { return m_pImage; }
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-Color ImagePanel::GetDrawColor(void) { return Color(255, 255, 255, 255); }
+Color ImagePanel::GetDrawColor() { return Color(255, 255, 255, 255); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -211,7 +211,7 @@ void ImagePanel::SetShouldScaleImage(bool state) { m_bScaleImage = state; }
 //-----------------------------------------------------------------------------
 void ImagePanel::SetScaleAmount(float scale) { m_fScaleAmount = scale; }
 
-float ImagePanel::GetScaleAmount(void) { return m_fScaleAmount; }
+float ImagePanel::GetScaleAmount() { return m_fScaleAmount; }
 
 //-----------------------------------------------------------------------------
 // Purpose: set the color to fill with, if no Image is specified
