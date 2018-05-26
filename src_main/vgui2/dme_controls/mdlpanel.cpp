@@ -183,7 +183,7 @@ static ConVar r_rootlod("r_rootlod", "0", FCVAR_CHEAT);
 
 static StudioRenderConfig_t s_StudioRenderConfig;
 
-void CMDLPanel::UpdateStudioRenderConfig(void) {
+void CMDLPanel::UpdateStudioRenderConfig() {
   memset(&s_StudioRenderConfig, 0, sizeof(s_StudioRenderConfig));
 
   s_StudioRenderConfig.bEyeMove = !!r_eyemove.GetInt();
@@ -361,7 +361,7 @@ void CMDLPanel::SetSkin(int nSkin) {
 // Purpose: Keeps a global clock to autoplay sequences to run from
 //			Also deals with speedScale changes
 //-----------------------------------------------------------------------------
-float GetAutoPlayTime(void) {
+float GetAutoPlayTime() {
   static int g_prevTicks;
   static float g_time;
 

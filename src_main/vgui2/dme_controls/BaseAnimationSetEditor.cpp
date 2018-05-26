@@ -780,7 +780,7 @@ void CBaseAnimationSetEditor::OnOpenContextMenu(KeyValues *params) {
 
   m_hContextMenu = new Menu(this, "ActionMenu");
 
-  int c = SOURCE_ARRAYSIZE(g_AnimSetLayout);
+  int c = std::size(g_AnimSetLayout);
   for (int i = 0; i < c; ++i) {
     const AnimSetLayout_t &data = g_AnimSetLayout[i];
 

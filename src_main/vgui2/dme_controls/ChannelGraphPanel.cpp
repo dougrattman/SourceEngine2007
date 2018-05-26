@@ -235,10 +235,10 @@ void CChannelGraphPanel::Paint() {
   for (int i = nMinTimeIndex; i <= nMaxTimeIndex;
        ++i, flTime += flTimeIncrement) {
     wchar_t pFormat[32];
-    _snwprintf_s(pFormat, SOURCE_ARRAYSIZE(pFormat), L"%%.%df", nDecimalPlaces);
+    swprintf_s(pFormat, L"%%.%df", nDecimalPlaces);
 
     wchar_t wstring[32];
-    _snwprintf_s(wstring, SOURCE_ARRAYSIZE(wstring), pFormat, flTime);
+    swprintf_s(wstring, pFormat, flTime);
 
     int tw = 0, th = 0;
     surface()->GetTextSize(m_font, wstring, tw, th);
@@ -265,7 +265,7 @@ void CChannelGraphPanel::Paint() {
 
   // draw plotted graph
   for (int i = 0; i < nComponents; ++i) {
-    Color &color = s_componentColors[i % SOURCE_ARRAYSIZE(s_componentColors)];
+    Color &color = s_componentColors[i % std::size(s_componentColors)];
     surface()->DrawSetColor(color);
 
     int lastx = -1;

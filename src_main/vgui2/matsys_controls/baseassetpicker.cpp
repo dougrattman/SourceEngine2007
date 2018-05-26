@@ -1,8 +1,8 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "matsys_controls/BaseAssetPicker.h"
 #include "base/include/macros.h"
 #include "filesystem.h"
+#include "matsys_controls/BaseAssetPicker.h"
 #include "tier1/keyvalues.h"
 #include "tier1/utlntree.h"
 #include "tier1/utlrbtree.h"
@@ -465,7 +465,7 @@ void CAssetCache::BuildModList() {
 
   // Add all mods
   int nLen = g_pFullFileSystem->GetSearchPath("GAME", false, NULL, 0);
-  char *pSearchPath = (char *)stackalloc(nLen * sizeof(char));
+  char *pSearchPath = stack_alloc<char>(nLen);
   g_pFullFileSystem->GetSearchPath("GAME", false, pSearchPath, nLen);
   char *pPath = pSearchPath;
   while (pPath) {
@@ -577,8 +577,7 @@ bool CAssetCache::AddFilesInDirectory(CachedAssetList_t &list,
             }
           }
           _strlwr_s(pAssetName, pRelativeChildPath +
-                                    SOURCE_ARRAYSIZE(pRelativeChildPath) -
-                                    pAssetName);
+                                    std::size(pRelativeChildPath) - pAssetName);
 
           AddAssetToList(list, pAssetName, nModIndex);
         }

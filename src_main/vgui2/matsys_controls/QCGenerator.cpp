@@ -320,7 +320,7 @@ CQCGenerator::CQCGenerator(vgui::Panel *pParent, const char *pszPath,
     // search the entire drive or prompt for the location
     char *pszEndGamePath = Q_strrchr(szGamePath, '\\');
     Q_strcpy(pszEndGamePath,
-             SOURCE_ARRAYSIZE(szGamePath) - (pszEndGamePath - szGamePath),
+             std::size(szGamePath) - (pszEndGamePath - szGamePath),
              "\\hl2");
     sprintf_s(szSearchPath, "%s%s", szGamePath, pSurfacePropFilename);
     fp = g_pFullFileSystem->Open(szSearchPath, "rb");
@@ -339,11 +339,11 @@ CQCGenerator::CQCGenerator(vgui::Panel *pParent, const char *pszPath,
   // filling up the surface property dropdown
   while (szSurfacePropContents) {
     szSurfacePropContents =
-        ParseKeyvalue(szSurfacePropContents, key, SOURCE_ARRAYSIZE(key), value);
+        ParseKeyvalue(szSurfacePropContents, key, std::size(key), value);
     ((ComboBox *)pSurfacePropDropDown)->AddItem(key, NULL);
     while (szSurfacePropContents) {
       szSurfacePropContents = ParseKeyvalue(szSurfacePropContents, key,
-                                            SOURCE_ARRAYSIZE(key), value);
+                                            std::size(key), value);
       if (!_stricmp(key, "}")) break;
     }
   }

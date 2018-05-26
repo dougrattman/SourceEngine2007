@@ -57,21 +57,21 @@ void CFloatAttributeManipulator::SetAttribute(CDmAttribute *pAttr) {
 
 CDmAttribute *CFloatAttributeManipulator::GetAttribute() { return m_pAttr; }
 
-void CFloatAttributeManipulator::OnBeginManipulation(void) {
+void CFloatAttributeManipulator::OnBeginManipulation() {
   if (m_pAttr) {
     m_startingValue = m_pAttr->GetValue<float>();
   }
 }
 
-void CFloatAttributeManipulator::OnAcceptManipulation(void) {}
+void CFloatAttributeManipulator::OnAcceptManipulation() {}
 
-void CFloatAttributeManipulator::OnCancelManipulation(void) {
+void CFloatAttributeManipulator::OnCancelManipulation() {
   if (m_pAttr) {
     m_pAttr->SetValue(m_startingValue);
   }
 }
 
-void CFloatAttributeManipulator::OnTick(void) {}
+void CFloatAttributeManipulator::OnTick() {}
 
 void CFloatAttributeManipulator::OnCursorMoved(int x, int y) {
   //	int dy = y - m_lasty;
@@ -120,7 +120,7 @@ void CTransformManipulator::SetTransform(CDmeTransform *transform) {
   m_pTransform = transform;
 }
 
-CDmeTransform *CTransformManipulator::GetTransform(void) {
+CDmeTransform *CTransformManipulator::GetTransform() {
   return m_pTransform;
 }
 
@@ -145,7 +145,7 @@ CPotteryWheelManip::CPotteryWheelManip(CDmeTransform *transform)
       m_flSpin(0.0f),
       m_bSpin(false) {}
 
-void CPotteryWheelManip::OnBeginManipulation(void) {
+void CPotteryWheelManip::OnBeginManipulation() {
   m_prevZoom = m_zoom;
   m_prevAltitude = m_altitude;
   m_prevAzimuth = m_azimuth;
@@ -157,12 +157,12 @@ void CPotteryWheelManip::OnBeginManipulation(void) {
 // Sets the zoom level
 void CPotteryWheelManip::SetZoom(float flZoom) { m_prevZoom = m_zoom = flZoom; }
 
-void CPotteryWheelManip::OnAcceptManipulation(void) {
+void CPotteryWheelManip::OnAcceptManipulation() {
   m_flSpin = 0.0f;
   m_bSpin = false;
 }
 
-void CPotteryWheelManip::OnCancelManipulation(void) {
+void CPotteryWheelManip::OnCancelManipulation() {
   m_zoom = m_prevZoom;
   m_altitude = m_prevAltitude;
   m_azimuth = m_prevAzimuth;
@@ -171,7 +171,7 @@ void CPotteryWheelManip::OnCancelManipulation(void) {
   UpdateTransform();
 }
 
-void CPotteryWheelManip::OnTick(void) {
+void CPotteryWheelManip::OnTick() {
   float dt = UpdateTime(m_flLastTickTime);
 
   if (m_bSpin) {
@@ -274,23 +274,23 @@ CTranslationManip::CTranslationManip(CDmeTransform *transform,
 
 void CTranslationManip::SetCamera(CDmeCamera *camera) { m_pCamera = camera; }
 
-CDmeCamera *CTranslationManip::GetCamera(void) { return m_pCamera; }
+CDmeCamera *CTranslationManip::GetCamera() { return m_pCamera; }
 
-void CTranslationManip::OnBeginManipulation(void) {
+void CTranslationManip::OnBeginManipulation() {
   if (!m_pTransform) return;
 
   m_prevOffset = m_pTransform->GetValue<Vector>("position");
   m_offset = m_prevOffset;
 }
 
-void CTranslationManip::OnAcceptManipulation(void) {}
+void CTranslationManip::OnAcceptManipulation() {}
 
-void CTranslationManip::OnCancelManipulation(void) {
+void CTranslationManip::OnCancelManipulation() {
   m_offset = m_prevOffset;
   UpdateTransform();
 }
 
-void CTranslationManip::OnTick(void) {}
+void CTranslationManip::OnTick() {}
 
 void CTranslationManip::OnCursorMoved(int x, int y) {
   int dy = y - m_lasty;

@@ -522,8 +522,7 @@ void CSimplePotteryWheelPanel::Paint() {
 
     CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
     int nLightCount = m_Lights.Count();
-    LightDesc_t *pDesc =
-        (LightDesc_t *)stackalloc(nLightCount * sizeof(LightDesc_t));
+    LightDesc_t *pDesc = stack_alloc<LightDesc_t>(nLightCount);
     for (int i = 0; i < nLightCount; ++i) {
       if (m_Lights[i]->GetLightDesc(&pDesc[i])) {
         pRenderContext->SetLight(i, pDesc[i]);
