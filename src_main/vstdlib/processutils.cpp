@@ -98,8 +98,8 @@ void CProcessUtils::Shutdown() {
 
 // Returns the last error that occurred
 char *CProcessUtils::GetErrorString(char *pBuf, usize nBufLen) {
-  FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, pBuf,
-                nBufLen, NULL);
+  FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, GetLastError(), 0, pBuf,
+                nBufLen, nullptr);
   char *p = strchr(pBuf, '\r');  // get rid of \r\n
   if (p) {
     p[0] = 0;
@@ -118,8 +118,8 @@ ProcessHandle_t CProcessUtils::CreateProcess(ProcessInfo_t &info,
   }
 
   PROCESS_INFORMATION pi;
-  if (::CreateProcess(NULL, info.m_CommandLine.Get(), NULL, NULL, TRUE,
-                      DETACHED_PROCESS, NULL, NULL, &si, &pi)) {
+  if (::CreateProcess(nullptr, info.m_CommandLine.Get(), nullptr, nullptr, TRUE,
+                      DETACHED_PROCESS, nullptr, nullptr, &si, &pi)) {
     info.m_hProcess = pi.hProcess;
     m_hCurrentProcess = m_Processes.AddToTail(info);
     return m_hCurrentProcess;
@@ -159,7 +159,7 @@ ProcessHandle_t CProcessUtils::StartProcess(const char *pCommandLine,
   SECURITY_ATTRIBUTES saAttr{sizeof(SECURITY_ATTRIBUTES)};
   // Set the bInheritHandle flag so pipe handles are inherited.
   saAttr.bInheritHandle = TRUE;
-  saAttr.lpSecurityDescriptor = NULL;
+  saAttr.lpSecurityDescriptor = nullptr;
 
   // Create a pipe for the child's STDOUT.
   if (CreatePipe(&info.m_hChildStdoutRd, &info.m_hChildStdoutWr, &saAttr, 0)) {
@@ -253,7 +253,8 @@ int CProcessUtils::GetActualProcessOutputSize(ProcessHandle_t hProcess) {
   if (info.m_hChildStdoutRd == INVALID_HANDLE_VALUE) return 0;
 
   DWORD dwCount = 0;
-  if (!PeekNamedPipe(info.m_hChildStdoutRd, NULL, NULL, NULL, &dwCount, NULL)) {
+  if (!PeekNamedPipe(info.m_hChildStdoutRd, nullptr, 0, nullptr, &dwCount,
+                     nullptr)) {
     char buf[512];
     Warning(
         "Could not read from pipe associated with command %s\n"
@@ -262,7 +263,7 @@ int CProcessUtils::GetActualProcessOutputSize(ProcessHandle_t hProcess) {
     return 0;
   }
 
-  // Add 1 for auto-NULL termination
+  // Add 1 for auto-nullptr termination
   return (dwCount > 0) ? (int)dwCount + 1 : 0;
 }
 
@@ -277,7 +278,8 @@ int CProcessUtils::GetActualProcessOutput(ProcessHandle_t hProcess, char *pBuf,
   // TODO(d.rattman): Is there a way of making pipes be text mode so we don't
   // get /n/rs back?
   char *pTempBuf = (char *)_alloca(nBufLen);
-  if (!PeekNamedPipe(info.m_hChildStdoutRd, NULL, NULL, NULL, &dwCount, NULL)) {
+  if (!PeekNamedPipe(info.m_hChildStdoutRd, nullptr, 0, nullptr, &dwCount,
+                     nullptr)) {
     char buf[512];
     Warning(
         "Could not read from pipe associated with command %s\n"
@@ -287,7 +289,7 @@ int CProcessUtils::GetActualProcessOutput(ProcessHandle_t hProcess, char *pBuf,
   }
 
   dwCount = std::min(dwCount, (DWORD)nBufLen - 1);
-  ReadFile(info.m_hChildStdoutRd, pTempBuf, dwCount, &dwRead, NULL);
+  ReadFile(info.m_hChildStdoutRd, pTempBuf, dwCount, &dwRead, nullptr);
 
   // Convert /n/r -> /n
   int nActualCountRead = 0;
@@ -337,7 +339,7 @@ int CProcessUtils::GetProcessOutput(ProcessHandle_t hProcess, char *pBuf,
     if (nBufLen <= 1) return nBytesRead;
   }
 
-  // Auto-NULL terminate
+  // Auto-nullptr terminate
   int nActualCountRead = GetActualProcessOutput(hProcess, pBuf, nBufLen);
   pBuf[nActualCountRead] = 0;
   return nActualCountRead + nBytesRead + 1;

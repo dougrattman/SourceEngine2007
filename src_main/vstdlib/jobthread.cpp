@@ -53,7 +53,7 @@ class alignas(16) CJobQueue {
         return pOverflowJob;
       }
     }
-    return NULL;
+    return nullptr;
   }
 
   int Push(CJob *pJob, int iThread = -1) {
@@ -61,7 +61,7 @@ class alignas(16) CJobQueue {
 
     CJob *pOverflowJob;
     int nOverflow = 0;
-    while ((pOverflowJob = PrePush()) != NULL) {
+    while ((pOverflowJob = PrePush()) != nullptr) {
       ServiceJobAndRelease(pJob);
       nOverflow++;
     }
@@ -81,7 +81,7 @@ class alignas(16) CJobQueue {
     m_mutex.Lock();
     if (!m_nItems) {
       m_mutex.Unlock();
-      *ppJob = NULL;
+      *ppJob = nullptr;
       return false;
     }
     if (--m_nItems == 0) {
@@ -96,7 +96,7 @@ class alignas(16) CJobQueue {
     }
 
     AssertMsg(0, "Expected at least one queue item");
-    *ppJob = NULL;
+    *ppJob = nullptr;
     return false;
   }
 
@@ -140,12 +140,12 @@ class CThreadPool : public CRefCounted1<IThreadPool, CRefCountServiceMT> {
   // Thread functions
   bool Start(
       const ThreadPoolStartParams_t &startParams = ThreadPoolStartParams_t()) {
-    return Start(startParams, NULL);
+    return Start(startParams, nullptr);
   }
   bool Start(const ThreadPoolStartParams_t &startParams,
              const char *pszNameOverride);
   bool Stop(int timeout = TT_INFINITE);
-  void Distribute(bool bDistribute = true, int *pAffinityTable = NULL);
+  void Distribute(bool bDistribute = true, int *pAffinityTable = nullptr);
 
   // Functions for any thread
   unsigned GetJobCount() { return m_nJobs; }
@@ -168,15 +168,16 @@ class CThreadPool : public CRefCounted1<IThreadPool, CRefCountServiceMT> {
   void InsertJobInQueue(CJob *);
 
   // Add an function object to the queue (master thread)
-  void AddFunctorInternal(CFunctor *, CJob ** = NULL,
-                          const char *pszDescription = NULL,
+  void AddFunctorInternal(CFunctor *, CJob ** = nullptr,
+                          const char *pszDescription = nullptr,
                           unsigned flags = 0);
 
   // Remove a job from the queue (master thread)
   virtual void ChangePriority(CJob *p, JobPriority_t priority);
 
   // Bulk job manipulation (blocking)
-  int ExecuteToPriority(JobPriority_t toPriority, JobFilter_t pfnFilter = NULL);
+  int ExecuteToPriority(JobPriority_t toPriority,
+                        JobFilter_t pfnFilter = nullptr);
   int AbortAll();
 
   virtual void Reserved1() {}
@@ -714,7 +715,7 @@ bool CThreadPool::Start(const ThreadPoolStartParams_t &startParams,
 
   Distribute(bDistribute, startParams.bUseAffinityTable
                               ? (int *)startParams.iAffinityTable
-                              : NULL);
+                              : nullptr);
 
   return true;
 }
@@ -796,7 +797,7 @@ CJob *CThreadPool::GetDummyJob() {
 
 #elif defined(OS_POSIX)
 
-IThreadPool *g_pThreadPool = NULL;
+IThreadPool *g_pThreadPool = nullptr;
 
 JOB_INTERFACE IThreadPool *CreateThreadPool() {
   // No threadpool implementation on Linux yet. We -should- be able to use 99%
@@ -805,7 +806,7 @@ JOB_INTERFACE IThreadPool *CreateThreadPool() {
   // WaitForMultipleObjects, which we don't (YET) have an equivalent for in
   // threadtools.h.
   Assert(false);
-  return NULL;
+  return nullptr;
 }
 
 JOB_INTERFACE void DestroyThreadPool(IThreadPool *pPool) {}

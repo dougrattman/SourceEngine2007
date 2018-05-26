@@ -2,4 +2,4 @@
 
 #include "base/include/windows/product_version.h"
 
-#define HALFLIFE_VER_FILEDESCRIPTION_STR "Awesome standart platform library"
+#define HALFLIFE_VER_FILEDESCRIPTION_STR "Awesome basic facilities library"

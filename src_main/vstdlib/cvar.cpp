@@ -381,7 +381,7 @@ ConCommand *CCvar::FindCommand(const char *pCommandName) {
 
 const char *CCvar::GetCommandLineValue(const char *pVariableName) {
   int nLen = Q_strlen(pVariableName);
-  char *pSearch = (char *)stackalloc(nLen + 2);
+  char *pSearch = stack_alloc<char>(nLen + 2);
   pSearch[0] = '+';
   memcpy(&pSearch[1], pVariableName, nLen + 1);
   return CommandLine()->ParmValue(pSearch);
@@ -389,7 +389,7 @@ const char *CCvar::GetCommandLineValue(const char *pVariableName) {
 
 ConCommandBase *CCvar::GetCommands() { return m_pConCommandList; }
 
-const ConCommandBase *CCvar::GetCommands(void) const {
+const ConCommandBase *CCvar::GetCommands() const {
   return m_pConCommandList;
 }
 
