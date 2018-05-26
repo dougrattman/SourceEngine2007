@@ -17,6 +17,7 @@
 #include "FileSystem.h"
 #include "SteamBootStrapper.h"
 #include "VPanel.h"
+#include "base/include/chrono.h"
 #include "base/include/compiler_specific.h"
 #include "base/include/windows/scoped_com_initializer.h"
 #include "bitmap.h"
@@ -313,13 +314,13 @@ class CWin32Surface : public ISurface {
 
   virtual IImage *GetIconImageForFullPath(char const *pFullPath);
 
-  virtual const char *GetResolutionKey(void) const {
+  virtual const char *GetResolutionKey() const {
     Assert(0);
     return NULL;
   }
 
  private:
-  CUtlDict<IImage *, unsigned short> m_FileTypeImages;
+  CUtlDict<IImage *, u16> m_FileTypeImages;
 
   enum { BASE_HEIGHT = 480, BASE_WIDTH = 640 };
 
@@ -391,27 +392,16 @@ static LRESULT CALLBACK staticProc(HWND hwnd, UINT msg, WPARAM wparam,
 static void staticNotifyIconProc(HWND hwnd, WPARAM wparam, LPARAM lparam);
 
 #ifdef DEBUG_TIMING
+#define START_TIMER()                                  \
+  f64 paintTime;                                       \
+  source::chrono::HpetTimer::TimeIt(paintTime, [=]() { \
 
-#define START_TIMER()                           \
-  float paintTime;                              \
-  static LARGE_INTEGER ticksPerSecond = {0};    \
-  if (!ticksPerSecond.QuadPart) {               \
-    QueryPerformanceFrequency(&ticksPerSecond); \
-  }                                             \
-  LARGE_INTEGER Start, end;                     \
-  QueryPerformanceCounter(&Start);
-
-#define END_TIMER(x)                                                \
-  QueryPerformanceCounter(&end);                                    \
-  paintTime = (float)(((end.QuadPart - Start.QuadPart) * 1000000) / \
-                      ticksPerSecond.QuadPart) /                    \
-              1000;                                                 \
-  if (paintTime > 1.0f) Msg(x, paintTime);
-
+#define END_TIMER(x)                                   \
+  });                                                  \
+  if (paintTime > 0.001f) Msg(x, paintTime * 1000.0f);
 #else
 #define START_TIMER()
 #define END_TIMER(x)
-
 #endif  // DEBUG_TIMING
 
 //-----------------------------------------------------------------------------
@@ -746,7 +736,7 @@ void CWin32Surface::DrawTexturedPolygon(int n, Vertex_t *pVertices) {
 
 const wchar_t *CWin32Surface::GetTitle(VPANEL panel) { return L""; }
 void CWin32Surface::LockCursor(bool state) {}
-bool CWin32Surface::IsCursorLocked(void) const { return false; }
+bool CWin32Surface::IsCursorLocked() const { return false; }
 void CWin32Surface::SetWorkspaceInsets(int left, int top, int right,
                                        int bottom) {}
 //-----------------------------------------------------------------------------
@@ -833,13 +823,13 @@ void CWin32Surface::PushMakeCurrent(VPANEL panel, bool useInsets) {
 
   SetCurrentContextPanel(currentContextPanel);
 
-  // clear the current active font so that it will be reset
-  m_pActiveFont = NULL;
-
   if (!currentContextPanel) {
     // no drawing context found, something is seriously wrong
     Msg("Warning: VPanel with no drawing context\n");
   }
+
+  // clear the current active font so that it will be reset
+  m_pActiveFont = NULL;  
 
   int inset[4];
 
@@ -1420,9 +1410,9 @@ void CWin32Surface::DrawGetTextureSize(int id, int &wide, int &tall) {
 #pragma pack(1)
 typedef struct {
   unsigned char id_length, colormap_type, image_type;
-  unsigned short colormap_index, colormap_length;
+  u16 colormap_index, colormap_length;
   unsigned char colormap_size;
-  unsigned short x_origin, y_origin, width, height;
+  u16 x_origin, y_origin, width, height;
   unsigned char pixel_size, attributes;
 } tga_header_t;
 #pragma pack()
@@ -2200,11 +2190,11 @@ void CWin32Surface::SwapBuffers(VPANEL panel) {
     // reset origin and clipping then blit
     ::SetRectRgn(plat->clipRgn, 0, 0, wide, tall);
     ::SelectObject(plat->hdc, plat->clipRgn);
-    ::SetViewportOrgEx(plat->hdc, 0, 0, NULL);
+    ::SetViewportOrgEx(plat->hdc, 0, 0, nullptr);
     ::BitBlt(plat->hwndDC, 0, 0, wide, tall, plat->hdc, 0, 0, SRCCOPY);
 
     ::ReleaseDC(plat->hwnd, plat->hwndDC);
-    plat->hwndDC = NULL;
+    plat->hwndDC = nullptr;
 
     END_TIMER("SwapBuffers time: %.2fms\n");
   }
@@ -2896,7 +2886,7 @@ IImage *CWin32Surface::GetIconImageForFullPath(char const *pFullPath) {
                  ShouldMakeUnique(ext) ? pFullPath : info.szTypeName);
 
       // Now check the dictionary
-      unsigned short idx = m_FileTypeImages.Find(lookup);
+      u16 idx = m_FileTypeImages.Find(lookup);
       if (idx == m_FileTypeImages.InvalidIndex()) {
         newIcon = new CIconImage(info.hIcon);
         idx = m_FileTypeImages.Insert(lookup, newIcon);

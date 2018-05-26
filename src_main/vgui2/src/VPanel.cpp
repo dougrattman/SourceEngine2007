@@ -356,7 +356,7 @@ int VPanel::GetZPos() { return _zpos; }
 //-----------------------------------------------------------------------------
 // Purpose: Moves the panel to the front of the z-order
 //-----------------------------------------------------------------------------
-void VPanel::MoveToFront(void) {
+void VPanel::MoveToFront() {
   g_pSurface->MovePopupToFront((VPANEL)this);
 
   if (_parent) {

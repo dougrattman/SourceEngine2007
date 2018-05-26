@@ -83,8 +83,8 @@ class CScheme : public IScheme {
   struct fontalias_t {
     CUtlSymbol _fontName;
     CUtlSymbol _trueFontName;
-    unsigned short _font : 15;
-    unsigned short m_bProportional : 1;
+    u16 _font : 15;
+    u16 m_bProportional : 1;
   };
 #pragma pack()
   friend fontalias_t;
@@ -531,7 +531,7 @@ void CScheme::LoadFromFile(VPANEL sizingPanel, const char *inFilename,
   }
 
   // translate format from goldsrc scheme to new scheme
-  for (int i = 0; i < SOURCE_ARRAYSIZE(g_SchemeTranslation); i++) {
+  for (usize i = 0; i < std::size(g_SchemeTranslation); i++) {
     if (!m_pkvBaseSettings->FindKey(g_SchemeTranslation[i].pchNewEntry,
                                     false)) {
       const char *pchColor;

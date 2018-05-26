@@ -1611,7 +1611,7 @@ enum LANGFLAG {
 
 struct LanguageIds {
   // char const			*idname;
-  unsigned short id;
+  u16 id;
   int languageflag;
   wchar_t const *shortcode;
   wchar_t const *displayname;
@@ -1789,7 +1789,7 @@ LanguageIds g_LanguageIds[] = {
     {0x0452, UNKNOWN, L"", L"Welsh (United Kingdom)"},
 };
 
-static LanguageIds *GetLanguageInfo(unsigned short id) {
+static LanguageIds *GetLanguageInfo(u16 id) {
   for (int j = 0; j < sizeof(g_LanguageIds) / sizeof(g_LanguageIds[0]); ++j) {
     if (g_LanguageIds[j].id == id) {
       return &g_LanguageIds[j];
@@ -1801,7 +1801,7 @@ static LanguageIds *GetLanguageInfo(unsigned short id) {
 
 /////////////////////////////////////////////////////////////////////////////
 // CIMEDlg message handlers
-static bool IsIDInList(unsigned short id, int count, HKL *list) {
+static bool IsIDInList(u16 id, int count, HKL *list) {
   for (int i = 0; i < count; ++i) {
     if (LOWORD(list[i]) == id) {
       return true;
@@ -1810,7 +1810,7 @@ static bool IsIDInList(unsigned short id, int count, HKL *list) {
   return false;
 }
 
-static const wchar_t *GetLanguageName(unsigned short id) {
+static const wchar_t *GetLanguageName(u16 id) {
   wchar_t const *name = L"???";
   for (int j = 0; j < sizeof(g_LanguageIds) / sizeof(g_LanguageIds[0]); ++j) {
     if (g_LanguageIds[j].id == id) {
@@ -1847,7 +1847,7 @@ static void SpewIMEInfo(int langid) {
   if (info) {
     wchar_t const *name = info->shortcode ? info->shortcode : L"???";
     wchar_t outstr[512];
-    _snwprintf_s(outstr, SOURCE_ARRAYSIZE(outstr),
+    _snwprintf_s(outstr, std::size(outstr),
                  L"IME language changed to:  %s", name);
     OutputDebugStringW(outstr);
     OutputDebugStringW(L"\n");

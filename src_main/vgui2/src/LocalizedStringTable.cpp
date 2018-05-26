@@ -532,7 +532,7 @@ bool CLocalizedStringTable::SaveToFile(const char *szFileName) {
   CUtlSymbol fileName = szFileName;
 
   // write litte-endian unicode marker
-  unsigned short marker = 0xFEFF;
+  u16 marker = 0xFEFF;
   marker = LittleShort(marker);
   g_pFullFileSystem->Write(&marker, sizeof(marker), file);
 
