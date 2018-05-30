@@ -34,7 +34,7 @@ class GDclass {
   //
   // Interface to class information:
   //
-  inline const char *GetName(void) { return (m_szName); }
+  inline const char *GetName() { return (m_szName); }
   inline const char *GetDescription(void);
 
   //
@@ -45,7 +45,7 @@ class GDclass {
   //
   // Interface to variable information (keys):
   //
-  inline int GetVariableCount(void) { return (m_nVariables); }
+  inline int GetVariableCount() { return (m_nVariables); }
   GDinputvariable *GetVariableAt(int iIndex);
   void GetHelperForGDVar(GDinputvariable *pVar,
                          CUtlVector<const char *> *helperName);
@@ -58,7 +58,7 @@ class GDclass {
   //
   inline void AddInput(CClassInput *pInput);
   CClassInput *FindInput(const char *szName);
-  inline int GetInputCount(void) { return (m_Inputs.Count()); }
+  inline int GetInputCount() { return (m_Inputs.Count()); }
   CClassInput *GetInput(int nIndex);
 
   //
@@ -66,7 +66,7 @@ class GDclass {
   //
   inline void AddOutput(CClassOutput *pOutput);
   CClassOutput *FindOutput(const char *szName);
-  inline int GetOutputCount(void) { return (m_Outputs.Count()); }
+  inline int GetOutputCount() { return (m_Outputs.Count()); }
   CClassOutput *GetOutput(int nIndex);
 
   GameData *Parent;
@@ -75,13 +75,13 @@ class GDclass {
   // Interface to class attributes:
   //
   inline bool IsClass(const char *pszClass);
-  inline bool IsSolidClass(void) { return (m_bSolid); }
-  inline bool IsBaseClass(void) { return (m_bBase); }
-  inline bool IsMoveClass(void) { return (m_bMove); }
-  inline bool IsKeyFrameClass(void) { return (m_bKeyFrame); }
-  inline bool IsPointClass(void) { return (m_bPoint); }
-  inline bool IsNPCClass(void) { return (m_bNPC); }
-  inline bool IsFilterClass(void) { return (m_bFilter); }
+  inline bool IsSolidClass() { return (m_bSolid); }
+  inline bool IsBaseClass() { return (m_bBase); }
+  inline bool IsMoveClass() { return (m_bMove); }
+  inline bool IsKeyFrameClass() { return (m_bKeyFrame); }
+  inline bool IsPointClass() { return (m_bPoint); }
+  inline bool IsNPCClass() { return (m_bNPC); }
+  inline bool IsFilterClass() { return (m_bFilter); }
   inline bool IsNodeClass(void);
   static inline bool IsNodeClass(const char *pszClassName);
 
@@ -95,8 +95,8 @@ class GDclass {
   inline void SetMoveClass(bool bMove) { m_bMove = bMove; }
   inline void SetKeyFrameClass(bool bKeyFrame) { m_bKeyFrame = bKeyFrame; }
 
-  inline const Vector &GetMins(void) { return (m_bmins); }
-  inline const Vector &GetMaxs(void) { return (m_bmaxs); }
+  inline const Vector &GetMins() { return (m_bmins); }
+  inline const Vector &GetMaxs() { return (m_bmaxs); }
 
   BOOL GetBoundBox(Vector &pfMins, Vector &pfMaxs);
   bool HasBoundBox() const { return m_bGotSize; }
@@ -107,7 +107,7 @@ class GDclass {
   // Interface to helper information:
   //
   inline void AddHelper(CHelperInfo *pHelper);
-  inline int GetHelperCount(void) { return (m_Helpers.Count()); }
+  inline int GetHelperCount() { return (m_Helpers.Count()); }
   CHelperInfo *GetHelper(int nIndex);
 
  protected:
@@ -191,13 +191,13 @@ inline void GDclass::AddHelper(CHelperInfo *pHelper) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns the render color of this entity class.
 //-----------------------------------------------------------------------------
-color32 GDclass::GetColor(void) { return m_rgbColor; }
+color32 GDclass::GetColor() { return m_rgbColor; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns a description of this entity class, or the entity class name
 //			if no description exists.
 //-----------------------------------------------------------------------------
-const char *GDclass::GetDescription(void) {
+const char *GDclass::GetDescription() {
   if (m_pszDescription == NULL) {
     return (m_szName);
   }
@@ -229,6 +229,6 @@ bool GDclass::IsNodeClass(const char *pszClassName) {
 // HACK: if this is necessary, we should have a new @NodeClass FGD specifier (or
 // something)
 //-----------------------------------------------------------------------------
-bool GDclass::IsNodeClass(void) { return (IsNodeClass(m_szName)); }
+bool GDclass::IsNodeClass() { return (IsNodeClass(m_szName)); }
 
 #endif  // GDCLASS_H

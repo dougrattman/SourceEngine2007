@@ -186,7 +186,7 @@ struct truncatedcone_t {
 
 the_interface IPhysicsCollision {
  public:
-  virtual ~IPhysicsCollision(void) {}
+  virtual ~IPhysicsCollision() {}
 
   // produce a convex element from verts (convex hull around verts)
   virtual CPhysConvex *ConvexFromVerts(Vector * *pVerts, int vertCount) = 0;
@@ -481,7 +481,7 @@ struct hlshadowcontrol_params_t {
 // hlshadowcontrol_params_t. All of the infrastructure is in place to do that.
 the_interface IPhysicsShadowController {
  public:
-  virtual ~IPhysicsShadowController(void) {}
+  virtual ~IPhysicsShadowController() {}
 
   virtual void Update(const Vector &position, const QAngle &angles,
                       float timeOffset) = 0;
@@ -537,7 +537,7 @@ class IMotionEvent {
 
 the_interface IPhysicsMotionController {
  public:
-  virtual ~IPhysicsMotionController(void) {}
+  virtual ~IPhysicsMotionController() {}
   virtual void SetEventHandler(IMotionEvent * handler) = 0;
   virtual void AttachObject(IPhysicsObject * pObject,
                             bool checkIfAlreadyAttached) = 0;
@@ -603,7 +603,7 @@ the_interface IPhysicsTraceFilter {
 
 the_interface IPhysicsEnvironment {
  public:
-  virtual ~IPhysicsEnvironment(void) {}
+  virtual ~IPhysicsEnvironment() {}
 
   virtual void SetDebugOverlay(CreateInterfaceFn debugOverlayFactory) = 0;
   virtual IVPhysicsDebugOverlay *GetDebugOverlay(void) = 0;
@@ -818,7 +818,7 @@ enum callbackflags {
 
 the_interface IPhysicsObject {
  public:
-  virtual ~IPhysicsObject(void) {}
+  virtual ~IPhysicsObject() {}
 
   // returns true if this object is static/unmoveable
   // NOTE: returns false for objects that are not created static, but set
@@ -852,15 +852,15 @@ the_interface IPhysicsObject {
   virtual void SetGameData(void *pGameData) = 0;
   virtual void *GetGameData(void) const = 0;
   // This flags word can be defined by the game as well
-  virtual void SetGameFlags(unsigned short userFlags) = 0;
-  virtual unsigned short GetGameFlags(void) const = 0;
-  virtual void SetGameIndex(unsigned short gameIndex) = 0;
-  virtual unsigned short GetGameIndex(void) const = 0;
+  virtual void SetGameFlags(u16 userFlags) = 0;
+  virtual u16 GetGameFlags(void) const = 0;
+  virtual void SetGameIndex(u16 gameIndex) = 0;
+  virtual u16 GetGameIndex(void) const = 0;
 
   // setup various callbacks for this object
-  virtual void SetCallbackFlags(unsigned short callbackflags) = 0;
+  virtual void SetCallbackFlags(u16 callbackflags) = 0;
   // get the current callback state for this object
-  virtual unsigned short GetCallbackFlags(void) const = 0;
+  virtual u16 GetCallbackFlags(void) const = 0;
 
   // "wakes up" an object
   // NOTE: ALL OBJECTS ARE "Asleep" WHEN CREATED
@@ -1026,7 +1026,7 @@ the_interface IPhysicsObject {
 
 the_interface IPhysicsSpring {
  public:
-  virtual ~IPhysicsSpring(void) {}
+  virtual ~IPhysicsSpring() {}
   virtual void GetEndpoints(Vector * worldPositionStart,
                             Vector * worldPositionEnd) = 0;
   virtual void SetSpringConstant(float flSpringContant) = 0;
@@ -1075,20 +1075,20 @@ struct surfaceaudioparams_t {
 };
 
 struct surfacesoundnames_t {
-  unsigned short stepleft;
-  unsigned short stepright;
+  u16 stepleft;
+  u16 stepright;
 
-  unsigned short impactSoft;
-  unsigned short impactHard;
+  u16 impactSoft;
+  u16 impactHard;
 
-  unsigned short scrapeSmooth;
-  unsigned short scrapeRough;
+  u16 scrapeSmooth;
+  u16 scrapeRough;
 
-  unsigned short bulletImpact;
-  unsigned short rolling;
+  u16 bulletImpact;
+  u16 rolling;
 
-  unsigned short breakSound;
-  unsigned short strainSound;
+  u16 breakSound;
+  u16 strainSound;
 };
 
 struct surfacesoundhandles_t {
@@ -1115,7 +1115,7 @@ struct surfacegameprops_t {
   float jumpFactor;  // Indicates how much higher the player should jump when on
                      // the surface
                      // Game-specific data
-  unsigned short material;
+  u16 material;
   // Indicates whether or not the player is on a ladder.
   unsigned char climbable;
   unsigned char pad;
@@ -1136,7 +1136,7 @@ struct surfacedata_t {
 #define VPHYSICS_SURFACEPROPS_INTERFACE_VERSION "VPhysicsSurfaceProps001"
 the_interface IPhysicsSurfaceProps {
  public:
-  virtual ~IPhysicsSurfaceProps(void) {}
+  virtual ~IPhysicsSurfaceProps() {}
 
   // parses a text file containing surface prop keys
   virtual int ParseSurfaceData(const char *pFilename,
@@ -1150,7 +1150,7 @@ the_interface IPhysicsSurfaceProps {
                                     float *elasticity) const = 0;
 
   virtual surfacedata_t *GetSurfaceData(int surfaceDataIndex) = 0;
-  virtual const char *GetString(unsigned short stringTableIndex) const = 0;
+  virtual const char *GetString(u16 stringTableIndex) const = 0;
 
   virtual const char *GetPropName(int surfaceDataIndex) const = 0;
 
@@ -1165,7 +1165,7 @@ the_interface IPhysicsSurfaceProps {
 
 the_interface IPhysicsFluidController {
  public:
-  virtual ~IPhysicsFluidController(void) {}
+  virtual ~IPhysicsFluidController() {}
 
   virtual void SetGameData(void *pGameData) = 0;
   virtual void *GetGameData(void) const = 0;

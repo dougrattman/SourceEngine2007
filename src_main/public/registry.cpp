@@ -71,7 +71,7 @@ IRegistry *registry = &g_Registry;
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CRegistry::CRegistry(void) {
+CRegistry::CRegistry() {
   // Assume failure
   m_bValid = false;
   m_hKey = 0;
@@ -80,7 +80,7 @@ CRegistry::CRegistry(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CRegistry::~CRegistry(void) {}
+CRegistry::~CRegistry() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Read integer from registry
@@ -279,7 +279,7 @@ bool CRegistry::Init(const char *platformName) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CRegistry::Shutdown(void) {
+void CRegistry::Shutdown() {
   if (!m_bValid) return;
 
   // Make invalid

@@ -30,7 +30,7 @@ struct BoxDeformation_t : DeformationBase_t {
   Vector m_ClampMaxes;
   float m_flPad3;
 
-  SOURCE_FORCEINLINE BoxDeformation_t(void) {  //-V730
+  SOURCE_FORCEINLINE BoxDeformation_t() {  //-V730
     m_eType = DEFORMATION_CLAMP_TO_BOX_IN_WORLDSPACE;
     // invalid cube
     m_SourceMins.Init(0, 0, 0);

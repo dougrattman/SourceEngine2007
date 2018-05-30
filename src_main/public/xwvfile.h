@@ -30,12 +30,12 @@ struct xwvHeader_t {
   unsigned int dataSize;           // length of samples in bytes
   unsigned int numDecodedSamples;  // for duration calcs
   int loopStart;                   // -1 = no loop, offset of loop in samples
-  unsigned short loopBlock;        // the xma block where the loop starts
-  unsigned short numLeadingSamples;   // number of leading samples in the loop
+  u16 loopBlock;        // the xma block where the loop starts
+  u16 numLeadingSamples;   // number of leading samples in the loop
                                       // block to discard
-  unsigned short numTrailingSamples;  // number of trailing samples at the final
+  u16 numTrailingSamples;  // number of trailing samples at the final
                                       // block to discard
-  unsigned short vdatSize;            // follows seek table
+  u16 vdatSize;            // follows seek table
   uint8_t format;
   uint8_t bitsPerSample;
   uint8_t sampleRate;

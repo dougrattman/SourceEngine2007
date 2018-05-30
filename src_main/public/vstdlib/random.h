@@ -52,7 +52,7 @@ class VSTDLIB_CLASS CUniformRandomStream : public IUniformRandomStream {
 // A generator of gaussian distributed random numbers.
 class VSTDLIB_CLASS CGaussianRandomStream {
  public:
-  // Passing in NULL will cause the gaussian stream to use the
+  // Passing in nullptr will cause the gaussian stream to use the
   // installed global random number generator
   CGaussianRandomStream(IUniformRandomStream *stream = nullptr);
 

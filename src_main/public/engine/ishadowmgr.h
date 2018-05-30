@@ -6,15 +6,11 @@
 #include "mathlib/vmatrix.h"
 #include "tier1/interface.h"
 
-//-----------------------------------------------------------------------------
-// forward declarations
-//-----------------------------------------------------------------------------
-
 class IMaterial;
 class Vector;
 class Vector2D;
 struct model_t;
-typedef unsigned short ModelInstanceHandle_t;
+typedef u16 ModelInstanceHandle_t;
 class IClientRenderable;
 class ITexture;
 
@@ -43,7 +39,7 @@ enum ShadowFlags_t {
 //-----------------------------------------------------------------------------
 // This is a handle	to shadows, clients can create as many as they want
 //-----------------------------------------------------------------------------
-typedef unsigned short ShadowHandle_t;
+typedef u16 ShadowHandle_t;
 
 enum { SHADOW_HANDLE_INVALID = (ShadowHandle_t)~0 };
 

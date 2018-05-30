@@ -28,8 +28,8 @@ class CClassInputOutputBase {
   CClassInputOutputBase(const char *pszName, InputOutputType_t eType);
   virtual ~CClassInputOutputBase(void);
 
-  inline const char *GetName(void) { return (m_szName); }
-  InputOutputType_t GetType(void) { return (m_eType); }
+  inline const char *GetName() { return (m_szName); }
+  InputOutputType_t GetType() { return (m_eType); }
   const char *GetTypeText(void);
   inline const char *GetDescription(void);
 
@@ -55,7 +55,7 @@ class CClassInputOutputBase {
 //-----------------------------------------------------------------------------
 // Purpose: Returns this I/O's long description.
 //-----------------------------------------------------------------------------
-const char *CClassInputOutputBase::GetDescription(void) {
+const char *CClassInputOutputBase::GetDescription() {
   if (m_pszDescription != NULL) {
     return (m_pszDescription);
   }

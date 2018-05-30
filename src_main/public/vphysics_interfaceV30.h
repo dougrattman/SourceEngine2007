@@ -151,7 +151,7 @@ struct truncatedcone_t {
 
 the_interface IPhysicsCollision {
  public:
-  virtual ~IPhysicsCollision(void) {}
+  virtual ~IPhysicsCollision() {}
 
   // produce a convex element from verts (convex hull around verts)
   virtual CPhysConvex *ConvexFromVerts(Vector * *pVerts, int vertCount) = 0;
@@ -423,7 +423,7 @@ struct hlshadowcontrol_params_t {
 // hlshadowcontrol_params_t. All of the infrastructure is in place to do that.
 the_interface IPhysicsShadowController {
  public:
-  virtual ~IPhysicsShadowController(void) {}
+  virtual ~IPhysicsShadowController() {}
 
   virtual void Update(const Vector &position, const QAngle &angles,
                       float timeOffset) = 0;
@@ -471,7 +471,7 @@ class IMotionEvent {
 
 the_interface IPhysicsMotionController {
  public:
-  virtual ~IPhysicsMotionController(void) {}
+  virtual ~IPhysicsMotionController() {}
   virtual void SetEventHandler(IMotionEvent * handler) = 0;
   virtual void AttachObject(IPhysicsObject * pObject,
                             bool checkIfAlreadyAttached) = 0;
@@ -532,7 +532,7 @@ the_interface IPhysicsTraceFilter {
 
 the_interface IPhysicsEnvironment {
  public:
-  virtual ~IPhysicsEnvironment(void) {}
+  virtual ~IPhysicsEnvironment() {}
 
   virtual void SetDebugOverlay(CreateInterfaceFn debugOverlayFactory) = 0;
   virtual IVPhysicsDebugOverlay *GetDebugOverlay(void) = 0;
@@ -726,7 +726,7 @@ enum callbackflags {
 
 the_interface IPhysicsObject {
  public:
-  virtual ~IPhysicsObject(void) {}
+  virtual ~IPhysicsObject() {}
 
   // returns true if this object is static/unmoveable
   // NOTE: returns false for objects that are not created static, but set
@@ -930,7 +930,7 @@ the_interface IPhysicsObject {
 
 the_interface IPhysicsSpring {
  public:
-  virtual ~IPhysicsSpring(void) {}
+  virtual ~IPhysicsSpring() {}
   virtual void GetEndpoints(Vector * worldPositionStart,
                             Vector * worldPositionEnd) = 0;
   virtual void SetSpringConstant(float flSpringContant) = 0;
@@ -1022,7 +1022,7 @@ struct surfacedata_t {
 #define VPHYSICS_SURFACEPROPS_INTERFACE_VERSION_1 "VPhysicsSurfaceProps001"
 the_interface IPhysicsSurfaceProps {
  public:
-  virtual ~IPhysicsSurfaceProps(void) {}
+  virtual ~IPhysicsSurfaceProps() {}
 
   // parses a text file containing surface prop keys
   virtual int ParseSurfaceData(const char *pFilename,
@@ -1050,7 +1050,7 @@ the_interface IPhysicsSurfaceProps {
 
 the_interface IPhysicsFluidController {
  public:
-  virtual ~IPhysicsFluidController(void) {}
+  virtual ~IPhysicsFluidController() {}
 
   virtual void SetGameData(void *pGameData) = 0;
   virtual void *GetGameData(void) const = 0;

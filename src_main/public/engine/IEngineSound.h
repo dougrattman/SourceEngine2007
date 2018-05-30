@@ -12,9 +12,6 @@
 #include "tier1/interface.h"
 #include "tier1/utlvector.h"
 
-//-----------------------------------------------------------------------------
-// forward declaration
-//-----------------------------------------------------------------------------
 class Vector;
 
 // Handy defines for EmitSound
@@ -50,7 +47,7 @@ the_interface IEngineSound {
 
   // Just loads the file header and checks for duration (not hooked up for
   // .mp3's yet) Is accessible to server and client though
-  virtual float GetSoundDuration(const char *pSample) = 0;
+  virtual f32 GetSoundDuration(const char *pSample) = 0;
 
   // Pitch of 100 is no pitch shift.  Pitch > 100 up to 255 is a higher pitch,
   // pitch < 100 down to 1 is a lower pitch.   150 to 70 is the realistic range.
@@ -61,27 +58,27 @@ the_interface IEngineSound {
   // local player (client-side only)
   virtual void EmitSound(
       IRecipientFilter & filter, int iEntIndex, int iChannel,
-      const char *pSample, float flVolume, float flAttenuation, int iFlags = 0,
+      const char *pSample, f32 flVolume, f32 flAttenuation, int iFlags = 0,
       int iPitch = PITCH_NORM, const Vector *pOrigin = NULL,
       const Vector *pDirection = NULL,
       CUtlVector<Vector> *pUtlVecOrigins = NULL, bool bUpdatePositions = true,
-      float soundtime = 0.0f, int speakerentity = -1) = 0;
+      f32 soundtime = 0.0f, int speakerentity = -1) = 0;
 
   virtual void EmitSound(
       IRecipientFilter & filter, int iEntIndex, int iChannel,
-      const char *pSample, float flVolume, soundlevel_t iSoundlevel,
+      const char *pSample, f32 flVolume, soundlevel_t iSoundlevel,
       int iFlags = 0, int iPitch = PITCH_NORM, const Vector *pOrigin = NULL,
       const Vector *pDirection = NULL,
       CUtlVector<Vector> *pUtlVecOrigins = NULL, bool bUpdatePositions = true,
-      float soundtime = 0.0f, int speakerentity = -1) = 0;
+      f32 soundtime = 0.0f, int speakerentity = -1) = 0;
 
   virtual void EmitSentenceByIndex(
       IRecipientFilter & filter, int iEntIndex, int iChannel,
-      int iSentenceIndex, float flVolume, soundlevel_t iSoundlevel,
+      int iSentenceIndex, f32 flVolume, soundlevel_t iSoundlevel,
       int iFlags = 0, int iPitch = PITCH_NORM, const Vector *pOrigin = NULL,
       const Vector *pDirection = NULL,
       CUtlVector<Vector> *pUtlVecOrigins = NULL, bool bUpdatePositions = true,
-      float soundtime = 0.0f, int speakerentity = -1) = 0;
+      f32 soundtime = 0.0f, int speakerentity = -1) = 0;
 
   virtual void StopSound(int iEntIndex, int iChannel, const char *pSample) = 0;
 
@@ -97,21 +94,20 @@ the_interface IEngineSound {
 
   // emit an "ambient" sound that isn't spatialized
   // only available on the client, assert on server
-  virtual void EmitAmbientSound(const char *pSample, float flVolume,
+  virtual void EmitAmbientSound(const char *pSample, f32 flVolume,
                                 int iPitch = PITCH_NORM, int flags = 0,
-                                float soundtime = 0.0f) = 0;
+                                f32 soundtime = 0.0f) = 0;
 
   //	virtual EntChannel_t	CreateEntChannel() = 0;
 
-  virtual float GetDistGainFromSoundLevel(soundlevel_t soundlevel,
-                                          float dist) = 0;
+  virtual f32 GetDistGainFromSoundLevel(soundlevel_t soundlevel, f32 dist) = 0;
 
   // Client .dll only functions
   virtual int GetGuidForLastSoundEmitted() = 0;
   virtual bool IsSoundStillPlaying(int guid) = 0;
   virtual void StopSoundByGuid(int guid) = 0;
   // Set's master volume (0.0->1.0)
-  virtual void SetVolumeByGuid(int guid, float fvol) = 0;
+  virtual void SetVolumeByGuid(int guid, f32 fvol) = 0;
 
   // Retrieves list of all active sounds
   virtual void GetActiveSounds(CUtlVector<SndInfo_t> & sndlist) = 0;

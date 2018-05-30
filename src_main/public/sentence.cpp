@@ -58,7 +58,7 @@ unsigned int CWordTag::GetEndByte() const { return 0; }
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CWordTag::CWordTag(void) {
+CWordTag::CWordTag() {
   m_pszWord = NULL;
 
   SetStartAndEndBytes(0, 0);
@@ -110,7 +110,7 @@ CWordTag::CWordTag(const char *word) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CWordTag::~CWordTag(void) {
+CWordTag::~CWordTag() {
   delete[] m_pszWord;
 
   while (m_Phonemes.Size() > 0) {
@@ -193,7 +193,7 @@ CBasePhonemeTag::CBasePhonemeTag(const CBasePhonemeTag &from) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CPhonemeTag::CPhonemeTag(void) {
+CPhonemeTag::CPhonemeTag() {
   m_szPhoneme = NULL;
 
   SetStartAndEndBytes(0, 0);
@@ -235,7 +235,7 @@ CPhonemeTag::CPhonemeTag(const char *phoneme) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CPhonemeTag::~CPhonemeTag(void) { delete[] m_szPhoneme; }
+CPhonemeTag::~CPhonemeTag() { delete[] m_szPhoneme; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -347,7 +347,7 @@ int CSentence::LanguageForName(char const *name) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CSentence::CSentence(void) {
+CSentence::CSentence() {
 #if PHONEME_EDITOR
   m_nResetWordBase = 0;
   m_szText = 0;
@@ -362,7 +362,7 @@ CSentence::CSentence(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CSentence::~CSentence(void) {
+CSentence::~CSentence() {
   Reset();
 #if PHONEME_EDITOR
   delete[] m_szText;
@@ -422,7 +422,7 @@ void CSentence::ParseWords(CUtlBuffer &buf) {
       buf.GetString(token);
 
       char phonemename[256];
-      Q_strncpy(phonemename, token, SOURCE_ARRAYSIZE(phonemename));
+      Q_strncpy(phonemename, token, std::size(phonemename));
 
       buf.GetString(token);
       float tagstart = atof(token);
@@ -886,7 +886,7 @@ void CSentence::InitFromBuffer(CUtlBuffer &buf) {
 // Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CSentence::GetWordBase(void) {
+int CSentence::GetWordBase() {
 #if PHONEME_EDITOR
   return m_nResetWordBase;
 #else
@@ -898,7 +898,7 @@ int CSentence::GetWordBase(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSentence::ResetToBase(void) {
+void CSentence::ResetToBase() {
 #if PHONEME_EDITOR
   // Delete everything after m_nResetWordBase
   while (m_Words.Size() > m_nResetWordBase) {
@@ -912,7 +912,7 @@ void CSentence::ResetToBase(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSentence::MarkNewPhraseBase(void) {
+void CSentence::MarkNewPhraseBase() {
 #if PHONEME_EDITOR
   m_nResetWordBase = std::max(m_Words.Size(), 0);
 #endif
@@ -921,7 +921,7 @@ void CSentence::MarkNewPhraseBase(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSentence::Reset(void) {
+void CSentence::Reset() {
 #if PHONEME_EDITOR
   m_nResetWordBase = 0;
 
@@ -957,7 +957,7 @@ void CSentence::AddWordTag(CWordTag *tag) {
 // Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CSentence::CountPhonemes(void) {
+int CSentence::CountPhonemes() {
   int c = 0;
 #if PHONEME_EDITOR
   for (int i = 0; i < m_Words.Size(); i++) {
@@ -1156,7 +1156,7 @@ void CSentence::SetText(const char *text) {
 // Purpose:
 // Output : const char
 //-----------------------------------------------------------------------------
-const char *CSentence::GetText(void) const {
+const char *CSentence::GetText() const {
 #if PHONEME_EDITOR
   return m_szText ? m_szText : "";
 #else
@@ -1167,7 +1167,7 @@ const char *CSentence::GetText(void) const {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSentence::SetTextFromWords(void) {
+void CSentence::SetTextFromWords() {
 #if PHONEME_EDITOR
   char fulltext[1024];
   fulltext[0] = 0;
@@ -1188,7 +1188,7 @@ void CSentence::SetTextFromWords(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSentence::Resort(void) {
+void CSentence::Resort() {
   int c = m_EmphasisSamples.Size();
   for (int i = 0; i < c; i++) {
     for (int j = i + 1; j < c; j++) {
@@ -1285,7 +1285,7 @@ float CSentence::GetIntensity(float time, float endtime) {
   return retval;
 }
 
-int CSentence::GetNumSamples(void) { return m_EmphasisSamples.Count(); }
+int CSentence::GetNumSamples() { return m_EmphasisSamples.Count(); }
 
 CEmphasisSample *CSentence::GetSample(int index) {
   if (index < 0 || index >= GetNumSamples()) return NULL;

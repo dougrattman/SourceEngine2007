@@ -31,8 +31,8 @@ class IRestore;
 #pragma pack(push, 1)
 
 struct SaveRestoreRecordHeader_t {
-  unsigned short size;
-  unsigned short symbol;
+  u16 size;
+  u16 symbol;
 };
 
 #pragma pack(pop)

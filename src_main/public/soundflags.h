@@ -3,9 +3,7 @@
 #ifndef SOUNDFLAGS_H
 #define SOUNDFLAGS_H
 
-//-----------------------------------------------------------------------------
-// channels
-//-----------------------------------------------------------------------------
+// Channels.
 enum {
   CHAN_REPLACE = -1,
   CHAN_AUTO = 0,
@@ -13,21 +11,20 @@ enum {
   CHAN_VOICE = 2,
   CHAN_ITEM = 3,
   CHAN_BODY = 4,
-  CHAN_STREAM = 5,  // allocate stream channel from the static or dynamic area
-  CHAN_STATIC = 6,  // allocate channel from the static area
-  CHAN_VOICE_BASE = 7,  // allocate channel for network voice data
-  CHAN_USER_BASE = (CHAN_VOICE_BASE +
-                    128)  // Anything >= this number is allocated to game code.
+  // Allocate stream channel from the static or dynamic area
+  CHAN_STREAM = 5,
+  // Allocate channel from the static area
+  CHAN_STATIC = 6,
+  // Allocate channel for network voice data
+  CHAN_VOICE_BASE = 7,
+  // Anything >= this number is allocated to game code.
+  CHAN_USER_BASE = (CHAN_VOICE_BASE + 128)
 };
 
-//-----------------------------------------------------------------------------
-// common volume values
-//-----------------------------------------------------------------------------
+// Common volume values.
 #define VOL_NORM 1.0f
 
-//-----------------------------------------------------------------------------
-// common attenuation values
-//-----------------------------------------------------------------------------
+// Common attenuation values.
 #define ATTN_NONE 0.0f
 #define ATTN_NORM 0.8f
 #define ATTN_IDLE 2.0f
@@ -38,7 +35,7 @@ enum {
 // Don't change this without consulting Kelly or Wedge (sjb).
 #define ATTN_GUNFIRE 0.27f
 
-enum soundlevel_t {
+enum soundlevel_t : int {
   SNDLVL_NONE = 0,
 
   SNDLVL_20dB = 20,  // rustling leaves
@@ -86,26 +83,23 @@ enum soundlevel_t {
   SNDLVL_180dB = 180,  // rocket launching
 
   // NOTE: Valid soundlevel_t values are 0-255.
-  //       256-511 are reserved for sounds using goldsrc compatibility
-  //       attenuation.
+  // 256-511 are reserved for sounds using goldsrc compatibility attenuation.
 };
 
-#define MAX_SNDLVL_BITS \
-  9  // Used to encode 0-255 for regular soundlevel_t's and 256-511 for
-     // goldsrc-compatible ones.
+// Used to encode 0-255 for regular soundlevel_t's and 256-511 for
+// goldsrc-compatible ones.
+#define MAX_SNDLVL_BITS 9
 #define MIN_SNDLVL_VALUE 0
 #define MAX_SNDLVL_VALUE ((1 << MAX_SNDLVL_BITS) - 1)
 
-#define ATTN_TO_SNDLVL(a) (soundlevel_t)(int)((a) ? (50 + 20 / ((float)a)) : 0)
-#define SNDLVL_TO_ATTN(a) ((a > 50) ? (20.0f / (float)(a - 50)) : 4.0)
+#define ATTN_TO_SNDLVL(a) (soundlevel_t)(int)((a) ? (50 + 20 / ((f32)a)) : 0)
+#define SNDLVL_TO_ATTN(a) ((a > 50) ? (20.0f / (f32)(a - 50)) : 4.0)
 
-// This is a limit due to network encoding.
-// It encodes attenuation * 64 in 8 bits, so the maximum is (255 / 64)
+// This is a limit due to network encoding. It encodes attenuation * 64 in 8
+// bits, so the maximum is (255 / 64).
 #define MAX_ATTENUATION 3.98f
 
-//-----------------------------------------------------------------------------
 // Flags to be or-ed together for the iFlags field
-//-----------------------------------------------------------------------------
 enum SoundFlags_t {
   SND_NOFLAGS = 0,              // to keep the compiler happy
   SND_CHANGE_VOL = (1 << 0),    // change sound vol
@@ -133,15 +127,15 @@ enum SoundFlags_t {
 #define MAX_SOUND_DELAY_MSEC_ENCODE_BITS (13)
 
 // Subtract one to leave room for the sign bit
-#define MAX_SOUND_DELAY_MSEC \
-  (1 << (MAX_SOUND_DELAY_MSEC_ENCODE_BITS - 1))  // 4096 msec or about 4 seconds
+// 4096 msec or about 4 seconds
+#define MAX_SOUND_DELAY_MSEC (1 << (MAX_SOUND_DELAY_MSEC_ENCODE_BITS - 1))
 
-//-----------------------------------------------------------------------------
-// common pitch values
-//-----------------------------------------------------------------------------
-#define PITCH_NORM 100  // non-pitch shifted
-#define PITCH_LOW \
-  95  // other values are possible - 0-255, where 255 is very high
+// Common pitch values.
+
+// Non-pitch shifted.
+#define PITCH_NORM 100
+// Other values are possible - 0-255, where 255 is very high.
+#define PITCH_LOW 95
 #define PITCH_HIGH 120
 
 #define DEFAULT_SOUND_PACKET_VOLUME 1.0f

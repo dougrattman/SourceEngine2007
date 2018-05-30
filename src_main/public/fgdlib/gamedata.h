@@ -114,12 +114,12 @@ inline GDclass *GameData::GetClass(int nIndex) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int GameData::GetMinMapCoord(void) { return m_nMinMapCoord; }
+int GameData::GetMinMapCoord() { return m_nMinMapCoord; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int GameData::GetMaxMapCoord(void) { return m_nMaxMapCoord; }
+int GameData::GetMaxMapCoord() { return m_nMaxMapCoord; }
 
 void GDSetMessageFunc(GameDataMessageFunc_t pFunc);
 bool GDError(TokenReader &tr, const char *error, ...);

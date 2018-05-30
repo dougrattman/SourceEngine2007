@@ -93,7 +93,7 @@ void virtualmodel_t::AppendModels(int group, const studiohdr_t *pStudioHdr) {
     const studiohdr_t *pTmpHdr =
         pStudioHdr->FindModel(&tmp, pStudioHdr->pModelGroup(j)->pszName());
     if (pTmpHdr) {
-      if (nValidIncludes >= SOURCE_ARRAYSIZE(list)) {
+      if (nValidIncludes >= std::size(list)) {
         // would cause stack overflow
         Assert(0);
         break;

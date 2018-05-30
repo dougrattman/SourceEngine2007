@@ -69,7 +69,7 @@ class GDinputvariable {
 
   // functions:
   inline const char *GetName() { return m_szName; }
-  inline const char *GetLongName(void) { return m_szLongName; }
+  inline const char *GetLongName() { return m_szLongName; }
   inline const char *GetDescription(void);
 
   inline int GetFlagCount() { return m_Items.Count(); }
@@ -137,7 +137,7 @@ class GDinputvariable {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-const char *GDinputvariable::GetDescription(void) {
+const char *GDinputvariable::GetDescription() {
   if (m_pszDescription != NULL) {
     return (m_pszDescription);
   }
@@ -150,14 +150,14 @@ const char *GDinputvariable::GetDescription(void) {
 // variables
 //			cannot be edited in the Entity Properties dialog.
 //-----------------------------------------------------------------------------
-bool GDinputvariable::IsReadOnly(void) { return (m_bReadOnly); }
+bool GDinputvariable::IsReadOnly() { return (m_bReadOnly); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns whether or not this variable should be displayed in the
 // Entity
 //			Report dialog.
 //-----------------------------------------------------------------------------
-bool GDinputvariable::IsReportable(void) { return (m_bReportable); }
+bool GDinputvariable::IsReportable() { return (m_bReportable); }
 
 //-----------------------------------------------------------------------------
 // Returns the flag mask (eg 4096) for the flag at the given index. The

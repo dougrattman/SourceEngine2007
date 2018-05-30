@@ -296,26 +296,26 @@ struct FlashlightState_t {
 
   Vector m_vecLightOrigin;
   Quaternion m_quatOrientation;
-  float m_NearZ;
-  float m_FarZ;
-  float m_fHorizontalFOVDegrees;
-  float m_fVerticalFOVDegrees;
-  float m_fQuadraticAtten;
-  float m_fLinearAtten;
-  float m_fConstantAtten;
-  float m_Color[4];
+  f32 m_NearZ;
+  f32 m_FarZ;
+  f32 m_fHorizontalFOVDegrees;
+  f32 m_fVerticalFOVDegrees;
+  f32 m_fQuadraticAtten;
+  f32 m_fLinearAtten;
+  f32 m_fConstantAtten;
+  f32 m_Color[4];
   ITexture *m_pSpotlightTexture;
   int m_nSpotlightTextureFrame;
 
   // Shadow depth mapping parameters
   bool m_bEnableShadows;
   bool m_bDrawShadowFrustum;
-  float m_flShadowMapResolution;
-  float m_flShadowFilterSize;
-  float m_flShadowSlopeScaleDepthBias;
-  float m_flShadowDepthBias;
-  float m_flShadowJitterSeed;
-  float m_flShadowAtten;
+  f32 m_flShadowMapResolution;
+  f32 m_flShadowFilterSize;
+  f32 m_flShadowSlopeScaleDepthBias;
+  f32 m_flShadowDepthBias;
+  f32 m_flShadowJitterSeed;
+  f32 m_flShadowAtten;
   int m_nShadowQuality;
 
   // Getters for scissor members
@@ -388,7 +388,7 @@ typedef void (*MaterialBufferRestoreFunc_t)(
 typedef void (*ModeChangeCallbackFunc_t)(void);
 
 typedef int VertexBufferHandle_t;
-typedef unsigned short MaterialHandle_t;
+typedef u16 MaterialHandle_t;
 
 SOURCE_DECLARE_POINTER_HANDLE(OcclusionQueryObjectHandle_t);
 #define INVALID_OCCLUSION_QUERY_OBJECT_HANDLE ((OcclusionQueryObjectHandle_t)0)
@@ -420,7 +420,7 @@ the_interface IMaterialSystem : public IAppSystem {
   virtual CreateInterfaceFn Init(char const *pShaderAPIDLL,
                                  IMaterialProxyFactory *pMaterialProxyFactory,
                                  CreateInterfaceFn fileSystemFactory,
-                                 CreateInterfaceFn cvarFactory = NULL) = 0;
+                                 CreateInterfaceFn cvarFactory = nullptr) = 0;
 
   // Call this to set an explicit shader version to use
   // Must be called before Init().
@@ -539,7 +539,7 @@ the_interface IMaterialSystem : public IAppSystem {
   // Control flow
   // -----------------------------------------------------------
 
-  virtual void BeginFrame(float frameTime) = 0;
+  virtual void BeginFrame(f32 frameTime) = 0;
   virtual void EndFrame() = 0;
   virtual void Flush(bool flushHardware = false) = 0;
 
@@ -657,7 +657,7 @@ the_interface IMaterialSystem : public IAppSystem {
   virtual void ReloadTextures() = 0;
 
   // Reloads materials
-  virtual void ReloadMaterials(const char *pSubString = NULL) = 0;
+  virtual void ReloadMaterials(const char *pSubString = nullptr) = 0;
 
   // Create a procedural material. The keyvalues looks like a VMT file
   virtual IMaterial *CreateMaterial(const char *pMaterialName,
@@ -679,7 +679,7 @@ the_interface IMaterialSystem : public IAppSystem {
   // which checks if it's 0 too).
   virtual IMaterial *FindMaterial(
       char const *pMaterialName, const char *pTextureGroupName,
-      bool complain = true, const char *pComplainPrefix = NULL) = 0;
+      bool complain = true, const char *pComplainPrefix = nullptr) = 0;
 
   //---------------------------------
   // This is the interface for knowing what materials are available
@@ -691,7 +691,7 @@ the_interface IMaterialSystem : public IAppSystem {
   virtual MaterialHandle_t FirstMaterial() const = 0;
 
   // returns InvalidMaterial if there isn't another material.
-  // WARNING: you must call GetNextMaterial until it returns NULL,
+  // WARNING: you must call GetNextMaterial until it returns nullptr,
   // otherwise there will be a memory leak.
   virtual MaterialHandle_t NextMaterial(MaterialHandle_t h) const = 0;
 
@@ -740,7 +740,7 @@ the_interface IMaterialSystem : public IAppSystem {
       MaterialRenderTargetDepth_t depth = MATERIAL_RT_DEPTH_SHARED) = 0;
 
   virtual ITexture *CreateNamedRenderTargetTextureEx(
-      const char *pRTName,  // Pass in NULL here for an unnamed render target.
+      const char *pRTName,  // Pass in nullptr here for an unnamed render target.
       int w, int h,
       RenderTargetSizeMode_t sizeMode,  // Controls how size is generated (and
                                         // regenerated on video mode change).
@@ -759,7 +759,7 @@ the_interface IMaterialSystem : public IAppSystem {
 
   // Must be called between the above Begin-End calls!
   virtual ITexture *CreateNamedRenderTargetTextureEx2(
-      const char *pRTName,  // Pass in NULL here for an unnamed render target.
+      const char *pRTName,  // Pass in nullptr here for an unnamed render target.
       int w, int h,
       RenderTargetSizeMode_t sizeMode,  // Controls how size is generated (and
                                         // regenerated on video mode change).
@@ -793,9 +793,9 @@ the_interface IMaterialSystem : public IAppSystem {
   // You should never call UpdateLightmap for a lightmap allocated through
   // AllocateWhiteLightmap.
   virtual void UpdateLightmap(int lightmapPageID, int lightmapSize[2],
-                              int offsetIntoLightmapPage[2], float *pFloatImage,
-                              float *pFloatImageBump1, float *pFloatImageBump2,
-                              float *pFloatImageBump3) = 0;
+                              int offsetIntoLightmapPage[2], f32 *pFloatImage,
+                              f32 *pFloatImageBump1, f32 *pFloatImageBump2,
+                              f32 *pFloatImageBump3) = 0;
 
   // fixme: could just be an array of ints for lightmapPageIDs since the
   // material for a surface is already known.
@@ -885,7 +885,7 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual void BindLocalCubemap(ITexture * pTexture) = 0;
 
   // pass in an ITexture (that is build with "rendertarget" "1") or
-  // pass in NULL for the regular backbuffer.
+  // pass in nullptr for the regular backbuffer.
   virtual void SetRenderTarget(ITexture * pTexture) = 0;
   virtual ITexture *GetRenderTarget(void) = 0;
 
@@ -898,17 +898,17 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual void BindLightmapPage(int lightmapPageID) = 0;
 
   // inputs are between 0 and 1
-  virtual void DepthRange(float zNear, float zFar) = 0;
+  virtual void DepthRange(f32 zNear, f32 zFar) = 0;
 
   virtual void ClearBuffers(bool bClearColor, bool bClearDepth,
                             bool bClearStencil = false) = 0;
 
-  // read to a unsigned char rgb image.
+  // read to a u8 rgb image.
   virtual void ReadPixels(int x, int y, int width, int height,
-                          unsigned char *data, ImageFormat dstFormat) = 0;
+                          u8 *data, ImageFormat dstFormat) = 0;
 
   // Sets lighting
-  virtual void SetAmbientLight(float r, float g, float b) = 0;
+  virtual void SetAmbientLight(f32 r, f32 g, f32 b) = 0;
   virtual void SetLight(int lightNum, const LightDesc_t &desc) = 0;
 
   // The faces of the cube are specified in the same order as cubemap textures
@@ -945,9 +945,9 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual void PerspectiveX(double fovx, double aspect, double zNear,
                             double zFar) = 0;
   virtual void PickMatrix(int x, int y, int width, int height) = 0;
-  virtual void Rotate(float angle, float x, float y, float z) = 0;
-  virtual void Translate(float x, float y, float z) = 0;
-  virtual void Scale(float x, float y, float z) = 0;
+  virtual void Rotate(f32 angle, f32 x, f32 y, f32 z) = 0;
+  virtual void Translate(f32 x, f32 y, f32 z) = 0;
+  virtual void Scale(f32 x, f32 y, f32 z) = 0;
   // end matrix api
 
   // Sets/gets the viewport
@@ -962,22 +962,22 @@ the_interface IMatRenderContext : public IRefCounted {
   // This could easily be extended to a general user clip plane
   virtual void SetHeightClipMode(MaterialHeightClipMode_t nHeightClipMode) = 0;
   // garymcthack : fog z is always used for heightclipz for now.
-  virtual void SetHeightClipZ(float z) = 0;
+  virtual void SetHeightClipZ(f32 z) = 0;
 
   // Fog methods...
   virtual void FogMode(MaterialFogMode_t fogMode) = 0;
-  virtual void FogStart(float fStart) = 0;
-  virtual void FogEnd(float fEnd) = 0;
-  virtual void SetFogZ(float fogZ) = 0;
+  virtual void FogStart(f32 fStart) = 0;
+  virtual void FogEnd(f32 fEnd) = 0;
+  virtual void SetFogZ(f32 fogZ) = 0;
   virtual MaterialFogMode_t GetFogMode(void) = 0;
 
-  virtual void FogColor3f(float r, float g, float b) = 0;
-  virtual void FogColor3fv(float const *rgb) = 0;
-  virtual void FogColor3ub(unsigned char r, unsigned char g,
-                           unsigned char b) = 0;
-  virtual void FogColor3ubv(unsigned char const *rgb) = 0;
+  virtual void FogColor3f(f32 r, f32 g, f32 b) = 0;
+  virtual void FogColor3fv(f32 const *rgb) = 0;
+  virtual void FogColor3ub(u8 r, u8 g,
+                           u8 b) = 0;
+  virtual void FogColor3ubv(u8 const *rgb) = 0;
 
-  virtual void GetFogColor(unsigned char *rgb) = 0;
+  virtual void GetFogColor(u8 *rgb) = 0;
 
   // Sets the number of bones for skinning
   virtual void SetNumBoneWeights(int numBones) = 0;
@@ -985,7 +985,7 @@ the_interface IMatRenderContext : public IRefCounted {
   // Creates/destroys Mesh
   virtual IMesh *CreateStaticMesh(VertexFormat_t fmt,
                                   const char *pTextureBudgetGroup,
-                                  IMaterial *pMaterial = NULL) = 0;
+                                  IMaterial *pMaterial = nullptr) = 0;
   virtual void DestroyStaticMesh(IMesh * mesh) = 0;
 
   // Gets the dynamic mesh associated with the currently bound material
@@ -1049,10 +1049,10 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual void PopSelectionName() = 0;
 
   // Sets the Clear Color for ClearBuffer....
-  virtual void ClearColor3ub(unsigned char r, unsigned char g,
-                             unsigned char b) = 0;
-  virtual void ClearColor4ub(unsigned char r, unsigned char g, unsigned char b,
-                             unsigned char a) = 0;
+  virtual void ClearColor3ub(u8 r, u8 g,
+                             u8 b) = 0;
+  virtual void ClearColor4ub(u8 r, u8 g, u8 b,
+                             u8 a) = 0;
 
   // Allows us to override the depth buffer setting of a material
   virtual void OverrideDepthEnable(bool bEnable, bool bDepthEnable) = 0;
@@ -1070,8 +1070,8 @@ the_interface IMatRenderContext : public IRefCounted {
   // found the bug in it and everything's tuned to use it. It's returning values
   // which are 2x too big (it's returning sphere diameter x2) Use
   // ComputePixelDiameterOfSphere below in all new code instead.
-  virtual float ComputePixelWidthOfSphere(const Vector &origin,
-                                          float flRadius) = 0;
+  virtual f32 ComputePixelWidthOfSphere(const Vector &origin,
+                                          f32 flRadius) = 0;
 
   //
   // Occlusion query support
@@ -1100,8 +1100,8 @@ the_interface IMatRenderContext : public IRefCounted {
 
   // This returns the diameter of the sphere in pixels based on
   // the current model, view, + projection matrices and viewport.
-  virtual float ComputePixelDiameterOfSphere(const Vector &vecAbsOrigin,
-                                             float flRadius) = 0;
+  virtual f32 ComputePixelDiameterOfSphere(const Vector &vecAbsOrigin,
+                                             f32 flRadius) = 0;
 
   // By default, the material system applies the VIEW and PROJECTION matrices
   // to the user clip planes (which are specified in world space) to generate
@@ -1139,7 +1139,7 @@ the_interface IMatRenderContext : public IRefCounted {
 
   // Read w/ stretch to a host-memory buffer
   virtual void ReadPixelsAndStretch(Rect_t * pSrcRect, Rect_t * pDstRect,
-                                    unsigned char *pBuffer,
+                                    u8 *pBuffer,
                                     ImageFormat dstFormat, int nDstStride) = 0;
 
   // Gets the window size
@@ -1152,14 +1152,14 @@ the_interface IMatRenderContext : public IRefCounted {
   // operations.
   virtual void DrawScreenSpaceRectangle(
       IMaterial * pMaterial, int destx, int desty, int width, int height,
-      float src_texture_x0,
-      float src_texture_y0,  // which texel you want to appear at
+      f32 src_texture_x0,
+      f32 src_texture_y0,  // which texel you want to appear at
       // destx/y
-      float src_texture_x1,
-      float src_texture_y1,  // which texel you want to appear at
+      f32 src_texture_x1,
+      f32 src_texture_y1,  // which texel you want to appear at
       // destx+width-1, desty+height-1
       int src_texture_width, int src_texture_height,  // needed for fixup
-      void *pClientRenderable = NULL, int nXDice = 1, int nYDice = 1) = 0;
+      void *pClientRenderable = nullptr, int nXDice = 1, int nYDice = 1) = 0;
 
   virtual void LoadBoneMatrix(int boneIndex, const matrix3x4_t &matrix) = 0;
 
@@ -1191,7 +1191,7 @@ the_interface IMatRenderContext : public IRefCounted {
   // Blit a subrect of the current render target to another texture
   virtual void CopyRenderTargetToTextureEx(
       ITexture * pTexture, int nRenderTargetID, Rect_t *pSrcRect,
-      Rect_t *pDstRect = NULL) = 0;
+      Rect_t *pDstRect = nullptr) = 0;
 
   // Special off-center perspective matrix for DoF, MSAA jitter and poster
   // rendering
@@ -1202,7 +1202,7 @@ the_interface IMatRenderContext : public IRefCounted {
   // Rendering parameters control special drawing modes withing the material
   // system, shader system, shaders, and engine. renderparm.h has their
   // definitions.
-  virtual void SetFloatRenderingParameter(int parm_number, float value) = 0;
+  virtual void SetFloatRenderingParameter(int parm_number, f32 value) = 0;
   virtual void SetIntRenderingParameter(int parm_number, int value) = 0;
   virtual void SetVectorRenderingParameter(int parm_number,
                                            Vector const &value) = 0;
@@ -1225,7 +1225,7 @@ the_interface IMatRenderContext : public IRefCounted {
   // actually be used in a sizeable chunk of hardware configurations and that
   // changes to the clip planes mid-frame while UsingFastClipping() is true will
   // result unresolvable depth inconsistencies
-  virtual void PushCustomClipPlane(const float *pPlane) = 0;
+  virtual void PushCustomClipPlane(const f32 *pPlane) = 0;
   virtual void PopCustomClipPlane(void) = 0;
 
   // Returns the number of vertices + indices we can render using the dynamic
@@ -1263,7 +1263,7 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual bool EnableClipping(bool bEnable) = 0;
 
   // get fog distances entered with FogStart(), FogEnd(), and SetFogZ()
-  virtual void GetFogDistances(float *fStart, float *fEnd, float *fFogZ) = 0;
+  virtual void GetFogDistances(f32 *fStart, f32 *fEnd, f32 *fFogZ) = 0;
 
   // Hooks for firing PIX events from outside the Material System...
   virtual void BeginPIXEvent(unsigned long color, const char *szName) = 0;
@@ -1275,11 +1275,11 @@ the_interface IMatRenderContext : public IRefCounted {
   // - replaced obtuse material system batch usage with an explicit and easier
   // to thread API
   virtual void BeginBatch(IMesh * pIndices) = 0;
-  virtual void BindBatch(IMesh * pVertices, IMaterial *pAutoBind = NULL) = 0;
+  virtual void BindBatch(IMesh * pVertices, IMaterial *pAutoBind = nullptr) = 0;
   virtual void DrawBatch(int firstIndex, int numIndices) = 0;
   virtual void EndBatch() = 0;
 
-  // Raw access to the call queue, which can be NULL if not in a queued mode
+  // Raw access to the call queue, which can be nullptr if not in a queued mode
   virtual ICallQueue *GetCallQueue() = 0;
 
   // Returns the world-space camera position
@@ -1289,9 +1289,9 @@ the_interface IMatRenderContext : public IRefCounted {
 
   // Tone mapping
   virtual void ResetToneMappingScale(
-      float monoscale) = 0;  // set scale to monoscale instantly with no chasing
+      f32 monoscale) = 0;  // set scale to monoscale instantly with no chasing
   virtual void SetGoalToneMappingScale(
-      float monoscale) = 0;  // set scale to monoscale instantly with no chasing
+      f32 monoscale) = 0;  // set scale to monoscale instantly with no chasing
 
   // call TurnOnToneMapping before drawing the 3d scene to get the proper
   // interpolated brightness value set.
@@ -1302,8 +1302,8 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual void SetToneMappingScaleLinear(const Vector &scale) = 0;
 
   virtual Vector GetToneMappingScaleLinear(void) = 0;
-  virtual void SetShadowDepthBiasFactors(float fSlopeScaleDepthBias,
-                                         float fDepthBias) = 0;
+  virtual void SetShadowDepthBiasFactors(f32 fSlopeScaleDepthBias,
+                                         f32 fDepthBias) = 0;
 
   // Apply stencil operations to every pixel on the screen without disturbing
   // depth or color buffers
@@ -1337,7 +1337,7 @@ the_interface IMatRenderContext : public IRefCounted {
       IMesh *pVertexOverride = 0, IMesh *pIndexOverride = 0,
       IMaterial *pAutoBind = 0) = 0;
 
-  virtual void FogMaxDensity(float flMaxDensity) = 0;
+  virtual void FogMaxDensity(f32 flMaxDensity) = 0;
 
   virtual IMaterial *GetCurrentMaterial() = 0;
   virtual int GetCurrentNumBones() const = 0;
@@ -1355,7 +1355,7 @@ the_interface IMatRenderContext : public IRefCounted {
                           const char *pLookupName) = 0;
   virtual void UnlockLookup(ColorCorrectionHandle_t handle) = 0;
   virtual void SetLookupWeight(ColorCorrectionHandle_t handle,
-                               float flWeight) = 0;
+                               f32 flWeight) = 0;
   virtual void ResetLookupWeights() = 0;
   virtual void SetResetable(ColorCorrectionHandle_t handle,
                             bool bResetable) = 0;
@@ -1367,8 +1367,8 @@ the_interface IMatRenderContext : public IRefCounted {
 
   // A special path used to tick the front buffer while loading on the 360
   virtual void SetNonInteractivePacifierTexture(
-      ITexture * pTexture, float flNormalizedX, float flNormalizedY,
-      float flNormalizedSize) = 0;
+      ITexture * pTexture, f32 flNormalizedX, f32 flNormalizedY,
+      f32 flNormalizedSize) = 0;
   virtual void SetNonInteractiveTempFullscreenBuffer(
       ITexture * pTexture, MaterialNonInteractiveMode_t mode) = 0;
   virtual void EnableNonInteractiveMode(MaterialNonInteractiveMode_t mode) = 0;

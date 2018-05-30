@@ -80,21 +80,21 @@ int CStringRegistry::GetIDForKey(unsigned short key) {
 //-----------------------------------------------------------------------------
 // Purpose: Clear all strings from the string registry
 //-----------------------------------------------------------------------------
-void CStringRegistry::ClearStrings(void) { m_pStringList->RemoveAll(); }
+void CStringRegistry::ClearStrings() { m_pStringList->RemoveAll(); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor - delete the list of strings and maps
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
-CStringRegistry::~CStringRegistry(void) { delete m_pStringList; }
+CStringRegistry::~CStringRegistry() { delete m_pStringList; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
-CStringRegistry::CStringRegistry(void) { m_pStringList = new StringTable_t; }
+CStringRegistry::CStringRegistry() { m_pStringList = new StringTable_t; }
 
 unsigned short CStringRegistry::First() const { return m_pStringList->First(); }
 

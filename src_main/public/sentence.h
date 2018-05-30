@@ -53,7 +53,7 @@ class CBasePhonemeTag {
  private:
   float m_flStartTime;
   float m_flEndTime;
-  unsigned short m_nPhonemeCode;
+  u16 m_nPhonemeCode;
 };
 
 class CPhonemeTag : public CBasePhonemeTag {

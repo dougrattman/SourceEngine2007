@@ -3,40 +3,34 @@
 #ifndef MATERIALSYSTEMUTIL_H
 #define MATERIALSYSTEMUTIL_H
 
-#include "bitmap/imageformat.h"  // ImageFormat enum definition
-#include "materialsystem/imaterialsystem.h"  // RenderTargetSizeMode_t and MaterialRenderTargetDepth_t definition
+#include "base/include/base_types.h"
+#include "bitmap/imageformat.h"  // ImageFormat
+#include "materialsystem/imaterialsystem.h"  // RenderTargetSizeMode_t and MaterialRenderTargetDepth_t
 
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 class IMaterial;
 class ITexture;
 class KeyValues;
 
-class KeyValues;
-
-//-----------------------------------------------------------------------------
-// Little utility class to deal with material references
-//-----------------------------------------------------------------------------
+// Little utility class to deal with material references.
 class CMaterialReference {
  public:
-  // constructor, destructor
-  CMaterialReference(char const *pMaterialName = 0,
-                     const char *pTextureGroupName = 0, bool bComplain = true);
+  CMaterialReference(ch const *material_name = nullptr,
+                     const ch *pTextureGroupName = nullptr,
+                     bool bComplain = true);
   ~CMaterialReference();
 
   // Attach to a material
-  void Init(const char *pMaterialName, const char *pTextureGroupName,
+  void Init(const ch *material_name, const ch *pTextureGroupName,
             bool bComplain = true);
-  void Init(const char *pMaterialName, KeyValues *pVMTKeyValues);
+  void Init(const ch *material_name, KeyValues *pVMTKeyValues);
   void Init(IMaterial *pMaterial);
   void Init(CMaterialReference &ref);
-  void Init(const char *pMaterialName, const char *pTextureGroupName,
+  void Init(const ch *material_name, const ch *pTextureGroupName,
             KeyValues *pVMTKeyValues);
 
   // Detach from a material
   void Shutdown();
-  bool IsValid() { return m_pMaterial != 0; }
+  bool IsValid() const { return m_pMaterial != nullptr; }
 
   // Automatic casts to IMaterial
   operator IMaterial *() { return m_pMaterial; }
@@ -47,40 +41,27 @@ class CMaterialReference {
   IMaterial *m_pMaterial;
 };
 
-//-----------------------------------------------------------------------------
 // Little utility class to deal with texture references
-//-----------------------------------------------------------------------------
 class CTextureReference {
  public:
-  // constructor, destructor
   CTextureReference();
   CTextureReference(const CTextureReference &ref);
   ~CTextureReference();
 
   // Attach to a texture
-  void Init(char const *pTexture, const char *pTextureGroupName,
+  void Init(ch const *pTexture, const ch *pTextureGroupName,
             bool bComplain = true);
-  void InitProceduralTexture(const char *pTextureName,
-                             const char *pTextureGroupName, int w, int h,
+  void InitProceduralTexture(const ch *pTextureName,
+                             const ch *pTextureGroupName, int w, int h,
                              ImageFormat fmt, int nFlags);
   void InitRenderTarget(int w, int h, RenderTargetSizeMode_t sizeMode,
                         ImageFormat fmt, MaterialRenderTargetDepth_t depth,
-                        bool bHDR, char *pStrOptionalName = NULL);
-#if defined(_X360)
-  // used when RT coupling is disparate (texture is DDR based, surface is EDRAM
-  // based)
-  void InitRenderTargetTexture(int width, int height,
-                               RenderTargetSizeMode_t sizeMode, ImageFormat fmt,
-                               MaterialRenderTargetDepth_t depth, bool bHDR,
-                               char *pStrOptionalName = NULL);
-  void InitRenderTargetSurface(int width, int height, ImageFormat fmt,
-                               bool bSameAsTexture);
-#endif
+                        bool bHDR, ch *pStrOptionalName = nullptr);
   void Init(ITexture *pTexture);
 
   // Detach from a texture
   void Shutdown(bool bDeleteIfUnReferenced = false);
-  bool IsValid() { return m_pTexture != 0; }
+  bool IsValid() const { return m_pTexture != nullptr; }
 
   // Automatic casts to ITexture
   operator ITexture *() { return m_pTexture; }

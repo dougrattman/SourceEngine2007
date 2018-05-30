@@ -57,7 +57,7 @@ the_interface IStaticPropMgrClient : public IStaticPropMgr {
       int decalIndex, bool doTrace, trace_t &tr) = 0;
 
   // Adds/removes shadows from static props
-  virtual void AddShadowToStaticProp(unsigned short shadowHandle,
+  virtual void AddShadowToStaticProp(u16 shadowHandle,
                                      IClientRenderable *pRenderable) = 0;
   virtual void RemoveAllShadowsFromStaticProp(IClientRenderable *
                                               pRenderable) = 0;

@@ -25,7 +25,7 @@ class CKeyRepeatHandler {
     }
   }
 
-  void Reset(void) {
+  void Reset() {
     memset(m_bAliasDown, 0, sizeof(bool) * FM_NUM_KEYREPEAT_ALIASES);
     m_bHaveKeyDown = false;
   }

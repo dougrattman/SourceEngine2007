@@ -69,7 +69,7 @@ class CVCoverage {
   int m_depth;
   unsigned m_token;
 
-  CUtlRBTree<Location_t, unsigned short, CLocationLess> m_locations;
+  CUtlRBTree<Location_t, u16, CLocationLess> m_locations;
 };
 
 VSTDLIB_INTERFACE CVCoverage g_VCoverage;

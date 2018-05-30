@@ -47,7 +47,7 @@ class CSaveRestoreSegment {
   char **DetachSymbolTable();
   int SizeSymbolTable();
   bool DefineSymbol(const char *pszToken, int token);
-  unsigned short FindCreateSymbol(const char *pszToken);
+  u16 FindCreateSymbol(const char *pszToken);
   const char *StringFromSymbol(int token);
 
  private:
@@ -396,10 +396,10 @@ inline bool CSaveRestoreSegment::DefineSymbol(const char *pszToken, int token) {
   return false;
 }
 
-inline unsigned short CSaveRestoreSegment::FindCreateSymbol(
+inline u16 CSaveRestoreSegment::FindCreateSymbol(
     const char *pszToken) {
-  unsigned short hash =
-      (unsigned short)(HashString(pszToken) % (unsigned)tokenCount);
+  u16 hash =
+      (u16)(HashString(pszToken) % (unsigned)tokenCount);
 
 #if _DEBUG
   static int tokensparsed = 0;

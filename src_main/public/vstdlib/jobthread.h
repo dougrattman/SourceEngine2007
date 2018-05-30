@@ -64,7 +64,7 @@ enum JobStatusEnum_t {
   JOB_STATUS_UNSERVICED,  // file is not yet queued
 };
 
-typedef int JobStatus_t;
+using JobStatus_t = int;
 
 enum JobFlags_t {
   JF_IO = (1 << 0),  // The job primarily blocks on IO or hardware
@@ -80,7 +80,7 @@ enum JobPriority_t { JP_LOW, JP_NORMAL, JP_HIGH };
 #define TP_MAX_POOL_THREADS 64u
 struct ThreadPoolStartParams_t {
   ThreadPoolStartParams_t(bool bIOThreads = false, unsigned nThreads = -1,
-                          int *pAffinities = NULL,
+                          int *pAffinities = nullptr,
                           ThreeState_t fDistribute = TRS_NONE,
                           unsigned nStackSize = -1,
                           int iThreadPriority = SHRT_MIN)
@@ -89,8 +89,8 @@ struct ThreadPoolStartParams_t {
         fDistribute(fDistribute),
         nStackSize(nStackSize),
         iThreadPriority(iThreadPriority) {
-    bUseAffinityTable =
-        (pAffinities != NULL) && (fDistribute == TRS_TRUE) && (nThreads != -1);
+    bUseAffinityTable = (pAffinities != nullptr) && (fDistribute == TRS_TRUE) &&
+                        (nThreads != -1);
     if (bUseAffinityTable) {
       // user supplied an optional 1:1 affinity mapping to override normal
       // distribute behavior
@@ -113,7 +113,7 @@ struct ThreadPoolStartParams_t {
 
 // IThreadPool
 
-typedef bool (*JobFilter_t)(CJob *);
+using JobFilter_t = bool (*)(CJob *);
 
 // Messages supported through the CallWorker() method
 enum ThreadPoolMessages_t {
@@ -154,8 +154,8 @@ the_interface IThreadPool : public IRefCounted {
   virtual void AddJob(CJob *) = 0;
 
   // Add an function object to the queue (master thread)
-  virtual void AddFunctor(CFunctor * pFunctor, CJob **ppJob = NULL,
-                          const char *pszDescription = NULL,
+  virtual void AddFunctor(CFunctor * pFunctor, CJob **ppJob = nullptr,
+                          const char *pszDescription = nullptr,
                           unsigned flags = 0) {
     AddFunctorInternal(RetAddRef(pFunctor), ppJob, pszDescription, flags);
   }
@@ -164,12 +164,12 @@ the_interface IThreadPool : public IRefCounted {
   virtual void ChangePriority(CJob * p, JobPriority_t priority) = 0;
 
   // Bulk job manipulation (blocking)
-  int ExecuteAll(JobFilter_t pfnFilter = NULL) {
+  int ExecuteAll(JobFilter_t pfnFilter = nullptr) {
     return ExecuteToPriority(JP_LOW, pfnFilter);
   }
 
   virtual int ExecuteToPriority(JobPriority_t toPriority,
-                                JobFilter_t pfnFilter = NULL) = 0;
+                                JobFilter_t pfnFilter = nullptr) = 0;
   virtual int AbortAll() = 0;
 
   virtual void Reserved1() = 0;
@@ -292,7 +292,7 @@ the_interface IThreadPool : public IRefCounted {
       FUNC_BASE_TEMPLATE_FUNC_PARAMS_##N) FUNC_ARG_FORMAL_PARAMS_##N) {      \
     CJob *pJob;                                                              \
     AddFunctorInternal(CreateFunctor(pfnProxied FUNC_FUNCTOR_CALL_ARGS_##N), \
-                       &pJob, NULL, JF_QUEUE);                               \
+                       &pJob, nullptr, JF_QUEUE);                            \
     return pJob;                                                             \
   }
 
@@ -307,7 +307,7 @@ the_interface IThreadPool : public IRefCounted {
     CJob *pJob;                                                               \
     AddFunctorInternal(                                                       \
         CreateFunctor(pObject, pfnProxied FUNC_FUNCTOR_CALL_ARGS_##N), &pJob, \
-        NULL, JF_QUEUE);                                                      \
+        nullptr, JF_QUEUE);                                                   \
     return pJob;                                                              \
   }
 
@@ -322,7 +322,7 @@ the_interface IThreadPool : public IRefCounted {
     CJob *pJob;                                                               \
     AddFunctorInternal(                                                       \
         CreateFunctor(pObject, pfnProxied FUNC_FUNCTOR_CALL_ARGS_##N), &pJob, \
-        NULL, JF_QUEUE);                                                      \
+        nullptr, JF_QUEUE);                                                   \
     return pJob;                                                              \
   }
 
@@ -337,7 +337,7 @@ the_interface IThreadPool : public IRefCounted {
     CJob *pJob;                                                             \
     AddFunctorInternal(CreateRefCountingFunctor(                            \
                            pObject, pfnProxied FUNC_FUNCTOR_CALL_ARGS_##N), \
-                       &pJob, NULL, JF_QUEUE);                              \
+                       &pJob, nullptr, JF_QUEUE);                           \
     return pJob;                                                            \
   }
 
@@ -352,7 +352,7 @@ the_interface IThreadPool : public IRefCounted {
     CJob *pJob;                                                             \
     AddFunctorInternal(CreateRefCountingFunctor(                            \
                            pObject, pfnProxied FUNC_FUNCTOR_CALL_ARGS_##N), \
-                       &pJob, NULL, JF_QUEUE);                              \
+                       &pJob, nullptr, JF_QUEUE);                           \
                                                                             \
     return pJob;                                                            \
   }
@@ -380,8 +380,8 @@ the_interface IThreadPool : public IRefCounted {
 #undef DEFINE_REF_COUNTING_CONST_MEMBER_QUEUE_CALL
 
  private:
-  virtual void AddFunctorInternal(CFunctor *, CJob ** = NULL,
-                                  const char *pszDescription = NULL,
+  virtual void AddFunctorInternal(CFunctor *, CJob ** = nullptr,
+                                  const char *pszDescription = nullptr,
                                   unsigned flags = 0) = 0;
 
   // Services for internal use by job instances
@@ -391,7 +391,7 @@ the_interface IThreadPool : public IRefCounted {
 
  public:
   virtual void Distribute(bool bDistribute = true,
-                          int *pAffinityTable = NULL) = 0;
+                          int *pAffinityTable = nullptr) = 0;
 
   virtual bool Start(const ThreadPoolStartParams_t &startParams,
                      const char *pszNameOverride) = 0;
@@ -417,7 +417,7 @@ class CJob : public CRefCounted1<IRefCounted, CRefCountServiceMT> {
         m_ThreadPoolData(JOB_NO_DATA),
         m_priority(priority),
         m_flags(0),
-        m_pThreadPool(NULL),
+        m_pThreadPool(nullptr),
         m_CompleteEvent(true),
         m_iServicingThread(-1),
         m_reserved{0} {}
@@ -454,7 +454,7 @@ class CJob : public CRefCounted1<IRefCounted, CRefCountServiceMT> {
   void Lock() const { m_mutex.Lock(); }
   void Unlock() const { m_mutex.Unlock(); }
 
-  // Thread event support (safe for NULL this to simplify code )
+  // Thread event support (safe for nullptr this to simplify code )
   bool WaitForFinish(uint32_t dwTimeout = TT_INFINITE) {
     AssertMsg(this, "Call with null this");
     return (!IsFinished()) ? g_pThreadPool->YieldWait(this, dwTimeout) : true;
@@ -510,7 +510,7 @@ class CJob : public CRefCounted1<IRefCounted, CRefCountServiceMT> {
 
 class CFunctorJob : public CJob {
  public:
-  CFunctorJob(CFunctor *pFunctor, const char *pszDescription = NULL)
+  CFunctorJob(CFunctor *pFunctor, const char *pszDescription = nullptr)
       : m_pFunctor(pFunctor) {
     if (pszDescription) {
       Q_strncpy(m_szDescription, pszDescription, sizeof(m_szDescription));
@@ -534,7 +534,7 @@ class CFunctorJob : public CJob {
 // Utility for managing multiple jobs
 class CJobSet {
  public:
-  CJobSet(CJob *pJob = NULL) {
+  CJobSet(CJob *pJob = nullptr) {
     if (pJob) {
       m_jobs.AddToTail(pJob);
     }
@@ -704,7 +704,7 @@ FUNC_GENERATE_ALL(DEFINE_MEMBER_ITER_RANGE_PARALLEL);
 template <typename T>
 class CJobItemProcessor {
  public:
-  typedef T ItemType_t;
+  using ItemType_t = T;
   void Begin() {}
   // void Process( ItemType_t & ) {}
   void End() {}
@@ -713,16 +713,16 @@ class CJobItemProcessor {
 template <typename T>
 class CFuncJobItemProcessor : public CJobItemProcessor<T> {
  public:
-  void Init(void (*pfnProcess)(T &), void (*pfnBegin)() = NULL,
-            void (*pfnEnd)() = NULL) {
+  void Init(void (*pfnProcess)(T &), void (*pfnBegin)() = nullptr,
+            void (*pfnEnd)() = nullptr) {
     m_pfnProcess = pfnProcess;
     m_pfnBegin = pfnBegin;
     m_pfnEnd = pfnEnd;
   }
 
   // CFuncJobItemProcessor(OBJECT_TYPE_PTR pObject, void
-  // (FUNCTION_CLASS::*pfnProcess)( ITEM_TYPE & ), void (*pfnBegin)() = NULL,
-  // void (*pfnEnd)() = NULL );
+  // (FUNCTION_CLASS::*pfnProcess)( ITEM_TYPE & ), void (*pfnBegin)() = nullptr,
+  // void (*pfnEnd)() = nullptr );
   void Begin() {
     if (m_pfnBegin) (*m_pfnBegin)();
   }
@@ -741,8 +741,8 @@ template <typename T, class OBJECT_TYPE, class FUNCTION_CLASS = OBJECT_TYPE>
 class CMemberFuncJobItemProcessor : public CJobItemProcessor<T> {
  public:
   void Init(OBJECT_TYPE *pObject, void (FUNCTION_CLASS::*pfnProcess)(T &),
-            void (FUNCTION_CLASS::*pfnBegin)() = NULL,
-            void (FUNCTION_CLASS::*pfnEnd)() = NULL) {
+            void (FUNCTION_CLASS::*pfnBegin)() = nullptr,
+            void (FUNCTION_CLASS::*pfnEnd)() = nullptr) {
     m_pObject = pObject;
     m_pfnProcess = pfnProcess;
     m_pfnBegin = pfnBegin;
@@ -770,7 +770,7 @@ class CParallelProcessor {
   CParallelProcessor() { m_pItems = m_pLimit = 0; }
 
   void Run(ITEM_TYPE *pItems, unsigned nItems, int nMaxParallel = INT_MAX,
-           IThreadPool *pThreadPool = NULL) {
+           IThreadPool *pThreadPool = nullptr) {
     if (nItems == 0) return;
 
     if (!pThreadPool) {
@@ -798,7 +798,7 @@ class CParallelProcessor {
     }
 
     if (nJobs > 1) {
-      CJob **jobs = (CJob **)stackalloc(nJobs * sizeof(CJob **));
+      CJob **jobs = stack_alloc<CJob *>(nJobs);
       int i = nJobs;
 
       while (i--) {
@@ -847,7 +847,8 @@ class CParallelProcessor {
 template <typename ITEM_TYPE>
 inline void ParallelProcess(ITEM_TYPE *pItems, unsigned nItems,
                             void (*pfnProcess)(ITEM_TYPE &),
-                            void (*pfnBegin)() = NULL, void (*pfnEnd)() = NULL,
+                            void (*pfnBegin)() = nullptr,
+                            void (*pfnEnd)() = nullptr,
                             int nMaxParallel = INT_MAX) {
   CParallelProcessor<ITEM_TYPE, CFuncJobItemProcessor<ITEM_TYPE> > processor;
   processor.m_ItemProcessor.Init(pfnProcess, pfnBegin, pfnEnd);
@@ -858,8 +859,8 @@ template <typename ITEM_TYPE, typename OBJECT_TYPE, typename FUNCTION_CLASS>
 inline void ParallelProcess(ITEM_TYPE *pItems, unsigned nItems,
                             OBJECT_TYPE *pObject,
                             void (FUNCTION_CLASS::*pfnProcess)(ITEM_TYPE &),
-                            void (FUNCTION_CLASS::*pfnBegin)() = NULL,
-                            void (FUNCTION_CLASS::*pfnEnd)() = NULL,
+                            void (FUNCTION_CLASS::*pfnBegin)() = nullptr,
+                            void (FUNCTION_CLASS::*pfnEnd)() = nullptr,
                             int nMaxParallel = INT_MAX) {
   CParallelProcessor<ITEM_TYPE, CMemberFuncJobItemProcessor<
                                     ITEM_TYPE, OBJECT_TYPE, FUNCTION_CLASS> >
@@ -930,8 +931,8 @@ class CParallelLoopProcessor {
 
 inline void ParallelLoopProcess(long lBegin, unsigned nItems,
                                 void (*pfnProcess)(long const &),
-                                void (*pfnBegin)() = NULL,
-                                void (*pfnEnd)() = NULL,
+                                void (*pfnBegin)() = nullptr,
+                                void (*pfnEnd)() = nullptr,
                                 int nMaxParallel = INT_MAX) {
   CParallelLoopProcessor<CFuncJobItemProcessor<long const> > processor;
   processor.m_ItemProcessor.Init(pfnProcess, pfnBegin, pfnEnd);
@@ -942,8 +943,8 @@ template <typename OBJECT_TYPE, typename FUNCTION_CLASS>
 inline void ParallelLoopProcess(
     long lBegin, unsigned nItems, OBJECT_TYPE *pObject,
     void (FUNCTION_CLASS::*pfnProcess)(long const &),
-    void (FUNCTION_CLASS::*pfnBegin)() = NULL,
-    void (FUNCTION_CLASS::*pfnEnd)() = NULL, int nMaxParallel = INT_MAX) {
+    void (FUNCTION_CLASS::*pfnBegin)() = nullptr,
+    void (FUNCTION_CLASS::*pfnEnd)() = nullptr, int nMaxParallel = INT_MAX) {
   CParallelLoopProcessor<
       CMemberFuncJobItemProcessor<long const, OBJECT_TYPE, FUNCTION_CLASS> >
       processor;
@@ -954,8 +955,8 @@ inline void ParallelLoopProcess(
 template <class Derived>
 class CParallelProcessorBase {
  protected:
-  typedef CParallelProcessorBase<Derived> ThisParallelProcessorBase_t;
-  typedef Derived ThisParallelProcessorDerived_t;
+  using ThisParallelProcessorBase_t = CParallelProcessorBase<Derived>;
+  using ThisParallelProcessorDerived_t = Derived;
 
  public:
   CParallelProcessorBase() { m_nActive = 0; }
@@ -1013,7 +1014,7 @@ inline unsigned FunctorExecuteThread(void *pParam) {
 }
 
 inline ThreadHandle_t ThreadExecuteSoloImpl(CFunctor *pFunctor,
-                                            const char *pszName = NULL) {
+                                            const char *pszName = nullptr) {
   ThreadHandle_t hThread;
   ThreadId_t threadId;
   hThread = CreateSimpleThread(FunctorExecuteThread, pFunctor, &threadId);

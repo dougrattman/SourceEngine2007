@@ -53,7 +53,7 @@ struct DrawTexData_t {
 
 class IEditorTexture {
  public:
-  virtual ~IEditorTexture(void) {}
+  virtual ~IEditorTexture() {}
 
   //
   // dvs: remove one of these

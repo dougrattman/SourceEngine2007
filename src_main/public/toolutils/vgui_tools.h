@@ -1,14 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-//=============================================================================
 
 #ifndef VGUI_TOOLS_H
 #define VGUI_TOOLS_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "interface.h"
 
@@ -17,13 +10,13 @@
 // Every tool must expose this back to us
 extern char const *GetVGuiControlsModuleName();
 
-bool VGui_Startup( CreateInterfaceFn appSystemFactory );
+bool VGui_Startup(CreateInterfaceFn appSystemFactory);
 bool VGui_PostInit();
-void VGui_Shutdown( void );
+void VGui_Shutdown();
 
 // Must be implemented by .dll
-void VGUI_CreateToolRootPanel( void );
-void VGUI_DestroyToolRootPanel( void );
-vgui::VPANEL VGui_GetToolRootPanel( void );
+void VGUI_CreateToolRootPanel();
+void VGUI_DestroyToolRootPanel();
+vgui::VPANEL VGui_GetToolRootPanel();
 
-#endif // VGUI_TOOLS_H
+#endif  // VGUI_TOOLS_H

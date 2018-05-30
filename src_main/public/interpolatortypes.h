@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef INTERPOLATORTYPES_H
-#define INTERPOLATORTYPES_H
+#ifndef SOURCE_INTERPOLATORTYPES_H_
+#define SOURCE_INTERPOLATORTYPES_H_
 
 class Quaternion;
 
@@ -97,4 +97,4 @@ void Interpolator_CurveInterpolate_NonNormalized(
     int interpolationType, const Quaternion &vPre, const Quaternion &vStart,
     const Quaternion &vEnd, const Quaternion &vNext, float f, Quaternion &vOut);
 
-#endif  // INTERPOLATORTYPES_H
+#endif  // SOURCE_INTERPOLATORTYPES_H_

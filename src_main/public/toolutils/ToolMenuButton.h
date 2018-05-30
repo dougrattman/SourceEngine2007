@@ -1,75 +1,74 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: Core Movie Maker UI API
-//
-//=============================================================================
 
 #ifndef TOOLMENUBUTTON_H
 #define TOOLMENUBUTTON_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-#include "vgui_controls/menubutton.h"
-#include "tier1/utldict.h"
 #include "tier1/UtlSymbol.h"
-
+#include "tier1/utldict.h"
+#include "vgui_controls/menubutton.h"
 
 //-----------------------------------------------------------------------------
 // Base class for tools menus
 //-----------------------------------------------------------------------------
-class CToolMenuButton : public vgui::MenuButton
-{
-	DECLARE_CLASS_SIMPLE( CToolMenuButton, vgui::MenuButton );
-public:
-	CToolMenuButton( vgui::Panel *parent, const char *panelName, const char *text, vgui::Panel *actionTarget );
+class CToolMenuButton : public vgui::MenuButton {
+  DECLARE_CLASS_SIMPLE(CToolMenuButton, vgui::MenuButton);
 
-	virtual void OnShowMenu(vgui::Menu *menu);
+ public:
+  CToolMenuButton(vgui::Panel *parent, const char *panelName, const char *text,
+                  vgui::Panel *actionTarget);
 
-	vgui::Menu	*GetMenu();
+  virtual void OnShowMenu(vgui::Menu *menu);
 
-	// Add a simple text item to the menu
-	virtual int AddMenuItem( char const *itemName, const char *itemText, KeyValues *message, Panel *target, const KeyValues *userData = NULL, char const *kbcommandname = NULL );
-	virtual int AddCheckableMenuItem( char const *itemName, const char *itemText, KeyValues *message, Panel *target, const KeyValues *userData = NULL, char const *kbcommandname = NULL );
+  vgui::Menu *GetMenu();
 
-	// Wide-character version to add a simple text item to the menu
-	virtual int AddMenuItem( char const *itemName, const wchar_t *itemText, KeyValues *message, Panel *target, const KeyValues *userData = NULL, char const *kbcommandname = NULL );
-	virtual int AddCheckableMenuItem( char const *itemName, const wchar_t *itemText, KeyValues *message, Panel *target, const KeyValues *userData = NULL, char const *kbcommandname = NULL );
+  // Add a simple text item to the menu
+  virtual int AddMenuItem(char const *itemName, const char *itemText,
+                          KeyValues *message, Panel *target,
+                          const KeyValues *userData = NULL,
+                          char const *kbcommandname = NULL);
+  virtual int AddCheckableMenuItem(char const *itemName, const char *itemText,
+                                   KeyValues *message, Panel *target,
+                                   const KeyValues *userData = NULL,
+                                   char const *kbcommandname = NULL);
 
-	virtual int FindMenuItem( char const *itemName );
-	virtual void AddSeparatorAfterItem( char const *itemName );
-	virtual void MoveMenuItem( int itemID, int moveBeforeThisItemID );
+  // Wide-character version to add a simple text item to the menu
+  virtual int AddMenuItem(char const *itemName, const wchar_t *itemText,
+                          KeyValues *message, Panel *target,
+                          const KeyValues *userData = NULL,
+                          char const *kbcommandname = NULL);
+  virtual int AddCheckableMenuItem(char const *itemName,
+                                   const wchar_t *itemText, KeyValues *message,
+                                   Panel *target,
+                                   const KeyValues *userData = NULL,
+                                   char const *kbcommandname = NULL);
 
-	virtual void SetItemEnabled( int itemID, bool state );
+  virtual int FindMenuItem(char const *itemName);
+  virtual void AddSeparatorAfterItem(char const *itemName);
+  virtual void MoveMenuItem(int itemID, int moveBeforeThisItemID);
 
-	// Pass in a NULL binding to clear it
-	virtual void SetCurrentKeyBindingLabel( char const *itemName, char const *binding );
+  virtual void SetItemEnabled(int itemID, bool state);
 
-	virtual void AddSeparator();
+  // Pass in a NULL binding to clear it
+  virtual void SetCurrentKeyBindingLabel(char const *itemName,
+                                         char const *binding);
 
-	void		Reset();
+  virtual void AddSeparator();
 
-protected:
-	void		UpdateMenuItemKeyBindings();
+  void Reset();
 
-	vgui::Menu	*m_pMenu;
-	vgui::Panel	*m_pActionTarget;
+ protected:
+  void UpdateMenuItemKeyBindings();
 
-	struct MenuItem_t
-	{
-		MenuItem_t()
-			: m_ItemID( 0 ),
-			  m_KeyBinding( UTL_INVAL_SYMBOL )
-		{
-		}
-		unsigned short	m_ItemID;
-		CUtlSymbol		m_KeyBinding;
-	};
+  vgui::Menu *m_pMenu;
+  vgui::Panel *m_pActionTarget;
 
-	CUtlDict< MenuItem_t, unsigned short >	m_Items;
+  struct MenuItem_t {
+    MenuItem_t() : m_ItemID(0), m_KeyBinding(UTL_INVAL_SYMBOL) {}
+    unsigned short m_ItemID;
+    CUtlSymbol m_KeyBinding;
+  };
+
+  CUtlDict<MenuItem_t, unsigned short> m_Items;
 };
 
-
-#endif // TOOLMENUBUTTON_H
-
+#endif  // TOOLMENUBUTTON_H

@@ -7,51 +7,42 @@
 #include "materialsystem/itexture.h"
 #include "tier1/KeyValues.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-
 // Little utility class to deal with material references
-
-
-
-// constructor, destructor
-
-CMaterialReference::CMaterialReference(char const *pMaterialName,
-                                       const char *pTextureGroupName,
+CMaterialReference::CMaterialReference(ch const *material_name,
+                                       const ch *pTextureGroupName,
                                        bool bComplain)
-    : m_pMaterial(0) {
-  if (pMaterialName) {
+    : m_pMaterial{nullptr} {
+  if (material_name) {
     Assert(pTextureGroupName);
-    Init(pMaterialName, pTextureGroupName, bComplain);
+    Init(material_name, pTextureGroupName, bComplain);
   }
 }
 
 CMaterialReference::~CMaterialReference() { Shutdown(); }
 
-
 // Attach to a material
-
-void CMaterialReference::Init(char const *pMaterialName,
-                              const char *pTextureGroupName, bool bComplain) {
+void CMaterialReference::Init(ch const *material_name,
+                              const ch *pTextureGroupName, bool bComplain) {
   IMaterial *pMaterial =
-      materials->FindMaterial(pMaterialName, pTextureGroupName, bComplain);
+      materials->FindMaterial(material_name, pTextureGroupName, bComplain);
   Assert(pMaterial);
   Init(pMaterial);
 }
 
-void CMaterialReference::Init(const char *pMaterialName,
+void CMaterialReference::Init(const ch *material_name,
                               KeyValues *pVMTKeyValues) {
   // CreateMaterial has a refcount of 1
   Shutdown();
-  m_pMaterial = materials->CreateMaterial(pMaterialName, pVMTKeyValues);
+  m_pMaterial = materials->CreateMaterial(material_name, pVMTKeyValues);
 }
 
-void CMaterialReference::Init(const char *pMaterialName,
-                              const char *pTextureGroupName,
+void CMaterialReference::Init(const ch *material_name,
+                              const ch *pTextureGroupName,
                               KeyValues *pVMTKeyValues) {
   IMaterial *pMaterial = materials->FindProceduralMaterial(
-      pMaterialName, pTextureGroupName, pVMTKeyValues);
+      material_name, pTextureGroupName, pVMTKeyValues);
   Assert(pMaterial);
   Init(pMaterial);
 }
@@ -76,24 +67,16 @@ void CMaterialReference::Init(CMaterialReference &ref) {
   }
 }
 
-
 // Detach from a material
-
 void CMaterialReference::Shutdown() {
   if (m_pMaterial && materials) {
     m_pMaterial->DecrementReferenceCount();
-    m_pMaterial = NULL;
+    m_pMaterial = nullptr;
   }
 }
 
-
 // Little utility class to deal with texture references
-
-
-
-// constructor, destructor
-
-CTextureReference::CTextureReference() : m_pTexture(NULL) {}
+CTextureReference::CTextureReference() : m_pTexture{nullptr} {}
 
 CTextureReference::CTextureReference(const CTextureReference &ref) {
   m_pTexture = ref.m_pTexture;
@@ -113,11 +96,9 @@ CTextureReference::~CTextureReference() {
   // Shutdown();
 }
 
-
 // Attach to a texture
-
-void CTextureReference::Init(char const *pTextureName,
-                             const char *pTextureGroupName, bool bComplain) {
+void CTextureReference::Init(ch const *pTextureName,
+                             const ch *pTextureGroupName, bool bComplain) {
   Shutdown();
   m_pTexture =
       materials->FindTexture(pTextureName, pTextureGroupName, bComplain);
@@ -135,22 +116,14 @@ void CTextureReference::Init(ITexture *pTexture) {
   }
 }
 
-void CTextureReference::InitProceduralTexture(const char *pTextureName,
-                                              const char *pTextureGroupName,
+void CTextureReference::InitProceduralTexture(const ch *pTextureName,
+                                              const ch *pTextureGroupName,
                                               int w, int h, ImageFormat fmt,
                                               int nFlags) {
   Shutdown();
 
   m_pTexture = materials->CreateProceduralTexture(
       pTextureName, pTextureGroupName, w, h, fmt, nFlags);
-
-  // NOTE: The texture reference is already incremented internally above!
-  /*
-  if ( m_pTexture )
-  {
-          m_pTexture->IncrementReferenceCount();
-  }
-  */
 }
 
 void CTextureReference::InitRenderTarget(int w, int h,
@@ -158,7 +131,7 @@ void CTextureReference::InitRenderTarget(int w, int h,
                                          ImageFormat fmt,
                                          MaterialRenderTargetDepth_t depth,
                                          bool bHDR,
-                                         char *pStrOptionalName /* = NULL */) {
+                                         ch *pStrOptionalName /* = nullptr */) {
   Shutdown();
 
   int textureFlags = TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT;
@@ -174,52 +147,13 @@ void CTextureReference::InitRenderTarget(int w, int h,
   Assert(m_pTexture);
 }
 
-
-// Detach from a texture
-
+// Detach from a texture.
 void CTextureReference::Shutdown(bool bDeleteIfUnReferenced) {
   if (m_pTexture && materials) {
     m_pTexture->DecrementReferenceCount();
     if (bDeleteIfUnReferenced) {
       m_pTexture->DeleteIfUnreferenced();
     }
-    m_pTexture = NULL;
+    m_pTexture = nullptr;
   }
 }
-
-
-// Builds ONLY the system ram render target. Used when caller is explicitly
-// managing. The paired EDRAM surface can be built in an alternate format.
-
-#if defined(_X360)
-void CTextureReference::InitRenderTargetTexture(
-    int w, int h, RenderTargetSizeMode_t sizeMode, ImageFormat fmt,
-    MaterialRenderTargetDepth_t depth, bool bHDR, char *pStrOptionalName) {
-  // other variants not implemented yet
-  Assert(depth == MATERIAL_RT_DEPTH_NONE || depth == MATERIAL_RT_DEPTH_SHARED);
-  Assert(!bHDR);
-
-  int renderTargetFlags = CREATERENDERTARGETFLAGS_NOEDRAM;
-
-  m_pTexture = materials->CreateNamedRenderTargetTextureEx(
-      pStrOptionalName, w, h, sizeMode, fmt, depth,
-      TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT, renderTargetFlags);
-  Assert(m_pTexture);
-}
-#endif
-
-
-// Builds ONLY the EDRAM render target surface. Used when caller is explicitly
-// managing. The paired system memory texture can be built in an alternate
-// format.
-
-#if defined(_X360)
-void CTextureReference::InitRenderTargetSurface(int width, int height,
-                                                ImageFormat fmt,
-                                                bool bSameAsTexture) {
-  // texture has to be created first
-  Assert(m_pTexture && m_pTexture->IsRenderTarget());
-
-  m_pTexture->CreateRenderTargetSurface(width, height, fmt, bSameAsTexture);
-}
-#endif

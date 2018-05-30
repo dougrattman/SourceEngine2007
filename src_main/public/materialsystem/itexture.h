@@ -43,7 +43,7 @@ the_interface ITexture {
   virtual bool IsTranslucent() const = 0;
   virtual bool IsMipmapped() const = 0;
 
-  virtual void GetLowResColorSample(float s, float t, float *color) const = 0;
+  virtual void GetLowResColorSample(f32 s, f32 t, f32 *color) const = 0;
 
   // Gets texture resource data of the specified type.
   // Params:
@@ -51,7 +51,7 @@ the_interface ITexture {
   //		pnumBytes		on return is the number of bytes available in the
   //read-only data buffer or is undefined
   // Returns:
-  //		pointer to the resource data, or NULL
+  //		pointer to the resource data, or nullptr
   virtual void *GetResourceData(uint32_t eDataType, size_t * pNumBytes)
       const = 0;
 

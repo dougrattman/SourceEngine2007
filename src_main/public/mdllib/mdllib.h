@@ -1,7 +1,7 @@
-// Copyright © 1996-2007, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef MDLLIB_H
-#define MDLLIB_H
+#ifndef SOURCE_MDLLIB_H_
+#define SOURCE_MDLLIB_H_
 
 #include "appframework/IAppSystem.h"
 #include "tier1/utlbuffer.h"
@@ -9,9 +9,7 @@
 the_interface IMdlLib;
 the_interface IMdlStripInfo;
 
-//-----------------------------------------------------------------------------
 // Purpose: Interface to accessing model data operations
-//-----------------------------------------------------------------------------
 #define MDLLIB_INTERFACE_VERSION "VMDLLIB001"
 
 the_interface IMdlLib : public IAppSystem {
@@ -23,10 +21,12 @@ the_interface IMdlLib : public IAppSystem {
   // StripModelBuffers
   //	The main function that strips the model buffers
   //		mdlBuffer			- mdl buffer, updated, no size
-  // change 		vvdBuffer			- vvd buffer, updated, size
-  // reduced 		vtxBuffer			- vtx buffer, updated, size reduced
-  //		ppStripInfo			- if nonzero on return will be filled
-  //with the stripping info
+  // change 		vvdBuffer			- vvd buffer, updated,
+  // size
+  // reduced 		vtxBuffer			- vtx buffer, updated,
+  // size reduced
+  //		ppStripInfo			- if nonzero on return will be
+  // filled  with the stripping info
   //
   virtual bool StripModelBuffers(CUtlBuffer & mdlBuffer, CUtlBuffer & vvdBuffer,
                                  CUtlBuffer & vtxBuffer,
@@ -44,7 +44,7 @@ the_interface IMdlStripInfo {
   //
   // Serialization
   //
- public:
+
   // Save the strip info to the buffer (appends to the end)
   virtual bool Serialize(CUtlBuffer & bufStorage) const = 0;
 
@@ -55,10 +55,10 @@ the_interface IMdlStripInfo {
   //
   // Stripping info state
   //
- public:
+
   // Returns the checksums that the stripping info was generated for:
   //	plChecksumOriginal		if non-NULL will hold the checksum of
-  //the original model submitted for stripping 	plChecksumStripped
+  // the original model submitted for stripping 	plChecksumStripped
   // if non-NULL will hold the resulting checksum of the stripped model
   virtual bool GetCheckSum(long *plChecksumOriginal, long *plChecksumStripped)
       const = 0;
@@ -66,7 +66,7 @@ the_interface IMdlStripInfo {
   //
   // Stripping
   //
- public:
+
   //
   // StripHardwareVertsBuffer
   //	The main function that strips the vhv buffer
@@ -98,8 +98,7 @@ the_interface IMdlStripInfo {
   //
   // Release the object with "delete this"
   //
- public:
   virtual void DeleteThis() = 0;
 };
 
-#endif  // MDLLIB_H
+#endif  // SOURCE_MDLLIB_H_

@@ -234,7 +234,7 @@ NTreeNode<T> *NTreeNode<T>::ReentrantTraversalGetFirst(int maxTreeDepth) {
 }
 
 template <class T>
-NTreeNode<T> *NTreeNode<T>::ReentrantTraversalGetNext(void) {
+NTreeNode<T> *NTreeNode<T>::ReentrantTraversalGetNext() {
   NTreeNode<T> *current, *nextSibling;
 
   while (!reentrantStack->IsEmpty()) {

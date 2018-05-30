@@ -730,7 +730,7 @@ class Panel : public IClientPanel {
                      // current context
   IBorder *_border;
 
-  CUtlFlags<unsigned short> _flags;    // see PanelFlags_t
+  CUtlFlags<u16> _flags;    // see PanelFlags_t
   Dar<HPanel> _actionSignalTargetDar;  // the panel to direct notify messages to
                                        // ("Command", "TextChanged", etc.)
 
@@ -746,7 +746,7 @@ class Panel : public IClientPanel {
   short m_nResizeDeltaY;
 
   HCursor _cursor;
-  unsigned short _buildModeFlags;  // flags that control how the build mode
+  u16 _buildModeFlags;  // flags that control how the build mode
                                    // dialog handles this panel
 
   uint8_t _pinCorner : 4;  // the corner of the dialog this panel is pinned to

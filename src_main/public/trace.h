@@ -20,19 +20,17 @@
 class CBaseTrace {
  public:
   // Displacement flags tests.
-  bool IsDispSurface(void) {
-    return ((dispFlags & DISPSURF_FLAG_SURFACE) != 0);
-  }
-  bool IsDispSurfaceWalkable(void) {
+  bool IsDispSurface() { return ((dispFlags & DISPSURF_FLAG_SURFACE) != 0); }
+  bool IsDispSurfaceWalkable() {
     return ((dispFlags & DISPSURF_FLAG_WALKABLE) != 0);
   }
-  bool IsDispSurfaceBuildable(void) {
+  bool IsDispSurfaceBuildable() {
     return ((dispFlags & DISPSURF_FLAG_BUILDABLE) != 0);
   }
-  bool IsDispSurfaceProp1(void) {
+  bool IsDispSurfaceProp1() {
     return ((dispFlags & DISPSURF_FLAG_SURFPROP1) != 0);
   }
-  bool IsDispSurfaceProp2(void) {
+  bool IsDispSurfaceProp2() {
     return ((dispFlags & DISPSURF_FLAG_SURFPROP2) != 0);
   }
 
@@ -44,9 +42,8 @@ class CBaseTrace {
 
   float fraction;  // time completed, 1.0 = didn't hit anything
 
-  int contents;  // contents on other side of surface hit
-  unsigned short
-      dispFlags;  // displacement flags for marking surfaces with data
+  int contents;   // contents on other side of surface hit
+  u16 dispFlags;  // displacement flags for marking surfaces with data
 
   bool allsolid;    // if true, plane is not valid
   bool startsolid;  // if true, the initial point was in a solid area

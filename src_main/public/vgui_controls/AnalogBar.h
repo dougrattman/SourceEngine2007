@@ -59,7 +59,7 @@ class AnalogBar : public Panel {
 
   void SetHomeValue(float val) { m_fHomeValue = val; }
 
-  const Color &GetHomeColor(void) { return m_HomeColor; }
+  const Color &GetHomeColor() { return m_HomeColor; }
   void SetHomeColor(const Color &color) { m_HomeColor = color; }
 
  protected:

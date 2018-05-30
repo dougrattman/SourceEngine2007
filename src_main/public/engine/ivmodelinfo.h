@@ -6,9 +6,6 @@
 #include <cstdint>
 #include "studio.h"
 
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 class IMaterial;
 class KeyValues;
 struct vcollide_t;
@@ -23,7 +20,7 @@ struct virtualmodel_t;
 typedef unsigned char byte;
 struct virtualterrainparams_t;
 class CPhysCollide;
-typedef unsigned short MDLHandle_t;
+typedef u16 MDLHandle_t;
 class CUtlBuffer;
 class IClientRenderable;
 
@@ -37,7 +34,7 @@ class IClientRenderable;
 
 class IVModelInfo {
  public:
-  virtual ~IVModelInfo(void) {}
+  virtual ~IVModelInfo() {}
 
   virtual const model_t *GetModel(int modelindex) const = 0;
   // Returns index of model by name
@@ -111,7 +108,7 @@ class IVModelInfo {
 
   // both client and server
   virtual int GetAutoplayList(const studiohdr_t *pStudioHdr,
-                              unsigned short **pAutoplayList) const = 0;
+                              u16 **pAutoplayList) const = 0;
 
   // Gets a virtual terrain collision model (creates if necessary)
   // NOTE: This may return NULL if the terrain model cannot be virtualized

@@ -1,6 +1,8 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifdef _WIN32
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
 #include "base/include/windows/windows_light.h"
 #endif
 
@@ -104,7 +106,7 @@ class Win32File {
                 sysTime.wHour, sysTime.wMinute, sysTime.wSecond,
                 sysTime.wMilliseconds);
       V_ComposeFileName(WritePath.String(), unique_file_path, tmp_file_path,
-                        SOURCE_ARRAYSIZE(tmp_file_path));
+                        std::size(tmp_file_path));
     }
 
     FileName = tmp_file_path;
@@ -513,18 +515,18 @@ class ZipFile {
     MAX_FILES_IN_ZIP = 32768,
   };
 
-  typedef struct {
+  struct TmpFileInfo_t {
     CUtlSymbol m_Name;
     unsigned int filepos;
     int filelen;
-  } TmpFileInfo_t;
+  };
 
   CByteswap m_Swap;
   unsigned int m_AlignmentSize;
   bool m_bForceAlignment;
   bool m_bCompatibleFormat;
 
-  unsigned short CalculatePadding(unsigned int filenameLen, unsigned int pos);
+  u16 CalculatePadding(unsigned int filenameLen, unsigned int pos);
   void SaveDirectory(IWriteStream &stream);
   u16 MakeXZipCommentString(char *pComment, size_t max_length);
   void ParseXZipCommentString(const char *pComment);
@@ -864,15 +866,13 @@ void ZipFile::RemoveFileFromZip(const char *relativename) {
 //	Purpose: Calculates how many bytes should be added to the extra field
 //  to push the start of the file data to the next aligned boundary
 //  Output: Required padding size
-unsigned short ZipFile::CalculatePadding(unsigned int filenameLen,
-                                         unsigned int pos) {
+u16 ZipFile::CalculatePadding(unsigned int filenameLen, unsigned int pos) {
   if (m_AlignmentSize == 0) {
     return 0;
   }
 
   unsigned int headerSize = sizeof(ZIP_LocalFileHeader) + filenameLen;
-  return (unsigned short)(m_AlignmentSize -
-                          ((pos + headerSize) % m_AlignmentSize));
+  return (u16)(m_AlignmentSize - ((pos + headerSize) % m_AlignmentSize));
 }
 
 // Purpose: Create the XZIP identifying comment string
@@ -1117,7 +1117,7 @@ void ZipFile::SaveDirectory(IWriteStream &stream) {
 
       Assert(strlen(e->m_Name.String()) <= USHRT_MAX);
 
-      hdr.fileNameLength = (unsigned short)strlen(e->m_Name.String());
+      hdr.fileNameLength = (u16)strlen(e->m_Name.String());
       hdr.extraFieldLength =
           CalculatePadding(hdr.fileNameLength, e->m_ZipOffset);
       hdr.fileCommentLength = 0;
@@ -1170,7 +1170,7 @@ void ZipFile::SaveDirectory(IWriteStream &stream) {
 
   char commentString[128];
   u16 comment_size =
-      MakeXZipCommentString(commentString, SOURCE_ARRAYSIZE(commentString));
+      MakeXZipCommentString(commentString, std::size(commentString));
   rec.commentLength = comment_size;
 
   // Swap the header in place

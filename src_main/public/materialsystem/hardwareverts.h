@@ -60,11 +60,11 @@ struct FileHeader_t {
 
   int m_nMeshes;
   inline MeshHeader_t *pMesh(int nMesh) const {
-    return (MeshHeader_t *)(((byte *)this) + sizeof(FileHeader_t)) + nMesh;
+    return (MeshHeader_t *)(((u8 *)this) + sizeof(FileHeader_t)) + nMesh;
   };
 
   inline void *pVertexBase(int nMesh) const {
-    return (void *)((byte *)this + pMesh(nMesh)->m_nOffset);
+    return (void *)((u8 *)this + pMesh(nMesh)->m_nOffset);
   };
 
   unsigned int m_nUnused[4];

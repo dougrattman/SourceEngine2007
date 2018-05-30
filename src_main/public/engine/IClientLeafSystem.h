@@ -3,7 +3,7 @@
 // Purpose: This file contains code to allow us to associate client data with
 // bsp leaves.
 
-#if !defined(ICLIENTLEAFSYSTEM_H)
+#ifndef ICLIENTLEAFSYSTEM_H
 #define ICLIENTLEAFSYSTEM_H
 
 #include "client_render_handle.h"
@@ -53,8 +53,7 @@ the_interface IClientLeafSystemEngine {
                                       bool bIsStaticProp = false) = 0;
   virtual void RemoveRenderable(ClientRenderHandle_t handle) = 0;
   virtual void AddRenderableToLeaves(ClientRenderHandle_t renderable,
-                                     int nLeafCount,
-                                     unsigned short *pLeaves) = 0;
+                                     int nLeafCount, u16 *pLeaves) = 0;
   virtual void ChangeRenderableRenderGroup(ClientRenderHandle_t handle,
                                            RenderGroup_t group) = 0;
 };

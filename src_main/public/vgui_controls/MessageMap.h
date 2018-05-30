@@ -74,7 +74,7 @@ struct MessageMapItem_t {
     map->entries.AddToTail(entry);                                            \
   }                                                                           \
                                                                               \
-  static void ChainToMap(void) {                                              \
+  static void ChainToMap() {                                                  \
     static bool chained = false;                                              \
     if (chained) return;                                                      \
     chained = true;                                                           \
@@ -120,7 +120,6 @@ struct MessageMapItem_t {
   DECLARE_KEYBINDINGMAP(className);                             \
   static char const *GetPanelClassName() { return #className; } \
   static char const *GetPanelBaseClassName() { return nullptr; }
-
 
 #define _MessageFuncCommon(name, scriptname, paramCount, p1type, p1name, \
                            p2type, p2name)                               \
@@ -326,12 +325,11 @@ struct PanelMap_t {
   virtual vgui::PanelMap_t *GetPanelMap(void);
 
 // TODO(d.rattman): Could embed typeid() into here as well?
-#define IMPLEMENT_PANELMAP(derivedClass, baseClass)                \
-  vgui::PanelMap_t derivedClass::m_PanelMap = {                    \
-      derivedClass::m_MessageMap,                                  \
-      SOURCE_ARRAYSIZE(derivedClass::m_MessageMap), #derivedClass, \
-      &baseClass::m_PanelMap};                                     \
-  vgui::PanelMap_t *derivedClass::GetPanelMap(void) { return &m_PanelMap; }
+#define IMPLEMENT_PANELMAP(derivedClass, baseClass)                      \
+  vgui::PanelMap_t derivedClass::m_PanelMap = {                          \
+      derivedClass::m_MessageMap, std::size(derivedClass::m_MessageMap), \
+      #derivedClass, &baseClass::m_PanelMap};                            \
+  vgui::PanelMap_t *derivedClass::GetPanelMap() { return &m_PanelMap; }
 
 typedef vgui::Panel *(*PANELCREATEFUNC)(void);
 
@@ -372,7 +370,8 @@ class CBuildFactoryHelper {
 // hooks that function up to the helper list so that the CHud objects can create
 // the elements by name, with no header file dependency, etc.
 #define DECLARE_BUILD_FACTORY(className)                   \
-  static vgui::Panel *Create_##className##(void) {         \
+  \ 
+  static vgui::Panel *Create_##className##() {             \
     return new className(nullptr, nullptr);                \
   };                                                       \
   static vgui::CBuildFactoryHelper g_##className##_Helper( \
@@ -380,7 +379,7 @@ class CBuildFactoryHelper {
   className *g_##className##LinkerHack = nullptr;
 
 #define DECLARE_BUILD_FACTORY_DEFAULT_TEXT(className, defaultText) \
-  static vgui::Panel *Create_##className##(void) {                 \
+  static vgui::Panel *Create_##className##() {                     \
     return new className(nullptr, nullptr, #defaultText);          \
   };                                                               \
   static vgui::CBuildFactoryHelper g_##className##_Helper(         \

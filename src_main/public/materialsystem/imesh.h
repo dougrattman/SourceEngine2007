@@ -99,30 +99,30 @@ struct VertexDesc_t {
   int m_NumBoneWeights;
 
   // Pointers to our current vertex data
-  float *m_pPosition;
+  f32 *m_pPosition;
 
-  float *m_pBoneWeight;
+  f32 *m_pBoneWeight;
 
 #ifndef NEW_SKINNING
-  unsigned char *m_pBoneMatrixIndex;
+  u8 *m_pBoneMatrixIndex;
 #else
-  float *m_pBoneMatrixIndex;
+  f32 *m_pBoneMatrixIndex;
 #endif
 
-  float *m_pNormal;
+  f32 *m_pNormal;
 
-  unsigned char *m_pColor;
-  unsigned char *m_pSpecular;
-  float *m_pTexCoord[VERTEX_MAX_TEXTURE_COORDINATES];
+  u8 *m_pColor;
+  u8 *m_pSpecular;
+  f32 *m_pTexCoord[VERTEX_MAX_TEXTURE_COORDINATES];
 
   // Tangent space *associated with one particular set of texcoords*
-  float *m_pTangentS;
-  float *m_pTangentT;
+  f32 *m_pTangentS;
+  f32 *m_pTangentT;
 
-  float *m_pWrinkle;
+  f32 *m_pWrinkle;
 
   // user data
-  float *m_pUserData;
+  f32 *m_pUserData;
 
   // The first vertex index (used for buffered vertex buffers, or cards that
   // don't support stream offset)
@@ -134,13 +134,13 @@ struct VertexDesc_t {
 
 #ifdef DEBUG_WRITE_COMBINE
   int m_nLastWrittenField;
-  unsigned char *m_pLastWrittenAddress;
+  u8 *m_pLastWrittenAddress;
 #endif
 };
 
 struct IndexDesc_t {
   // Pointers to the index data
-  unsigned short *m_pIndices;
+  u16 *m_pIndices;
 
   // The offset in bytes of the memory we're writing into
   // from the start of the D3D buffer (will be 0 for static meshes)
@@ -153,7 +153,7 @@ struct IndexDesc_t {
   // 1 if the device is active, 0 if the device isn't active.
   // Faster than doing if checks for 0 m_pIndices if someone is
   // trying to write the m_pIndices while the device is inactive.
-  unsigned char m_nIndexSize;
+  u8 m_nIndexSize;
 };
 
 //-----------------------------------------------------------------------------
@@ -180,23 +180,23 @@ struct ModelVertexDX8_t : public ModelVertexDX7_t {
 //-----------------------------------------------------------------------------
 // Utility methods for buffer builders
 //-----------------------------------------------------------------------------
-inline float *OffsetFloatPointer(float *pBufferPointer, int nVertexCount,
+inline f32 *OffsetFloatPointer(f32 *pBufferPointer, int nVertexCount,
                                  int vertexSize) {
-  return reinterpret_cast<float *>(
-      reinterpret_cast<unsigned char *>(pBufferPointer) +
+  return reinterpret_cast<f32 *>(
+      reinterpret_cast<u8 *>(pBufferPointer) +
       nVertexCount * vertexSize);
 }
 
-inline const float *OffsetFloatPointer(const float *pBufferPointer,
+inline const f32 *OffsetFloatPointer(const f32 *pBufferPointer,
                                        int nVertexCount, int vertexSize) {
-  return reinterpret_cast<const float *>(
-      reinterpret_cast<unsigned char const *>(pBufferPointer) +
+  return reinterpret_cast<const f32 *>(
+      reinterpret_cast<u8 const *>(pBufferPointer) +
       nVertexCount * vertexSize);
 }
 
-inline void IncrementFloatPointer(float *&pBufferPointer, int vertexSize) {
-  pBufferPointer = reinterpret_cast<float *>(
-      reinterpret_cast<unsigned char *>(pBufferPointer) + vertexSize);
+inline void IncrementFloatPointer(f32 *&pBufferPointer, int vertexSize) {
+  pBufferPointer = reinterpret_cast<f32 *>(
+      reinterpret_cast<u8 *>(pBufferPointer) + vertexSize);
 }
 
 //-----------------------------------------------------------------------------
@@ -381,7 +381,7 @@ class CVertexBuilder : private VertexDesc_t {
   void Bind(IMatRenderContext *pContext, int nStreamID,
             VertexFormat_t usage = 0);
 
-  // Returns the uint8_t offset
+  // Returns the u8 offset
   int Offset() const;
 
   // This must be called before Begin, if a vertex buffer with a compressed
@@ -433,111 +433,111 @@ class CVertexBuilder : private VertexDesc_t {
   int GetFirstVertex() const;
 
   // Data retrieval...
-  const float *Position() const;
+  const f32 *Position() const;
 
-  const float *Normal() const;
+  const f32 *Normal() const;
 
   unsigned int Color() const;
 
-  unsigned char *Specular() const;
+  u8 *Specular() const;
 
-  const float *TexCoord(int stage) const;
+  const f32 *TexCoord(int stage) const;
 
-  const float *TangentS() const;
-  const float *TangentT() const;
+  const f32 *TangentS() const;
+  const f32 *TangentT() const;
 
-  const float *BoneWeight() const;
-  float Wrinkle() const;
+  const f32 *BoneWeight() const;
+  f32 Wrinkle() const;
 
   int NumBoneWeights() const;
 #ifndef NEW_SKINNING
-  unsigned char *BoneMatrix() const;
+  u8 *BoneMatrix() const;
 #else
-  float *BoneMatrix() const;
+  f32 *BoneMatrix() const;
 #endif
 
   // position setting
-  void Position3f(float x, float y, float z);
-  void Position3fv(const float *v);
+  void Position3f(f32 x, f32 y, f32 z);
+  void Position3fv(const f32 *v);
 
   // normal setting
-  void Normal3f(float nx, float ny, float nz);
-  void Normal3fv(const float *n);
-  void NormalDelta3fv(const float *n);
-  void NormalDelta3f(float nx, float ny, float nz);
+  void Normal3f(f32 nx, f32 ny, f32 nz);
+  void Normal3fv(const f32 *n);
+  void NormalDelta3fv(const f32 *n);
+  void NormalDelta3f(f32 nx, f32 ny, f32 nz);
   // normal setting (templatized for code which needs to support compressed
   // vertices)
   template <VertexCompressionType_t T>
-  void CompressedNormal3f(float nx, float ny, float nz);
+  void CompressedNormal3f(f32 nx, f32 ny, f32 nz);
   template <VertexCompressionType_t T>
-  void CompressedNormal3fv(const float *n);
+  void CompressedNormal3fv(const f32 *n);
 
   // color setting
-  void Color3f(float r, float g, float b);
-  void Color3fv(const float *rgb);
-  void Color4f(float r, float g, float b, float a);
-  void Color4fv(const float *rgba);
+  void Color3f(f32 r, f32 g, f32 b);
+  void Color3fv(const f32 *rgb);
+  void Color4f(f32 r, f32 g, f32 b, f32 a);
+  void Color4fv(const f32 *rgba);
 
   // Faster versions of color
-  void Color3ub(unsigned char r, unsigned char g, unsigned char b);
-  void Color3ubv(unsigned char const *rgb);
-  void Color4ub(unsigned char r, unsigned char g, unsigned char b,
-                unsigned char a);
-  void Color4ubv(unsigned char const *rgba);
+  void Color3ub(u8 r, u8 g, u8 b);
+  void Color3ubv(u8 const *rgb);
+  void Color4ub(u8 r, u8 g, u8 b,
+                u8 a);
+  void Color4ubv(u8 const *rgba);
 
   // specular color setting
-  void Specular3f(float r, float g, float b);
-  void Specular3fv(const float *rgb);
-  void Specular4f(float r, float g, float b, float a);
-  void Specular4fv(const float *rgba);
+  void Specular3f(f32 r, f32 g, f32 b);
+  void Specular3fv(const f32 *rgb);
+  void Specular4f(f32 r, f32 g, f32 b, f32 a);
+  void Specular4fv(const f32 *rgba);
 
   // Faster version of specular
-  void Specular3ub(unsigned char r, unsigned char g, unsigned char b);
-  void Specular3ubv(unsigned char const *c);
-  void Specular4ub(unsigned char r, unsigned char g, unsigned char b,
-                   unsigned char a);
-  void Specular4ubv(unsigned char const *c);
+  void Specular3ub(u8 r, u8 g, u8 b);
+  void Specular3ubv(u8 const *c);
+  void Specular4ub(u8 r, u8 g, u8 b,
+                   u8 a);
+  void Specular4ubv(u8 const *c);
 
   // texture coordinate setting
-  void TexCoord1f(int stage, float s);
-  void TexCoord2f(int stage, float s, float t);
-  void TexCoord2fv(int stage, const float *st);
-  void TexCoord3f(int stage, float s, float t, float u);
-  void TexCoord3fv(int stage, const float *stu);
-  void TexCoord4f(int stage, float s, float t, float u, float w);
-  void TexCoord4fv(int stage, const float *stuv);
+  void TexCoord1f(int stage, f32 s);
+  void TexCoord2f(int stage, f32 s, f32 t);
+  void TexCoord2fv(int stage, const f32 *st);
+  void TexCoord3f(int stage, f32 s, f32 t, f32 u);
+  void TexCoord3fv(int stage, const f32 *stu);
+  void TexCoord4f(int stage, f32 s, f32 t, f32 u, f32 w);
+  void TexCoord4fv(int stage, const f32 *stuv);
 
-  void TexCoordSubRect2f(int stage, float s, float t, float offsetS,
-                         float offsetT, float scaleS, float scaleT);
-  void TexCoordSubRect2fv(int stage, const float *st, const float *offset,
-                          const float *scale);
+  void TexCoordSubRect2f(int stage, f32 s, f32 t, f32 offsetS,
+                         f32 offsetT, f32 scaleS, f32 scaleT);
+  void TexCoordSubRect2fv(int stage, const f32 *st, const f32 *offset,
+                          const f32 *scale);
 
   // tangent space
-  void TangentS3f(float sx, float sy, float sz);
-  void TangentS3fv(const float *s);
+  void TangentS3f(f32 sx, f32 sy, f32 sz);
+  void TangentS3fv(const f32 *s);
 
-  void TangentT3f(float tx, float ty, float tz);
-  void TangentT3fv(const float *t);
+  void TangentT3f(f32 tx, f32 ty, f32 tz);
+  void TangentT3fv(const f32 *t);
 
   // Wrinkle
-  void Wrinkle1f(float flWrinkle);
+  void Wrinkle1f(f32 flWrinkle);
 
   // bone weights
-  void BoneWeight(int idx, float weight);
+  void BoneWeight(int idx, f32 weight);
   // bone weights (templatized for code which needs to support compressed
   // vertices)
   template <VertexCompressionType_t T>
-  void CompressedBoneWeight3fv(const float *pWeights);
+  void CompressedBoneWeight3fv(const f32 *pWeights);
 
   // bone matrix index
   void BoneMatrix(int idx, int matrixIndex);
 
   // Generic per-vertex data
-  void UserData(const float *pData);
+  void UserData(const f32 *pData);
   // Generic per-vertex data (templatized for code which needs to support
   // compressed vertices)
   template <VertexCompressionType_t T>
-  void CompressedUserData(const float *pData);
+  void CompressedUserData(const f32 *pData);
 
 #ifndef ARCH_CPU_X86_64
   // Fast Vertex! No need to call advance vertex, and no random access allowed.
@@ -585,10 +585,10 @@ class CVertexBuilder : private VertexDesc_t {
   mutable int m_nCurrentVertex;
 
   // Optimization: Pointer to the current pos, norm, texcoord, and color
-  mutable float *m_pCurrPosition;
-  mutable float *m_pCurrNormal;
-  mutable float *m_pCurrTexCoord[VERTEX_MAX_TEXTURE_COORDINATES];
-  mutable unsigned char *m_pCurrColor;
+  mutable f32 *m_pCurrPosition;
+  mutable f32 *m_pCurrNormal;
+  mutable f32 *m_pCurrTexCoord[VERTEX_MAX_TEXTURE_COORDINATES];
+  mutable u8 *m_pCurrColor;
 
   // Total number of vertices appended
   int m_nTotalVertexCount;
@@ -612,7 +612,7 @@ class CVertexBuilder : private VertexDesc_t {
 //
 //-----------------------------------------------------------------------------
 inline CVertexBuilder::CVertexBuilder() {
-  m_pVertexBuffer = NULL;
+  m_pVertexBuffer = nullptr;
   m_nBufferOffset = INVALID_BUFFER_OFFSET;
   m_nBufferFirstVertex = 0;
   m_nVertexCount = 0;
@@ -622,9 +622,9 @@ inline CVertexBuilder::CVertexBuilder() {
   m_CompressionType = VERTEX_COMPRESSION_INVALID;
 
 #ifdef _DEBUG
-  m_pCurrPosition = NULL;
-  m_pCurrNormal = NULL;
-  m_pCurrColor = NULL;
+  m_pCurrPosition = nullptr;
+  m_pCurrNormal = nullptr;
+  m_pCurrColor = nullptr;
   memset(m_pCurrTexCoord, 0, sizeof(m_pCurrTexCoord));
   m_bModify = false;
 #endif
@@ -648,9 +648,9 @@ inline CVertexBuilder::CVertexBuilder(IVertexBuffer *pVertexBuffer,
   }
 
 #ifdef _DEBUG
-  m_pCurrPosition = NULL;
-  m_pCurrNormal = NULL;
-  m_pCurrColor = NULL;
+  m_pCurrPosition = nullptr;
+  m_pCurrNormal = nullptr;
+  m_pCurrColor = nullptr;
   memset(m_pCurrTexCoord, 0, sizeof(m_pCurrTexCoord));
   m_bModify = false;
 #endif
@@ -707,9 +707,9 @@ inline void CVertexBuilder::Unlock() {
 
 #ifdef _DEBUG
   // Null out our data...
-  m_pCurrPosition = NULL;
-  m_pCurrNormal = NULL;
-  m_pCurrColor = NULL;
+  m_pCurrPosition = nullptr;
+  m_pCurrNormal = nullptr;
+  m_pCurrColor = nullptr;
   memset(m_pCurrTexCoord, 0, sizeof(m_pCurrTexCoord));
   memset(static_cast<VertexDesc_t *>(this), 0, sizeof(VertexDesc_t));
 #endif
@@ -730,12 +730,12 @@ inline void CVertexBuilder::Bind(IMatRenderContext *pContext, int nStreamID,
         m_nTotalVertexCount,
         usage ? usage : m_pVertexBuffer->GetVertexFormat());
   } else {
-    pContext->BindVertexBuffer(nStreamID, NULL, 0, 0, 0, 0);
+    pContext->BindVertexBuffer(nStreamID, nullptr, 0, 0, 0, 0);
   }
 }
 
 //-----------------------------------------------------------------------------
-// Returns the uint8_t offset
+// Returns the u8 offset
 //-----------------------------------------------------------------------------
 inline int CVertexBuilder::Offset() const { return m_nBufferOffset; }
 
@@ -821,9 +821,9 @@ inline void CVertexBuilder::End(bool bSpewData) {
 
 #ifdef _DEBUG
   // Null out our pointers...
-  m_pCurrPosition = NULL;
-  m_pCurrNormal = NULL;
-  m_pCurrColor = NULL;
+  m_pCurrPosition = nullptr;
+  m_pCurrNormal = nullptr;
+  m_pCurrColor = nullptr;
   memset(m_pCurrTexCoord, 0, sizeof(m_pCurrTexCoord));
   memset(static_cast<VertexDesc_t *>(this), 0, sizeof(VertexDesc_t));
 #endif
@@ -858,15 +858,15 @@ inline void CVertexBuilder::AttachEnd() {
   Assert(!m_bModify);
 
   m_nMaxVertexCount = 0;
-  m_pVertexBuffer = NULL;
+  m_pVertexBuffer = nullptr;
 
   m_CompressionType = VERTEX_COMPRESSION_INVALID;
 
 #ifdef _DEBUG
   // Null out our pointers...
-  m_pCurrPosition = NULL;
-  m_pCurrNormal = NULL;
-  m_pCurrColor = NULL;
+  m_pCurrPosition = nullptr;
+  m_pCurrNormal = nullptr;
+  m_pCurrColor = nullptr;
   memset(m_pCurrTexCoord, 0, sizeof(m_pCurrTexCoord));
   memset(static_cast<VertexDesc_t *>(this), 0, sizeof(VertexDesc_t));
 #endif
@@ -899,9 +899,9 @@ inline void CVertexBuilder::AttachEndModify() {
 
 #ifdef _DEBUG
   // Null out our pointers...
-  m_pCurrPosition = NULL;
-  m_pCurrNormal = NULL;
-  m_pCurrColor = NULL;
+  m_pCurrPosition = nullptr;
+  m_pCurrNormal = nullptr;
+  m_pCurrColor = nullptr;
   memset(m_pCurrTexCoord, 0, sizeof(m_pCurrTexCoord));
   memset(static_cast<VertexDesc_t *>(this), 0, sizeof(VertexDesc_t));
 #endif
@@ -910,12 +910,12 @@ inline void CVertexBuilder::AttachEndModify() {
 //-----------------------------------------------------------------------------
 // Computes the first min non-0 address
 //-----------------------------------------------------------------------------
-inline unsigned char *FindMinAddress(void *pAddress1, void *pAddress2,
+inline u8 *FindMinAddress(void *pAddress1, void *pAddress2,
                                      int nAddress2Size) {
-  if (nAddress2Size == 0) return (unsigned char *)pAddress1;
-  if (!pAddress1) return (unsigned char *)pAddress2;
-  return (pAddress1 < pAddress2) ? (unsigned char *)pAddress1
-                                 : (unsigned char *)pAddress2;
+  if (nAddress2Size == 0) return (u8 *)pAddress1;
+  if (!pAddress1) return (u8 *)pAddress2;
+  return (pAddress1 < pAddress2) ? (u8 *)pAddress1
+                                 : (u8 *)pAddress2;
 }
 
 //-----------------------------------------------------------------------------
@@ -942,7 +942,7 @@ inline void CVertexBuilder::Reset() {
   // Logic for m_pLastWrittenAddress is tricky. It really wants the min of the
   // non-0 address pointers.
   m_nLastWrittenField = MB_FIELD_NONE;
-  m_pLastWrittenAddress = NULL;
+  m_pLastWrittenAddress = nullptr;
   m_pLastWrittenAddress =
       FindMinAddress(m_pLastWrittenAddress, m_pPosition, m_VertexSize_Position);
   m_pLastWrittenAddress = FindMinAddress(m_pLastWrittenAddress, m_pBoneWeight,
@@ -1336,7 +1336,7 @@ inline int CVertexBuilder::GetCurrentVertex() const { return m_nCurrentVertex; }
 //-----------------------------------------------------------------------------
 // Data retrieval...
 //-----------------------------------------------------------------------------
-inline const float *CVertexBuilder::Position() const {
+inline const f32 *CVertexBuilder::Position() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1346,7 +1346,7 @@ inline const float *CVertexBuilder::Position() const {
   return m_pCurrPosition;
 }
 
-inline const float *CVertexBuilder::Normal() const {
+inline const f32 *CVertexBuilder::Normal() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1369,7 +1369,7 @@ inline unsigned int CVertexBuilder::Color() const {
   return color;
 }
 
-inline unsigned char *CVertexBuilder::Specular() const {
+inline u8 *CVertexBuilder::Specular() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1379,7 +1379,7 @@ inline unsigned char *CVertexBuilder::Specular() const {
   return m_pSpecular + m_nCurrentVertex * m_VertexSize_Specular;
 }
 
-inline const float *CVertexBuilder::TexCoord(int stage) const {
+inline const f32 *CVertexBuilder::TexCoord(int stage) const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1389,7 +1389,7 @@ inline const float *CVertexBuilder::TexCoord(int stage) const {
   return m_pCurrTexCoord[stage];
 }
 
-inline const float *CVertexBuilder::TangentS() const {
+inline const f32 *CVertexBuilder::TangentS() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1400,7 +1400,7 @@ inline const float *CVertexBuilder::TangentS() const {
                             m_VertexSize_TangentS);
 }
 
-inline const float *CVertexBuilder::TangentT() const {
+inline const f32 *CVertexBuilder::TangentT() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1411,7 +1411,7 @@ inline const float *CVertexBuilder::TangentT() const {
                             m_VertexSize_TangentT);
 }
 
-inline float CVertexBuilder::Wrinkle() const {
+inline f32 CVertexBuilder::Wrinkle() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1422,7 +1422,7 @@ inline float CVertexBuilder::Wrinkle() const {
                              m_VertexSize_Wrinkle);
 }
 
-inline const float *CVertexBuilder::BoneWeight() const {
+inline const f32 *CVertexBuilder::BoneWeight() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1436,7 +1436,7 @@ inline const float *CVertexBuilder::BoneWeight() const {
 inline int CVertexBuilder::NumBoneWeights() const { return m_NumBoneWeights; }
 
 #ifndef NEW_SKINNING
-inline unsigned char *CVertexBuilder::BoneMatrix() const {
+inline u8 *CVertexBuilder::BoneMatrix() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1446,7 +1446,7 @@ inline unsigned char *CVertexBuilder::BoneMatrix() const {
   return m_pBoneMatrixIndex + m_nCurrentVertex * m_VertexSize_BoneMatrixIndex;
 }
 #else
-inline float *CVertexBuilder::BoneMatrix() const {
+inline f32 *CVertexBuilder::BoneMatrix() const {
   // TODO(d.rattman): add a templatized accessor (return type varies to ensure
   // calling code is updated appropriately)
   //        for code that needs to access compressed data (and/or a
@@ -1460,20 +1460,20 @@ inline float *CVertexBuilder::BoneMatrix() const {
 //-----------------------------------------------------------------------------
 // Position setting methods
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::Position3f(float x, float y, float z) {
+inline void CVertexBuilder::Position3f(f32 x, f32 y, f32 z) {
   Assert(m_pPosition && m_pCurrPosition);
   Assert(IsFinite(x) && IsFinite(y) && IsFinite(z));
-  float *pDst = m_pCurrPosition;
+  f32 *pDst = m_pCurrPosition;
   *pDst++ = x;
   *pDst++ = y;
   *pDst = z;
 }
 
-inline void CVertexBuilder::Position3fv(const float *v) {
+inline void CVertexBuilder::Position3fv(const f32 *v) {
   Assert(v);
   Assert(m_pPosition && m_pCurrPosition);
 
-  float *pDst = m_pCurrPosition;
+  f32 *pDst = m_pCurrPosition;
   *pDst++ = *v++;
   *pDst++ = *v++;
   *pDst = *v;
@@ -1482,7 +1482,7 @@ inline void CVertexBuilder::Position3fv(const float *v) {
 //-----------------------------------------------------------------------------
 // Normal setting methods
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::Normal3f(float nx, float ny, float nz) {
+inline void CVertexBuilder::Normal3f(f32 nx, f32 ny, f32 nz) {
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);  // Use the templatized
                                                          // version if you want
                                                          // to support
@@ -1493,13 +1493,13 @@ inline void CVertexBuilder::Normal3f(float nx, float ny, float nz) {
   Assert(ny >= -1.05f && ny <= 1.05f);
   Assert(nz >= -1.05f && nz <= 1.05f);
 
-  float *pDst = m_pCurrNormal;
+  f32 *pDst = m_pCurrNormal;
   *pDst++ = nx;
   *pDst++ = ny;
   *pDst = nz;
 }
 
-inline void CVertexBuilder::Normal3fv(const float *n) {
+inline void CVertexBuilder::Normal3fv(const f32 *n) {
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);  // Use the templatized
                                                          // version if you want
                                                          // to support
@@ -1511,13 +1511,13 @@ inline void CVertexBuilder::Normal3fv(const float *n) {
   Assert(n[1] >= -1.05f && n[1] <= 1.05f);
   Assert(n[2] >= -1.05f && n[2] <= 1.05f);
 
-  float *pDst = m_pCurrNormal;
+  f32 *pDst = m_pCurrNormal;
   *pDst++ = *n++;
   *pDst++ = *n++;
   *pDst = *n;
 }
 
-inline void CVertexBuilder::NormalDelta3f(float nx, float ny, float nz) {
+inline void CVertexBuilder::NormalDelta3f(f32 nx, f32 ny, f32 nz) {
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);  // Use the templatized
                                                          // version if you want
                                                          // to support
@@ -1525,13 +1525,13 @@ inline void CVertexBuilder::NormalDelta3f(float nx, float ny, float nz) {
   Assert(m_pNormal);
   Assert(IsFinite(nx) && IsFinite(ny) && IsFinite(nz));
 
-  float *pDst = m_pCurrNormal;
+  f32 *pDst = m_pCurrNormal;
   *pDst++ = nx;
   *pDst++ = ny;
   *pDst = nz;
 }
 
-inline void CVertexBuilder::NormalDelta3fv(const float *n) {
+inline void CVertexBuilder::NormalDelta3fv(const f32 *n) {
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);  // Use the templatized
                                                          // version if you want
                                                          // to support
@@ -1540,7 +1540,7 @@ inline void CVertexBuilder::NormalDelta3fv(const float *n) {
   Assert(m_pNormal && m_pCurrNormal);
   Assert(IsFinite(n[0]) && IsFinite(n[1]) && IsFinite(n[2]));
 
-  float *pDst = m_pCurrNormal;
+  f32 *pDst = m_pCurrNormal;
   *pDst++ = *n++;
   *pDst++ = *n++;
   *pDst = *n;
@@ -1550,7 +1550,7 @@ inline void CVertexBuilder::NormalDelta3fv(const float *n) {
 // Templatized normal setting methods which support compressed vertices
 //-----------------------------------------------------------------------------
 template <VertexCompressionType_t T>
-inline void CVertexBuilder::CompressedNormal3f(float nx, float ny, float nz) {
+inline void CVertexBuilder::CompressedNormal3f(f32 nx, f32 ny, f32 nz) {
   Assert(T == m_CompressionType);
   Assert(m_pNormal && m_pCurrNormal);
   Assert(IsFinite(nx) && IsFinite(ny) && IsFinite(nz));
@@ -1558,7 +1558,7 @@ inline void CVertexBuilder::CompressedNormal3f(float nx, float ny, float nz) {
   Assert(ny >= -1.05f && ny <= 1.05f);
   Assert(nz >= -1.05f && nz <= 1.05f);
   // TODO(d.rattman): studiorender is passing in non-unit normals
-  // float lengthSqd = nx*nx + ny*ny + nz*nz;
+  // f32 lengthSqd = nx*nx + ny*ny + nz*nz;
   // Assert( lengthSqd >= 0.95f && lengthSqd <= 1.05f );
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, T == VERTEX_COMPRESSION_ON)) {
@@ -1578,7 +1578,7 @@ inline void CVertexBuilder::CompressedNormal3f(float nx, float ny, float nz) {
     PackNormal_UBYTE4(nx, ny, nz, (unsigned int *)m_pCurrNormal);
 #endif
   } else {
-    float *pDst = m_pCurrNormal;
+    f32 *pDst = m_pCurrNormal;
     *pDst++ = nx;
     *pDst++ = ny;
     *pDst = nz;
@@ -1586,7 +1586,7 @@ inline void CVertexBuilder::CompressedNormal3f(float nx, float ny, float nz) {
 }
 
 template <VertexCompressionType_t T>
-inline void CVertexBuilder::CompressedNormal3fv(const float *n) {
+inline void CVertexBuilder::CompressedNormal3fv(const f32 *n) {
   Assert(n);
   CompressedNormal3f<T>(n[0], n[1], n[2]);
 }
@@ -1594,7 +1594,7 @@ inline void CVertexBuilder::CompressedNormal3fv(const float *n) {
 //-----------------------------------------------------------------------------
 // Color setting methods
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::Color3f(float r, float g, float b) {
+inline void CVertexBuilder::Color3f(f32 r, f32 g, f32 b) {
   Assert(m_pColor && m_pCurrColor);
   Assert(IsFinite(r) && IsFinite(g) && IsFinite(b));
   Assert((r >= 0.0) && (g >= 0.0) && (b >= 0.0));
@@ -1605,7 +1605,7 @@ inline void CVertexBuilder::Color3f(float r, float g, float b) {
   *(int *)m_pCurrColor = col;
 }
 
-inline void CVertexBuilder::Color3fv(const float *rgb) {
+inline void CVertexBuilder::Color3fv(const f32 *rgb) {
   Assert(rgb);
   Assert(m_pColor && m_pCurrColor);
   Assert(IsFinite(rgb[0]) && IsFinite(rgb[1]) && IsFinite(rgb[2]));
@@ -1617,7 +1617,7 @@ inline void CVertexBuilder::Color3fv(const float *rgb) {
   *(int *)m_pCurrColor = col;
 }
 
-inline void CVertexBuilder::Color4f(float r, float g, float b, float a) {
+inline void CVertexBuilder::Color4f(f32 r, f32 g, f32 b, f32 a) {
   Assert(m_pColor && m_pCurrColor);
   Assert(IsFinite(r) && IsFinite(g) && IsFinite(b) && IsFinite(a));
   Assert((r >= 0.0) && (g >= 0.0) && (b >= 0.0) && (a >= 0.0));
@@ -1628,7 +1628,7 @@ inline void CVertexBuilder::Color4f(float r, float g, float b, float a) {
   *(int *)m_pCurrColor = col;
 }
 
-inline void CVertexBuilder::Color4fv(const float *rgba) {
+inline void CVertexBuilder::Color4fv(const f32 *rgba) {
   Assert(rgba);
   Assert(m_pColor && m_pCurrColor);
   Assert(IsFinite(rgba[0]) && IsFinite(rgba[1]) && IsFinite(rgba[2]) &&
@@ -1646,14 +1646,14 @@ inline void CVertexBuilder::Color4fv(const float *rgba) {
 //-----------------------------------------------------------------------------
 // Faster versions of color
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::Color3ub(unsigned char r, unsigned char g,
-                                     unsigned char b) {
+inline void CVertexBuilder::Color3ub(u8 r, u8 g,
+                                     u8 b) {
   Assert(m_pColor && m_pCurrColor);
   int col = b | (g << 8) | (r << 16) | 0xFF000000;
   *(int *)m_pCurrColor = col;
 }
 
-inline void CVertexBuilder::Color3ubv(unsigned char const *rgb) {
+inline void CVertexBuilder::Color3ubv(u8 const *rgb) {
   Assert(rgb);
   Assert(m_pColor && m_pCurrColor);
 
@@ -1661,61 +1661,61 @@ inline void CVertexBuilder::Color3ubv(unsigned char const *rgb) {
   *(int *)m_pCurrColor = col;
 }
 
-inline void CVertexBuilder::Color4ub(unsigned char r, unsigned char g,
-                                     unsigned char b, unsigned char a) {
+inline void CVertexBuilder::Color4ub(u8 r, u8 g,
+                                     u8 b, u8 a) {
   Assert(m_pColor && m_pCurrColor);
   int col = b | (g << 8) | (r << 16) | (a << 24);
   *(int *)m_pCurrColor = col;
 }
 
-inline void CVertexBuilder::Color4ubv(unsigned char const *rgba) {
+inline void CVertexBuilder::Color4ubv(u8 const *rgba) {
   Assert(rgba);
   Assert(m_pColor && m_pCurrColor);
   int col = rgba[2] | (rgba[1] << 8) | (rgba[0] << 16) | (rgba[3] << 24);
   *(int *)m_pCurrColor = col;
 }
 
-inline void CVertexBuilder::Specular3f(float r, float g, float b) {
+inline void CVertexBuilder::Specular3f(f32 r, f32 g, f32 b) {
   Assert(m_pSpecular);
   Assert(IsFinite(r) && IsFinite(g) && IsFinite(b));
   Assert((r >= 0.0) && (g >= 0.0) && (b >= 0.0));
   Assert((r <= 1.0) && (g <= 1.0) && (b <= 1.0));
 
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col =
       (FastFToC(b)) | (FastFToC(g) << 8) | (FastFToC(r) << 16) | 0xFF000000;
   *(int *)pSpecular = col;
 }
 
-inline void CVertexBuilder::Specular3fv(const float *rgb) {
+inline void CVertexBuilder::Specular3fv(const f32 *rgb) {
   Assert(rgb);
   Assert(m_pSpecular);
   Assert(IsFinite(rgb[0]) && IsFinite(rgb[1]) && IsFinite(rgb[2]));
   Assert((rgb[0] >= 0.0) && (rgb[1] >= 0.0) && (rgb[2] >= 0.0));
   Assert((rgb[0] <= 1.0) && (rgb[1] <= 1.0) && (rgb[2] <= 1.0));
 
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col = (FastFToC(rgb[2])) | (FastFToC(rgb[1]) << 8) |
             (FastFToC(rgb[0]) << 16) | 0xFF000000;
   *(int *)pSpecular = col;
 }
 
-inline void CVertexBuilder::Specular4f(float r, float g, float b, float a) {
+inline void CVertexBuilder::Specular4f(f32 r, f32 g, f32 b, f32 a) {
   Assert(m_pSpecular);
   Assert(IsFinite(r) && IsFinite(g) && IsFinite(b) && IsFinite(a));
   Assert((r >= 0.0) && (g >= 0.0) && (b >= 0.0) && (a >= 0.0));
   Assert((r <= 1.0) && (g <= 1.0) && (b <= 1.0) && (a <= 1.0f));
 
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col = (FastFToC(b)) | (FastFToC(g) << 8) | (FastFToC(r) << 16) |
             (FastFToC(a) << 24);
   *(int *)pSpecular = col;
 }
 
-inline void CVertexBuilder::Specular4fv(const float *rgb) {
+inline void CVertexBuilder::Specular4fv(const f32 *rgb) {
   Assert(rgb);
   Assert(m_pSpecular);
   Assert(IsFinite(rgb[0]) && IsFinite(rgb[1]) && IsFinite(rgb[2]) &&
@@ -1725,42 +1725,42 @@ inline void CVertexBuilder::Specular4fv(const float *rgb) {
   Assert((rgb[0] <= 1.0) && (rgb[1] <= 1.0) && (rgb[2] <= 1.0) &&
          (rgb[3] <= 1.0));
 
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col = (FastFToC(rgb[2])) | (FastFToC(rgb[1]) << 8) |
             (FastFToC(rgb[0]) << 16) | (FastFToC(rgb[3]) << 24);
   *(int *)pSpecular = col;
 }
 
-inline void CVertexBuilder::Specular3ub(unsigned char r, unsigned char g,
-                                        unsigned char b) {
+inline void CVertexBuilder::Specular3ub(u8 r, u8 g,
+                                        u8 b) {
   Assert(m_pSpecular);
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col = b | (g << 8) | (r << 16) | 0xFF000000;
   *(int *)pSpecular = col;
 }
 
-inline void CVertexBuilder::Specular3ubv(unsigned char const *c) {
+inline void CVertexBuilder::Specular3ubv(u8 const *c) {
   Assert(m_pSpecular);
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col = c[2] | (c[1] << 8) | (c[0] << 16) | 0xFF000000;
   *(int *)pSpecular = col;
 }
 
-inline void CVertexBuilder::Specular4ub(unsigned char r, unsigned char g,
-                                        unsigned char b, unsigned char a) {
+inline void CVertexBuilder::Specular4ub(u8 r, u8 g,
+                                        u8 b, u8 a) {
   Assert(m_pSpecular);
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col = b | (g << 8) | (r << 16) | (a << 24);
   *(int *)pSpecular = col;
 }
 
-inline void CVertexBuilder::Specular4ubv(unsigned char const *c) {
+inline void CVertexBuilder::Specular4ubv(u8 const *c) {
   Assert(m_pSpecular);
-  unsigned char *pSpecular =
+  u8 *pSpecular =
       &m_pSpecular[m_nCurrentVertex * m_VertexSize_Specular];
   int col = c[2] | (c[1] << 8) | (c[0] << 16) | (c[3] << 24);
   *(int *)pSpecular = col;
@@ -1769,97 +1769,97 @@ inline void CVertexBuilder::Specular4ubv(unsigned char const *c) {
 //-----------------------------------------------------------------------------
 // Texture coordinate setting methods
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::TexCoord1f(int nStage, float s) {
+inline void CVertexBuilder::TexCoord1f(int nStage, f32 s) {
   Assert(m_pTexCoord[nStage] && m_pCurrTexCoord[nStage]);
   Assert(IsFinite(s));
 
-  float *pDst = m_pCurrTexCoord[nStage];
+  f32 *pDst = m_pCurrTexCoord[nStage];
   *pDst = s;
 }
 
-inline void CVertexBuilder::TexCoord2f(int nStage, float s, float t) {
+inline void CVertexBuilder::TexCoord2f(int nStage, f32 s, f32 t) {
   Assert(m_pTexCoord[nStage] && m_pCurrTexCoord[nStage]);
   Assert(IsFinite(s) && IsFinite(t));
 
-  float *pDst = m_pCurrTexCoord[nStage];
+  f32 *pDst = m_pCurrTexCoord[nStage];
   *pDst++ = s;
   *pDst = t;
 }
 
-inline void CVertexBuilder::TexCoord2fv(int nStage, const float *st) {
+inline void CVertexBuilder::TexCoord2fv(int nStage, const f32 *st) {
   Assert(st);
   Assert(m_pTexCoord[nStage] && m_pCurrTexCoord[nStage]);
   Assert(IsFinite(st[0]) && IsFinite(st[1]));
 
-  float *pDst = m_pCurrTexCoord[nStage];
+  f32 *pDst = m_pCurrTexCoord[nStage];
   *pDst++ = *st++;
   *pDst = *st;
 }
 
-inline void CVertexBuilder::TexCoord3f(int stage, float s, float t, float u) {
+inline void CVertexBuilder::TexCoord3f(int stage, f32 s, f32 t, f32 u) {
   // Tried to add too much!
   Assert(m_pTexCoord[stage] && m_pCurrTexCoord[stage]);
   Assert(IsFinite(s) && IsFinite(t) && IsFinite(u));
-  float *pDst = m_pCurrTexCoord[stage];
+  f32 *pDst = m_pCurrTexCoord[stage];
   *pDst++ = s;
   *pDst++ = t;
   *pDst = u;
 }
 
-inline void CVertexBuilder::TexCoord3fv(int stage, const float *stu) {
+inline void CVertexBuilder::TexCoord3fv(int stage, const f32 *stu) {
   Assert(stu);
   Assert(m_pTexCoord[stage] && m_pCurrTexCoord[stage]);
   Assert(IsFinite(stu[0]) && IsFinite(stu[1]) && IsFinite(stu[2]));
 
-  float *pDst = m_pCurrTexCoord[stage];
+  f32 *pDst = m_pCurrTexCoord[stage];
   *pDst++ = *stu++;
   *pDst++ = *stu++;
   *pDst = *stu;
 }
 
-inline void CVertexBuilder::TexCoord4f(int stage, float s, float t, float u,
-                                       float v) {
+inline void CVertexBuilder::TexCoord4f(int stage, f32 s, f32 t, f32 u,
+                                       f32 v) {
   // Tried to add too much!
   Assert(m_pTexCoord[stage] && m_pCurrTexCoord[stage]);
   Assert(IsFinite(s) && IsFinite(t) && IsFinite(u));
-  float *pDst = m_pCurrTexCoord[stage];
+  f32 *pDst = m_pCurrTexCoord[stage];
   *pDst++ = s;
   *pDst++ = t;
   *pDst++ = u;
   *pDst = v;
 }
 
-inline void CVertexBuilder::TexCoord4fv(int stage, const float *stuv) {
+inline void CVertexBuilder::TexCoord4fv(int stage, const f32 *stuv) {
   Assert(stuv);
   Assert(m_pTexCoord[stage] && m_pCurrTexCoord[stage]);
   Assert(IsFinite(stuv[0]) && IsFinite(stuv[1]) && IsFinite(stuv[2]));
 
-  float *pDst = m_pCurrTexCoord[stage];
+  f32 *pDst = m_pCurrTexCoord[stage];
   *pDst++ = *stuv++;
   *pDst++ = *stuv++;
   *pDst++ = *stuv++;
   *pDst = *stuv;
 }
 
-inline void CVertexBuilder::TexCoordSubRect2f(int stage, float s, float t,
-                                              float offsetS, float offsetT,
-                                              float scaleS, float scaleT) {
+inline void CVertexBuilder::TexCoordSubRect2f(int stage, f32 s, f32 t,
+                                              f32 offsetS, f32 offsetT,
+                                              f32 scaleS, f32 scaleT) {
   Assert(m_pTexCoord[stage] && m_pCurrTexCoord[stage]);
   Assert(IsFinite(s) && IsFinite(t));
 
-  float *pDst = m_pCurrTexCoord[stage];
+  f32 *pDst = m_pCurrTexCoord[stage];
   *pDst++ = (s * scaleS) + offsetS;
   *pDst = (t * scaleT) + offsetT;
 }
 
-inline void CVertexBuilder::TexCoordSubRect2fv(int stage, const float *st,
-                                               const float *offset,
-                                               const float *scale) {
+inline void CVertexBuilder::TexCoordSubRect2fv(int stage, const f32 *st,
+                                               const f32 *offset,
+                                               const f32 *scale) {
   Assert(st);
   Assert(m_pTexCoord[stage] && m_pCurrTexCoord[stage]);
   Assert(IsFinite(st[0]) && IsFinite(st[1]));
 
-  float *pDst = m_pCurrTexCoord[stage];
+  f32 *pDst = m_pCurrTexCoord[stage];
   *pDst++ = (*st++ * *scale++) + *offset++;
   *pDst = (*st * *scale) + *offset;
 }
@@ -1867,46 +1867,46 @@ inline void CVertexBuilder::TexCoordSubRect2fv(int stage, const float *st,
 //-----------------------------------------------------------------------------
 // Tangent space setting methods
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::TangentS3f(float sx, float sy, float sz) {
+inline void CVertexBuilder::TangentS3f(f32 sx, f32 sy, f32 sz) {
   Assert(m_pTangentS);
   Assert(IsFinite(sx) && IsFinite(sy) && IsFinite(sz));
 
-  float *pTangentS =
+  f32 *pTangentS =
       OffsetFloatPointer(m_pTangentS, m_nCurrentVertex, m_VertexSize_TangentS);
   *pTangentS++ = sx;
   *pTangentS++ = sy;
   *pTangentS = sz;
 }
 
-inline void CVertexBuilder::TangentS3fv(const float *s) {
+inline void CVertexBuilder::TangentS3fv(const f32 *s) {
   Assert(s);
   Assert(m_pTangentS);
   Assert(IsFinite(s[0]) && IsFinite(s[1]) && IsFinite(s[2]));
 
-  float *pTangentS =
+  f32 *pTangentS =
       OffsetFloatPointer(m_pTangentS, m_nCurrentVertex, m_VertexSize_TangentS);
   *pTangentS++ = *s++;
   *pTangentS++ = *s++;
   *pTangentS = *s;
 }
 
-inline void CVertexBuilder::TangentT3f(float tx, float ty, float tz) {
+inline void CVertexBuilder::TangentT3f(f32 tx, f32 ty, f32 tz) {
   Assert(m_pTangentT);
   Assert(IsFinite(tx) && IsFinite(ty) && IsFinite(tz));
 
-  float *pTangentT =
+  f32 *pTangentT =
       OffsetFloatPointer(m_pTangentT, m_nCurrentVertex, m_VertexSize_TangentT);
   *pTangentT++ = tx;
   *pTangentT++ = ty;
   *pTangentT = tz;
 }
 
-inline void CVertexBuilder::TangentT3fv(const float *t) {
+inline void CVertexBuilder::TangentT3fv(const f32 *t) {
   Assert(t);
   Assert(m_pTangentT);
   Assert(IsFinite(t[0]) && IsFinite(t[1]) && IsFinite(t[2]));
 
-  float *pTangentT =
+  f32 *pTangentT =
       OffsetFloatPointer(m_pTangentT, m_nCurrentVertex, m_VertexSize_TangentT);
   *pTangentT++ = *t++;
   *pTangentT++ = *t++;
@@ -1916,11 +1916,11 @@ inline void CVertexBuilder::TangentT3fv(const float *t) {
 //-----------------------------------------------------------------------------
 // Wrinkle setting methods
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::Wrinkle1f(float flWrinkle) {
+inline void CVertexBuilder::Wrinkle1f(f32 flWrinkle) {
   Assert(m_pWrinkle);
   Assert(IsFinite(flWrinkle));
 
-  float *pWrinkle =
+  f32 *pWrinkle =
       OffsetFloatPointer(m_pWrinkle, m_nCurrentVertex, m_VertexSize_Wrinkle);
   *pWrinkle = flWrinkle;
 }
@@ -1928,7 +1928,7 @@ inline void CVertexBuilder::Wrinkle1f(float flWrinkle) {
 //-----------------------------------------------------------------------------
 // Bone weight setting methods
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::BoneWeight(int idx, float weight) {
+inline void CVertexBuilder::BoneWeight(int idx, f32 weight) {
   Assert(m_pBoneWeight);
   Assert(IsFinite(weight));
   Assert(idx >= 0);
@@ -1938,7 +1938,7 @@ inline void CVertexBuilder::BoneWeight(int idx, float weight) {
   // the vertex shader as "1 - C", where C is the sum of the (N-1) other
   // weights)
   if (idx < m_NumBoneWeights) {
-    float *pBoneWeight = OffsetFloatPointer(m_pBoneWeight, m_nCurrentVertex,
+    f32 *pBoneWeight = OffsetFloatPointer(m_pBoneWeight, m_nCurrentVertex,
                                             m_VertexSize_BoneWeight);
     pBoneWeight[idx] = weight;
   }
@@ -1956,11 +1956,11 @@ inline void CVertexBuilder::BoneMatrix(int idx, int matrixIdx) {
   Assert((matrixIdx >= 0) && (matrixIdx < 53));
 
 #ifndef NEW_SKINNING
-  unsigned char *pBoneMatrix =
+  u8 *pBoneMatrix =
       &m_pBoneMatrixIndex[m_nCurrentVertex * m_VertexSize_BoneMatrixIndex];
-  pBoneMatrix[idx] = (unsigned char)matrixIdx;
+  pBoneMatrix[idx] = (u8)matrixIdx;
 #else
-  float *pBoneMatrix =
+  f32 *pBoneMatrix =
       &m_pBoneMatrixIndex[m_nCurrentVertex * m_VertexSize_BoneMatrixIndex];
   pBoneMatrix[idx] = matrixIdx;
 #endif
@@ -1970,12 +1970,12 @@ inline void CVertexBuilder::BoneMatrix(int idx, int matrixIdx) {
 // Templatized bone weight setting methods which support compressed vertices
 //-----------------------------------------------------------------------------
 template <VertexCompressionType_t T>
-inline void CVertexBuilder::CompressedBoneWeight3fv(const float *pWeights) {
+inline void CVertexBuilder::CompressedBoneWeight3fv(const f32 *pWeights) {
   Assert(T == m_CompressionType);
   Assert(m_pBoneWeight);
   Assert(pWeights);
 
-  float *pDestWeights = OffsetFloatPointer(m_pBoneWeight, m_nCurrentVertex,
+  f32 *pDestWeights = OffsetFloatPointer(m_pBoneWeight, m_nCurrentVertex,
                                            m_VertexSize_BoneWeight);
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, T == VERTEX_COMPRESSION_ON)) {
@@ -2040,7 +2040,7 @@ inline void CVertexBuilder::CompressedBoneWeight3fv(const float *pWeights) {
 //-----------------------------------------------------------------------------
 // Generic per-vertex data setting method
 //-----------------------------------------------------------------------------
-inline void CVertexBuilder::UserData(const float *pData) {
+inline void CVertexBuilder::UserData(const f32 *pData) {
   Assert(m_CompressionType == VERTEX_COMPRESSION_NONE);  // Use the templatized
                                                          // version if you want
                                                          // to support
@@ -2048,9 +2048,9 @@ inline void CVertexBuilder::UserData(const float *pData) {
   Assert(pData);
 
   int userDataSize = 4;  // garymcthack
-  float *pUserData =
+  f32 *pUserData =
       OffsetFloatPointer(m_pUserData, m_nCurrentVertex, m_VertexSize_UserData);
-  memcpy(pUserData, pData, sizeof(float) * userDataSize);
+  memcpy(pUserData, pData, sizeof(f32) * userDataSize);
 }
 
 //-----------------------------------------------------------------------------
@@ -2058,7 +2058,7 @@ inline void CVertexBuilder::UserData(const float *pData) {
 // vertices
 //-----------------------------------------------------------------------------
 template <VertexCompressionType_t T>
-inline void CVertexBuilder::CompressedUserData(const float *pData) {
+inline void CVertexBuilder::CompressedUserData(const f32 *pData) {
   Assert(T == m_CompressionType);
   Assert(pData);
   // This is always in fact a tangent vector, not generic 'userdata'
@@ -2068,14 +2068,14 @@ inline void CVertexBuilder::CompressedUserData(const float *pData) {
   Assert(pData[2] >= -1.05f && pData[2] <= 1.05f);
   Assert(pData[3] == +1.0f || pData[3] == -1.0f);
   // TODO(d.rattman): studiorender is passing in non-unit normals
-  // float lengthSqd = pData[0]*pData[0] + pData[1]*pData[1] +
+  // f32 lengthSqd = pData[0]*pData[0] + pData[1]*pData[1] +
   // pData[2]*pData[2];  Assert( lengthSqd >= 0.95f && lengthSqd <= 1.05f );
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, T == VERTEX_COMPRESSION_ON)) {
-    float binormalSign = pData[3];
+    f32 binormalSign = pData[3];
 
 #if (COMPRESSED_NORMALS_TYPE == COMPRESSED_NORMALS_SEPARATETANGENTS_SHORT2)
-    float *pUserData = OffsetFloatPointer(m_pUserData, m_nCurrentVertex,
+    f32 *pUserData = OffsetFloatPointer(m_pUserData, m_nCurrentVertex,
                                           m_VertexSize_UserData);
     PackNormal_SHORT2(pData, (unsigned int *)pUserData, binormalSign);
 #else  //( COMPRESSED_NORMALS_TYPE == COMPRESSED_NORMALS_COMBINEDTANGENTS_UBYTE4
@@ -2097,9 +2097,9 @@ inline void CVertexBuilder::CompressedUserData(const float *pData) {
 #endif
   } else {
     int userDataSize = 4;  // garymcthack
-    float *pUserData = OffsetFloatPointer(m_pUserData, m_nCurrentVertex,
+    f32 *pUserData = OffsetFloatPointer(m_pUserData, m_nCurrentVertex,
                                           m_VertexSize_UserData);
-    memcpy(pUserData, pData, sizeof(float) * userDataSize);
+    memcpy(pUserData, pData, sizeof(f32) * userDataSize);
   }
 }
 
@@ -2133,7 +2133,7 @@ class CIndexBuilder : private IndexDesc_t {
   // Binds this index buffer
   void Bind(IMatRenderContext *pContext);
 
-  // Returns the uint8_t offset
+  // Returns the u8 offset
   int Offset() const;
 
   // Begins, ends modification of the index buffer
@@ -2169,17 +2169,17 @@ class CIndexBuilder : private IndexDesc_t {
   int GetCurrentIndex();
   int GetFirstIndex() const;
 
-  unsigned short const *Index() const;
+  u16 const *Index() const;
 
   // Used to define the indices (only used if you aren't using primitives)
-  void Index(unsigned short nIndex);
+  void Index(u16 nIndex);
 
   // Fast Index! No need to call advance index, and no random access allowed
-  void FastIndex(unsigned short nIndex);
+  void FastIndex(u16 nIndex);
 
   // NOTE: This version is the one you really want to achieve write-combining;
   // Write combining only works if you write in 4 bytes chunks.
-  void FastIndex2(unsigned short nIndex1, unsigned short nIndex2);
+  void FastIndex2(u16 nIndex1, u16 nIndex2);
 
   // Generates indices for a particular primitive type
   void GenerateIndices(MaterialPrimitiveType_t primitiveType, int nIndexCount);
@@ -2323,12 +2323,12 @@ inline void CIndexBuilder::Bind(IMatRenderContext *pContext) {
   if (m_pIndexBuffer && (m_nBufferOffset != INVALID_BUFFER_OFFSET)) {
     pContext->BindIndexBuffer(m_pIndexBuffer, m_nBufferOffset);
   } else {
-    pContext->BindIndexBuffer(NULL, 0);
+    pContext->BindIndexBuffer(nullptr, 0);
   }
 }
 
 //-----------------------------------------------------------------------------
-// Returns the uint8_t offset
+// Returns the u8 offset
 //-----------------------------------------------------------------------------
 inline int CIndexBuilder::Offset() const { return m_nBufferOffset; }
 
@@ -2516,7 +2516,7 @@ inline void CIndexBuilder::AdvanceIndices(int nIndices) {
 //-----------------------------------------------------------------------------
 inline int CIndexBuilder::GetCurrentIndex() { return m_nCurrentIndex; }
 
-inline unsigned short const *CIndexBuilder::Index() const {
+inline u16 const *CIndexBuilder::Index() const {
   Assert(m_nCurrentIndex < m_nMaxIndexCount);
   return &m_pIndices[m_nCurrentIndex];
 }
@@ -2529,17 +2529,17 @@ inline void CIndexBuilder::SelectIndex(int nIndex) {
 //-----------------------------------------------------------------------------
 // Used to write data into the index buffer
 //-----------------------------------------------------------------------------
-inline void CIndexBuilder::Index(unsigned short nIndex) {
+inline void CIndexBuilder::Index(u16 nIndex) {
   Assert(m_pIndices);
   Assert(m_nCurrentIndex < m_nMaxIndexCount);
-  m_pIndices[m_nCurrentIndex] = (unsigned short)(m_nIndexOffset + nIndex);
+  m_pIndices[m_nCurrentIndex] = (u16)(m_nIndexOffset + nIndex);
 }
 
 // Fast Index! No need to call advance index
-inline void CIndexBuilder::FastIndex(unsigned short nIndex) {
+inline void CIndexBuilder::FastIndex(u16 nIndex) {
   Assert(m_pIndices);
   Assert(m_nCurrentIndex < m_nMaxIndexCount);
-  m_pIndices[m_nCurrentIndex] = (unsigned short)(m_nIndexOffset + nIndex);
+  m_pIndices[m_nCurrentIndex] = (u16)(m_nIndexOffset + nIndex);
   m_nCurrentIndex += m_nIndexSize;
   m_nIndexCount = m_nCurrentIndex;
 }
@@ -2548,8 +2548,8 @@ inline void CIndexBuilder::FastIndex(unsigned short nIndex) {
 // NOTE: This version is the one you really want to achieve write-combining;
 // Write combining only works if you write in 4 bytes chunks.
 //-----------------------------------------------------------------------------
-inline void CIndexBuilder::FastIndex2(unsigned short nIndex1,
-                                      unsigned short nIndex2) {
+inline void CIndexBuilder::FastIndex2(u16 nIndex1,
+                                      u16 nIndex2) {
   Assert(m_pIndices);
   Assert(m_nCurrentIndex < m_nMaxIndexCount - 1);
   //	Assert( ( (int)( &m_pIndices[m_nCurrentIndex] ) & 0x3 ) == 0 );
@@ -2580,7 +2580,7 @@ inline void CIndexBuilder::GenerateIndices(
   nIndexCount = std::min(nMaxIndices, nIndexCount);
   if (nIndexCount == 0) return;
 
-  unsigned short *pIndices = &m_pIndices[m_nCurrentIndex];
+  u16 *pIndices = &m_pIndices[m_nCurrentIndex];
 
   switch (primitiveType) {
     case MATERIAL_INSTANCED_QUADS:
@@ -2659,8 +2659,8 @@ class CMeshBuilder : public MeshDesc_t {
   void EndModify(bool bSpewData = false);
 
   // A helper method since this seems to be done a whole bunch.
-  void DrawQuad(IMesh *pMesh, const float *v1, const float *v2, const float *v3,
-                const float *v4, unsigned char const *pColor,
+  void DrawQuad(IMesh *pMesh, const f32 *v1, const f32 *v2, const f32 *v3,
+                const f32 *v4, u8 const *pColor,
                 bool wireframe = false);
 
   // returns the number of indices and vertices
@@ -2698,124 +2698,124 @@ class CMeshBuilder : public MeshDesc_t {
   int GetCurrentIndex();
 
   // Data retrieval...
-  const float *Position() const;
+  const f32 *Position() const;
 
-  const float *Normal() const;
+  const f32 *Normal() const;
 
   unsigned int Color() const;
 
-  unsigned char *Specular() const;
+  u8 *Specular() const;
 
-  const float *TexCoord(int stage) const;
+  const f32 *TexCoord(int stage) const;
 
-  const float *TangentS() const;
-  const float *TangentT() const;
+  const f32 *TangentS() const;
+  const f32 *TangentT() const;
 
-  const float *BoneWeight() const;
-  float Wrinkle() const;
+  const f32 *BoneWeight() const;
+  f32 Wrinkle() const;
 
   int NumBoneWeights() const;
 #ifndef NEW_SKINNING
-  unsigned char *BoneMatrix() const;
+  u8 *BoneMatrix() const;
 #else
-  float *BoneMatrix() const;
+  f32 *BoneMatrix() const;
 #endif
-  unsigned short const *Index() const;
+  u16 const *Index() const;
 
   // position setting
-  void Position3f(float x, float y, float z);
-  void Position3fv(const float *v);
+  void Position3f(f32 x, f32 y, f32 z);
+  void Position3fv(const f32 *v);
 
   // normal setting
-  void Normal3f(float nx, float ny, float nz);
-  void Normal3fv(const float *n);
-  void NormalDelta3fv(const float *n);
-  void NormalDelta3f(float nx, float ny, float nz);
+  void Normal3f(f32 nx, f32 ny, f32 nz);
+  void Normal3fv(const f32 *n);
+  void NormalDelta3fv(const f32 *n);
+  void NormalDelta3f(f32 nx, f32 ny, f32 nz);
 
   // normal setting (templatized for code which needs to support compressed
   // vertices)
   template <VertexCompressionType_t T>
-  void CompressedNormal3f(float nx, float ny, float nz);
+  void CompressedNormal3f(f32 nx, f32 ny, f32 nz);
   template <VertexCompressionType_t T>
-  void CompressedNormal3fv(const float *n);
+  void CompressedNormal3fv(const f32 *n);
 
   // color setting
-  void Color3f(float r, float g, float b);
-  void Color3fv(const float *rgb);
-  void Color4f(float r, float g, float b, float a);
-  void Color4fv(const float *rgba);
+  void Color3f(f32 r, f32 g, f32 b);
+  void Color3fv(const f32 *rgb);
+  void Color4f(f32 r, f32 g, f32 b, f32 a);
+  void Color4fv(const f32 *rgba);
 
   // Faster versions of color
-  void Color3ub(unsigned char r, unsigned char g, unsigned char b);
-  void Color3ubv(unsigned char const *rgb);
-  void Color4ub(unsigned char r, unsigned char g, unsigned char b,
-                unsigned char a);
-  void Color4ubv(unsigned char const *rgba);
+  void Color3ub(u8 r, u8 g, u8 b);
+  void Color3ubv(u8 const *rgb);
+  void Color4ub(u8 r, u8 g, u8 b,
+                u8 a);
+  void Color4ubv(u8 const *rgba);
 
   // specular color setting
-  void Specular3f(float r, float g, float b);
-  void Specular3fv(const float *rgb);
-  void Specular4f(float r, float g, float b, float a);
-  void Specular4fv(const float *rgba);
+  void Specular3f(f32 r, f32 g, f32 b);
+  void Specular3fv(const f32 *rgb);
+  void Specular4f(f32 r, f32 g, f32 b, f32 a);
+  void Specular4fv(const f32 *rgba);
 
   // Faster version of specular
-  void Specular3ub(unsigned char r, unsigned char g, unsigned char b);
-  void Specular3ubv(unsigned char const *c);
-  void Specular4ub(unsigned char r, unsigned char g, unsigned char b,
-                   unsigned char a);
-  void Specular4ubv(unsigned char const *c);
+  void Specular3ub(u8 r, u8 g, u8 b);
+  void Specular3ubv(u8 const *c);
+  void Specular4ub(u8 r, u8 g, u8 b,
+                   u8 a);
+  void Specular4ubv(u8 const *c);
 
   // texture coordinate setting
-  void TexCoord1f(int stage, float s);
-  void TexCoord2f(int stage, float s, float t);
-  void TexCoord2fv(int stage, const float *st);
-  void TexCoord3f(int stage, float s, float t, float u);
-  void TexCoord3fv(int stage, const float *stu);
-  void TexCoord4f(int stage, float s, float t, float u, float w);
-  void TexCoord4fv(int stage, const float *stuv);
+  void TexCoord1f(int stage, f32 s);
+  void TexCoord2f(int stage, f32 s, f32 t);
+  void TexCoord2fv(int stage, const f32 *st);
+  void TexCoord3f(int stage, f32 s, f32 t, f32 u);
+  void TexCoord3fv(int stage, const f32 *stu);
+  void TexCoord4f(int stage, f32 s, f32 t, f32 u, f32 w);
+  void TexCoord4fv(int stage, const f32 *stuv);
 
-  void TexCoordSubRect2f(int stage, float s, float t, float offsetS,
-                         float offsetT, float scaleS, float scaleT);
-  void TexCoordSubRect2fv(int stage, const float *st, const float *offset,
-                          const float *scale);
+  void TexCoordSubRect2f(int stage, f32 s, f32 t, f32 offsetS,
+                         f32 offsetT, f32 scaleS, f32 scaleT);
+  void TexCoordSubRect2fv(int stage, const f32 *st, const f32 *offset,
+                          const f32 *scale);
 
   // tangent space
-  void TangentS3f(float sx, float sy, float sz);
-  void TangentS3fv(const float *s);
+  void TangentS3f(f32 sx, f32 sy, f32 sz);
+  void TangentS3fv(const f32 *s);
 
-  void TangentT3f(float tx, float ty, float tz);
-  void TangentT3fv(const float *t);
+  void TangentT3f(f32 tx, f32 ty, f32 tz);
+  void TangentT3fv(const f32 *t);
 
   // Wrinkle
-  void Wrinkle1f(float flWrinkle);
+  void Wrinkle1f(f32 flWrinkle);
 
   // bone weights
-  void BoneWeight(int idx, float weight);
+  void BoneWeight(int idx, f32 weight);
   // bone weights (templatized for code which needs to support compressed
   // vertices)
   template <VertexCompressionType_t T>
-  void CompressedBoneWeight3fv(const float *pWeights);
+  void CompressedBoneWeight3fv(const f32 *pWeights);
 
   // bone matrix index
   void BoneMatrix(int idx, int matrixIndex);
 
   // Generic per-vertex data
-  void UserData(const float *pData);
+  void UserData(const f32 *pData);
   // Generic per-vertex data (templatized for code which needs to support
   // compressed vertices)
   template <VertexCompressionType_t T>
-  void CompressedUserData(const float *pData);
+  void CompressedUserData(const f32 *pData);
 
   // Used to define the indices (only used if you aren't using primitives)
-  void Index(unsigned short index);
+  void Index(u16 index);
 
   // NOTE: Use this one to get write combining! Much faster than the other
   // version of FastIndex Fast Index! No need to call advance index, and no
   // random access allowed
-  void FastIndex2(unsigned short nIndex1, unsigned short nIndex2);
+  void FastIndex2(u16 nIndex1, u16 nIndex2);
 
   // Fast Index! No need to call advance index, and no random access allowed
-  void FastIndex(unsigned short index);
+  void FastIndex(u16 index);
 
 #ifndef ARCH_CPU_X86_64
   // Fast Vertex! No need to call advance vertex, and no random access allowed.
@@ -3212,9 +3212,9 @@ SOURCE_FORCEINLINE int CMeshBuilder::GetCurrentIndex() {
 //-----------------------------------------------------------------------------
 // A helper method since this seems to be done a whole bunch.
 //-----------------------------------------------------------------------------
-inline void CMeshBuilder::DrawQuad(IMesh *pMesh, const float *v1,
-                                   const float *v2, const float *v3,
-                                   const float *v4, unsigned char const *pColor,
+inline void CMeshBuilder::DrawQuad(IMesh *pMesh, const f32 *v1,
+                                   const f32 *v2, const f32 *v3,
+                                   const f32 *v4, u8 const *pColor,
                                    bool wireframe) {
   if (!wireframe) {
     Begin(pMesh, MATERIAL_TRIANGLE_STRIP, 2);
@@ -3278,11 +3278,11 @@ SOURCE_FORCEINLINE void *CMeshBuilder::BaseVertexData() {
 //-----------------------------------------------------------------------------
 // Data retrieval...
 //-----------------------------------------------------------------------------
-SOURCE_FORCEINLINE const float *CMeshBuilder::Position() const {
+SOURCE_FORCEINLINE const f32 *CMeshBuilder::Position() const {
   return m_VertexBuilder.Position();
 }
 
-SOURCE_FORCEINLINE const float *CMeshBuilder::Normal() const {
+SOURCE_FORCEINLINE const f32 *CMeshBuilder::Normal() const {
   return m_VertexBuilder.Normal();
 }
 
@@ -3290,27 +3290,27 @@ SOURCE_FORCEINLINE unsigned int CMeshBuilder::Color() const {
   return m_VertexBuilder.Color();
 }
 
-SOURCE_FORCEINLINE unsigned char *CMeshBuilder::Specular() const {
+SOURCE_FORCEINLINE u8 *CMeshBuilder::Specular() const {
   return m_VertexBuilder.Specular();
 }
 
-SOURCE_FORCEINLINE const float *CMeshBuilder::TexCoord(int nStage) const {
+SOURCE_FORCEINLINE const f32 *CMeshBuilder::TexCoord(int nStage) const {
   return m_VertexBuilder.TexCoord(nStage);
 }
 
-SOURCE_FORCEINLINE const float *CMeshBuilder::TangentS() const {
+SOURCE_FORCEINLINE const f32 *CMeshBuilder::TangentS() const {
   return m_VertexBuilder.TangentS();
 }
 
-SOURCE_FORCEINLINE const float *CMeshBuilder::TangentT() const {
+SOURCE_FORCEINLINE const f32 *CMeshBuilder::TangentT() const {
   return m_VertexBuilder.TangentT();
 }
 
-SOURCE_FORCEINLINE float CMeshBuilder::Wrinkle() const {
+SOURCE_FORCEINLINE f32 CMeshBuilder::Wrinkle() const {
   return m_VertexBuilder.Wrinkle();
 }
 
-SOURCE_FORCEINLINE const float *CMeshBuilder::BoneWeight() const {
+SOURCE_FORCEINLINE const f32 *CMeshBuilder::BoneWeight() const {
   return m_VertexBuilder.BoneWeight();
 }
 
@@ -3318,29 +3318,29 @@ SOURCE_FORCEINLINE int CMeshBuilder::NumBoneWeights() const {
   return m_VertexBuilder.NumBoneWeights();
 }
 
-SOURCE_FORCEINLINE unsigned short const *CMeshBuilder::Index() const {
+SOURCE_FORCEINLINE u16 const *CMeshBuilder::Index() const {
   return m_IndexBuilder.Index();
 }
 
 //-----------------------------------------------------------------------------
 // Index
 //-----------------------------------------------------------------------------
-SOURCE_FORCEINLINE void CMeshBuilder::Index(unsigned short idx) {
+SOURCE_FORCEINLINE void CMeshBuilder::Index(u16 idx) {
   m_IndexBuilder.Index(idx);
 }
 
 //-----------------------------------------------------------------------------
 // Fast Index! No need to call advance index
 //-----------------------------------------------------------------------------
-SOURCE_FORCEINLINE void CMeshBuilder::FastIndex(unsigned short idx) {
+SOURCE_FORCEINLINE void CMeshBuilder::FastIndex(u16 idx) {
   m_IndexBuilder.FastIndex(idx);
 }
 
 // NOTE: Use this one to get write combining! Much faster than the other version
 // of FastIndex Fast Index! No need to call advance index, and no random access
 // allowed
-SOURCE_FORCEINLINE void CMeshBuilder::FastIndex2(unsigned short nIndex1,
-                                                 unsigned short nIndex2) {
+SOURCE_FORCEINLINE void CMeshBuilder::FastIndex2(u16 nIndex1,
+                                                 u16 nIndex2) {
   m_IndexBuilder.FastIndex2(nIndex1, nIndex2);
 }
 
@@ -3385,180 +3385,180 @@ SOURCE_FORCEINLINE void CMeshBuilder::FastVertexSSE(
 //-----------------------------------------------------------------------------
 // Vertex field setting methods
 //-----------------------------------------------------------------------------
-SOURCE_FORCEINLINE void CMeshBuilder::Position3f(float x, float y, float z) {
+SOURCE_FORCEINLINE void CMeshBuilder::Position3f(f32 x, f32 y, f32 z) {
   m_VertexBuilder.Position3f(x, y, z);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Position3fv(const float *v) {
+SOURCE_FORCEINLINE void CMeshBuilder::Position3fv(const f32 *v) {
   m_VertexBuilder.Position3fv(v);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Normal3f(float nx, float ny, float nz) {
+SOURCE_FORCEINLINE void CMeshBuilder::Normal3f(f32 nx, f32 ny, f32 nz) {
   m_VertexBuilder.Normal3f(nx, ny, nz);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Normal3fv(const float *n) {
+SOURCE_FORCEINLINE void CMeshBuilder::Normal3fv(const f32 *n) {
   m_VertexBuilder.Normal3fv(n);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::NormalDelta3f(float nx, float ny,
-                                                    float nz) {
+SOURCE_FORCEINLINE void CMeshBuilder::NormalDelta3f(f32 nx, f32 ny,
+                                                    f32 nz) {
   m_VertexBuilder.NormalDelta3f(nx, ny, nz);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::NormalDelta3fv(const float *n) {
+SOURCE_FORCEINLINE void CMeshBuilder::NormalDelta3fv(const f32 *n) {
   m_VertexBuilder.NormalDelta3fv(n);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color3f(float r, float g, float b) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color3f(f32 r, f32 g, f32 b) {
   m_VertexBuilder.Color3f(r, g, b);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color3fv(const float *rgb) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color3fv(const f32 *rgb) {
   m_VertexBuilder.Color3fv(rgb);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color4f(float r, float g, float b,
-                                              float a) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color4f(f32 r, f32 g, f32 b,
+                                              f32 a) {
   m_VertexBuilder.Color4f(r, g, b, a);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color4fv(const float *rgba) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color4fv(const f32 *rgba) {
   m_VertexBuilder.Color4fv(rgba);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color3ub(unsigned char r, unsigned char g,
-                                               unsigned char b) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color3ub(u8 r, u8 g,
+                                               u8 b) {
   m_VertexBuilder.Color3ub(r, g, b);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color3ubv(unsigned char const *rgb) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color3ubv(u8 const *rgb) {
   m_VertexBuilder.Color3ubv(rgb);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color4ub(unsigned char r, unsigned char g,
-                                               unsigned char b,
-                                               unsigned char a) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color4ub(u8 r, u8 g,
+                                               u8 b,
+                                               u8 a) {
   m_VertexBuilder.Color4ub(r, g, b, a);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Color4ubv(unsigned char const *rgba) {
+SOURCE_FORCEINLINE void CMeshBuilder::Color4ubv(u8 const *rgba) {
   m_VertexBuilder.Color4ubv(rgba);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular3f(float r, float g, float b) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular3f(f32 r, f32 g, f32 b) {
   m_VertexBuilder.Specular3f(r, g, b);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular3fv(const float *rgb) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular3fv(const f32 *rgb) {
   m_VertexBuilder.Specular3fv(rgb);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular4f(float r, float g, float b,
-                                                 float a) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular4f(f32 r, f32 g, f32 b,
+                                                 f32 a) {
   m_VertexBuilder.Specular4f(r, g, b, a);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular4fv(const float *rgba) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular4fv(const f32 *rgba) {
   m_VertexBuilder.Specular4fv(rgba);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular3ub(unsigned char r,
-                                                  unsigned char g,
-                                                  unsigned char b) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular3ub(u8 r,
+                                                  u8 g,
+                                                  u8 b) {
   m_VertexBuilder.Specular3ub(r, g, b);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular3ubv(unsigned char const *c) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular3ubv(u8 const *c) {
   m_VertexBuilder.Specular3ubv(c);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular4ub(unsigned char r,
-                                                  unsigned char g,
-                                                  unsigned char b,
-                                                  unsigned char a) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular4ub(u8 r,
+                                                  u8 g,
+                                                  u8 b,
+                                                  u8 a) {
   m_VertexBuilder.Specular4ub(r, g, b, a);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Specular4ubv(unsigned char const *c) {
+SOURCE_FORCEINLINE void CMeshBuilder::Specular4ubv(u8 const *c) {
   m_VertexBuilder.Specular4ubv(c);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord1f(int nStage, float s) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord1f(int nStage, f32 s) {
   m_VertexBuilder.TexCoord1f(nStage, s);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord2f(int nStage, float s, float t) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord2f(int nStage, f32 s, f32 t) {
   m_VertexBuilder.TexCoord2f(nStage, s, t);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord2fv(int nStage, const float *st) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord2fv(int nStage, const f32 *st) {
   m_VertexBuilder.TexCoord2fv(nStage, st);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord3f(int nStage, float s, float t,
-                                                 float u) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord3f(int nStage, f32 s, f32 t,
+                                                 f32 u) {
   m_VertexBuilder.TexCoord3f(nStage, s, t, u);
 }
 
 SOURCE_FORCEINLINE void CMeshBuilder::TexCoord3fv(int nStage,
-                                                  const float *stu) {
+                                                  const f32 *stu) {
   m_VertexBuilder.TexCoord3fv(nStage, stu);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoord4f(int nStage, float s, float t,
-                                                 float u, float v) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoord4f(int nStage, f32 s, f32 t,
+                                                 f32 u, f32 v) {
   m_VertexBuilder.TexCoord4f(nStage, s, t, u, v);
 }
 
 SOURCE_FORCEINLINE void CMeshBuilder::TexCoord4fv(int nStage,
-                                                  const float *stuv) {
+                                                  const f32 *stuv) {
   m_VertexBuilder.TexCoord4fv(nStage, stuv);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TexCoordSubRect2f(int nStage, float s,
-                                                        float t, float offsetS,
-                                                        float offsetT,
-                                                        float scaleS,
-                                                        float scaleT) {
+SOURCE_FORCEINLINE void CMeshBuilder::TexCoordSubRect2f(int nStage, f32 s,
+                                                        f32 t, f32 offsetS,
+                                                        f32 offsetT,
+                                                        f32 scaleS,
+                                                        f32 scaleT) {
   m_VertexBuilder.TexCoordSubRect2f(nStage, s, t, offsetS, offsetT, scaleS,
                                     scaleT);
 }
 
 SOURCE_FORCEINLINE void CMeshBuilder::TexCoordSubRect2fv(int nStage,
-                                                         const float *st,
-                                                         const float *offset,
-                                                         const float *scale) {
+                                                         const f32 *st,
+                                                         const f32 *offset,
+                                                         const f32 *scale) {
   m_VertexBuilder.TexCoordSubRect2fv(nStage, st, offset, scale);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TangentS3f(float sx, float sy, float sz) {
+SOURCE_FORCEINLINE void CMeshBuilder::TangentS3f(f32 sx, f32 sy, f32 sz) {
   m_VertexBuilder.TangentS3f(sx, sy, sz);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TangentS3fv(const float *s) {
+SOURCE_FORCEINLINE void CMeshBuilder::TangentS3fv(const f32 *s) {
   m_VertexBuilder.TangentS3fv(s);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TangentT3f(float tx, float ty, float tz) {
+SOURCE_FORCEINLINE void CMeshBuilder::TangentT3f(f32 tx, f32 ty, f32 tz) {
   m_VertexBuilder.TangentT3f(tx, ty, tz);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::TangentT3fv(const float *t) {
+SOURCE_FORCEINLINE void CMeshBuilder::TangentT3fv(const f32 *t) {
   m_VertexBuilder.TangentT3fv(t);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::Wrinkle1f(float flWrinkle) {
+SOURCE_FORCEINLINE void CMeshBuilder::Wrinkle1f(f32 flWrinkle) {
   m_VertexBuilder.Wrinkle1f(flWrinkle);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::BoneWeight(int nIndex, float flWeight) {
+SOURCE_FORCEINLINE void CMeshBuilder::BoneWeight(int nIndex, f32 flWeight) {
   m_VertexBuilder.BoneWeight(nIndex, flWeight);
 }
 
 template <VertexCompressionType_t T>
 SOURCE_FORCEINLINE void CMeshBuilder::CompressedBoneWeight3fv(
-    const float *pWeights) {
+    const f32 *pWeights) {
   m_VertexBuilder.CompressedBoneWeight3fv<T>(pWeights);
 }
 
@@ -3566,12 +3566,12 @@ SOURCE_FORCEINLINE void CMeshBuilder::BoneMatrix(int nIndex, int nMatrixIdx) {
   m_VertexBuilder.BoneMatrix(nIndex, nMatrixIdx);
 }
 
-SOURCE_FORCEINLINE void CMeshBuilder::UserData(const float *pData) {
+SOURCE_FORCEINLINE void CMeshBuilder::UserData(const f32 *pData) {
   m_VertexBuilder.UserData(pData);
 }
 
 template <VertexCompressionType_t T>
-SOURCE_FORCEINLINE void CMeshBuilder::CompressedUserData(const float *pData) {
+SOURCE_FORCEINLINE void CMeshBuilder::CompressedUserData(const f32 *pData) {
   m_VertexBuilder.CompressedUserData<T>(pData);
 }
 
@@ -3580,13 +3580,13 @@ SOURCE_FORCEINLINE void CMeshBuilder::CompressedUserData(const float *pData) {
 //-----------------------------------------------------------------------------
 
 template <VertexCompressionType_t T>
-SOURCE_FORCEINLINE void CMeshBuilder::CompressedNormal3f(float nx, float ny,
-                                                         float nz) {
+SOURCE_FORCEINLINE void CMeshBuilder::CompressedNormal3f(f32 nx, f32 ny,
+                                                         f32 nz) {
   m_VertexBuilder.CompressedNormal3f<T>(nx, ny, nz);
 }
 
 template <VertexCompressionType_t T>
-SOURCE_FORCEINLINE void CMeshBuilder::CompressedNormal3fv(const float *n) {
+SOURCE_FORCEINLINE void CMeshBuilder::CompressedNormal3fv(const f32 *n) {
   m_VertexBuilder.CompressedNormal3fv<T>(n);
 }
 

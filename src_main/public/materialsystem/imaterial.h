@@ -359,7 +359,7 @@ inline int GetVertexElementSize(VertexElement_t element,
       // Normals and tangents (userdata4) are combined into a single UBYTE4
       // vertex element
       case VERTEX_ELEMENT_NORMAL:
-        return (4 * sizeof(unsigned char));
+        return (4 * sizeof(u8));
       case VERTEX_ELEMENT_USERDATA4:
         return (0);
 #endif
@@ -375,101 +375,101 @@ inline int GetVertexElementSize(VertexElement_t element,
   // Uncompressed-vertex element sizes
   switch (element) {
     case VERTEX_ELEMENT_POSITION:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_NORMAL:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_COLOR:
-      return (4 * sizeof(unsigned char));
+      return (4 * sizeof(u8));
     case VERTEX_ELEMENT_SPECULAR:
-      return (4 * sizeof(unsigned char));
+      return (4 * sizeof(u8));
     case VERTEX_ELEMENT_TANGENT_S:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TANGENT_T:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_WRINKLE:
-      return (1 * sizeof(float));  // Packed into Position.W
+      return (1 * sizeof(f32));  // Packed into Position.W
     case VERTEX_ELEMENT_BONEINDEX:
-      return (4 * sizeof(unsigned char));
+      return (4 * sizeof(u8));
     case VERTEX_ELEMENT_BONEWEIGHTS1:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_BONEWEIGHTS2:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_BONEWEIGHTS3:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_BONEWEIGHTS4:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_USERDATA1:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_USERDATA2:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_USERDATA3:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_USERDATA4:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_0:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_1:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_2:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_3:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_4:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_5:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_6:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD1D_7:
-      return (1 * sizeof(float));
+      return (1 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_0:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_1:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_2:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_3:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_4:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_5:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_6:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD2D_7:
-      return (2 * sizeof(float));
+      return (2 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_0:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_1:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_2:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_3:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_4:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_5:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_6:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD3D_7:
-      return (3 * sizeof(float));
+      return (3 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_0:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_1:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_2:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_3:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_4:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_5:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_6:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     case VERTEX_ELEMENT_TEXCOORD4D_7:
-      return (4 * sizeof(float));
+      return (4 * sizeof(f32));
     default:
       Assert(0);
       return 0;
@@ -588,7 +588,7 @@ the_interface IMaterial {
   // Will do resampling if necessary.(not yet!!! :) )
   // Will do color format conversion. (works now.)
   virtual PreviewImageRetVal_t GetPreviewImage(
-      unsigned char *data, int width, int height, ImageFormat imageFormat)
+      u8 *data, int width, int height, ImageFormat imageFormat)
       const = 0;
   //
   virtual int GetMappingWidth() = 0;
@@ -599,8 +599,8 @@ the_interface IMaterial {
   // For material subrects (material pages).  Offset(u,v) and scale(u,v) are
   // normalized to texture.
   virtual bool InMaterialPage(void) = 0;
-  virtual void GetMaterialOffset(float *pOffset) = 0;
-  virtual void GetMaterialScale(float *pScale) = 0;
+  virtual void GetMaterialOffset(f32 *pOffset) = 0;
+  virtual void GetMaterialScale(f32 *pScale) = 0;
   virtual IMaterial *GetMaterialPage(void) = 0;
 
   // find a vmt variable.
@@ -623,7 +623,7 @@ the_interface IMaterial {
   // for sorting in the application.
   virtual int GetEnumerationID(void) const = 0;
 
-  virtual void GetLowResColorSample(float s, float t, float *color) const = 0;
+  virtual void GetLowResColorSample(f32 s, f32 t, f32 *color) const = 0;
 
   // This computes the state snapshots for this material
   virtual void RecomputeStateSnapshots() = 0;
@@ -657,8 +657,8 @@ the_interface IMaterial {
   virtual bool NeedsSoftwareSkinning(void) = 0;
 
   // Apply constant color or alpha modulation
-  virtual void AlphaModulate(float alpha) = 0;
-  virtual void ColorModulate(float r, float g, float b) = 0;
+  virtual void AlphaModulate(f32 alpha) = 0;
+  virtual void ColorModulate(f32 r, f32 g, f32 b) = 0;
 
   // Material Var flags...
   virtual void SetMaterialVarFlag(MaterialVarFlags_t flag, bool on) = 0;
@@ -705,8 +705,8 @@ the_interface IMaterial {
   virtual void SetUseFixedFunctionBakedLighting(bool bEnable) = 0;
 
   // Gets the current alpha modulation
-  virtual float GetAlphaModulation() = 0;
-  virtual void GetColorModulation(float *r, float *g, float *b) = 0;
+  virtual f32 GetAlphaModulation() = 0;
+  virtual void GetColorModulation(f32 *r, f32 *g, f32 *b) = 0;
 
   // Gets the morph format
   virtual MorphFormat_t GetMorphFormat() const = 0;

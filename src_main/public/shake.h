@@ -46,13 +46,12 @@ extern int gmsgFade;
 #define SCREENFADE_FRACBITS 9  // which leaves 16-this for the integer part
 // This structure is sent over the net to describe a screen fade event
 struct ScreenFade_t {
-  unsigned short duration;  // FIXED 16 bit, with SCREENFADE_FRACBITS
-                            // fractional, seconds duration
-  unsigned short
-      holdTime;  // FIXED 16 bit, with SCREENFADE_FRACBITS fractional, seconds
+  u16 duration;  // FIXED 16 bit, with SCREENFADE_FRACBITS
+                 // fractional, seconds duration
+  u16 holdTime;  // FIXED 16 bit, with SCREENFADE_FRACBITS fractional, seconds
                  // duration until reset (fade & hold)
-  short fadeFlags;     // flags
-  uint8_t r, g, b, a;  // fade to color ( max alpha )
+  short fadeFlags;  // flags
+  u8 r, g, b, a;    // fade to color ( max alpha )
 };
 
 #endif  // SHAKE_H
