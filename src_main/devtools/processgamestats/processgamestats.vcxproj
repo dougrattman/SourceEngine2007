@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>tagbuild</ProjectName>
-    <ProjectGuid>{B0B9A462-50A0-4EC2-9C94-44BA49D8CC40}</ProjectGuid>
+    <ProjectName>processgamestats</ProjectName>
+    <ProjectGuid>{B3D0582C-4846-4AC9-9682-6D002CB7E1A9}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -63,7 +63,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_ProjectFileVersion>15.0.26919.1</_ProjectFileVersion>
+    <_ProjectFileVersion>15.0.27625.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
@@ -86,14 +86,11 @@
     <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;..\..\game\shared;..\..\game\server;..\..\game\shared\tf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_WINDOWS;GAME_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -102,48 +99,48 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalOptions />
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <PrecompiledHeader />
       <ExpandAttributedSource>false</ExpandAttributedSource>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>false</TreatWarningAsError>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
-      <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(IntDir)$(TargetName).map</MapFileName>
       <SubSystem>Console</SubSystem>
       <BaseAddress>
       </BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Xdcmake />
-    <Bscmake>
-      <OutputFile>$(OutDir)tagbuild.bsc</OutputFile>
-    </Bscmake>
+    <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;..\..\game\shared;..\..\game\server;..\..\game\shared\tf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_WINDOWS;GAME_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -152,50 +149,51 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <ExpandAttributedSource>false</ExpandAttributedSource>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>false</TreatWarningAsError>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
-      <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(IntDir)$(TargetName).map</MapFileName>
       <SubSystem>Console</SubSystem>
       <BaseAddress>
       </BaseAddress>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Xdcmake />
-    <Bscmake>
-      <OutputFile>$(OutDir)tagbuild.bsc</OutputFile>
-    </Bscmake>
+    <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;..\..\game\shared;..\..\game\server;..\..\game\shared\tf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;GAME_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -203,52 +201,52 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalOptions />
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <PrecompiledHeader />
       <ExpandAttributedSource>false</ExpandAttributedSource>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
-      <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(IntDir)$(TargetName).map</MapFileName>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <BaseAddress>
       </BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Xdcmake />
-    <Bscmake>
-      <OutputFile>$(OutDir)tagbuild.bsc</OutputFile>
-    </Bscmake>
+    <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\..\utils\vmpi;..\..\game\shared;..\..\game\server;..\..\game\shared\tf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;GAME_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -257,41 +255,92 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <ExpandAttributedSource>false</ExpandAttributedSource>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
-      <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(IntDir)$(TargetName).map</MapFileName>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <BaseAddress>
       </BaseAddress>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Xdcmake />
-    <Bscmake>
-      <OutputFile>$(OutDir)tagbuild.bsc</OutputFile>
-    </Bscmake>
+    <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\game\server\GameStats_BasicStatsFunctions.cpp" />
+    <ClCompile Include="..\..\game\shared\tf\tf_gamestats_shared.cpp" />
+    <ClCompile Include="..\..\public\filesystem_helpers.cpp" />
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="cstrike_gamestats_parse.cpp" />
+    <ClCompile Include="ep2_gamestats_parse.cpp" />
     <ClCompile Include="main.cc" />
+    <ClCompile Include="tf_gamestats_parse.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\game\server\episodic\ep2_gamestats.h" />
+    <ClInclude Include="..\..\game\server\GameStats.h" />
+    <ClInclude Include="..\..\game\server\tf\tf_gamestats.h" />
+    <ClInclude Include="..\..\game\shared\tf\tf_gamestats_shared.h" />
+    <ClInclude Include="..\..\public\commonmacros.h" />
+    <ClInclude Include="..\..\public\filesystem_helpers.h" />
+    <ClInclude Include="..\..\public\protected_things.h" />
+    <ClInclude Include="..\..\public\string_t.h" />
+    <ClInclude Include="..\..\public\tier0\basetypes.h" />
+    <ClInclude Include="..\..\public\tier0\dbg.h" />
+    <ClInclude Include="..\..\public\tier0\fasttimer.h" />
+    <ClInclude Include="..\..\public\tier0\memdbgoff.h" />
+    <ClInclude Include="..\..\public\tier0\memdbgon.h" />
+    <ClInclude Include="..\..\public\tier0\platform.h" />
+    <ClInclude Include="..\..\public\tier1\utlmemory.h" />
+    <ClInclude Include="..\..\public\tier1\utlvector.h" />
+    <ClInclude Include="..\..\public\vstdlib\ICommandLine.h" />
+    <ClInclude Include="..\..\public\vstdlib\strtools.h" />
+    <ClInclude Include="..\..\public\vstdlib\vstdlib.h" />
+    <ClInclude Include="..\..\utils\vmpi\imysqlwrapper.h" />
+    <ClInclude Include="base_gamestats_parse.h" />
+    <ClInclude Include="cs_gamestats.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cstrike_gamestats.db" />
+    <None Include="ep1_gamestats.db" />
+    <None Include="ep2_gamestats.db" />
+    <None Include="portal_gamestats.db" />
+    <None Include="tf_gamestats.db" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\tier0\tier0.vcxproj">
@@ -299,7 +348,12 @@
     </ProjectReference>
     <ProjectReference Include="..\..\tier1\tier1.vcxproj">
       <Project>{f8e20a37-8ac2-4587-90db-565934b985b0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tier2\tier2.vcxproj">
+      <Project>{5edc148b-acf5-49da-a05c-924e2b162750}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\vstdlib\vstdlib.vcxproj">
+      <Project>{08257043-fe59-4e3f-8c99-a181397052d0}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

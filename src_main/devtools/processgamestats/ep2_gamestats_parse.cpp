@@ -148,14 +148,20 @@ void DescribeEp2Stats() {
     Ep2LevelStats_t::SaveGameInfo_t *sg = &pCurrentMap->m_SaveGameInfo;
     Msg("  -- Save Game --\n");
     time_t t = (time_t)sg->m_nCurrentSaveFileTime;
+
     struct tm *timestamp;
-    timestamp = localtime(&t);
+    localtime_s(timestamp, &t);
+
+    char time_buf[32];
+    asctime_s(time_buf, timestamp);
+
     if (t == (time_t)0) {
       Msg("   No save file\n");
     } else {
       Msg("  Current save %s file time %s\n", sg->m_sCurrentSaveFile.String(),
-          asctime(timestamp));
+          time_buf);
     }
+
     for (i = 0; i < sg->m_Records.Count(); ++i) {
       const Ep2LevelStats_t::SaveGameInfoRecord2_t &rec = sg->m_Records[i];
       Msg("  %3d deaths, saved at (%5d %5d %5d) with health %3d %s\n",
@@ -320,26 +326,23 @@ void InsertCustomData(CUtlDict<int, unsigned short> &mapOrder, IMySQL *sql,
         "%f);",
         gamename, counternames, userid.c_str(), tag.c_str(), mapname.c_str(),
         mapversion,
-        (uint32)
-            pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_CRATESSMASHED],
-        (uint32)
-            pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_OBJECTSPUNTED],
-        (uint32)pCurrentMap
+        (u32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_CRATESSMASHED],
+        (u32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_OBJECTSPUNTED],
+        (u32)pCurrentMap
             ->m_IntCounters[Ep2LevelStats_t::COUNTER_VEHICULARHOMICIDES],
         pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_DISTANCE_INVEHICLE],
         pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_DISTANCE_ONFOOT],
         pCurrentMap
             ->m_IntCounters[Ep2LevelStats_t::COUNTER_DISTANCE_ONFOOTSPRINTING],
-        (uint32)
-            pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_FALLINGDEATHS],
-        (uint32)pCurrentMap
+        (u32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_FALLINGDEATHS],
+        (u32)pCurrentMap
             ->m_IntCounters[Ep2LevelStats_t::COUNTER_VEHICLE_OVERTURNED],
-        (uint32)pCurrentMap
+        (u32)pCurrentMap
             ->m_IntCounters[Ep2LevelStats_t::COUNTER_LOADGAME_STILLALIVE],
-        (uint32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_LOADS],
-        (uint32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_SAVES],
-        (uint32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_GODMODES],
-        (uint32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_NOCLIPS],
+        (u32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_LOADS],
+        (u32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_SAVES],
+        (u32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_GODMODES],
+        (u32)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_NOCLIPS],
         (double)
             pCurrentMap->m_FloatCounters[Ep2LevelStats_t::COUNTER_DAMAGETAKEN]);
 
@@ -457,8 +460,7 @@ void LoadCustomDataFromBuffer(CUtlBuffer &LoadBuffer, char *tag,
       }
     }
 
-    if ((int64)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_NOCLIPS] <
-        0) {
+    if ((i64)pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_NOCLIPS] < 0) {
       pCurrentMap->m_IntCounters[Ep2LevelStats_t::COUNTER_NOCLIPS] = 0;
     }
   }
@@ -466,15 +468,15 @@ void LoadCustomDataFromBuffer(CUtlBuffer &LoadBuffer, char *tag,
 
 bool Ep2_ParseCurrentUserID(char const *pchDataFile, char *pchUserID,
                             size_t bufsize, time_t &modifiedtime) {
-  FILE *fp = fopen(pchDataFile, "rb");
-  if (fp) {
+  FILE *fp;
+  if (!fopen_s(&fp, pchDataFile, "rb")) {
     CUtlBuffer statsBuffer;
 
-    struct _stat sb;
-    _stat(pchDataFile, &sb);
+    struct _stati64 sb;
+    _stati64(pchDataFile, &sb);
 
     // Msg( "Processing %s\n", ctx->file );
-    int nBytesToRead = std::min(sb.st_size, sizeof(short) + 16);
+    usize nBytesToRead = std::min((usize)sb.st_size, sizeof(short) + 16);
 
     statsBuffer.Clear();
     statsBuffer.EnsureCapacity(nBytesToRead);
@@ -498,8 +500,8 @@ bool Ep2_ParseCurrentUserID(char const *pchDataFile, char *pchUserID,
 int Ep2_ParseCustomGameStatsData(ParseContext_t *ctx) {
   g_dictMapStats.Purge();
 
-  FILE *fp = fopen(ctx->file, "rb");
-  if (fp) {
+  FILE *fp;
+  if (!fopen_s(&fp, ctx->file, "rb")) {
     CUtlBuffer statsBuffer;
 
     struct _stat sb;

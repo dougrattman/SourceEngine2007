@@ -1,11 +1,11 @@
-:: Copy game artifacts to game/bin.
+:: Copy developer tools artifacts to devtools/bin.
 
 @echo on
 setlocal
 
 :: Make sure we have all args
 if %5 == "" (
-  echo  Post-Build: ERROR: Incorrect number of args provided. Usage post_build_copy_artifacts_to_game.cmd "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" [bin dir].
+  echo  Post-Build: ERROR: Incorrect number of args provided. Usage post_build_copy_artifacts_to_devtools.cmd "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" [bin dir].
   endlocal
   exit /b 1
 )
@@ -16,7 +16,7 @@ set target_path=%~3
 set target_name=%~4
 set target_file_name=%~5
 set bin_dir=%~6
-set "full_result_dir=%solution_dir%..\game\%bin_dir%\"
+set "full_result_dir=%solution_dir%devtools\%bin_dir%\"
 
 if not exist "%full_result_dir%" (
   md "%full_result_dir%"

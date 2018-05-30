@@ -81,11 +81,11 @@ void BuildFileList_R(CUtlVector<CUtlSymbol> &files, char const *dir,
                      char const *extension) {
   WIN32_FIND_DATA wfd;
 
-  char directory[256];
-  char filename[256];
+  char directory[SOURCE_MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   HANDLE ff;
 
-  sprintf(directory, "%s\\*.*", dir);
+  sprintf_s(directory, "%s\\*.*", dir);
 
   if ((ff = FindFirstFile(directory, &wfd)) == INVALID_HANDLE_VALUE) return;
 
@@ -96,19 +96,19 @@ void BuildFileList_R(CUtlVector<CUtlSymbol> &files, char const *dir,
       if (wfd.cFileName[0] == '.') continue;
 
       // Recurse down directory
-      sprintf(filename, "%s\\%s", dir, wfd.cFileName);
+      sprintf_s(filename, "%s\\%s", dir, wfd.cFileName);
       BuildFileList_R(files, filename, extension);
     } else {
       int len = strlen(wfd.cFileName);
       if (len > extlen) {
-        if (!stricmp(&wfd.cFileName[len - extlen], extension)) {
-          char filename[SOURCE_MAX_PATH];
-          Q_snprintf(filename, sizeof(filename), "%s\\%s", dir, wfd.cFileName);
-          _strlwr(filename);
+        if (!_stricmp(&wfd.cFileName[len - extlen], extension)) {
+          char fn[SOURCE_MAX_PATH];
 
-          Q_FixSlashes(filename);
+          sprintf_s(fn, "%s\\%s", dir, wfd.cFileName);
+          _strlwr_s(fn);
+          Q_FixSlashes(fn);
 
-          CUtlSymbol sym = g_Analysis.symbols.AddString(filename);
+          CUtlSymbol sym = g_Analysis.symbols.AddString(fn);
           files.AddToTail(sym);
         }
       }
@@ -340,10 +340,9 @@ void BuildMapList() {
   void *buffer = NULL;
   char *pFileList;
   FILE *pFile;
-  pFile = fopen("maplist.txt", "r");
   int i = 0;
 
-  if (pFile) {
+  if (!fopen_s(&pFile, "maplist.txt", "r")) {
     long lSize;
     // obtain file size.
     fseek(pFile, 0, SEEK_END);
@@ -376,8 +375,8 @@ void BuildMapList() {
 }
 
 int Default_ParseCustomGameStatsData(ParseContext_t *ctx) {
-  FILE *fp = fopen(ctx->file, "rb");
-  if (fp) {
+  FILE *fp;
+  if (!fopen_s(&fp, ctx->file, "rb")) {
     CUtlBuffer statsBuffer;
 
     struct _stat sb;
@@ -438,8 +437,8 @@ int Default_ParseCustomGameStatsData(ParseContext_t *ctx) {
         Msg("\n\nFound custom data, dumping to %s\n",
             szCustomDataOutputFileName);
 
-        FILE *pCustomDataOutput = fopen(szCustomDataOutputFileName, "wb+");
-        if (pCustomDataOutput) {
+        FILE *pCustomDataOutput;
+        if (!fopen_s(&pCustomDataOutput, szCustomDataOutputFileName, "wb+")) {
           int iGetPosition = statsBuffer.TellGet();
           fwrite((((unsigned char *)statsBuffer.Base()) + iGetPosition),
                  statsBuffer.TellPut() - iGetPosition, 1, pCustomDataOutput);
@@ -460,8 +459,8 @@ int Default_ParseCustomGameStatsData(ParseContext_t *ctx) {
                    sizeof(szCustomDataOutputFileName), "customdatadumps/%s.dat",
                    szCurrentStatsFileUserID);
 
-        FILE *pCustomDataOutput = fopen(szCustomDataOutputFileName, "wb+");
-        if (pCustomDataOutput) {
+        FILE *pCustomDataOutput;
+        if (!fopen_s(&pCustomDataOutput, szCustomDataOutputFileName, "wb+")) {
           int iGetPosition = statsBuffer.TellGet();
           fwrite((((unsigned char *)statsBuffer.Base()) + iGetPosition),
                  statsBuffer.TellPut() - iGetPosition, 1, pCustomDataOutput);
@@ -520,8 +519,8 @@ int main(int argc, char *argv[]) {
   CUtlVector<CUtlSymbol> files;
   if (describeonly || Q_stristr(argv[dirArg], ".dat")) {
     char filename[SOURCE_MAX_PATH];
-    Q_snprintf(filename, sizeof(filename), "%s", argv[dirArg]);
-    _strlwr(filename);
+    sprintf_s(filename, "%s", argv[dirArg]);
+    _strlwr_s(filename);
     Q_FixSlashes(filename);
     CUtlSymbol sym = g_Analysis.symbols.AddString(filename);
     files.AddToTail(sym);
@@ -756,8 +755,8 @@ void InsertKeyDataIntoTable(IMySQL *pSQL, char const *pTableName,
   bool bBadData = false;
   char fieldNameBuffer[1024];
   char fieldValueBuffer[2048];
-  strcpy(fieldNameBuffer, "(CreationTimeStamp, ");
-  strcpy(fieldValueBuffer, "( now(),");
+  strcpy_s(fieldNameBuffer, "(CreationTimeStamp, ");
+  strcpy_s(fieldValueBuffer, "( now(),");
   for (int i = 0; i < tokens.Count(); i++) {
     char *pKVData = tokens[i];
     char *pEqualsSign = strchr(pKVData, '=');
@@ -797,8 +796,8 @@ void InsertKeyDataIntoTable(IMySQL *pSQL, char const *pTableName,
   if (!bBadData) {
     char sqlCommandBuffer[1024 + sizeof(fieldNameBuffer) +
                           sizeof(fieldValueBuffer)];
-    sprintf(sqlCommandBuffer, "insert into %s %s values %s;", pTableName,
-            fieldNameBuffer, fieldValueBuffer);
+    sprintf_s(sqlCommandBuffer, "insert into %s %s values %s;", pTableName,
+              fieldNameBuffer, fieldValueBuffer);
     //			printf("cmd %s\n", sqlCommandBuffer);
     int retcode = pSQL->Execute(sqlCommandBuffer);
     if (retcode != 0) {

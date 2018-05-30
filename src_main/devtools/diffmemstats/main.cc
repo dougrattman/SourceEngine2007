@@ -1,7 +1,6 @@
 // Processes two "memstats<n>.txt" memory dumps from the game into a 'diff' text
 // file which Excel will display in legible form (useful for tracking mem leaks)
 
-#include <tchar.h>
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -12,25 +11,23 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-typedef map<string, float> CItemMap;
-typedef pair<string, float> CDelta;
+using ItemMap = std::map<std::string, float>;
+using Delta = std::pair<std::string, float>;
 
 struct Sequence {
   const char *m_name;
-  float *m_values;
+  std::vector<float> m_values;
   float m_maxDelta;
   float m_endDelta;
 };
 
 // The number of chains which will be output (the top N, after sorting and
 // skipping)
-int gNumSequencesToOutput = 16;
+std::size_t gNumSequencesToOutput = 16;
 
 // The number of chains which will be skipped before output (the top N, after
 // sorting)
-int gNumSequencesToSkip = 0;
+std::size_t gNumSequencesToSkip = 0;
 
 // If this is true, we sort chains by their maximum delta from the starting
 // value, otherwise we sort by the change from the start to the end value
@@ -57,34 +54,31 @@ bool gOutputAbsolute = false;
 // Output MB instead of KB
 bool gOutputMB = false;
 
-bool GetQuotedString(ifstream &file, string &item) {
+bool GetQuotedString(std::ifstream &file, std::string &item) {
   // Skip the opening quote
   char ch;
   while (file.get(ch) && (ch != '"'))
     ;
   // Get the string
-  getline(file, item, '"');
+  std::getline(file, item, '"');
   // Skip the comma
   file.get(ch);
 
-  return (!file.eof());
+  return !file.eof();
 }
 
-string &CleanupName(string &name) {
+std::string &CleanupName(std::string &name) {
   // Strip everything before "\src\", to make memstats files from different
   // peoples' machines compatible
   const char *pSrc = strstr(name.c_str(), "src\\");
   if (pSrc && (pSrc != name.c_str())) {
-    string strippedName(pSrc);
-    name = strippedName;
+    name = pSrc;
   }
   return name;
 }
 
-bool ParseFile(char *pszFile, CItemMap *pResult) {
-  ifstream file;
-  string item;
-  float size;
+bool ParseFile(char *pszFile, ItemMap *pResult) {
+  std::ifstream file;
 
   // Is this a CSV file?
   bool bIsCSV = !!strstr(pszFile, ".csv");
@@ -92,13 +86,18 @@ bool ParseFile(char *pszFile, CItemMap *pResult) {
   pResult->clear();
   file.open(pszFile);
   if (!file.is_open()) {
-    printf("Failed to open %s\n", pszFile);
+    fprintf(stderr, "Failed to open %s\n", pszFile);
     return false;
   }
 
+  std::string item;
   // Skip the header
-  getline(file, item);
+  if (!getline(file, item)) {
+    fprintf(stderr, "%s header is missed\n", pszFile);
+    return false;
+  }
 
+  float size;
   float maxEntrySize = 0;
   while (!file.eof()) {
     if (bIsCSV) {
@@ -126,19 +125,20 @@ bool ParseFile(char *pszFile, CItemMap *pResult) {
     multiplier = 1.0f / 1024.0f;
   else if (!bInputDataInKB && !gOutputMB)
     multiplier = 1024.0f;
-  CItemMap::iterator p1;
-  for (p1 = pResult->begin(); p1 != pResult->end(); p1++) {
-    p1->second = p1->second * multiplier;
+
+  for (auto &p1 : *pResult) {
+    p1.second *= multiplier;
   }
 
-  return (pResult->size() > 0);
+  return pResult->size() > 0;
 }
 
-bool FillMissingEntries(CItemMap *items, int numItems, int *numAllocations) {
+bool FillMissingEntries(std::vector<ItemMap> &items, std::size_t numItems,
+                        std::size_t &numAllocations) {
   // First, generate a list of all unique allocations
-  CItemMap allAllocations;
-  CItemMap::const_iterator p1, p2;
-  for (int i = 0; i < numItems; i++) {
+  ItemMap allAllocations;
+  ItemMap::const_iterator p1, p2;
+  for (std::size_t i = 0; i < numItems; i++) {
     for (p1 = items[i].begin(); p1 != items[i].end(); p1++) {
       p2 = allAllocations.find(p1->first);
       if (p2 == allAllocations.end())
@@ -147,7 +147,7 @@ bool FillMissingEntries(CItemMap *items, int numItems, int *numAllocations) {
   }
 
   // Determine how many sequences we have in total
-  *numAllocations = (int)allAllocations.size();
+  numAllocations = allAllocations.size();
 
   // Now make sure each allocation is present in every CItemMap. Where absent,
   // assign the previous known value, and where there is no known value assign
@@ -159,7 +159,7 @@ bool FillMissingEntries(CItemMap *items, int numItems, int *numAllocations) {
   for (p1 = allAllocations.begin(); p1 != allAllocations.end(); p1++) {
     float curValue = 0.0f;
     bool foundFirstOccurrence = false;
-    for (int i = 0; i < numItems; i++) {
+    for (std::size_t i = 0; i < numItems; i++) {
       p2 = items[i].find(p1->first);
       if (p2 != items[i].end()) {
         // Entry already present, update current value
@@ -176,46 +176,51 @@ bool FillMissingEntries(CItemMap *items, int numItems, int *numAllocations) {
   return isValid;
 }
 
-bool CompareSequence(const Sequence *&lhs, const Sequence *&rhs) {
-  if (gSortByMaxChange)
-    return (lhs->m_maxDelta > rhs->m_maxDelta);
-  else
-    return (lhs->m_endDelta > rhs->m_endDelta);
+bool CompareSequenceMaxDelta(const Sequence &lhs, const Sequence &rhs) {
+  return (lhs.m_maxDelta > rhs.m_maxDelta);
 }
 
-vector<const Sequence *> &CreateSequences(CItemMap *items, int numItems) {
+bool CompareSequenceEndDelta(const Sequence &lhs, const Sequence &rhs) {
+  return (lhs.m_endDelta > rhs.m_endDelta);
+}
+
+std::vector<Sequence> CreateSequences(const std::vector<ItemMap> &items,
+                                      std::size_t numItems) {
   // Create a vector of Sequence objects, each of which holds the
   // sequence of 'Allocation Size' values for each allocation
-  vector<const Sequence *> &sequences = *new vector<const Sequence *>();
+  std::vector<Sequence> sequences;
 
-  CItemMap::const_iterator p1, p2;
+  ItemMap::const_iterator p1, p2;
   for (p1 = items[0].begin(); p1 != items[0].end(); p1++) {
-    Sequence *seq = new Sequence;
-    seq->m_name = p1->first.c_str();
-    seq->m_values = new float[numItems];
+    Sequence seq;
+    seq.m_name = p1->first.c_str();
+    seq.m_values = std::vector<float>(numItems);
     float startVal = p1->second;
     float maxDelta = 0.0f;
     float endDelta = 0.0f;
-    for (int i = 0; i < numItems; i++) {
-      p2 = items[i].find(seq->m_name);
+    for (std::size_t i = 0; i < numItems; i++) {
+      p2 = items[i].find(seq.m_name);
       assert(p2 != items[i].end());
       if (p2 != items[i].end()) {
-        seq->m_values[i] = p2->second;
+        seq.m_values[i] = p2->second;
         float delta = p2->second - startVal;
         if (gSortByAbsDeltas) delta = fabs(delta);
         if (delta > maxDelta) maxDelta = delta;
         endDelta = delta;
       }
     }
-    seq->m_endDelta = endDelta;
-    seq->m_maxDelta = maxDelta;
+    seq.m_endDelta = endDelta;
+    seq.m_maxDelta = maxDelta;
     sequences.push_back(seq);
   }
 
-  // Now sort the sequences vector
-  sort(sequences.begin(), sequences.end(), CompareSequence);
+  const auto &compareSequence =
+      gSortByMaxChange ? CompareSequenceMaxDelta : CompareSequenceEndDelta;
 
-  return sequences;
+  // Now sort the sequences vector
+  sort(sequences.begin(), sequences.end(), compareSequence);
+
+  return std::move(sequences);
 }
 
 void Usage() {
@@ -277,12 +282,12 @@ void Usage() {
   printf("[-mb]                  output values in MB (default is KB)\n");
 }
 
-bool ParseOption(_TCHAR *option) {
+bool ParseOption(char *option) {
   if (option[0] != '-') return false;
 
   option++;
 
-  int numChains, numRead = sscanf(option, "numchains:%d", &numChains);
+  int numChains, numRead = sscanf_s(option, "numchains:%d", &numChains);
   if (numRead == 1) {
     if (numChains >= 0) {
       gNumSequencesToOutput = numChains;
@@ -291,7 +296,7 @@ bool ParseOption(_TCHAR *option) {
     return false;
   }
 
-  int skipChains, numRead2 = sscanf(option, "skipchains:%d", &skipChains);
+  int skipChains, numRead2 = sscanf_s(option, "skipchains:%d", &skipChains);
   if (numRead2 == 1) {
     if (skipChains >= 0) {
       gNumSequencesToSkip = skipChains;
@@ -300,37 +305,37 @@ bool ParseOption(_TCHAR *option) {
     return false;
   }
 
-  if (!stricmp(option, "delta")) {
+  if (!_stricmp(option, "delta")) {
     gOutputDeltas = true;
     return true;
   }
 
-  if (!stricmp(option, "absolute")) {
+  if (!_stricmp(option, "absolute")) {
     gOutputAbsolute = true;
     return true;
   }
 
-  if (!stricmp(option, "sortend")) {
+  if (!_stricmp(option, "sortend")) {
     gSortByMaxChange = false;
     return true;
   }
 
-  if (!stricmp(option, "sortmax")) {
+  if (!_stricmp(option, "sortmax")) {
     gSortByMaxChange = true;
     return true;
   }
 
-  if (!stricmp(option, "sortabs")) {
+  if (!_stricmp(option, "sortabs")) {
     gSortByAbsDeltas = true;
     return true;
   }
 
-  if (!stricmp(option, "allowmismatch")) {
+  if (!_stricmp(option, "allowmismatch")) {
     gAllowArbitraryInputSequence = true;
     return true;
   }
 
-  if (!stricmp(option, "mb")) {
+  if (!_stricmp(option, "mb")) {
     gOutputMB = true;
     return true;
   }
@@ -362,15 +367,15 @@ int main(int argc, char *argv[]) {
   //       in that folder (using Aaron's naming scheme:
   //       <map_name>_<mmdd>_<hhmmss>_<count>.txt)
 
-  int numFiles = argc - 1 - numOptions;
-  CItemMap *items = new CItemMap[numFiles];
-  string *names = new string[numFiles];
-  for (int i = 0; i < numFiles; i++) {
-    strlwr(argv[0]);
+  std::size_t numFiles = std::clamp(argc - 1 - numOptions, 0, argc);
+  std::vector<ItemMap> items{numFiles};
+  std::vector<std::string> names{numFiles};
+  for (std::size_t i = 0; i < numFiles; i++) {
+    _strlwr_s(argv[0], strlen(argv[0]) + 1);
     if (!ParseFile(argv[0], &items[i])) return 1;
 
     // Create a label for each column of output data
-    string name = argv[0];
+    std::string name = argv[0];
     if ((name.find(".csv") == (name.length() - 4)) ||
         (name.find(".txt") == (name.length() - 4))) {
       name = name.substr(0, name.length() - 4);
@@ -382,10 +387,11 @@ int main(int argc, char *argv[]) {
   // Generate missing entries (i.e. make it so that each allocation
   // occurs in every CItemMap, so we have a sequence of 'numFiles' value,
   // duplicating )
-  int numAllocations = 0;
-  bool isValidSequence = FillMissingEntries(items, numFiles, &numAllocations);
+  std::size_t numAllocations = 0;
+  bool isValidSequence = FillMissingEntries(items, numFiles, numAllocations);
   if (!isValidSequence && !gAllowArbitraryInputSequence) {
-    printf(
+    fprintf(
+        stderr,
         "ERROR: input files did not all come from the same play session, or "
         "are in the wrong order (to allow this, specify -allowmismatch)\n");
     return 1;
@@ -394,28 +400,32 @@ int main(int argc, char *argv[]) {
   // Create a vector of Sequence objects, each of which holds the sequence of
   // 'size' values for each allocation. The vector is sorted based on max change
   // from the start value, or the start-to-end change (gSortByMaxChange).
-  vector<const Sequence *> &sequences = CreateSequences(items, numFiles);
+  std::vector<Sequence> sequences = CreateSequences(items, numFiles);
 
   // Headings
   printf("Allocation type");
-  for (int i = 0; i < numFiles; i++) {
+  for (std::size_t i = 0; i < numFiles; i++) {
     printf("\t%s", names[i].c_str());
   }
   printf("\n");
 
-  for (int i = gNumSequencesToSkip;
+  for (std::size_t i = gNumSequencesToSkip;
        (i < (gNumSequencesToSkip + gNumSequencesToOutput)) &&
        (i < numAllocations);
        i++) {
-    const Sequence &seq = *sequences.at(i);
+    const Sequence &seq = sequences.at(i);
     printf(seq.m_name);
-    for (int j = 0; j < numFiles; j++) {
+    for (std::size_t j = 0; j < numFiles; j++) {
       // Subtract out either the first (want change since the sequence start)
       // or the prior value (want change from one value to the next).
-      int base = 0;
+      std::size_t base = 0;
+
       if (gOutputDeltas && (j > 0)) base = j - 1;
+
       float baseVal = seq.m_values[base];
+
       if (gOutputAbsolute && !gOutputDeltas) baseVal = 0.0f;
+
       printf("\t%.2f", (seq.m_values[j] - baseVal));
     }
     printf("\n");

@@ -4,88 +4,13 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{4175ad88-3697-4ec4-b335-fc7cc18e561d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{175e43ac-dd11-430e-9023-be2caee299c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{796be933-8737-4d0c-864b-92fb902dc00b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{f33dbe73-29ef-4ab8-860e-3287585a9aef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StdAfx.cpp">
+    <ClCompile Include="main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tagbuild.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="StdAfx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier0\basetypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\commonmacros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier0\dbg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier0\fasttimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\vstdlib\ICommandLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\utils\vmpi\imysqlwrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier0\memdbgoff.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier0\memdbgon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier0\platform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\protected_things.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\string_t.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\vstdlib\strtools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier1\utlmemory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tier1\utlvector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\vstdlib\vstdlib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\lib\public\tier0.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier1.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vstdlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="tagbuild.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
 </Project>

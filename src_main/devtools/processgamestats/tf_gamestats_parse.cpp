@@ -1,16 +1,17 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
+#include "stdafx.h"
+
 #include <process.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <time.h>
-
-#include "FileSystem.h"
 #include "base/include/windows/windows_light.h"
+
 #include "imysqlwrapper.h"
 #include "interface.h"
-#include "stdafx.h"
+
 #include "tier1/UtlBuffer.h"
 #include "tier1/UtlDict.h"
 #include "tier1/UtlString.h"
@@ -18,7 +19,8 @@
 #include "tier1/UtlVector.h"
 #include "tier2/tier2.h"
 
-#include "cbase.h"
+#include "FileSystem.h"
+
 #include "gamestats.h"
 class CBaseObject;
 #include "base_gamestats_parse.h"
@@ -127,44 +129,73 @@ const char *WeaponIdToAlias(int iWeapon) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void DescribeTF2Stats() {
-#if 0  // not up to date w/latest stats code. 
+#if 0  // not up to date w/latest stats code.
 	int iMap;
-	for ( iMap = g_dictMapStats.First(); iMap != g_dictMapStats.InvalidIndex(); iMap = g_dictMapStats.Next( iMap ) )
+	for ( iMap = g_dictMapStats.First(); iMap !=
+ g_dictMapStats.InvalidIndex(); iMap = g_dictMapStats.Next( iMap ) )
 	{
 		// Get the current map.
 		TF_Gamestats_LevelStats_t *pCurrentMap = &g_dictMapStats[iMap];
 
-		Msg( " --- %s ------\n   %d deaths\n   %.2f seconds total playtime\n", pCurrentMap->m_Header.m_szMapName, 
-			pCurrentMap->m_aPlayerDeaths.Count(), pCurrentMap->m_Header.m_flTime );
-		for( int i = 0; i < pCurrentMap->m_aPlayerDeaths.Count(); i++ )
+		Msg( " --- %s ------\n   %d deaths\n   %.2f seconds total
+ playtime\n", pCurrentMap->m_Header.m_szMapName,
+			pCurrentMap->m_aPlayerDeaths.Count(),
+ pCurrentMap->m_Header.m_flTime ); 		for( int i = 0; i <
+ pCurrentMap->m_aPlayerDeaths.Count(); i++ )
 		{
-			Msg( "   %s killed %s with %s at (%d,%d,%d), distance %d\n",
-				ClassIdToAlias( pCurrentMap->m_aPlayerDeaths[ i ].iAttackClass ),
-				ClassIdToAlias( pCurrentMap->m_aPlayerDeaths[ i ].iTargetClass ),
-				WeaponIdToAlias( pCurrentMap->m_aPlayerDeaths[ i ].iWeapon ), 
-				pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 0 ],
-				pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 1 ],
-				pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 2 ],
-				pCurrentMap->m_aPlayerDeaths[ i ].iDistance );
+			Msg( "   %s killed %s with %s at (%d,%d,%d), distance
+%d\n", 				ClassIdToAlias(
+ pCurrentMap->m_aPlayerDeaths[ i ].iAttackClass ),
+				ClassIdToAlias( pCurrentMap->m_aPlayerDeaths[ i
+].iTargetClass ), 				WeaponIdToAlias(
+ pCurrentMap->m_aPlayerDeaths[ i ].iWeapon ),
+				pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 0
+], 				pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 1
+], 				pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 2
+], 				pCurrentMap->m_aPlayerDeaths[ i ].iDistance );
 		}
-		Msg( "\n---------------------------------\n\n   %d damage records\n", pCurrentMap->m_aPlayerDamage.Count() );
+		Msg( "\n---------------------------------\n\n   %d damage
+ records\n", pCurrentMap->m_aPlayerDamage.Count() );
 
 		for( int i = 0; i < pCurrentMap->m_aPlayerDamage.Count(); i++ )
 		{
-			Msg( "   %.2f : %s at (%d,%d,%d) caused %d damage to %s with %s at (%d,%d,%d)%s%s\n",
+			Msg( "   %.2f : %s at (%d,%d,%d) caused %d damage to %s
+ with %s at (%d,%d,%d)%s%s\n",
 				pCurrentMap->m_aPlayerDamage[ i ].fTime,
-				ClassIdToAlias( pCurrentMap->m_aPlayerDamage[ i ].iAttackClass ),
-				pCurrentMap->m_aPlayerDamage[ i ].nAttackerPosition[ 0 ],
-				pCurrentMap->m_aPlayerDamage[ i ].nAttackerPosition[ 1 ],
-				pCurrentMap->m_aPlayerDamage[ i ].nAttackerPosition[ 2 ],
-				pCurrentMap->m_aPlayerDamage[ i ].iDamage,
-				ClassIdToAlias( pCurrentMap->m_aPlayerDamage[ i ].iTargetClass ),
-				WeaponIdToAlias( pCurrentMap->m_aPlayerDamage[ i ].iWeapon ), 
-				pCurrentMap->m_aPlayerDamage[ i ].nTargetPosition[ 0 ],
-				pCurrentMap->m_aPlayerDamage[ i ].nTargetPosition[ 1 ],
-				pCurrentMap->m_aPlayerDamage[ i ].nTargetPosition[ 2 ],
-				pCurrentMap->m_aPlayerDamage[ i ].iCrit ? ", CRIT!" : "",
-				pCurrentMap->m_aPlayerDamage[ i ].iKill ? ", KILL" : "" );
+				ClassIdToAlias( pCurrentMap->m_aPlayerDamage[ i
+].iAttackClass ), 				pCurrentMap->m_aPlayerDamage[ i
+].nAttackerPosition[ 0 ],
+				pCurrentMap->m_aPlayerDamage[ i
+].nAttackerPosition[
+ 1
+],
+				pCurrentMap->m_aPlayerDamage[ i
+].nAttackerPosition[
+ 2
+], 				pCurrentMap->m_aPlayerDamage[ i ].iDamage,
+				ClassIdToAlias( pCurrentMap->m_aPlayerDamage[ i
+].iTargetClass ), 				WeaponIdToAlias(
+ pCurrentMap->m_aPlayerDamage[ i ].iWeapon ),
+				pCurrentMap->m_aPlayerDamage[ i
+].nTargetPosition[
+ 0
+],
+				pCurrentMap->m_aPlayerDamage[ i
+].nTargetPosition[
+ 1
+],
+				pCurrentMap->m_aPlayerDamage[ i
+].nTargetPosition[
+ 2
+],
+				pCurrentMap->m_aPlayerDamage[ i ].iCrit ? ",
+ CRIT!"
+:
+"",
+				pCurrentMap->m_aPlayerDamage[ i ].iKill ? ",
+ KILL"
+:
+"" );
 		}
 
 		Msg( "\n" );
@@ -185,10 +216,11 @@ void InsertTF2Data(bool bDeathOnly, char const *szStatsFileUserID,
 
   char szDate[128] = "Now()";
   if (fileTime > 0) {
-    tm *pTm = localtime(&fileTime);
-    Q_snprintf(szDate, std::size(szDate), "'%04d-%02d-%02d %02d:%02d:%02d'",
-               pTm->tm_year + 1900, pTm->tm_mon + 1, pTm->tm_mday, pTm->tm_hour,
-               pTm->tm_min, pTm->tm_sec);
+    tm *pTm;
+    localtime_s(pTm, &fileTime);
+    sprintf_s(szDate, "'%04d-%02d-%02d %02d:%02d:%02d'", pTm->tm_year + 1900,
+              pTm->tm_mon + 1, pTm->tm_mday, pTm->tm_hour, pTm->tm_min,
+              pTm->tm_sec);
   }
 
   char q[4096];
@@ -205,7 +237,7 @@ void InsertTF2Data(bool bDeathOnly, char const *szStatsFileUserID,
 #if 1
       int slot = g_mapOrder.Find(pCurrentMap->m_Header.m_szMapName);
       if (slot == g_mapOrder.InvalidIndex()) {
-        if (Q_stricmp(pCurrentMap->m_Header.m_szMapName, "devtest")) continue;
+        if (_stricmp(pCurrentMap->m_Header.m_szMapName, "devtest")) continue;
       }
 #endif
 
@@ -219,19 +251,6 @@ void InsertTF2Data(bool bDeathOnly, char const *szStatsFileUserID,
 
       int mapversion = 0;
 
-      /*
-      for( int i = 0; i < pCurrentMap->m_aPlayerDeaths.Count(); i++ )
-      {
-              Msg( "   %s killed %s with %s at (%d,%d,%d), distance %d\n",
-                      ClassIdToAlias( pCurrentMap->m_aPlayerDeaths[ i
-      ].iAttackClass ), ClassIdToAlias( pCurrentMap->m_aPlayerDeaths[ i
-      ].iTargetClass ), WeaponIdToAlias( pCurrentMap->m_aPlayerDeaths[ i
-      ].iWeapon ), pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 0 ],
-                      pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 1 ],
-                      pCurrentMap->m_aPlayerDeaths[ i ].nPosition[ 2 ],
-                      pCurrentMap->m_aPlayerDeaths[ i ].iDistance );
-      }
-      */
       // Deal with deaths
       for (int i = 0; i < pCurrentMap->m_aPlayerDeaths.Count(); ++i) {
         Q_snprintf(q, sizeof(q),
@@ -341,8 +360,8 @@ int g_nCustom = 0;
 // Purpose:
 //-----------------------------------------------------------------------------
 int TF_ParseCustomGameStatsData(ParseContext_t *ctx) {
-  FILE *fp = fopen(ctx->file, "rb");
-  if (!fp) return CUSTOMDATA_FAILED;
+  FILE *fp;
+  if (fopen_s(&fp, ctx->file, "rb")) return CUSTOMDATA_FAILED;
 
   CUtlBuffer statsBuffer;
 
@@ -405,7 +424,8 @@ void TF_PostImport(IMySQL *sql) {
 #if 0  // now handled by PHP script
 	if ( g_bDeathOnly )
 		return;
-	// All the new data files have been imported to SQL.  Now, do a rollup of the raw data into the rollup tables.
+	// All the new data files have been imported to SQL.  Now, do a rollup
+ of the raw data into the rollup tables.
 
 	// delete existing rollup for class data
 	int retcode = sql->Execute( "delete from tf_classdata_rollup" );
@@ -415,9 +435,11 @@ void TF_PostImport(IMySQL *sql) {
 		return;
 	}
 	// create new rollup for class data
-	retcode = sql->Execute( "insert into tf_classdata_rollup (class,spawns,totaltime,score,kills,deaths,assists,captures) "
-		"select class,sum(spawns),sum(totaltime),sum(score),sum(kills),sum(deaths),sum(assists),sum(captures) from tf_classdata group by class;" );
-	if ( 0 != retcode )
+	retcode = sql->Execute( "insert into tf_classdata_rollup
+(class,spawns,totaltime,score,kills,deaths,assists,captures) "
+		"select
+ class,sum(spawns),sum(totaltime),sum(score),sum(kills),sum(deaths),sum(assists),sum(captures)
+ from tf_classdata group by class;" ); 	if ( 0 != retcode )
 	{
 		Msg( "Failed to create class data rollup\n" );
 		return;
@@ -431,9 +453,11 @@ void TF_PostImport(IMySQL *sql) {
 		return;
 	}
 	// create new rollup for map data
-	retcode = sql->Execute( "insert into tf_mapdata_rollup (mapname,roundsplayed,totaltime,bluewins,redwins,stalemates) "
-		"select mapname,sum(roundsplayed),sum(totaltime),sum(bluewins),sum(redwins),sum(stalemates) from tf_mapdata group by mapname;" );
-	if ( 0 != retcode )
+	retcode = sql->Execute( "insert into tf_mapdata_rollup
+(mapname,roundsplayed,totaltime,bluewins,redwins,stalemates) "
+		"select
+ mapname,sum(roundsplayed),sum(totaltime),sum(bluewins),sum(redwins),sum(stalemates)
+ from tf_mapdata group by mapname;" ); 	if ( 0 != retcode )
 	{
 		Msg( "Failed to create map data rollup\n" );
 		return;

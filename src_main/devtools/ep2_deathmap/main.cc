@@ -1,11 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <process.h>
-#include <stdio.h>
-#include <string.h>
 #include <sys/stat.h>
-#include <time.h>
-
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <ctime>
 #include "FileSystem.h"
 #include "KeyValues.h"
 #include "base/include/windows/windows_light.h"
@@ -23,11 +23,11 @@
 extern IFileSystem *g_pFullFileSystem;
 
 struct Image_t {
-  byte *data;
+  u8 *data;
   int w, h;
 };
 
-bool ReadBitmapRGB(const byte *raw, size_t rawlen, Image_t *image) {
+bool ReadBitmapRGB(const u8 *raw, size_t rawlen, Image_t *image) {
   assert(image);
 
   CUtlBuffer buf;
@@ -37,7 +37,7 @@ bool ReadBitmapRGB(const byte *raw, size_t rawlen, Image_t *image) {
   BITMAPFILEHEADER bmfh;
   BITMAPINFOHEADER bmih;
   int cbBmpBits;
-  byte *pb;
+  u8 *pb;
 
   // Read file header
   buf.Get(&bmfh, sizeof(bmfh));
@@ -63,23 +63,23 @@ bool ReadBitmapRGB(const byte *raw, size_t rawlen, Image_t *image) {
 
   int cbTotalbytes = cbBmpBits;
 
-  pb = new byte[cbBmpBits];
+  pb = new u8[cbBmpBits];
   if (pb == 0) {
     return false;
   }
 
   buf.Get(pb, cbBmpBits);
 
-  byte *start = pb;
-  image->data = new byte[cbTotalbytes];
+  u8 *start = pb;
+  image->data = new u8[cbTotalbytes];
 
   int bitrueWidth = (bmih.biWidth + 3) & ~3;
 
-  byte *dst = image->data;
+  u8 *dst = image->data;
   int x, y;
   for (y = 0; y < image->h; ++y) {
     int rowstart = 3 * (image->h - 1 - y) * bitrueWidth;
-    byte *row = &start[rowstart];
+    u8 *row = &start[rowstart];
 
     for (x = 0; x < image->w; ++x) {
       *dst++ = *row++;
@@ -188,16 +188,16 @@ bool WriteBitmap(char const *filename, Image_t *image) {
 
   g_pFullFileSystem->Write((LPVOID)&bi, sizeof(BITMAPINFOHEADER), fh);
   // bitmap bits
-  byte *hp = new byte[imageSize];
+  u8 *hp = new u8[imageSize];
   Q_memcpy(hp, image->data, imageSize);
 
-  byte b;
+  u8 b;
   int i;
 
   // Invert vertically for BMP format
   for (i = 0; i < h / 2; i++) {
-    byte *top = hp + i * w * 3;
-    byte *bottom = hp + (h - i - 1) * w * 3;
+    u8 *top = hp + i * w * 3;
+    u8 *bottom = hp + (h - i - 1) * w * 3;
     for (int j = 0; j < w * 3; j++) {
       b = *top;
       *top = *bottom;
@@ -284,9 +284,9 @@ void HSLToRGB(Color &out, float *hsl) {
     sat[1] = 0;
     sat[2] = (360 - hsl[0]) / 60.0;
   }
-  sat[0] = std::min(sat[0], 1);
-  sat[1] = std::min(sat[1], 1);
-  sat[2] = std::min(sat[2], 1);
+  sat[0] = std::min(sat[0], 1.f);
+  sat[1] = std::min(sat[1], 1.f);
+  sat[2] = std::min(sat[2], 1.f);
 
   ctmp[0] = 2 * hsl[1] * sat[0] + (1 - hsl[1]);
   ctmp[1] = 2 * hsl[1] * sat[1] + (1 - hsl[1]);
@@ -316,10 +316,10 @@ inline void DrawColoredRect(Image_t *image, int x, int y, int w, int h,
 
       int offset = yy * image->w * 3 + xx * 3;
 
-      byte *dst = &image->data[offset];
+      u8 *dst = &image->data[offset];
 
       for (int i = 0; i < 3; ++i) {
-        dst[i] = (byte)(flOneMinusAlpha * dst[i] + flAlpha * rgb[i]);
+        dst[i] = (u8)(flOneMinusAlpha * dst[i] + flAlpha * rgb[i]);
       }
     }
   }
@@ -444,21 +444,21 @@ void BuildAggregateStats(IMySQL *mysql, char const *pszMapName,
 
   Msg("  Counters\n");
 
-  static char *counters[] = {"CRATESSMASHED",
-                             "OBJECTSPUNTED",
-                             "VEHICULARHOMICIDES",
-                             "DISTANCE_INVEHICLE",
-                             "DISTANCE_ONFOOT",
-                             "DISTANCE_ONFOOTSPRINTING",
-                             "FALLINGDEATHS",
-                             "VEHICLE_OVERTURNED",
-                             "LOADGAME_STILLALIVE",
-                             "LOADS",
-                             "SAVES",
-                             "GODMODES",
-                             "NOCLIPS",
-                             "DAMAGETAKEN",
-                             NULL};
+  static const char *counters[] = {"CRATESSMASHED",
+                                   "OBJECTSPUNTED",
+                                   "VEHICULARHOMICIDES",
+                                   "DISTANCE_INVEHICLE",
+                                   "DISTANCE_ONFOOT",
+                                   "DISTANCE_ONFOOTSPRINTING",
+                                   "FALLINGDEATHS",
+                                   "VEHICLE_OVERTURNED",
+                                   "LOADGAME_STILLALIVE",
+                                   "LOADS",
+                                   "SAVES",
+                                   "GODMODES",
+                                   "NOCLIPS",
+                                   "DAMAGETAKEN",
+                                   nullptr};
 
   Q_snprintf(q, sizeof(q),
              "select Sum(CRATESSMASHED), Avg(CRATESSMASHED),"
@@ -491,7 +491,7 @@ void BuildAggregateStats(IMySQL *mysql, char const *pszMapName,
 
   if (mysql->SeekToFirstRow()) {
     while (mysql->NextRow()) {
-      while (counters[i] != NULL) {
+      while (counters[i] != nullptr) {
         int idx = 2 * i;
 
         char const *raw1 = mysql->GetColumnValue_String(idx);
@@ -501,7 +501,7 @@ void BuildAggregateStats(IMySQL *mysql, char const *pszMapName,
         // raw2
         //);
 
-        uint64 sum = _atoi64(raw1);
+        u64 sum = _atoi64(raw1);
         double avg = Q_atof(raw2);
 
         if (Q_stristr(counters[i], "DISTANCE_")) {
@@ -549,10 +549,9 @@ void printusage(int argc, char *argv[]) {
   Msg("%s:\n"
       " Version = " EP2_DEATHS_VERSION
       "\n"
-      " Date [ "__DATE__
-      " "__TIME__
+      " Date [ " __DATE__ " " __TIME__
       " ]\n"
-      " Copyright Valve 2007.  All rights reserved.\n"
+      " Copyright Valve 2007-2018.  All rights reserved.\n"
       "  -bugs bugtestfile     { special bug file culled from PVCSTracker "
       "report }\n"
       "  -imagedir imagedir    { directory for mapinfo.res and image .bmps }\n"
@@ -571,8 +570,8 @@ void printusage(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
   int i;
-  char bugfile[512] = {0};
-  char pathname[512] = {0};
+  char bugfile[SOURCE_MAX_PATH] = {0};
+  char pathname[SOURCE_MAX_PATH] = {0};
   char whereclause[1024] = {0};
   float flScale = 1.0f;
 
@@ -590,18 +589,18 @@ int main(int argc, char *argv[]) {
   for (i = 1; i < argc; ++i) {
     if (!stricmp(argv[i], "-bugs")) {
       bBugSpots = true;
-      Q_strncpy(bugfile, argv[i + 1], sizeof(bugfile));
+      strcpy_s(bugfile, argv[i + 1]);
       Msg("  parsing bugs from '%s'\n", bugfile);
       ++i;
     } else if (!stricmp(argv[i], "-deaths")) {
       bBuildImages = true;
       Msg("  generating death images\n");
     } else if (!stricmp(argv[i], "-imagedir")) {
-      Q_strncpy(pathname, argv[i + 1], sizeof(pathname));
+      strcpy_s(pathname, argv[i + 1]);
       Msg("  image dir '%s'\n", pathname);
       ++i;
     } else if (!stricmp(argv[i], "-where")) {
-      Q_snprintf(whereclause, sizeof(whereclause), " and %s", argv[i + 1]);
+      sprintf_s(whereclause, " and %s", argv[i + 1]);
       Msg("  using custom where clause '%s'\n", argv[i + 1]);
       ++i;
     } else if (!stricmp(argv[i], "-h")) {
@@ -649,21 +648,21 @@ int main(int argc, char *argv[]) {
 
   CUtlDict<CUtlVector<Vector> *, int> raw;
 
-  char fn[512];
-  Q_snprintf(fn, sizeof(fn), "%s/mapinfo.res", pathname);
+  char fn[SOURCE_MAX_PATH];
+  sprintf_s(fn, "%s/mapinfo.res", pathname);
   Q_FixSlashes(fn);
   Q_strlower(fn);
 
   KeyValues *kv = new KeyValues("mapinfo.res");
-  if (!kv->LoadFromFile(g_pFullFileSystem, fn, NULL)) {
+  if (!kv->LoadFromFile(g_pFullFileSystem, fn, nullptr)) {
     Msg("Unable to load mapinfo.res file from image directory [%s]\n",
         pathname);
     exit(-1);
   }
 
-  CSysModule *sql = NULL;
-  CreateInterfaceFn factory = NULL;
-  IMySQL *mysql = NULL;
+  CSysModule *sql = nullptr;
+  CreateInterfaceFn factory = nullptr;
+  IMySQL *mysql = nullptr;
 
   bool bSqlOkay = false;
 
@@ -672,7 +671,7 @@ int main(int argc, char *argv[]) {
     if (sql) {
       factory = Sys_GetFactory(sql);
       if (factory) {
-        mysql = (IMySQL *)factory(MYSQL_WRAPPER_VERSION_NAME, NULL);
+        mysql = (IMySQL *)factory(MYSQL_WRAPPER_VERSION_NAME, nullptr);
         if (mysql) {
           if (mysql->InitMySQL(db, host, user, pw)) {
             bSqlOkay = true;
@@ -722,13 +721,11 @@ int main(int argc, char *argv[]) {
 
     if (bBuildImages) {
       char imagefile[512];
-      Q_snprintf(imagefile, sizeof(imagefile), "%s/%s.bmp", pathname,
-                 pszMapName);
+      sprintf_s(imagefile, "%s/%s.bmp", pathname, pszMapName);
       Q_FixSlashes(imagefile);
       Q_strlower(imagefile);
       char outfile[512];
-      Q_snprintf(outfile, sizeof(outfile), "%s/%s_deaths.bmp", pathname,
-                 pszMapName);
+      sprintf_s(outfile, "%s/%s_deaths.bmp", pathname, pszMapName);
       Q_FixSlashes(outfile);
       Q_strlower(outfile);
 
@@ -741,7 +738,7 @@ int main(int argc, char *argv[]) {
       float scale = map->GetFloat("scale", 1.0f);
 
       int size = g_pFullFileSystem->Size(fh);
-      byte *buf = new byte[size + 1];
+      u8 *buf = new u8[size + 1];
       g_pFullFileSystem->Read(buf, size, fh);
       g_pFullFileSystem->Close(fh);
       buf[size] = 0;
@@ -787,7 +784,7 @@ int main(int argc, char *argv[]) {
                 death.x = RandomInt(0, image.w - 1);
                 death.y = RandomInt(0, image.h - 1);
 
-                byte *rgb = &image.data[3 * death.y * image.w + 3 * death.x];
+                u8 *rgb = &image.data[3 * death.y * image.w + 3 * death.x];
                 if (rgb[0] || rgb[1] || rgb[2]) {
                   break;
                 }
@@ -805,9 +802,9 @@ int main(int argc, char *argv[]) {
 
             // Now read all the locations from the sql server
 
-            Q_snprintf(q, sizeof(q),
-                       "select x, y from ep2_deaths where MapName = \'%s\' %s;",
-                       mapname.c_str(), whereclause);
+            sprintf_s(q,
+                      "select x, y from ep2_deaths where MapName = \'%s\' %s;",
+                      mapname.c_str(), whereclause);
 
             int retcode = mysql->Execute(q);
             if (retcode != 0) {
@@ -837,14 +834,14 @@ int main(int argc, char *argv[]) {
         }
 
         float *info = new float[image.h * image.w];
-        Q_memset(info, 0, image.h * image.w * sizeof(float));
+        memset(info, 0, image.h * image.w * sizeof(float));
 
         float ooRadiusSqr = 1.0f / flRadiusSqr;
 
         int nSide = nRadius * 2 + 1;
 
         float *contribution = new float[nSide * nSide];
-        Q_memset(contribution, 0, nSide * nSide * sizeof(float));
+        memset(contribution, 0, nSide * nSide * sizeof(float));
 
         for (int s = 0; s < nSide; ++s) {
           for (int t = 0; t < nSide; ++t) {
@@ -866,7 +863,8 @@ int main(int argc, char *argv[]) {
           int ypos = v.y;
           for (int y = std::max(0, ypos - nRadius);
                y <= std::min(ypos + nRadius, image.h - 1); ++y) {
-            for (int x = std::max(0, xpos - nRadius); x <= xpos + nRadius; ++x) {
+            for (int x = std::max(0, xpos - nRadius); x <= xpos + nRadius;
+                 ++x) {
               if (x >= image.w) break;
 
               float *slot = &info[y * image.w + x];
@@ -903,7 +901,7 @@ int main(int argc, char *argv[]) {
           }
         }
 
-        float et = Plat_FloatTime();
+        double et = Plat_FloatTime();
         double msec = 1000.0 * (et - st);
         double msecperdeath = 0.0;
         if (vecDeaths.Count() > 0) {
@@ -940,12 +938,12 @@ int main(int argc, char *argv[]) {
   if (bSqlOkay) {
     if (mysql) {
       mysql->Release();
-      mysql = NULL;
+      mysql = nullptr;
     }
 
     if (sql) {
       Sys_UnloadModule(sql);
-      sql = NULL;
+      sql = nullptr;
     }
   }
 

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{cb3087f6-15ec-43d1-9839-20748c4af436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Custom Stats">
+      <UniqueIdentifier>{f1ddbc3a-0916-49af-b056-bb077442c458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{fcc3b01e-aa41-4f46-b18d-f8aac023d72d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database Setup">
+      <UniqueIdentifier>{6a91a620-ba62-4929-a35d-910aa79afe1b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\public\filesystem_helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\server\GameStats_BasicStatsFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cstrike_gamestats_parse.cpp">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="ep2_gamestats_parse.cpp">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="tf_gamestats_parse.cpp">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\tf\tf_gamestats_shared.cpp">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\public\filesystem_helpers.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="base_gamestats_parse.h">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="cs_gamestats.h">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\server\episodic\ep2_gamestats.h">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\server\tf\tf_gamestats.h">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\tf\tf_gamestats_shared.h">
+      <Filter>Source Files\Custom Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\basetypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\commonmacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\dbg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\fasttimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\server\GameStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\vstdlib\ICommandLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\utils\vmpi\imysqlwrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\memdbgoff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\memdbgon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\platform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\protected_things.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\string_t.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\vstdlib\strtools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\utlmemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\utlvector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\vstdlib\vstdlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cstrike_gamestats.db">
+      <Filter>Database Setup</Filter>
+    </None>
+    <None Include="ep1_gamestats.db">
+      <Filter>Database Setup</Filter>
+    </None>
+    <None Include="ep2_gamestats.db">
+      <Filter>Database Setup</Filter>
+    </None>
+    <None Include="portal_gamestats.db">
+      <Filter>Database Setup</Filter>
+    </None>
+    <None Include="tf_gamestats.db">
+      <Filter>Database Setup</Filter>
+    </None>
+  </ItemGroup>
+</Project>
