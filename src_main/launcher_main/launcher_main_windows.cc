@@ -10,6 +10,21 @@
 #include "base/include/windows/scoped_error_mode.h"
 #include "base/include/windows/windows_light.h"
 
+// Indicates to hybrid graphics systems to prefer the discrete part by default.
+extern "C" {
+// Starting with the Release 302 drivers, application developers can direct the
+// Optimus driver at runtime to use the High Performance Graphics to render any
+// application —- even those applications for which there is no existing
+// application profile.  See
+// https://docs.nvidia.com/gameworks/content/technologies/desktop/optimus.htm
+__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+// This will select the high performance GPU as long as no profile exists that
+// assigns the application to another GPU.  Please make sure to use a 13.35 or
+// newer driver.  Older drivers do not support this.  See
+// https://community.amd.com/thread/169965
+__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
+
 namespace {
 // Gets the file directory from |file_path|.
 inline wstr GetDirectoryFromFilePath(_In_ wstr file_path) {
@@ -141,7 +156,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
   const wstr launcher_dll_path{root_dir + L"\\bin\\launcher.dll"};
 
   // STEAM OK ... file system not mounted yet.
-  auto [launcher_module, errno_info] =
+  auto[launcher_module, errno_info] =
       source::unique_module_ptr::from_load_library(
           launcher_dll_path, LOAD_WITH_ALTERED_SEARCH_PATH);
 

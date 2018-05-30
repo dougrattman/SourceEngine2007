@@ -21,6 +21,21 @@
 #include "vphysics_interface.h"
 #include "vstdlib/cvar.h"
 
+// Indicates to hybrid graphics systems to prefer the discrete part by default.
+extern "C" {
+// Starting with the Release 302 drivers, application developers can direct the
+// Optimus driver at runtime to use the High Performance Graphics to render any
+// application —- even those applications for which there is no existing
+// application profile.  See
+// https://docs.nvidia.com/gameworks/content/technologies/desktop/optimus.htm
+__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+// This will select the high performance GPU as long as no profile exists that
+// assigns the application to another GPU.  Please make sure to use a 13.35 or
+// newer driver.  Older drivers do not support this.  See
+// https://community.amd.com/thread/169965
+__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
+
 // The application object
 class CHammerApp : public CAppSystemGroup {
  public:
