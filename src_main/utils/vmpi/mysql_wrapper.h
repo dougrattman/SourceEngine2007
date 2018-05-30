@@ -9,7 +9,7 @@ class IMySQL;
 
 // This is a helper class to build queries like the stream IO.
 class CMySQLQuery {
-  friend class CMySQL;
+  friend class MySQL;
 
  public:
   // This is like a sprintf, but it will grow the string as necessary.
@@ -21,14 +21,14 @@ class CMySQLQuery {
 
 class CColumnValue {
  public:
-  CColumnValue(CMySQL *pSQL, int iColumn);
+  CColumnValue(MySQL *pSQL, int iColumn);
 
   const char *String();
   long Int32();
   unsigned long UInt32();
 
  private:
-  CMySQL *m_pSQL;
+  MySQL *m_pSQL;
   int m_iColumn;
 };
 
@@ -79,7 +79,7 @@ IMySQL *InitMySQL(const char *pDBName, const char *pHostName = "",
 // ------------------------------------------------------------------------------------------------
 // //
 
-inline CColumnValue::CColumnValue(CMySQL *pSQL, int iColumn) {
+inline CColumnValue::CColumnValue(MySQL *pSQL, int iColumn) {
   m_pSQL = pSQL;
   m_iColumn = iColumn;
 }

@@ -4,12 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{5a92faf4-a2c5-482e-b6e5-b145ec2f1390}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{2bbb29e9-ee72-4256-ad3a-bd2fe4aac641}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{b0ce9381-b01c-4972-892d-ccb8deb4cd81}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{04447fd0-1023-497a-bc9e-bd1a29b836ed}</UniqueIdentifier>
     </Filter>
@@ -18,40 +12,15 @@
     <ClCompile Include="..\..\..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mysql_wrapper.cpp">
+    <ClCompile Include="dll_main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
+    <ClCompile Include="mysql_wrapper.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\mysql\lib\opt\libmySQL.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\..\lib\public\tier0.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\..\lib\public\tier1.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\..\lib\public\vstdlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\mysql\lib\opt\zlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="mysql_wrapper.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vmpi\imysqlwrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,24 +3,15 @@
 #ifndef MYSQL_WRAPPER_H
 #define MYSQL_WRAPPER_H
 
-#include "interface.h"
-#include "utlvector.h"
+#include "tier1/interface.h"
+#include "tier1/utlvector.h"
 
-class IMySQLRowSet;
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
 
-class CColumnValue {
- public:
-  CColumnValue(IMySQLRowSet *pSQL, int iColumn);
+class CColumnValue;
 
-  const char *String();
-  long Int32();
-
- private:
-  IMySQLRowSet *m_pSQL;
-  int m_iColumn;
-};
-
-class IMySQLRowSet {
+the_interface IMySQLRowSet {
  public:
   virtual void Release() = 0;
 
@@ -51,7 +42,22 @@ class IMySQLRowSet {
   virtual int GetColumnIndex(const char *pColumnName) = 0;
 };
 
-class IMySQL : public IMySQLRowSet {
+class CColumnValue {
+ public:
+  CColumnValue(IMySQLRowSet *mysql_row_set, int column)
+      : mysql_row_set_{mysql_row_set}, column_{column} {}
+
+  const char *String() {
+    return mysql_row_set_->GetColumnValue_String(column_);
+  }
+  long Int32() { return mysql_row_set_->GetColumnValue_Int(column_); }
+
+ private:
+  IMySQLRowSet *mysql_row_set_;
+  const int column_;
+};
+
+the_interface IMySQL : public IMySQLRowSet {
  public:
   virtual bool InitMySQL(const char *pDBName, const char *pHostName = "",
                          const char *pUserName = "",
@@ -69,30 +75,12 @@ class IMySQL : public IMySQLRowSet {
 
   // If you just inserted rows into a table with an AUTO_INCREMENT column,
   // then this returns the (unique) value of that column.
-  virtual unsigned long InsertID() = 0;
+  virtual u64 InsertID() = 0;
 
   // Returns the last error message, if an error took place
   virtual const char *GetLastError() = 0;
 };
 
 #define MYSQL_WRAPPER_VERSION_NAME "MySQLWrapper001"
-
-// ------------------------------------------------------------------------------------------------
-// // Inlines.
-// ------------------------------------------------------------------------------------------------
-// //
-
-inline CColumnValue::CColumnValue(IMySQLRowSet *pSQL, int iColumn) {
-  m_pSQL = pSQL;
-  m_iColumn = iColumn;
-}
-
-inline const char *CColumnValue::String() {
-  return m_pSQL->GetColumnValue_String(m_iColumn);
-}
-
-inline long CColumnValue::Int32() {
-  return m_pSQL->GetColumnValue_Int(m_iColumn);
-}
 
 #endif  // MYSQL_WRAPPER_H
