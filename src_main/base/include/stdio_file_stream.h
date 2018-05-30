@@ -29,7 +29,7 @@ class stdio_file_stream {
   // Move assignment operator.
   stdio_file_stream& operator=(stdio_file_stream&& f) noexcept {
     const posix_errno_code errno_code{close()};
-    CHECK(errno_code == 0, errno_code);
+    CHECK(errno_code == posix_errno_code_ok, errno_code);
 
     std::swap(fd_, f.fd_);
 
@@ -50,9 +50,15 @@ class stdio_file_stream {
             make_posix_errno_info(ferror(fd_))};
   }
 
+  // Like feof.
+  io_result<bool> eof() const noexcept {
+    const int c{feof(fd_)};
+    return {c != 0, posix_errno_info_last_error()};
+  }
+
   // Like fgetc, get char from file.
   io_result<int> getc() const noexcept {
-    int c = fgetc(fd_);
+    const int c{fgetc(fd_)};
     return {
         c, c != EOF ? posix_errno_info_ok : make_posix_errno_info(ferror(fd_))};
   }
@@ -60,7 +66,7 @@ class stdio_file_stream {
   // Like fgets, get C string from file.
   template <size_t buffer_size>
   io_result<char*> gets(char (&buffer)[buffer_size]) const noexcept {
-    char* string = fgets(buffer, buffer_size, fd_);
+    char* string{fgets(buffer, buffer_size, fd_)};
     return {string, string != nullptr ? posix_errno_info_ok
                                       : make_posix_errno_info(ferror(fd_))};
   }
@@ -83,7 +89,7 @@ class stdio_file_stream {
   io_result<size_t> read(char (&buffer)[buffer_size]) const noexcept {
     static_assert(buffer_size >= 1);
 
-    auto [read_size, error_info] = read(buffer, buffer_size - 1);
+    auto[read_size, error_info] = read(buffer, buffer_size - 1);
 
     if (error_info.is_success()) buffer[read_size] = '\0';
 
@@ -95,7 +101,7 @@ class stdio_file_stream {
   io_result<size_t> read(wchar_t (&buffer)[buffer_size]) const noexcept {
     static_assert(buffer_size >= 1);
 
-    auto [read_size, error_info] = read(buffer, buffer_size - 1);
+    auto[read_size, error_info] = read(buffer, buffer_size - 1);
 
     if (error_info.is_success()) buffer[read_size] = L'\0';
 
@@ -190,7 +196,7 @@ class stdio_file_stream {
 class stdio_file_stream_factory {
  public:
   // Opens file with path |file_path| and mode |mode|.
-  [[nodiscard]] static std::tuple<stdio_file_stream, posix_errno_info> open(
+  [[nodiscard]] static io_result<stdio_file_stream> open(
       const char* file_path, const char* mode) noexcept {
     FILE* fd;
     const posix_errno_code errno_code{fopen_s(&fd, file_path, mode)};

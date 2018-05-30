@@ -60,8 +60,13 @@ using posix_errno_info = errno_info<posix_errno_code, char, 92, succeeded>;
 }
 
 // Last POSIX errno info.
+[[nodiscard]] inline posix_errno_code posix_errno_code_last_error() noexcept {
+  return errno;
+}
+
+// Last POSIX errno info.
 [[nodiscard]] inline posix_errno_info posix_errno_info_last_error() noexcept {
-  return make_posix_errno_info(errno);
+  return make_posix_errno_info(posix_errno_code_last_error());
 }
 
 // Success POSIX errno info.
