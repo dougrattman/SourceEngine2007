@@ -15,12 +15,8 @@
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
-// NOTE: This must be the last include file in a .cpp file!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Globals
-//-----------------------------------------------------------------------------
 const char* CBaseShader::s_pTextureGroupName = NULL;
 IMaterialVar** CBaseShader::s_ppParams;
 IShaderShadow* CBaseShader::s_pShaderShadow;
@@ -30,14 +26,9 @@ int CBaseShader::s_nModulationFlags;
 CMeshBuilder* CBaseShader::s_pMeshBuilder;
 static ConVar mat_fullbright("mat_fullbright", "0", FCVAR_CHEAT);
 
-//-----------------------------------------------------------------------------
-// constructor
-//-----------------------------------------------------------------------------
 CBaseShader::CBaseShader() { GetShaderDLL()->InsertShader(this); }
 
-//-----------------------------------------------------------------------------
 // Shader parameter info
-//-----------------------------------------------------------------------------
 // Look in BaseShader.h for the enumeration for these.
 // Update there if you update here.
 static ShaderParamInfo_t s_StandardParams[NUM_SHADER_MATERIAL_VARS] = {
@@ -68,10 +59,8 @@ static ShaderParamInfo_t s_StandardParams[NUM_SHADER_MATERIAL_VARS] = {
      SHADER_PARAM_TYPE_COLOR, "[1 1 1]", 0},
 };
 
-//-----------------------------------------------------------------------------
 // Gets the standard shader parameter names
 // TODO(d.rattman): Turn this into one function?
-//-----------------------------------------------------------------------------
 int CBaseShader::GetNumParams() const { return NUM_SHADER_MATERIAL_VARS; }
 
 char const* CBaseShader::GetParamName(int nParamIndex) const {
@@ -99,9 +88,7 @@ int CBaseShader::GetParamFlags(int nParamIndex) const {
   return s_StandardParams[nParamIndex].m_nFlags;
 }
 
-//-----------------------------------------------------------------------------
 // Necessary to snag ahold of some important data for the helper methods
-//-----------------------------------------------------------------------------
 void CBaseShader::InitShaderParams(IMaterialVar** ppParams,
                                    const char* pMaterialName) {
   // Re-entrancy check
@@ -162,9 +149,7 @@ void CBaseShader::DrawElements(IMaterialVar** ppParams, int nModulationFlags,
   s_pMeshBuilder = NULL;
 }
 
-//-----------------------------------------------------------------------------
 // Sets the default shadow state
-//-----------------------------------------------------------------------------
 void CBaseShader::SetInitialShadowState() {
   // Set the default state
   s_pShaderShadow->SetDefaultState();
@@ -202,9 +187,7 @@ void CBaseShader::SetInitialShadowState() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Draws a snapshot
-//-----------------------------------------------------------------------------
 void CBaseShader::Draw(bool bMakeActualDrawCall) {
   if (IsSnapshotting()) {
     // Turn off transparency if we're asked to....
@@ -220,10 +203,8 @@ void CBaseShader::Draw(bool bMakeActualDrawCall) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Finds a particular parameter	(works because the lowest parameters match
 // the shader)
-//-----------------------------------------------------------------------------
 int CBaseShader::FindParamIndex(const char* pName) const {
   int numParams = GetNumParams();
   for (int i = 0; i < numParams; i++) {
@@ -234,28 +215,20 @@ int CBaseShader::FindParamIndex(const char* pName) const {
   return -1;
 }
 
-//-----------------------------------------------------------------------------
 // Are we using graphics?
-//-----------------------------------------------------------------------------
 bool CBaseShader::IsUsingGraphics() {
   return GetShaderSystem()->IsUsingGraphics();
 }
 
-//-----------------------------------------------------------------------------
 // Are we using graphics?
-//-----------------------------------------------------------------------------
 bool CBaseShader::CanUseEditorMaterials() {
   return GetShaderSystem()->CanUseEditorMaterials();
 }
 
-//-----------------------------------------------------------------------------
 // Gets the builder...
-//-----------------------------------------------------------------------------
 CMeshBuilder* CBaseShader::MeshBuilder() { return s_pMeshBuilder; }
 
-//-----------------------------------------------------------------------------
 // Loads a texture
-//-----------------------------------------------------------------------------
 void CBaseShader::LoadTexture(int nTextureVar) {
   if ((!s_ppParams) || (nTextureVar == -1)) return;
 
@@ -265,9 +238,7 @@ void CBaseShader::LoadTexture(int nTextureVar) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Loads a bumpmap
-//-----------------------------------------------------------------------------
 void CBaseShader::LoadBumpMap(int nTextureVar) {
   if ((!s_ppParams) || (nTextureVar == -1)) return;
 
@@ -277,9 +248,7 @@ void CBaseShader::LoadBumpMap(int nTextureVar) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Loads a cubemap
-//-----------------------------------------------------------------------------
 void CBaseShader::LoadCubeMap(int nTextureVar) {
   if ((!s_ppParams) || (nTextureVar == -1)) return;
 
@@ -302,10 +271,8 @@ ShaderAPITextureHandle_t CBaseShader::GetShaderAPITextureBindHandle(
       pTextureVar->GetTextureValue(), nFrame, nTextureChannel);
 }
 
-//-----------------------------------------------------------------------------
 // Four different flavors of BindTexture(), handling the two-sampler
 // case as well as ITexture* versus textureVar forms
-//-----------------------------------------------------------------------------
 
 void CBaseShader::BindTexture(Sampler_t sampler1, int nTextureVar,
                               int nFrameVar /* = -1 */) {
@@ -349,9 +316,7 @@ void CBaseShader::BindTexture(Sampler_t sampler1, Sampler_t sampler2,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Does the texture store translucency in its alpha channel?
-//-----------------------------------------------------------------------------
 bool CBaseShader::TextureIsTranslucent(int textureVar, bool isBaseTexture) {
   if (textureVar < 0) return false;
 
@@ -376,15 +341,9 @@ bool CBaseShader::TextureIsTranslucent(int textureVar, bool isBaseTexture) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
-//
 // Helper methods for color modulation
-//
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
 // Are we alpha or color modulating?
-//-----------------------------------------------------------------------------
 bool CBaseShader::IsAlphaModulating() {
   return (s_nModulationFlags & SHADER_USING_ALPHA_MODULATION) != 0;
 }
@@ -413,9 +372,7 @@ void CBaseShader::GetColorParameter(IMaterialVar** params,
   }
 }
 
-//-----------------------------------------------------------------------------
 // TODO(d.rattman): Figure out a better way to do this?
-//-----------------------------------------------------------------------------
 int CBaseShader::ComputeModulationFlags(IMaterialVar** params,
                                         IShaderDynamicAPI* pShaderAPI) {
   s_pShaderAPI = pShaderAPI;
@@ -452,34 +409,23 @@ int CBaseShader::ComputeModulationFlags(IMaterialVar** params,
   return mod;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 bool CBaseShader::NeedsPowerOfTwoFrameBufferTexture(
     IMaterialVar** params, bool bCheckSpecificToThisFrame) const {
   return CShader_IsFlag2Set(
       params, MATERIAL_VAR2_NEEDS_POWER_OF_TWO_FRAME_BUFFER_TEXTURE);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 bool CBaseShader::NeedsFullFrameBufferTexture(
     IMaterialVar** params, bool bCheckSpecificToThisFrame) const {
   return CShader_IsFlag2Set(params,
                             MATERIAL_VAR2_NEEDS_FULL_FRAME_BUFFER_TEXTURE);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 bool CBaseShader::IsTranslucent(IMaterialVar** params) const {
   return IS_FLAG_SET(MATERIAL_VAR_TRANSLUCENT);
 }
 
-//-----------------------------------------------------------------------------
 // Returns the translucency...
-//-----------------------------------------------------------------------------
 float CBaseShader::GetAlpha(IMaterialVar** ppParams) {
   if (!ppParams) {
     ppParams = s_ppParams;
@@ -493,9 +439,7 @@ float CBaseShader::GetAlpha(IMaterialVar** ppParams) {
   return std::clamp(flAlpha, 0.0f, 1.0f);
 }
 
-//-----------------------------------------------------------------------------
 // Sets the color + transparency
-//-----------------------------------------------------------------------------
 void CBaseShader::SetColorState(int colorVar, bool setAlpha) {
   Assert(!IsSnapshotting());
   if (!s_ppParams) return;
@@ -595,11 +539,7 @@ void CBaseShader::ComputeModulationColor(float* color) {
   color[3] = GetAlpha();
 }
 
-//-----------------------------------------------------------------------------
-//
 // Helper methods for alpha blending....
-//
-//-----------------------------------------------------------------------------
 void CBaseShader::EnableAlphaBlending(ShaderBlendFactor_t src,
                                       ShaderBlendFactor_t dst) {
   Assert(IsSnapshotting());
@@ -711,9 +651,7 @@ void CBaseShader::SetBlendingShadowState(BlendType_t nMode) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Sets lightmap blending mode for single texturing
-//-----------------------------------------------------------------------------
 void CBaseShader::SingleTextureLightmapBlendMode() {
   Assert(IsSnapshotting());
 
@@ -721,9 +659,7 @@ void CBaseShader::SingleTextureLightmapBlendMode() {
   s_pShaderShadow->BlendFunc(SHADER_BLEND_DST_COLOR, SHADER_BLEND_SRC_COLOR);
 }
 
-//-----------------------------------------------------------------------------
 // Loads the identity transform into a matrix
-//-----------------------------------------------------------------------------
 void CBaseShader::LoadIdentity(MaterialMatrixMode_t matrixMode) {
   Assert(!IsSnapshotting());
 
@@ -731,9 +667,7 @@ void CBaseShader::LoadIdentity(MaterialMatrixMode_t matrixMode) {
   s_pShaderAPI->LoadIdentity();
 }
 
-//-----------------------------------------------------------------------------
 // Loads the camera to world transform into a matrix
-//-----------------------------------------------------------------------------
 void CBaseShader::LoadCameraToWorldTransform(MaterialMatrixMode_t matrixMode) {
   s_pShaderAPI->MatrixMode(matrixMode);
   s_pShaderAPI->LoadCameraToWorld();
@@ -752,11 +686,7 @@ void CBaseShader::LoadCameraSpaceSphereMapTransform(
   s_pShaderAPI->LoadMatrix((float*)mat);
 }
 
-//-----------------------------------------------------------------------------
-//
 // Sets a texture translation transform
-//
-//-----------------------------------------------------------------------------
 void CBaseShader::SetFixedFunctionTextureTranslation(
     MaterialMatrixMode_t textureTransform, int translationVar) {
   Assert(!IsSnapshotting());
@@ -904,12 +834,8 @@ void CBaseShader::SetFixedFunctionTextureScaledTransform(
   }
 }
 
-//-----------------------------------------------------------------------------
-//
 // Helper methods for fog
-//
-//-----------------------------------------------------------------------------
-void CBaseShader::FogToOOOverbright(void) {
+void CBaseShader::FogToOOOverbright() {
   Assert(IsSnapshotting());
   if ((CurrentMaterialVarFlags() & MATERIAL_VAR_NOFOG) == 0) {
     s_pShaderShadow->FogMode(SHADER_FOGMODE_OO_OVERBRIGHT);
@@ -918,7 +844,7 @@ void CBaseShader::FogToOOOverbright(void) {
   }
 }
 
-void CBaseShader::FogToWhite(void) {
+void CBaseShader::FogToWhite() {
   Assert(IsSnapshotting());
   if ((CurrentMaterialVarFlags() & MATERIAL_VAR_NOFOG) == 0) {
     s_pShaderShadow->FogMode(SHADER_FOGMODE_WHITE);
@@ -926,7 +852,7 @@ void CBaseShader::FogToWhite(void) {
     s_pShaderShadow->FogMode(SHADER_FOGMODE_DISABLED);
   }
 }
-void CBaseShader::FogToBlack(void) {
+void CBaseShader::FogToBlack() {
   Assert(IsSnapshotting());
   if ((CurrentMaterialVarFlags() & MATERIAL_VAR_NOFOG) == 0) {
     s_pShaderShadow->FogMode(SHADER_FOGMODE_BLACK);
@@ -935,7 +861,7 @@ void CBaseShader::FogToBlack(void) {
   }
 }
 
-void CBaseShader::FogToGrey(void) {
+void CBaseShader::FogToGrey() {
   Assert(IsSnapshotting());
   if ((CurrentMaterialVarFlags() & MATERIAL_VAR_NOFOG) == 0) {
     s_pShaderShadow->FogMode(SHADER_FOGMODE_GREY);
@@ -944,7 +870,7 @@ void CBaseShader::FogToGrey(void) {
   }
 }
 
-void CBaseShader::FogToFogColor(void) {
+void CBaseShader::FogToFogColor() {
   Assert(IsSnapshotting());
   if ((CurrentMaterialVarFlags() & MATERIAL_VAR_NOFOG) == 0) {
     s_pShaderShadow->FogMode(SHADER_FOGMODE_FOGCOLOR);
@@ -953,12 +879,12 @@ void CBaseShader::FogToFogColor(void) {
   }
 }
 
-void CBaseShader::DisableFog(void) {
+void CBaseShader::DisableFog() {
   Assert(IsSnapshotting());
   s_pShaderShadow->FogMode(SHADER_FOGMODE_DISABLED);
 }
 
-void CBaseShader::DefaultFog(void) {
+void CBaseShader::DefaultFog() {
   if (CurrentMaterialVarFlags() & MATERIAL_VAR_ADDITIVE) {
     FogToBlack();
   } else {
@@ -966,9 +892,7 @@ void CBaseShader::DefaultFog(void) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Fixed function multiply by detail texture pass
-//-----------------------------------------------------------------------------
 void CBaseShader::FixedFunctionMultiplyByDetailPass(int baseTextureVar,
                                                     int frameVar,
                                                     int textureTransformVar,
@@ -1062,9 +986,7 @@ void CBaseShader::FixedFunctionMultiplyByDetailPass(int baseTextureVar,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Multiply by lightmap pass
-//-----------------------------------------------------------------------------
 void CBaseShader::FixedFunctionMultiplyByLightmapPass(
     int baseTextureVar, int frameVar, int baseTextureTransformVar,
     float alphaOverride) {
@@ -1147,9 +1069,7 @@ void CBaseShader::FixedFunctionMultiplyByLightmapPass(
   }
 }
 
-//-----------------------------------------------------------------------------
 // Fixed function Self illumination pass
-//-----------------------------------------------------------------------------
 void CBaseShader::FixedFunctionSelfIlluminationPass(Sampler_t sampler,
                                                     int baseTextureVar,
                                                     int frameVar,
@@ -1198,9 +1118,7 @@ void CBaseShader::FixedFunctionSelfIlluminationPass(Sampler_t sampler,
   Draw();
 }
 
-//-----------------------------------------------------------------------------
 // Fixed function Base * detail pass
-//-----------------------------------------------------------------------------
 void CBaseShader::FixedFunctionBaseTimesDetailPass(int baseTextureVar,
                                                    int frameVar,
                                                    int baseTextureTransformVar,
@@ -1283,9 +1201,7 @@ void CBaseShader::FixedFunctionBaseTimesDetailPass(int baseTextureVar,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Helpers for environment mapping...
-//-----------------------------------------------------------------------------
 int CBaseShader::SetShadowEnvMappingState(int envMapMaskVar, int tintVar) {
   Assert(IsSnapshotting());
   IMaterialVar** params = s_ppParams;
@@ -1496,7 +1412,7 @@ void CBaseShader::DrawFlashlight_dx70(IMaterialVar** params,
 
     // Alpha test
     //		pShaderShadow->EnableAlphaTest( IS_FLAG_SET(
-    //MATERIAL_VAR_ALPHATEST
+    // MATERIAL_VAR_ALPHATEST
     //)
     //);
     bool bIsAlphaTested = IS_FLAG_SET(MATERIAL_VAR_ALPHATEST) != 0;
@@ -1592,7 +1508,7 @@ void CBaseShader::SetFlashlightFixedFunctionTextureTransform(
   s_pShaderAPI->LoadMatrix(&viewToTexture[0][0]);
 }
 
-bool CBaseShader::IsHDREnabled(void) {
+bool CBaseShader::IsHDREnabled() {
   // HDRFIXME!  Need to fix this for vgui materials
   HDRType_t hdr_mode = g_pHardwareConfig->GetHDRType();
   switch (hdr_mode) {

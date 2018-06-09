@@ -4,13 +4,12 @@
 
 #include "tier1/tier1.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // ConVar stuff.
 class CShaderLibConVarAccessor : public IConCommandBaseAccessor {
  public:
-  virtual bool RegisterConCommandBase(ConCommandBase *pCommand) {
+  bool RegisterConCommandBase(ConCommandBase *pCommand) override {
     // Link to engine's list instead
     g_pCVar->RegisterConCommand(pCommand);
 
@@ -18,6 +17,7 @@ class CShaderLibConVarAccessor : public IConCommandBaseAccessor {
     if (pValue && !pCommand->IsCommand()) {
       ((ConVar *)pCommand)->SetValue(pValue);
     }
+
     return true;
   }
 };
@@ -25,7 +25,5 @@ class CShaderLibConVarAccessor : public IConCommandBaseAccessor {
 CShaderLibConVarAccessor g_ConVarAccessor;
 
 void InitShaderLibCVars(CreateInterfaceFn cvarFactory) {
-  if (g_pCVar) {
-    ConVar_Register(0, &g_ConVarAccessor);
-  }
+  if (g_pCVar) ConVar_Register(0, &g_ConVarAccessor);
 }

@@ -13,12 +13,9 @@
 #include "tier1/tier1.h"
 #include "tier1/utlvector.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
 // The standard implementation of CShaderDLL
-//-----------------------------------------------------------------------------
 class CShaderDLL : public IShaderDLLInternal, public IShaderDLL {
  public:
   CShaderDLL();
@@ -38,29 +35,21 @@ class CShaderDLL : public IShaderDLLInternal, public IShaderDLL {
   CUtlVector<IShader *> m_ShaderList;
 };
 
-//-----------------------------------------------------------------------------
 // Global interfaces/structures
-//-----------------------------------------------------------------------------
 IMaterialSystemHardwareConfig *g_pHardwareConfig;
 const MaterialSystem_Config_t *g_pConfig;
 
-//-----------------------------------------------------------------------------
 // Interfaces/structures local to shaderlib
-//-----------------------------------------------------------------------------
 IShaderSystem *g_pSLShaderSystem;
 
 // Pattern necessary because shaders register themselves in global constructors
 static CShaderDLL *s_pShaderDLL;
 
-//-----------------------------------------------------------------------------
 // Global accessor
-//-----------------------------------------------------------------------------
 IShaderDLL *GetShaderDLL() {
   // Pattern necessary because shaders register themselves in global
   // constructors
-  if (!s_pShaderDLL) {
-    s_pShaderDLL = new CShaderDLL;
-  }
+  if (!s_pShaderDLL) s_pShaderDLL = new CShaderDLL;
 
   return s_pShaderDLL;
 }
@@ -68,42 +57,34 @@ IShaderDLL *GetShaderDLL() {
 IShaderDLLInternal *GetShaderDLLInternal() {
   // Pattern necessary because shaders register themselves in global
   // constructors
-  if (!s_pShaderDLL) {
-    s_pShaderDLL = new CShaderDLL;
-  }
+  if (!s_pShaderDLL) s_pShaderDLL = new CShaderDLL;
 
-  return static_cast<IShaderDLLInternal *>(s_pShaderDLL);
+  return implicit_cast<IShaderDLLInternal *>(s_pShaderDLL);
 }
 
-//-----------------------------------------------------------------------------
 // Singleton interface
-//-----------------------------------------------------------------------------
 EXPOSE_INTERFACE_FN((InstantiateInterfaceFn)GetShaderDLLInternal,
                     IShaderDLLInternal, SHADER_DLL_INTERFACE_VERSION);
 
-//-----------------------------------------------------------------------------
 // Connect, disconnect...
-//-----------------------------------------------------------------------------
 CShaderDLL::CShaderDLL() { MathLib_Init(2.2f, 2.2f, 0.0f, 2.0f); }
 
-//-----------------------------------------------------------------------------
 // Connect, disconnect...
-//-----------------------------------------------------------------------------
 bool CShaderDLL::Connect(CreateInterfaceFn factory, bool bIsMaterialSystem) {
   g_pHardwareConfig = (IMaterialSystemHardwareConfig *)factory(
-      MATERIALSYSTEM_HARDWARECONFIG_INTERFACE_VERSION, NULL);
+      MATERIALSYSTEM_HARDWARECONFIG_INTERFACE_VERSION, nullptr);
   g_pConfig = (const MaterialSystem_Config_t *)factory(
-      MATERIALSYSTEM_CONFIG_VERSION, NULL);
+      MATERIALSYSTEM_CONFIG_VERSION, nullptr);
   g_pSLShaderSystem =
-      (IShaderSystem *)factory(SHADERSYSTEM_INTERFACE_VERSION, NULL);
+      (IShaderSystem *)factory(SHADERSYSTEM_INTERFACE_VERSION, nullptr);
 
   if (!bIsMaterialSystem) {
     ConnectTier1Libraries(&factory, 1);
     InitShaderLibCVars(factory);
   }
 
-  return (g_pConfig != NULL) && (g_pHardwareConfig != NULL) &&
-         (g_pSLShaderSystem != NULL);
+  return (g_pConfig != nullptr) && (g_pHardwareConfig != nullptr) &&
+         (g_pSLShaderSystem != nullptr);
 }
 
 void CShaderDLL::Disconnect(bool bIsMaterialSystem) {
@@ -112,9 +93,9 @@ void CShaderDLL::Disconnect(bool bIsMaterialSystem) {
     DisconnectTier1Libraries();
   }
 
-  g_pHardwareConfig = NULL;
-  g_pConfig = NULL;
-  g_pSLShaderSystem = NULL;
+  g_pHardwareConfig = nullptr;
+  g_pConfig = nullptr;
+  g_pSLShaderSystem = nullptr;
 }
 
 bool CShaderDLL::Connect(CreateInterfaceFn factory) {
@@ -123,20 +104,16 @@ bool CShaderDLL::Connect(CreateInterfaceFn factory) {
 
 void CShaderDLL::Disconnect() { Disconnect(false); }
 
-//-----------------------------------------------------------------------------
 // Iterates over all shaders
-//-----------------------------------------------------------------------------
 int CShaderDLL::ShaderCount() const { return m_ShaderList.Count(); }
 
 IShader *CShaderDLL::GetShader(int nShader) {
-  if ((nShader < 0) || (nShader >= m_ShaderList.Count())) return NULL;
+  if ((nShader < 0) || (nShader >= m_ShaderList.Count())) return nullptr;
 
   return m_ShaderList[nShader];
 }
 
-//-----------------------------------------------------------------------------
 // Adds to the shader lists
-//-----------------------------------------------------------------------------
 void CShaderDLL::InsertShader(IShader *pShader) {
   Assert(pShader);
   m_ShaderList.AddToTail(pShader);

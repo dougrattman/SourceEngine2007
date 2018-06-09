@@ -456,7 +456,7 @@ class CShaderAPIEmpty : public IShaderAPI,
   void SetPixelShaderStateAmbientLightCube(int pshReg,
                                            bool bForceToBlack = false) {}
 
-  float GetAmbientLightCubeLuminance(void) { return 0.0f; }
+  float GetAmbientLightCubeLuminance() { return 0.0f; }
 
   void SetSkinningMatrices();
 
@@ -796,7 +796,7 @@ class CShaderAPIEmpty : public IShaderAPI,
   void SetDefaultDynamicState() {}
   virtual void CommitPixelShaderLighting(int pshReg) {}
 
-  ShaderAPIOcclusionQuery_t CreateOcclusionQueryObject(void) {
+  ShaderAPIOcclusionQuery_t CreateOcclusionQueryObject() {
     return INVALID_SHADERAPI_OCCLUSION_QUERY_HANDLE;
   }
 
@@ -892,12 +892,12 @@ class CShaderAPIEmpty : public IShaderAPI,
 
   void SetToneMappingScaleLinear(const Vector &scale) {}
 
-  const Vector &GetToneMappingScaleLinear(void) const {
+  const Vector &GetToneMappingScaleLinear() const {
     static Vector dummy;
     return dummy;
   }
 
-  virtual float GetLightMapScaleFactor(void) const { return 1.0; }
+  virtual float GetLightMapScaleFactor() const { return 1.0; }
 
   // For dealing with device lost in cases where SwapBuffers isn't called all
   // the time (Hammer)
@@ -982,7 +982,7 @@ class CShaderAPIEmpty : public IShaderAPI,
 
   virtual bool SupportsFetch4() { return false; }
 
-  virtual int NeedsShaderSRGBConversion(void) const { return 0; }
+  virtual int NeedsShaderSRGBConversion() const { return 0; }
   virtual bool UsesSRGBCorrectBlending() const { return false; }
 
   virtual bool HasFastVertexTextures() const { return false; }
@@ -1004,9 +1004,9 @@ class CShaderAPIEmpty : public IShaderAPI,
             int numIndices) {}
   // ------------ End ----------------------------
 
-  virtual int GetVertexBufferCompression(void) const { return 0; };
+  virtual int GetVertexBufferCompression() const { return 0; };
 
-  virtual bool ShouldWriteDepthToDestAlpha(void) const { return false; };
+  virtual bool ShouldWriteDepthToDestAlpha() const { return false; };
   virtual bool SupportsHDRMode(HDRType_t nHDRMode) const { return false; };
   virtual bool IsDX10Card() const { return false; };
 
@@ -1030,7 +1030,7 @@ class CShaderAPIEmpty : public IShaderAPI,
   }
 
   virtual void ExecuteCommandBuffer(uint8_t *pData) {}
-  virtual bool GetHDREnabled(void) const { return true; }
+  virtual bool GetHDREnabled() const { return true; }
   virtual void SetHDREnabled(bool bEnable) {}
 
  private:
@@ -1773,7 +1773,7 @@ void CShaderAPIEmpty::SetAmbientLight(float r, float g, float b) {}
 void CShaderAPIEmpty::SetAmbientLightCube(Vector4D cube[6]) {}
 
 // Get lights
-int CShaderAPIEmpty::GetMaxLights(void) const { return 0; }
+int CShaderAPIEmpty::GetMaxLights() const { return 0; }
 
 const LightDesc_t &CShaderAPIEmpty::GetLight(int lightNum) const {
   static LightDesc_t blah;
@@ -1856,9 +1856,9 @@ void CShaderAPIEmpty::MultMatrixLocal(float *m) {}
 
 void CShaderAPIEmpty::GetMatrix(MaterialMatrixMode_t matrixMode, float *dst) {}
 
-void CShaderAPIEmpty::LoadIdentity(void) {}
+void CShaderAPIEmpty::LoadIdentity() {}
 
-void CShaderAPIEmpty::LoadCameraToWorld(void) {}
+void CShaderAPIEmpty::LoadCameraToWorld() {}
 
 void CShaderAPIEmpty::Ortho(double left, double top, double right,
                             double bottom, double zNear, double zFar) {}
@@ -1953,7 +1953,7 @@ void CShaderAPIEmpty::SetIntegerPixelShaderConstant(int var, int const *pVec,
                                                     int numIntVecs,
                                                     bool bForce) {}
 
-void CShaderAPIEmpty::InvalidateDelayedShaderConstants(void) {}
+void CShaderAPIEmpty::InvalidateDelayedShaderConstants() {}
 
 float CShaderAPIEmpty::GammaToLinear_HardwareSpecific(float fGamma) const {
   return 0.0f;
@@ -2065,7 +2065,7 @@ void CShaderAPIEmpty::ClearBuffers(bool bClearColor, bool bClearDepth,
 void CShaderAPIEmpty::ClearBuffersObeyStencil(bool bClearColor,
                                               bool bClearDepth) {}
 
-void CShaderAPIEmpty::PerformFullScreenStencilOperation(void) {}
+void CShaderAPIEmpty::PerformFullScreenStencilOperation() {}
 
 void CShaderAPIEmpty::SetScissorRect(const int nLeft, const int nTop,
                                      const int nRight, const int nBottom,
@@ -2117,7 +2117,7 @@ double CShaderAPIEmpty::CurrentTime() const { return Plat_FloatTime(); }
 // Get the current camera position in world space.
 void CShaderAPIEmpty::GetWorldSpaceCameraPosition(float *pPos) const {}
 
-void CShaderAPIEmpty::ForceHardwareSync(void) {}
+void CShaderAPIEmpty::ForceHardwareSync() {}
 
 void CShaderAPIEmpty::SetClipPlane(int index, const float *pPlane) {}
 
@@ -2127,11 +2127,11 @@ void CShaderAPIEmpty::SetFastClipPlane(const float *pPlane) {}
 
 void CShaderAPIEmpty::EnableFastClip(bool bEnable) {}
 
-int CShaderAPIEmpty::GetCurrentNumBones(void) const { return 0; }
+int CShaderAPIEmpty::GetCurrentNumBones() const { return 0; }
 
-bool CShaderAPIEmpty::IsHWMorphingEnabled(void) const { return false; }
+bool CShaderAPIEmpty::IsHWMorphingEnabled() const { return false; }
 
-int CShaderAPIEmpty::GetCurrentLightCombo(void) const { return 0; }
+int CShaderAPIEmpty::GetCurrentLightCombo() const { return 0; }
 
 void CShaderAPIEmpty::GetDX9LightState(LightState_t *state) const {
   state->m_nNumLights = 0;
@@ -2139,7 +2139,7 @@ void CShaderAPIEmpty::GetDX9LightState(LightState_t *state) const {
   state->m_bStaticLight = false;
 }
 
-MaterialFogMode_t CShaderAPIEmpty::GetCurrentFogType(void) const {
+MaterialFogMode_t CShaderAPIEmpty::GetCurrentFogType() const {
   return MATERIAL_FOG_NONE;
 }
 
@@ -2153,7 +2153,7 @@ bool CShaderAPIEmpty::PreferReducedFillrate() const { return false; }
 
 bool CShaderAPIEmpty::HasProjectedBumpEnv() const { return true; }
 
-int CShaderAPIEmpty::GetCurrentDynamicVBSize(void) { return 0; }
+int CShaderAPIEmpty::GetCurrentDynamicVBSize() { return 0; }
 
 void CShaderAPIEmpty::DestroyVertexBuffers(bool bExitingLevel) {}
 
