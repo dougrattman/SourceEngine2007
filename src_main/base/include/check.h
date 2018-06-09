@@ -28,6 +28,18 @@
     std::exit(exit_code);                              \
   })
 
+// Checks |condition| in DEBUG mode, if not, then print condition and
+// |exit_code| to stderr and exit process with |exit_code_lazy()|.  Process is
+// terminated via std::exit call.
+#define DCHECK_LAZY_EXIT(condition, exit_code_lazy)    \
+  assert(condition);                                   \
+  SOURCE_DBG_CODE_NOSCOPE(if (!(condition)) {          \
+    auto exit_code = exit_code_lazy();                 \
+    fprintf_s(stderr, "%s failed (%d).", (#condition), \
+              implicit_cast<int>(exit_code));          \
+    std::exit(exit_code);                              \
+  })
+
 // Checks |condition|, if not, then print condition and |exit_code| to stderr
 // and exit process with |exit_code|.  Process is terminated via std::exit call.
 #define CHECK(condition, exit_code)                    \
