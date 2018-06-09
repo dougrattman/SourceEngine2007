@@ -36,9 +36,6 @@
     <ClCompile Include="..\common\netapi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\SteamAppStartup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="console\conproc.cpp">
       <Filter>Source Files\Console</Filter>
     </ClCompile>
