@@ -46,11 +46,7 @@ CMainPanel::CMainPanel() : Panel(nullptr, "CMainPanel") {
 //-----------------------------------------------------------------------------
 // Purpose: Destructor
 //-----------------------------------------------------------------------------
-CMainPanel::~CMainPanel() {
-  if (gpszCvars) {
-    free(gpszCvars);
-  }
-}
+CMainPanel::~CMainPanel() { heap_free(gpszCvars); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Called once to set up

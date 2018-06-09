@@ -113,7 +113,6 @@ struct studiodata_t {
 
 DEFINE_FIXEDSIZE_ALLOCATOR_MT(studiodata_t, 128, CMemoryPool::GROW_SLOW);
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CTempAllocHelper {
@@ -126,12 +125,7 @@ class CTempAllocHelper {
 
   void Alloc(int nSize) { m_pData = malloc(nSize); }
 
-  void Free() {
-    if (m_pData) {
-      free(m_pData);
-      m_pData = NULL;
-    }
-  }
+  void Free() { heap_free(m_pData); }
 
  private:
   void *m_pData;
@@ -180,8 +174,8 @@ unsigned ComputeHardwareDataSize(studiohwdata_t *pData) {
 }
 #endif
 
-static void MakeFilename(char szFileName[SOURCE_MAX_PATH], studiohdr_t *pStudioHdr,
-                         const char *pszExtension) {
+static void MakeFilename(char szFileName[SOURCE_MAX_PATH],
+                         studiohdr_t *pStudioHdr, const char *pszExtension) {
   char szBaseModelName[SOURCE_MAX_PATH];
 
   Q_StripExtension(pStudioHdr->pszName(), szBaseModelName, SOURCE_MAX_PATH);
@@ -193,9 +187,9 @@ static void MakeFilename(char szFileName[SOURCE_MAX_PATH], studiohdr_t *pStudioH
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// Async support
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  // Async support
+  //-----------------------------------------------------------------------------
 
 #define MDLCACHE_NONE ((MDLCacheDataType_t)-1)
 
@@ -603,19 +597,19 @@ void CMDLCache::Disconnect() {
 //-----------------------------------------------------------------------------
 void *CMDLCache::QueryInterface(const char *pInterfaceName) {
   if (!Q_strncmp(pInterfaceName, STUDIO_DATA_CACHE_INTERFACE_VERSION,
-                 Q_strlen(STUDIO_DATA_CACHE_INTERFACE_VERSION) + 1))
+                 strlen(STUDIO_DATA_CACHE_INTERFACE_VERSION) + 1))
     return (IStudioDataCache *)this;
 
   if (!Q_strncmp(pInterfaceName, MDLCACHE_INTERFACE_VERSION,
-                 Q_strlen(MDLCACHE_INTERFACE_VERSION) + 1))
+                 strlen(MDLCACHE_INTERFACE_VERSION) + 1))
     return (IMDLCache *)this;
 
   return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Init/Shutdown
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  // Init/Shutdown
+  //-----------------------------------------------------------------------------
 
 #define MODEL_CACHE_MODEL_SECTION_NAME "ModelData"
 #define MODEL_CACHE_MESH_SECTION_NAME "ModelMesh"
@@ -1037,8 +1031,8 @@ unsigned char *CMDLCache::UnserializeAnimBlock(MDLHandle_t handle, int nBlock) {
   if (iAsync == NO_ASYNC) {
     studiohdr_t *pStudioHdr = GetStudioHdr(handle);
 
-    // TODO(d.rattman): For consistency, the block name maybe shouldn't have 'model' in
-    // it.
+    // TODO(d.rattman): For consistency, the block name maybe shouldn't have
+    // 'model' in it.
     char const *pModelName = pStudioHdr->pszAnimBlockName();
     mstudioanimblock_t *pBlock = pStudioHdr->pAnimBlock(nBlock);
     int nSize = pBlock->dataend - pBlock->datastart;
@@ -1145,8 +1139,7 @@ void CMDLCache::FreeAutoplaySequences(studiodata_t *pStudioData) {
 //-----------------------------------------------------------------------------
 // Gets the autoplay list
 //-----------------------------------------------------------------------------
-int CMDLCache::GetAutoplayList(MDLHandle_t handle,
-                               u16 **pAutoplayList) {
+int CMDLCache::GetAutoplayList(MDLHandle_t handle, u16 **pAutoplayList) {
   if (pAutoplayList) {
     *pAutoplayList = NULL;
   }
@@ -1661,9 +1654,9 @@ studiohdr_t *CMDLCache::UnserializeMDL(MDLHandle_t handle, void *pData,
     m_MDLDict[handle]->m_nFlags |= STUDIODATA_FLAGS_LOCKED_MDL;
   }
 
-  // TODO(d.rattman): Is there any way we can compute the size to load *before* loading in
-  // and read directly into cache memory? It would be nice to reduce cache
-  // overhead here. move the complete, relocatable model to the cache
+  // TODO(d.rattman): Is there any way we can compute the size to load *before*
+  // loading in and read directly into cache memory? It would be nice to reduce
+  // cache overhead here. move the complete, relocatable model to the cache
   memcpy(pHdr, pStudioHdrIn, pStudioHdrIn->length);
 
   // On first load, convert the flex deltas from fp16 to 16-bit fixed-point
@@ -2309,8 +2302,7 @@ vertexFileHeader_t *CMDLCache::CreateThinVertexes(
     Vector *pPositions = (Vector *)(pNewThinVerts + 1);
     float *pBoneWeights = (float *)(pPositions + numVerts);
     // Alloc the (short) normals here to avoid mis-aligning the float data
-    u16 *pNormals =
-        (u16 *)(pBoneWeights + numVerts * numStoredWeights);
+    u16 *pNormals = (u16 *)(pBoneWeights + numVerts * numStoredWeights);
     // Alloc the (char) indices here to avoid mis-aligning the float/short data
     char *pBoneIndices = (char *)(pNormals + numVerts);
     if (numStoredWeights == 0) pBoneWeights = NULL;
@@ -2424,11 +2416,6 @@ bool CMDLCache::ProcessDataIntoCache(MDLHandle_t handle,
 
       m_pMeshCacheSection->Unlock(pStudioDataCurrent->m_VertexCache);
       m_pMeshCacheSection->Age(pStudioDataCurrent->m_VertexCache);
-
-      // TODO(d.rattman): thin VVD data on PC too (have to address alt-tab, various
-      // DX8/DX7/debug software paths in studiorender, tools, etc)
-      static bool bCompressedVVDs =
-          CommandLine()->CheckParm("-no_compressed_vvds") == NULL;
 
       break;
     }
@@ -2985,7 +2972,7 @@ void CMDLCache::QueuedLoaderCallback_MDL(void *pContext, void *pContext2,
   // journal each incoming buffer
   ModelParts_t *pModelParts = (ModelParts_t *)pContext;
   ModelParts_t::BufferType_t bufferType =
-      static_cast<ModelParts_t::BufferType_t>((int)pContext2);
+      static_cast<ModelParts_t::BufferType_t>((intptr_t)pContext2);
   pModelParts->Buffers[bufferType].SetExternalBuffer(
       (void *)pData, nSize, nSize, CUtlBuffer::READ_ONLY);
   pModelParts->nLoadedParts += (1 << bufferType);

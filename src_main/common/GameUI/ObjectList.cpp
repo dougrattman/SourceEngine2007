@@ -52,7 +52,7 @@ void *ObjectList::RemoveHead() {
     // if we remove this prev element
     if (tail == head) tail = nullptr;
 
-    free(head);
+    heap_free(head);
     head = newHead;
 
     number--;
@@ -96,7 +96,7 @@ void *ObjectList::RemoveTail() {
     // if we remove this prev element
     if (head == tail) head = nullptr;
 
-    free(tail);
+    heap_free(tail);
     tail = newTail;
 
     number--;
@@ -133,9 +133,9 @@ void ObjectList::Clear(bool freeElementsMemory) {
   while (e) {
     ne = e->next;
 
-    if (freeElementsMemory && e->object) free(e->object);
+    if (freeElementsMemory) heap_free(e->object);
 
-    free(e);
+    heap_free(e);
     e = ne;
   }
 
@@ -156,7 +156,7 @@ bool ObjectList::Remove(void *object) {
     if (head == e) head = e->next;
     if (tail == e) tail = e->prev;
     if (current == e) current = e->next;
-    free(e);
+    heap_free(e);
     number--;
   }
 

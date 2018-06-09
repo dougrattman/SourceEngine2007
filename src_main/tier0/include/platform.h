@@ -77,31 +77,49 @@
     SOURCE_HINT(0);          \
   }
 
-#ifdef OS_WIN
-// Alloca defined for this platform.
-#define stackalloc(_size) _alloca(AlignValue(_size, 16))
-#define stackfree(_p) 0
-#define securestackalloc(_size) _malloca(AlignValue(_size, 16))
-#define securestackfree(_p) _freea(_p)
-#elif defined OS_POSIX
-// Alloca defined for this platform.
-#define stackalloc(_size) _alloca(AlignValue(_size, 16))
-#define stackfree(_p) 0
-#endif  // OS_WIN
+template <typename T>
+SOURCE_FORCEINLINE T *stack_alloc(usize items_count) {
+  return reinterpret_cast<T *>(
+      _alloca(AlignValue(items_count * sizeof(T), 16)));
+}
+
+template <typename T, typename Y = std::enable_if_t<std::is_pointer_v<T>>>
+SOURCE_FORCEINLINE void stack_free(T) {}
+
+template <typename T>
+SOURCE_FORCEINLINE SOURCE_RESTRICT_FUNCTION T *heap_alloc(usize items_count) {
+  return reinterpret_cast<T *>(malloc(items_count * sizeof(T)));
+}
+
+template <typename T, typename Y = std::enable_if_t<
+                          std::is_pointer_v<T> &&
+                          !std::is_const_v<std::remove_pointer_t<T>>>>
+SOURCE_FORCEINLINE void heap_free(T &heap) {
+  free(heap);
+  heap = nullptr;
+}
+
+template <typename T, typename Y = std::enable_if_t<
+                          std::is_const_v<std::remove_pointer_t<T>>>>
+SOURCE_FORCEINLINE void heap_free(T heap) {
+  free(const_cast<
+       std::add_pointer_t<std::remove_const_t<std::remove_pointer_t<T>>>>(
+      heap));
+}
 
 // Standard functions for handling endian-ness
 
 // Basic swaps
 
 template <typename T>
-inline T WordSwapC(T w) {
+constexpr inline T WordSwapC(T w) {
   u16 temp = ((*((u16 *)&w) & 0xff00) >> 8);
   temp |= ((*((u16 *)&w) & 0x00ff) << 8);
   return *((T *)&temp);
 }
 
 template <typename T>
-inline T DWordSwapC(T dw) {
+constexpr inline T DWordSwapC(T dw) {
   u32 temp = *((u32 *)&dw) >> 24;
   temp |= ((*((u32 *)&dw) & 0x00FF0000) >> 8);
   temp |= ((*((u32 *)&dw) & 0x0000FF00) << 8);
@@ -109,7 +127,7 @@ inline T DWordSwapC(T dw) {
   return *((T *)&temp);
 }
 
-// Fast swaps
+  // Fast swaps
 
 #ifdef COMPILER_MSVC
 #define WordSwap WordSwapAsm
@@ -133,15 +151,11 @@ inline T DWordSwapAsm(T dw) {
 #define DWordSwap DWordSwapC
 #endif  // COMPILER_MSVC
 
-#if defined(ARCH_CPU_LITTLE_ENDIAN)
-#define LITTLE_ENDIAN 1
-#endif
-
 // If a swapped f32 passes through the fpu, the bytes may get changed.
 // Prevent this by swapping floats as DWORDs.
 #define SafeSwapFloat(pOut, pIn) (*((u32 *)pOut) = DWordSwap(*((u32 *)pIn)))
 
-#if defined(LITTLE_ENDIAN)
+#ifdef ARCH_CPU_LITTLE_ENDIAN
 #define BigShort(val) WordSwap(val)
 #define BigWord(val) WordSwap(val)
 #define BigLong(val) DWordSwap(val)
@@ -159,76 +173,25 @@ inline T DWordSwapAsm(T dw) {
 #define BigFloat(pOut, pIn) SafeSwapFloat(pOut, pIn)
 #define LittleFloat(pOut, pIn) (*pOut = *pIn)
 #define SwapFloat(pOut, pIn) BigFloat(pOut, pIn)
-#else   // !LITTLE_ENDIAN
-// @Note (toml 05-02-02): this technique expects the compiler to
-// optimize the expression and eliminate the other path. On any new
-// platform/compiler this should be tested.
-inline short BigShort(short val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? WordSwap(val) : val;
-}
-inline u16 BigWord(u16 val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? WordSwap(val) : val;
-}
-inline long BigLong(long val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? DWordSwap(val) : val;
-}
-inline u32 BigDWord(u32 val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? DWordSwap(val) : val;
-}
-inline short LittleShort(short val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? val : WordSwap(val);
-}
-inline u16 LittleWord(u16 val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? val : WordSwap(val);
-}
-inline long LittleLong(long val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? val : DWordSwap(val);
-}
-inline u32 LittleDWord(u32 val) {
-  i32 test = 1;
-  return (*(ch *)&test == 1) ? val : DWordSwap(val);
-}
-inline short SwapShort(short val) { return WordSwap(val); }
-inline u16 SwapWord(u16 val) { return WordSwap(val); }
-inline long SwapLong(long val) { return DWordSwap(val); }
-inline u32 SwapDWord(u32 val) { return DWordSwap(val); }
 
-// Pass floats by pointer for swapping to avoid truncation in the fpu
-inline void BigFloat(f32 *pOut, const f32 *pIn) {
-  i32 test = 1;
-  (*(ch *)&test == 1) ? SafeSwapFloat(pOut, pIn) : (*pOut = *pIn);
-}
-inline void LittleFloat(f32 *pOut, const f32 *pIn) {
-  i32 test = 1;
-  (*(ch *)&test == 1) ? (*pOut = *pIn) : SafeSwapFloat(pOut, pIn);
-}
-inline void SwapFloat(f32 *pOut, const f32 *pIn) { SafeSwapFloat(pOut, pIn); }
-#endif  // LITTLE_ENDIAN
-
-inline unsigned long LoadLittleDWord(unsigned long *base, usize dwordIndex) {
+constexpr inline unsigned long LoadLittleDWord(unsigned long *base,
+                                               usize dwordIndex) {
   return LittleDWord(base[dwordIndex]);
 }
 
-inline void StoreLittleDWord(unsigned long *base, usize dwordIndex,
-                             unsigned long dword) {
+constexpr inline void StoreLittleDWord(unsigned long *base, usize dwordIndex,
+                                       unsigned long dword) {
   base[dwordIndex] = LittleDWord(dword);
 }
+#else
+#error Please define swap operations for platform endian in tier0/include/platform.h
+#endif
 
 // Returns time in seconds since the module was loaded.
 SOURCE_TIER0_API f64 Plat_FloatTime();
 
 // Time in milliseconds.
 SOURCE_TIER0_API unsigned long Plat_MSTime();
-
-// Query performance timer frequency.
-SOURCE_TIER0_API u64 Plat_PerformanceFrequency();
 
 // Processor Information.
 struct CPUInformation {
@@ -298,7 +261,7 @@ inline bool Plat_IsPrimaryThread() {
 SOURCE_TIER0_API const ch *Plat_GetCommandLine();
 
 #ifndef OS_WIN
-// Helper function for OS's that don't have a GetCommandLine() API.
+// Helper function for OS'es that don't have a GetCommandLine() API.
 SOURCE_TIER0_API void Plat_SetCommandLine(const ch *cmdLine);
 #endif
 
@@ -328,9 +291,9 @@ SOURCE_TIER0_API bool vtune(bool resume);
 #endif  // OS_WIN
 
 // Methods to invoke the constructor, copy constructor, and destructor.
-template <typename T>
-inline void Construct(T *memory) {
-  ::new (memory) T;
+template <typename T, typename... Args>
+inline void Construct(T *memory, Args &&... args) {
+  ::new (memory) T{std::forward<Args>(args)...};
 }
 
 template <typename T>
@@ -339,7 +302,7 @@ inline void CopyConstruct(T *memory, T const &source) {
 }
 
 template <typename T>
-inline void Destruct(T *memory) {
+inline void Destroy(T *memory) {
   memory->~T();
 
 #ifndef NDEBUG

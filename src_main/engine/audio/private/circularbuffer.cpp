@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -204,5 +205,5 @@ CCircularBuffer *AllocateCircularBuffer(int nSize) {
 }
 
 void FreeCircularBuffer(CCircularBuffer *pCircularBuffer) {
-  free((ch *)pCircularBuffer);
+  heap_free(pCircularBuffer);
 }

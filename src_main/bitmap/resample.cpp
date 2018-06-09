@@ -624,7 +624,7 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
         kernel, info, wratio, hratio, dratio, gammaToLinear, pAlphaResult);
   }
 
-  if (pAlphaResult) free(pAlphaResult);
+  heap_free(pAlphaResult);
 
   return true;
 }

@@ -743,8 +743,10 @@ class CBik : public IBik {
   bool SetDirectSoundDevice(void *pDevice) override;
 
  private:
-  static void *RADLINK BinkMemAlloc(U32 bytes) { return malloc(bytes); };
-  static void RADLINK BinkMemFree(void PTR4 *ptr) { free(ptr); };
+  static void *RADLINK BinkMemAlloc(U32 bytes) {
+    return heap_alloc<u8>(bytes);
+  };
+  static void RADLINK BinkMemFree(void PTR4 *ptr) { heap_free(ptr); };
 
   // NOTE: Have to use pointers here since BIKMaterials inherit from
   // ITextureRegenerator The realloc screws up the pointers held to

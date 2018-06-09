@@ -85,7 +85,7 @@ void CAppSystemGroup::UnloadAllModules() {
       Sys_UnloadModule(m_Modules[i].m_pModule);
     }
     if (m_Modules[i].m_pModuleName) {
-      free(m_Modules[i].m_pModuleName);
+      heap_free(m_Modules[i].m_pModuleName);
     }
   }
   m_Modules.RemoveAll();

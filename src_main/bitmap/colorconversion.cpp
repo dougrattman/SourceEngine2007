@@ -750,7 +750,7 @@ bool ConvertToATIxN(const u8 *src, ImageFormat srcImageFormat, u8 *dst,
   ATI_TC_ERROR errATI = ATI_TC_ConvertTexture(
       &srcTexture, &destTexture, nullptr, nullptr, 0, 0);  // Convert it!
 
-  free(srcTexture.pData);  // Free temporary buffers
+  heap_free(srcTexture.pData);  // Free temporary buffers
 
   if (errATI != ATI_TC_OK) return false;
 
