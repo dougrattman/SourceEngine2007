@@ -39,21 +39,21 @@ class FixedWorkQueue {
   int read_index;
 
  public:
-  FixedWorkQueue(void) {
+  FixedWorkQueue() {
     read_index = write_index = 0;
     n_added = n_removed = 0;
   }
 
-  int IsEmpty(void) { return (n_added == n_removed); }
+  int IsEmpty() { return (n_added == n_removed); }
 
-  int IsFull(void) { return (n_added - n_removed) >= QSIZE; }
+  int IsFull() { return (n_added - n_removed) >= QSIZE; }
 
-  T GetWorkUnit(void) {
+  T GetWorkUnit() {
     if (IsEmpty()) return 0;
     return Data[read_index];
   }
 
-  void MarkUnitDone(void) {
+  void MarkUnitDone() {
     n_removed++;
     read_index = (read_index + 1) % QSIZE;
   }
@@ -75,7 +75,7 @@ void __cdecl OurThreadInit(void *ourthis) {
   ((Direct3DDevice9Wrapper *)ourthis)->RunThread();
 }
 
-void Direct3DDevice9Wrapper::RunThread(void) {
+void Direct3DDevice9Wrapper::RunThread() {
   SetThreadAffinityMask(GetCurrentThread(), 2);
   for (;;) {
     PushBuffer *Pbuf = PBQueue.GetWorkUnit();
@@ -129,13 +129,13 @@ PushBuffer *Direct3DDevice9Wrapper::FindFreePushBuffer(
   }
 }
 
-void Direct3DDevice9Wrapper::GetPushBuffer(void) {
+void Direct3DDevice9Wrapper::GetPushBuffer() {
   current_push_buffer_ = FindFreePushBuffer(PUSHBUFFER_BEING_FILLED);
   output_ptr_ = current_push_buffer_->m_BufferData;
   push_buffer_free_slots_ = PUSHBUFFER_NELEMS - 1;  // leave room for end marker
 }
 
-void Direct3DDevice9Wrapper::SubmitPushBufferAndGetANewOne(void) {
+void Direct3DDevice9Wrapper::SubmitPushBufferAndGetANewOne() {
   // submit the current push buffer
   if (current_push_buffer_) {
     if (output_ptr_ ==
@@ -150,11 +150,11 @@ void Direct3DDevice9Wrapper::SubmitPushBufferAndGetANewOne(void) {
   GetPushBuffer();
 }
 
-void Direct3DDevice9Wrapper::SubmitIfNotBusy(void) {
+void Direct3DDevice9Wrapper::SubmitIfNotBusy() {
   if (PBQueue.IsEmpty()) SubmitPushBufferAndGetANewOne();
 }
 
-void Direct3DDevice9Wrapper::Synchronize(void) {
+void Direct3DDevice9Wrapper::Synchronize() {
   if (ASyncMode()) {
     SubmitPushBufferAndGetANewOne();
     // here, wait for queue to become empty

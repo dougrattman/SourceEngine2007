@@ -9,7 +9,7 @@
 #include "base/include/windows/windows_light.h"
 
 #include <d3d9.h>
-#include "dx9sdk/include/d3dx9.h"
+#include "deps/dxsdk_jun2010/Include/d3dx9.h"
 #include "recording.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"

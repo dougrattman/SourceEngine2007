@@ -399,7 +399,7 @@ KeyValues *CShaderDeviceMgrBase::ReadDXSupportKeyValues() {
 
   char temp_path[1024];
   if (g_pFullFileSystem->GetSearchPath("GAME", false, temp_path,
-                                       SOURCE_ARRAYSIZE(temp_path)) > 1) {
+                                       std::size(temp_path)) > 1) {
     // Is there a mod-specific override file?
     KeyValues *dx_support_override_config = new KeyValues("dxsupport_override");
     if (dx_support_override_config->LoadFromFile(

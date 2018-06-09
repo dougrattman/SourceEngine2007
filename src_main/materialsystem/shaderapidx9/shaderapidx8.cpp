@@ -1019,7 +1019,7 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
   void SetBumpEnvMatrix(TextureStage_t textureStage, float m00, float m01,
                         float m10, float m11);
 
-  int GetCurrentFrameCounter(void) const { return m_CurrentFrame; }
+  int GetCurrentFrameCounter() const { return m_CurrentFrame; }
 
   // Workaround hack for visualization of selection mode
   virtual void SetupSelectionModeVisualizationState();
@@ -1875,7 +1875,7 @@ CShaderAPIDx8::~CShaderAPIDx8() {
 }
 
 void CShaderAPIDx8::ClearStdTextureHandles() {
-  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_StdTextureHandles); i++)
+  for (usize i = 0; i < std::size(m_StdTextureHandles); i++)
     m_StdTextureHandles[i] = INVALID_SHADERAPI_TEXTURE_HANDLE;
 }
 
@@ -5408,20 +5408,20 @@ SOURCE_FORCEINLINE T GetData(uint8_t const *pData) {
 
 void CShaderAPIDx8::SetStandardTextureHandle(StandardTextureId_t nId,
                                              ShaderAPITextureHandle_t nHandle) {
-  Assert(nId < SOURCE_ARRAYSIZE(m_StdTextureHandles));
+  Assert(nId < std::size(m_StdTextureHandles));
   m_StdTextureHandles[nId] = nHandle;
 }
 
 void CShaderAPIDx8::ExecuteCommandBuffer(uint8_t *pCmdBuf) {
   uint8_t *pReturnStack[20];
-  uint8_t **pSP = &pReturnStack[SOURCE_ARRAYSIZE(pReturnStack)];
+  uint8_t **pSP = &pReturnStack[std::size(pReturnStack)];
   uint8_t *pLastCmd;
   for (;;) {
     uint8_t *pCmd = pCmdBuf;
     int nCmd = GetData<int>(pCmdBuf);
     switch (nCmd) {
       case CBCMD_END: {
-        if (pSP == &pReturnStack[SOURCE_ARRAYSIZE(pReturnStack)])
+        if (pSP == &pReturnStack[std::size(pReturnStack)])
           return;
         else {
           // pop pc
@@ -6009,12 +6009,11 @@ void CShaderAPIDx8::CreateTextures(ShaderAPITextureHandle_t *pHandles,
 
   // Create a set of texture handles
   CreateTextureHandles(pHandles, count);
-  Texture_t **arrTxp = (Texture_t **)stackalloc(count * sizeof(Texture_t *));
+  Texture_t **arrTxp = stack_alloc<Texture_t *>(count);
 
-  unsigned short usSetFlags = 0;
-  usSetFlags |= (creationFlags & TEXTURE_CREATE_VERTEXTEXTURE)
-                    ? Texture_t::IS_VERTEX_TEXTURE
-                    : 0;
+  u16 usSetFlags = (creationFlags & TEXTURE_CREATE_VERTEXTEXTURE)
+                       ? Texture_t::IS_VERTEX_TEXTURE
+                       : 0;
 
   for (int idxFrame = 0; idxFrame < count; ++idxFrame) {
     arrTxp[idxFrame] = &GetTexture(pHandles[idxFrame]);
@@ -6150,7 +6149,7 @@ void CShaderAPIDx8::DeleteD3DTexture(ShaderAPITextureHandle_t hTexture) {
     RECORD_INT(hTexture);
 
     if (texture.GetDepthStencilSurface()) {
-      int nRetVal = texture.GetDepthStencilSurface()->Release();
+      ULONG nRetVal = texture.GetDepthStencilSurface()->Release();
       Assert(nRetVal == 0);
       texture.GetDepthStencilSurface() = 0;
       numDeallocated = 1;
@@ -6530,13 +6529,12 @@ void CShaderAPIDx8::SetRenderTargetEx(
     m_ViewportMaxHeight = desc.Height;
   }
 
-  ULONG ref;
   if (pZSurface) {
-    ref = pZSurface->Release();
+    ULONG ref = pZSurface->Release();
     Assert(ref != 0);
   }
 
-  ref = pColorSurface->Release();
+  ULONG ref = pColorSurface->Release();
 
   // Changing the render target sets a default viewport.  Force rewrite to
   // preserve the current desired state.
@@ -6738,10 +6736,10 @@ void CShaderAPIDx8::TexSubImage2D(int level, int cubeFaceID, int xOffset,
     return;
   }
 
-  // NOTE: This can only be done with procedural textures if this method is
-  // being used to download the entire texture, cause last frame's partial
-  // update may be in a completely different texture! Sadly, I don't have all of
-  // the information I need, but I can at least check a couple things....
+    // NOTE: This can only be done with procedural textures if this method is
+    // being used to download the entire texture, cause last frame's partial
+    // update may be in a completely different texture! Sadly, I don't have all
+    // of the information I need, but I can at least check a couple things....
 #ifdef _DEBUG
   if (GetTexture(GetModifyTextureHandle()).m_NumCopies > 1) {
     Assert((xOffset == 0) && (yOffset == 0));
@@ -7019,15 +7017,10 @@ void CShaderAPIDx8::SetLightingOrigin(const Vector &vLightingOrigin) {
   }
 }
 
-//#define NO_LOCAL_LIGHTS
 void CShaderAPIDx8::SetLight(int lightNum, const LightDesc_t &desc_) {
   LOCK_SHADERAPI();
-#ifdef NO_LOCAL_LIGHTS
-  LightDesc_t desc = desc_;
-  desc.m_Type = MATERIAL_LIGHT_DISABLE;
-#else
+
   LightDesc_t &desc = const_cast<LightDesc_t &>(desc_);  // to permit '&'
-#endif
   Assert(lightNum < g_pHardwareConfig->Caps().m_MaxNumLights && lightNum >= 0);
 
   if (lightNum >= g_pHardwareConfig->Caps().m_MaxNumLights || lightNum < 0)
@@ -7116,7 +7109,7 @@ void CShaderAPIDx8::DisableAllLocalLights() {
   }
 }
 
-int CShaderAPIDx8::GetMaxLights(void) const {
+int CShaderAPIDx8::GetMaxLights() const {
   return g_pHardwareConfig->Caps().m_MaxNumLights;
 }
 
@@ -7478,10 +7471,10 @@ void CShaderAPIDx8::SpewBoardState() {
       boardState.m_AlphaRef, boardState.m_Lighting, m_DynamicState.m_Ambient);
 
   for (int i = 0; i < g_pHardwareConfig->Caps().m_MaxNumLights; ++i) {
-    len += sprintf_s(buf + len, SOURCE_ARRAYSIZE(buf) - len, "%d ",
+    len += sprintf_s(buf + len, std::size(buf) - len, "%d ",
                      m_DynamicState.m_LightEnable[i]);
   }
-  sprintf_s(buf + len, SOURCE_ARRAYSIZE(buf) - len, "\n");
+  sprintf_s(buf + len, std::size(buf) - len, "\n");
   Plat_DebugString(buf);
   sprintf_s(buf, "Fixed Function: %d, VertexBlend %d\n",
             boardState.m_UsingFixedFunction, m_DynamicState.m_VertexBlend);
@@ -7816,7 +7809,7 @@ void CShaderAPIDx8::PopDeformation() {
   ++m_pDeformationStackPtr;
 }
 
-int CShaderAPIDx8::GetNumActiveDeformations(void) const {
+int CShaderAPIDx8::GetNumActiveDeformations() const {
   return (m_DeformationStack + DEFORMATION_STACK_DEPTH) -
          m_pDeformationStackPtr;
 }
@@ -9734,7 +9727,7 @@ void CShaderAPIDx8::RegisterSelectionHit(float minz, float maxz) {
   if (m_SelectionMaxZ < maxz) m_SelectionMaxZ = maxz;
 }
 
-int CShaderAPIDx8::GetCurrentNumBones(void) const {
+int CShaderAPIDx8::GetCurrentNumBones() const {
   return m_DynamicState.m_NumBones;
 }
 
@@ -9893,13 +9886,13 @@ static int g_DX9LightCombinations[][MAX_LIGHTS] = {
 // This is just for getting light combos for DX8
 // For DX9, use GetDX9LightState()
 // It is up to the shader cpp files to use the right method
-int CShaderAPIDx8::GetCurrentLightCombo(void) const {
+int CShaderAPIDx8::GetCurrentLightCombo() const {
   Assert(g_pHardwareConfig->Caps().m_nDXSupportLevel <= 81);
 
   Assert(m_DynamicState.m_NumLights <= 2);
 
   static_assert(DX8_LIGHTING_COMBINATION_COUNT ==
-                SOURCE_ARRAYSIZE(g_DX8LightCombinations));
+                std::size(g_DX8LightCombinations));
 
   // hack . . do this a cheaper way.
   bool bUseAmbientCube;
@@ -10004,7 +9997,7 @@ void CShaderAPIDx8::GetDX9LightState(LightState_t *state) const {
   state->m_bStaticLight = m_pRenderMesh->HasColorMesh();
 }
 
-MaterialFogMode_t CShaderAPIDx8::GetCurrentFogType(void) const {
+MaterialFogMode_t CShaderAPIDx8::GetCurrentFogType() const {
   return m_DynamicState.m_SceneFog;
 }
 
@@ -10084,7 +10077,7 @@ void CShaderAPIDx8::DestroyOcclusionQueryObject(
     ShaderAPIOcclusionQuery_t handle) {
   IDirect3DQuery9 *pQuery = (IDirect3DQuery9 *)handle;
 
-  int nRetVal = pQuery->Release();
+  ULONG nRetVal = pQuery->Release();
   Assert(nRetVal == 0);
 }
 
@@ -10232,11 +10225,11 @@ bool CShaderAPIDx8::SupportsShadowDepthTextures() {
   return g_pHardwareConfig->Caps().m_bSupportsShadowDepthTextures;
 }
 
-bool CShaderAPIDx8::SupportsNormalMapCompression(void) const {
+bool CShaderAPIDx8::SupportsNormalMapCompression() const {
   return g_pHardwareConfig->Caps().m_bSupportsNormalMapCompression;
 }
 
-bool CShaderAPIDx8::SupportsBorderColor(void) const {
+bool CShaderAPIDx8::SupportsBorderColor() const {
   return g_pHardwareConfig->Caps().m_bSupportsBorderColor;
 }
 
@@ -10276,7 +10269,7 @@ ITexture *CShaderAPIDx8::GetRenderTargetEx(int nRenderTargetID) {
   return ShaderUtil()->GetRenderTargetEx(nRenderTargetID);
 }
 
-float CShaderAPIDx8::GetLightMapScaleFactor(void) const {
+float CShaderAPIDx8::GetLightMapScaleFactor() const {
   switch (HardwareConfig()->GetHDRType()) {
     case HDR_TYPE_FLOAT:
       return 1.0;
@@ -10339,7 +10332,7 @@ void CShaderAPIDx8::SetToneMappingScaleLinear(const Vector &scale) {
   }
 }
 
-const Vector &CShaderAPIDx8::GetToneMappingScaleLinear(void) const {
+const Vector &CShaderAPIDx8::GetToneMappingScaleLinear() const {
   return m_ToneMappingScale.AsVector3D();
 }
 
@@ -10350,26 +10343,26 @@ void CShaderAPIDx8::EnableLinearColorSpaceFrameBuffer(bool bEnable) {
 
 void CShaderAPIDx8::SetFloatRenderingParameter(int parm_number, float value) {
   LOCK_SHADERAPI();
-  if (parm_number < SOURCE_ARRAYSIZE(FloatRenderingParameters))
+  if (parm_number < std::size(FloatRenderingParameters))
     FloatRenderingParameters[parm_number] = value;
 }
 
 void CShaderAPIDx8::SetIntRenderingParameter(int parm_number, int value) {
   LOCK_SHADERAPI();
-  if (parm_number < SOURCE_ARRAYSIZE(IntRenderingParameters))
+  if (parm_number < std::size(IntRenderingParameters))
     IntRenderingParameters[parm_number] = value;
 }
 
 void CShaderAPIDx8::SetVectorRenderingParameter(int parm_number,
                                                 Vector const &value) {
   LOCK_SHADERAPI();
-  if (parm_number < SOURCE_ARRAYSIZE(VectorRenderingParameters))
+  if (parm_number < std::size(VectorRenderingParameters))
     VectorRenderingParameters[parm_number] = value;
 }
 
 float CShaderAPIDx8::GetFloatRenderingParameter(int parm_number) const {
   LOCK_SHADERAPI();
-  if (parm_number < SOURCE_ARRAYSIZE(FloatRenderingParameters))
+  if (parm_number < std::size(FloatRenderingParameters))
     return FloatRenderingParameters[parm_number];
   else
     return 0.0;
@@ -10377,18 +10370,18 @@ float CShaderAPIDx8::GetFloatRenderingParameter(int parm_number) const {
 
 int CShaderAPIDx8::GetIntRenderingParameter(int parm_number) const {
   LOCK_SHADERAPI();
-  if (parm_number < SOURCE_ARRAYSIZE(IntRenderingParameters))
+  if (parm_number < std::size(IntRenderingParameters))
     return IntRenderingParameters[parm_number];
-  else
-    return 0;
+
+  return 0;
 }
 
 Vector CShaderAPIDx8::GetVectorRenderingParameter(int parm_number) const {
   LOCK_SHADERAPI();
-  if (parm_number < SOURCE_ARRAYSIZE(VectorRenderingParameters))
+  if (parm_number < std::size(VectorRenderingParameters))
     return VectorRenderingParameters[parm_number];
-  else
-    return Vector(0, 0, 0);
+
+  return Vector(0, 0, 0);
 }
 
 // stencil entry points
@@ -10506,7 +10499,7 @@ float CShaderAPIDx8::LinearToGamma_HardwareSpecific(float fLinear) const {
   return SrgbLinearToGamma(fLinear);
 }
 
-bool CShaderAPIDx8::ShouldWriteDepthToDestAlpha(void) const {
+bool CShaderAPIDx8::ShouldWriteDepthToDestAlpha() const {
   return g_pHardwareConfig->SupportsPixelShaders_2_b() &&
          (m_SceneFogMode != MATERIAL_FOG_LINEAR_BELOW_FOG_Z) &&
          (GetIntRenderingParameter(INT_RENDERPARM_WRITE_DEPTH_TO_DESTALPHA) !=

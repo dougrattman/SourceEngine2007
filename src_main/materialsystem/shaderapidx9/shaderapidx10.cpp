@@ -773,7 +773,7 @@ void CShaderAPIDx10::SetAmbientLight(float r, float g, float b) {}
 void CShaderAPIDx10::SetAmbientLightCube(Vector4D cube[6]) {}
 
 // Get lights
-int CShaderAPIDx10::GetMaxLights(void) const { return 0; }
+int CShaderAPIDx10::GetMaxLights() const { return 0; }
 
 const LightDesc_t &CShaderAPIDx10::GetLight(int lightNum) const {
   static LightDesc_t blah;
@@ -873,9 +873,9 @@ void CShaderAPIDx10::MultMatrixLocal(float *m) {}
 
 void CShaderAPIDx10::GetMatrix(MaterialMatrixMode_t matrixMode, float *dst) {}
 
-void CShaderAPIDx10::LoadIdentity(void) {}
+void CShaderAPIDx10::LoadIdentity() {}
 
-void CShaderAPIDx10::LoadCameraToWorld(void) {}
+void CShaderAPIDx10::LoadCameraToWorld() {}
 
 void CShaderAPIDx10::Ortho(double left, double top, double right, double bottom,
                            double zNear, double zFar) {}
@@ -953,7 +953,7 @@ void CShaderAPIDx10::SetVertexShaderConstant(int var, float const *pVec,
 void CShaderAPIDx10::SetPixelShaderConstant(int var, float const *pVec,
                                             int numConst, bool bForce) {}
 
-void CShaderAPIDx10::InvalidateDelayedShaderConstants(void) {}
+void CShaderAPIDx10::InvalidateDelayedShaderConstants() {}
 
 // Set's the linear->gamma conversion textures to use for this hardware for both
 // srgb writes enabled and disabled(identity)
@@ -1051,7 +1051,7 @@ bool CShaderAPIDx10::IsTextureResident(ShaderAPITextureHandle_t textureHandle) {
 void CShaderAPIDx10::ClearBuffersObeyStencil(bool bClearColor,
                                              bool bClearDepth) {}
 
-void CShaderAPIDx10::PerformFullScreenStencilOperation(void) {}
+void CShaderAPIDx10::PerformFullScreenStencilOperation() {}
 
 void CShaderAPIDx10::ReadPixels(int x, int y, int width, int height,
                                 unsigned char *data, ImageFormat dstFormat) {}
@@ -1095,7 +1095,7 @@ double CShaderAPIDx10::CurrentTime() const { return Plat_FloatTime(); }
 // Get the current camera position in world space.
 void CShaderAPIDx10::GetWorldSpaceCameraPosition(float *pPos) const {}
 
-void CShaderAPIDx10::ForceHardwareSync(void) {}
+void CShaderAPIDx10::ForceHardwareSync() {}
 
 void CShaderAPIDx10::SetClipPlane(int index, const float *pPlane) {}
 
@@ -1105,18 +1105,18 @@ void CShaderAPIDx10::SetFastClipPlane(const float *pPlane) {}
 
 void CShaderAPIDx10::EnableFastClip(bool bEnable) {}
 
-int CShaderAPIDx10::GetCurrentNumBones(void) const { return 0; }
+int CShaderAPIDx10::GetCurrentNumBones() const { return 0; }
 
 // Is hardware morphing enabled?
 bool CShaderAPIDx10::IsHWMorphingEnabled() const { return false; }
 
-int CShaderAPIDx10::GetCurrentLightCombo(void) const { return 0; }
+int CShaderAPIDx10::GetCurrentLightCombo() const { return 0; }
 
 int CShaderAPIDx10::MapLightComboToPSLightCombo(int nLightCombo) const {
   return 0;
 }
 
-MaterialFogMode_t CShaderAPIDx10::GetCurrentFogType(void) const {
+MaterialFogMode_t CShaderAPIDx10::GetCurrentFogType() const {
   return MATERIAL_FOG_NONE;
 }
 
@@ -1124,7 +1124,7 @@ void CShaderAPIDx10::RecordString(const char *pStr) {}
 
 void CShaderAPIDx10::DestroyVertexBuffers(bool bExitingLevel) {}
 
-int CShaderAPIDx10::GetCurrentDynamicVBSize(void) { return 0; }
+int CShaderAPIDx10::GetCurrentDynamicVBSize() { return 0; }
 
 void CShaderAPIDx10::EvictManagedResources() {}
 

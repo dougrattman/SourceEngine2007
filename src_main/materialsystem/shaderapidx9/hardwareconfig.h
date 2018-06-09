@@ -231,7 +231,7 @@ class CHardwareConfig : public IHardwareConfigInternal {
 
   const HardwareCaps_t &ActualCaps() const { return m_ActualCaps; }
   const HardwareCaps_t &Caps() const { return m_Caps; }
-  virtual bool GetHDREnabled(void) const { return m_bHDREnabled; }
+  virtual bool GetHDREnabled() const { return m_bHDREnabled; }
   virtual void SetHDREnabled(bool bEnable) { m_bHDREnabled = bEnable; }
 
  protected:

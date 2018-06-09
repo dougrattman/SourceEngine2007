@@ -706,7 +706,7 @@ void CVBAllocTracker::AddSaving(int &alreadySaved, int &yetToSave,
   }
 }
 
-void CVBAllocTracker::SpewExpectedSavings(void) {
+void CVBAllocTracker::SpewExpectedSavings() {
   int alreadySaved = 0, yetToSave = 0;
 
   // We have removed bone weights+indices from static props

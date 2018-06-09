@@ -143,7 +143,5 @@ std::tuple<u64, HRESULT> GetVidMemBytes([[maybe_unused]] u32 adapter_idx) {
     wbem_class_object.Release();
   }
 
-  // TODO: wbem_class_object.Release();
-
   return {video_memory_bytes, errno_code};
 }

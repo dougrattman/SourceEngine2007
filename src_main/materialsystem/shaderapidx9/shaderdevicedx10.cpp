@@ -3,7 +3,7 @@
 #define NOMINMAX
 
 #include <d3d10.h>
-#include "dx10sdk/Include/D3DX10.h"
+#include "deps/dxsdk_jun2010/Include/D3DX10.h"
 
 #include "inputlayoutdx10.h"
 #include "meshdx10.h"

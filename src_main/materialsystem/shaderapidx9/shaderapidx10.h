@@ -253,7 +253,7 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
   void SetPixelShaderStateAmbientLightCube(int pshReg) {}
   virtual void GetDX9LightState(LightState_t *state) const {}
 
-  float GetAmbientLightCubeLuminance(void) { return 0.0f; }
+  float GetAmbientLightCubeLuminance() { return 0.0f; }
 
   void SetSkinningMatrices();
 
@@ -398,7 +398,7 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
     Assert(0);
   }
 
-  bool ShouldWriteDepthToDestAlpha(void) const {
+  bool ShouldWriteDepthToDestAlpha() const {
     Assert(0);
     return false;
   }
@@ -565,7 +565,7 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
   virtual void MarkUnusedVertexFields(unsigned int nFlags, int nTexCoordCount,
                                       bool *pUnusedTexCoords) {}
 
-  ShaderAPIOcclusionQuery_t CreateOcclusionQueryObject(void) {
+  ShaderAPIOcclusionQuery_t CreateOcclusionQueryObject() {
     return INVALID_SHADERAPI_OCCLUSION_QUERY_HANDLE;
   }
 
@@ -653,12 +653,12 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
 
   void SetToneMappingScaleLinear(const Vector &scale) {}
 
-  const Vector &GetToneMappingScaleLinear(void) const {
+  const Vector &GetToneMappingScaleLinear() const {
     static Vector dummy;
     return dummy;
   }
 
-  virtual float GetLightMapScaleFactor(void) const { return 1.0; }
+  virtual float GetLightMapScaleFactor() const { return 1.0; }
 
   // For dealing with device lost in cases where SwapBuffers isn't called all
   // the time (Hammer)
@@ -735,7 +735,7 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
 
   virtual bool SupportsShadowDepthTextures() { return false; }
 
-  virtual int NeedsShaderSRGBConversion(void) const { return 1; }
+  virtual int NeedsShaderSRGBConversion() const { return 1; }
 
   virtual bool SupportsFetch4() { return false; }
 
@@ -747,7 +747,7 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
   virtual void ShaderLock() {}
   virtual void ShaderUnlock() {}
   virtual void EnableHWMorphing(bool bEnable) {}
-  ImageFormat GetNullTextureFormat(void) {
+  ImageFormat GetNullTextureFormat() {
     return IMAGE_FORMAT_ABGR8888;
   }  // stub
   virtual void PushDeformation(DeformationBase_t const *Deformation) {}

@@ -8,7 +8,7 @@
 #ifdef DX10
 
 #include <d3d10.h>
-#include "dx9sdk/include/d3dx10.h"
+#include "deps/dxsdk_jun2010/Include/D3DX10.h"
 
 struct IDirect3D10BaseTexture {
   ID3D10Resource *m_pBaseTexture;
@@ -43,8 +43,8 @@ class CDx10Types {
 #define D3D_DEBUG_INFO 1
 #endif
 #include <d3d9.h>
-#include "dx9sdk/include/d3dx9.h"
-#include "dx9sdk/include/d3dx9core.h"
+#include "deps/dxsdk_jun2010/Include/d3dx9.h"
+#include "deps/dxsdk_jun2010/Include/d3dx9core.h"
 
 struct IDirect3DTexture9;
 struct IDirect3DBaseTexture9;

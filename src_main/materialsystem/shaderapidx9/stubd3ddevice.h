@@ -401,7 +401,7 @@ class CStubD3DDevice : public IDirect3DDevice8 {
     return m_pD3DDevice->GetDepthStencilSurface(ppZStencilSurface);
   }
 
-  HRESULT SOURCE_STDCALL BeginScene(void) {
+  HRESULT SOURCE_STDCALL BeginScene() {
     FPRINTF(s_FileHandle, "BeginScene\n");
     return m_pD3DDevice->BeginScene();
   }
@@ -496,7 +496,7 @@ class CStubD3DDevice : public IDirect3DDevice8 {
     return m_pD3DDevice->GetRenderState(State, pValue);
   }
 
-  HRESULT SOURCE_STDCALL BeginStateBlock(void) {
+  HRESULT SOURCE_STDCALL BeginStateBlock() {
     FPRINTF(s_FileHandle, "BeginStateBlock\n");
     return m_pD3DDevice->BeginStateBlock();
   }

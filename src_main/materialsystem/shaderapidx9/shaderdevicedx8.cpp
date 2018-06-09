@@ -338,7 +338,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   if (FAILED(hr)) return false;
 
   Q_strncpy(pCaps->m_pDriverName, ident.Description,
-            std::min(SOURCE_ARRAYSIZE(ident.Description),
+            std::min(std::size(ident.Description),
                      (usize)MATERIAL_ADAPTER_NAME_LENGTH));
   pCaps->m_VendorID = ident.VendorId;
   pCaps->m_DeviceID = ident.DeviceId;
@@ -1035,11 +1035,11 @@ u64 CShaderDeviceMgrDx8::GetVidMemBytes(u32 adapter_idx) const {
   return bytes;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Shader device
-//
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  //
+  // Shader device
+  //
+  //-----------------------------------------------------------------------------
 
 #if 0
 // TODO(d.rattman): Enable after I've separated it out from shaderapidx8 a little better
@@ -1625,7 +1625,7 @@ IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
   DWarning(
       "init", 0,
       "Failed to create D3D device! Please see the following for more info.\n"
-      "http://support.steampowered.com/cgi-bin/steampowered.cfg/php/enduser/"
+      "https://support.steampowered.com/cgi-bin/steampowered.cfg/php/enduser/"
       "std_adp.php?p_faqid=772\n");
 
   return nullptr;
@@ -1722,8 +1722,6 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
 // Frame sync
 //-----------------------------------------------------------------------------
 void CShaderDeviceDx8::AllocFrameSyncTextureObject() {
-  if (IsX360()) return;
-
   FreeFrameSyncTextureObject();
 
   // Create a tiny managed texture.
@@ -1739,17 +1737,13 @@ void CShaderDeviceDx8::AllocFrameSyncTextureObject() {
 }
 
 void CShaderDeviceDx8::FreeFrameSyncTextureObject() {
-  if (IsX360()) return;
-
   if (m_pFrameSyncTexture) {
     m_pFrameSyncTexture->Release();
     m_pFrameSyncTexture = nullptr;
   }
 }
 
-void CShaderDeviceDx8::AllocFrameSyncObjects(void) {
-  if (IsX360()) return;
-
+void CShaderDeviceDx8::AllocFrameSyncObjects() {
   if (mat_debugalttab.GetBool()) {
     Warning("mat_debugalttab: CShaderAPIDX8::AllocFrameSyncObjects\n");
   }
@@ -1775,9 +1769,7 @@ void CShaderDeviceDx8::AllocFrameSyncObjects(void) {
   }
 }
 
-void CShaderDeviceDx8::FreeFrameSyncObjects(void) {
-  if (IsX360()) return;
-
+void CShaderDeviceDx8::FreeFrameSyncObjects() {
   if (mat_debugalttab.GetBool()) {
     Warning("mat_debugalttab: CShaderAPIDX8::FreeFrameSyncObjects\n");
   }
@@ -1818,8 +1810,6 @@ void CShaderDeviceDx8::OtherAppInitializing(bool initializing) {
 // We lost the device, but we have a chance to recover
 //-----------------------------------------------------------------------------
 bool CShaderDeviceDx8::TryDeviceReset() {
-  if (IsX360()) return true;
-
   // TODO(d.rattman): Make this rebuild the Dx9Device from scratch!
   // Helps with compatibility
   HRESULT hr = Dx9Device()->Reset(&m_PresentParameters);
@@ -2159,7 +2149,7 @@ void CShaderDeviceDx8::Present() {
 
   // If we're not iconified, try to present (without this check, we can flicker
   // when Alt-Tabbed away)
-  if (IsX360() || IsIconic((HWND)m_hWnd) == 0) {
+  if (IsIconic((HWND)m_hWnd) == 0) {
     if ((m_IsResizing || (m_ViewHWnd != (HWND)m_hWnd))) {
       RECT destRect;
       GetClientRect((HWND)m_ViewHWnd, &destRect);
@@ -2182,28 +2172,24 @@ void CShaderDeviceDx8::Present() {
 
   UpdatePresentStats();
 
-  if (IsPC()) {
-    if (hr == D3DERR_DRIVERINTERNALERROR) {
-      /*	Usually this bug means that the driver has run out of internal
-         video memory, due to leaking it slowly over several application
-         restarts. As of summer 2007, IE in particular seemed to leak a lot of
-         driver memory for every image context it created in the browser window.
-         A reboot clears out the leaked memory and will generally allow the game
-              to be run again; occasionally (but not frequently) it's necessary
-         to reduce video settings in the game as well to run. But, this is too
-              fine a distinction to explain in a dialog, so place the guilt on
-         the user and ask them to reduce video settings regardless.
-      */
-
-      Error(
-          "Internal driver error at Present.\n"
-          "You're likely out of OS Paged Pool Memory! For more info, see\n"
-          "http://support.steampowered.com/cgi-bin/steampowered.cfg/php/"
-          "enduser/std_adp.php?p_faqid=150\n");
-    }
-    if (hr == D3DERR_DEVICELOST) {
-      MarkDeviceLost();
-    }
+  if (hr == D3DERR_DRIVERINTERNALERROR) {
+    /*	Usually this bug means that the driver has run out of internal
+       video memory, due to leaking it slowly over several application
+       restarts. As of summer 2007, IE in particular seemed to leak a lot of
+       driver memory for every image context it created in the browser window.
+       A reboot clears out the leaked memory and will generally allow the game
+            to be run again; occasionally (but not frequently) it's necessary
+       to reduce video settings in the game as well to run. But, this is too
+            fine a distinction to explain in a dialog, so place the guilt on
+       the user and ask them to reduce video settings regardless.
+    */
+    Error(
+        "Internal driver error at Present.\n"
+        "You're likely out of OS Paged Pool Memory! For more info, see\n"
+        "https://support.steampowered.com/cgi-bin/steampowered.cfg/php/"
+        "enduser/std_adp.php?p_faqid=150\n");
+  } else if (hr == D3DERR_DEVICELOST) {
+    MarkDeviceLost();
   }
 
   MeshMgr()->DiscardVertexBuffers();
