@@ -84,8 +84,8 @@ inline source::windows::windows_errno_code EnableTerminationOnHeapCorruption() {
 }
 
 // Get module's file path with instance |instance|.
-inline std::tuple<wstr, source::windows::windows_errno_code>
-GetThisModuleFilePath(_In_ HINSTANCE instance) {
+inline source::windows::windows_errno_result<wstr> GetThisModuleFilePath(
+    _In_ HINSTANCE instance) {
   wch this_module_file_path[MAX_PATH];
   // If the function succeeds, the return value is the length of the string that
   // is copied to the buffer, in characters, not including the terminating null
