@@ -91,7 +91,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WIN64
 #define _USE_32BIT_TIME_T  //+++1.2
+#endif
 
 #define STRICT
 #define WIN32_LEAN_AND_MEAN
@@ -2194,15 +2196,15 @@ uLong ucrc32(uLong crc, const Byte *buf, uInt len) {
   return crc ^ 0xffffffffL;
 }
 
-// adler32.c -- compute the Adler-32 checksum of a data stream
-// Copyright (C) 1995-1998 Mark Adler
-// For conditions of distribution and use, see copyright notice in zlib.h
+  // adler32.c -- compute the Adler-32 checksum of a data stream
+  // Copyright (C) 1995-1998 Mark Adler
+  // For conditions of distribution and use, see copyright notice in zlib.h
 
-// @(#) $Id$
+  // @(#) $Id$
 
 #define BASE 65521L  // largest prime smaller than 65536
 #define NMAX 5552
-// NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1
+  // NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1
 
 #define AD_DO1(buf, i) \
   {                    \
@@ -2549,9 +2551,9 @@ static int GetUnicodeFileName(const char *name, LPWSTR buf, int nBufSize) {
 
 #endif
 
-// unzip.c -- IO on .zip files using zlib
-// Version 0.15 beta, Mar 19th, 1998,
-// Read unzip.h for more info
+  // unzip.c -- IO on .zip files using zlib
+  // Version 0.15 beta, Mar 19th, 1998,
+  // Read unzip.h for more info
 
 #define UNZ_BUFSIZE (16384)
 #define UNZ_MAXFILENAMEINZIP (256)
