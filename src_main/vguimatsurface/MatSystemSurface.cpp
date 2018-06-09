@@ -2994,50 +2994,54 @@ static bool IsChildOfModalSubTree(VPANEL panel) {
     // If panel is child of modal subtree, the allow messages to route to it if
     // restrict messages is set
     bool isChildOfModal = ipanel()->HasParent(panel, modalSubTree);
-    if (isChildOfModal) {
-      return restrictMessages;
-    }
+    if (isChildOfModal) return restrictMessages;
+
     // If panel is not a child of modal subtree, then only allow messages if
     // we're not restricting them to the modal subtree
-    else {
-      return !restrictMessages;
-    }
+    return !restrictMessages;
   }
 
   return true;
 }
 
 void CMatSystemSurface::CalculateMouseVisible() {
-  int i;
-  m_bNeedsMouse = false;
-  m_bNeedsKeyboard = false;
+  if (input()->GetMouseCapture() != 0) {
+    m_bNeedsMouse = false;
+    m_bNeedsKeyboard = false;
+    return;
+  }
 
-  if (input()->GetMouseCapture() != 0) return;
+  bool is_need_mouse = false, is_need_keyboard = false;
 
-  for (i = 0; i < surface()->GetPopupCount(); i++) {
+  for (int i = 0; i < surface()->GetPopupCount(); i++) {
     VPanel *pop = (VPanel *)surface()->GetPopup(i);
     if (!pop) continue;
+
     bool isChildOfModalSubPanel = IsChildOfModalSubTree((VPANEL)pop);
     if (!isChildOfModalSubPanel) continue;
 
-    bool isVisible = pop->IsVisible();
-    VPanel *p = pop->GetParent();
+    bool is_visible = pop->IsVisible();
+    VPanel *parent = pop->GetParent();
 
-    while (p && isVisible) {
-      if (p->IsVisible() == false) {
-        isVisible = false;
+    while (parent && is_visible) {
+      if (parent->IsVisible() == false) {
+        is_visible = false;
         break;
       }
-      p = p->GetParent();
+
+      parent = parent->GetParent();
     }
 
-    if (isVisible) {
-      m_bNeedsMouse = m_bNeedsMouse || pop->IsMouseInputEnabled();
-      m_bNeedsKeyboard = m_bNeedsKeyboard || pop->IsKeyBoardInputEnabled();
+    if (is_visible) {
+      is_need_mouse |= pop->IsMouseInputEnabled();
+      is_need_keyboard |= pop->IsKeyBoardInputEnabled();
     }
   }
 
-  if (m_bNeedsMouse) {
+  m_bNeedsMouse = is_need_mouse;
+  m_bNeedsKeyboard = is_need_keyboard;
+
+  if (is_need_mouse) {
     // NOTE: We must unlock the cursor *before* the set call here.
     // Failing to do this causes s_bCursorVisible to not be set correctly
     // (UnlockCursor fails to set it correctly)
