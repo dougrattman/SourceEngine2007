@@ -68,11 +68,11 @@ class CGameUI : public IGameUI {
                                      int port);  // OLD: use OnConnectToServer2
   virtual void OnConnectToServer2(const char *game, int IP, int connectionPort,
                                   int queryPort);
-  virtual void OnDisconnectFromServer(uint8_t eSteamLoginFailure);
+  virtual void OnDisconnectFromServer(ESteamLoginFailure eSteamLoginFailure);
   virtual void OnLevelLoadingStarted(bool bShowProgressDialog);
   virtual void OnLevelLoadingFinished(bool bError, const char *failureReason,
                                       const char *extendedReason);
-  virtual void OnDisconnectFromServer_OLD(uint8_t eSteamLoginFailure,
+  virtual void OnDisconnectFromServer_OLD(ESteamLoginFailure eSteamLoginFailure,
                                           const char *username) {
     OnDisconnectFromServer(eSteamLoginFailure);
   }
@@ -103,8 +103,8 @@ class CGameUI : public IGameUI {
 
   // X360 Storage device validation:
   //		returns true right away if storage device has been previously
-  //selected. 		otherwise returns false and will set the variable pointed by
-  //pStorageDeviceValidated to 1
+  // selected. 		otherwise returns false and will set the variable pointed
+  // by  pStorageDeviceValidated to 1
   // 	  once the storage device is selected by user.
   virtual bool ValidateStorageDevice(int *pStorageDeviceValidated);
 

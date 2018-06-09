@@ -277,11 +277,9 @@ void CGameUI::BonusMapChallengeObjectives(int &iBronze, int &iSilver,
   BonusMapsDatabase()->GetCurrentChallengeObjectives(iBronze, iSilver, iGold);
 }
 
-void CGameUI::BonusMapDatabaseSave(void) {
-  BonusMapsDatabase()->WriteSaveData();
-}
+void CGameUI::BonusMapDatabaseSave() { BonusMapsDatabase()->WriteSaveData(); }
 
-int CGameUI::BonusMapNumAdvancedCompleted(void) {
+int CGameUI::BonusMapNumAdvancedCompleted() {
   return BonusMapsDatabase()->NumAdvancedComplete();
 }
 
@@ -448,8 +446,8 @@ void CGameUI::Start() {
 // Purpose: Validates the user has a cdkey in the registry
 //-----------------------------------------------------------------------------
 void CGameUI::ValidateCDKey() {
-  // this check is disabled, since we have no plans for an offline version of
-  // hl2
+// this check is disabled, since we have no plans for an offline version of
+// hl2
 #if 0
   //!! hack, write out a regkey for now so developers don't have to type it in
   //!! undo this before release
@@ -671,7 +669,7 @@ void CGameUI::SendConnectedToGameMessage() {
 //-----------------------------------------------------------------------------
 // Purpose: Called when the game disconnects from a server
 //-----------------------------------------------------------------------------
-void CGameUI::OnDisconnectFromServer(uint8_t eSteamLoginFailure) {
+void CGameUI::OnDisconnectFromServer(ESteamLoginFailure eSteamLoginFailure) {
   m_iGameIP = 0;
   m_iGameConnectionPort = 0;
   m_iGameQueryPort = 0;
@@ -962,7 +960,7 @@ void CGameUI::SessionSearchResult(int searchIdx, void *pHostData,
                                   XSESSION_SEARCHRESULT *pResult, int ping) {
   BasePanel()->SessionSearchResult(searchIdx, pHostData, pResult, ping);
 }
-void CGameUI::OnCreditsFinished(void) { BasePanel()->OnCreditsFinished(); }
+void CGameUI::OnCreditsFinished() { BasePanel()->OnCreditsFinished(); }
 bool CGameUI::ValidateStorageDevice(int *pStorageDeviceValidated) {
   return BasePanel()->ValidateStorageDevice(pStorageDeviceValidated);
 }

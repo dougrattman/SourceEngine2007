@@ -3,13 +3,14 @@
 #ifndef IGAMEUI_H
 #define IGAMEUI_H
 
+#include "base/include/base_types.h"
 #include "tier1/interface.h"
 #include "vgui/IPanel.h"
 
 #include "xbox/xboxstubs.h"
 
 // reasons why the user can't connect to a game server
-enum ESteamLoginFailure {
+enum ESteamLoginFailure : u8 {
   STEAMLOGINFAILURE_NONE,
   STEAMLOGINFAILURE_BADTICKET,
   STEAMLOGINFAILURE_NOSTEAMLOGIN,
@@ -49,7 +50,7 @@ the_interface IGameUI {
   // OLD: Use OnConnectToServer2
   virtual void OLD_OnConnectToServer(const char *game, int IP, int port) = 0;
 
-  virtual void OnDisconnectFromServer_OLD(uint8_t eSteamLoginFailure,
+  virtual void OnDisconnectFromServer_OLD(ESteamLoginFailure eSteamLoginFailure,
                                           const char *username) = 0;
   virtual void OnLevelLoadingStarted(bool bShowProgressDialog) = 0;
   virtual void OnLevelLoadingFinished(bool bError, const char *failureReason,
@@ -109,7 +110,8 @@ the_interface IGameUI {
   virtual bool ValidateStorageDevice(int *pStorageDeviceValidated) = 0;
 
   virtual void SetProgressOnStart() = 0;
-  virtual void OnDisconnectFromServer(uint8_t eSteamLoginFailure) = 0;
+  virtual void OnDisconnectFromServer(
+      ESteamLoginFailure eSteamLoginFailure) = 0;
 };
 
 #define GAMEUI_INTERFACE_VERSION "GameUI012"
