@@ -21,7 +21,7 @@ struct DataCacheItemData_t {
   CDataCacheSection *pSection;
 };
 
-#define DC_NO_NEXT_LOCKED ((DataCacheItem_t *)0xffffffff)
+#define DC_NO_NEXT_LOCKED ((DataCacheItem_t *)(intptr_t)-1)
 #define DC_MAX_THREADS_FRAMELOCKED 4
 
 struct DataCacheItem_t : DataCacheItemData_t {
@@ -372,6 +372,6 @@ inline void CDataCacheSection::NoteUnlock(int size) {
   m_nFrameUnlockCounter++;
 }
 
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
 
 #endif  // DATACACHE_H

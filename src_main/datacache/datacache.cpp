@@ -2,11 +2,12 @@
 
 #include "datacache/idatacache.h"
 
+#include "datacache.h"
+
 #ifdef OS_POSIX
 #include <malloc.h>
 #endif
 
-#include "datacache.h"
 #include "filesystem.h"
 #include "tier0/include/basetypes.h"
 #include "tier0/include/vprof.h"
