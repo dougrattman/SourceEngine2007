@@ -864,7 +864,7 @@ void CConsolePanel::AddToHistory(const char *commandText,
   m_iNextCompletion = 0;
   RebuildCompletionList(m_szPartialText);
 
-  free(extra);
+  heap_free(extra);
 }
 
 //-----------------------------------------------------------------------------

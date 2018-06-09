@@ -240,7 +240,7 @@ void TextEntry::SetText(const char *text) {
     wchar_t *unicode = (wchar_t *)malloc(lenUnicode);
     g_pVGuiLocalize->ConvertANSIToUnicode(text, unicode, lenUnicode);
     SetText(unicode);
-    free(unicode);
+    heap_free(unicode);
   }
 }
 
@@ -2747,27 +2747,6 @@ void TextEntry::OpenEditMenu() {
   // get cursor position, this is local to this text edit window
   int cursorX, cursorY;
   input()->GetCursorPos(cursorX, cursorY);
-
-  /* !!	disabled since it recursively gets panel pointers, potentially across
-  dll boundaries, and doesn't need to be necessary (it's just for handling
-  windowed mode)
-
-  // find the frame that has no parent (the one on the desktop)
-  Panel *panel = this;
-  while ( panel->GetParent() != NULL)
-  {
-          panel = panel->GetParent();
-  }
-  panel->ScreenToLocal(cursorX, cursorY);
-  int x, y;
-  // get base panel's postition
-  panel->GetPos(x, y);
-  
-
-  // adjust our cursor position accordingly
-  cursorX += x;
-  cursorY += y;
-  */
 
   int x0, x1;
   if (GetSelectedRange(x0, x1))  // there is something selected

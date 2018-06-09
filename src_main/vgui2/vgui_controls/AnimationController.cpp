@@ -142,7 +142,7 @@ bool AnimationController::LoadScriptFile(const char *fileName) {
   g_pFullFileSystem->Close(f);
   // parse
   bool success = ParseScriptFile(pMem, bytesRead);
-  free(pMem);
+  heap_free(pMem);
   return success;
 }
 
