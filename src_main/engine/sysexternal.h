@@ -1,9 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef SYSEXTERNAL_H
-#define SYSEXTERNAL_H
+#ifndef SOURCE_ENGINE_SYSEXTERNAL_H_
+#define SOURCE_ENGINE_SYSEXTERNAL_H_
 
-// an error will cause the entire program to exit
+// An error will cause the entire program to exit.
 void Sys_Error(const char *format, ...);
 
-#endif  // SYSEXTERNAL_H
+#endif  // SOURCE_ENGINE_SYSEXTERNAL_H_

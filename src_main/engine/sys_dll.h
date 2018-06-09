@@ -18,7 +18,7 @@ class IInputSystem;
 class IDedicatedExports;
 class ISoundEmitterSystemBase;
 
-typedef unsigned short AVIHandle_t;
+typedef u16 AVIHandle_t;
 
 // Class factories
 

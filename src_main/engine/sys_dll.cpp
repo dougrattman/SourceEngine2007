@@ -1,6 +1,13 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+
+#include "build/include/build_config.h"
 
 #include "sys_dll.h"
+
+#ifdef OS_WIN
+#include <io.h>
+#include "base/include/windows/windows_light.h"
+#endif
 
 #include "DevShotGenerator.h"
 #include "MapReslistGenerator.h"
@@ -13,6 +20,7 @@
 #include "eifaceV21.h"
 #include "errno.h"
 #include "filesystem_engine.h"
+#include "gameui/IGameUI.h"
 #include "gl_matsysiface.h"
 #include "host.h"
 #include "host_cmd.h"
@@ -37,15 +45,10 @@
 #include "vengineserver_impl.h"
 
 #ifdef OS_WIN
-#include <io.h>
-#include "base/include/windows/windows_light.h"
-#include "tier0/include/systeminformation.h"
 #include "vgui_baseui_interface.h"
 #endif
 
 #include "tier0/include/memdbgon.h"
-
-#define ONE_HUNDRED_TWENTY_EIGHT_MB (128 * 1024 * 1024)
 
 ConVar mem_min_heapsize("mem_min_heapsize", "48", 0,
                         "Minimum amount of memory to dedicate to engine hunk "
@@ -58,81 +61,84 @@ ConVar mem_max_heapsize_dedicated("mem_max_heapsize_dedicated", "128", 0,
                                   "engine hunk and datacache, for dedicated "
                                   "server (in mb)");
 
-#define MINIMUM_WIN_MEMORY (unsigned)(mem_min_heapsize.GetInt() * 1024 * 1024)
-#define MAXIMUM_WIN_MEMORY                                      \
-  std::max((unsigned)(mem_max_heapsize.GetInt() * 1024 * 1024), \
-           MINIMUM_WIN_MEMORY)
-#define MAXIMUM_DEDICATED_MEMORY \
-  (unsigned)(mem_max_heapsize_dedicated.GetInt() * 1024 * 1024)
+inline u32 MinHeapMemoryBytes() {
+  return (u32)(mem_min_heapsize.GetInt() * 1024 * 1024);
+}
 
-char *CheckParm(const char *psz, char **ppszValue = nullptr);
+inline u32 MaxHeapMemoryBytes() {
+  return std::max((u32)(mem_max_heapsize.GetInt() * 1024 * 1024),
+                  MinHeapMemoryBytes());
+}
+
+inline u32 MaxDedicatedHeapBytes() {
+  return (u32)(mem_max_heapsize_dedicated.GetInt() * 1024 * 1024);
+}
+
+ch *CheckParm(const ch *psz, ch **ppszValue = nullptr);
 void SeedRandomNumberGenerator(bool random_invariant);
-void Con_ColorPrintf(const Color &clr, const char *fmt, ...);
+void Con_ColorPrintf(const Color &clr, const ch *fmt, ...);
 
 void COM_ShutdownFileSystem();
-void COM_InitFilesystem(const char *pFullModPath);
+void COM_InitFilesystem(const ch *pFullModPath);
 
 modinfo_t gmodinfo;
 
 #ifdef OS_WIN
 extern HWND *pmainwindow;
 #endif
-char gszDisconnectReason[256];
-char gszExtendedDisconnectReason[256];
-bool gfExtendedError = false;
-uint8_t g_eSteamLoginFailure = 0;
-bool g_bV3SteamInterface = false;
-CreateInterfaceFn g_AppSystemFactory = nullptr;
 
-static bool s_bIsDedicated = false;
-ConVar *sv_noclipduringpause = nullptr;
+ch gszDisconnectReason[256];
+ch gszExtendedDisconnectReason[256];
+bool gfExtendedError{false};
+ESteamLoginFailure g_eSteamLoginFailure{STEAMLOGINFAILURE_NONE};
+bool g_bV3SteamInterface{false};
+CreateInterfaceFn g_AppSystemFactory{nullptr};
+
+static bool s_bIsDedicated{false};
+ConVar *sv_noclipduringpause{nullptr};
 
 // Special mode where the client uses a console window and has no graphics.
 // Useful for stress-testing a server without having to round up 32 people.
-bool g_bTextMode = false;
+bool g_bTextMode{false};
 
 // Set to true when we exit from an error.
-bool g_bInErrorExit = false;
+bool g_bInErrorExit{false};
 
-static FileFindHandle_t g_hfind = FILESYSTEM_INVALID_FIND_HANDLE;
+static FileFindHandle_t g_hfind{FILESYSTEM_INVALID_FIND_HANDLE};
 
 // The extension DLL directory--one entry per loaded DLL
-CSysModule *g_GameDLL = nullptr;
+CSysModule *g_GameDLL{nullptr};
 
 // Prototype of an global method function
 using PFN_GlobalMethod = void(DLLEXPORT *)(edict_t *pEntity);
 
-IServerGameDLL *serverGameDLL = nullptr;
+IServerGameDLL *serverGameDLL{nullptr};
 bool g_bServerGameDLLGreaterThanV4;
 bool g_bServerGameDLLGreaterThanV5;
-IServerGameEnts *serverGameEnts = nullptr;
+IServerGameEnts *serverGameEnts{nullptr};
 
-IServerGameClients *serverGameClients = nullptr;
-int g_iServerGameClientsVersion =
-    0;  // This matches the number at the end of the interface name (so for
-        // "ServerGameClients004", this would be 4).
+IServerGameClients *serverGameClients{nullptr};
+// This matches the number at the end of the interface name (so for
+// "ServerGameClients004", this would be 4).
+int g_iServerGameClientsVersion{0};
 
-IHLTVDirector *serverGameDirector = nullptr;
+IHLTVDirector *serverGameDirector{nullptr};
 
 // Purpose: Compare file times.
 int Sys_CompareFileTime(long ft1, long ft2) {
-  if (ft1 < ft2) {
-    return -1;
-  }
+  if (ft1 < ft2) return -1;
 
-  if (ft1 > ft2) {
-    return 1;
-  }
+  if (ft1 > ft2) return 1;
 
   return 0;
 }
 
 // Is slash?
-inline bool IsSlash(char c) { return c == '\\' || c == '/'; }
+inline bool IsSlash(ch c) { return c == '\\' || c == '/'; }
 
 // Purpose: Create specified directory
-void Sys_mkdir(const char *path) {
-  char test_path[SOURCE_MAX_PATH];
+void Sys_mkdir(const ch *path) {
+  ch test_path[SOURCE_MAX_PATH];
   // Remove any terminal backslash or /
   strcpy_s(test_path, path);
 
@@ -142,7 +148,7 @@ void Sys_mkdir(const char *path) {
   }
 
   // Look for URL
-  const char *path_id{"MOD"};
+  const ch *path_id{"MOD"};
   if (IsSlash(test_path[0]) && IsSlash(test_path[1])) {
     path_id = nullptr;
   }
@@ -158,13 +164,13 @@ void Sys_mkdir(const char *path) {
   g_pFileSystem->CreateDirHierarchy(path, path_id);
 }
 
-const char *Sys_FindFirst(const char *path, char *basename, int namelength) {
+const ch *Sys_FindFirst(const ch *path, ch *basename, int namelength) {
   if (g_hfind != FILESYSTEM_INVALID_FIND_HANDLE) {
     Sys_Error("Sys_FindFirst without close");
     g_pFileSystem->FindClose(g_hfind);
   }
 
-  const char *psz = g_pFileSystem->FindFirst(path, &g_hfind);
+  const ch *psz = g_pFileSystem->FindFirst(path, &g_hfind);
   if (basename && psz) {
     Q_FileBase(psz, basename, namelength);
   }
@@ -173,14 +179,14 @@ const char *Sys_FindFirst(const char *path, char *basename, int namelength) {
 }
 
 // Purpose: Sys_FindFirst with a path ID filter.
-const char *Sys_FindFirstEx(const char *pWildcard, const char *pPathID,
-                            char *basename, int namelength) {
+const ch *Sys_FindFirstEx(const ch *pWildcard, const ch *pPathID, ch *basename,
+                          int namelength) {
   if (g_hfind != FILESYSTEM_INVALID_FIND_HANDLE) {
     Sys_Error("Sys_FindFirst without close");
     g_pFileSystem->FindClose(g_hfind);
   }
 
-  const char *psz = g_pFileSystem->FindFirstEx(pWildcard, pPathID, &g_hfind);
+  const ch *psz = g_pFileSystem->FindFirstEx(pWildcard, pPathID, &g_hfind);
   if (basename && psz) {
     Q_FileBase(psz, basename, namelength);
   }
@@ -188,8 +194,8 @@ const char *Sys_FindFirstEx(const char *pWildcard, const char *pPathID,
   return psz;
 }
 
-const char *Sys_FindNext(char *basename, int namelength) {
-  const char *psz = g_pFileSystem->FindNext(g_hfind);
+const ch *Sys_FindNext(ch *basename, int namelength) {
+  const ch *psz = g_pFileSystem->FindNext(g_hfind);
   if (basename && psz) {
     Q_FileBase(psz, basename, namelength);
   }
@@ -210,9 +216,9 @@ void Sys_Init() {}
 void Sys_Shutdown() {}
 
 // Purpose: Print to system console.
-void Sys_Printf(const char *format, ...) {
+void Sys_Printf(const ch *format, ...) {
   va_list arg_ptr;
-  char message[1024];
+  ch message[1024];
 
   va_start(arg_ptr, format);
   vsprintf_s(message, format, arg_ptr);
@@ -235,7 +241,7 @@ void Sys_Printf(const char *format, ...) {
   }
 }
 
-bool Sys_MessageBox(const char *title, const char *info,
+bool Sys_MessageBox(const ch *title, const ch *info,
                     bool should_show_ok_cancel) {
 #ifdef OS_WIN
   return IDOK == MessageBox(nullptr, title, info,
@@ -245,14 +251,14 @@ bool Sys_MessageBox(const char *title, const char *info,
   Warning("%s\n", info);
   return true;
 #else
-#error "implement me"
+#error Please, implement Sys_MessageBox at engine/sys_dll.cpp
 #endif
 }
 
 // Purpose: Exit engine with error.
-void Sys_Error(const char *format, ...) {
+void Sys_Error(const ch *format, ...) {
   va_list arg_ptr;
-  char error_message[1024];
+  ch error_message[1024];
   static bool bReentry = false;  // Don't meltdown
 
   va_start(arg_ptr, format);
@@ -296,8 +302,8 @@ void Sys_Error(const char *format, ...) {
 
 #ifdef OS_WIN
   // We don't want global destructors in our process OR in any DLL to get
-  // executed. _exit() avoids calling global destructors in our module, but not
-  // in other DLLs.
+  // executed. _exit() avoids calling global destructors in our module, but
+  // not in other DLLs.
   TerminateProcess(GetCurrentProcess(), 100);
 #else
   _exit(100);
@@ -324,12 +330,9 @@ void Sys_InitMemory() {
     return;
   }
 
-  if (CommandLine()->FindParm("-minmemory")) {
-    host_parms.memsize = MINIMUM_WIN_MEMORY;
-    return;
-  }
+  host_parms.memsize = MinHeapMemoryBytes();
 
-  host_parms.memsize = MINIMUM_WIN_MEMORY;
+  if (CommandLine()->FindParm("-minmemory")) return;
 
   MEMORYSTATUSEX memory_status = {sizeof(MEMORYSTATUSEX)};
   if (GlobalMemoryStatusEx(&memory_status)) {
@@ -338,8 +341,10 @@ void Sys_InitMemory() {
                              : memory_status.ullTotalPhys;
   }
 
-  if (host_parms.memsize < ONE_HUNDRED_TWENTY_EIGHT_MB) {
-    Sys_Error("Available memory (%zu) less than 128MB.\n", host_parms.memsize);
+  constexpr usize Mb_128{128 * 1024 * 1024};
+
+  if (host_parms.memsize < Mb_128) {
+    Sys_Error("Available memory (%zu) less than 128 MB.\n", host_parms.memsize);
   }
 
   // take one quarter the physical memory
@@ -348,22 +353,22 @@ void Sys_InitMemory() {
     // Apply cap of 64MB for 512MB systems
     // this keeps the code the same as HL2 gold
     // but allows us to use more memory on 1GB+ systems
-    if (host_parms.memsize > MAXIMUM_DEDICATED_MEMORY) {
-      host_parms.memsize = MAXIMUM_DEDICATED_MEMORY;
+    if (host_parms.memsize > MaxDedicatedHeapBytes()) {
+      host_parms.memsize = MaxDedicatedHeapBytes();
     }
   } else {
     // just take one quarter, no cap
     host_parms.memsize >>= 2;
   }
 
-  host_parms.memsize =
-      std::clamp(host_parms.memsize, MINIMUM_WIN_MEMORY, MAXIMUM_WIN_MEMORY);
+  host_parms.memsize = std::clamp(host_parms.memsize, MinHeapMemoryBytes(),
+                                  MaxHeapMemoryBytes());
 #else
   // FILE *meminfo=fopen("/proc/meminfo","r"); // read in meminfo file?
   // sysinfo() system call??
 
   // hard code 128 mb for dedicated servers
-  host_parms.memsize = MAXIMUM_DEDICATED_MEMORY;
+  host_parms.memsize = MAXIMUM_DEDICATED_MEMORY();
 #endif
 }
 
@@ -372,16 +377,16 @@ void Sys_ShutdownMemory() { host_parms.memsize = 0; }
 // Debug library spew output
 thread_local bool g_bInSpew;
 
-SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const char *pMsg) {
+SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const ch *pMsg) {
   bool suppress = g_bInSpew;
 
   g_bInSpew = true;
 
-  char temp[8192];
-  char *pFrom = (char *)pMsg;
-  char *pTo = temp;
+  ch temp[8192];
+  ch *pFrom = (ch *)pMsg;
+  ch *pTo = temp;
   // always space for 2 chars plus 0 (ie %%)
-  char *pLimit = &temp[sizeof(temp) - 2];
+  ch *pLimit = &temp[sizeof(temp) - 2];
 
   while (*pFrom && pTo < pLimit) {
     *pTo = *pFrom++;
@@ -390,10 +395,10 @@ SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const char *pMsg) {
   *pTo = 0;
 
   if (!suppress) {
-    // If this is a dedicated server, then we have taken over its spew function,
-    // but we still want its vgui console to show the spew, so pass it into the
-    // dedicated server.
-    if (dedicated) dedicated->Sys_Printf((char *)pMsg);
+    // If this is a dedicated server, then we have taken over its spew
+    // function, but we still want its vgui console to show the spew, so pass
+    // it into the dedicated server.
+    if (dedicated) dedicated->Sys_Printf((ch *)pMsg);
 
     if (g_bTextMode) fprintf_s(stdout, "%s", pMsg);
 
@@ -435,7 +440,7 @@ SpewRetval_t Sys_SpewFunc(SpewType_t spewType, const char *pMsg) {
   return SPEW_CONTINUE;
 }
 
-void OnDeveloperConvarChange(IConVar *con_var, const char *old_value_string,
+void OnDeveloperConvarChange(IConVar *con_var, const ch *old_value_string,
                              float old_value_float) {
   // Set the "developer" spew group to the value...
   ConVarRef var{con_var};
@@ -449,7 +454,7 @@ void OnDeveloperConvarChange(IConVar *con_var, const char *old_value_string,
 
 // Factory conglomeration, gets the client, server, and gameui dlls
 // together.
-void *GameFactory(const char *interface_name, int *return_code) {
+void *GameFactory(const ch *interface_name, int *return_code) {
   // first ask the app factory
   void *an_interface = g_AppSystemFactory(interface_name, return_code);
   if (an_interface) return an_interface;
@@ -506,7 +511,7 @@ bool Sys_InitGame(CreateInterfaceFn create_interface_fn, const ch *base_dir,
 
   memset(&gmodinfo, 0, sizeof(gmodinfo));
 
-  static char base_directory[SOURCE_MAX_PATH];
+  static ch base_directory[SOURCE_MAX_PATH];
   strcpy_s(base_directory, base_dir);
   Q_strlower(base_directory);
   Q_FixSlashes(base_directory);
@@ -517,7 +522,7 @@ bool Sys_InitGame(CreateInterfaceFn create_interface_fn, const ch *base_dir,
     FILE *pidFile = g_pFileSystem->Open(
         CommandLine()->ParmValue("-pidfile", "srcds.pid"), "w+");
     if (pidFile) {
-      char dir[SOURCE_MAX_PATH];
+      ch dir[SOURCE_MAX_PATH];
       getcwd(dir, sizeof(dir));
       g_pFileSystem->FPrintf(pidFile, "%i\n", getpid());
       g_pFileSystem->Close(pidFile);
@@ -579,8 +584,8 @@ class CServerGameDLLV3 : public IServerGameDLL {
 
   virtual bool GameInit() { return m_pServerGameDLL->GameInit(); }
 
-  virtual bool LevelInit(char const *pMapName, char const *pMapEntities,
-                         char const *pOldLevel, char const *pLandmarkName,
+  virtual bool LevelInit(ch const *pMapName, ch const *pMapEntities,
+                         ch const *pOldLevel, ch const *pLandmarkName,
                          bool loadGame, bool background) {
     return m_pServerGameDLL->LevelInit(pMapName, pMapEntities, pOldLevel,
                                        pLandmarkName, loadGame, background);
@@ -605,7 +610,7 @@ class CServerGameDLLV3 : public IServerGameDLL {
 
   virtual void DLLShutdown() { m_pServerGameDLL->DLLShutdown(); }
 
-  virtual float GetTickInterval(void) const {
+  virtual float GetTickInterval() const {
     return m_pServerGameDLL->GetTickInterval();
   }
 
@@ -613,7 +618,7 @@ class CServerGameDLLV3 : public IServerGameDLL {
     return m_pServerGameDLL->GetAllServerClasses();
   }
 
-  virtual const char *GetGameDescription() {
+  virtual const ch *GetGameDescription() {
     return m_pServerGameDLL->GetGameDescription();
   }
 
@@ -625,12 +630,12 @@ class CServerGameDLLV3 : public IServerGameDLL {
     return m_pServerGameDLL->SaveInit(size);
   }
 
-  virtual void SaveWriteFields(CSaveRestoreData *s, const char *c, void *v,
+  virtual void SaveWriteFields(CSaveRestoreData *s, const ch *c, void *v,
                                datamap_t *d, typedescription_t *t, int i) {
     return m_pServerGameDLL->SaveWriteFields(s, c, v, d, t, i);
   }
 
-  virtual void SaveReadFields(CSaveRestoreData *s, const char *c, void *v,
+  virtual void SaveReadFields(CSaveRestoreData *s, const ch *c, void *v,
                               datamap_t *d, typedescription_t *t, int i) {
     return m_pServerGameDLL->SaveReadFields(s, c, v, d, t, i);
   }
@@ -647,19 +652,18 @@ class CServerGameDLLV3 : public IServerGameDLL {
 
   virtual void Save(CSaveRestoreData *s) { m_pServerGameDLL->Save(s); }
 
-  virtual void GetSaveComment(char *comment, int maxlength, float flMinutes,
+  virtual void GetSaveComment(ch *comment, int maxlength, float flMinutes,
                               float flSeconds, bool bNoTime = false) {
     m_pServerGameDLL->GetSaveComment(comment, maxlength);
   }
 
-  virtual void PreSaveGameLoaded(char const *pSaveName, bool bCurrentlyInGame) {
-  }
+  virtual void PreSaveGameLoaded(ch const *pSaveName, bool bCurrentlyInGame) {}
 
   virtual bool ShouldHideServer() { return false; }
 
   virtual void InvalidateMdlCache() {}
 
-  virtual void GetSaveCommentEx(char *comment, int maxlength, float flMinutes,
+  virtual void GetSaveCommentEx(ch *comment, int maxlength, float flMinutes,
                                 float flSeconds) {
     m_pServerGameDLL->GetSaveComment(comment, maxlength);
   }
@@ -686,7 +690,7 @@ class CServerGameDLLV3 : public IServerGameDLL {
     m_pServerGameDLL->BuildAdjacentMapList();
   }
 
-  virtual bool GetUserMessageInfo(int msg_type, char *name, int maxnamelength,
+  virtual bool GetUserMessageInfo(int msg_type, ch *name, int maxnamelength,
                                   int &size) {
     return m_pServerGameDLL->GetUserMessageInfo(msg_type, name, maxnamelength,
                                                 size);
@@ -714,8 +718,8 @@ class CServerGameDLLV3 : public IServerGameDLL {
   virtual void OnQueryCvarValueFinished(QueryCvarCookie_t iCookie,
                                         edict_t *pPlayerEntity,
                                         EQueryCvarValueStatus eStatus,
-                                        const char *pCvarName,
-                                        const char *pCvarValue) {}
+                                        const ch *pCvarName,
+                                        const ch *pCvarValue) {}
 
  private:
   ServerGameDLLV3::IServerGameDLL *m_pServerGameDLL;
@@ -727,19 +731,19 @@ class CServerGameDLLV3 : public IServerGameDLL {
 // relevant info to the DLL directory.  If not, ignore it entirely.
 CreateInterfaceFn g_ServerFactory;
 
-static bool LoadThisDll(const char *szDllFilename) {
-  CSysModule *pDLL = g_pFileSystem->LoadModule(szDllFilename, "GAMEBIN", false);
+static bool LoadThisDll(const ch *dll_name) {
+  CSysModule *module = g_pFileSystem->LoadModule(dll_name, "GAMEBIN", false);
 
   // Load DLL, ignore if cannot
   // ensures that the game.dll is running under Steam
   // this will have to be undone when we want mods to be able to run
-  if (pDLL == nullptr) {
-    ConMsg("Failed to load %s\n", szDllFilename);
+  if (module == nullptr) {
+    ConMsg("Failed to load %s\n", dll_name);
     goto IgnoreThisDLL;
   }
 
   // Load interface factory and any interfaces exported by the game .dll
-  g_ServerFactory = Sys_GetFactory(pDLL);
+  g_ServerFactory = Sys_GetFactory(module);
   if (g_ServerFactory) {
     g_bServerGameDLLGreaterThanV5 = true;
     g_bServerGameDLLGreaterThanV4 = true;
@@ -764,7 +768,7 @@ static bool LoadThisDll(const char *szDllFilename) {
                   g_ServerFactory(SERVERGAMEDLL_INTERFACEVERSION_3, nullptr));
           if (!pServerGameDLLV3) {
             ConMsg("Could not get IServerGameDLL interface from library %s",
-                   szDllFilename);
+                   dll_name);
             goto IgnoreThisDLL;
           }
           serverGameDLL = new CServerGameDLLV3(pServerGameDLLV3);
@@ -774,11 +778,11 @@ static bool LoadThisDll(const char *szDllFilename) {
 #endif
     }
 
-    serverGameEnts = (IServerGameEnts *)g_ServerFactory(
-        INTERFACEVERSION_SERVERGAMEENTS, nullptr);
+    serverGameEnts = static_cast<IServerGameEnts *>(
+        g_ServerFactory(INTERFACEVERSION_SERVERGAMEENTS, nullptr));
     if (!serverGameEnts) {
       ConMsg("Could not get IServerGameEnts interface from library %s",
-             szDllFilename);
+             dll_name);
       goto IgnoreThisDLL;
     }
 
@@ -788,36 +792,34 @@ static bool LoadThisDll(const char *szDllFilename) {
       g_iServerGameClientsVersion = 4;
     } else {
       // Try the previous version.
-      const char *pINTERFACEVERSION_SERVERGAMECLIENTS_V3 =
-          "ServerGameClients003";
+      const ch *pINTERFACEVERSION_SERVERGAMECLIENTS_V3 = "ServerGameClients003";
       serverGameClients = (IServerGameClients *)g_ServerFactory(
           pINTERFACEVERSION_SERVERGAMECLIENTS_V3, nullptr);
       if (serverGameClients) {
         g_iServerGameClientsVersion = 3;
       } else {
         ConMsg("Could not get IServerGameClients interface from library %s",
-               szDllFilename);
+               dll_name);
         goto IgnoreThisDLL;
       }
     }
     serverGameDirector = (IHLTVDirector *)g_ServerFactory(
         INTERFACEVERSION_HLTVDIRECTOR, nullptr);
     if (!serverGameDirector) {
-      ConMsg("Could not get IHLTVDirector interface from library %s",
-             szDllFilename);
+      ConMsg("Could not get IHLTVDirector interface from library %s", dll_name);
       // this is not a critical
     }
   } else {
-    ConMsg("Could not find factory interface in library %s", szDllFilename);
+    ConMsg("Could not find factory interface in library %s", dll_name);
     goto IgnoreThisDLL;
   }
 
-  g_GameDLL = pDLL;
+  g_GameDLL = module;
   return true;
 
 IgnoreThisDLL:
-  if (pDLL != nullptr) {
-    g_pFileSystem->UnloadModule(pDLL);
+  if (module != nullptr) {
+    g_pFileSystem->UnloadModule(module);
     serverGameDLL = nullptr;
     serverGameEnts = nullptr;
     serverGameClients = nullptr;
@@ -826,8 +828,9 @@ IgnoreThisDLL:
 }
 
 // Scan DLL directory, load all DLLs that conform to spec.
-void LoadEntityDLLs(const char *szBaseDir) {
+void LoadEntityDLLs(const ch *the_base_dir) {
   memset(&gmodinfo, 0, sizeof(gmodinfo));
+
   gmodinfo.version = 1;
   gmodinfo.svonly = true;
 
@@ -850,7 +853,7 @@ void LoadEntityDLLs(const char *szBaseDir) {
   }
   modinfo->deleteThis();
 
-  LoadThisDll(
+  const ch *server_dll_name{
 #ifdef OS_WIN
       "server.dll"
 #elif OS_POSIX
@@ -858,259 +861,249 @@ void LoadEntityDLLs(const char *szBaseDir) {
 #else
 #error Please, define server dll name in engine/sys_dll.cpp
 #endif
-  );
+  };
+
+  LoadThisDll(server_dll_name);
 
   if (serverGameDLL) {
-    Msg("server library loaded for \"%s\".\n",
+    Msg("Server library loaded for \"%s\".\n",
         serverGameDLL->GetGameDescription());
   }
 }  //-V773
 
 // Retrieves a string value from the registry
 #ifdef OS_WIN
-char string_type_name[] = {'S', 't', 'r', 'i', 'n', 'g', '\0'};
+ch string_type_name[] = {'S', 't', 'r', 'i', 'n', 'g', '\0'};
 
-void Sys_GetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
-                                 const char *pszElement, char *pszReturnString,
-                                 int nReturnLength,
-                                 const char *pszDefaultValue) {
-  LONG lResult;         // Registry function result code
-  HKEY hKey;            // Handle of opened/created key
-  char szBuff[128];     // Temp. buffer
-  ULONG dwDisposition;  // Type of key opening event
-  DWORD dwType;         // Type of key
-  DWORD dwSize;         // Size of element data
+LONG Sys_GetRegKeyValueUnderRoot(HKEY root_key, const ch *sub_key,
+                                 const ch *element, ch *return_value,
+                                 int return_size, const ch *default_value) {
+  HKEY key;
+  ULONG disposition;
 
-  // Assume the worst
-  strcpy_s(pszReturnString, nReturnLength, pszDefaultValue);
+  // Assume the worst.
+  strcpy_s(return_value, return_size, default_value);
 
   // Create it if it doesn't exist.  (Create opens the key otherwise)
-  lResult = VCRHook_RegCreateKeyEx(
-      rootKey,                  // handle of open key
-      pszSubKey,                // address of name of subkey to open
+  LONG result_code = VCRHook_RegCreateKeyEx(
+      root_key,                 // handle of open key
+      sub_key,                  // address of name of subkey to open
       0ul,                      // DWORD ulOptions,	  // reserved
       string_type_name,         // Type of value
       REG_OPTION_NON_VOLATILE,  // Store permanently in reg.
       KEY_ALL_ACCESS,           // REGSAM samDesired, // security access mask
-      nullptr,
-      &hKey,            // Key we are creating
-      &dwDisposition);  // Type of creation
+      nullptr, &key, &disposition);
 
-  if (lResult != ERROR_SUCCESS)  // Failure
-    return;
+  if (result_code == ERROR_SUCCESS) {
+    if (disposition == REG_CREATED_NEW_KEY) {
+      DWORD key_type, key_size = return_size;
+      ch key_buffer[128];
 
-  // First time, just set to Valve default
-  if (dwDisposition == REG_CREATED_NEW_KEY) {
-    // Just Set the Values according to the defaults
-    lResult = VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_SZ,
-                                    (CONST BYTE *)pszDefaultValue,
-                                    Q_strlen(pszDefaultValue) + 1);
-  } else {
-    // We opened the existing key. Now go ahead and find out how big the key is.
-    dwSize = nReturnLength;
-    lResult = VCRHook_RegQueryValueEx(hKey, pszElement, 0, &dwType,
-                                      (unsigned char *)szBuff, &dwSize);
+      // We opened the existing key. Now go ahead and find out how big the key
+      // is.
+      result_code = VCRHook_RegQueryValueEx(key, element, 0, &key_type,
+                                            (u8 *)key_buffer, &key_size);
 
-    // Success?
-    if (lResult == ERROR_SUCCESS) {
-      // Only copy strings, and only copy as much data as requested.
-      if (dwType == REG_SZ) {
-        strcpy_s(pszReturnString, nReturnLength, szBuff);
-        pszReturnString[nReturnLength - 1] = '\0';
+      if (result_code == ERROR_SUCCESS) {
+        // Only copy strings, and only copy as much data as requested.
+        if (key_type == REG_SZ) strcpy_s(return_value, return_size, key_buffer);
+      } else {
+        // Didn't find it, so write out new value.  Just set the values
+        // according to the defaults
+        result_code = VCRHook_RegSetValueEx(key, element, 0, REG_SZ,
+                                            (const u8 *)default_value,
+                                            strlen(default_value) + 1);
       }
-    } else
-    // Didn't find it, so write out new value
-    {
-      // Just Set the Values according to the defaults
-      lResult = VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_SZ,
-                                      (CONST BYTE *)pszDefaultValue,
-                                      Q_strlen(pszDefaultValue) + 1);
+    } else {
+      // First time, just set to Valve default.
+      result_code = VCRHook_RegSetValueEx(key, element, 0, REG_SZ,
+                                          (const u8 *)default_value,
+                                          strlen(default_value) + 1);
     }
-  };
 
-  // Always close this key before exiting.
-  VCRHook_RegCloseKey(hKey);
+    // Always close this key before exiting.
+    VCRHook_RegCloseKey(key);
+  }
+
+  return result_code;
 }
 
 // Purpose: Retrieves a DWORD value from the registry
-void Sys_GetRegKeyValueUnderRootInt(HKEY rootKey, const char *pszSubKey,
-                                    const char *pszElement, long *plReturnValue,
-                                    const long lDefaultValue) {
-  LONG lResult;         // Registry function result code
-  HKEY hKey;            // Handle of opened/created key
-  ULONG dwDisposition;  // Type of key opening event
-  DWORD dwType;         // Type of key
-  DWORD dwSize;         // Size of element data
+LONG Sys_GetRegKeyValueUnderRootInt(HKEY root_key, const ch *sub_key,
+                                    const ch *element, long *return_Value,
+                                    const long default_value) {
+  HKEY key;
+  ULONG disposition;
 
   // Assume the worst
   // Set the return value to the default
-  *plReturnValue = lDefaultValue;
+  *return_Value = default_value;
 
   // Create it if it doesn't exist.  (Create opens the key otherwise)
-  lResult = VCRHook_RegCreateKeyEx(
-      rootKey,                  // handle of open key
-      pszSubKey,                // address of name of subkey to open
+  LONG result_code = VCRHook_RegCreateKeyEx(
+      root_key,                 // handle of open key
+      sub_key,                  // address of name of subkey to open
       0ul,                      // DWORD ulOptions,	  // reserved
       string_type_name,         // Type of value
       REG_OPTION_NON_VOLATILE,  // Store permanently in reg.
       KEY_ALL_ACCESS,           // REGSAM samDesired, // security access mask
-      nullptr,
-      &hKey,            // Key we are creating
-      &dwDisposition);  // Type of creation
+      nullptr, &key, &disposition);
 
-  if (lResult != ERROR_SUCCESS)  // Failure
-    return;
+  if (result_code == ERROR_SUCCESS) {
+    if (disposition == REG_CREATED_NEW_KEY) {
+      DWORD type, size = sizeof(DWORD);
 
-  // First time, just set to Valve default
-  if (dwDisposition == REG_CREATED_NEW_KEY) {
-    // Just Set the Values according to the defaults
-    lResult =
-        VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_DWORD,
-                              (CONST BYTE *)&lDefaultValue, sizeof(DWORD));
-  } else {
-    // We opened the existing key. Now go ahead and find out how big the key is.
-    dwSize = sizeof(DWORD);
-    lResult = VCRHook_RegQueryValueEx(hKey, pszElement, 0, &dwType,
-                                      (unsigned char *)plReturnValue, &dwSize);
+      // We opened the existing key.  Now go ahead and find out how big the
+      // key is.
+      result_code = VCRHook_RegQueryValueEx(key, element, 0, &type,
+                                            (u8 *)return_Value, &size);
 
-    // Success?
-    if (lResult != ERROR_SUCCESS)
-    // Didn't find it, so write out new value
-    {
-      // Just Set the Values according to the defaults
-      lResult = VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_DWORD,
-                                      (LPBYTE)&lDefaultValue, sizeof(DWORD));
+      if (result_code != ERROR_SUCCESS) {
+        // Didn't find it, so write out new value.  Just set the values
+        // according to the defaults
+        result_code = VCRHook_RegSetValueEx(
+            key, element, 0, REG_DWORD, (u8 *)&default_value, sizeof(DWORD));
+      }
+    } else {
+      // First time, just set to Valve default.
+      result_code =
+          VCRHook_RegSetValueEx(key, element, 0, REG_DWORD,
+                                (const u8 *)&default_value, sizeof(DWORD));
     }
-  };
 
-  // Always close this key before exiting.
-  VCRHook_RegCloseKey(hKey);
+    // Always close this key before exiting.
+    VCRHook_RegCloseKey(key);
+  }
+
+  return result_code;
 }
 
-void Sys_SetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
-                                 const char *pszElement, const char *pszValue) {
-  LONG lResult;  // Registry function result code
-  HKEY hKey;     // Handle of opened/created key
-  // char szBuff[128];       // Temp. buffer
-  ULONG dwDisposition;  // Type of key opening event
-  // DWORD dwType;           // Type of key
-  // DWORD dwSize;           // Size of element data
+LONG Sys_SetRegKeyValueUnderRoot(HKEY root_key, const ch *sub_key,
+                                 const ch *element, const ch *value) {
+  HKEY key;
+  ULONG disposition;
 
   // Create it if it doesn't exist.  (Create opens the key otherwise)
-  lResult = VCRHook_RegCreateKeyEx(
-      rootKey,                  // handle of open key
-      pszSubKey,                // address of name of subkey to open
+  LONG result_code = VCRHook_RegCreateKeyEx(
+      root_key,                 // handle of open key
+      sub_key,                  // address of name of subkey to open
       0ul,                      // DWORD ulOptions,	  // reserved
       string_type_name,         // Type of value
       REG_OPTION_NON_VOLATILE,  // Store permanently in reg.
       KEY_ALL_ACCESS,           // REGSAM samDesired, // security access mask
-      nullptr,
-      &hKey,            // Key we are creating
-      &dwDisposition);  // Type of creation
+      nullptr, &key, &disposition);
 
-  if (lResult != ERROR_SUCCESS)  // Failure
-    return;
-
-  // First time, just set to Valve default
-  if (dwDisposition == REG_CREATED_NEW_KEY) {
+  if (result_code == ERROR_SUCCESS) {
     // Just Set the Values according to the defaults
-    lResult =
-        VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_SZ,
-                              (CONST BYTE *)pszValue, Q_strlen(pszValue) + 1);
-  } else {
-    // Just Set the Values according to the defaults
-    lResult =
-        VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_SZ,
-                              (CONST BYTE *)pszValue, Q_strlen(pszValue) + 1);
-  };
+    result_code = VCRHook_RegSetValueEx(key, element, 0, REG_SZ,
+                                        (const u8 *)value, strlen(value) + 1);
 
-  // Always close this key before exiting.
-  VCRHook_RegCloseKey(hKey);
+    // Always close this key before exiting.
+    VCRHook_RegCloseKey(key);
+  }
+
+  return result_code;
 }
 #endif
 
-void Sys_GetRegKeyValue(const char *pszSubKey, const char *pszElement,
-                        char *pszReturnString, int nReturnLength,
-                        const char *pszDefaultValue) {
-#if defined(OS_WIN)
-  Sys_GetRegKeyValueUnderRoot(HKEY_CURRENT_USER, pszSubKey, pszElement,
-                              pszReturnString, nReturnLength, pszDefaultValue);
+bool Sys_GetRegKeyValue(const ch *sub_key, const ch *element, ch *return_value,
+                        int return_size, const ch *default_value) {
+#ifdef OS_WIN
+  return Sys_GetRegKeyValueUnderRoot(HKEY_CURRENT_USER, sub_key, element,
+                                     return_value, return_size,
+                                     default_value) == ERROR_SUCCESS;
+#else
+  return true;
 #endif
 }
 
-void Sys_GetRegKeyValueInt(char *pszSubKey, const char *pszElement,
-                           long *plReturnValue, long lDefaultValue) {
-#if defined(OS_WIN)
-  Sys_GetRegKeyValueUnderRootInt(HKEY_CURRENT_USER, pszSubKey, pszElement,
-                                 plReturnValue, lDefaultValue);
+bool Sys_GetRegKeyValueInt(ch *sub_key, const ch *element, long *return_value,
+                           long default_value) {
+#ifdef OS_WIN
+  return Sys_GetRegKeyValueUnderRootInt(HKEY_CURRENT_USER, sub_key, element,
+                                        return_value,
+                                        default_value) == ERROR_SUCCESS;
+#else
+  return true;
 #endif
 }
 
-void Sys_SetRegKeyValue(const char *pszSubKey, const char *pszElement,
-                        const char *pszValue) {
-#if defined(OS_WIN)
-  Sys_SetRegKeyValueUnderRoot(HKEY_CURRENT_USER, pszSubKey, pszElement,
-                              pszValue);
+bool Sys_SetRegKeyValue(const ch *sub_key, const ch *element, const ch *value) {
+#ifdef OS_WIN
+  return Sys_SetRegKeyValueUnderRoot(HKEY_CURRENT_USER, sub_key, element,
+                                     value) == ERROR_SUCCESS;
+#else
+  return true;
 #endif
 }
 
-#define SOURCE_ENGINE_APP_CLASS "Valve.Source"
+bool Sys_CreateFileAssociations(usize count, FileAssociationInfo *list) {
+#ifdef OS_WIN
+  const ch *kSourceEngineAppClass{"Valve.Source"};
+  ch app_name[SOURCE_MAX_PATH];
 
-void Sys_CreateFileAssociations(int count, FileAssociationInfo *list) {
-#if defined(OS_WIN)
-  char appname[512];
+  GetModuleFileName(0, app_name, sizeof(app_name));
+  Q_FixSlashes(app_name);
+  Q_strlower(app_name);
 
-  GetModuleFileName(0, appname, sizeof(appname));
-  Q_FixSlashes(appname);
-  Q_strlower(appname);
+  ch quoted_appname_with_arg[512];
+  sprintf_s(quoted_appname_with_arg, "\"%s\" \"%%1\"", app_name);
 
-  char quoted_appname_with_arg[512];
-  Q_snprintf(quoted_appname_with_arg, sizeof(quoted_appname_with_arg),
-             "\"%s\" \"%%1\"", appname);
-  char base_exe_name[256];
-  Q_FileBase(appname, base_exe_name, sizeof(base_exe_name));
-  Q_DefaultExtension(base_exe_name, ".exe", sizeof(base_exe_name));
+  // HKEY_CLASSES_ROOT/Valve.Source/shell/open/command == "u:\tf2\hl2.exe"
+  // "%1" quoted
+  LONG result_code = Sys_SetRegKeyValueUnderRoot(
+      HKEY_CLASSES_ROOT, va("%s\\shell\\open\\command", kSourceEngineAppClass),
+      "", quoted_appname_with_arg);
 
-  // HKEY_CLASSES_ROOT/Valve.Source/shell/open/command == "u:\tf2\hl2.exe" "%1"
-  // quoted
-  Sys_SetRegKeyValueUnderRoot(
-      HKEY_CLASSES_ROOT,
-      va("%s\\shell\\open\\command", SOURCE_ENGINE_APP_CLASS), "",
-      quoted_appname_with_arg);
-  // HKEY_CLASSES_ROOT/Applications/hl2.exe/shell/open/command ==
-  // "u:\tf2\hl2.exe" "%1" quoted
-  Sys_SetRegKeyValueUnderRoot(
-      HKEY_CLASSES_ROOT,
-      va("Applications\\%s\\shell\\open\\command", base_exe_name), "",
-      quoted_appname_with_arg);
+  if (result_code == ERROR_SUCCESS) {
+    ch base_exe_name[256];
+    Q_FileBase(app_name, base_exe_name, sizeof(base_exe_name));
+    Q_DefaultExtension(base_exe_name, ".exe", sizeof(base_exe_name));
 
-  for (int i = 0; i < count; i++) {
-    FileAssociationInfo *fa = &list[i];
-    char binding[32];
-    binding[0] = 0;
-    // Create file association for our .exe
-    // HKEY_CLASSES_ROOT/.dem == "Valve.Source"
-    Sys_GetRegKeyValueUnderRoot(HKEY_CLASSES_ROOT, fa->extension, "", binding,
-                                sizeof(binding), "");
-    if (Q_strlen(binding) == 0) {
-      Sys_SetRegKeyValueUnderRoot(HKEY_CLASSES_ROOT, fa->extension, "",
-                                  SOURCE_ENGINE_APP_CLASS);
+    // HKEY_CLASSES_ROOT/Applications/hl2.exe/shell/open/command ==
+    // "u:\tf2\hl2.exe" "%1" quoted
+    result_code = Sys_SetRegKeyValueUnderRoot(
+        HKEY_CLASSES_ROOT,
+        va("Applications\\%s\\shell\\open\\command", base_exe_name), "",
+        quoted_appname_with_arg);
+  }
+
+  for (usize i = 0; i < count; ++i) {
+    // Assume always success.
+    if (result_code == ERROR_SUCCESS) {
+      FileAssociationInfo *fa = &list[i];
+      ch binding[32];
+      binding[0] = '\0';
+
+      // Create file association for our .exe
+      // HKEY_CLASSES_ROOT/.dem == "Valve.Source"
+      result_code = Sys_GetRegKeyValueUnderRoot(
+          HKEY_CLASSES_ROOT, fa->extension, "", binding, sizeof(binding), "");
+
+      if (result_code == ERROR_SUCCESS && strlen(binding) == 0) {
+        result_code = Sys_SetRegKeyValueUnderRoot(
+            HKEY_CLASSES_ROOT, fa->extension, "", kSourceEngineAppClass);
+      }
     }
   }
+
+  return result_code == ERROR_SUCCESS;
+#else
+  return true;
 #endif
 }
 
-void Sys_TestSendKey(const char *pKey) {
-#if defined(OS_WIN)
-  int key = pKey[0];
-  if (pKey[0] == '\\' && pKey[1] == 'r') {
-    key = VK_RETURN;
+void Sys_TestSendKey(const ch *key) {
+#ifdef OS_WIN
+  int the_key = key[0];
+  if (key[0] == '\\' && key[1] == 'r') {
+    the_key = VK_RETURN;
   }
 
   HWND hWnd = (HWND)game->GetMainWindow();
 
-  PostMessageA(hWnd, WM_KEYDOWN, key, 0);
-  PostMessageA(hWnd, WM_KEYUP, key, 0);
+  PostMessageA(hWnd, WM_KEYDOWN, the_key, 0);
+  PostMessageA(hWnd, WM_KEYUP, the_key, 0);
 #endif
 }
 
@@ -1127,9 +1120,9 @@ void UnloadEntityDLLs() {
 }
 
 CON_COMMAND(star_memory, "Dump memory stats") {
-  // get a current stat of available memory
-  // 32 MB is reserved and fixed by OS, so not reporting to allow memory loggers
-  // sync
+// get a current stat of available memory
+// 32 MB is reserved and fixed by OS, so not reporting to allow memory loggers
+// sync
 #ifdef OS_POSIX
   struct mallinfo memstats = mallinfo();
   Msg("sbrk size: %.2f MB, Used: %.2f MB, #mallocs = %d\n",

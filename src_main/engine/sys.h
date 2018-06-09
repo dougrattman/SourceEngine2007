@@ -1,22 +1,24 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// sys.h -- non-portable functions
+// Non-portable functions.
 
-#ifndef SYS_H
-#define SYS_H
+#ifndef SOURCE_ENGINE_SYS_H_
+#define SOURCE_ENGINE_SYS_H_
+
+#include "base/include/base_types.h"
 
 #include "sysexternal.h"
 
 // system IO
-void Sys_mkdir(const char *path);
+void Sys_mkdir(const ch *path);
 int Sys_CompareFileTime(long ft1, long ft2);
-char const *Sys_FindFirst(const char *path, char *basename, int namelength);
-char const *Sys_FindNext(char *basename, int namelength);
+ch const *Sys_FindFirst(const ch *path, ch *basename, int namelength);
+ch const *Sys_FindNext(ch *basename, int namelength);
 void Sys_FindClose();
 
 // Takes a path ID filter
-char const *Sys_FindFirstEx(const char *pWildcard, const char *pPathID,
-                            char *basename, int namelength);
+ch const *Sys_FindFirstEx(const ch *pWildcard, const ch *pPathID, ch *basename,
+                          int namelength);
 
 void Sys_ShutdownMemory();
 void Sys_InitMemory();
@@ -25,23 +27,20 @@ void Sys_LoadHLTVDLL();
 void Sys_UnloadHLTVDLL();
 
 void Sys_Sleep(int msec);
-void Sys_GetRegKeyValue(const char *pszSubKey, const char *pszElement,
-                        char *pszReturnString, int nReturnLength,
-                        const char *pszDefaultValue);
-void Sys_GetRegKeyValueInt(char *pszSubKey, const char *pszElement,
+bool Sys_GetRegKeyValue(const ch *pszSubKey, const ch *pszElement,
+                        ch *pszReturnString, int nReturnLength,
+                        const ch *pszDefaultValue);
+bool Sys_GetRegKeyValueInt(ch *pszSubKey, const ch *pszElement,
                            long *pulReturnValue, long dwDefaultValue);
-void Sys_SetRegKeyValue(const char *pszSubKey, const char *pszElement,
-                        const char *pszValue);
+bool Sys_SetRegKeyValue(const ch *pszSubKey, const ch *pszElement,
+                        const ch *pszValue);
 
-extern "C" void Sys_SetFPCW();
-extern "C" void Sys_TruncateFPU();
-
-struct FileAssociationInfo {
-  char const *extension;
-  char const *command_to_issue;
+struct alignas(4) FileAssociationInfo {
+  ch const *extension;
+  ch const *command_to_issue;
 };
 
-void Sys_CreateFileAssociations(int count, FileAssociationInfo *list);
-void Sys_TestSendKey(const char *pKey);
+bool Sys_CreateFileAssociations(usize count, FileAssociationInfo *list);
+void Sys_TestSendKey(const ch *key);
 
-#endif  // SYS_H
+#endif  // SOURCE_ENGINE_SYS_H_

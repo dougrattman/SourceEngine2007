@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "build/include/build_config.h"
 
@@ -37,7 +37,6 @@
 #include "sys_dll.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/minidump.h"
-#include "tier0/include/systeminformation.h"
 #include "tier0/include/vcrmode.h"
 #include "tier3/tier3.h"
 #include "toolframework/itoolframework.h"
@@ -249,27 +248,24 @@ class CModAppSystemGroup : public CAppSystemGroup {
   // Methods of IApplication
   bool Create() override {
 #ifndef SWDS
-    if (!IsServerOnly()) {
-      if (!ClientDLL_Load()) return false;
-    }
+    if (!IsServerOnly() && !ClientDLL_Load()) return false;
 #endif
 
     if (!ServerDLL_Load()) return false;
 
-    IClientDLLSharedAppSystems *clientSharedSystems = 0;
+    IClientDLLSharedAppSystems *client_shared = nullptr;
 
 #ifndef SWDS
     if (!IsServerOnly()) {
-      clientSharedSystems = (IClientDLLSharedAppSystems *)g_ClientFactory(
-          CLIENT_DLL_SHARED_APPSYSTEMS, nullptr);
-      if (!clientSharedSystems) return AddLegacySystems();
+      client_shared = static_cast<IClientDLLSharedAppSystems *>(
+          g_ClientFactory(CLIENT_DLL_SHARED_APPSYSTEMS, nullptr));
+      if (!client_shared) return AddLegacySystems();
     }
 #endif
 
-    IServerDLLSharedAppSystems *serverSharedSystems =
-        (IServerDLLSharedAppSystems *)g_ServerFactory(
-            SERVER_DLL_SHARED_APPSYSTEMS, nullptr);
-    if (!serverSharedSystems) {
+    auto *server_shared = static_cast<IServerDLLSharedAppSystems *>(
+        g_ServerFactory(SERVER_DLL_SHARED_APPSYSTEMS, nullptr));
+    if (!server_shared) {
       Assert(!"Expected both game and client .dlls to have or not have shared app systems interfaces!!!");
       return AddLegacySystems();
     }
@@ -277,53 +273,39 @@ class CModAppSystemGroup : public CAppSystemGroup {
     // Load game and client .dlls and build list then
     CUtlVector<AppSystemInfo_t> systems;
 
-    int i;
-    int serverCount = serverSharedSystems->Count();
-    for (i = 0; i < serverCount; ++i) {
-      const char *dllName = serverSharedSystems->GetDllName(i);
-      const char *interfaceName = serverSharedSystems->GetInterfaceName(i);
+    int serverCount = server_shared->Count();
+    for (int i = 0; i < serverCount; ++i) {
+      const char *dllName = server_shared->GetDllName(i);
+      const char *interfaceName = server_shared->GetInterfaceName(i);
 
-      AppSystemInfo_t info;
-      info.m_pModuleName = dllName;
-      info.m_pInterfaceName = interfaceName;
-
-      systems.AddToTail(info);
+      systems.AddToTail({dllName, interfaceName});
     }
 
     if (!IsServerOnly()) {
-      int clientCount = clientSharedSystems->Count();
-      for (i = 0; i < clientCount; ++i) {
-        const char *dllName = clientSharedSystems->GetDllName(i);
-        const char *interfaceName = clientSharedSystems->GetInterfaceName(i);
+      int clientCount = client_shared->Count();
+      for (int i = 0; i < clientCount; ++i) {
+        const char *dllName = client_shared->GetDllName(i);
+        const char *interfaceName = client_shared->GetInterfaceName(i);
 
         if (ModuleAlreadyInList(systems, dllName, interfaceName)) continue;
 
-        AppSystemInfo_t info;
-        info.m_pModuleName = dllName;
-        info.m_pInterfaceName = interfaceName;
-
-        systems.AddToTail(info);
+        systems.AddToTail({dllName, interfaceName});
       }
     }
 
-    AppSystemInfo_t info;
-    info.m_pModuleName = "";
-    info.m_pInterfaceName = "";
-    systems.AddToTail(info);
+    systems.AddToTail({"", ""});
 
     if (!AddSystems(systems.Base())) return false;
 
 #ifndef OS_POSIX
-    //	if ( CommandLine()->FindParm( "-tools" ) )
-    {
-      AppModule_t toolFrameworkModule = LoadModule("engine.dll");
-      if (!AddSystem(toolFrameworkModule, VTOOLFRAMEWORK_INTERFACE_VERSION))
-        return false;
-    }
+    AppModule_t toolFrameworkModule = LoadModule("engine.dll");
+    if (!AddSystem(toolFrameworkModule, VTOOLFRAMEWORK_INTERFACE_VERSION))
+      return false;
 #endif
 
     return true;
   }
+
   bool PreInit() override { return true; }
 
   int Main() override;
@@ -346,8 +328,8 @@ class CModAppSystemGroup : public CAppSystemGroup {
   bool ModuleAlreadyInList(CUtlVector<AppSystemInfo_t> &list,
                            const char *moduleName, const char *interfaceName) {
     for (int i = 0; i < list.Count(); ++i) {
-      if (!Q_stricmp(list[i].m_pModuleName, moduleName)) {
-        if (Q_stricmp(list[i].m_pInterfaceName, interfaceName)) {
+      if (!_stricmp(list[i].m_pModuleName, moduleName)) {
+        if (_stricmp(list[i].m_pInterfaceName, interfaceName)) {
           Error(
               "Game and client .dlls requesting different versions '%s' vs. "
               "'%s' "
@@ -372,12 +354,9 @@ class CModAppSystemGroup : public CAppSystemGroup {
     if (!AddSystems(appSystems)) return false;
 
 #ifndef OS_POSIX
-    //	if ( CommandLine()->FindParm( "-tools" ) )
-    {
-      AppModule_t toolFrameworkModule = LoadModule("engine.dll");
-      if (!AddSystem(toolFrameworkModule, VTOOLFRAMEWORK_INTERFACE_VERSION))
-        return false;
-    }
+    AppModule_t toolFrameworkModule = LoadModule("engine.dll");
+    if (!AddSystem(toolFrameworkModule, VTOOLFRAMEWORK_INTERFACE_VERSION))
+      return false;
 #endif
 
     return true;
@@ -402,11 +381,11 @@ void __cdecl WriteMiniDump(unsigned int uStructuredExceptionCode,
 static bool IsValveMod(const char *pModName) {
   const ch *current_mod{GetCurrentMod()};
   // Figure out if we're running a Valve mod or not.
-  return (Q_stricmp(current_mod, "cstrike") == 0 ||
-          Q_stricmp(current_mod, "dod") == 0 ||
-          Q_stricmp(current_mod, "hl1mp") == 0 ||
-          Q_stricmp(current_mod, "tf") == 0 ||
-          Q_stricmp(current_mod, "hl2mp") == 0);
+  return (_stricmp(current_mod, "cstrike") == 0 ||
+          _stricmp(current_mod, "dod") == 0 ||
+          _stricmp(current_mod, "hl1mp") == 0 ||
+          _stricmp(current_mod, "tf") == 0 ||
+          _stricmp(current_mod, "hl2mp") == 0);
 }
 
 // Main engine interface exposed to launcher
@@ -453,6 +432,8 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     DisconnectMDLCacheNotify();
 
     g_pHammer = nullptr;
+    bik = nullptr;
+    avi = nullptr;
     g_pPhysics = nullptr;
 
     Shader_Disconnect();
@@ -586,7 +567,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   // Reset the map we're on
   void SetMap(const char *pMapName) override {
     char map_buffer[SOURCE_MAX_PATH];
-    Q_snprintf(map_buffer, SOURCE_ARRAYSIZE(map_buffer), "map %s", pMapName);
+    sprintf_s(map_buffer, "map %s", pMapName);
     Cbuf_AddText(map_buffer);
   }
 
@@ -687,24 +668,18 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
 
     // This has to happen before CreateGameWindow to set up the instance
     // for use by the code that creates the window
-    if (!game->Init(pInstance)) {
-      goto onStartupError;
-    }
+    if (!game->Init(pInstance)) goto onStartupError;
 
     // Try to create the window
     Plat_TimestampedLog("Engine::CEngineAPI::OnStartup: videomode->Init");
 
     // This needs to be after Shader_Init and registry->Init
     // This way mods can have different default video settings
-    if (!videomode->Init()) {
-      goto onStartupShutdownGame;
-    }
+    if (!videomode->Init()) goto onStartupShutdownGame;
 
     // We need to access the registry to get various settings (specifically,
     // InitMaterialSystemConfig requires it).
-    if (!InitRegistry(pStartupModName)) {
-      goto onStartupShutdownVideoMode;
-    }
+    if (!InitRegistry(pStartupModName)) goto onStartupShutdownVideoMode;
 
     materials->ModInit();
 
@@ -729,9 +704,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   // One-time shutdown (shuts down stuff set up in OnStartup)
   // TODO(d.rattman): This should move into the launcher!
   void OnShutdown() {
-    if (videomode) {
-      videomode->Shutdown();
-    }
+    if (videomode) videomode->Shutdown();
 
     // Shut down the game
     game->Shutdown();
@@ -763,14 +736,10 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
 
     // Create the game window now that we have a search path
     // TODO(d.rattman): Deal with initial window width + height better
-    if (!videomode || !videomode->CreateGameWindow(
-                          g_pMaterialSystemConfig->m_VideoMode.m_Width,
-                          g_pMaterialSystemConfig->m_VideoMode.m_Height,
-                          g_pMaterialSystemConfig->Windowed())) {
-      return false;
-    }
-
-    return true;
+    return (videomode && videomode->CreateGameWindow(
+                             g_pMaterialSystemConfig->m_VideoMode.m_Width,
+                             g_pMaterialSystemConfig->m_VideoMode.m_Height,
+                             g_pMaterialSystemConfig->Windowed()));
   }
 
   void ModShutdown() {
@@ -804,7 +773,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     if (CommandLine()->FindParm("-safe")) {
       Sys_MessageBox(
           "Failed to set video mode.\n\nThis game has a minimum requirement of "
-          "DirectX 7.0 compatible hardware.\n",
+          "DirectX 9.0 compatible hardware.\n",
           "Video mode error", false);
       return INIT_FAILED;
     }
@@ -904,18 +873,6 @@ int CModAppSystemGroup::Main() {
   if (IsServerOnly()) {
     // Start up the game engine
     if (eng->Load(true, host_parms.basedir)) {
-      // If we're using STEAM, pass the map cycle list as resource hints...
-#if LATER
-      if (g_pFileSystem->IsSteam()) {
-        char *hints;
-        if (BuildMapCycleListHints(&hints)) {
-          g_pFileSystem->HintResourceNeed(hints, true);
-        }
-        if (hints) {
-          free(hints);
-        }
-      }
-#endif
       // Dedicated server drives frame loop manually
       dedicated->RunServer();
 
@@ -1094,98 +1051,11 @@ class CDedicatedServerAPI : public CTier3AppSystem<IDedicatedServerAPI> {
 
   void GetHostname(ch *host_name, usize host_name_size) const override {
     if (host_name && host_name_size > 0) {
-      Q_strncpy(host_name, sv.GetName(), host_name_size);
+      strcpy_s(host_name, host_name_size, sv.GetName());
     }
   }
 
  private:
-  int BuildMapCycleListHints(char **hints) {
-    // Creates the hint list for a multiplayer map rotation from the map cycle.
-    // The map cycle message is a text string with CR/CRLF separated lines.
-    //	-removes comments
-    //	-removes arguments
-
-    const char *szCommonPreloads = "MP_Preloads";
-    const char *szReslistsBaseDir = "reslists2";
-    const char *szReslistsExt = ".lst";
-
-    char szMap[MAX_OSPATH + 2];  // room for one path plus <CR><LF>
-    unsigned int length;
-    char szMod[MAX_OSPATH];
-
-    // Determine the mod directory.
-    Q_FileBase(com_gamedir, szMod, sizeof(szMod));
-
-    // Open mapcycle.txt
-    char cszMapCycleTxtFile[MAX_OSPATH];
-    Q_snprintf(cszMapCycleTxtFile, sizeof(cszMapCycleTxtFile),
-               "%s\\mapcycle.txt", szMod);
-    FileHandle_t pFile = g_pFileSystem->Open(cszMapCycleTxtFile, "rb");
-    if (pFile == FILESYSTEM_INVALID_HANDLE) {
-      ConMsg("Unable to open %s", cszMapCycleTxtFile);
-      return 0;
-    }
-
-    // Start off with the common preloads.
-    Q_snprintf(szMap, sizeof(szMap), "%s\\%s\\%s%s\r\n", szReslistsBaseDir,
-               szMod, szCommonPreloads, szReslistsExt);
-    int hintsSize = strlen(szMap) + 1;
-    *hints = (char *)malloc(hintsSize);
-    if (*hints == nullptr) {
-      ConMsg("Unable to allocate memory for map cycle hints list");
-      g_pFileSystem->Close(pFile);
-      return 0;
-    }
-    Q_strncpy(*hints, szMap, hintsSize);
-
-    // Read in and parse mapcycle.txt
-    length = g_pFileSystem->Size(pFile);
-    if (length) {
-      char *pStart = (char *)malloc(length);
-      if (pStart && (1 == g_pFileSystem->Read(pStart, length, pFile))) {
-        const char *pFileList = pStart;
-
-        while (1) {
-          pFileList = COM_Parse(pFileList);
-          if (strlen(com_token) <= 0) break;  //-V814
-
-          Q_strncpy(szMap, com_token, sizeof(szMap));
-
-          // Any more tokens on this line?
-          if (COM_TokenWaiting(pFileList)) {
-            pFileList = COM_Parse(pFileList);
-          }
-
-          char mapLine[sizeof(szMap)];
-          Q_snprintf(mapLine, sizeof(mapLine), "%s\\%s\\%s%s\r\n",
-                     szReslistsBaseDir, szMod, szMap, szReslistsExt);
-          *hints = (char *)realloc(*hints,
-                                   strlen(*hints) + 1 + strlen(mapLine) +
-                                       1);  // count nullptr string terminators
-          if (*hints == nullptr) {
-            ConMsg("Unable to reallocate memory for map cycle hints list");
-            g_pFileSystem->Close(pFile);
-            return 0;
-          }
-          Q_strncat(*hints, mapLine, hintsSize, COPY_ALL_CHARACTERS);
-        }
-      }
-    }
-
-    g_pFileSystem->Close(pFile);
-
-    // Tack on <moddir>\mp_maps.txt to the end to make sure we load reslists for
-    // all multiplayer maps we know of
-    Q_snprintf(szMap, sizeof(szMap), "%s\\%s\\mp_maps.txt\r\n",
-               szReslistsBaseDir, szMod);
-    *hints =
-        (char *)realloc(*hints, strlen(*hints) + 1 + strlen(szMap) +
-                                    1);  // count nullptr string terminators
-    Q_strncat(*hints, szMap, hintsSize, COPY_ALL_CHARACTERS);
-
-    return 1;
-  }
-
   CModAppSystemGroup *dedicated_server_;
 };
 
