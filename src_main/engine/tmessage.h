@@ -3,6 +3,8 @@
 #ifndef TMESSAGE_H
 #define TMESSAGE_H
 
+#include "client_textmessage.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus
@@ -17,8 +19,6 @@ extern "C" {
 
 #define MAX_NETMESSAGE 6
 
-#include "client_textmessage.h"
-
 extern client_textmessage_t *gMessageTable;
 extern int gMessageTableCount;
 
@@ -27,9 +27,9 @@ extern char gNetworkTextMessageBuffer[MAX_NETMESSAGE][512];
 extern const char *gNetworkMessageNames[MAX_NETMESSAGE];
 
 // text message system
-void TextMessageInit(void);
+void TextMessageInit();
 client_textmessage_t *TextMessageGet(const char *pName);
-void TextMessageShutdown(void);
+void TextMessageShutdown();
 
 void TextMessage_DemoMessage(const char *pszMessage, float fFadeInTime,
                              float fFadeOutTime, float fHoldTime);
