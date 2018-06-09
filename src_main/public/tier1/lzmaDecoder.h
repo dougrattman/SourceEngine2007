@@ -1,30 +1,39 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-//	LZMA Decoder. Designed for run time decoding.
+// LZMA SDK is written and placed in the public domain by Igor Pavlov.
 //
-//	LZMA SDK 4.43 Copyright (c) 1999-2006 Igor Pavlov (2006-05-01)
-//	http://www.7-zip.org/
+// Some code in LZMA SDK is based on public domain code from another developers:
+//   1) PPMd var.H (2001): Dmitry Shkarin
+//   2) SHA-256: Wei Dai (Crypto++ library)
+//
+// Anyone is free to copy, modify, publish, use, compile, sell, or distribute
+// the original LZMA SDK code, either in source code form or as a compiled
+// binary, for any purpose, commercial or non-commercial, and by any means.
+//
+// LZMA SDK code is compatible with open source licenses, for example, you can
+// include it to GNU GPL or GNU LGPL code.
 
 #ifndef SOURCE_TIER1_LZMADECODER_H_
 #define SOURCE_TIER1_LZMADECODER_H_
 
+#include "base/include/base_types.h"
+
 #define LZMA_ID (('A' << 24) | ('M' << 16) | ('Z' << 8) | ('L'))
 
-// bind the buffer for correct identification
+// Bind the buffer for correct identification
 #pragma pack(1)
 struct lzma_header_t {
-  unsigned int id;
-  unsigned int actualSize;  // always little endian
-  unsigned int lzmaSize;    // always little endian
-  unsigned char properties[5];
+  u32 id;
+  u32 actualSize;  // always little endian
+  u32 lzmaSize;    // always little endian
+  u8 properties[5];
 };
 #pragma pack()
 
-class CLZMA {
- public:
-  unsigned int Uncompress(unsigned char *pInput, unsigned char *pOutput);
-  bool IsCompressed(unsigned char *pInput);
-  unsigned int GetActualSize(unsigned char *pInput);
+struct LZMA {
+  usize Uncompress(u8 *in, u8 *out, usize out_size);
+  bool IsCompressed(u8 *in);
+  usize GetActualSize(u8 *in);
 };
 
 #endif  // SOURCE_TIER1_LZMADECODER_H_

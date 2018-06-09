@@ -308,21 +308,49 @@ Valve’s obligations to provide such notices:
     by all standard GIF decoders.
   """
 
-- LZMA is licensed as follows:
+- LZMA SDK 18.05, located at src_main/deps/lzma, is licensed as follows:
   """
-    LZMA SDK 4.40 Copyright (c) 1999-2006 Igor Pavlov (2006-05-01)
-    http://www.7-zip.org/
-    LZMA SDK is licensed under two licenses:
-    1) GNU Lesser General Public License (GNU LGPL)
-    2) Common Public License (CPL)
-    It means that you can select one of these two licenses and 
-    follow rules of that license.
-    SPECIAL EXCEPTION:
-    Igor Pavlov, as the author of this Code, expressly permits you to 
-    statically or dynamically link your Code (or bind by name) to the 
-    interfaces of this file without subjecting your linked Code to the 
-    terms of the CPL or GNU LGPL. Any modifications or additions 
-    to this file, however, are subject to the LGPL or CPL terms.
+    LZMA SDK 18.05
+    --------------
+    
+    LZMA SDK provides the documentation, samples, header files,
+    libraries, and tools you need to develop applications that 
+    use 7z / LZMA / LZMA2 / XZ compression.
+    
+    LZMA is an improved version of famous LZ77 compression algorithm. 
+    It was improved in way of maximum increasing of compression ratio,
+    keeping high decompression speed and low memory requirements for 
+    decompressing.
+    
+    LZMA2 is a LZMA based compression method. LZMA2 provides better 
+    multithreading support for compression than LZMA and some other improvements.
+    
+    7z is a file format for data compression and file archiving.
+    7z is a main file format for 7-Zip compression program (www.7-zip.org).
+    7z format supports different compression methods: LZMA, LZMA2 and others.
+    7z also supports AES-256 based encryption.
+    
+    XZ is a file format for data compression that uses LZMA2 compression.
+    XZ format provides additional features: SHA/CRC check, filters for 
+    improved compression ratio, splitting to blocks and streams,
+    
+    
+    
+    LICENSE
+    -------
+    
+    LZMA SDK is written and placed in the public domain by Igor Pavlov.
+    
+    Some code in LZMA SDK is based on public domain code from another developers:
+      1) PPMd var.H (2001): Dmitry Shkarin
+      2) SHA-256: Wei Dai (Crypto++ library)
+    
+    Anyone is free to copy, modify, publish, use, compile, sell, or distribute the 
+    original LZMA SDK code, either in source code form or as a compiled binary, for 
+    any purpose, commercial or non-commercial, and by any means.
+    
+    LZMA SDK code is compatible with open source licenses, for example, you can 
+    include it to GNU GPL or GNU LGPL code.
   """
 
 - mxToolkit, located at src_main/deps/mxtk, is licensed as follows:

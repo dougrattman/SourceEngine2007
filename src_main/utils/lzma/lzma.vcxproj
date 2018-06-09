@@ -1,25 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AFCED408-C836-4BB4-8B55-4559E6E17D8E}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -30,7 +51,13 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -38,182 +65,438 @@
     <_ProjectFileVersion>15.0.27130.2010</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\Debug\</OutDir>
-    <IntDir>.\Debug\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\Release\</OutDir>
-    <IntDir>.\Release\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PreBuildEvent>
-      <Command>if EXIST ..\..\lib\common\vc8\$(TargetName).lib for /f "delims=" %25%25A in (%27attrib "..\..\lib\common\vc8\$(TargetName).lib"%27) do set valveTmpIsReadOnly="%25%25A"
-set valveTmpIsReadOnlyLetter=%25valveTmpIsReadOnly:~6,1%25
-if "%25valveTmpIsReadOnlyLetter%25"=="R" (
-attrib -r ..\..\lib\common\vc8\$(TargetName).lib
-..\..\devtools\bin\gnu\touch.exe -d "1999-01-01" ..\..\lib\common\vc8\$(TargetName).lib
-attrib +r ..\..\lib\common\vc8\$(TargetName).lib
-)
-set path=..\..\..\game\bin%3b%25path%25
-if exist ..\..\devtools\bin\vpc.exe ..\..\devtools\bin\vpc.exe -crc lzma.vpc 3807f1b5 -crc ..\..\vpc_scripts\source_lib_win32_base.vpc 254f6656 -crc ..\..\vpc_scripts\version.vpc 26d8e8a7 -crc ..\..\vpc_scripts\source_lib_win32_debug.vpc cf5cf9db -crc ..\..\vpc_scripts\source_lib_win32_release.vpc 7991f7e4
-</Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)public</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_NO_EXCEPTIONS;_LZMA_PROB32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
-      <ExceptionHandling />
+      <ExceptionHandling>Async</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader />
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <AssemblerOutput />
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <BrowseInformation />
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SDLCheck>true</SDLCheck>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <ConformanceMode>true</ConformanceMode>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
     </ClCompile>
     <PreLinkEvent>
-      <Command>call ..\..\vpc_scripts\valve_p4_edit.cmd ..\..\lib\common\vc8\$(TargetName).lib ..\..</Command>
+      <Command>
+      </Command>
     </PreLinkEvent>
+    <Lib />
+    <Xdcmake />
+    <Bscmake />
+    <Lib />
     <Lib>
-      <UseUnicodeResponseFiles>false</UseUnicodeResponseFiles>
-      <OutputFile>..\..\lib\common\vc8\lzma.lib</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetMachine>MachineX86</TargetMachine>
     </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)lzma.bsc</OutputFile>
-    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PreBuildEvent />
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)public</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_NO_EXCEPTIONS;_LZMA_PROB32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SDLCheck>true</SDLCheck>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <ConformanceMode>true</ConformanceMode>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
+    </ClCompile>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <Lib />
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PreBuildEvent>
-      <Command>if EXIST ..\..\lib\common\vc8\$(TargetName).lib for /f "delims=" %25%25A in (%27attrib "..\..\lib\common\vc8\$(TargetName).lib"%27) do set valveTmpIsReadOnly="%25%25A"
-set valveTmpIsReadOnlyLetter=%25valveTmpIsReadOnly:~6,1%25
-if "%25valveTmpIsReadOnlyLetter%25"=="R" (
-attrib -r ..\..\lib\common\vc8\$(TargetName).lib
-..\..\devtools\bin\gnu\touch.exe -d "1999-01-01" ..\..\lib\common\vc8\$(TargetName).lib
-attrib +r ..\..\lib\common\vc8\$(TargetName).lib
-)
-set path=..\..\..\game\bin%3b%25path%25
-if exist ..\..\devtools\bin\vpc.exe ..\..\devtools\bin\vpc.exe -crc lzma.vpc 3807f1b5 -crc ..\..\vpc_scripts\source_lib_win32_base.vpc 254f6656 -crc ..\..\vpc_scripts\version.vpc 26d8e8a7 -crc ..\..\vpc_scripts\source_lib_win32_debug.vpc cf5cf9db -crc ..\..\vpc_scripts\source_lib_win32_release.vpc 7991f7e4
-</Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)public</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_NO_EXCEPTIONS;_LZMA_PROB32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <ExceptionHandling />
+      <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader />
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <AssemblerOutput />
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <BrowseInformation />
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SDLCheck>true</SDLCheck>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <ConformanceMode>true</ConformanceMode>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
     </ClCompile>
     <PreLinkEvent>
-      <Command>call ..\..\vpc_scripts\valve_p4_edit.cmd ..\..\lib\common\vc8\$(TargetName).lib ..\..</Command>
+      <Command>
+      </Command>
     </PreLinkEvent>
+    <Lib />
+    <Xdcmake />
+    <Bscmake />
+    <Lib />
     <Lib>
-      <UseUnicodeResponseFiles>false</UseUnicodeResponseFiles>
-      <OutputFile>..\..\lib\common\vc8\lzma.lib</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetMachine>MachineX86</TargetMachine>
     </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)lzma.bsc</OutputFile>
-    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PreBuildEvent />
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)public</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_NO_EXCEPTIONS;_LZMA_PROB32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SDLCheck>true</SDLCheck>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <ConformanceMode>true</ConformanceMode>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
+    </ClCompile>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <Lib />
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C\7zip\Common\OutBuffer.cpp" />
-    <ClCompile Include="C\7zip\Common\StreamUtils.cpp" />
-    <ClCompile Include="C\7zip\Compress\LZMA\LZMADecoder.cpp" />
-    <ClCompile Include="C\7zip\Compress\LZMA\LZMAEncoder.cpp" />
-    <ClCompile Include="C\7zip\Compress\LZMA_C\LzmaDecode.c" />
-    <ClCompile Include="C\7zip\Compress\LZ\LZInWindow.cpp" />
-    <ClCompile Include="C\7zip\Compress\LZ\LZOutWindow.cpp" />
-    <ClCompile Include="C\7zip\Compress\RangeCoder\RangeCoderBit.cpp" />
-    <ClCompile Include="C\Common\Alloc.cpp" />
-    <ClCompile Include="C\Common\CRC.cpp" />
-    <ClCompile Include="lzma.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\CreateCoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\CWrappers.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\FilePathAutoRename.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\FileStreams.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\FilterCoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\InBuffer.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\InOutTempBuffer.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\LimitedStreams.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\LockedStream.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\MethodId.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\MethodProps.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\OffsetStream.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\OutBuffer.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\ProgressUtils.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\PropId.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\StreamBinder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\StreamObjects.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\StreamUtils.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\UniqBlocks.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Common\VirtThread.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\Bcj2Coder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\Bcj2Register.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\BcjCoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\BcjRegister.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\BranchMisc.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\BranchRegister.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\ByteSwap.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\CodecExports.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\CopyCoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\CopyRegister.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\DeltaFilter.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\Lzma2Decoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\Lzma2Encoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\Lzma2Register.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\LzmaDecoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\LzmaEncoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\LzmaRegister.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\PpmdDecoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\PpmdEncoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\PpmdRegister.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\XzDecoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\7zip\Compress\XzEncoder.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\CommandLineParser.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\CRC.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\CrcReg.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\C_FileIO.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\IntToString.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\ListFileUtils.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\MyString.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\MyVector.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\MyWindows.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\NewHandler.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\Sha256Reg.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\StdInStream.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\StdOutStream.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\StringConvert.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\StringToInt.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\TextConfig.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\UTFConvert.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\Wildcard.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\XzCrc64Init.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Common\XzCrc64Reg.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\CommonDialog.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Control\ComboBox.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Control\Dialog.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Control\ImageList.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Control\ListView.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Control\PropertyPage.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Control\Window2.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\DLL.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\ErrorMsg.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\FileDir.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\FileFind.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\FileIO.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\FileLink.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\FileMapping.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\FileName.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\FileSystem.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\MemoryLock.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\PropVariant.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\PropVariantConv.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Registry.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\ResourceString.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\SecurityUtils.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Shell.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Synchronization.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\System.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\TimeUtils.cpp" />
+    <ClCompile Include="..\..\deps\lzma\CPP\Windows\Window.cpp" />
+    <ClCompile Include="..\..\deps\lzma\C\7zAlloc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zArcIn.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zBuf.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zBuf2.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zCrc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zCrcOpt.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zDec.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zFile.c" />
+    <ClCompile Include="..\..\deps\lzma\C\7zStream.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Aes.c" />
+    <ClCompile Include="..\..\deps\lzma\C\AesOpt.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Alloc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Bcj2.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Bcj2Enc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Bra.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Bra86.c" />
+    <ClCompile Include="..\..\deps\lzma\C\BraIA64.c" />
+    <ClCompile Include="..\..\deps\lzma\C\CpuArch.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Delta.c" />
+    <ClCompile Include="..\..\deps\lzma\C\DllSecur.c" />
+    <ClCompile Include="..\..\deps\lzma\C\LzFind.c" />
+    <ClCompile Include="..\..\deps\lzma\C\LzFindMt.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Lzma2Dec.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Lzma2DecMt.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Lzma2Enc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Lzma86Dec.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Lzma86Enc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\LzmaDec.c" />
+    <ClCompile Include="..\..\deps\lzma\C\LzmaEnc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\LzmaLib.c" />
+    <ClCompile Include="..\..\deps\lzma\C\MtCoder.c" />
+    <ClCompile Include="..\..\deps\lzma\C\MtDec.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Ppmd7.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Ppmd7Dec.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Ppmd7Enc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Sha256.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Sort.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Threads.c" />
+    <ClCompile Include="..\..\deps\lzma\C\Xz.c" />
+    <ClCompile Include="..\..\deps\lzma\C\XzCrc64.c" />
+    <ClCompile Include="..\..\deps\lzma\C\XzCrc64Opt.c" />
+    <ClCompile Include="..\..\deps\lzma\C\XzDec.c" />
+    <ClCompile Include="..\..\deps\lzma\C\XzEnc.c" />
+    <ClCompile Include="..\..\deps\lzma\C\XzIn.c" />
+    <ClCompile Include="lzma.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C\7zip\Common\OutBuffer.h" />
-    <ClInclude Include="C\7zip\Common\StreamUtils.h" />
-    <ClInclude Include="C\7zip\Compress\LZMA\LZMA.h" />
-    <ClInclude Include="C\7zip\Compress\LZMA\LZMADecoder.h" />
-    <ClInclude Include="C\7zip\Compress\LZMA\LZMAEncoder.h" />
-    <ClInclude Include="C\7zip\Compress\LZMA_C\LzmaDecode.h" />
-    <ClInclude Include="C\7zip\Compress\LZMA_C\LzmaTypes.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree2.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree3.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree3Z.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree4.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTreeMain.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\HashChain\HC4.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\HashChain\HCMain.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\IMatchFinder.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\LZInWindow.h" />
-    <ClInclude Include="C\7zip\Compress\LZ\LZOutWindow.h" />
-    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoder.h" />
-    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoderBit.h" />
-    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoderBitTree.h" />
-    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoderOpt.h" />
-    <ClInclude Include="C\Common\Alloc.h" />
-    <ClInclude Include="C\Common\CRC.h" />
-    <ClInclude Include="C\Common\Defs.h" />
-    <ClInclude Include="C\Common\MyCom.h" />
-    <ClInclude Include="C\Common\MyWindows.h" />
-    <ClInclude Include="C\Common\Types.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\CreateCoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\CWrappers.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\FilePathAutoRename.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\FileStreams.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\FilterCoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\InBuffer.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\InOutTempBuffer.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\LimitedStreams.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\LockedStream.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\MethodId.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\MethodProps.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\OffsetStream.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\OutBuffer.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\ProgressUtils.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\RegisterArc.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\RegisterCodec.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\StdAfx.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\StreamBinder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\StreamObjects.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\StreamUtils.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\UniqBlocks.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Common\VirtThread.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\Bcj2Coder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\BcjCoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\BranchMisc.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\CopyCoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\Lzma2Decoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\Lzma2Encoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\LzmaDecoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\LzmaEncoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\PpmdDecoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\PpmdEncoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\StdAfx.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\XzDecoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\7zip\Compress\XzEncoder.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\AutoPtr.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\CommandLineParser.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\Common.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\ComTry.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\C_FileIO.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\Defs.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\DynamicBuffer.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\IntToString.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\Lang.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\ListFileUtils.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyBuffer.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyBuffer2.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyCom.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyException.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyGuidDef.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyInitGuid.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyLinux.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyString.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyTypes.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyUnknown.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyVector.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\MyWindows.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\NewHandler.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\StdAfx.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\StdInStream.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\StdOutStream.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\StringConvert.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\StringToInt.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\TextConfig.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\UTFConvert.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Common\Wildcard.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\COM.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\CommonDialog.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\ComboBox.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\CommandBar.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\Dialog.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\Edit.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\ImageList.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\ListView.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\ProgressBar.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\PropertyPage.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\ReBar.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\Static.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\StatusBar.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\StdAfx.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\ToolBar.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\Trackbar.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Control\Window2.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Defs.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\DLL.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\ErrorMsg.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\FileDir.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\FileFind.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\FileIO.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\FileMapping.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\FileName.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\FileSystem.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Handle.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\MemoryLock.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\NtCheck.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\PropVariant.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\PropVariantConv.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Registry.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\ResourceString.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\SecurityUtils.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Shell.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\StdAfx.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Synchronization.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\System.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Thread.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\TimeUtils.h" />
+    <ClInclude Include="..\..\deps\lzma\CPP\Windows\Window.h" />
+    <ClInclude Include="..\..\deps\lzma\C\7z.h" />
+    <ClInclude Include="..\..\deps\lzma\C\7zAlloc.h" />
+    <ClInclude Include="..\..\deps\lzma\C\7zBuf.h" />
+    <ClInclude Include="..\..\deps\lzma\C\7zCrc.h" />
+    <ClInclude Include="..\..\deps\lzma\C\7zFile.h" />
+    <ClInclude Include="..\..\deps\lzma\C\7zTypes.h" />
+    <ClInclude Include="..\..\deps\lzma\C\7zVersion.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Aes.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Alloc.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Bcj2.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Bra.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Compiler.h" />
+    <ClInclude Include="..\..\deps\lzma\C\CpuArch.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Delta.h" />
+    <ClInclude Include="..\..\deps\lzma\C\DllSecur.h" />
+    <ClInclude Include="..\..\deps\lzma\C\LzFind.h" />
+    <ClInclude Include="..\..\deps\lzma\C\LzFindMt.h" />
+    <ClInclude Include="..\..\deps\lzma\C\LzHash.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Lzma2Dec.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Lzma2DecMt.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Lzma2Enc.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Lzma86.h" />
+    <ClInclude Include="..\..\deps\lzma\C\LzmaDec.h" />
+    <ClInclude Include="..\..\deps\lzma\C\LzmaEnc.h" />
+    <ClInclude Include="..\..\deps\lzma\C\LzmaLib.h" />
+    <ClInclude Include="..\..\deps\lzma\C\MtCoder.h" />
+    <ClInclude Include="..\..\deps\lzma\C\MtDec.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Ppmd.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Ppmd7.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Precomp.h" />
+    <ClInclude Include="..\..\deps\lzma\C\RotateDefs.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Sha256.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Sort.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Threads.h" />
+    <ClInclude Include="..\..\deps\lzma\C\Xz.h" />
+    <ClInclude Include="..\..\deps\lzma\C\XzCrc64.h" />
+    <ClInclude Include="..\..\deps\lzma\C\XzEnc.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="lzma.vpc" />
+    <ResourceCompile Include="..\..\deps\lzma\C\7zVersion.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

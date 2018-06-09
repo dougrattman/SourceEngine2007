@@ -125,7 +125,7 @@ class CFileHandle {
   void SetName(char const *pName) {
     Assert(pName);
     Assert(!m_pszTrueFileName);
-    int len = Q_strlen(pName);
+    usize len = strlen(pName);
     m_pszTrueFileName = new char[len + 1];
     memcpy(m_pszTrueFileName, pName, len + 1);
   }
@@ -400,7 +400,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
                                unsigned nOffset) {
     return malloc(nSize);
   }
-  void FreeOptimalReadBuffer(void *p) { free(p); }
+  void FreeOptimalReadBuffer(void *p) { heap_free(p); }
 
   // Gets the current working directory
   virtual bool GetCurrentDirectory(char *pDirectory, int maxlen);

@@ -42,8 +42,8 @@ ConVar fs_warning_mode("fs_warning_mode", "0", 0,
 ConVar fs_monitor_read_from_pack("fs_monitor_read_from_pack", "0", 0,
                                  "0:Off, 1:Any, 2:Sync only");
 
-#define BSPOUTPUT \
-  0  // bsp output flag -- determines type of fs_log output to generate
+// bsp output flag -- determines type of fs_log output to generate
+#define BSPOUTPUT 0
 
 static void AddSeperatorAndFixPath(char *str);
 
@@ -53,7 +53,7 @@ CUtlSymbolTableMT g_PathIDTable(0, 32, true);
 int g_iNextSearchPathID = 1;
 
 // Look for cases like materials\\blah.vmt.
-bool V_CheckDoubleSlashes(const char *pStr) {
+inline bool V_CheckDoubleSlashes(const char *pStr) {
   usize len = strlen(pStr);
 
   for (usize i = 1; i < len - 1; i++) {
@@ -61,6 +61,7 @@ bool V_CheckDoubleSlashes(const char *pStr) {
         (pStr[i + 1] == '/' || pStr[i + 1] == '\\'))
       return true;
   }
+
   return false;
 }
 
@@ -163,13 +164,11 @@ CUtlSymbol CBaseFileSystem::m_BSPPathID;
 DVDMode_t CBaseFileSystem::m_DVDMode;
 CUtlVector<FileNameHandle_t> CBaseFileSystem::m_ExcludePaths;
 
-class CStoreIDEntry {
- public:
-  CStoreIDEntry() {}
-  CStoreIDEntry(const char *pPathIDStr, int storeID)
+struct StoreIDEntry {
+  StoreIDEntry() {}
+  StoreIDEntry(const char *pPathIDStr, int storeID)
       : m_PathIDString{pPathIDStr}, m_StoreID{storeID} {}
 
- public:
   CUtlSymbol m_PathIDString;
   int m_StoreID;
 };
@@ -178,9 +177,8 @@ class CStoreIDEntry {
 // list of files.
 class CFileSystemReloadFileList : public IFileList {
  public:
-  CFileSystemReloadFileList(CBaseFileSystem *pFileSystem) {
-    m_pFileSystem = pFileSystem;
-  }
+  CFileSystemReloadFileList(CBaseFileSystem *pFileSystem)
+      : m_pFileSystem{pFileSystem} {}
 
   virtual void Release() { delete this; }
 
@@ -188,31 +186,30 @@ class CFileSystemReloadFileList : public IFileList {
   // Return true if this file should be reloaded based on its current state and
   // the whitelist that we have now.
   virtual bool IsFileInList(const char *pFilename) {
-    bool bRet = m_pFileSystem->ShouldGameReloadFile(pFilename);
-    return bRet;
+    return m_pFileSystem->ShouldGameReloadFile(pFilename);
   }
 
  private:
   CBaseFileSystem *m_pFileSystem;
 };
 
-static CStoreIDEntry *FindPrevFileByStoreID(
-    CUtlDict<CUtlVector<CStoreIDEntry> *, int> &filesByStoreID,
+static StoreIDEntry *FindPrevFileByStoreID(
+    CUtlDict<CUtlVector<StoreIDEntry> *, int> &filesByStoreID,
     const char *pFilename, const char *pPathIDStr, int foundStoreID) {
   int iEntry = filesByStoreID.Find(pFilename);
 
   if (iEntry == filesByStoreID.InvalidIndex()) {
-    CUtlVector<CStoreIDEntry> *pList = new CUtlVector<CStoreIDEntry>;
-    pList->AddToTail(CStoreIDEntry(pPathIDStr, foundStoreID));
+    CUtlVector<StoreIDEntry> *pList = new CUtlVector<StoreIDEntry>;
+    pList->AddToTail(StoreIDEntry(pPathIDStr, foundStoreID));
     filesByStoreID.Insert(pFilename, pList);
     return nullptr;
   }
 
   // Now is there a previous entry with a different path ID string and the
   // same store ID?
-  CUtlVector<CStoreIDEntry> *pList = filesByStoreID[iEntry];
+  CUtlVector<StoreIDEntry> *pList = filesByStoreID[iEntry];
   for (int i = 0; i < pList->Count(); i++) {
-    CStoreIDEntry &entry = pList->Element(i);
+    StoreIDEntry &entry = pList->Element(i);
     if (entry.m_StoreID == foundStoreID &&
         _stricmp(entry.m_PathIDString.String(), pPathIDStr) != 0)
       return &entry;
@@ -685,7 +682,7 @@ int CPackFile::ReadFromPack(int nIndex, void *buffer, int nDestBytes,
   // Seek to the start of the read area and perform the read: TODO: CHANGE THIS
   // INTO A CFileHandle
   m_fs->FS_fseek(m_hPackFileHandle, m_nBaseOffset + nOffset, SEEK_SET);
-  int nBytesRead =
+  usize nBytesRead =
       m_fs->FS_fread(buffer, nDestBytes, nBytes, m_hPackFileHandle);
 
   m_mutex.Unlock();
@@ -769,9 +766,9 @@ int CZipPackFile::ReadFromPack(int nEntryIndex, void *pBuffer, int nDestBytes,
       int nLocalOffset = nOffset - m_PackFiles[nEntryIndex].m_nPosition;
       byte *pPreloadData = (byte *)m_pPreloadData + pPreloadEntry->DataOffset;
 
-      CLZMA lzma;
+      LZMA lzma;
       if (lzma.IsCompressed(pPreloadData)) {
-        unsigned int actualSize = lzma.GetActualSize(pPreloadData);
+        usize actualSize = lzma.GetActualSize(pPreloadData);
         if (nLocalOffset + nBytes <= (int)actualSize) {
           // satisfy from compressed preload
           if (fs_monitor_read_from_pack.GetInt() == 1) {
@@ -782,15 +779,14 @@ int CZipPackFile::ReadFromPack(int nEntryIndex, void *pBuffer, int nDestBytes,
           if (nLocalOffset == 0 && nDestBytes >= (int)actualSize &&
               nBytes == (int)actualSize) {
             // uncompress directly into caller's buffer
-            lzma.Uncompress((unsigned char *)pPreloadData,
-                            (unsigned char *)pBuffer);
+            lzma.Uncompress((u8 *)pPreloadData, (u8 *)pBuffer, nDestBytes);
             return nBytes;
           }
 
           // uncompress into temporary memory
           CUtlMemory<byte> tempMemory;
           tempMemory.EnsureCapacity(actualSize);
-          lzma.Uncompress(pPreloadData, tempMemory.Base());
+          lzma.Uncompress(pPreloadData, tempMemory.Base(), actualSize);
           // copy only what caller expects
           memcpy(pBuffer, (byte *)tempMemory.Base() + nLocalOffset, nBytes);
           return nBytes;
@@ -912,8 +908,7 @@ void CZipPackFile::DiscardPreloadData() {
     return;
   }
 
-  free(m_pPreloadHeader);
-  m_pPreloadHeader = nullptr;
+  heap_free(m_pPreloadHeader);
 }
 
 //-----------------------------------------------------------------------------
@@ -1102,7 +1097,7 @@ void CBaseFileSystem::AddPackFiles(const char *pPath, const CUtlSymbol &pathID,
     MEM_ALLOC_CREDIT();
 
     pakNames.AddToTail(pakfile);
-    pakSizes.AddToTail((int64_t)((unsigned int)buf.st_size));
+    pakSizes.AddToTail(buf.st_size);
   }
 
   // Add any zip files in the format zip1.zip ... zip0.zip
@@ -2316,17 +2311,11 @@ void CBaseFileSystem::ParsePathID(const char *&pFilename, const char *&pPathID,
     pFilename = pIn + 1;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 FileHandle_t CBaseFileSystem::Open(const char *pFileName, const char *pOptions,
                                    const char *pathID) {
   return OpenEx(pFileName, pOptions, 0, pathID);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 FileHandle_t CBaseFileSystem::OpenEx(const char *pFileName,
                                      const char *pOptions, unsigned flags,
                                      const char *pathID,
@@ -2360,9 +2349,6 @@ FileHandle_t CBaseFileSystem::OpenEx(const char *pFileName,
   return OpenForWrite(tempFileName, pOptions, pathID);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CBaseFileSystem::Close(FileHandle_t file) {
   VPROF_BUDGET("CBaseFileSystem::Close", VPROF_BUDGETGROUP_OTHER_FILESYSTEM);
   if (!file) {
@@ -2373,9 +2359,6 @@ void CBaseFileSystem::Close(FileHandle_t file) {
   delete (CFileHandle *)file;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CBaseFileSystem::Seek(FileHandle_t file, int pos,
                            FileSystemSeek_t whence) {
   VPROF_BUDGET("CBaseFileSystem::Seek", VPROF_BUDGETGROUP_OTHER_FILESYSTEM);
@@ -2388,11 +2371,6 @@ void CBaseFileSystem::Seek(FileHandle_t file, int pos,
   fh->Seek(pos, whence);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : file -
-// Output : unsigned int
-//-----------------------------------------------------------------------------
 unsigned int CBaseFileSystem::Tell(FileHandle_t file) {
   VPROF_BUDGET("CBaseFileSystem::Tell", VPROF_BUDGETGROUP_OTHER_FILESYSTEM);
 
@@ -2405,11 +2383,6 @@ unsigned int CBaseFileSystem::Tell(FileHandle_t file) {
   return ((CFileHandle *)file)->Tell();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : file -
-// Output : unsigned int
-//-----------------------------------------------------------------------------
 unsigned int CBaseFileSystem::Size(FileHandle_t file) {
   VPROF_BUDGET("CBaseFileSystem::Size", VPROF_BUDGETGROUP_OTHER_FILESYSTEM);
 
@@ -2421,11 +2394,6 @@ unsigned int CBaseFileSystem::Size(FileHandle_t file) {
   return ((CFileHandle *)file)->Size();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : file -
-// Output : unsigned int
-//-----------------------------------------------------------------------------
 unsigned int CBaseFileSystem::Size(const char *pFileName, const char *pPathID) {
   VPROF_BUDGET("CBaseFileSystem::Size", VPROF_BUDGETGROUP_OTHER_FILESYSTEM);
   CHECK_DOUBLE_SLASHES(pFileName);
@@ -2466,19 +2434,12 @@ unsigned int CBaseFileSystem::Size(const char *pFileName, const char *pPathID) {
   for (CSearchPath *pSearchPath = iter.GetFirst(); pSearchPath != nullptr;
        pSearchPath = iter.GetNext()) {
     iSize = FastFindFile(pSearchPath, pFileName);
-    if (iSize > 0) {
-      break;
-    }
+
+    if (iSize > 0) break;
   }
   return iSize;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *path -
-//			*pFileName -
-// Output : long
-//-----------------------------------------------------------------------------
 long CBaseFileSystem::FastFileTime(const CSearchPath *path,
                                    const char *pFileName) {
   struct _stat buf;
@@ -2509,13 +2470,13 @@ long CBaseFileSystem::FastFileTime(const CSearchPath *path,
 #ifdef OS_POSIX
     const char *realName = findFileInDirCaseInsensitive(pTmpFileName);
     if (realName && FS_stat(realName, &buf) != -1) {
-      free((void *)realName);
+      heap_free(realName);
       return buf.st_size;
     }
 #endif
   }
 
-  return (0L);
+  return 0L;
 }
 
 int CBaseFileSystem::FastFindFile(const CSearchPath *path,
@@ -3055,8 +3016,8 @@ bool CBaseFileSystem::ShouldGameReloadFile(const char *pFilename) {
   }
 
   FileInfo *fileInfos[256];
-  int nFileInfos = m_FileTracker.GetFileInfos(
-      fileInfos, std::size(fileInfos), pFilename);
+  int nFileInfos =
+      m_FileTracker.GetFileInfos(fileInfos, std::size(fileInfos), pFilename);
   if (nFileInfos == 0) {
     // Ain't heard of this file. It probably came from a BSP or a pak file.
     if (m_WhitelistSpewFlags & WHITELIST_SPEW_DONT_RELOAD_FILES) {
@@ -3193,11 +3154,11 @@ void CBaseFileSystem::CacheFileCRCs_R(const char *pPathname,
   checking the GAME and MOD path IDs for blah.txt return different file CRCs)
   */
 
-  CUtlDict<CUtlVector<CStoreIDEntry> *, int> filesByStoreID;  // key=filename,
-                                                              // value=list of
-                                                              // store IDs this
-                                                              // filename was
-                                                              // found in
+  CUtlDict<CUtlVector<StoreIDEntry> *, int> filesByStoreID;  // key=filename,
+                                                             // value=list of
+                                                             // store IDs this
+                                                             // filename was
+                                                             // found in
   for (int i = searchPathNames.First(); i != searchPathNames.InvalidIndex();
        i = searchPathNames.Next(i)) {
     // Now find all the files..
@@ -3217,7 +3178,7 @@ void CBaseFileSystem::CacheFileCRCs_R(const char *pPathname,
             CacheFileCRCs_R(relativeName, eType, pFilter, searchPathNames);
         } else {
           if (pFilter->IsFileInList(relativeName)) {
-            CStoreIDEntry *pPrevRecord = FindPrevFileByStoreID(
+            StoreIDEntry *pPrevRecord = FindPrevFileByStoreID(
                 filesByStoreID, pFilename, pPathIDStr, foundStoreID);
             if (pPrevRecord) {
               // Ok, we already found this file in an earlier search path with
@@ -3490,7 +3451,7 @@ void CBaseFileSystem::CreateDirHierarchy(const char *pRelativePath,
     strcpy_s(szScratchFileName, pRelativePath);
   }
 
-  int len = strlen(szScratchFileName) + 1;
+  usize len = strlen(szScratchFileName) + 1;
   char *end = szScratchFileName + len;
   char *s = szScratchFileName;
   while (s < end) {
@@ -3958,7 +3919,7 @@ bool CBaseFileSystem::GetCurrentDirectory(char *pDirectory, int maxlen) {
   Q_FixSlashes(pDirectory);
 
   // Strip the last slash
-  int len = strlen(pDirectory);
+  usize len = strlen(pDirectory);
   if (pDirectory[len - 1] == CORRECT_PATH_SEPARATOR) {
     pDirectory[len - 1] = 0;
   }
@@ -4442,7 +4403,9 @@ int CFileHandle::Read(void *pBuffer, int nDestSize, int nLength) {
   // Is this a regular file or a pack file?
   if (m_pFile) {
     return m_fs->FS_fread(pBuffer, nDestSize, nLength, m_pFile);
-  } else if (m_pPackFileHandle) {
+  }
+
+  if (m_pPackFileHandle) {
     // Pack file handle handles clamping all the reads:
     return m_pPackFileHandle->Read(pBuffer, nDestSize, nLength);
   }

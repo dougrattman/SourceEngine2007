@@ -40,11 +40,11 @@ CUtlVector<SceneFile_t> g_SceneFiles;
 
 class CSceneTokenProcessor : public ISceneTokenProcessor {
  public:
-  const char *CurrentToken(void) { return token; }
+  const char *CurrentToken() { return token; }
 
   bool GetToken(bool crossline) { return ::GetToken(crossline) ? true : false; }
 
-  bool TokenAvailable(void) { return ::TokenAvailable() ? true : false; }
+  bool TokenAvailable() { return ::TokenAvailable() ? true : false; }
 
   void Error(const char *fmt, ...) {
     char string[2048];
@@ -67,14 +67,14 @@ class CChoreoStringPool : public IChoreoStringPool {
   CChoreoStringPool() : m_StringMap(true) { m_nOffset = 0; }
 
   // Returns a valid id into the string table
-  virtual short FindOrAddString(const char *pString) {
+  short FindOrAddString(const char *pString) override {
     int stringId = m_StringMap.Find(pString);
     if (stringId != m_StringMap.InvalidIndex()) {
       // found in pool
       return stringId;
     }
 
-    int &nOffset = m_StringMap[pString];
+    usize &nOffset = m_StringMap[pString];
     nOffset = m_nOffset;
     // advance by string and 0
     m_nOffset += strlen(pString) + 1;
@@ -85,7 +85,7 @@ class CChoreoStringPool : public IChoreoStringPool {
     return stringId;
   }
 
-  virtual bool GetString(short stringId, char *buff, int buffSize) {
+  bool GetString(short stringId, char *buff, int buffSize) const override {
     if (stringId < 0 || stringId >= m_StringMap.GetNumStrings()) {
       V_strncpy(buff, "", buffSize);
       return false;
@@ -94,9 +94,9 @@ class CChoreoStringPool : public IChoreoStringPool {
     return true;
   }
 
-  int GetNumStrings() { return m_StringMap.GetNumStrings(); }
+  int GetNumStrings() const { return m_StringMap.GetNumStrings(); }
 
-  unsigned int GetPoolSize() { return m_nOffset; }
+  usize GetPoolSize() const { return m_nOffset; }
 
   // build the final pool
   void GetTableAndPool(CUtlVector<unsigned int> &offsets, CUtlBuffer &buffer) {
@@ -124,7 +124,7 @@ class CChoreoStringPool : public IChoreoStringPool {
     }
   }
 
-  void DumpPool() {
+  void DumpPool() const {
     for (int i = 0; i < m_StringMap.GetNumStrings(); i++) {
       const char *pString = m_StringMap.String(i);
       Msg("%s\n", pString);
@@ -137,8 +137,8 @@ class CChoreoStringPool : public IChoreoStringPool {
   }
 
  private:
-  CUtlStringMap<int> m_StringMap;
-  unsigned int m_nOffset;
+  CUtlStringMap<usize> m_StringMap;
+  usize m_nOffset;
 };
 CChoreoStringPool g_ChoreoStringPool;
 
@@ -147,8 +147,7 @@ CChoreoStringPool g_ChoreoStringPool;
 void FindSoundsInEvent(CChoreoEvent *pEvent, CUtlVector<short> &soundList) {
   if (!pEvent || pEvent->GetType() != CChoreoEvent::SPEAK) return;
 
-  unsigned short stringId =
-      g_ChoreoStringPool.FindOrAddString(pEvent->GetParameters());
+  u16 stringId = g_ChoreoStringPool.FindOrAddString(pEvent->GetParameters());
   if (soundList.Find(stringId) == soundList.InvalidIndex()) {
     soundList.AddToTail(stringId);
   }
@@ -207,16 +206,16 @@ bool CreateTargetFile_VCD(const char *pSourceName, const char *pTargetName,
   pChoreoScene->SaveToBinaryBuffer(g_SceneFiles[iScene].compiledBuffer,
                                    crcSource, &g_ChoreoStringPool);
 
-  unsigned int compressedSize;
-  unsigned char *pCompressedBuffer = LZMA_Compress(
-      (unsigned char *)g_SceneFiles[iScene].compiledBuffer.Base(),
+  usize compressedSize;
+  u8 *pCompressedBuffer = LZMA_Compress(
+      (u8 *)g_SceneFiles[iScene].compiledBuffer.Base(),
       g_SceneFiles[iScene].compiledBuffer.TellMaxPut(), &compressedSize);
   if (pCompressedBuffer) {
     // replace the compiled buffer with the compressed version
     g_SceneFiles[iScene].compiledBuffer.Purge();
     g_SceneFiles[iScene].compiledBuffer.EnsureCapacity(compressedSize);
     g_SceneFiles[iScene].compiledBuffer.Put(pCompressedBuffer, compressedSize);
-    free(pCompressedBuffer);
+    heap_free(pCompressedBuffer);
   }
 
   delete pChoreoScene;

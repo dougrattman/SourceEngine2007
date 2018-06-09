@@ -1,53 +1,45 @@
 // Copyright © 1996-2007, Valve Corporation, All rights reserved.
 //
-//	Purpose: LZMA Glue. Designed for Tool time Encoding/Decoding.
+// Purpose: LZMA Glue. Designed for Tool time Encoding/Decoding.
 //
-//	LZMA SDK 4.43 Copyright (c) 1999-2006 Igor Pavlov (2006-05-01)
+// LZMA SDK is written and placed in the public domain by Igor Pavlov.
 //
-//	http://www.7-zip.org/
+// Some code in LZMA SDK is based on public domain code from another developers:
+//   1) PPMd var.H (2001): Dmitry Shkarin
+//   2) SHA-256: Wei Dai (Crypto++ library)
 //
-//	LZMA SDK is licensed under two licenses:
+// Anyone is free to copy, modify, publish, use, compile, sell, or distribute
+// the original LZMA SDK code, either in source code form or as a compiled
+// binary, for any purpose, commercial or non-commercial, and by any means.
 //
-//	1) GNU Lesser General Public License (GNU LGPL)
-//	2) Common Public License (CPL)
-//
-//	It means that you can select one of these two licenses and
-//	follow rules of that license.
-//
-//	SPECIAL EXCEPTION:
-//
-//	Igor Pavlov, as the author of this Code, expressly permits you to
-//	statically or dynamically link your Code (or bind by name) to the
-//	interfaces of this file without subjecting your linked Code to the
-//	terms of the CPL or GNU LGPL. Any modifications or additions
-//	to this file, however, are subject to the LGPL or CPL terms.
+// LZMA SDK code is compatible with open source licenses, for example, you can
+// include it to GNU GPL or GNU LGPL code.
 
-#ifndef LZMA_H
-#define LZMA_H
+#ifndef SOURCE_LZMA_H_
+#define SOURCE_LZMA_H_
 
-#include <cstdint>
+#include "base/include/base_types.h"
 
 // power of two, 256k
-#define LZMA_DEFAULT_DICTIONARY 18
+#define LZMA_DEFAULT_DICTIONARY 18u
 
 // These routines are designed for TOOL TIME encoding/decoding on the PC!
 // They have not been made to encode/decode on the PPC and lack big endian
-// awarnesss. Lightweight GAME TIME Decoding is part of tier1.lib, via CLZMA.
+// awarnesss.  Lightweight GAME TIME Decoding is part of tier1.lib, via LZMA.
 
 // Encoding glue. Returns non-null Compressed buffer if successful.
 // Caller must free.
-unsigned char *LZMA_Compress(uint8_t *input, size_t input_size,
-                             size_t *output_size,
-                             size_t dinctionary_size = LZMA_DEFAULT_DICTIONARY);
+u8 *LZMA_Compress(u8 *in, usize in_size, usize *out_size,
+  usize dictionary_size = LZMA_DEFAULT_DICTIONARY);
 
 // Decoding glue. Returns true if successful.
-bool LZMA_Uncompress(uint8_t *input, uint8_t **output, size_t *output_size);
+bool LZMA_Uncompress(u8 *in, u8 **out, usize *out_size);
 
 // Decoding helper, returns TRUE if buffer is LZMA compressed.
-bool LZMA_IsCompressed(uint8_t *input);
+bool LZMA_IsCompressed(u8 *in);
 
 // Decoding helper, returns non-zero size of data when uncompressed, otherwise
 // 0.
-unsigned int LZMA_GetActualSize(uint8_t *input);
+u32 LZMA_GetActualSize(u8 *in);
 
-#endif
+#endif  // SOURCE_LZMA_H_

@@ -84,7 +84,7 @@ volatile static char s_ShaderCompileString[] = "dynamic_shader_compile_is_on";
 #endif
 
 #ifdef PROFILE_SHADER_CREATE
-static FILE *GetDebugFileHandle(void) {
+static FILE *GetDebugFileHandle() {
   static FILE *fp = NULL;
   if (!fp) {
     fp = fopen("shadercreate.txt", "w");
@@ -506,7 +506,7 @@ class CShaderManager : public IShaderManager {
   struct ShaderCombos_t {
     CUtlVector<Combo_t> m_StaticCombos;
     CUtlVector<Combo_t> m_DynamicCombos;
-    int GetNumDynamicCombos(void) const {
+    int GetNumDynamicCombos() const {
       int combos = 1;
       int i;
       for (i = 0; i < m_DynamicCombos.Count(); i++) {
@@ -514,7 +514,7 @@ class CShaderManager : public IShaderManager {
       }
       return combos;
     }
-    int GetNumStaticCombos(void) const {
+    int GetNumStaticCombos() const {
       int combos = 1;
       int i;
       for (i = 0; i < m_StaticCombos.Count(); i++) {
@@ -807,7 +807,7 @@ void CShaderManager::DestroyStaticShaders() {
 }
 
 #ifdef DYNAMIC_SHADER_COMPILE
-static const char *GetShaderSourcePath(void) {
+static const char *GetShaderSourcePath() {
   static char shaderDir[SOURCE_MAX_PATH];
   // GR - just in case init this...
   static bool bHaveShaderDir = false;
@@ -1091,7 +1091,7 @@ HRESULT CDxInclude::Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
 
 HRESULT CDxInclude::Close(LPCVOID pData) {
   void *pMem = const_cast<void *>(pData);
-  free(pMem);
+  heap_free(pMem);
   return S_OK;
 }
 
@@ -1356,7 +1356,8 @@ retry_compile:
     // enable to dump the disassembly for shader validation
     char exampleCommandLine[2048];
     Q_strncpy(exampleCommandLine,
-              "// Run from stdshaders\n// ..\\..\\dx9sdk\\utilities\\fxc.exe ",
+              "// Run from stdshaders\n// "
+              "..\\..\\deps\\dxsdk_jun2010\\Utilities\\\fxc.exe ",
               sizeof(exampleCommandLine));
     int i;
     for (i = 0; macros[i].Name; i++) {
@@ -1660,11 +1661,12 @@ bool CShaderManager::CreateDynamicCombos_Ver5(void *pContext,
 
       case 0x40000000:  // lzma compressed
       {
-        CLZMA lzDecoder;
+        LZMA lzDecoder;
         nBlockSize &= 0x3fffffff;
 
-        size_t nOutsize = lzDecoder.Uncompress(
-            reinterpret_cast<uint8_t *>(pCompressedShaders), pUnpackBuffer);
+        size_t nOutsize =
+            lzDecoder.Uncompress(reinterpret_cast<u8 *>(pCompressedShaders),
+                                 pUnpackBuffer, MAX_SHADER_UNPACKED_BLOCK_SIZE);
         pCompressedShaders += nBlockSize;
         nBlockSize = nOutsize;  // how much data there is
       } break;
@@ -2112,9 +2114,11 @@ void CShaderManager::SetVertexShader(VertexShader_t shader) {
     vshIndex = 0;
   }
 
-  //	VertexShaderLookup_t &lookup = m_VertexShaderDict[shader];
-  //	Warning( "vsh: %s static: %d dynamic: %d\n", m_ShaderSymbolTable.String(
-  // lookup.m_Name ), 		lookup.m_nStaticIndex, m_nVertexShaderIndex );
+    //	VertexShaderLookup_t &lookup = m_VertexShaderDict[shader];
+    //	Warning( "vsh: %s static: %d dynamic: %d\n", m_ShaderSymbolTable.String(
+    // lookup.m_Name ), 		lookup.m_nStaticIndex,
+    // m_nVertexShaderIndex
+    // );
 
 #ifdef DYNAMIC_SHADER_COMPILE
   HardwareShader_t &dxshader =
@@ -2209,9 +2213,9 @@ void CShaderManager::SetPixelShader(PixelShader_t shader) {
 
   int pshIndex = m_nPixelShaderIndex;
   Assert(pshIndex >= 0);
-//	PixelShaderLookup_t &lookup = m_PixelShaderDict[shader];
-//	Warning( "psh: %s static: %d dynamic: %d\n", m_ShaderSymbolTable.String(
-// lookup.m_Name ), 		lookup.m_nStaticIndex, m_nPixelShaderIndex );
+  //	PixelShaderLookup_t &lookup = m_PixelShaderDict[shader];
+  //	Warning( "psh: %s static: %d dynamic: %d\n", m_ShaderSymbolTable.String(
+  // lookup.m_Name ), 		lookup.m_nStaticIndex, m_nPixelShaderIndex );
 #ifdef DYNAMIC_SHADER_COMPILE
   HardwareShader_t &dxshader =
       m_PixelShaderDict[shader]
@@ -2342,7 +2346,7 @@ void CShaderManager::DestroyPixelShader(PixelShader_t pixelShader) {
 //-----------------------------------------------------------------------------
 // Destroys all shaders
 //-----------------------------------------------------------------------------
-void CShaderManager::DestroyAllShaders(void) {
+void CShaderManager::DestroyAllShaders() {
   for (VertexShader_t vshIndex = m_VertexShaderDict.Head();
        vshIndex != m_VertexShaderDict.InvalidIndex();) {
     Assert(m_VertexShaderDict[vshIndex].m_nRefCount >= 0);
@@ -2366,7 +2370,7 @@ void CShaderManager::DestroyAllShaders(void) {
 //-----------------------------------------------------------------------------
 // print all vertex and pixel shaders along with refcounts to the console
 //-----------------------------------------------------------------------------
-void CShaderManager::SpewVertexAndPixelShaders(void) {
+void CShaderManager::SpewVertexAndPixelShaders() {
   // only spew a populated shader file cache
   Msg("\nShader File Cache:\n");
   for (int cacheIndex = m_ShaderFileCache.Head();
@@ -2450,7 +2454,7 @@ const char *CShaderManager::GetActivePixelShaderName() {
 }
 
 #ifdef DYNAMIC_SHADER_COMPILE
-void CShaderManager::FlushShaders(void) {
+void CShaderManager::FlushShaders() {
   for (VertexShader_t shader = m_VertexShaderDict.Head();
        shader != m_VertexShaderDict.InvalidIndex();
        shader = m_VertexShaderDict.Next(shader)) {

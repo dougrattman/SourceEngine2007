@@ -13,7 +13,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utldict.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 IFileSystem *filesystem = NULL;
@@ -197,8 +196,8 @@ int CSceneFileCache::FindSceneInImage(const char *pSceneName) {
       reinterpret_cast<uint8_t *>(header) + header->nSceneEntryOffset);
 
   char clean_name[SOURCE_MAX_PATH];
-  V_strncpy(clean_name, pSceneName, SOURCE_ARRAYSIZE(clean_name));
-  V_strlower(clean_name);
+  strcpy_s(clean_name, pSceneName);
+  _strlwr_s(clean_name);
 
 #ifdef OS_POSIX
   V_FixSlashes(clean_name, '\\');
@@ -253,20 +252,20 @@ bool CSceneFileCache::GetSceneDataFromImage(const char *pFileName, int iScene,
       (SceneImageEntry_t *)((uint8_t *)pHeader + pHeader->nSceneEntryOffset);
   unsigned char *pData =
       (unsigned char *)pHeader + pEntries[iScene].nDataOffset;
-  CLZMA lzma;
+  LZMA lzma;
   bool bIsCompressed;
   bIsCompressed = lzma.IsCompressed(pData);
   if (bIsCompressed) {
-    int originalSize = lzma.GetActualSize(pData);
+    usize originalSize = lzma.GetActualSize(pData);
     if (pSceneData) {
-      int nMaxLen = *pSceneLength;
+      usize nMaxLen = *pSceneLength;
       if (originalSize <= nMaxLen) {
-        lzma.Uncompress(pData, pSceneData);
+        lzma.Uncompress(pData, pSceneData, nMaxLen);
       } else {
-        unsigned char *pOutputData = (unsigned char *)malloc(originalSize);
-        lzma.Uncompress(pData, pOutputData);
+        u8 *pOutputData = (u8 *)malloc(originalSize);
+        lzma.Uncompress(pData, pOutputData, originalSize);
         V_memcpy(pSceneData, pOutputData, nMaxLen);
-        free(pOutputData);
+        heap_free(pOutputData);
       }
     }
     if (pSceneLength) {
@@ -276,7 +275,7 @@ bool CSceneFileCache::GetSceneDataFromImage(const char *pFileName, int iScene,
     if (pSceneData) {
       size_t nCountToCopy =
           std::min(*pSceneLength, (size_t)pEntries[iScene].nDataLength);
-      V_memcpy(pSceneData, pData, nCountToCopy);
+      memcpy(pSceneData, pData, nCountToCopy);
     }
     if (pSceneLength) {
       *pSceneLength = (size_t)pEntries[iScene].nDataLength;

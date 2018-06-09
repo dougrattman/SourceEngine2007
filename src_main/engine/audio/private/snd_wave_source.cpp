@@ -12,7 +12,6 @@
 #include "tier1/utlsymbol.h"
 #include "xwvfile.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // This determines how much data to pre-cache (will invalidate per-map caches if
@@ -358,13 +357,9 @@ void CAudioSourceWave::ParseChunk(IterateRIFF &walk, int chunkName) {
   }
 }
 
-bool CAudioSourceWave::IsLooped() {
-  return (m_loopStart >= 0) ? true : false;
-}
+bool CAudioSourceWave::IsLooped() { return m_loopStart >= 0; }
 
-bool CAudioSourceWave::IsStereoWav() {
-  return (m_channels == 2) ? true : false;
-}
+bool CAudioSourceWave::IsStereoWav() { return m_channels == 2; }
 
 bool CAudioSourceWave::IsStreaming() { return false; }
 
@@ -528,15 +523,17 @@ bool CAudioSourceWave::GetXboxAudioStartupData() {
 
         // vdat is precompiled into minimal binary format and possibly
         // compressed
-        CLZMA lzma;
+        LZMA lzma;
 
         if (lzma.IsCompressed(pData)) {
           // uncompress binary vdat and restore
           CUtlBuffer targetBuffer;
-          int originalSize = lzma.GetActualSize(pData);
+          usize originalSize = lzma.GetActualSize(pData);
+
           targetBuffer.EnsureCapacity(originalSize);
-          lzma.Uncompress(pData, (unsigned char *)targetBuffer.Base());
+          lzma.Uncompress(pData, (u8 *)targetBuffer.Base(), originalSize);
           targetBuffer.SeekPut(CUtlBuffer::SEEK_HEAD, originalSize);
+
           m_pTempSentence->CacheRestoreFromBuffer(targetBuffer);
         } else {
           m_pTempSentence->CacheRestoreFromBuffer(fileBuffer);
@@ -787,8 +784,7 @@ int CAudioSourceWave::ConvertLoopedPosition(int samplePosition) {
 void CAudioSourceWave::ReferenceRemove(CAudioMixer *pMixer) {
   m_refCount--;
 
-  if (m_refCount == 0 &&
-      ((IsPlayOnce()) || (IsX360() && IsStreaming()))) {
+  if (m_refCount == 0 && IsPlayOnce()) {
     SetPlayOnce(false);  // in case it gets used again
     CacheUnload();
   }
@@ -1073,7 +1069,7 @@ int CAudioSourceMemWave::ZeroCrossingAfter(int sample) {
 //-----------------------------------------------------------------------------
 void CAudioSourceMemWave::ParseChunk(IterateRIFF &walk, int chunkName) {
   switch (chunkName) {
-    // this is the audio data
+      // this is the audio data
     case WAVE_DATA:
       ParseDataChunk(walk);
       return;
@@ -2258,8 +2254,7 @@ void CAudioSourceCache::WriteManifest() {
 // Purpose:
 //-----------------------------------------------------------------------------
 CAudioSourceCache::CacheType_t *CAudioSourceCache::LookUpCacheEntry(
-    const ch *fn, int audiosourcetype, bool soundisprecached,
-    CSfxTable *sfx) {
+    const ch *fn, int audiosourcetype, bool soundisprecached, CSfxTable *sfx) {
   // Hack to remember the type of audiosource to create if we need to recreate
   // it
   CAudioSourceCachedInfo::s_CurrentType = audiosourcetype;
@@ -2808,12 +2803,9 @@ bool CAudioSourceCache::FastBuildAllMissingSoundCaches(
 //			fullCache -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CAudioSourceCache::FastBuildSoundCache(float progressfrac,
-                                            ch const *currentcache,
-                                            CacheType_t *fullCache,
-                                            CacheType_t *sharedPrecacheCache,
-                                            CacheType_t *cache,
-                                            ch const *manifest) {
+bool CAudioSourceCache::FastBuildSoundCache(
+    float progressfrac, ch const *currentcache, CacheType_t *fullCache,
+    CacheType_t *sharedPrecacheCache, CacheType_t *cache, ch const *manifest) {
   Assert(currentcache);
   Assert(fullCache);
   Assert(cache);
@@ -2859,9 +2851,8 @@ bool CAudioSourceCache::FastBuildSoundCache(float progressfrac,
 
 CAudioSourceCache::CacheType_t *
 CAudioSourceCache::BuildNoDataCacheFromFullDataCache(
-    ch const *cachename, CacheType_t *fullCache,
-    bool showprogress /*= false*/, float flProgressStart /*= 0.0f*/,
-    float flProgressEnd /*= 1.0f*/) {
+    ch const *cachename, CacheType_t *fullCache, bool showprogress /*= false*/,
+    float flProgressStart /*= 0.0f*/, float flProgressEnd /*= 1.0f*/) {
   CacheType_t *newCache = NULL;
 
   newCache = AllocAudioCache(cachename);
@@ -3008,7 +2999,7 @@ void CAudioSourceCache::KillCache() {
 }
 
 ch const *CAudioSourceCache::GetAudioCacheLanguageSuffix(ch *buf,
-                                                           size_t bufsize) {
+                                                         size_t bufsize) {
   ch const *pchLanguage = g_pSoundServices->GetUILanguage();
 
   if (!pchLanguage || !*pchLanguage || !Q_stricmp(pchLanguage, "english")) {
