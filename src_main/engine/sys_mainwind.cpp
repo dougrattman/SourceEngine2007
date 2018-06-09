@@ -136,7 +136,7 @@ void DoSomeSocketStuffInOrderToGetZoneAlarmToNoticeUs() {
 HICON LoadGameWindowIcon(IFileSystem *file_system) {
   char local_icon_path[SOURCE_MAX_PATH];
   if (file_system->GetLocalPath("resource/game.ico", local_icon_path,
-                                SOURCE_ARRAYSIZE(local_icon_path))) {
+                                std::size(local_icon_path))) {
     file_system->GetLocalCopy(local_icon_path);
     return (HICON)LoadImageA(nullptr, local_icon_path, IMAGE_ICON, 0, 0,
                              LR_LOADFROMFILE | LR_DEFAULTSIZE);
@@ -404,7 +404,7 @@ class CGame : public IGame {
     ::ShowCursor(TRUE);
 
     // call free on the buffer since the buffer was malloc'd in COM_LoadFile
-    free((void *)buffer);
+    heap_free(buffer);
 
 #endif  // SWDS
   }

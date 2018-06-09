@@ -180,8 +180,8 @@ class CVideoMode_Common : public IVideoMode {
 
     return &m_rgModeList[num];
   }
-  virtual int GetModeCount(void) { return m_nNumModes; }
-  virtual bool IsWindowedMode(void) const { return m_bWindowed; }
+  virtual int GetModeCount() { return m_nNumModes; }
+  virtual bool IsWindowedMode() const { return m_bWindowed; }
   virtual void UpdateWindowPosition(void);
   virtual void RestoreVideo(void);
   virtual void ReleaseVideo(void);
@@ -332,8 +332,8 @@ class CVideoMode_Common : public IVideoMode {
     return true;
   }
   // Returns the video mode width + height.
-  virtual int GetModeWidth(void) const { return m_nModeWidth; }
-  virtual int GetModeHeight(void) const { return m_nModeHeight; }
+  virtual int GetModeWidth() const { return m_nModeWidth; }
+  virtual int GetModeHeight() const { return m_nModeHeight; }
   virtual const vrect_t &GetClientViewRect() const;
   virtual void SetClientViewRect(const vrect_t &viewRect);
   virtual void MarkClientViewRectDirty();
@@ -688,11 +688,11 @@ static int __cdecl VideoModeCompare(const void *arg1, const void *arg2) {
   return 1;
 }
 
-// Purpose: Renders the startup video into the HWND
+  // Purpose: Renders the startup video into the HWND
 
-// Purpose: Renders the startup graphic into the HWND
+  // Purpose: Renders the startup graphic into the HWND
 
-// Purpose: Blits an image to the loading window hdc
+  // Purpose: Blits an image to the loading window hdc
 
 #ifndef _WIN32
 
@@ -880,9 +880,9 @@ void CVideoMode_Common::BlitGraphicToHDC(HDC hdc, uint8_t *rgba, int imageWidth,
 
 // Purpose: This is called in response to a WM_MOVE message
 
-void CVideoMode_Common::UpdateWindowPosition(void) {
+void CVideoMode_Common::UpdateWindowPosition() {
   // Get the window from the game ( right place for it? )
-  auto [x, y, w, h] = game->GetWindowRect();
+  auto[x, y, w, h] = game->GetWindowRect();
 
   RECT window_rect;
   window_rect.left = x;
@@ -898,7 +898,7 @@ void CVideoMode_Common::ChangeDisplaySettingsToFullscreen(int nWidth,
                                                           int nHeight,
                                                           int nBPP) {}
 
-void CVideoMode_Common::ReleaseFullScreen(void) {}
+void CVideoMode_Common::ReleaseFullScreen() {}
 
 // Purpose: Returns the optimal refresh rate for the specified mode
 
@@ -986,7 +986,7 @@ void CVideoMode_Common::AdjustWindow(int nWidth, int nHeight, int nBPP,
 
 // Purpose:
 
-void CVideoMode_Common::Shutdown(void) {
+void CVideoMode_Common::Shutdown() {
   ReleaseFullScreen();
   game->DestroyGameWindow();
 
@@ -1111,24 +1111,18 @@ void CVideoMode_Common::TakeSnapshotTGA(const char *pFilename) {
 
 // PFM screenshot helpers
 
-ITexture *CVideoMode_Common::GetBuildCubemaps16BitTexture(void) {
+ITexture *CVideoMode_Common::GetBuildCubemaps16BitTexture() {
   return materials->FindTexture("_rt_BuildCubemaps16bit",
                                 TEXTURE_GROUP_RENDER_TARGET);
 }
 
-ITexture *CVideoMode_Common::GetFullFrameFB0(void) {
+ITexture *CVideoMode_Common::GetFullFrameFB0() {
   return materials->FindTexture("_rt_FullFrameFB", TEXTURE_GROUP_RENDER_TARGET);
 }
 
-void CVideoMode_Common::BlitHiLoScreenBuffersTo16Bit(void) {
+void CVideoMode_Common::BlitHiLoScreenBuffersTo16Bit() {
   IMaterial *pHDRCombineMaterial = materials->FindMaterial(
       "dev/hdrcombineto16bit", TEXTURE_GROUP_OTHER, true);
-  //	if( IsErrorMaterial( pHDRCombineMaterial ) )
-  //	{
-  //		Assert( 0 );
-  //		return;
-  //	}
-
   CMatRenderContextPtr pRenderContext(materials);
   ITexture *pSaveRenderTarget;
   pSaveRenderTarget = pRenderContext->GetRenderTarget();
@@ -1263,9 +1257,9 @@ void CVideoMode_Common::TakeSnapshotPFMRect(const char *pFilename, int x, int y,
 
   PFMWrite(pFloatImage, pFilename, resampleWidth, resampleHeight);
 
-  free(pImage1);
-  free(pImage);
-  free(pFloatImage);
+  heap_free(pImage1);
+  heap_free(pImage);
+  heap_free(pFloatImage);
 }
 
 // Takes a snapshot
@@ -1467,7 +1461,7 @@ class CVideoMode_MaterialSystem : public CVideoMode_Common {
     SetInitialized(true);
     return true;
   }
-  virtual void Shutdown(void) {
+  virtual void Shutdown() {
     materials->RemoveModeChangeCallBack(&VideoMode_AdjustForModeChange);
     BaseClass::Shutdown();
   }
@@ -1526,19 +1520,19 @@ class CVideoMode_MaterialSystem : public CVideoMode_Common {
     OverrideMaterialSystemConfig(config);
     return true;
   }
-  virtual void ReleaseVideo(void) {
+  virtual void ReleaseVideo() {
     if (IsWindowedMode()) return;
 
     ReleaseFullScreen();
   }
-  virtual void RestoreVideo(void) {
+  virtual void RestoreVideo() {
     if (IsWindowedMode()) return;
 
     ShowWindow((HWND)game->GetMainWindow(), SW_SHOWNORMAL);
     AdjustWindow(GetModeWidth(), GetModeHeight(), GetModeBPP(),
                  IsWindowedMode());
   }
-  virtual void AdjustForModeChange(void) {
+  virtual void AdjustForModeChange() {
     if (InEditMode()) return;
 
     // get previous size
@@ -1593,7 +1587,7 @@ class CVideoMode_MaterialSystem : public CVideoMode_Common {
   }
 
  private:
-  virtual void ReleaseFullScreen(void) {
+  virtual void ReleaseFullScreen() {
     if (IsWindowedMode()) return;
 
     // Hide the main window

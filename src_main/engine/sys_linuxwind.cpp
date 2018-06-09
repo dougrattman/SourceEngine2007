@@ -102,9 +102,9 @@ void VCR_EnterPausedState() {
  */
 }
 
-bool CGame::CreateGameWindow(void) { return true; }
+bool CGame::CreateGameWindow() { return true; }
 
-void CGame::DestroyGameWindow(void) {}
+void CGame::DestroyGameWindow() {}
 
 // This is used in edit mode to override the default wnd proc associated w/
 bool CGame::InputAttachToGameWindow() { return true; }
@@ -113,17 +113,17 @@ void CGame::InputDetachFromGameWindow() {}
 
 void CGame::SetGameWindow(void *hWnd) { return; }
 
-CGame::CGame(void) { m_bActiveApp = true; }
+CGame::CGame() { m_bActiveApp = true; }
 
-CGame::~CGame(void) {}
+CGame::~CGame() {}
 
 bool CGame::Init(void *pvInstance) { return true; }
 
-bool CGame::Shutdown(void) { return true; }
+bool CGame::Shutdown() { return true; }
 
-void *CGame::GetMainWindow(void) { return 0; }
+void *CGame::GetMainWindow() { return 0; }
 
-void **CGame::GetMainWindowAddress(void) { return NULL; }
+void **CGame::GetMainWindowAddress() { return NULL; }
 
 void CGame::SetWindowXY(int x, int y) {}
 
@@ -144,7 +144,7 @@ void CGame::GetWindowRect(int *x, int *y, int *w, int *h) {
   }
 }
 
-bool CGame::IsActiveApp(void) { return m_bActiveApp; }
+bool CGame::IsActiveApp() { return m_bActiveApp; }
 
 void CGame::SetActiveApp(bool active) { m_bActiveApp = active; }
 
