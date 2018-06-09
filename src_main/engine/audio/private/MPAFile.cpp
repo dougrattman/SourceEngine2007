@@ -27,8 +27,8 @@ CMPAException::CMPAException(const CMPAException& Source) {
 
 // destructor
 CMPAException::~CMPAException() {
-  if (m_szFile) free((void*)m_szFile);
-  if (m_szFunction) free((void*)m_szFunction);
+  free((void*)m_szFile);
+  free((void*)m_szFunction);
 }
 
 // should be in resource file for multi language applications
@@ -305,7 +305,8 @@ void CMPAFile::FillBuffer(DWORD dwOffsetToRead) {
   m_dwBufferSize += dwBytesRead;
 }
 
-// Uses mp3 code from:  http://www.codeproject.com/audio/MPEGAudioInfo.asp
+// Uses mp3 code from:
+// http://www.codeproject.com/audio/MPEGAudioInfo.asp
 
 struct MP3Duration_t {
   FileNameHandle_t h;

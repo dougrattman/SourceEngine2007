@@ -312,8 +312,8 @@ void CSfxTable::OnNameChanged(const char *pName) {
     char szString[SOURCE_MAX_PATH];
     Q_strncpy(szString, pName, sizeof(szString));
     Q_FixSlashes(szString, '/');
-    m_mixGroupCount = MXR_GetMixGroupListFromDirName(
-        szString, m_mixGroupList, std::size(m_mixGroupList));
+    m_mixGroupCount = MXR_GetMixGroupListFromDirName(szString, m_mixGroupList,
+                                                     std::size(m_mixGroupList));
     m_bMixGroupsCached = true;
   }
 }
@@ -1365,8 +1365,8 @@ float SND_GetDspMix(channel_t *pchannel, int idist) {
   return mix;
 }
 
-// calculate crossfade between wav left (close sound) and wav right (far sound)
-// based on distance fron listener
+  // calculate crossfade between wav left (close sound) and wav right (far
+  // sound) based on distance fron listener
 
 #define DVAR_DIST_MIN (20.0f * 12.0f)   // play full 'near' sound at 20' or less
 #define DVAR_DIST_MAX (110.0f * 12.0f)  // play full 'far' sound at 110' or more
@@ -1480,14 +1480,14 @@ bool SND_GetClosestPoint(channel_t *pChannel, QAngle &source_angles,
   return true;
 }
 
-// given point of nearest approach and sound source facing angles,
-// return vector pointing into quadrant in which to play
-// doppler left wav (incomming) and doppler right wav (outgoing).
+  // given point of nearest approach and sound source facing angles,
+  // return vector pointing into quadrant in which to play
+  // doppler left wav (incomming) and doppler right wav (outgoing).
 
-// doppler left is point in space to play left doppler wav
-// doppler right is point in space to play right doppler wav
+  // doppler left is point in space to play left doppler wav
+  // doppler right is point in space to play right doppler wav
 
-// Also modifies channel pitch based on distance to nearest approach point
+  // Also modifies channel pitch based on distance to nearest approach point
 
 #define DOPPLER_DIST_LEFT_TO_RIGHT \
   (4 * 12.0f)  // separate left/right sounds by 4'
@@ -1662,8 +1662,8 @@ float SND_GetGain(channel_t *ch, bool fplayersound, bool fmusicsound,
   return gain;
 }
 
-// always ramp channel gain changes over time
-// returns ramped gain, given new target gain
+  // always ramp channel gain changes over time
+  // returns ramped gain, given new target gain
 
 #define SND_GAIN_FADE_TIME 0.25  // xfade seconds between obscuring gain changes
 
@@ -1917,8 +1917,8 @@ float SND_GetGainObscured(channel_t *ch, bool fplayersound, bool flooping,
   return gain;
 }
 
-// convert sound db level to approximate sound source radius,
-// used only for determining how much of sound is obscured by world
+  // convert sound db level to approximate sound source radius,
+  // used only for determining how much of sound is obscured by world
 
 #define SND_RADIUS_MAX (20.0 * 12.0)  // max sound source radius
 #define SND_RADIUS_MIN (2.0 * 12.0)   // min sound source radius
@@ -1961,8 +1961,8 @@ float PercentDifference(float a, float b) {
   return (1.0 - vp);
 }
 
-// NOTE: Do not change SND_WALL_TRACE_LEN without also changing PRC_MDY6 delay
-// value in snd_dsp.cpp!
+  // NOTE: Do not change SND_WALL_TRACE_LEN without also changing PRC_MDY6 delay
+  // value in snd_dsp.cpp!
 
 #define SND_WALL_TRACE_LEN \
   (100.0 * 12.0)  // trace max of 100' = max of 100 milliseconds of linear delay
@@ -6202,15 +6202,16 @@ static void S_Say(const CCommand &args) {
   }
 }
 
-//------------------------------------------------------------------------------
-//
-// Sound Mixers
-//
-// Sound mixers are referenced by name from Soundscapes, and are used to provide
-// custom volume control over various sound categories, called 'mix groups'
-//
-// see scripts/soundmixers.txt for data format
-//------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------
+  //
+  // Sound Mixers
+  //
+  // Sound mixers are referenced by name from Soundscapes, and are used to
+  // provide custom volume control over various sound categories, called 'mix
+  // groups'
+  //
+  // see scripts/soundmixers.txt for data format
+  //------------------------------------------------------------------------------
 
 #define CMXRGROUPMAX 64                        // up to n mixgroups
 #define CMXRGROUPRULESMAX (CMXRGROUPMAX + 16)  // max number of group rules
@@ -7239,7 +7240,7 @@ bool MXR_LoadAllSoundMixers() {
   bResult = true;
 
   // loadmxr_exit:
-  free(pbuffer);
+  heap_free(pbuffer);
   return bResult;
 }
 

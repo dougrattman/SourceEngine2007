@@ -148,8 +148,7 @@ void MIX_FreeAllPaintbuffers() {
       }
     }
 
-    free(g_paintBuffers);
-    g_paintBuffers = NULL;
+    heap_free(g_paintBuffers);
   }
 }
 

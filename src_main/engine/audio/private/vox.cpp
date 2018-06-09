@@ -296,7 +296,7 @@ ch *VOX_GetDirectory(ch *szpath, int maxpath, ch *psz) {
   return pszscan + 1;
 }
 
-// get channel volume scale if word
+  // get channel volume scale if word
 
 #ifndef SWDS
 float VOX_GetChanVol(channel_t *ch) {
@@ -430,7 +430,7 @@ int VOX_ParseWordParams(ch *psz, voxword_t *pvoxword, int fFirst) {
 
 #define CVOXSAVEDWORDSIZE 32
 
-// saved entity name/number based on type of entity & id
+  // saved entity name/number based on type of entity & id
 
 #define CVOXGLOBMAX 4  // max number of rnd and seqential globals
 
@@ -444,11 +444,11 @@ typedef struct _vox_entname {
   SoundSource soundsource;  // the enity emitting the sentence
   ch *pszname;  // a custom name for the entity (this is a word name)
   ch *psznum;   // a custom number for the entity (this is a word name)
-  ch *pszglobal[CVOXGLOBMAX];  // 1 global word, shared by this type of
-                                 // entity, picked randomly, expires after 5min
+  ch *pszglobal[CVOXGLOBMAX];     // 1 global word, shared by this type of
+                                  // entity, picked randomly, expires after 5min
   ch *pszglobalseq[CVOXGLOBMAX];  // 1 global word, shared by this type of
-                                    // entity, picked in sequence, expires after
-                                    // 5 min
+                                  // entity, picked in sequence, expires after
+                                  // 5 min
   bool fdied;             // true if ent died (don't clear, we need its name)
   int iseq[CVOXGLOBMAX];  // sequence index, for global sequential lookups
   float timestamp[CVOXGLOBMAX];  // latest update to this ent global timestamp
@@ -565,7 +565,7 @@ ch *VOX_LookupRndVirtual(ch *pGroupName) {
 // given groupname, get pointer to first word of n'th sentence in group
 
 ch *VOX_LookupSentenceByIndex(const ch *pGroupname, int ipick,
-                                int *pipicknext) {
+                              int *pipicknext) {
   // get group index
 
   int isentenceg = VOX_GroupIndexFromName(pGroupname);
@@ -621,7 +621,7 @@ ch *VOX_LookupNumber(ch *pGroupName, int ipick) {
 // UNDONE: init ent/type/string array, wrap when saving
 
 ch *VOX_LookupMyVirtual(int iname, ch *pGroupName, ch chtype,
-                          SoundSource soundsource) {
+                        SoundSource soundsource) {
   ch *psz = NULL;
   ch **ppsz = NULL;
 
@@ -659,10 +659,10 @@ ch *VOX_LookupMyVirtual(int iname, ch *pGroupName, ch chtype,
 // store count of words in pcnew
 // if fsimple is true, return numeric sequence based on ten digit max
 
-void VOX_LookupRangeHeadingOrGrid(int irhg, ch *pGroupName,
-                                  channel_t *pChannel, SoundSource soundsource,
-                                  ch **ppszNew, ch **ppszNew1,
-                                  ch **ppszNew2, int *pcnew, bool fsimple) {
+void VOX_LookupRangeHeadingOrGrid(int irhg, ch *pGroupName, channel_t *pChannel,
+                                  SoundSource soundsource, ch **ppszNew,
+                                  ch **ppszNew1, ch **ppszNew2, int *pcnew,
+                                  bool fsimple) {
   Vector SL;  // sound -> listener vector
   ch *phundreds = NULL;
   ch *ptens = NULL;
@@ -874,8 +874,8 @@ ch *VOX_LookupSectorVirtual(ch *pGroupname) {
   return VOX_LookupNumber(pGroupname, g_vox_isector);
 }
 
-ch *VOX_LookupGlobalVirtual(int type, SoundSource soundsource,
-                              ch *pGroupName, int iglobal) {
+ch *VOX_LookupGlobalVirtual(int type, SoundSource soundsource, ch *pGroupName,
+                            int iglobal) {
   int i;
   float curtime = g_pSoundServices->GetClientTime();
 
@@ -915,7 +915,7 @@ ch *VOX_LookupGlobalVirtual(int type, SoundSource soundsource,
 // in sequence. sequence counter expires every 2.5 minutes.
 
 ch *VOX_LookupGlobalSeqVirtual(int type, SoundSource soundsource,
-                                 ch *pGroupName, int iglobal) {
+                               ch *pGroupName, int iglobal) {
   int i;
   int ient;
   float curtime = g_pSoundServices->GetClientTime();
@@ -1271,7 +1271,7 @@ void VOX_Precache(IEngineSound *pSoundSystem, int sentenceIndex,
 
   memset(rgvoxword, 0, sizeof(voxword_t) * CVOXWORDMAX);
   ch *psz = (ch *)(g_Sentences[sentenceIndex].pName +
-                       Q_strlen(g_Sentences[sentenceIndex].pName) + 1);
+                   Q_strlen(g_Sentences[sentenceIndex].pName) + 1);
   // get directory from string, advance psz
   psz = VOX_GetDirectory(szpath, sizeof(szpath), psz);
   Q_strncpy(buffer, psz, sizeof(buffer));
@@ -1317,8 +1317,7 @@ void VOX_Precache(IEngineSound *pSoundSystem, int sentenceIndex,
   }
 }
 
-void VOX_PrecacheSentenceGroup(IEngineSound *pSoundSystem,
-                               const ch *pGroupName,
+void VOX_PrecacheSentenceGroup(IEngineSound *pSoundSystem, const ch *pGroupName,
                                const ch *pPathOverride) {
   int i;
 
@@ -2219,7 +2218,7 @@ void VOX_ListClear() {
 
   while (pList) {
     pNext = pList->pNext;
-    free(pList);
+    heap_free(pList);
 
     pList = pNext;
   }
@@ -2423,9 +2422,9 @@ float VOX_SentenceLength(int sentence_num) {
 // CONSIDER: if we have a large number of sentences, should
 // CONSIDER: sort strings in g_Sentences and do binary search.
 ch *VOX_LookupString(const ch *pSentenceName, int *psentencenum,
-                       bool *pbEmitCaption /*=NULL*/,
-                       CUtlSymbol *pCaptionSymbol /*=NULL*/,
-                       float *pflDuration /*= NULL*/) {
+                     bool *pbEmitCaption /*=NULL*/,
+                     CUtlSymbol *pCaptionSymbol /*=NULL*/,
+                     float *pflDuration /*= NULL*/) {
   if (pbEmitCaption) {
     *pbEmitCaption = false;
   }
