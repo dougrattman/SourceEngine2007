@@ -273,7 +273,7 @@ CQueuedLoader::CQueuedLoader() : BaseClass(false) {
 
   // set resource dictionaries sort context
   for (int i = 0; i < RESOURCEPRELOAD_COUNT; i++) {
-    m_ResourceNames[i].SetLessContext((void *)i);
+    m_ResourceNames[i].SetLessContext((void *)(intptr_t)i);
   }
 
   InstallLoader(RESOURCEPRELOAD_ANONYMOUS, &s_ResourcePreloadAnonymous);
@@ -361,10 +361,9 @@ void CQueuedLoader::BuildMaterialResources(IResourcePreload *preloader,
       }
 
       V_strncpy(last_file_name, file_name, sizeof(last_file_name));
-      strcat_s(
-          file_name,
-          &file_name_buffer[0] + std::size(file_name_buffer) - file_name,
-          ".vmt");
+      strcat_s(file_name,
+               &file_name_buffer[0] + std::size(file_name_buffer) - file_name,
+               ".vmt");
 
       FileNameHandle_t handle = g_QueuedLoader.FindFilename(file_name);
       if (handle) resources_list->Remove(handle);
@@ -569,7 +568,7 @@ FileNameHandle_t CQueuedLoader::FindFilename(const char *pFilename) {
 bool CQueuedLoader::CResourceNameLessFunc::Less(
     const FileNameHandle_t &hFilenameLHS, const FileNameHandle_t &hFilenameRHS,
     void *pCtx) {
-  switch ((int)pCtx) {
+  switch ((intptr_t)pCtx) {
     case RESOURCEPRELOAD_MATERIAL: {
       // Cubemap materials are expected to be at top of list
       char szNameLHS[SOURCE_MAX_PATH];

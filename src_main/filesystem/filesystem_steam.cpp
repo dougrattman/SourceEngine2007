@@ -617,7 +617,7 @@ size_t CFileSystem_Steam::FS_vfprintf(FILE *fp, const char *fmt, va_list list) {
   plen = _vsnprintf_s(buf, blen + 1, blen, fmt, list);
   va_end(list);
   if (plen != blen) {
-    free(buf);
+    heap_free(buf);
     return 0;
   }
 
@@ -625,11 +625,11 @@ size_t CFileSystem_Steam::FS_vfprintf(FILE *fp, const char *fmt, va_list list) {
 
   // Write out the formatted string.
   if (plen != (int)FS_fwrite(buf, plen, fp)) {
-    free(buf);
+    heap_free(buf);
     return 0;
   }
 
-  free(buf);
+  heap_free(buf);
   return plen;
 }
 

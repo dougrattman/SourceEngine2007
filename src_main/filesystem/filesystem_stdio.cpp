@@ -645,16 +645,12 @@ char *CFileSystem_Stdio::FS_fgets(char *dest, int destSize, FILE *fp) {
 }
 
 int CFileSystem_Stdio::FS_chmod(const char *path, int pmode) {
-  if (!path) return -1;
-
-  int rt = _chmod(path, pmode);
+  int rt = path ? _chmod(path, pmode) : -1;
 
 #ifndef OS_WIN
   if (rt == -1) {
     const char *file = findFileInDirCaseInsensitive(path);
-    if (file) {
-      rt = _chmod(file, pmode);
-    }
+    if (file) rt = _chmod(file, pmode);
   }
 #endif
 
@@ -662,16 +658,12 @@ int CFileSystem_Stdio::FS_chmod(const char *path, int pmode) {
 }
 
 int CFileSystem_Stdio::FS_stat(const char *path, struct _stat *buf) {
-  if (!path) return -1;
-
-  int rt = _stat(path, buf);
+  int rt = path ? _stat(path, buf) : -1;
 
 #ifndef OS_WIN
   if (rt == -1) {
     const char *file = findFileInDirCaseInsensitive(path);
-    if (file) {
-      rt = _stat(file, buf);
-    }
+    if (file) rt = _stat(file, buf);
   }
 #endif
 
@@ -778,7 +770,7 @@ size_t Win32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
 
   if (unbuffered_file_ != INVALID_HANDLE_VALUE) {
     const unsigned long destBaseAlign = sector_size_;
-    bool bDestBaseIsAligned = ((DWORD)dest % destBaseAlign == 0);
+    bool bDestBaseIsAligned = ((DWORD)(uintptr_t)dest % destBaseAlign == 0);
     bool bCanReadUnbufferedDirect =
         (bDestBaseIsAligned && (destSize % sector_size_ == 0) &&
          (read_offset_ % sector_size_ == 0));
@@ -860,7 +852,7 @@ size_t Win32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
           kMaxReadBytes > kMinReadBytes) {
         kMaxReadBytes /= 2;
         bReadOk = true;
-        DevMsg("ERROR_NO_SYSTEM_RESOURCES: Reducing max read to %d bytes\n",
+        DevMsg("ERROR_NO_SYSTEM_RESOURCES: Reducing max read to %zu bytes\n",
                kMaxReadBytes);
       } else {
         DevMsg("Unknown read error %d\n", dwError);

@@ -121,7 +121,7 @@ class CAsyncOpenedFiles {
 
     AUTO_LOCK_FM(m_mutex);
 
-    int iEntry = m_map.Find(szFixedName);
+    u16 iEntry = m_map.Find(szFixedName);
     if (iEntry == m_map.InvalidIndex()) {
       iEntry = m_map.Insert(_strdup(szFixedName), new AsyncOpenedFile_t);
     } else {
@@ -137,7 +137,7 @@ class CAsyncOpenedFiles {
 
     AUTO_LOCK_FM(m_mutex);
 
-    int iEntry = m_map.Find(szFixedName);
+    u16 iEntry = m_map.Find(szFixedName);
     if (iEntry != m_map.InvalidIndex()) {
       m_map[iEntry]->AddRef();
     }
@@ -152,7 +152,8 @@ class CAsyncOpenedFiles {
 
     AUTO_LOCK_FM(m_mutex);
 
-    int iEntry = (CUtlMap<CUtlString, AsyncOpenedFile_t>::IndexType_t)(int)item;
+    u16 iEntry =
+        (CUtlMap<CUtlString, AsyncOpenedFile_t>::IndexType_t)(uintptr_t)item;
     Assert(m_map.IsValidIndex(iEntry));
     m_map[iEntry]->AddRef();
     return m_map[iEntry];
@@ -165,7 +166,8 @@ class CAsyncOpenedFiles {
 
     AUTO_LOCK_FM(m_mutex);
 
-    int iEntry = (CUtlMap<CUtlString, AsyncOpenedFile_t>::IndexType_t)(int)item;
+    u16 iEntry =
+        (CUtlMap<CUtlString, AsyncOpenedFile_t>::IndexType_t)(uintptr_t)item;
     Assert(m_map.IsValidIndex(iEntry));
     m_map[iEntry]->AddRef();
   }
@@ -177,7 +179,8 @@ class CAsyncOpenedFiles {
 
     AUTO_LOCK_FM(m_mutex);
 
-    int iEntry = (CUtlMap<CUtlString, AsyncOpenedFile_t>::IndexType_t)(int)item;
+    u16 iEntry =
+        (CUtlMap<CUtlString, AsyncOpenedFile_t>::IndexType_t)(uintptr_t)item;
     Assert(m_map.IsValidIndex(iEntry));
     if (m_map[iEntry]->Release() == 0) {
       if (m_map[iEntry]->hFile != FILESYSTEM_INVALID_HANDLE) {
@@ -267,7 +270,7 @@ class CFileAsyncReadJob : public CFileAsyncJob, protected FileAsyncRequest_t {
       g_AsyncOpenedFiles.Release(hSpecificAsyncFile);
     }
 
-    if (pszFilename) free((void *)pszFilename);
+    heap_free(pszFilename);
   }
 
   virtual char const *Describe() { return pszFilename; }
@@ -378,7 +381,7 @@ class CFileAsyncWriteJob : public CFileAsyncJob {
 
   ~CFileAsyncWriteJob() {
     g_nAsyncWriteJobs--;
-    free((void *)m_pszFilename);
+    heap_free(m_pszFilename);
   }
 
   virtual char const *Describe() { return m_pszFilename; }
@@ -1090,7 +1093,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncAppendFile(
         fileSize -= size;
       }
 
-      free(buf);
+      heap_free(buf);
       Close(hSourceFile);
       result = FSASYNC_OK;
     }
