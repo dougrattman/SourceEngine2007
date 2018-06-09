@@ -584,15 +584,12 @@ ButtonCode_t ButtonCode_ScanCodeToButtonCode(int lParam) {
   return result;
 }
 
-//-----------------------------------------------------------------------------
 // Update scan codes for foreign keyboards
-//-----------------------------------------------------------------------------
 void ButtonCode_UpdateScanCodeLayout() {
   // reset the keyboard
   memcpy(s_pScanToButtonCode, s_pScanToButtonCode_QWERTY,
          sizeof(s_pScanToButtonCode));
 
-#if !defined(_X360)
   // fix up keyboard layout for other languages
   HKL currentKb = ::GetKeyboardLayout(0);
   HKL englishKb = ::LoadKeyboardLayout("00000409", 0);
@@ -621,12 +618,9 @@ void ButtonCode_UpdateScanCodeLayout() {
   }
 
   s_pScanToButtonCode[0] = KEY_NONE;
-#endif
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Updates the current keyboard layout
-//-----------------------------------------------------------------------------
 CON_COMMAND(
     key_updatelayout,
     "Updates game keyboard layout to current windows keyboard setting.") {
