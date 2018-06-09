@@ -1,68 +1,37 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Methods associated with the cursor
-//
-// $Revision: $
-// $NoKeywords: $
-
 
 #ifndef MATSURFACE_CURSOR_H
 #define MATSURFACE_CURSOR_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
+#include "vgui/Cursor.h"
 #include "vguimatsurface/IMatSystemSurface.h"
-#include <vgui/Cursor.h>
 
-//-----------------------------------------------------------------------------
-// Initializes cursors
-//-----------------------------------------------------------------------------
+// Initializes cursors.
 void InitCursors();
 
-
-//-----------------------------------------------------------------------------
-// Selects a cursor
-//-----------------------------------------------------------------------------
+// Selects a cursor.
 void CursorSelect(vgui::HCursor hCursor);
 
-
-//-----------------------------------------------------------------------------
-// Activates the current cursor
-//-----------------------------------------------------------------------------
+// Activates the current cursor.
 void ActivateCurrentCursor();
 
-
-//-----------------------------------------------------------------------------
-// handles mouse movement
-//-----------------------------------------------------------------------------
+// Handles mouse movement.
 void CursorSetPos(void *hwnd, int x, int y);
 void CursorGetPos(void *hwnd, int &x, int &y);
 
+// Prevents vgui from changing the cursor
+void LockCursor(bool bEnable);
 
-//-----------------------------------------------------------------------------
-// Purpose: prevents vgui from changing the cursor
-//-----------------------------------------------------------------------------
-void LockCursor( bool bEnable );
-
-
-//-----------------------------------------------------------------------------
-// Purpose: unlocks the cursor state
-//-----------------------------------------------------------------------------
+// Unlocks the cursor state.
 bool IsCursorLocked();
 
-//-----------------------------------------------------------------------------
-// Purpose: loads a custom cursor file from the file system
-//-----------------------------------------------------------------------------
-vgui::HCursor Cursor_CreateCursorFromFile( char const *curOrAniFile, char const *pPathID );
+// Loads a custom cursor file from the file system.
+vgui::HCursor Cursor_CreateCursorFromFile(char const *curOrAniFile,
+                                          char const *pPathID);
 
-// Helper for shutting down cursors
+// Helper for shutting down cursors.
 void Cursor_ClearUserCursors();
 
-#endif // MATSURFACE_CURSOR_H
-
-
-
-
-
+#endif  // MATSURFACE_CURSOR_H

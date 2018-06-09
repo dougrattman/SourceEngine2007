@@ -1,249 +1,204 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: Methods associated with the cursor
-//
-// $Revision: $
-// $NoKeywords: $
-//===========================================================================//
+// Purpose: Methods associated with the cursor.
 
-#if !defined( _X360 )
-#define OEMRESOURCE //for OCR_* cursor junk
+#define OEMRESOURCE  // for OCR_* cursor junk
 #include "base/include/windows/windows_light.h"
-#endif
+
+#include "FileSystem.h"
+#include "cursor.h"
+#include "inputsystem/iinputsystem.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/vcrmode.h"
 #include "tier1/UtlDict.h"
-#include "cursor.h"
 #include "vguimatsurface.h"
-#include "FileSystem.h"
-#if defined( _X360 )
-#include "xbox/xbox_win32stubs.h"
-#endif
 
-#include "inputsystem/iinputsystem.h"
-
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
-static HICON s_pDefaultCursor[20];
-static HICON s_hCurrentCursor = NULL;
-static bool s_bCursorLocked = false; 
-static bool s_bCursorVisible = true;
 
+namespace {
+static HCURSOR the_default_cursors[20];
+static HCURSOR the_current_cursor{nullptr};
+static bool is_cursor_locked{false};
+static bool is_cursor_visible{true};
+}  // namespace
 
-//-----------------------------------------------------------------------------
 // Initializes cursors
-//-----------------------------------------------------------------------------
-void InitCursors()
-{
-	// load up all default cursors
-	s_pDefaultCursor[dc_none]     = NULL;
-	s_pDefaultCursor[dc_arrow]    =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_NORMAL);
-	s_pDefaultCursor[dc_ibeam]    =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_IBEAM);
-	s_pDefaultCursor[dc_hourglass]=(HICON)LoadCursor(NULL, (LPCTSTR)OCR_WAIT);
-	s_pDefaultCursor[dc_crosshair]=(HICON)LoadCursor(NULL, (LPCTSTR)OCR_CROSS);
-	s_pDefaultCursor[dc_up]       =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_UP);
-	s_pDefaultCursor[dc_sizenwse] =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_SIZENWSE);
-	s_pDefaultCursor[dc_sizenesw] =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_SIZENESW);
-	s_pDefaultCursor[dc_sizewe]   =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_SIZEWE);
-	s_pDefaultCursor[dc_sizens]   =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_SIZENS);
-	s_pDefaultCursor[dc_sizeall]  =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_SIZEALL);
-	s_pDefaultCursor[dc_no]       =(HICON)LoadCursor(NULL, (LPCTSTR)OCR_NO);
-	s_pDefaultCursor[dc_hand]     =(HICON)LoadCursor(NULL, (LPCTSTR)32649);
+void InitCursors() {
+  // load up all default cursors
+  the_default_cursors[dc_none] = nullptr;
+  the_default_cursors[dc_arrow] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL));
+  the_default_cursors[dc_ibeam] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_IBEAM));
+  the_default_cursors[dc_hourglass] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_WAIT));
+  the_default_cursors[dc_crosshair] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_CROSS));
+  the_default_cursors[dc_up] = LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_UP));
+  the_default_cursors[dc_sizenwse] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_SIZENWSE));
+  the_default_cursors[dc_sizenesw] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_SIZENESW));
+  the_default_cursors[dc_sizewe] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_SIZEWE));
+  the_default_cursors[dc_sizens] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_SIZENS));
+  the_default_cursors[dc_sizeall] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_SIZEALL));
+  the_default_cursors[dc_no] = LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_NO));
+  the_default_cursors[dc_hand] =
+      LoadCursorW(nullptr, MAKEINTRESOURCEW(OCR_HAND));
 
-	s_bCursorLocked = false;
-	s_bCursorVisible = true;
-	s_hCurrentCursor = s_pDefaultCursor[dc_arrow];
+  is_cursor_locked = false;
+  is_cursor_visible = true;
+  the_current_cursor = the_default_cursors[dc_arrow];
 }
 
+#define USER_CURSOR_MASK 0x80000000UL
 
-#define USER_CURSOR_MASK 0x80000000
-
-//-----------------------------------------------------------------------------
 // Purpose: Simple manager for user loaded windows cursors in vgui
-//-----------------------------------------------------------------------------
-class CUserCursorManager
-{
-public:
-	void Shutdown();
-	vgui::HCursor CreateCursorFromFile( char const *curOrAniFile, char const *pPathID );
-	bool LookupCursor( vgui::HCursor cursor, HCURSOR& handle );
-private:
-	CUtlDict< HCURSOR, int >	m_UserCursors;
+class UserCursorManager {
+ public:
+  void Shutdown();
+  vgui::HCursor CreateCursorFromFile(char const *curOrAniFile,
+                                     char const *pPathID);
+  bool LookupCursor(vgui::HCursor cursor, HCURSOR &handle);
+
+ private:
+  CUtlDict<HCURSOR, unsigned long> user_cursors_;
 };
 
-void CUserCursorManager::Shutdown()
-{
-	for ( int i = m_UserCursors.First() ; i != m_UserCursors.InvalidIndex(); i = m_UserCursors.Next( i ) )
-	{
-		::DestroyCursor( m_UserCursors[ i ] );
-	}
-	m_UserCursors.RemoveAll();
+void UserCursorManager::Shutdown() {
+  for (unsigned long i{user_cursors_.First()};
+       i != user_cursors_.InvalidIndex(); i = user_cursors_.Next(i)) {
+    ::DestroyCursor(user_cursors_[i]);
+  }
+  user_cursors_.RemoveAll();
 }
 
-vgui::HCursor CUserCursorManager::CreateCursorFromFile( char const *curOrAniFile, char const *pPathID )
-{
-	char fn[ 512 ];
-	Q_strncpy( fn, curOrAniFile, sizeof( fn ) );
-	Q_strlower( fn );
-	Q_FixSlashes( fn );
-	
-	int cursorIndex = m_UserCursors.Find( fn );
-	if ( cursorIndex != m_UserCursors.InvalidIndex() )
-	{
-		return cursorIndex | USER_CURSOR_MASK;
-	}
+vgui::HCursor UserCursorManager::CreateCursorFromFile(char const *curOrAniFile,
+                                                      char const *pPathID) {
+  char fn[SOURCE_MAX_PATH];
 
-	g_pFullFileSystem->GetLocalCopy( fn );
+  strcpy_s(fn, curOrAniFile);
+  Q_strlower(fn);
+  Q_FixSlashes(fn);
 
-	char fullpath[ 512 ];
-	g_pFullFileSystem->RelativePathToFullPath( fn, pPathID, fullpath, sizeof( fullpath ) );
-	
-	HCURSOR newCursor = (HCURSOR)LoadCursorFromFile( fullpath );
-	cursorIndex = m_UserCursors.Insert( fn, newCursor );
-	return cursorIndex | USER_CURSOR_MASK;
+  unsigned long cursor_idx{user_cursors_.Find(fn)};
+  if (cursor_idx != user_cursors_.InvalidIndex()) {
+    return cursor_idx | USER_CURSOR_MASK;
+  }
+
+  g_pFullFileSystem->GetLocalCopy(fn);
+
+  char fullpath[SOURCE_MAX_PATH];
+  g_pFullFileSystem->RelativePathToFullPath(fn, pPathID, fullpath,
+                                            sizeof(fullpath));
+
+  HCURSOR cursor{LoadCursorFromFileA(fullpath)};
+  cursor_idx = user_cursors_.Insert(fn, cursor);
+
+  return cursor_idx | USER_CURSOR_MASK;
 }
 
-bool CUserCursorManager::LookupCursor( vgui::HCursor cursor, HCURSOR& handle )
-{
-	if ( !( (int)cursor & USER_CURSOR_MASK ) )
-	{
-		handle = 0;
-		return false;
-	}
+bool UserCursorManager::LookupCursor(vgui::HCursor cursor, HCURSOR &handle) {
+  if (!(cursor & USER_CURSOR_MASK)) {
+    handle = nullptr;
+    return false;
+  }
 
-	int cursorIndex = (int)cursor & ~USER_CURSOR_MASK;
-	if ( !m_UserCursors.IsValidIndex( cursorIndex ) )
-	{
-		handle = 0;
-		return false;
-	}
+  unsigned long cursor_idx{cursor & ~USER_CURSOR_MASK};
+  if (!user_cursors_.IsValidIndex(cursor_idx)) {
+    handle = nullptr;
+    return false;
+  }
 
-	handle = m_UserCursors[ cursorIndex ];
-	return true;
+  handle = user_cursors_[cursor_idx];
+  return true;
 }
 
-static CUserCursorManager g_UserCursors;
-
-vgui::HCursor Cursor_CreateCursorFromFile( char const *curOrAniFile, char const *pPathID )
-{
-	return g_UserCursors.CreateCursorFromFile( curOrAniFile, pPathID );
+namespace {
+static UserCursorManager user_cursor_manager;
 }
 
-void Cursor_ClearUserCursors()
-{
-	g_UserCursors.Shutdown();
+vgui::HCursor Cursor_CreateCursorFromFile(char const *curOrAniFile,
+                                          char const *pPathID) {
+  return user_cursor_manager.CreateCursorFromFile(curOrAniFile, pPathID);
 }
 
-//-----------------------------------------------------------------------------
+void Cursor_ClearUserCursors() { user_cursor_manager.Shutdown(); }
+
 // Selects a cursor
-//-----------------------------------------------------------------------------
-void CursorSelect(HCursor hCursor)
-{
-	if (s_bCursorLocked)
-		return;
+void CursorSelect(HCursor cursor) {
+  if (is_cursor_locked) return;
 
-	s_bCursorVisible = true;
-	switch (hCursor)
-	{
-	case dc_user:
-	case dc_none:
-	case dc_blank:
-		s_bCursorVisible = false;
-		break;
+  is_cursor_visible = true;
+  switch (cursor) {
+    case dc_user:
+    case dc_none:
+    case dc_blank:
+      is_cursor_visible = false;
+      break;
 
-	case dc_arrow:
-	case dc_waitarrow:
-	case dc_ibeam:
-	case dc_hourglass:
-	case dc_crosshair:
-	case dc_up:
-	case dc_sizenwse:
-	case dc_sizenesw:
-	case dc_sizewe:
-	case dc_sizens:
-	case dc_sizeall:
-	case dc_no:
-	case dc_hand:
-		s_hCurrentCursor = s_pDefaultCursor[hCursor];
-		break;
+    case dc_arrow:
+    case dc_waitarrow:
+    case dc_ibeam:
+    case dc_hourglass:
+    case dc_crosshair:
+    case dc_up:
+    case dc_sizenwse:
+    case dc_sizenesw:
+    case dc_sizewe:
+    case dc_sizens:
+    case dc_sizeall:
+    case dc_no:
+    case dc_hand:
+      the_current_cursor = the_default_cursors[cursor];
+      break;
 
-	default:
-		{
-			HCURSOR custom = 0;
-			if ( g_UserCursors.LookupCursor( hCursor, custom ) && custom != 0 )
-			{
-				s_hCurrentCursor = custom;
-			}
-			else
-			{
-				s_bCursorVisible = false;
-				Assert(0);
-			}
-		}
-		break;
-	}
+    default: {
+      HCURSOR custom{nullptr};
+      if (user_cursor_manager.LookupCursor(cursor, custom) &&
+          custom != nullptr) {
+        the_current_cursor = custom;
+      } else {
+        is_cursor_visible = false;
+        Assert(0);
+      }
+    } break;
+  }
 
-	ActivateCurrentCursor();
+  ActivateCurrentCursor();
 }
 
-
-//-----------------------------------------------------------------------------
-// Activates the current cursor
-//-----------------------------------------------------------------------------
-void ActivateCurrentCursor()
-{
-	if (s_bCursorVisible)
-	{
-		::SetCursor(s_hCurrentCursor);
-	}
-	else
-	{
-		::SetCursor(NULL);
-	}
+// Activates the current cursor.
+void ActivateCurrentCursor() {
+  ::SetCursor(is_cursor_visible ? the_current_cursor : nullptr);
 }
 
-
-//-----------------------------------------------------------------------------
-// Purpose: prevents vgui from changing the cursor
-//-----------------------------------------------------------------------------
-void LockCursor( bool bEnable )
-{
-	s_bCursorLocked = bEnable;
-	ActivateCurrentCursor();
+// Prevents vgui from changing the cursor.
+void LockCursor(bool is_lock_cursor) {
+  is_cursor_locked = is_lock_cursor;
+  ActivateCurrentCursor();
 }
 
+// Unlocks the cursor state.
+bool IsCursorLocked() { return is_cursor_locked; }
 
-//-----------------------------------------------------------------------------
-// Purpose: unlocks the cursor state
-//-----------------------------------------------------------------------------
-bool IsCursorLocked()
-{
-	return s_bCursorLocked;
+// Handles mouse movement.
+void CursorSetPos(void *hwnd, int x, int y) {
+  g_pInputSystem->SetCursorPosition(x, y);
 }
 
+void CursorGetPos(void *hwnd, int &x, int &y) {
+  POINT pt;
 
-//-----------------------------------------------------------------------------
-// handles mouse movement
-//-----------------------------------------------------------------------------
-void CursorSetPos( void *hwnd, int x, int y )
-{
-	g_pInputSystem->SetCursorPosition( x, y );
+  // Default implementation.
+  VCRHook_GetCursorPos(&pt);
+  VCRHook_ScreenToClient((HWND)hwnd, &pt);
+
+  x = pt.x;
+  y = pt.y;
 }
-
-void CursorGetPos(void *hwnd, int &x, int &y)
-{
-	POINT pt;
-
-	// Default implementation
-	VCRHook_GetCursorPos( &pt );
-	VCRHook_ScreenToClient((HWND)hwnd, &pt);
-	x = pt.x; y = pt.y;
-}
-
-
-
-
-
-
