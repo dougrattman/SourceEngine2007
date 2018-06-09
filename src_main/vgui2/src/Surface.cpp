@@ -726,7 +726,7 @@ void CWin32Surface::DrawTexturedPolygon(int n, Vertex_t *pVertices) {
 
     ::SelectObject(hdc, oldBrush);
     ::DeleteObject(hbrush);
-    free(pt);
+    heap_free(pt);
 
     // restore pen colour
     DrawSetTextColor(GetRValue(pencolor), GetGValue(pencolor),
@@ -1063,7 +1063,7 @@ void CWin32Surface::DrawPolyLine(int *px, int *py, int numPoints) {
     }
 
     Polyline(PLAT(_currentContextPanel)->hdc, pt, numPoints);
-    free(pt);
+    heap_free(pt);
   }
 }
 
@@ -1769,7 +1769,7 @@ bool CWin32Surface::LoadTGA(Texture *texture, const char *filename) {
     }
   }
 
-  free(rgba);
+  heap_free(rgba);
   return true;
 }
 
@@ -2370,11 +2370,10 @@ VPANEL CWin32Surface::GetTopmostPopup() { return 0; }
 // Purpose: Checks to see if the mouse should be visible or not
 //-----------------------------------------------------------------------------
 void CWin32Surface::CalculateMouseVisible() {
-  int i;
   _needMouse = false;
   _needKB = false;
 
-  for (i = 0; i < g_pSurface->GetPopupCount(); i++) {
+  for (int i = 0; i < g_pSurface->GetPopupCount(); i++) {
     VPanel *pop = (VPanel *)g_pSurface->GetPopup(i);
 
     bool isVisible = pop->IsVisible();

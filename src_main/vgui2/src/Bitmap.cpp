@@ -11,7 +11,6 @@
 #include "vgui/ISurface.h"
 #include "vgui_internal.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -48,11 +47,7 @@ Bitmap::Bitmap(const char *filename, bool hardwareFiltered) {
 //-----------------------------------------------------------------------------
 // Purpose: Destructor
 //-----------------------------------------------------------------------------
-Bitmap::~Bitmap() {
-  if (_filename) {
-    free(_filename);
-  }
-}
+Bitmap::~Bitmap() { heap_free(_filename); }
 
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
