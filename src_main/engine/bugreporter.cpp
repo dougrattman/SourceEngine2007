@@ -13,6 +13,9 @@
 #include <direct.h>
 #include <winsock2.h>  // INADDR_ANY defn
 #include <ctime>
+
+#include "deps/libxzip/XZip.h"
+
 #include "FindSteamServers.h"
 #include "cl_main.h"
 #include "client.h"
@@ -65,7 +68,6 @@
 #ifndef SWDS
 #include "cl_steamauth.h"
 #endif
-#include "deps/libxzip/XZip.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -84,7 +86,7 @@
 #define BUG_REPORTER_DLLNAME "bugreporter_filequeue"
 #define BUG_REPORTER_PUBLIC_DLLNAME "bugreporter_public"
 
-#if defined(_DEBUG)
+#ifndef NDEBUG
 #define PUBLIC_BUGREPORT_WAIT_TIME 3
 #else
 #define PUBLIC_BUGREPORT_WAIT_TIME 15
@@ -106,18 +108,17 @@ static ConVar bugreporter_uploadasync("bugreporter_uploadasync", "0",
 using namespace vgui;
 
 unsigned long GetRam() {
-  MEMORYSTATUS stat;
-  GlobalMemoryStatus(&stat);
-  return (stat.dwTotalPhys / (1024 * 1024));
+  MEMORYSTATUSEX stat;
+  GlobalMemoryStatusEx(&stat);
+  return (stat.ullTotalPhys / (1024 * 1024));
 }
 
 const char *GetInternalBugReporterDLL() {
-  char const *bug_reporter_dll = nullptr;
+  char const *bug_reporter_dll{nullptr};
   if (CommandLine()->CheckParm("-bugreporterdll", &bug_reporter_dll))
     return bug_reporter_dll;
 
-  char *gamedir = com_gamedir;
-  gamedir = strrchr(gamedir, '\\') + 1;
+  char *gamedir = strrchr(com_gamedir, '\\') + 1;
   if (!_stricmp(gamedir, "hl2") || !_stricmp(gamedir, "ep2") ||
       !_stricmp(gamedir, "episodic")) {
     return BUG_REPORTER_OLD_DLLNAME;
@@ -132,10 +133,10 @@ void DisplaySystemVersion(char *osversion, size_t maxlen) {
   OSVERSIONINFOEX osvi = {0};
   osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
-  BOOL bOsVersionInfoEx = GetVersionExA((OSVERSIONINFO *)&osvi);
+  BOOL has_version = GetVersionExA((OSVERSIONINFO *)&osvi);
 
-  if (!bOsVersionInfoEx) {
-    Q_strncpy(osversion, "Unable to get Version", maxlen);
+  if (!has_version) {
+    strcpy_s(osversion, maxlen, "Unable to get OS version");
     return;
   }
 
@@ -145,25 +146,23 @@ void DisplaySystemVersion(char *osversion, size_t maxlen) {
       if (osvi.dwMajorVersion == HIBYTE(_WIN32_WINNT_WIN10) &&
           osvi.dwMinorVersion == LOBYTE(_WIN32_WINNT_WIN10)) {
         if (osvi.wProductType == VER_NT_WORKSTATION) {
-          Q_strncat(osversion, "Windows 10 ", maxlen, COPY_ALL_CHARACTERS);
+          strcat_s(osversion, maxlen, "Windows 10 ");
         } else {
-          Q_strncat(osversion, "Windows Server 2016 ", maxlen,
-                    COPY_ALL_CHARACTERS);
+          strcat_s(osversion, maxlen, "Windows Server 2016 ");
         }
       } else {
-        Q_strncat(osversion, "N/A ", maxlen, COPY_ALL_CHARACTERS);
+        strcat_s(osversion, maxlen, "N/A ");
       }
 
       // Display version, service pack (if any), and build number.
       char build[256];
-      Q_snprintf(build, std::size(build), "%s (Build %u) version %u.%u",
-                 osvi.szCSDVersion, osvi.dwBuildNumber, osvi.dwMajorVersion,
-                 osvi.dwMinorVersion);
-      Q_strncat(osversion, build, maxlen, COPY_ALL_CHARACTERS);
+      sprintf_s(build, "%s (Build %u) version %u.%u", osvi.szCSDVersion,
+                osvi.dwBuildNumber, osvi.dwMajorVersion, osvi.dwMinorVersion);
+      strcat_s(osversion, maxlen, build);
       break;
 
     default:
-      Q_strncat(osversion, "N/A ", maxlen, COPY_ALL_CHARACTERS);
+      strcat_s(osversion, maxlen, "N/A ");
       break;
   }
 }
@@ -182,9 +181,10 @@ static int GetNumberForMap() {
     KeyValues *entry = resfilekeys->GetFirstSubKey();
 
     while (entry) {
-      if (!Q_stricmp(entry->GetName(), mapname)) {
+      if (!_stricmp(entry->GetName(), mapname)) {
         int map_number = entry->GetInt() + 1;
         resfilekeys->deleteThis();
+
         return map_number;  //-V773
       }
 
@@ -196,12 +196,11 @@ static int GetNumberForMap() {
 
   char szNameCopy[128];
 
-  const char *pszResult = Q_strrchr(mapname, '_');
-  if (!pszResult)
-    // I don't know where the number of this map is, if there even is one.
-    return 1;
+  const char *pszResult = strrchr(mapname, '_');
+  // I don't know where the number of this map is, if there even is one.
+  if (!pszResult) return 1;
 
-  Q_strncpy(szNameCopy, pszResult + 1, sizeof(szNameCopy));
+  strcpy_s(szNameCopy, pszResult + 1);
   if (!*szNameCopy) return 1;
 
   //	in case we can't use char.h, this will do the same thing
@@ -216,11 +215,9 @@ static int GetNumberForMap() {
   return atoi(szNameCopy) + 1;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Generic dialog for displaying animating steam progress logo
-//			used when we are doing a possibly length steam op that
-// has  no progress measure (login/create user/etc)
-//-----------------------------------------------------------------------------
+// Purpose: Generic dialog for displaying animating steam progress logo used
+// when we are doing a possibly length steam op that has no progress measure
+// (login/create user/etc)
 class CBugReportUploadProgressDialog : public vgui::Frame {
  public:
   CBugReportUploadProgressDialog(vgui::Panel *parent, const char *name,
@@ -321,7 +318,7 @@ CBugReportFinishedDialog::CBugReportFinishedDialog(Panel *parent,
 }
 
 void CBugReportFinishedDialog::OnCommand(const char *command) {
-  if (!Q_stricmp(command, "Close")) {
+  if (!_stricmp(command, "Close")) {
     MarkForDeletion();
     OnClose();
   } else {
@@ -2425,7 +2422,7 @@ void CEngineBugReporter::InstallBugReportingUI(
   bool bIsPublic = true;
 
   char fn[512];
-  Q_snprintf(fn, sizeof(fn), "%s.dll", GetInternalBugReporterDLL());
+  sprintf_s(fn, "%s.dll", GetInternalBugReporterDLL());
   bool bCanUseInternal = g_pFileSystem->FileExists(fn, "EXECUTABLE_PATH");
 
   switch (type) {
@@ -2441,16 +2438,6 @@ void CEngineBugReporter::InstallBugReportingUI(
         if (CommandLine()->FindParm("-internalbuild")) {
           bIsPublic = false;
         }
-#if !defined(_X360)
-#ifndef NO_STEAM
-        // otherwise, if Steam is running and connected to beta, autoselect the
-        // internal bug db
-        else if (SteamUtils()) {
-          EUniverse eUniverse = SteamUtils()->GetConnectedUniverse();
-          if (k_EUniverseBeta == eUniverse) bIsPublic = false;
-        }
-#endif
-#endif
       }
     } break;
 

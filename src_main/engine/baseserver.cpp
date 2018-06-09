@@ -1326,9 +1326,6 @@ bool CBaseServer::CheckIPRestrictions(const netadr_t &adr, int nAuthProtocol) {
   // Determine if client is outside appropriate address range
   if (adr.IsLoopback()) return true;
 
-  // X360TBD: network
-  if (IsX360()) return true;
-
   // allow other users if they're on the same ip range
   if (Steam3Server().BLanOnly()) {
     // allow connection, if client is in the same subnet
@@ -1358,9 +1355,9 @@ bool CBaseServer::CheckPassword(netadr_t &adr, const char *password,
     return true;  // local client can always connect
   }
 
-  int iServerPassLen = Q_strlen(server_password);
+  usize iServerPassLen = strlen(server_password);
 
-  if (iServerPassLen != Q_strlen(password)) {
+  if (iServerPassLen != strlen(password)) {
     return false;  // different length cannot be equal
   }
 

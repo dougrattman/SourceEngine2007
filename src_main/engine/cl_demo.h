@@ -20,7 +20,7 @@ class CDemoPlayer : public IDemoPlayer {
 
   CDemoFile *GetDemoFile();
 
-  bool StartPlayback(const char *filename, bool bAsTimeDemo);
+  bool StartPlayback(const ch *filename, bool bAsTimeDemo);
   void PausePlayback(float seconds);
   void SkipToTick(int tick, bool bRelative, bool bPause);
   void ResumePlayback(void);
@@ -34,7 +34,7 @@ class CDemoPlayer : public IDemoPlayer {
   bool IsPlaybackPaused(void);
   bool IsPlayingTimeDemo(void);
   bool IsSkipping(void);
-  bool CanSkipBackwards(void) { return false; }
+  bool CanSkipBackwards() { return false; }
 
   void SetPlaybackTimeScale(float timescale);
   void InterpolateViewpoint();  // override viewpoint
@@ -43,7 +43,7 @@ class CDemoPlayer : public IDemoPlayer {
 
  public:  // other public functions
   void MarkFrame(float flFPSVariability);
-  void SetBenchframe(int tick, const char *filename);
+  void SetBenchframe(int tick, const ch *filename);
   void ResyncDemoClock(void);
   bool CheckPausedPlayback(void);
   void WriteTimeDemoResults(void);
@@ -80,7 +80,7 @@ class CDemoPlayer : public IDemoPlayer {
 
   // benchframe stuff
   int m_nSnapshotTick;
-  char m_SnapshotFilename[MAX_OSPATH];
+  ch m_SnapshotFilename[MAX_OSPATH];
 };
 
 class CDemoRecorder : public IDemoRecorder {
@@ -91,14 +91,14 @@ class CDemoRecorder : public IDemoRecorder {
   CDemoFile *GetDemoFile(void);
   int GetRecordingTick(void);
 
-  void StartRecording(const char *filename, bool bContinuously);
+  void StartRecording(const ch *filename, bool bContinuously);
   void SetSignonState(int state);
   bool IsRecording(void);
   void PauseRecording(void);
   void ResumeRecording(void);
   void StopRecording(void);
 
-  void RecordCommand(const char *cmdstring);  // record a console command
+  void RecordCommand(const ch *cmdstring);  // record a console command
   void RecordUserInput(int cmdnumber);        // record a user input command
   void RecordMessages(bf_read &data,
                       int bits);  // add messages to current packet
@@ -118,7 +118,7 @@ class CDemoRecorder : public IDemoRecorder {
   void WriteDemoCvars(void);
   void WriteBSPDecals(void);
   void WriteMessages(bf_write &message);
-  bool ComputeNextIncrementalDemoFilename(char *name, int namesize);
+  bool ComputeNextIncrementalDemoFilename(ch *name, int namesize);
 
  public:
   CDemoFile m_DemoFile;
@@ -127,7 +127,7 @@ class CDemoRecorder : public IDemoRecorder {
   int m_nStartTick;  // host_tickcount when starting recoring
 
   // Name of demo file we are appending onto.
-  char m_szDemoBaseName[MAX_OSPATH];
+  ch m_szDemoBaseName[MAX_OSPATH];
 
   // For demo file handle
   bool m_bIsDemoHeader;   // true, if m_hDemoFile is the header file
