@@ -28,24 +28,23 @@ enum server_state_t {
 // See baseserver.cpp for #define which controls this
 bool AllowDebugDedicatedServerOutsideSteam();
 
-// MAX_CHALLENGES is made large to prevent a denial
-//  of service attack that could cycle all of them
-//  out before legitimate users connected
+// MAX_CHALLENGES is made large to prevent a denial of service attack that could
+// cycle all of them out before legitimate users connected
 #define MAX_CHALLENGES 16384
 
-// time a challenge is valid for, in seconds
+// Time a challenge is valid for, in seconds
 #define CHALLENGE_LIFETIME 60 * 60.0f
 
-// MAX_DELTA_TICKS defines the maximum delta difference allowed
-// for delta compression, if clients request on older tick as
-// delta baseline, send a full update.
+// MAX_DELTA_TICKS defines the maximum delta difference allowed for delta
+// compression, if clients request on older tick as delta baseline, send a full
+// update.
 #define MAX_DELTA_TICKS 192  // this is about 3 seconds
 
-typedef struct {
+struct challenge_t {
   netadr_t adr;   // Address where challenge value was sent to.
   int challenge;  // To connect, adr IP address must respond with this #
   float time;     // # is valid for only a short duration.
-} challenge_t;
+};
 
 class CBaseServer : public IServer {
   friend class CMaster;
@@ -132,7 +131,7 @@ class CBaseServer : public IServer {
   void SendPendingServerInfo();
 
   const ch *CompressPackedEntity(ServerClass *pServerClass, const ch *data,
-                                   int &bits);
+                                 int &bits);
   const ch *UncompressPackedEntity(PackedEntity *pPackedEntity, int &size);
 
   INetworkStringTable *GetInstanceBaselineTable(void);
@@ -177,8 +176,7 @@ class CBaseServer : public IServer {
   virtual bool CheckChallengeType(CBaseClient *client, int nNewUserID,
                                   netadr_t &adr, int nAuthProtocol,
                                   const ch *pchLogonCookie, int cbCookie);
-  virtual bool CheckPassword(netadr_t &adr, const ch *password,
-                             const ch *name);
+  virtual bool CheckPassword(netadr_t &adr, const ch *password, const ch *name);
   virtual bool CheckIPConnectionReuse(netadr_t &adr);
 
   virtual void ReplyChallenge(netadr_t &adr);
@@ -207,9 +205,9 @@ class CBaseServer : public IServer {
   server_state_t m_State;  // some actions are only valid during load
   int m_Socket;            // network socket
   int m_nTickCount;        // current server tick
-  ch m_szMapname[64];    // map name without path and extension
-  ch m_szSkyname[64];    // skybox name
-  ch m_Password[32];     // server password
+  ch m_szMapname[64];      // map name without path and extension
+  ch m_szSkyname[64];      // skybox name
+  ch m_Password[32];       // server password
 
   CRC32_t worldmapCRC;   // For detecting that client has a hacked local copy of
                          // map, the client will be dropped if this occurs.
