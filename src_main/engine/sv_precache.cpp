@@ -114,7 +114,7 @@ void SV_ForceModelBounds(const char *name, const Vector &mins,
 // Purpose:
 // Output : TABLEID
 //-----------------------------------------------------------------------------
-INetworkStringTable *CGameServer::GetModelPrecacheTable(void) const {
+INetworkStringTable *CGameServer::GetModelPrecacheTable() const {
   return m_pModelPrecacheTable;
 }
 
@@ -230,7 +230,7 @@ int CGameServer::LookupModelIndex(char const *name) {
 // Purpose:
 // Output : TABLEID
 //-----------------------------------------------------------------------------
-INetworkStringTable *CGameServer::GetSoundPrecacheTable(void) const {
+INetworkStringTable *CGameServer::GetSoundPrecacheTable() const {
   return m_pSoundPrecacheTable;
 }
 
@@ -310,7 +310,7 @@ int CGameServer::LookupSoundIndex(char const *name) {
 // Purpose:
 // Output : TABLEID
 //-----------------------------------------------------------------------------
-INetworkStringTable *CGameServer::GetGenericPrecacheTable(void) const {
+INetworkStringTable *CGameServer::GetGenericPrecacheTable() const {
   return m_pGenericPrecacheTable;
 }
 
@@ -387,7 +387,7 @@ int CGameServer::LookupGenericIndex(char const *name) {
 // Purpose:
 // Output : TABLEID
 //-----------------------------------------------------------------------------
-INetworkStringTable *CGameServer::GetDecalPrecacheTable(void) const {
+INetworkStringTable *CGameServer::GetDecalPrecacheTable() const {
   return m_pDecalPrecacheTable;
 }
 

@@ -17,7 +17,6 @@
 #include "materialsystem/imesh.h"
 #include "materialsystem/materialsystemutil.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifdef VPROF_ENABLED
@@ -85,22 +84,22 @@ class CVProfGraphPanel : public vgui::Panel {
 
 CVProfNode *CVProfGraphPanel::m_CurrentNode = NULL;
 
-void IN_VProfPrevSibling(void) {
+void IN_VProfPrevSibling() {
   CVProfNode *n = CVProfGraphPanel::m_CurrentNode->GetPrevSibling();
   if (n) CVProfGraphPanel::m_CurrentNode = n;
 }
 
-void IN_VProfNextSibling(void) {
+void IN_VProfNextSibling() {
   CVProfNode *n = CVProfGraphPanel::m_CurrentNode->GetSibling();
   if (n) CVProfGraphPanel::m_CurrentNode = n;
 }
 
-void IN_VProfParent(void) {
+void IN_VProfParent() {
   CVProfNode *n = CVProfGraphPanel::m_CurrentNode->GetParent();
   if (n) CVProfGraphPanel::m_CurrentNode = n;
 }
 
-void IN_VProfChild(void) {
+void IN_VProfChild() {
   CVProfNode *n = CVProfGraphPanel::m_CurrentNode->GetChild();
   if (n) {
     // Find the largest child:
@@ -156,7 +155,7 @@ CVProfGraphPanel::CVProfGraphPanel(vgui::VPANEL parent)
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CVProfGraphPanel::~CVProfGraphPanel(void) {}
+CVProfGraphPanel::~CVProfGraphPanel() {}
 
 void CVProfGraphPanel::ApplySchemeSettings(vgui::IScheme *pScheme) {
   BaseClass::ApplySchemeSettings(pScheme);
@@ -181,9 +180,9 @@ void CVProfGraphPanel::GraphGetXY(vrect_t *rect, int width, int *x, int *y) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CVProfGraphPanel::OnTick(void) { SetVisible(ShouldDraw()); }
+void CVProfGraphPanel::OnTick() { SetVisible(ShouldDraw()); }
 
-bool CVProfGraphPanel::ShouldDraw(void) { return vprof_graph.GetBool(); }
+bool CVProfGraphPanel::ShouldDraw() { return vprof_graph.GetBool(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -220,10 +219,10 @@ void CVProfGraphPanel::Paint() {
 
   char sz[256];
   if ((g_ClientGlobalVariables.absoluteframetime) > 0.f) {
-    Q_snprintf(sz, sizeof(sz), "%s - %0.1f%%%%", m_CurrentNode->GetName(),
-               (m_CurrentNode->GetPrevTime() / RootTime) * 100.f);
+    sprintf_s(sz, "%s - %0.1f%%%%", m_CurrentNode->GetName(),
+              (m_CurrentNode->GetPrevTime() / RootTime) * 100.f);
     g_pMatSystemSurface->DrawColoredText(m_hFont, x, y, GRAPH_RED, GRAPH_GREEN,
-                                         GRAPH_BLUE, 255, sz);
+                                         GRAPH_BLUE, 255, "%s", sz);
   }
 
   uint8_t color[3][3] = {
@@ -352,9 +351,9 @@ void CVProfGraphPanel::PaintLineArt(int x, int y, int w) {
 
 #endif  // VPROF_ENABLED
 
-//-----------------------------------------------------------------------------
-// Creates/destroys the vprof graph panel
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  // Creates/destroys the vprof graph panel
+  //-----------------------------------------------------------------------------
 
 #ifdef VPROF_ENABLED
 static CVProfGraphPanel *s_pVProfGraphPanel = NULL;

@@ -70,7 +70,7 @@ CPlugin::~CPlugin() {
 //---------------------------------------------------------------------------------
 bool CPlugin::Load(const char *fileName) {
   char fixedFileName[SOURCE_MAX_PATH];
-  Q_strncpy(fixedFileName, fileName, SOURCE_ARRAYSIZE(fixedFileName));
+  Q_strncpy(fixedFileName, fileName, std::size(fixedFileName));
   Q_FixSlashes(fixedFileName);
 
   m_pPluginModule = g_pFileSystem->LoadModule(fixedFileName, NULL, false);
@@ -335,7 +335,7 @@ void CServerPlugin::GameFrame(bool simulating) {
   serverGameDLL->GameFrame(simulating);
 }
 
-void CServerPlugin::LevelShutdown(void) {
+void CServerPlugin::LevelShutdown() {
   MDLCACHE_COARSE_LOCK_(g_pMDLCache);
   FORALL_PLUGINS {
     if (!m_Plugins[i]->IsDisabled()) {

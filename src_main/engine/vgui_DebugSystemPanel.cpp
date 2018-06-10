@@ -59,7 +59,7 @@ class CDebugCommandButton : public vgui::Button {
     Cbuf_AddText(va("%s\n", (char *)command));
   }
 
-  virtual void OnTick(void) {}
+  virtual void OnTick() {}
 };
 
 class CDebugCommandCheckbox : public vgui::CheckButton {
@@ -125,7 +125,7 @@ class CDebugIncrementCVarButton : public vgui::Button {
     m_pVar->SetValue(curValue);
   }
 
-  virtual void OnTick(void) {
+  virtual void OnTick() {
     if (!m_pVar) return;
 
     if (m_pVar->GetFloat() == m_flPreviousValue) return;
@@ -156,7 +156,7 @@ class CDebugOptionsPage : public vgui::PropertyPage {
     vgui::ivgui()->AddTickSignal(GetVPanel(), 250);
   }
 
-  virtual void OnTick(void) {
+  virtual void OnTick() {
     BaseClass::OnTick();
 
     if (!IsVisible()) return;
@@ -168,7 +168,7 @@ class CDebugOptionsPage : public vgui::PropertyPage {
     }
   }
 
-  virtual void PerformLayout(void) {
+  virtual void PerformLayout() {
     BaseClass::PerformLayout();
 
     int c = m_LayoutItems.Count();

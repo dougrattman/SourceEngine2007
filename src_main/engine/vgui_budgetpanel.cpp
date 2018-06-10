@@ -38,9 +38,9 @@ CON_COMMAND(vprof_adddebuggroup1,
   VPROF_BUDGET("vprof_adddebuggroup1", "vprof_adddebuggroup1");
 }
 
-void IN_BudgetDown(void) { GetBudgetPanel()->UserCmd_ShowBudgetPanel(); }
+void IN_BudgetDown() { GetBudgetPanel()->UserCmd_ShowBudgetPanel(); }
 
-void IN_BudgetUp(void) { GetBudgetPanel()->UserCmd_HideBudgetPanel(); }
+void IN_BudgetUp() { GetBudgetPanel()->UserCmd_HideBudgetPanel(); }
 
 static ConCommand startshowbudget("+showbudget", IN_BudgetDown, "",
                                   FCVAR_CHEAT);
@@ -49,7 +49,7 @@ static ConCommand endshowbudget("-showbudget", IN_BudgetUp, "", FCVAR_CHEAT);
 // Globals.
 static CBudgetPanelEngine *g_pBudgetPanel = NULL;
 
-CBudgetPanelEngine *GetBudgetPanel(void) { return g_pBudgetPanel; }
+CBudgetPanelEngine *GetBudgetPanel() { return g_pBudgetPanel; }
 
 CBudgetPanelEngine::CBudgetPanelEngine(vgui::Panel *pParent,
                                        const char *pElementName)
@@ -103,7 +103,7 @@ void CBudgetPanelEngine::PostChildPaint() {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBudgetPanelEngine::UserCmd_ShowBudgetPanel(void) {
+void CBudgetPanelEngine::UserCmd_ShowBudgetPanel() {
   Cbuf_AddText("vprof_on\n");
   m_bShowBudgetPanelHeld = true;
   SetVisible(true);
@@ -112,7 +112,7 @@ void CBudgetPanelEngine::UserCmd_ShowBudgetPanel(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBudgetPanelEngine::UserCmd_HideBudgetPanel(void) {
+void CBudgetPanelEngine::UserCmd_HideBudgetPanel() {
   Cbuf_AddText("vprof_off\n");
   m_bShowBudgetPanelHeld = false;
   SetVisible(false);

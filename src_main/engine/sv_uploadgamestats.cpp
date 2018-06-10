@@ -16,6 +16,7 @@
 #include "quakedef.h"  // build_number()
 #endif
 #include "FindSteamServers.h"
+#include "base/include/base_types.h"
 #include "blockingudpsocket.h"
 #include "cserserverprotocol_engine.h"
 #include "deps/libice/IceKey.h"
@@ -39,10 +40,6 @@
 #include "tier0/include/memdbgon.h"
 
 extern int g_iSteamAppID;
-
-typedef unsigned int u32;
-typedef unsigned char u8;
-typedef unsigned short u16;
 
 namespace GameStatsHarvester {
 
@@ -234,7 +231,7 @@ class CUploadGameStats : public IUploadGameStats {
   //-----------------------------------------------------------------------------
   // Purpose: Initializes the connection to the CSER
   //-----------------------------------------------------------------------------
-  void InitConnection(void) {
+  void InitConnection() {
     m_bConnected = false;
     m_Adr.Clear();
     m_Adr.SetType(NA_IP);
@@ -243,7 +240,7 @@ class CUploadGameStats : public IUploadGameStats {
     // don't call UpdateConnection here, does bad things
   }
 
-  void UpdateConnection(void) {
+  void UpdateConnection() {
     if (m_bConnected) return;
 
     if (CommandLine()->FindParm("-localcser") || !g_pFileSystem->IsSteam()) {
@@ -423,10 +420,10 @@ class CUploadGameStats : public IUploadGameStats {
         username[sizeof(username) - 1] = '\0';
 #endif
         if (bOk) {
-          int nBytesToCopy = std::min(Q_strlen(username), (int)sizeof(hex) - 1);
+          usize nBytesToCopy = std::min(strlen(username), sizeof(hex) - 1);
           // NOTE:  This doesn't copy the NULL terminator from username because
           // we want the "random" bits after the name
-          Q_memcpy(hex, username, nBytesToCopy);
+          memcpy(hex, username, nBytesToCopy);
         }
       }
 
@@ -441,15 +438,15 @@ class CUploadGameStats : public IUploadGameStats {
 #endif
   }
 
-  virtual bool IsCyberCafeUser(void) {
+  virtual bool IsCyberCafeUser() {
     // TODO: convert this to be aware of proper Steam3'ified cafes once we
     // actually implement that
     return false;
   }
 
   // Only works in single player
-  virtual bool IsHDREnabled(void) {
-#if defined(SWDS) || defined(_X360)
+  virtual bool IsHDREnabled() {
+#if defined(SWDS)
     return false;
 #else
     return g_pMaterialSystemHardwareConfig->GetHDREnabled();

@@ -492,7 +492,7 @@ CEngineVGui::~CEngineVGui() {}
 // language dirs)
 //-----------------------------------------------------------------------------
 bool CEngineVGui::SetVGUIDirectories() {
-  // add vgui skins directory last
+// add vgui skins directory last
 #if defined(_WIN32)
   char temp[512];
   char skin[128];
@@ -1461,28 +1461,20 @@ void CEngineVGui::Paint(PaintMode_t mode) {
   vgui::VPANEL pVPanel = vgui::surface()->GetEmbeddedPanel();
   if (!pVPanel) return;
 
-  bool drawVgui = r_drawvgui.GetBool();
+  const bool drawVgui = r_drawvgui.GetBool();
+
+  if (!drawVgui || m_bNoShaderAPI) return;
 
   // Don't draw the console at all if vgui is off during a time demo
-  if (demoplayer->IsPlayingTimeDemo() && !drawVgui) {
-    return;
-  }
-
-  if (!drawVgui || m_bNoShaderAPI) {
-    return;
-  }
+  if (demoplayer->IsPlayingTimeDemo()) return;
 
   // Force engine's root panel (staticPanel) to be full screen size
   RECT rect;
   ::GetClientRect(*pmainwindow, &rect);
 
-  int w, h;
-  w = rect.right;
-  h = rect.bottom;
-
   // draw from the main panel down
   vgui::Panel *panel = staticPanel;
-  panel->SetBounds(0, 0, w, h);
+  panel->SetBounds(0, 0, rect.right, rect.bottom);
   panel->Repaint();
 
   toolframework->VGui_PreRenderAllTools(mode);
@@ -1491,6 +1483,9 @@ void CEngineVGui::Paint(PaintMode_t mode) {
 
   // It's either the full screen, or just the client .dll stuff
   if (mode & PAINT_UIPANELS) {
+    VPROF_BUDGET("CEngineVGui::Paint::PAINT_UIPANELS",
+                 VPROF_BUDGETGROUP_OTHER_VGUI);
+
     // Hide the client .dll, and paint everything else
     bool saveVisible = staticClientDLLPanel->IsVisible();
     bool saveToolsVisible = staticClientDLLToolsPanel->IsVisible();
@@ -1531,11 +1526,11 @@ void CEngineVGui::Paint(PaintMode_t mode) {
   toolframework->VGui_PostRenderAllTools(mode);
 }
 
-bool CEngineVGui::IsDebugSystemVisible(void) {
+bool CEngineVGui::IsDebugSystemVisible() {
   return staticDebugSystemPanel ? staticDebugSystemPanel->IsVisible() : false;
 }
 
-void CEngineVGui::HideDebugSystem(void) {
+void CEngineVGui::HideDebugSystem() {
   if (staticDebugSystemPanel) {
     staticDebugSystemPanel->SetVisible(false);
     SetEngineVisible(true);
@@ -1564,21 +1559,21 @@ void CEngineVGui::ToggleDebugSystemUI(const CCommand &args) {
   }
 }
 
-bool CEngineVGui::IsShiftKeyDown(void) {
+bool CEngineVGui::IsShiftKeyDown() {
   if (!vgui::input()) return false;
 
   return vgui::input()->IsKeyDown(KEY_LSHIFT) ||
          vgui::input()->IsKeyDown(KEY_RSHIFT);
 }
 
-bool CEngineVGui::IsAltKeyDown(void) {
+bool CEngineVGui::IsAltKeyDown() {
   if (!vgui::input()) return false;
 
   return vgui::input()->IsKeyDown(KEY_LALT) ||
          vgui::input()->IsKeyDown(KEY_RALT);
 }
 
-bool CEngineVGui::IsCtrlKeyDown(void) {
+bool CEngineVGui::IsCtrlKeyDown() {
   if (!vgui::input()) return false;
 
   return vgui::input()->IsKeyDown(KEY_LCONTROL) ||
@@ -1603,7 +1598,7 @@ void CEngineVGui::NotifyOfServerDisconnect() {
   if (!staticGameUIFuncs) return;
 
   staticGameUIFuncs->OnDisconnectFromServer(g_eSteamLoginFailure);
-  g_eSteamLoginFailure = 0;
+  g_eSteamLoginFailure = STEAMLOGINFAILURE_NONE;
 }
 
 //-----------------------------------------------------------------------------
@@ -1713,7 +1708,7 @@ CFocusOverlayPanel::CFocusOverlayPanel(vgui::Panel *pParent, const char *pName)
   SetMouseInputEnabled(false);
 }
 
-void CFocusOverlayPanel::PostChildPaint(void) {
+void CFocusOverlayPanel::PostChildPaint() {
   BaseClass::PostChildPaint();
 
   if (!vgui_drawfocus.GetBool()) return;
@@ -1852,7 +1847,7 @@ static void VGui_RecursePanel(CUtlVector<vgui::VPANEL> &panelList, int x, int y,
   }
 }
 
-void CEngineVGui::DrawMouseFocus(void) {
+void CEngineVGui::DrawMouseFocus() {
   VPROF("CEngineVGui::DrawMouseFocus");
 
   g_FocusPanelList.RemoveAll();
@@ -1926,7 +1921,7 @@ void CEngineVGui::ShowNewGameDialog(int chapter) {
   staticGameUIFuncs->ShowNewGameDialog(chapter);
 }
 
-void CEngineVGui::OnCreditsFinished(void) {
+void CEngineVGui::OnCreditsFinished() {
   staticGameUIFuncs->OnCreditsFinished();
 }
 

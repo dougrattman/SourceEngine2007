@@ -86,6 +86,6 @@ CBasePanel::CBasePanel(vgui::Panel *parent, char const *panelName)
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CBasePanel::~CBasePanel(void) {}
+CBasePanel::~CBasePanel() {}
 
 void CBasePanel::OnTick() { SetVisible(ShouldDraw()); }

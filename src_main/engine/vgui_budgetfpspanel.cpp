@@ -85,7 +85,7 @@ void CBudgetFPSPanel::DrawTickAtIndex(int id, float percent, int red, int green,
   vgui::surface()->DrawFilledRect(left, top, right, bottom);
 }
 
-void CBudgetFPSPanel::DrawTimeLines(void) {
+void CBudgetFPSPanel::DrawTimeLines() {
   int panelWidth, panelHeight;
   GetSize(panelWidth, panelHeight);
   int i;
@@ -181,7 +181,7 @@ void CBudgetFPSPanel::DrawAverages() {
   }
 }
 
-void CBudgetFPSPanel::Paint(void) {
+void CBudgetFPSPanel::Paint() {
   materials->Flush();
   g_VProfCurrentProfile.Pause();
   int width, height;

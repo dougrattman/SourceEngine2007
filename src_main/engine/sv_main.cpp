@@ -253,7 +253,7 @@ static FILE *OpenRecordingFile() {
 }
 #endif  // #if defined( DEBUG_NETWORKING )
 
-void CGameServer::Clear(void) {
+void CGameServer::Clear() {
   m_pModelPrecacheTable = NULL;
   m_pGenericPrecacheTable = NULL;
   m_pSoundPrecacheTable = NULL;
@@ -291,7 +291,7 @@ void CGameServer::Clear(void) {
 // Purpose: Create any client/server string tables needed internally by the
 // engine
 //-----------------------------------------------------------------------------
-void CGameServer::CreateEngineStringTables(void) {
+void CGameServer::CreateEngineStringTables() {
   int i, j;
 
   m_StringTables->SetTick(m_nTickCount);  // set first tick
@@ -394,7 +394,7 @@ void CGameServer::CopyPureServerWhitelistToStringTable() {
                                    buf.Base());
 }
 
-void SV_InstallClientStringTableMirrors(void) {
+void SV_InstallClientStringTableMirrors() {
 #ifndef SWDS
 #ifndef SHARED_NET_STRING_TABLES
 
@@ -492,7 +492,7 @@ CON_COMMAND(users, "Show user info for players on server.") {
 bool CL_IsHL2Demo();     // from cl_main.cpp
 bool CL_IsPortalDemo();  // from cl_main.cpp
 
-void CGameServer::InitMaxClients(void) {
+void CGameServer::InitMaxClients() {
   int minmaxplayers = 1;
   int maxmaxplayers = ABSOLUTE_PLAYER_LIMIT;
   int defaultmaxplayers = 1;
@@ -582,7 +582,7 @@ int SV_BuildSendTablesArray(ServerClass *pClasses, SendTable **pTables,
 void SV_InitSendTables(ServerClass *pClasses) {
   SendTable *pTables[MAX_DATATABLES];
   int nTables =
-      SV_BuildSendTablesArray(pClasses, pTables, SOURCE_ARRAYSIZE(pTables));
+      SV_BuildSendTablesArray(pClasses, pTables, std::size(pTables));
 
   SendTable_Init(pTables, nTables);
 }
@@ -652,7 +652,7 @@ void SV_InitGameDLL() {
     bool bVerifiedMod = false;
 
     // find the game dir we're running
-    for (int i = 0; i < SOURCE_ARRAYSIZE(g_ModDirPermissions); i++) {
+    for (int i = 0; i < std::size(g_ModDirPermissions); i++) {
       if (!Q_stricmp(COM_GetModDirectory(),
                      g_ModDirPermissions[i].m_pchGameDir)) {
         // we've found the mod, make sure we own the app
@@ -736,7 +736,7 @@ void SV_InitGameDLL() {
 //
 // Release resources associated with extension DLLs.
 //
-void SV_ShutdownGameDLL(void) {
+void SV_ShutdownGameDLL() {
   if (!sv.dll_initialized) {
     return;
   }
@@ -786,7 +786,7 @@ void CGameServer::Init(bool isDedicated) {
   dll_initialized = false;
 }
 
-bool CGameServer::IsPausable(void) const {
+bool CGameServer::IsPausable() const {
   // In single-player, they can always pause it. In multiplayer, check the cvar.
   if (IsMultiplayer()) {
     return sv_pausable.GetBool();
@@ -795,7 +795,7 @@ bool CGameServer::IsPausable(void) const {
   }
 }
 
-void CGameServer::Shutdown(void) {
+void CGameServer::Shutdown() {
   m_bIsLevelMainMenuBackground = false;
 
   CBaseServer::Shutdown();
@@ -1188,22 +1188,15 @@ bool CGameServer::IsInPureServerMode() const {
 
 void CGameServer::FinishRestore() {
 #ifndef SWDS
-  CSaveRestoreData currentLevelData;
-  char name[MAX_OSPATH];
-
   if (!m_bLoadgame) return;
 
+  CSaveRestoreData currentLevelData;
   g_ServerGlobalVariables.pSaveData = &currentLevelData;
   // Build the adjacent map list
   serverGameDLL->BuildAdjacentMapList();
 
-  if (!saverestore->IsXSave()) {
-    Q_snprintf(name, sizeof(name), "%s%s.HL2", saverestore->GetSaveDir(),
-               m_szMapname);
-  } else {
-    Q_snprintf(name, sizeof(name), "%s:\\%s.HL2", GetCurrentMod(), m_szMapname);
-  }
-
+  char name[MAX_OSPATH];
+  sprintf_s(name, "%s%s.HL2", saverestore->GetSaveDir(), m_szMapname);
   Q_FixSlashes(name);
 
   saverestore->RestoreClientState(name, false);
@@ -1221,7 +1214,6 @@ void CGameServer::FinishRestore() {
 
   // Reset
   m_bLoadgame = false;
-  saverestore->SetIsXSave(IsX360());
 #endif
 }
 
@@ -1409,7 +1401,7 @@ SV_CreateBaseline
 
 ================
 */
-void SV_CreateBaseline(void) {
+void SV_CreateBaseline() {
   SV_WriteVoiceCodec(sv.m_Signon);
 
   ServerClass *pClasses = serverGameDLL->GetAllServerClasses();
@@ -2027,7 +2019,7 @@ void CGameServer::UpdateMasterServerPlayers() {
 //-----------------------------------------------------------------------------
 // SV_IsSimulating
 //-----------------------------------------------------------------------------
-bool SV_IsSimulating(void) {
+bool SV_IsSimulating() {
   if (sv.IsPaused()) return false;
 
 #ifndef SWDS

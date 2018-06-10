@@ -78,7 +78,7 @@ class CSteam3 {
 #endif
   bool CompareUserID(const USERID_t &id1, const USERID_t &id2);
   CSteamID GetGSSteamID();
-  void UpdateSpectatorPort(unsigned short unSpectatorPort);
+  void UpdateSpectatorPort(u16 unSpectatorPort);
 
   uint16_t GetQueryPort() const { return m_QueryPort; }
 

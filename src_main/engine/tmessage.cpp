@@ -3,7 +3,6 @@
 #include "tmessage.h"
 
 #include "base/include/base_types.h"
-#include "base/include/chrono.h"
 #include "cdll_int.h"
 #include "common.h"
 #include "draw.h"
@@ -476,13 +475,7 @@ void TextMessageInit() {
   u8 *mem_file = COM_LoadFile("scripts/titles.txt", 5, &fileSize);
 
   if (mem_file) {
-    f64 parse_stamp;
-    source::chrono::HpetTimer::TimeIt(
-        parse_stamp, [=]() { TextMessageParse(mem_file, fileSize); });
-
-    ConDMsg("tmessage(scripts/titles.txt): Parsing took %.3f sec.\n",
-            parse_stamp);
-
+    TextMessageParse(mem_file, fileSize);
     heap_free(mem_file);
   }
 

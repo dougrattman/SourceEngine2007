@@ -158,7 +158,7 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
   virtual void ComputeRenderInfo(ShadowDecalRenderInfo_t* pInfo,
                                  ShadowHandle_t handle) const;
   virtual void SetModelShadowState(ModelInstanceHandle_t instance);
-  virtual unsigned short InvalidShadowIndex();
+  virtual u16 InvalidShadowIndex();
 
   // Methods of ISpatialLeafEnumerator
   virtual bool EnumerateLeaf(int leaf, int context);
@@ -174,7 +174,7 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
                                  float dist);
 
   // Gets the first model associated with a shadow
-  unsigned short& FirstModelInShadow(ShadowHandle_t h) {
+  u16& FirstModelInShadow(ShadowHandle_t h) {
     return m_Shadows[h].m_FirstModel;
   }
 
@@ -234,13 +234,13 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
 
   // A cache entries' worth of vertices....
   struct ShadowVertexCache_t {
-    unsigned short m_Count;
+    u16 m_Count;
     ShadowHandle_t m_Shadow;
-    unsigned short m_CachedVerts;
+    u16 m_CachedVerts;
     ShadowVertex_t* m_pVerts;
   };
 
-  typedef unsigned short FlashlightHandle_t;
+  typedef u16 FlashlightHandle_t;
 
   // Shadow state
   struct Shadow_t : public ShadowInfo_t {
@@ -248,8 +248,8 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
     IMaterial* m_pMaterial;       // material for rendering surfaces
     IMaterial* m_pModelMaterial;  // material for rendering models
     void* m_pBindProxy;
-    unsigned short m_Flags;
-    unsigned short m_SortOrder;
+    u16 m_Flags;
+    u16 m_SortOrder;
     float m_flSphereRadius;  // Radius of sphere surrounding the shadow
     Ray_t m_Ray;             // NOTE: Ray needs to be on 16-uint8_t boundaries.
     Vector m_vecSphereCenter;  // Sphere surrounding the shadow
@@ -258,7 +258,7 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
     ITexture* m_pFlashlightDepthTexture;
 
     // Extra clip planes
-    unsigned short m_ClipPlaneCount;
+    u16 m_ClipPlaneCount;
     Vector m_ClipPlane[MAX_CLIP_PLANE_COUNT];
     float m_ClipDist[MAX_CLIP_PLANE_COUNT];
 
@@ -266,7 +266,7 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
     ShadowSurfaceIndex_t m_FirstDecal;
 
     // First model the shadow is projected onto
-    unsigned short m_FirstModel;
+    u16 m_FirstModel;
 
     // Stencil bit used to mask this shadow
     unsigned char m_ucShadowStencilBit;
@@ -279,7 +279,7 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
     ShadowSurfaceIndex_t m_ShadowListIndex;
     ShadowHandle_t m_Shadow;
     DispShadowHandle_t m_DispShadow;
-    unsigned short m_ShadowVerts;
+    u16 m_ShadowVerts;
 
     // This is a handle of the next shadow decal to be rendered
     ShadowDecalHandle_t m_NextRender;
@@ -324,7 +324,7 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
 
   struct FlashlightInfo_t {
     FlashlightState_t m_FlashlightState;
-    unsigned short m_Shadow;
+    u16 m_Shadow;
     Frustum_t m_Frustum;
     CMaterialsBuckets<SurfaceHandle_t> m_MaterialBuckets;
     CMaterialsBuckets<SurfaceHandle_t> m_OccluderBuckets;
@@ -493,26 +493,26 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
   CUtlVector<ShadowDecalHandle_t> m_RenderQueue;
 
   // Used to assign sort order handles
-  CUtlLinkedList<SortOrderInfo_t, unsigned short> m_SortOrderIds;
+  CUtlLinkedList<SortOrderInfo_t, u16> m_SortOrderIds;
 
   // A cache of shadow vertex data...
-  CUtlLinkedList<ShadowVertexCache_t, unsigned short> m_VertexCache;
+  CUtlLinkedList<ShadowVertexCache_t, u16> m_VertexCache;
 
   // This is temporary, not saved off....
   CUtlVector<ShadowVertexCache_t> m_TempVertexCache;
 
   // Vertex data
-  CUtlLinkedList<ShadowVertexSmallList_t, unsigned short> m_SmallVertexList;
-  CUtlLinkedList<ShadowVertexLargeList_t, unsigned short> m_LargeVertexList;
+  CUtlLinkedList<ShadowVertexSmallList_t, u16> m_SmallVertexList;
+  CUtlLinkedList<ShadowVertexLargeList_t, u16> m_LargeVertexList;
 
   // Model-shadow association
-  CBidirectionalSet<ModelInstanceHandle_t, ShadowHandle_t, unsigned short>
+  CBidirectionalSet<ModelInstanceHandle_t, ShadowHandle_t, u16>
       m_ShadowsOnModels;
 
   // Cache of information for surface bounds
   typedef CUtlLinkedList<
-      SurfaceBounds_t, unsigned short, false, int,
-      CUtlMemoryFixed<UtlLinkedListElem_t<SurfaceBounds_t, unsigned short>,
+      SurfaceBounds_t, u16, false, int,
+      CUtlMemoryFixed<UtlLinkedListElem_t<SurfaceBounds_t, u16>,
                       SURFACE_BOUNDS_CACHE_COUNT, 16> >
       SurfaceBoundsCache_t;
   typedef SurfaceBoundsCache_t::IndexType_t SurfaceBoundsCacheIndex_t;
@@ -539,12 +539,12 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShadowMgr, IShadowMgr,
 //-----------------------------------------------------------------------------
 // Shadows on model instances
 //-----------------------------------------------------------------------------
-unsigned short& FirstShadowOnModel(ModelInstanceHandle_t h) {
+u16& FirstShadowOnModel(ModelInstanceHandle_t h) {
   // See l_studio.cpp
   return FirstShadowOnModelInstance(h);
 }
 
-unsigned short& FirstModelInShadow(ShadowHandle_t h) {
+u16& FirstModelInShadow(ShadowHandle_t h) {
   return s_ShadowMgr.FirstModelInShadow(h);
 }
 
@@ -602,8 +602,8 @@ void CShadowMgr::SetMaterial(Shadow_t& shadow, IMaterial* pMaterial,
 
   // Search the sort order handles for an enumeration id match
   int materialEnum = (int)pMaterial;
-  for (unsigned short i = m_SortOrderIds.Head();
-       i != m_SortOrderIds.InvalidIndex(); i = m_SortOrderIds.Next(i)) {
+  for (u16 i = m_SortOrderIds.Head(); i != m_SortOrderIds.InvalidIndex();
+       i = m_SortOrderIds.Next(i)) {
     // Found a match, lets increment the refcount of this sort order id
     if (m_SortOrderIds[i].m_MaterialEnum == materialEnum) {
       ++m_SortOrderIds[i].m_RefCount;
@@ -642,7 +642,7 @@ void CShadowMgr::CleanupMaterial(Shadow_t& shadow) {
 //-----------------------------------------------------------------------------
 // For the model shadow list
 //-----------------------------------------------------------------------------
-unsigned short CShadowMgr::InvalidShadowIndex() {
+u16 CShadowMgr::InvalidShadowIndex() {
   return m_ShadowsOnModels.InvalidIndex();
 }
 
@@ -1209,7 +1209,7 @@ void CShadowMgr::SetModelShadowState(ModelInstanceHandle_t instance) {
   g_pStudioRender->ClearAllShadows();
   if (instance != MODEL_INSTANCE_INVALID && r_shadows.GetInt()) {
     bool bWireframe = r_shadowwireframe.GetBool();
-    unsigned short i = m_ShadowsOnModels.FirstElement(instance);
+    u16 i = m_ShadowsOnModels.FirstElement(instance);
     while (i != m_ShadowsOnModels.InvalidIndex()) {
       Shadow_t& shadow = m_Shadows[m_ShadowsOnModels.Element(i)];
 
@@ -2144,8 +2144,7 @@ bool CShadowMgr::ComputeShadowVertices(ShadowDecal_t& decal,
                                        ShadowVertexCache_t* pVertexCache) {
   VPROF("CShadowMgr::ComputeShadowVertices");
   // Prepare for the clipping
-  Vector** ppVec =
-      (Vector**)stackalloc(MSurf_VertCount(decal.m_SurfID) * sizeof(Vector*));
+  Vector** ppVec = stack_alloc<Vector*>(MSurf_VertCount(decal.m_SurfID));
   for (int i = 0; i < MSurf_VertCount(decal.m_SurfID); ++i) {
     int vertIndex = host_state.worldbrush
                         ->vertindices[MSurf_FirstVertIndex(decal.m_SurfID) + i];
@@ -2489,9 +2488,8 @@ void CShadowMgr::RenderShadowList(IMatRenderContext* pRenderContext,
 
   // Set up rendering info structure
   ShadowRenderInfo_t info;
-  info.m_pCache = (int*)stackalloc(m_DecalsToRender * sizeof(int));
-  info.m_pDispCache = (DispShadowHandle_t*)stackalloc(
-      m_DecalsToRender * sizeof(DispShadowHandle_t));
+  info.m_pCache = stack_alloc<int>(m_DecalsToRender);
+  info.m_pDispCache = stack_alloc<DispShadowHandle_t>(m_DecalsToRender);
   info.m_pModelToWorld = pModelToWorld;
   if (pModelToWorld) {
     MatrixInverseTR(*pModelToWorld, info.m_WorldToModel);
@@ -2523,8 +2521,8 @@ void CShadowMgr::RenderShadowList(IMatRenderContext* pRenderContext,
     RenderDebuggingInfo(info, DrawShadowID);
   }
 
-  stackfree(info.m_pCache);
-  stackfree(info.m_pDispCache);
+  stack_free(info.m_pCache);
+  stack_free(info.m_pDispCache);
 }
 
 //-----------------------------------------------------------------------------
@@ -2548,8 +2546,8 @@ void CShadowMgr::SetNumWorldMaterialBuckets(int numMaterialSortBins) {
 //-----------------------------------------------------------------------------
 // Per frame call to clear all of the flashlight world material buckets.
 //-----------------------------------------------------------------------------
-void CShadowMgr::ClearAllFlashlightMaterialBuckets(void) {
-  if (IsX360() || r_flashlight_version2.GetInt()) return;
+void CShadowMgr::ClearAllFlashlightMaterialBuckets() {
+  if (r_flashlight_version2.GetInt()) return;
 
   FlashlightHandle_t flashlightID;
   for (flashlightID = m_FlashlightStates.Head();
@@ -3233,9 +3231,9 @@ void CShadowMgr::RenderFlashlights(bool bDoMasking,
       }
 
       if (numIndices > 0) {
-        // NOTE: If we ever need to make this faster, we could get larger
-        // batches here.
-        // Draw this batch.
+      // NOTE: If we ever need to make this faster, we could get larger
+      // batches here.
+      // Draw this batch.
 #if NEWMESH
         IIndexBuffer* pIndexBuffer =
             pRenderContext->GetDynamicIndexBuffer(MATERIAL_INDEX_FORMAT_16BIT);
@@ -3261,7 +3259,7 @@ void CShadowMgr::RenderFlashlights(bool bDoMasking,
 #endif
           }
         }
-        // close out the index buffer
+          // close out the index buffer
 #if NEWMESH
         indexBufferBuilder.End(
             false);  // haven't tested this one yet (flashlights)

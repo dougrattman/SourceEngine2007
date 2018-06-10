@@ -42,7 +42,6 @@
 #include "vstdlib/random.h"
 #include "world.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_MESSAGE_SIZE 2500
@@ -98,9 +97,9 @@ struct MsgData {
   }
 
   byte userdata[SOURCE_PAD_NUMBER(MAX_USER_MSG_DATA,
-                           4)];  // buffer for outgoing user messages
+                                  4)];  // buffer for outgoing user messages
   byte entitydata[SOURCE_PAD_NUMBER(MAX_ENTITY_MSG_DATA,
-                             4)];  // buffer for outgoing entity messages
+                                    4)];  // buffer for outgoing entity messages
 
   IRecipientFilter *filter;  // clients who get this message
   bool reliable;
@@ -183,9 +182,9 @@ class CVEngineServer : public IVEngineServer {
     return modelloader->Map_IsValid(filename);
   }
 
-  virtual bool IsDedicatedServer(void) { return sv.IsDedicated(); }
+  virtual bool IsDedicatedServer() { return sv.IsDedicated(); }
 
-  virtual int IsInEditMode(void) {
+  virtual int IsInEditMode() {
 #ifdef SWDS
     return false;
 #else
@@ -193,7 +192,7 @@ class CVEngineServer : public IVEngineServer {
 #endif
   }
 
-  virtual int IsInCommentaryMode(void) {
+  virtual int IsInCommentaryMode() {
 #ifdef SWDS
     return false;
 #else
@@ -286,7 +285,7 @@ class CVEngineServer : public IVEngineServer {
     SV_ForceSimpleMaterial(s);
   }
 
-  virtual bool IsInternalBuild(void) { return !phonehome->IsExternalBuild(); }
+  virtual bool IsInternalBuild() { return !phonehome->IsExternalBuild(); }
 
   //-----------------------------------------------------------------------------
   // Purpose: Precache a sentence file (parse on server, send to client)
@@ -436,7 +435,7 @@ class CVEngineServer : public IVEngineServer {
     return NULL;
   }
 
-  virtual int GetEntityCount(void) { return sv.num_edicts; }
+  virtual int GetEntityCount() { return sv.num_edicts; }
 
   virtual INetChannelInfo *GetPlayerNetInfo(int playerIndex) {
     if (playerIndex < 1 || playerIndex > sv.GetClientCount()) return NULL;
@@ -468,9 +467,7 @@ class CVEngineServer : public IVEngineServer {
     memset(pEntity, 0xDD, size);
 #endif
 
-    if (pEntity) {
-      free(pEntity);
-    }
+    heap_free(pEntity);
   }
 
   virtual void *SaveAllocMemory(size_t num, size_t size) {
@@ -490,7 +487,7 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   EmitAmbientSound
-  
+  
 
 
 
@@ -668,26 +665,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   ServerCommand
-  
-
-
-
-
-
-
-
 
 
     Sends text to servers execution buffer
-    
-
-
-
-
-
-
-
-
 
           localcmd (string)
           =================
@@ -706,56 +686,20 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   ServerExecute
-  
-
-
-
-
-
-
-
-
 
     Executes all commands in server buffer
-    
-
-
-
-
-
-
-
-
-
+    
           localcmd (string)
           =================
   */
-  virtual void ServerExecute(void) { Cbuf_Execute(); }
+  virtual void ServerExecute() { Cbuf_Execute(); }
 
   /*
   =================
   ClientCommand
-  
-
-
-
-
-
-
-
-
-
+  
     Sends text over to the client's execution buffer
-    
-
-
-
-
-
-
-
-
-
+    
           stuffcmd (clientent, value)
           =================
   */
@@ -789,17 +733,7 @@ class CVEngineServer : public IVEngineServer {
   /*
   ===============
   LightStyle
-  
-
-
-
-
-
-
-
-
-
-    void(float style, string value) lightstyle
+       void(float style, string value) lightstyle
     ===============
   */
   virtual void LightStyle(int style, const char *val) {
@@ -839,28 +773,9 @@ class CVEngineServer : public IVEngineServer {
 
   /*
   ===============================================================================
-  
-
-
-
-
-
-
-
-
 
     MESSAGE WRITING
-    
-
-
-
-
-
-
-
-
-
-          ===============================================================================
+               ===============================================================================
   */
 
   virtual bf_write *EntityMessageBegin(int ent_index, ServerClass *ent_class,
@@ -966,7 +881,7 @@ class CVEngineServer : public IVEngineServer {
     return -1;
   }
 
-  virtual void MessageEnd(void) {
+  virtual void MessageEnd() {
     if (!s_MsgData.started) {
       Sys_Error("MESSAGE_END called with no active message\n");
       return;
@@ -1047,7 +962,7 @@ class CVEngineServer : public IVEngineServer {
     client->SendNetMsg(view);
   }
 
-  virtual float Time(void) { return Plat_FloatTime(); }
+  virtual float Time() { return Plat_FloatTime(); }
 
   virtual void CrosshairAngle(const edict_t *clientent, float pitch,
                               float yaw) {
@@ -1247,28 +1162,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   InsertServerCommand
-  
-
-
-
-
-
-
-
-
-
+  
     Sends text to servers execution buffer
-    
-
-
-
-
-
-
-
-
-
-          localcmd (string)
+               localcmd (string)
           =================
   */
   virtual void InsertServerCommand(const char *str) {
@@ -1354,16 +1250,8 @@ IVEngineServer *g_pVEngineServer = &g_VEngineServer;
 static CMemoryPool s_PVSInfoAllocator(128, 128 * 64, CMemoryPool::GROW_SLOW,
                                       "pvsinfopool", 128);
 
-//-----------------------------------------------------------------------------
 // Purpose: Sends a temp entity to the client ( follows the format of the
 // original MESSAGE_BEGIN stuff from HL1 Input  : msg_dest -
-//			delay -
-//			*origin -
-//			*recipient -
-//			*pSender -
-//			*pST -
-//			classID -
-//-----------------------------------------------------------------------------
 void CVEngineServer::PlaybackTempEntity(IRecipientFilter &filter, float delay,
                                         const void *pSender,
                                         const SendTable *pST, int classID) {
@@ -1549,10 +1437,9 @@ void CVEngineServer::BuildEntityClusterList(edict_t *pEdict,
       if ((i > 0) && (clusters[i] == clusters[i - 1])) continue;
 
       if (pPVSInfo->m_nClusterCount == MAX_FAST_ENT_CLUSTERS) {
-        unsigned short *pClusters =
-            (unsigned short *)s_PVSInfoAllocator.Alloc();
+        u16 *pClusters = (u16 *)s_PVSInfoAllocator.Alloc();
         memcpy(pClusters, pPVSInfo->m_pClusters,
-               MAX_FAST_ENT_CLUSTERS * sizeof(unsigned short));
+               MAX_FAST_ENT_CLUSTERS * sizeof(u16));
         pPVSInfo->m_pClusters = pClusters;
       } else if (pPVSInfo->m_nClusterCount == MAX_ENT_CLUSTERS) {
         // assume we missed some leafs, and mark by headnode
@@ -1577,9 +1464,9 @@ void CVEngineServer::BuildEntityClusterList(edict_t *pEdict,
     if (j != i) continue;
 
     if (pPVSInfo->m_nClusterCount == MAX_FAST_ENT_CLUSTERS) {
-      unsigned short *pClusters = (unsigned short *)s_PVSInfoAllocator.Alloc();
+      u16 *pClusters = (u16 *)s_PVSInfoAllocator.Alloc();
       memcpy(pClusters, pPVSInfo->m_pClusters,
-             MAX_FAST_ENT_CLUSTERS * sizeof(unsigned short));
+             MAX_FAST_ENT_CLUSTERS * sizeof(u16));
       pPVSInfo->m_pClusters = pClusters;
     } else if (pPVSInfo->m_nClusterCount == MAX_ENT_CLUSTERS) {
       // assume we missed some leafs, and mark by headnode

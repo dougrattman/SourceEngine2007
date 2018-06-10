@@ -157,7 +157,7 @@ static inline void SV_PackEntity(int edictIdx, edict_t *edict,
                                        pPrevFrame->GetNumBits(), packedData,
                                        writeBuf.GetNumBitsWritten(),
 
-                                       deltaProps, SOURCE_ARRAYSIZE(deltaProps),
+                                       deltaProps, std::size(deltaProps),
 
                                        edictIdx);
 

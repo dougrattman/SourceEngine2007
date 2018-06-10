@@ -14,7 +14,6 @@
 #include "vgui_baseui_interface.h"
 #include "vgui_helpers.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 bool g_bForceRefresh = true;
@@ -363,10 +362,8 @@ void VGui_FillKeyValues(KeyValues *pCurrentParent) {
   }
 }
 
-void VGui_DrawHierarchy(void) {
+void VGui_DrawHierarchy() {
   VPROF("VGui_DrawHierarchy");
-
-  if (IsX360()) return;
 
   if (vgui_drawtree.GetInt() <= 0) {
     g_pDrawTreeFrame->SetVisible(false);

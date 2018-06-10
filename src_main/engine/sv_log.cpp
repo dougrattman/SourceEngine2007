@@ -224,7 +224,7 @@ void CLog::Reset(void)  // reset all logging streams
 #endif
 }
 
-void CLog::Init(void) {
+void CLog::Init() {
   Reset();
 
   // listen to these events
@@ -289,7 +289,7 @@ bool CLog::DelLogAddress(netadr_t addr) {
   return false;
 }
 
-void CLog::ListLogAddress(void) {
+void CLog::ListLogAddress() {
   netadr_t *pElement;
   const char *pszAdr;
   int count = m_LogAddresses.Count();
@@ -312,9 +312,9 @@ void CLog::ListLogAddress(void) {
   }
 }
 
-bool CLog::UsingLogAddress(void) { return (m_LogAddresses.Count() > 0); }
+bool CLog::UsingLogAddress() { return (m_LogAddresses.Count() > 0); }
 
-void CLog::DelAllLogAddress(void) {
+void CLog::DelAllLogAddress() {
   if (m_LogAddresses.Count() > 0) {
     ConMsg("logaddress_delall:  all addresses cleared\n");
     m_LogAddresses.RemoveAll();
@@ -329,7 +329,7 @@ Log_PrintServerVars
 
 ==================
 */
-void CLog::PrintServerVars(void) {
+void CLog::PrintServerVars() {
   const ConCommandBase *var;  // Temporary Pointer to cvars
 
   if (!IsActive()) {
@@ -349,7 +349,7 @@ void CLog::PrintServerVars(void) {
   Printf("server cvars end\n");
 }
 
-bool CLog::IsActive(void) { return m_bActive; }
+bool CLog::IsActive() { return m_bActive; }
 
 /*
 ==================
@@ -508,7 +508,7 @@ Log_Close
 Close logging file
 ====================
 */
-void CLog::Close(void) {
+void CLog::Close() {
   if (m_hLogFile != FILESYSTEM_INVALID_HANDLE) {
     Printf("Log file closed\n");
     g_pFileSystem->Close(m_hLogFile);
@@ -524,7 +524,7 @@ Log_Open
 Open logging file
 ====================
 */
-void CLog::Open(void) {
+void CLog::Open() {
   char szFileBase[MAX_OSPATH];
   char szTestFile[MAX_OSPATH];
   int i;

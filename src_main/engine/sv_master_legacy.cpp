@@ -63,12 +63,12 @@ bool IsUsingMasterLegacyMode() {
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-// THIS 'INFO' STUFF CAME FROM INFO.CPP WHICH NO LONGER NEEDS TO EXIST IN THE
-// ENGINE. IT IS HERE UNTIL WE GET RID OF THIS LEGACY CODE.
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  // THIS 'INFO' STUFF CAME FROM INFO.CPP WHICH NO LONGER NEEDS TO EXIST IN THE
+  // ENGINE. IT IS HERE UNTIL WE GET RID OF THIS LEGACY CODE.
+  //-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
 
 #define MAX_KV_LEN 127
 
@@ -328,13 +328,13 @@ IMaster *master = (IMaster *)&s_MasterServer;
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CMaster::CMaster(void) {
+CMaster::CMaster() {
   m_bNoMasters = false;
   m_iHeartBeatTimeout = HEARTBEAT_SECONDS;
   m_bRestartOnLevelChange = false;
 }
 
-CMaster::~CMaster(void) {}
+CMaster::~CMaster() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Sends a heartbeat to the master server
@@ -565,21 +565,22 @@ bool CMaster::RemoveServer(struct netadr_s *adr) {
 //-----------------------------------------------------------------------------
 // Purpose: Add built-in default master if steam doesn't parse
 //-----------------------------------------------------------------------------
-void CMaster::UseDefault(void) {
+void CMaster::UseDefault() {
   // don't bother with a default, if you can't find a HL2MS give up
 }
 
 #if defined(_WIN32) && !defined(_X360)
 // Instead of including windows.h
 extern "C" {
-extern void *SOURCE_STDCALL GetProcAddress(void *hModule, const char *pszProcName);
+extern void *SOURCE_STDCALL GetProcAddress(void *hModule,
+                                           const char *pszProcName);
 };
 #endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Initializes the default master server address
 //-----------------------------------------------------------------------------
-void CMaster::InitConnection(void) {
+void CMaster::InitConnection() {
   if (!IsUsingMasterLegacyMode()) return;
 
   static bool bInitialized = false;
@@ -654,15 +655,16 @@ void CMaster::InitConnection(void) {
   } else {
     bInitialized = true;  // needed here to stop recursion in AddServer() below
 
-    numServers = std::min(numServers, 2);  // only heartbeat to this many servers
-                                      // the servers have their own TCP/IP peer
-                                      // to peer network so you only need to
-                                      // heartbeat to one to show up on all of
-                                      // them. Heartbeat to 2 to take into
-                                      // account possible packet loss.
-                                      // heartbeating to more causes more
-                                      // useless traffic into the servers AND on
-                                      // the peer to peer network!!!!
+    numServers =
+        std::min(numServers, 2);  // only heartbeat to this many servers
+                                  // the servers have their own TCP/IP peer
+                                  // to peer network so you only need to
+                                  // heartbeat to one to show up on all of
+                                  // them. Heartbeat to 2 to take into
+                                  // account possible packet loss.
+                                  // heartbeating to more causes more
+                                  // useless traffic into the servers AND on
+                                  // the peer to peer network!!!!
 
     // You only need to pick the first 2 because the SteamFindServers
     // library randomises the order of returned IP addrs.
@@ -806,7 +808,7 @@ void CMaster::Init() {}
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMaster::Shutdown(void) { m_MasterServers.Purge(); }
+void CMaster::Shutdown() { m_MasterServers.Purge(); }
 
 bool CMaster::IsMasterServerAddress(netadr_t *from) {
   for (int i = 0; i < m_MasterServers.Count(); i++) {
@@ -896,7 +898,7 @@ void CMaster::HandleUnknown(netpacket_t *packet, CBaseServer *pServer,
     case A2S_INFO: {
       char nugget[64];
       nugget[0] = 0;
-      if (msg.GetNumBytesLeft() >= Q_strlen(A2S_KEY_STRING)) {
+      if (msg.GetNumBytesLeft() >= strlen(A2S_KEY_STRING)) {
         msg.ReadString(nugget, sizeof(nugget) - 2);
         nugget[sizeof(nugget) - 1] = 0;
       }

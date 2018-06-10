@@ -254,7 +254,7 @@ CSteamID CSteam3::GetGSSteamID() {
 //-----------------------------------------------------------------------------
 // Purpose: Called when spectator port changes
 //-----------------------------------------------------------------------------
-void CSteam3::UpdateSpectatorPort(unsigned short unSpectatorPort) {
+void CSteam3::UpdateSpectatorPort(u16 unSpectatorPort) {
   ISteamGameServer *pGameServer = SteamGameServer();
   if (pGameServer) pGameServer->GSUpdateSpectatorPort(unSpectatorPort);
 }

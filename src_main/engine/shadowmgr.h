@@ -17,7 +17,7 @@ class CDispInfo;
 //-----------------------------------------------------------------------------
 // Shadow decals are applied to a single surface
 //-----------------------------------------------------------------------------
-typedef unsigned short ShadowDecalHandle_t;
+typedef u16 ShadowDecalHandle_t;
 
 enum { SHADOW_DECAL_HANDLE_INVALID = (ShadowDecalHandle_t)~0 };
 
@@ -84,7 +84,7 @@ the_interface IShadowMgrInternal : public IShadowMgr {
                                  ShadowHandle_t handle) const = 0;
 
   // Shadow state...
-  virtual unsigned short InvalidShadowIndex() = 0;
+  virtual u16 InvalidShadowIndex() = 0;
   virtual void SetModelShadowState(ModelInstanceHandle_t instance) = 0;
 
   virtual void SetNumWorldMaterialBuckets(int numMaterialSortBins) = 0;

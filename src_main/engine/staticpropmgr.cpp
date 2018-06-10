@@ -238,7 +238,7 @@ class CStaticProp : public IClientUnknown,
 
   // Rendering clip plane, should be 4 floats, return value of NULL indicates a
   // disabled render clip plane
-  virtual float *GetRenderClipPlane(void) { return NULL; }
+  virtual float *GetRenderClipPlane() { return NULL; }
 
   // Returns the transform from RenderOrigin/RenderAngles to world
   virtual const matrix3x4_t &RenderableToWorldTransform() {
@@ -634,9 +634,9 @@ void CStaticProp::WorldSpaceSurroundingBounds(Vector *pVecWorldMins,
 //-----------------------------------------------------------------------------
 // Data accessors
 //-----------------------------------------------------------------------------
-const Vector &CStaticProp::GetRenderOrigin(void) { return m_Origin; }
+const Vector &CStaticProp::GetRenderOrigin() { return m_Origin; }
 
-const QAngle &CStaticProp::GetRenderAngles(void) { return m_Angles; }
+const QAngle &CStaticProp::GetRenderAngles() { return m_Angles; }
 
 bool CStaticProp::GetAttachment(int number, Vector &origin, QAngle &angles) {
   origin = m_Origin;
@@ -649,11 +649,11 @@ bool CStaticProp::GetAttachment(int number, matrix3x4_t &matrix) {
   return true;
 }
 
-bool CStaticProp::IsTransparent(void) {
+bool CStaticProp::IsTransparent() {
   return (m_Alpha < 255) || modelinfo->IsTranslucent(m_pModel);
 }
 
-bool CStaticProp::IsTwoPass(void) {
+bool CStaticProp::IsTwoPass() {
   return modelinfo->IsTranslucentTwoPass(m_pModel);
 }
 
@@ -674,7 +674,7 @@ void CStaticProp::SetupWeights(const matrix3x4_t *pBoneToWorld,
                                int nFlexWeightCount, float *pFlexWeights,
                                float *pFlexDelayedWeights) {}
 
-void CStaticProp::DoAnimationEvents(void) {}
+void CStaticProp::DoAnimationEvents() {}
 
 //-----------------------------------------------------------------------------
 // Render baby!
@@ -781,13 +781,13 @@ SolidType_t CStaticProp::GetSolid() const { return (SolidType_t)m_nSolidType; }
 
 int CStaticProp::GetSolidFlags() const { return 0; }
 
-bool CStaticProp::UsesPowerOfTwoFrameBufferTexture(void) {
+bool CStaticProp::UsesPowerOfTwoFrameBufferTexture() {
   if (!m_pModel) return false;
 
   return (m_pModel->flags & MODELFLAG_STUDIOHDR_USES_FB_TEXTURE) ? true : false;
 }
 
-bool CStaticProp::UsesFullFrameBufferTexture(void) { return false; }
+bool CStaticProp::UsesFullFrameBufferTexture() { return false; }
 
 ClientRenderHandle_t &CStaticProp::RenderHandle() { return m_RenderHandle; }
 
@@ -823,7 +823,7 @@ void CStaticProp::PrecacheLighting() {
 #endif
 }
 
-void CStaticProp::RecomputeStaticLighting(void) {
+void CStaticProp::RecomputeStaticLighting() {
 #ifndef SWDS
   modelrender->RecomputeStaticLighting(m_ModelInstance);
 #endif
@@ -1224,7 +1224,7 @@ void CStaticPropMgr::UnserializeModels(CUtlBuffer &buf) {
   }
 }
 
-void CStaticPropMgr::OutputLevelStats(void) {
+void CStaticPropMgr::OutputLevelStats() {
   // STATS
   int i;
   int totalVerts = 0;
@@ -2034,7 +2034,7 @@ void CStaticPropMgr::GetStaticPropMaterialColorAndLighting(trace_t *pTrace,
 //-----------------------------------------------------------------------------
 // Little debugger tool to report which prop we're looking at
 //-----------------------------------------------------------------------------
-void Cmd_PropCrosshair_f(void) {
+void Cmd_PropCrosshair_f() {
   Vector endPoint;
   VectorMA(MainViewOrigin(), COORD_EXTENT * 1.74f, MainViewForward(), endPoint);
 

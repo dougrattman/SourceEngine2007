@@ -34,7 +34,7 @@ CFrameSnapshotManager::CFrameSnapshotManager(void)
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CFrameSnapshotManager::~CFrameSnapshotManager(void) {
+CFrameSnapshotManager::~CFrameSnapshotManager() {
 #ifdef _DEBUG
   if (IsInErrorExit()) {
     // These may have been freed already. Don't crash when freeing these.
@@ -63,7 +63,7 @@ void CFrameSnapshotManager::LevelChanged() {
 
 CFrameSnapshot *CFrameSnapshotManager::NextSnapshot(
     const CFrameSnapshot *pSnapshot) {
-  if (!pSnapshot || ((unsigned short)pSnapshot->m_ListIndex ==
+  if (!pSnapshot || ((u16)pSnapshot->m_ListIndex ==
                      m_FrameSnapshots.InvalidIndex()))
     return NULL;
 
@@ -106,7 +106,7 @@ CFrameSnapshot *CFrameSnapshotManager::CreateEmptySnapshot(int tickcount,
 // Input  : framenumber -
 //-----------------------------------------------------------------------------
 CFrameSnapshot *CFrameSnapshotManager::TakeTickSnapshot(int tickcount) {
-  unsigned short nValidEntities[MAX_EDICTS];
+  u16 nValidEntities[MAX_EDICTS];
 
   CFrameSnapshot *snap = CreateEmptySnapshot(tickcount, sv.num_edicts);
 
@@ -143,9 +143,9 @@ CFrameSnapshot *CFrameSnapshotManager::TakeTickSnapshot(int tickcount) {
   }
 
   // create dynamic valid entities array and copy indices
-  snap->m_pValidEntities = new unsigned short[snap->m_nValidEntities];
+  snap->m_pValidEntities = new u16[snap->m_nValidEntities];
   Q_memcpy(snap->m_pValidEntities, nValidEntities,
-           snap->m_nValidEntities * sizeof(unsigned short));
+           snap->m_nValidEntities * sizeof(u16));
 
   if (hltv && hltv->IsActive()) {
     snap->m_pHLTVEntityData = new CHLTVEntityData[snap->m_nValidEntities];

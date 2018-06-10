@@ -74,7 +74,7 @@ ConVar texture_budget_background_alpha("texture_budget_background_alpha", "128",
                                        FCVAR_ARCHIVE,
                                        "how translucent the budget panel is");
 
-CTextureBudgetPanel *GetTextureBudgetPanel(void) {
+CTextureBudgetPanel *GetTextureBudgetPanel() {
   return g_pTextureBudgetPanel;
 }
 

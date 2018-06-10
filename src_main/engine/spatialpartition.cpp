@@ -376,13 +376,13 @@ class CSpatialPartition : public ISpatialPartitionInternal {
   virtual SpatialPartitionListMask_t GetSuppressedLists(void);
 
   virtual void RenderLeafsForRayTraceStart(float flTime) {}
-  virtual void RenderLeafsForRayTraceEnd(void) {}
+  virtual void RenderLeafsForRayTraceEnd() {}
   virtual void RenderLeafsForHullTraceStart(float flTime) {}
-  virtual void RenderLeafsForHullTraceEnd(void) {}
+  virtual void RenderLeafsForHullTraceEnd() {}
   virtual void RenderLeafsForBoxStart(float flTime) {}
-  virtual void RenderLeafsForBoxEnd(void) {}
+  virtual void RenderLeafsForBoxEnd() {}
   virtual void RenderLeafsForSphereStart(float flTime) {}
-  virtual void RenderLeafsForSphereEnd(void) {}
+  virtual void RenderLeafsForSphereEnd() {}
 
   virtual void RenderObjectsInBox(const Vector &vecMin, const Vector &vecMax,
                                   float flTime);
@@ -595,7 +595,7 @@ void CVoxelHash::Init(CVoxelTree *pPartition, const Vector &worldmin,
 //-----------------------------------------------------------------------------
 // Shutdown
 //-----------------------------------------------------------------------------
-void CVoxelHash::Shutdown(void) {
+void CVoxelHash::Shutdown() {
   m_aEntityList.Purge();
   m_aVoxelHash.Purge();
 }
@@ -1730,7 +1730,7 @@ void CVoxelTree::Init(CSpatialPartition *pOwner, int iTree,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CVoxelTree::Shutdown(void) {
+void CVoxelTree::Shutdown() {
   m_aLeafList.Purge();
   for (int i = 0; i < m_nLevelCount; ++i) {
     m_pVoxelHash[i].Shutdown();
@@ -2363,7 +2363,7 @@ void CSpatialPartition::Init(const Vector &worldmin, const Vector &worldmax) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSpatialPartition::Shutdown(void) {
+void CSpatialPartition::Shutdown() {
   for (int i = 0; i < NUM_TREES; i++) {
     m_VoxelTrees[i].Shutdown();
   }
@@ -2595,7 +2595,7 @@ void CSpatialPartition::SuppressLists(SpatialPartitionListMask_t nListMask,
 // Purpose: (Debugging) Get the suppression list.
 //  Output: spatial partition suppression list
 //-----------------------------------------------------------------------------
-SpatialPartitionListMask_t CSpatialPartition::GetSuppressedLists(void) {
+SpatialPartitionListMask_t CSpatialPartition::GetSuppressedLists() {
   return m_nSuppressedListMask;
 }
 
