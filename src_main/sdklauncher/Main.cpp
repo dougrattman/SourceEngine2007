@@ -98,7 +98,7 @@ const char *GetLastWindowsErrorString() {
 //-----------------------------------------------------------------------------
 // Purpose: Creates a dummy window that handles windows messages
 //-----------------------------------------------------------------------------
-void CreateMessageWindow(void) {
+void CreateMessageWindow() {
   // Make and register a very simple window class
   memset(&staticWndclass, 0, sizeof(staticWndclass));
   staticWndclass.style = 0;
@@ -115,7 +115,7 @@ void CreateMessageWindow(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void ShutdownMessageWindow(void) {
+void ShutdownMessageWindow() {
   // Kill our windows instance
   ::DestroyWindow(staticHwnd);
   ::UnregisterClass("VConfig_Window", ::GetModuleHandle(NULL));
@@ -356,7 +356,7 @@ void VGUIMessageBox(vgui::Panel *pParent, const char *pTitle, const char *pMsg,
 //-----------------------------------------------------------------------------
 // Purpose: Startup our file watch
 //-----------------------------------------------------------------------------
-void UpdateConfigsStatus_Init(void) {
+void UpdateConfigsStatus_Init() {
   // Watch our config file for changes
   if (g_dwChangeHandle == NULL) {
     char szConfigDir[SOURCE_MAX_PATH];
@@ -381,7 +381,7 @@ void UpdateConfigsStatus_Init(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Update our status
 //-----------------------------------------------------------------------------
-void UpdateConfigsStatus(void) {
+void UpdateConfigsStatus() {
   // Wait for notification.
   DWORD dwWaitStatus = WaitForSingleObject(g_dwChangeHandle, 0);
 
@@ -403,7 +403,7 @@ void UpdateConfigsStatus(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Stop watching the file
 //-----------------------------------------------------------------------------
-void UpdateConfigsStatus_Shutdown(void) {
+void UpdateConfigsStatus_Shutdown() {
   FindCloseChangeNotification(g_dwChangeHandle);
 }
 
