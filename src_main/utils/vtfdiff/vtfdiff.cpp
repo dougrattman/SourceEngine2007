@@ -62,10 +62,11 @@ char const *ResourceToString(uint32 uiResType) {
 }
 
 void PrintFlags(int flags) {
-#define PRNFLAG(flagname)                                                  \
-  if ((flags & (flagname)) == (flagname)) {                                \
-    flags &= ~(flagname);                                                  \
-    printf("%s%s", #flagname + strlen("TEXTUREFLAGS_"), flags ? "|" : ""); \
+#define PRNFLAG(flagname)                                      \
+  if ((flags & (flagname)) == (flagname)) {                    \
+    flags &= ~(flagname);                                      \
+    printf("%s%s", #flagname + std::size("TEXTUREFLAGS_") - 1, \
+           flags ? "|" : "");                                  \
   }
 
   PRNFLAG(TEXTUREFLAGS_POINTSAMPLE)
