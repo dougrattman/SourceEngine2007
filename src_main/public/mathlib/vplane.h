@@ -6,7 +6,7 @@
 #include "base/include/base_types.h"
 #include "mathlib/vector.h"
 
-typedef int SideType;
+using SideType = int;
 
 // Used to represent sides of things like planes.
 #define SIDE_FRONT 0
@@ -61,7 +61,6 @@ class VPlane {
   VPlane(const VPlane &vOther);
 #endif
 };
-
 
 // Inlines.
 

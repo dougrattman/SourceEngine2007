@@ -31,8 +31,7 @@
 // a compressed unit vector. reasonable fidelty for unit
 // vectors in a 16 bit package. Good enough for surface normals
 // we hope.
-class cUnitVector  // : public c3dMathObject
-{
+class cUnitVector {
  public:
   cUnitVector() { mVec = 0; }
   cUnitVector(const Vector& vec) { packVector(vec); }
@@ -101,7 +100,7 @@ class cUnitVector  // : public c3dMathObject
     mVec |= ybits;
   }
 
-  void unpackVector(Vector& vec) {
+  void unpackVector(Vector& vec) const {
     // if we do a straightforward backward transform
     // we will get points on the plane X0,Y0,Z0
     // however we need points on a sphere that goes through

@@ -68,9 +68,9 @@ const i32 alignas(16) g_SIMD_ComponentMask[4][4] = {{0xFFFFFFFFi32, 0, 0, 0},
 // function is more than one screen long, yours is probably not one
 // of those occasions.
 
-/// You can use this to rotate a long array of FourVectors all by the same
-/// matrix. The first parameter is the head of the array. The second is the
-/// number of vectors to rotate. The third is the matrix.
+// You can use this to rotate a long array of FourVectors all by the same
+// matrix. The first parameter is the head of the array. The second is the
+// number of vectors to rotate. The third is the matrix.
 void FourVectors::RotateManyBy(FourVectors* SOURCE_RESTRICT pVectors,
                                u32 numVectors,
                                const matrix3x4_t& rotationMatrix) {

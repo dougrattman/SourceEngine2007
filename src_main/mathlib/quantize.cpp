@@ -20,7 +20,7 @@ f64 SquaredError;
 
 #define SQ(x) ((x) * (x))
 
-static struct QuantizedValue *AllocQValue(void) {
+static struct QuantizedValue *AllocQValue() {
   struct QuantizedValue *ret = new QuantizedValue;
   ret->Samples = 0;
   ret->Children[0] = ret->Children[1] = 0;
@@ -205,7 +205,7 @@ static void UpdateWorst(struct QuantizedValue *q) {
   }
 }
 
-static int FindWorst(void) {
+static int FindWorst() {
   ErrorVal = -1.;
   UpdateWorst(current_root);
   return (ErrorVal > 0);

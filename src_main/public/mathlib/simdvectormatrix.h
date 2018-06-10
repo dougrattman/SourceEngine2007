@@ -22,20 +22,20 @@ class CSIMDVectorMatrix {
   FourVectors *m_pData;
 
  protected:
-  void Init(void) {
+  void Init() {
     m_pData = NULL;
     m_nWidth = 0;
     m_nHeight = 0;
     m_nPaddedWidth = 0;
   }
 
-  int NVectors(void) const { return m_nHeight * m_nPaddedWidth; }
+  int NVectors() const { return m_nHeight * m_nPaddedWidth; }
 
  public:
   // constructors and destructors
-  CSIMDVectorMatrix(void) { Init(); }
+  CSIMDVectorMatrix() { Init(); }
 
-  ~CSIMDVectorMatrix(void) { delete[] m_pData; }
+  ~CSIMDVectorMatrix() { delete[] m_pData; }
 
   // set up storage and fields for m x n matrix. destroys old data
   void SetSize(int width, int height) {
@@ -98,7 +98,7 @@ class CSIMDVectorMatrix {
   }
 
   // math operations on the whole image
-  void Clear(void) {
+  void Clear() {
     Assert(m_pData);
     memset(m_pData, 0, m_nHeight * m_nPaddedWidth * sizeof(m_pData[0]));
   }

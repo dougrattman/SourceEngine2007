@@ -5,7 +5,7 @@
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
 
-void LightDesc_t::RecalculateDerivedValues(void) {
+void LightDesc_t::RecalculateDerivedValues() {
   m_Flags = 0;
   if (m_Attenuation0) m_Flags |= LIGHTTYPE_OPTIMIZATIONFLAGS_HAS_ATTENUATION0;
   if (m_Attenuation1) m_Flags |= LIGHTTYPE_OPTIMIZATIONFLAGS_HAS_ATTENUATION1;
@@ -39,10 +39,12 @@ void LightDesc_t::ComputeLightAtPointsForDirectional(const FourVectors &pos,
                                                      bool DoHalfLambert) const {
   FourVectors delta;
   delta.DuplicateVector(m_Direction);
+
   //	delta.VectorNormalizeFast();
-  fltx4 strength = delta * normal;
+  fltx4 strength;
   if (DoHalfLambert) {
-    strength = AddSIMD(MulSIMD(strength, Four_PointFives), Four_PointFives);
+    strength =
+        AddSIMD(MulSIMD(delta * normal, Four_PointFives), Four_PointFives);
   } else
     strength = MaxSIMD(Four_Zeros, delta * normal);
 
@@ -228,8 +230,7 @@ void LightDesc_t::ComputeNonincidenceLightAtPoints(const FourVectors &pos,
   color.z = AddSIMD(color.z, MulSIMD(strength, ReplicateX4(m_Color.z)));
 }
 
-void LightDesc_t::SetupOldStyleAttenuation(f32 fQuadraticAttn,
-                                           f32 fLinearAttn,
+void LightDesc_t::SetupOldStyleAttenuation(f32 fQuadraticAttn, f32 fLinearAttn,
                                            f32 fConstantAttn) {
   // old-style manually typed quadrtiac coefficients
   if (fQuadraticAttn < EQUAL_EPSILON) fQuadraticAttn = 0;
@@ -245,8 +246,7 @@ void LightDesc_t::SetupOldStyleAttenuation(f32 fQuadraticAttn,
   m_Attenuation2 = fQuadraticAttn;
   m_Attenuation1 = fLinearAttn;
   m_Attenuation0 = fConstantAttn;
-  f32 fScaleFactor =
-      fQuadraticAttn * 10000 + fLinearAttn * 100 + fConstantAttn;
+  f32 fScaleFactor = fQuadraticAttn * 10000 + fLinearAttn * 100 + fConstantAttn;
 
   if (fScaleFactor > 0) m_Color *= fScaleFactor;
 }

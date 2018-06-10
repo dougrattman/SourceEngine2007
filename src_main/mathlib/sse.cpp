@@ -4,7 +4,7 @@
 
 #include "sse.h"
 
-#include <float.h>  // Needed for FLT_EPSILON
+#include <cfloat>  // Needed for FLT_EPSILON
 #include <memory.h>
 #include <cmath>
 #include "mathlib/mathlib.h"

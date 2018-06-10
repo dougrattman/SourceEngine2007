@@ -4,15 +4,17 @@
 
 #include <algorithm>
 
-#define N_EXTRAVALUES 1
-#define N_DIMENSIONS (3 + N_EXTRAVALUES)
+constexpr inline usize N_EXTRAVALUES{1};
+constexpr inline usize N_DIMENSIONS{3 + N_EXTRAVALUES};
 
-#define PIXEL(x, y, c) image[4 * ((x) + ((width * (y)))) + (c)]
+constexpr inline u8 PIXEL(u8 const *image, int width, int x, int y, int c) {
+  return image[4 * (x + width * y) + c];
+}
 
 static u8 Weights[] = {5, 7, 4, 8};
 static int ExtraValueXForms[3 * N_EXTRAVALUES] = {76, 151, 28};
 
-#define MAX_QUANTIZE_IMAGE_WIDTH 4096
+constexpr inline usize MAX_QUANTIZE_IMAGE_WIDTH{4096};
 
 void ColorQuantize(u8 const *image, int width, int height, int flags,
                    int colors_num, u8 *out_pixels, u8 *out_palette,
@@ -23,14 +25,16 @@ void ColorQuantize(u8 const *image, int width, int height, int flags,
   for (int y = 0; y < height; y++)
     for (int x = 0; x < width; x++) {
       for (int c = 0; c < 3; c++)
-        NthSample(s, y * width + x, N_DIMENSIONS)->Value[c] = PIXEL(x, y, c);
+        NthSample(s, y * width + x, N_DIMENSIONS)->Value[c] =
+            PIXEL(image, width, x, y, c);
 
       // now, let's generate extra values to quantize on
       for (int i = 0; i < N_EXTRAVALUES; i++) {
         int extra_val = 0;
 
         for (int c = 0; c < 3; c++)
-          extra_val += PIXEL(x, y, c) * ExtraValueXForms[i * 3 + c];
+          extra_val +=
+              PIXEL(image, width, x, y, c) * ExtraValueXForms[i * 3 + c];
 
         extra_val >>= 8;
 
@@ -60,7 +64,7 @@ void ColorQuantize(u8 const *image, int width, int height, int flags,
       u8 samp[3];
 
       for (int c = 0; c < 3; c++) {
-        int tryc = PIXEL(x, y, c);
+        int tryc = PIXEL(image, width, x, y, c);
 
         if (!(flags & QUANTFLAGS_NODITHER)) {
           tryc += errors[x][c][error_use];

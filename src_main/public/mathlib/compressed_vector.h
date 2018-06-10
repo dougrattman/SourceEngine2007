@@ -3,7 +3,7 @@
 #ifndef SOURCE_MATHLIB_COMPRESSED_VECTOR_H_
 #define SOURCE_MATHLIB_COMPRESSED_VECTOR_H_
 
-#include <float.h>
+#include <cfloat>
 #include <cmath>
 #include <cstdlib>  // std::rand
 
@@ -21,7 +21,6 @@ class Vector32 {
   Vector32 &operator=(const Vector &vOther);
 
   operator Vector() const {
-    static f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};
     f32 fexp = expScale[exp] / 512.0f;
 
     return Vector{(((int)x) - 512) * fexp, (((int)y) - 512) * fexp,
@@ -33,19 +32,25 @@ class Vector32 {
   u16 y : 10;
   u16 z : 10;
   u16 exp : 2;
+
+  static constexpr f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};
 };
 
 inline Vector32 &Vector32::operator=(const Vector &vOther) {
   CHECK_VALID(vOther);
 
-  static f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};
-
   f32 fmax = std::max(fabs(vOther.x), fabs(vOther.y));
   fmax = std::max(fmax, fabs(vOther.z));
 
-  for (exp = 0; exp < 3; exp++) {
-    if (fmax < expScale[exp]) break;
-  }
+  if (fmax < expScale[0])
+    exp = 0;
+  else if (fmax < expScale[1])
+    exp = 1;
+  else if (fmax < expScale[2])
+    exp = 2;
+  else if (fmax < expScale[3])
+    exp = 3;
+
   Assert(fmax < expScale[exp]);
 
   f32 fexp = 512.0f / expScale[exp];
@@ -89,9 +94,6 @@ inline Normal32 &Normal32::operator=(const Vector &vOther) {
   x = std::clamp((int)(vOther.x * 16384) + 16384, 0, 32767);
   y = std::clamp((int)(vOther.y * 16384) + 16384, 0, 32767);
   zneg = (vOther.z < 0);
-  // x = vOther.x;
-  // y = vOther.y;
-  // z = vOther.z;
   return *this;
 }
 
@@ -211,6 +213,9 @@ constexpr f32 maxfloat16bits = 65504.0f;
 // 16 bit f32.
 class float16 {
  public:
+  float16() = default;
+  float16(f32 f) { SetFloat(f); }
+
   void Init() { m_storage.rawWord = 0; }
 
   u16 GetBits() const { return m_storage.rawWord; }
@@ -254,26 +259,25 @@ class float16 {
     } bits;
   };
 
-  static bool IsNaN(float16bits in) {
+  static constexpr bool IsNaN(float16bits in) {
     return in.bits.biased_exponent == 31 && in.bits.mantissa != 0;
   }
 
-  static bool IsInfinity(float16bits in) {
+  static constexpr bool IsInfinity(float16bits in) {
     return in.bits.biased_exponent == 31 && in.bits.mantissa == 0;
   }
 
   // 0x0001 - 0x03ff
-  static u16 ConvertFloatTo16bits(f32 input) {
-    if (input > maxfloat16bits)
-      input = maxfloat16bits;
-    else if (input < -maxfloat16bits)
-      input = -maxfloat16bits;
+  static u16 ConvertFloatTo16bits(f32 in) {
+    if (in > maxfloat16bits)
+      in = maxfloat16bits;
+    else if (in < -maxfloat16bits)
+      in = -maxfloat16bits;
+
+    float32bits inFloat;
+    inFloat.rawFloat = in;
 
     float16bits output;
-    float32bits inFloat;
-
-    inFloat.rawFloat = input;
-
     output.bits.sign = inFloat.bits.sign;
 
     if ((inFloat.bits.biased_exponent == 0) && (inFloat.bits.mantissa == 0)) {
@@ -325,16 +329,16 @@ class float16 {
     return output.rawWord;
   }
 
-  static f32 Convert16bitFloatTo32bits(u16 input) {
-    float32bits output;
-    const float16bits &inFloat = *((float16bits *)&input);
+  static f32 Convert16bitFloatTo32bits(u16 in) {
+    const float16bits &inFloat = *((float16bits *)&in);
 
     if (IsInfinity(inFloat)) {
       return maxfloat16bits * ((inFloat.bits.sign == 1) ? -1.0f : 1.0f);
     }
-    if (IsNaN(inFloat)) {
-      return 0.0;
-    }
+
+    if (IsNaN(inFloat)) return 0.0;
+
+    float32bits output;
     if (inFloat.bits.biased_exponent == 0 && inFloat.bits.mantissa != 0) {
       // denorm
       const f32 half_denorm = (1.0f / 16384.0f);  // 2^-14

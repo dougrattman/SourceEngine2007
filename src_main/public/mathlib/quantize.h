@@ -7,8 +7,8 @@
 #include "base/include/base_types.h"
 #include "tier0/include/platform.h"
 
-#define MAXDIMS 768
-#define MAXQUANT 16000
+constexpr inline usize MAXDIMS{768};
+constexpr inline usize MAXQUANT{16000};
 
 struct Sample;
 
@@ -97,8 +97,8 @@ extern f64 SquaredError;  // may be reset and examined. updated by
                           // FindMatch()
 
 // the routines below can be used for uniform quantization via dart-throwing.
-typedef void (*GENERATOR)(void *);  // generate a random sample
-typedef f64 (*COMPARER)(void const *a, void const *b);
+using GENERATOR = void (*)(void *);  // generate a random sample
+using COMPARER = f64 (*)(void const *a, void const *b);
 
 void *DartThrow(int NResults, int NTries, size_t itemsize, GENERATOR gen,
                 COMPARER cmp);

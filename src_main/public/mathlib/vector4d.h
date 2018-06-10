@@ -3,7 +3,7 @@
 #ifndef SOURCE_MATHLIB_VECTOR4D_H_
 #define SOURCE_MATHLIB_VECTOR4D_H_
 
-#include <float.h>
+#include <cfloat>
 #include <cmath>
 #include <cstdlib>  // std::rand.
 
@@ -125,7 +125,7 @@ class Vector4D {
   f32 Length() const { return Vector4DLength(*this); }
 
   // Get the Vector4D's magnitude squared.
-  f32 LengthSqr(void) const {
+  f32 LengthSqr() const {
     Assert(IsValid());
     return (x * x + y * y + z * z + w * w);
   }
@@ -177,7 +177,7 @@ class Vector4D {
   // for backwards compatability
   f32 Dot(Vector4D const& vOther) const { return DotProduct4D(*this, vOther); }
 
-  // No copy constructors allowed if we're in optimal mode
+    // No copy constructors allowed if we're in optimal mode
 #ifdef VECTOR_NO_SLOW_OPERATIONS
  private:
 #else
@@ -224,12 +224,9 @@ class alignas(16) Vector4DAligned : public Vector4D {
     w = W;
     Assert(IsValid());
   }
-  inline void InitZero(void) {
-#if !defined(_X360)
+  inline void InitZero() {
     this->AsM128() = _mm_set1_ps(0.0f);
-#else
-    this->AsM128() = __vspltisw(0);
-#endif
+
     Assert(IsValid());
   }
 

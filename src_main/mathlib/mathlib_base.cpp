@@ -8,8 +8,8 @@
 //#define _VPROF_MATHLIB
 #include "mathlib/mathlib.h"
 
-#include <float.h>  // Needed for FLT_EPSILON
 #include <memory.h>
+#include <cfloat>  // Needed for FLT_EPSILON
 #include <cmath>
 
 #include "deps/amd3dx/include/amd3dx.h"
@@ -559,9 +559,9 @@ void FloorDivMod(f64 numer, f64 denom, int *quotient, int *rem) {
 #ifdef PARANOID
   if (denom <= 0.0) Sys_Error("FloorDivMod: bad denominator %d\n", denom);
 
-//	if ((floor(numer) != numer) || (floor(denom) != denom))
-//		Sys_Error ("FloorDivMod: non-integer numer or denom %f %f\n",
-//				numer, denom);
+    //	if ((floor(numer) != numer) || (floor(denom) != denom))
+    //		Sys_Error ("FloorDivMod: non-integer numer or denom %f %f\n",
+    //				numer, denom);
 #endif
 
   if (numer >= 0.0) {
@@ -1577,10 +1577,10 @@ void QuaternionMatrix(const Quaternion &q, matrix3x4_t &matrix) {
   VPROF_BUDGET("QuaternionMatrix", "Mathlib");
 #endif
 
-// Original code
-// This should produce the same code as below with optimization, but looking at
-// the assmebly, it doesn't.  There are 7 extra multiplies in the release build
-// of this, go figure.
+  // Original code
+  // This should produce the same code as below with optimization, but looking
+  // at the assmebly, it doesn't.  There are 7 extra multiplies in the release
+  // build of this, go figure.
 #if 1
   matrix[0][0] = 1.0 - 2.0 * q.y * q.y - 2.0 * q.z * q.z;
   matrix[1][0] = 2.0 * q.x * q.y + 2.0 * q.w * q.z;
@@ -1712,7 +1712,6 @@ void AngleQuaternion(const RadianEuler &angles, Quaternion &outQuat) {
   SinCos(angles.y * 0.5f, &sp, &cp);
   SinCos(angles.x * 0.5f, &sr, &cr);
 
-  // NJS: for some reason VC6 wasn't recognizing the common subexpressions:
   f32 srXcp = sr * cp, crXsp = cr * sp;
   outQuat.x = srXcp * cy - crXsp * sy;  // X
   outQuat.y = crXsp * cy + srXcp * sy;  // Y
@@ -1742,7 +1741,6 @@ void AngleQuaternion(const QAngle &angles, Quaternion &outQuat) {
   SinCos(DEG2RAD(angles.x) * 0.5f, &sp, &cp);
   SinCos(DEG2RAD(angles.z) * 0.5f, &sr, &cr);
 
-  // NJS: for some reason VC6 wasn't recognizing the common subexpressions:
   f32 srXcp = sr * cp, crXsp = cr * sp;
   outQuat.x = srXcp * cy - crXsp * sy;  // X
   outQuat.y = crXsp * cy + srXcp * sy;  // Y
@@ -2133,7 +2131,7 @@ void Hermite_Spline(const Quaternion &q0, const Quaternion &q1,
   QuaternionNormalize(output);
 }
 
-// See http://en.wikipedia.org/wiki/Kochanek-Bartels_curves
+// See https://en.wikipedia.org/wiki/Kochanek-Bartels_spline
 //
 // Tension:  -1 = Round -> 1 = Tight
 // Bias:     -1 = Pre-shoot (bias left) -> 1 = Post-shoot (bias right)
@@ -2729,7 +2727,7 @@ f32 CalcDistanceSqrToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
 }
 
 // Do we have another epsilon we could use
-#define LINE_EPS (0.000001f)
+constexpr inline f32 LINE_EPS{0.000001f};
 
 // Purpose: Given lines p1->p2 and p3->p4, computes a line segment (pa->pb) and
 // returns the parameters 0->1 multipliers
@@ -3099,9 +3097,9 @@ int PolyFromPlane(Vector *outVerts, const Vector &normal, f32 dist,
 
 int ClipPolyToPlane(Vector *inVerts, int vertCount, Vector *outVerts,
                     const Vector &normal, f32 dist, f32 fOnPlaneEpsilon) {
-  f32 *dists = (f32 *)stackalloc(sizeof(f32) * vertCount *
-                                 4);  // 4x vertcount should cover all cases
-  int *sides = (int *)stackalloc(sizeof(f32) * vertCount * 4);
+  // 4x vertcount should cover all cases
+  f32 *dists = stack_alloc<f32>(vertCount * 4);
+  int *sides = stack_alloc<i32>(vertCount * 4);
   int counts[3];
   f32 dot;
   int i, j;
@@ -3175,9 +3173,9 @@ int ClipPolyToPlane(Vector *inVerts, int vertCount, Vector *outVerts,
 
 int ClipPolyToPlane_Precise(f64 *inVerts, int vertCount, f64 *outVerts,
                             const f64 *normal, f64 dist, f64 fOnPlaneEpsilon) {
-  f64 *dists = (f64 *)stackalloc(sizeof(f64) * vertCount *
-                                 4);  // 4x vertcount should cover all cases
-  int *sides = (int *)stackalloc(sizeof(f64) * vertCount * 4);
+  // 4x vertcount should cover all cases
+  f64 *dists = stack_alloc<f64>(vertCount * 4);
+  int *sides = stack_alloc<int>(vertCount * 4);
   int counts[3];
   f64 dot;
   int i, j;
@@ -3388,7 +3386,7 @@ bool R_CullBoxSkipNear(const Vector &mins, const Vector &maxs,
 // demo Creates basis vectors, based on a vertex and index list. See the NVidia
 // white paper 'GDC2K PerPixel Lighting' for a description of how this
 // computation works
-#define SMALL_FLOAT 1e-12
+constexpr inline f64 SMALL_FLOAT{1e-12};
 
 void CalcTriangleTangentSpace(const Vector &p0, const Vector &p1,
                               const Vector &p2, const Vector2D &t0,

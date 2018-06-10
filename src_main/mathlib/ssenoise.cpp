@@ -2,17 +2,15 @@
 //
 // Purpose: Fast low quality noise suitable for real time use.
 
-#include <float.h>  // Needed for FLT_EPSILON
-#include <memory.h>
+#include <cfloat>  // Needed for FLT_EPSILON
 #include <cmath>
-#include "tier0/include/basetypes.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
 #include "mathlib/vector.h"
+#include "noisedata.h"
+#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
- 
-#include "noisedata.h"
 #include "tier0/include/memdbgon.h"
 
 #define MAGIC_NUMBER (1 << 15)  // gives 8 bits of fraction
@@ -51,9 +49,9 @@ fltx4 NoiseSIMD(const fltx4 &x, const fltx4 &y, const fltx4 &z) {
   fltx4 xfrac = Four_Zeros, yfrac = Four_Zeros, zfrac = Four_Zeros;
 #define DOPASS(i)                                                           \
   {                                                                         \
-    u32 xi = SubInt(x_idx, i);                                     \
-    u32 yi = SubInt(y_idx, i);                                     \
-    u32 zi = SubInt(z_idx, i);                                     \
+    u32 xi = SubInt(x_idx, i);                                              \
+    u32 yi = SubInt(y_idx, i);                                              \
+    u32 zi = SubInt(z_idx, i);                                              \
     SubFloat(xfrac, i) = (xi & 0xff) * (1.0 / 256.0);                       \
     SubFloat(yfrac, i) = (yi & 0xff) * (1.0 / 256.0);                       \
     SubFloat(zfrac, i) = (zi & 0xff) * (1.0 / 256.0);                       \

@@ -2,7 +2,7 @@
 //
 // Purpose: generates 4 random numbers in the range 0..1 quickly, using SIMD
 
-#include <float.h>  // Needed for FLT_EPSILON
+#include <cfloat>  // Needed for FLT_EPSILON
 #include <memory.h>
 #include <cmath>
 #include "mathlib/mathlib.h"
@@ -65,7 +65,7 @@ fltx4 RandSIMD(int nContextIndex) {
   return s_SIMDRandContexts[nContextIndex].RandSIMD();
 }
 
-int GetSIMDRandContext(void) {
+int GetSIMDRandContext() {
   for (;;) {
     for (usize i = 0; i < std::size(s_SIMDRandContexts); i++) {
       if (!s_nRandContextsInUse[i])  // available?

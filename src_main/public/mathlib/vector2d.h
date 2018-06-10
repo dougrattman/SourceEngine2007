@@ -3,7 +3,7 @@
 #ifndef SOURCE_MATHLIB_VECTOR2D_H_
 #define SOURCE_MATHLIB_VECTOR2D_H_
 
-#include <float.h>
+#include <cfloat>
 #include <cmath>
 #include <cstdlib>  // std::rand
 
@@ -169,7 +169,7 @@ void Vector2DLerp(const Vector2D& src1, const Vector2D& src2, f32 t,
 
 // constructors
 
-inline Vector2D::Vector2D(void) {
+inline Vector2D::Vector2D() {
 #ifdef _DEBUG
   // Initialize to NAN to catch errors
   x = y = FLOAT32_NAN;
@@ -403,7 +403,7 @@ inline f32 Vector2DLength(const Vector2D& v) {
   return (f32)FastSqrt(v.x * v.x + v.y * v.y);
 }
 
-inline f32 Vector2D::LengthSqr(void) const {
+inline f32 Vector2D::LengthSqr() const {
   Assert(IsValid());
   return (x * x + y * y);
 }
@@ -418,7 +418,7 @@ inline bool Vector2D::IsLengthLessThan(f32 val) const {
   return LengthSqr() < val * val;
 }
 
-inline f32 Vector2D::Length(void) const { return Vector2DLength(*this); }
+inline f32 Vector2D::Length() const { return Vector2DLength(*this); }
 
 inline void Vector2DMin(const Vector2D& a, const Vector2D& b,
                         Vector2D& result) {
@@ -476,9 +476,9 @@ inline void ComputeClosestPoint2D(const Vector2D& vecStart, f32 flMaxDist,
   }
 }
 
-//
-// Slow methods
-//
+  //
+  // Slow methods
+  //
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -494,7 +494,7 @@ inline Vector2D Vector2D::Max(const Vector2D& vOther) const {
 
 // arithmetic operations
 
-inline Vector2D Vector2D::operator-(void) const { return Vector2D(-x, -y); }
+inline Vector2D Vector2D::operator-() const { return Vector2D(-x, -y); }
 
 inline Vector2D Vector2D::operator+(const Vector2D& v) const {
   Vector2D res;

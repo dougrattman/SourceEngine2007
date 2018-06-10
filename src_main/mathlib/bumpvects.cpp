@@ -4,51 +4,38 @@
 
 #include "mathlib/bumpvects.h"
 
-#ifdef QUIVER
-#include "r_local.h"
-#endif
-
 #include <cassert>
+
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-// z is coming out of the face.
-
-void GetBumpNormals(const Vector& sVect, const Vector& tVect,
-                    const Vector& flatNormal, const Vector& phongNormal,
-                    Vector bumpNormals[NUM_BUMP_VECTS]) {
-  Vector tmpNormal;
-  bool leftHanded;
-  int i;
-
-  assert(NUM_BUMP_VECTS == 3);
-
+// Z is coming out of the face.
+void GetBumpNormals(const Vector& s_vec, const Vector& t_vec,
+                    const Vector& flat_normal, const Vector& phong_normal,
+                    Vector bump_normals[NUM_BUMP_VECTS]) {
+  Vector normal_vec;
   // Are we left or right handed?
-  CrossProduct(sVect, tVect, tmpNormal);
-  if (DotProduct(flatNormal, tmpNormal) < 0.0f) {
-    leftHanded = true;
-  } else {
-    leftHanded = false;
-  }
+  CrossProduct(s_vec, t_vec, normal_vec);
 
-  // Build a basis for the face around the phong normal
-  matrix3x4_t smoothBasis;
-  CrossProduct(phongNormal.Base(), sVect.Base(), smoothBasis[1]);
-  VectorNormalize(smoothBasis[1]);
-  CrossProduct(smoothBasis[1], phongNormal.Base(), smoothBasis[0]);
-  VectorNormalize(smoothBasis[0]);
-  VectorCopy(phongNormal.Base(), smoothBasis[2]);
+  const bool is_left_handed{DotProduct(flat_normal, normal_vec) < 0.0f};
 
-  if (leftHanded) {
-    VectorNegate(smoothBasis[1]);
-  }
+  // Build a basis for the face around the phong normal.
+  matrix3x4_t smooth_basis;
+  CrossProduct(phong_normal.Base(), s_vec.Base(), smooth_basis[1]);
+  VectorNormalize(smooth_basis[1]);
+  CrossProduct(smooth_basis[1], phong_normal.Base(), smooth_basis[0]);
+  VectorNormalize(smooth_basis[0]);
+  VectorCopy(phong_normal.Base(), smooth_basis[2]);
 
-  // move the g_localBumpBasis into world space to create bumpNormals
-  for (i = 0; i < 3; i++) {
-    VectorIRotate(g_localBumpBasis[i], smoothBasis, bumpNormals[i]);
+  if (is_left_handed) VectorNegate(smooth_basis[1]);
+
+  static_assert(std::size(g_localBumpBasis) == NUM_BUMP_VECTS);
+
+  // Move the g_localBumpBasis into world space to create bump_normals.
+  for (usize i{0}; i < NUM_BUMP_VECTS; ++i) {
+    VectorIRotate(g_localBumpBasis[i], smooth_basis, bump_normals[i]);
   }
 }
 

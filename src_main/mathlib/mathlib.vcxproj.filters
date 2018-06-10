@@ -12,16 +12,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="anorms.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bumpvects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="color_conversion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="halton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imagequant.cpp">
@@ -64,6 +58,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vmatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="anorms.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

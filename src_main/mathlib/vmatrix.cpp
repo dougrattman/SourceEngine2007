@@ -10,13 +10,7 @@
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
-
-// -------------------------------------------------------------------------------------------
-// // Helper functions.
-// -------------------------------------------------------------------------------------------
-// //
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -332,7 +326,6 @@ bool MatrixInverseGeneral(const VMatrix &src, VMatrix &dst) {
   return true;
 }
 
-
 // Does a fast inverse, assuming the matrix only contains translation and
 // rotation.
 
@@ -366,7 +359,6 @@ void MatrixInverseTranspose(const VMatrix &src, VMatrix &dst) {
   src.InverseGeneral(dst);
   MatrixTranspose(dst, dst);
 }
-
 
 // Computes the inverse transpose
 
@@ -480,7 +472,6 @@ void VMatrix::SetupMatrixOrgAngles(const Vector &origin,
   m[3][3] = 1.0f;
 }
 
-
 // Sets matrix to identity
 
 void MatrixSetIdentity(VMatrix &dst) {
@@ -502,13 +493,11 @@ void MatrixSetIdentity(VMatrix &dst) {
   dst[3][3] = 1.0f;
 }
 
-
 // Setup a matrix from euler angles.
 
 void MatrixFromAngles(const QAngle &vAngles, VMatrix &dst) {
   dst.SetupMatrixOrgAngles(vec3_origin, vAngles);
 }
-
 
 // Creates euler angles from a matrix
 
@@ -545,8 +534,8 @@ void MatrixToAngles(const VMatrix &src, QAngle &vAngles) {
     vAngles[2] = RAD2DEG(atan2f(left[2], up[2]));
   } else  // forward is mostly Z, gimbal lock-
   {
-    // (yaw)	y = ATAN( -left.x, left.y );			-- forward is mostly z,
-    // so use right for yaw
+    // (yaw)	y = ATAN( -left.x, left.y );			-- forward is
+    // mostly z, so use right for yaw
     vAngles[1] = RAD2DEG(atan2f(-left[0], left[1]));
 
     // The engine does pitch inverted from this, but we always end up negating
@@ -560,7 +549,6 @@ void MatrixToAngles(const VMatrix &src, QAngle &vAngles) {
     vAngles[2] = 0;
   }
 }
-
 
 // Transpose
 
@@ -598,9 +586,7 @@ void MatrixTranspose(const VMatrix &src, VMatrix &dst) {
   }
 }
 
-
 // Matrix copy
-
 
 void MatrixCopy(const VMatrix &src, VMatrix &dst) {
   if (&src != &dst) {
@@ -608,10 +594,9 @@ void MatrixCopy(const VMatrix &src, VMatrix &dst) {
   }
 }
 
-
 // Matrix multiply
 
-typedef f32 VMatrixRaw_t[4];
+using VMatrixRaw_t = f32[4];
 
 void MatrixMultiply(const VMatrix &src1, const VMatrix &src2, VMatrix &dst) {
   // Make sure it works if src1 == dst or src2 == dst
@@ -663,9 +648,7 @@ void MatrixMultiply(const VMatrix &src1, const VMatrix &src2, VMatrix &dst) {
               s1[3][3] * s2[3][3];
 }
 
-
 // Matrix/vector multiply
-
 
 void Vector4DMultiply(const VMatrix &src1, Vector4D const &src2,
                       Vector4D &dst) {
@@ -687,9 +670,7 @@ void Vector4DMultiply(const VMatrix &src1, Vector4D const &src2,
            src1[3][3] * v[3];
 }
 
-
 // Matrix/vector multiply
-
 
 void Vector4DMultiplyPosition(const VMatrix &src1, Vector const &src2,
                               Vector4D &dst) {
@@ -712,9 +693,7 @@ void Vector4DMultiplyPosition(const VMatrix &src1, Vector const &src2,
       src1[3][0] * v[0] + src1[3][1] * v[1] + src1[3][2] * v[2] + src1[3][3];
 }
 
-
 // Matrix/vector multiply
-
 
 void Vector3DMultiply(const VMatrix &src1, const Vector &src2, Vector &dst) {
   // Make sure it works if src2 == dst
@@ -729,7 +708,6 @@ void Vector3DMultiply(const VMatrix &src1, const Vector &src2, Vector &dst) {
   dst[1] = src1[1][0] * v[0] + src1[1][1] * v[1] + src1[1][2] * v[2];
   dst[2] = src1[2][0] * v[0] + src1[2][1] * v[1] + src1[2][2] * v[2];
 }
-
 
 // Vector3DMultiplyPositionProjective treats src2 as if it's a point
 // and does the perspective divide at the end
@@ -758,7 +736,6 @@ void Vector3DMultiplyPositionProjective(const VMatrix &src1, const Vector &src2,
   dst *= w;
 }
 
-
 // Vector3DMultiplyProjective treats src2 as if it's a direction
 // and does the perspective divide at the end
 
@@ -782,7 +759,6 @@ void Vector3DMultiplyProjective(const VMatrix &src1, const Vector &src2,
     dst = vec3_origin;
   }
 }
-
 
 // Multiplies the vector by the transpose of the matrix
 
@@ -808,7 +784,6 @@ void Vector4DMultiplyTranspose(const VMatrix &src1, Vector4D const &src2,
            src1[3][3] * v[3];
 }
 
-
 // Multiplies the vector by the transpose of the matrix
 
 void Vector3DMultiplyTranspose(const VMatrix &src1, const Vector &src2,
@@ -827,7 +802,6 @@ void Vector3DMultiplyTranspose(const VMatrix &src1, const Vector &src2,
   dst[1] = src1[0][1] * v[0] + src1[1][1] * v[1] + src1[2][1] * v[2];
   dst[2] = src1[0][2] * v[0] + src1[1][2] * v[1] + src1[2][2] * v[2];
 }
-
 
 // Transform a plane
 
@@ -866,7 +840,6 @@ VPlane VMatrix::operator*(const VPlane &thePlane) const {
 
 #endif
 
-
 // Builds a rotation matrix that rotates one direction vector into another
 
 void MatrixBuildTranslation(VMatrix &dst, f32 x, f32 y, f32 z) {
@@ -882,7 +855,6 @@ void MatrixBuildTranslation(VMatrix &dst, const Vector &translation) {
   dst[1][3] = translation[1];
   dst[2][3] = translation[2];
 }
-
 
 // Purpose: Builds the matrix for a counterclockwise rotation about an arbitrary
 // axis.
@@ -906,7 +878,6 @@ void MatrixBuildRotationAboutAxis(VMatrix &dst, const Vector &vAxisOfRot,
   dst[3][2] = 0;
   dst[3][3] = 1;
 }
-
 
 // Builds a rotation matrix that rotates one direction vector into another
 
@@ -956,8 +927,6 @@ void MatrixBuildRotation(VMatrix &dst, const Vector &initialDirection,
   Assert(test.LengthSqr() < 1e-3);
 #endif
 }
-
-
 
 void MatrixBuildRotateZ(VMatrix &dst, f32 angleDegrees) {
   f32 radians = angleDegrees * (M_PI / 180.0f);
@@ -1009,8 +978,8 @@ void MatrixBuildScale(VMatrix &dst, const Vector &scale) {
 
 void MatrixBuildPerspective(VMatrix &dst, f32 fovX, f32 fovY, f32 zNear,
                             f32 zFar) {
-  // TODO(d.rattman): collapse all of this into one matrix after we figure out what all
-  // should be in here.
+  // TODO(d.rattman): collapse all of this into one matrix after we figure out
+  // what all should be in here.
   f32 width = 2 * zNear * tan(fovX * (M_PI / 180.0f) * 0.5f);
   f32 height = 2 * zNear * tan(fovY * (M_PI / 180.0f) * 0.5f);
 
@@ -1060,14 +1029,13 @@ static inline void CalculateAABBForNormalizedFrustum_Helper(
   AddPointToBounds(worldPos, mins, maxs);
 }
 
-
 // Given an inverse projection matrix, take the extremes of the space in
 // transformed into world space and get a bounding box.
 
 void CalculateAABBFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                               Vector *pMins, Vector *pMaxs) {
-  // TODO(d.rattman): Could maybe do better than the compile with all of these multiplies
-  // by 0 and 1.
+  // TODO(d.rattman): Could maybe do better than the compile with all of these
+  // multiplies by 0 and 1.
   ClearBounds(*pMins, *pMaxs);
   CalculateAABBForNormalizedFrustum_Helper(0, 0, 0, volumeToWorld, *pMins,
                                            *pMaxs);
@@ -1094,15 +1062,14 @@ void CalculateAABBFromProjectionMatrix(const VMatrix &worldToVolume,
   CalculateAABBFromProjectionMatrixInverse(volumeToWorld, pMins, pMaxs);
 }
 
-
 // Given an inverse projection matrix, take the extremes of the space in
 // transformed into world space and get a bounding sphere.
 
 void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                                 Vector *pCenter,
                                                 f32 *pflRadius) {
-  // TODO(d.rattman): Could maybe do better than the compile with all of these multiplies
-  // by 0 and 1.
+  // TODO(d.rattman): Could maybe do better than the compile with all of these
+  // multiplies by 0 and 1.
 
   // Need 3 points: the endpoint of the line through the center of the near +
   // far planes, and one point on the far plane. From that, we can derive a
@@ -1140,7 +1107,6 @@ void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
   VectorMA(vecCenterNear, (x / l), vecDelta, *pCenter);
   *pflRadius = sqrt(h1Sqr + x * x);
 }
-
 
 // Given a projection matrix, take the extremes of the space in transformed into
 // world space and get a bounding sphere.
@@ -1206,8 +1172,8 @@ void FrustumPlanesFromMatrix(const VMatrix &clipToWorld, Frustum_t &frustum) {
   frustum.SetPlane(FRUSTUM_BOTTOM, PLANE_ANYZ, normal, dist);
 }
 
-void MatrixBuildOrtho(VMatrix &dst, f64 left, f64 top, f64 right,
-                      f64 bottom, f64 zNear, f64 zFar) {
+void MatrixBuildOrtho(VMatrix &dst, f64 left, f64 top, f64 right, f64 bottom,
+                      f64 zNear, f64 zFar) {
   // TODO(d.rattman): This is being used incorrectly! Should read:
   // D3DXMatrixOrthoOffCenterRH( &matrix, left, right, bottom, top, zNear, zFar
   // ); Which is certainly why we need these extra -1 scales in y. Bleah
@@ -1250,10 +1216,9 @@ void MatrixBuildPerspectiveX(VMatrix &dst, f64 flFovX, f64 flAspect,
            0.0f, 0.0f, -1.0f, 0.0f);
 }
 
-void MatrixBuildPerspectiveOffCenterX(VMatrix &dst, f64 flFovX,
-                                      f64 flAspect, f64 flZNear,
-                                      f64 flZFar, f64 bottom, f64 top,
-                                      f64 left, f64 right) {
+void MatrixBuildPerspectiveOffCenterX(VMatrix &dst, f64 flFovX, f64 flAspect,
+                                      f64 flZNear, f64 flZFar, f64 bottom,
+                                      f64 top, f64 left, f64 right) {
   f32 flWidth = 2.0f * flZNear * tanf(flFovX * M_PI / 360.0f);
   f32 flHeight = flWidth / flAspect;
 

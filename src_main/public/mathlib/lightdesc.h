@@ -48,7 +48,7 @@ struct LightDesc_t {
   void
   RecalculateDerivedValues();  // calculate m_xxDot, m_Type for changed parms
 
-  LightDesc_t(void) {}
+  LightDesc_t() {}
 
   // a point light with infinite range
   LightDesc_t(Vector const &pos, Vector const &color)

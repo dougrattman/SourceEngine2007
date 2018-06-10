@@ -121,7 +121,7 @@ f32 SparseConvolutionNoise(Vector const &pnt, f32 (*pNoiseShapeFunction)(f32)) {
 // Improved Perlin Noise
 // The following code is the c-ification of Ken Perlin's new noise algorithm
 // "JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN"
-// as available here: http://mrl.nyu.edu/~perlin/noise/
+// as available here: https://mrl.nyu.edu/~perlin/noise/
 
 f32 NoiseGradient(int hash, f32 x, f32 y, f32 z) {
   int h = hash & 15;      // CONVERT LO 4 BITS OF HASH CODE

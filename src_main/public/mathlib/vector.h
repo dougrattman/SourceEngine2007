@@ -3,8 +3,8 @@
 #ifndef SOURCE_MATHLIB_VECTOR_H_
 #define SOURCE_MATHLIB_VECTOR_H_
 
-#include <float.h>
 #include <algorithm>
+#include <cfloat>
 #include <cmath>
 #include <cstdlib>  // std::rand.
 
@@ -53,8 +53,18 @@ class Vector {
   f32 x, y, z;
 
   // Construction/destruction:
-  Vector();
-  Vector(f32 X, f32 Y, f32 Z);
+  inline Vector() {
+#ifdef _DEBUG
+#ifdef VECTOR_PARANOIA
+    // Initialize to NAN to catch errors
+    x = y = z = VEC_T_NAN;
+#endif
+#endif
+  }
+
+  constexpr inline Vector(f32 X, f32 Y, f32 Z) : x{X}, y{Y}, z{Z} {
+    CHECK_VALID(*this);
+  }
 
   // Initialization
   void Init(f32 ix = 0.0f, f32 iy = 0.0f, f32 iz = 0.0f);
@@ -100,7 +110,7 @@ class Vector {
   inline f32 Length() const;
 
   // Get the vector's magnitude squared.
-  SOURCE_FORCEINLINE f32 LengthSqr(void) const {
+  SOURCE_FORCEINLINE f32 LengthSqr() const {
     CHECK_VALID(*this);
     return (x * x + y * y + z * z);
   }
@@ -127,12 +137,7 @@ class Vector {
   // due to being an 'out of line' inline. may be able to tidy this up after
   // switching to VC7
   SOURCE_FORCEINLINE f32 DistToSqr(const Vector& vOther) const {
-    Vector delta;
-
-    delta.x = x - vOther.x;
-    delta.y = y - vOther.y;
-    delta.z = z - vOther.z;
-
+    const Vector delta{x - vOther.x, y - vOther.y, z - vOther.z};
     return delta.LengthSqr();
   }
 
@@ -322,7 +327,7 @@ class TableVector {
 
 class alignas(16) VectorAligned : public Vector {
  public:
-  inline VectorAligned(void){};
+  inline VectorAligned(){};
   inline VectorAligned(f32 X, f32 Y, f32 Z) { Init(X, Y, Z); }
 
 #ifdef VECTOR_NO_SLOW_OPERATIONS
@@ -409,24 +414,6 @@ Vector RandomVector(f32 minVal, f32 maxVal);
 //
 // Inlined Vector methods
 //
-
-// constructors
-
-inline Vector::Vector() {
-#ifdef _DEBUG
-#ifdef VECTOR_PARANOIA
-  // Initialize to NAN to catch errors
-  x = y = z = VEC_T_NAN;
-#endif
-#endif
-}
-
-inline Vector::Vector(f32 X, f32 Y, f32 Z) {
-  x = X;
-  y = Y;
-  z = Z;
-  CHECK_VALID(*this);
-}
 
 // initialization
 
@@ -956,15 +943,14 @@ inline Vector& AllocTempVector() {
   return s_vecTemp[nIndex & 0x7F];
 }
 
-// dot, cross
-
+// Dot product.
 SOURCE_FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
-// for backwards compatability
+// Dot product for backwards compatability.
 inline f32 Vector::Dot(const Vector& vOther) const {
   CHECK_VALID(vOther);
   return DotProduct(*this, vOther);
@@ -999,32 +985,10 @@ inline f32 VectorLength(const Vector& v) {
   return (f32)FastSqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-inline f32 Vector::Length(void) const {
+inline f32 Vector::Length() const {
   CHECK_VALID(*this);
   return VectorLength(*this);
 }
-
-// Normalization
-
-/*
-// TODO(d.rattman): Can't use until we're un-macroed in mathlib.h
-inline f32 VectorNormalize( Vector& v )
-{
-        Assert( v.IsValid() );
-        f32 l = v.Length();
-        if (l != 0.0f)
-        {
-                v /= l;
-        }
-        else
-        {
-                // TODO(d.rattman):
-                // Just copying the existing implemenation; shouldn't res.z ==
-0? v.x = v.y = 0.0f; v.z = 1.0f;
-        }
-        return l;
-}
-*/
 
 // check a point against a box
 bool Vector::WithinAABox(Vector const& boxmin, Vector const& boxmax) {
@@ -1073,9 +1037,9 @@ inline void VectorAbs(const Vector& src, Vector& dst) {
   dst.z = FloatMakePositive(src.z);
 }
 
-//
-// Slow methods
-//
+  //
+  // Slow methods
+  //
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -1093,7 +1057,7 @@ inline Vector Vector::Max(const Vector& vOther) const {
 
 // arithmetic operations
 
-inline Vector Vector::operator-(void) const { return Vector(-x, -y, -z); }
+inline Vector Vector::operator-() const { return Vector(-x, -y, -z); }
 
 inline Vector Vector::operator+(const Vector& v) const {
   Vector res;
@@ -1143,9 +1107,9 @@ inline Vector Vector::Cross(const Vector& vOther) const {
 
 // 2D
 
-inline f32 Vector::Length2D(void) const { return (f32)FastSqrt(x * x + y * y); }
+inline f32 Vector::Length2D() const { return (f32)FastSqrt(x * x + y * y); }
 
-inline f32 Vector::Length2DSqr(void) const { return (x * x + y * y); }
+inline f32 Vector::Length2DSqr() const { return (x * x + y * y); }
 
 inline Vector CrossProduct(const Vector& a, const Vector& b) {
   return Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
@@ -1203,7 +1167,7 @@ inline bool operator!=(const Vector&, f32 const*) {
 
 // AngularImpulse are exponetial maps (an axis scaled by a "twist" angle in
 // degrees)
-typedef Vector AngularImpulse;
+using AngularImpulse = Vector;
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -1223,7 +1187,7 @@ class Quaternion  // same data-layout as engine's vec4_t,
 {                 //		which is a f32[4]
  public:
   inline Quaternion() {
-    // Initialize to NAN to catch errors
+  // Initialize to NAN to catch errors
 #ifdef _DEBUG
 #ifdef VECTOR_PARANOIA
     x = y = z = w = VEC_T_NAN;
@@ -1564,7 +1528,7 @@ inline RadianEuler::RadianEuler(QAngle const& angles) {
        angles.y * 3.14159265358979323846f / 180.f);
 }
 
-inline QAngle RadianEuler::ToQAngle(void) const {
+inline QAngle RadianEuler::ToQAngle() const {
   return QAngle(y * 180.f / 3.14159265358979323846f,
                 z * 180.f / 3.14159265358979323846f,
                 x * 180.f / 3.14159265358979323846f);
@@ -1696,11 +1660,11 @@ inline bool QAnglesAreEqual(const QAngle& src1, const QAngle& src2,
   return (FloatMakePositive(src1.z - src2.z) <= tolerance);
 }
 
-// arithmetic operations (SLOW!!)
+  // arithmetic operations (SLOW!!)
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
-inline QAngle QAngle::operator-(void) const {
+inline QAngle QAngle::operator-() const {
   QAngle ret(-x, -y, -z);
   return ret;
 }

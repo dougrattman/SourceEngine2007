@@ -4,9 +4,13 @@
 #define SOURCE_MATHLIB_MATHLIB_H_
 
 #include <algorithm>
+
+#define _USE_MATH_DEFINES  // M_PI
+#include <math.h>
 #include <cmath>
 
 #include "base/include/base_types.h"
+#include "base/include/macros.h"
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector2d.h"
@@ -70,21 +74,21 @@ extern int SignbitsForPlane(cplane_t *out);
 
 class Frustum_t {
  public:
-  void SetPlane(int i, int nType, const Vector &vecNormal, f32 dist) {
-    m_Plane[i].normal = vecNormal;
-    m_Plane[i].dist = dist;
-    m_Plane[i].type = nType;
-    m_Plane[i].signbits = SignbitsForPlane(&m_Plane[i]);
-    m_AbsNormal[i].Init(fabs(vecNormal.x), fabs(vecNormal.y),
-                        fabs(vecNormal.z));
+  void SetPlane(usize i, u8 nType, const Vector &vecNormal, f32 dist) {
+    planes_[i].normal = vecNormal;
+    planes_[i].dist = dist;
+    planes_[i].type = nType;
+    planes_[i].signbits = SignbitsForPlane(&planes_[i]);
+    abs_normals_[i].Init(fabs(vecNormal.x), fabs(vecNormal.y),
+                         fabs(vecNormal.z));
   }
 
-  inline const cplane_t *GetPlane(int i) const { return &m_Plane[i]; }
-  inline const Vector &GetAbsNormal(int i) const { return m_AbsNormal[i]; }
+  inline const cplane_t *GetPlane(int i) const { return &planes_[i]; }
+  inline const Vector &GetAbsNormal(int i) const { return abs_normals_[i]; }
 
  private:
-  cplane_t m_Plane[FRUSTUM_NUMPLANES];
-  Vector m_AbsNormal[FRUSTUM_NUMPLANES];
+  cplane_t planes_[FRUSTUM_NUMPLANES];
+  Vector abs_normals_[FRUSTUM_NUMPLANES];
 };
 
 // Computes Y fov from an X fov and a screen aspect ratio + X from Y
@@ -152,7 +156,7 @@ struct matrix3x4_t {
     Init(xAxis, yAxis, zAxis, vecOrigin);
   }
 
-  inline void Invalidate(void) {
+  inline void Invalidate() {
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 4; j++) {
         m_flMatVal[i][j] = FLOAT32_NAN;
@@ -174,21 +178,35 @@ struct matrix3x4_t {
   f32 m_flMatVal[3][4];
 };
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846  // matches value in gcc v2 math.h
-#endif
-
-#define M_PI_F ((f32)(M_PI))  // Shouldn't collide with anything.
+constexpr inline f32 M_PI_F{(f32)M_PI};  // Shouldn't collide with anything.
 
 // NJS: Inlined to prevent floats from being autopromoted to doubles, as with
 // the old system.
-#ifndef RAD2DEG
-#define RAD2DEG(x) ((f32)(x) * (f32)(180.f / M_PI_F))
-#endif
+template <typename T>
+constexpr inline T RAD2DEG(T rad);
 
-#ifndef DEG2RAD
-#define DEG2RAD(x) ((f32)(x) * (f32)(M_PI_F / 180.f))
-#endif
+template <>
+constexpr inline f32 RAD2DEG(f32 rad) {
+  return rad * 180.f / M_PI_F;
+}
+
+template <>
+constexpr inline f64 RAD2DEG(f64 rad) {
+  return rad * 180.0 / M_PI;
+}
+
+template <typename T>
+constexpr inline T DEG2RAD(T deg);
+
+template <>
+constexpr inline f32 DEG2RAD(f32 deg) {
+  return deg * M_PI_F / 180.f;
+}
+
+template <>
+constexpr inline f64 DEG2RAD(f64 deg) {
+  return deg * M_PI / 180.0;
+}
 
 // Used to represent sides of things like planes.
 #define SIDE_FRONT 0
@@ -196,10 +214,10 @@ struct matrix3x4_t {
 #define SIDE_ON 2
 #define SIDE_CROSS -2  // necessary for polylib.c
 
-#define ON_VIS_EPSILON \
-  0.01  // necessary for vvis (flow.c) -- again look into moving later!
-#define EQUAL_EPSILON \
-  0.001  // necessary for vbsp (faces.c) -- should look into moving it there?
+// necessary for vvis (flow.c) -- again look into moving later!
+constexpr inline f64 ON_VIS_EPSILON{0.01};
+// necessary for vbsp (faces.c) -- should look into moving it there?
+constexpr inline f64 EQUAL_EPSILON{0.001};
 
 extern bool s_bMathlibInitialized;
 
@@ -208,7 +226,10 @@ extern const QAngle vec3_angle;
 extern const Vector vec3_invalid;
 extern const int nanmask;
 
-#define IS_NAN(x) (((*(int *)&x) & nanmask) == nanmask)
+template <typename T, typename Y = std::enable_if_t<(sizeof(T) == sizeof(int))>>
+constexpr inline bool IS_NAN(T x) {
+  return ((*(int *)&x) & nanmask) == nanmask;
+}
 
 SOURCE_FORCEINLINE f32 DotProduct(const f32 *v1, const f32 *v2) {
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
@@ -253,8 +274,6 @@ inline void VectorNegate(f32 *a) {
   a[2] = -a[2];
 }
 
-//#define VectorMaximum(a)		( std::max( (a)[0], std::max( (a)[1],
-//(a)[2] ) ) )
 #define Vector2Clear(x) \
   { (x)[0] = (x)[1] = 0; }
 #define Vector2Negate(x) \
@@ -333,7 +352,7 @@ int Q_log2(int val);
 
 // Math routines done in optimized assembly math package routines
 void inline SinCos(f32 radians, f32 *sine, f32 *cosine) {
-#if defined(_WIN32)
+#if defined(OS_WIN)
   *sine = sin(radians);
   *cosine = cos(radians);
 #elif defined(OS_POSIX)
@@ -342,11 +361,13 @@ void inline SinCos(f32 radians, f32 *sine, f32 *cosine) {
 
   *sine = __sinr;
   *cosine = __cosr;
+#else
+#error Please, define SinCos for your platform in mathlib.h
 #endif
 }
 
-#define SIN_TABLE_SIZE 256
-#define FTOIBIAS 12582912.f
+constexpr inline usize SIN_TABLE_SIZE{256};
+constexpr inline f32 FTOIBIAS(12582912.f);
 extern f32 SinCosTable[SIN_TABLE_SIZE];
 
 inline f32 TableCos(f32 theta) {
@@ -357,7 +378,7 @@ inline f32 TableCos(f32 theta) {
 
   // ideally, the following should compile down to: theta * constant + constant,
   // changing any of these constants from defines sometimes fubars this.
-  ftmp.f = theta * (f32)(SIN_TABLE_SIZE / (2.0f * M_PI)) +
+  ftmp.f = theta * (f32)(SIN_TABLE_SIZE / (2.0f * M_PI_F)) +
            (FTOIBIAS + (SIN_TABLE_SIZE / 4));
   return SinCosTable[ftmp.i & (SIN_TABLE_SIZE - 1)];
 }
@@ -369,16 +390,14 @@ inline f32 TableSin(f32 theta) {
   } ftmp;
 
   // ideally, the following should compile down to: theta * constant + constant
-  ftmp.f = theta * (f32)(SIN_TABLE_SIZE / (2.0f * M_PI)) + FTOIBIAS;
+  ftmp.f = theta * (f32)(SIN_TABLE_SIZE / (2.0f * M_PI_F)) + FTOIBIAS;
   return SinCosTable[ftmp.i & (SIN_TABLE_SIZE - 1)];
 }
 
-template <class T>
-SOURCE_FORCEINLINE T Square(T const &a) {
+template <typename T>
+constexpr SOURCE_FORCEINLINE T Square(T const &a) {
   return a * a;
 }
-
-SOURCE_FORCEINLINE bool IsPowerOfTwo(u32 x) { return (x & (x - 1)) == 0; }
 
 // return the smallest power of two >= x.
 // returns 0 if x == 0 or x > 0x80000000 (ie numbers that would be negative if x
@@ -386,7 +405,7 @@ SOURCE_FORCEINLINE bool IsPowerOfTwo(u32 x) { return (x & (x - 1)) == 0; }
 // 0x80000000 casted to a u32,
 //       you'll get 0x80000000, which is correct for uints, instead of 0, which
 //       was correct for ints
-SOURCE_FORCEINLINE u32 SmallestPowerOfTwoGreaterOrEqual(u32 x) {
+constexpr SOURCE_FORCEINLINE u32 SmallestPowerOfTwoGreaterOrEqual(u32 x) {
   x -= 1;
   x |= x >> 1;
   x |= x >> 2;
@@ -397,7 +416,7 @@ SOURCE_FORCEINLINE u32 SmallestPowerOfTwoGreaterOrEqual(u32 x) {
 }
 
 // return the largest power of two <= x. Will return 0 if passed 0
-SOURCE_FORCEINLINE u32 LargestPowerOfTwoLessThanOrEqual(u32 x) {
+constexpr SOURCE_FORCEINLINE u32 LargestPowerOfTwoLessThanOrEqual(u32 x) {
   if (x >= 0x80000000) return 0x80000000;
 
   return SmallestPowerOfTwoGreaterOrEqual(x + 1) >> 1;
@@ -509,18 +528,17 @@ inline f32 MatrixColumnDotProduct(const matrix3x4_t &in1, int col,
 int __cdecl BoxOnPlaneSide(const f32 *emins, const f32 *emaxs,
                            const cplane_t *plane);
 
-inline f32 anglemod(f32 a) {
-  a = (360.f / 65536) * ((int)(a * (65536.f / 360.0f)) & 65535);
-  return a;
+constexpr inline f32 anglemod(f32 a) {
+  return (360.f / 65536) * ((int)(a * (65536.f / 360.0f)) & 65535);
 }
 
 // Remap a value in the range [A,B] to [C,D].
-inline f32 RemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
+constexpr inline f32 RemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
   return C + (D - C) * (val - A) / (B - A);
 }
 
-inline f32 RemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
+constexpr inline f32 RemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
   f32 cVal = (val - A) / (B - A);
   cVal = std::clamp(cVal, 0.0f, 1.0f);
@@ -531,7 +549,7 @@ inline f32 RemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
 // Returns A + (B-A)*flPercent.
 // f32 Lerp( f32 flPercent, f32 A, f32 B );
 template <class T>
-SOURCE_FORCEINLINE T Lerp(f32 flPercent, T const &A, T const &B) {
+constexpr SOURCE_FORCEINLINE T Lerp(f32 flPercent, T const &A, T const &B) {
   return A + (B - A) * flPercent;
 }
 
@@ -546,7 +564,7 @@ SOURCE_FORCEINLINE T Lerp(f32 flPercent, T const &A, T const &B) {
 //   at position i2, the function can be linearly interpolated with
 //   FLerp(f1,f2,i1,i2,x)
 //    i2=i1 will cause a divide by zero.
-static inline f32 FLerp(f32 f1, f32 f2, f32 i1, f32 i2, f32 x) {
+constexpr static inline f32 FLerp(f32 f1, f32 f2, f32 i1, f32 i2, f32 x) {
   return f1 + (f2 - f1) * (x - i1) / (i2 - i1);
 }
 
@@ -617,17 +635,14 @@ SOURCE_FORCEINLINE void swap(T &x, T &y) {
 }
 
 template <class T>
-SOURCE_FORCEINLINE T AVG(T a, T b) {
+constexpr SOURCE_FORCEINLINE T AVG(T a, T b) {
   return (a + b) / 2;
 }
-
-// number of elements in an array of static size
-#define NELEMS(x) ((sizeof(x)) / sizeof(x[0]))
 
 // XYZ macro, for printf type functions - ex printf("%f %f %f",XYZ(myvector));
 #define XYZ(v) (v).x, (v).y, (v).z
 
-inline f32 Sign(f32 x) { return (x < 0.0f) ? -1.0f : 1.0f; }
+constexpr inline f32 Sign(f32 x) { return (x < 0.0f) ? -1.0f : 1.0f; }
 
 //
 // Clamps the input integer to the given array bounds.
@@ -643,7 +658,7 @@ inline f32 Sign(f32 x) { return (x < 0.0f) ? -1.0f : 1.0f; }
 //
 // Note: This code has been run against all possible integers.
 //
-inline int ClampArrayBounds(int n, u32 maxindex) {
+constexpr inline int ClampArrayBounds(int n, u32 maxindex) {
   // mask is 0 if less than 4096, 0xFFFFFFFF if greater than
   u32 inrangemask = 0xFFFFFFFF + (((u32)n) > maxindex);
   u32 lessthan0mask = 0xFFFFFFFF + (n >= 0);
@@ -999,7 +1014,7 @@ inline f32 ExponentialDecayIntegral(f32 decayTo, f32 decayTime, f32 dt) {
 // hermite basis function for smooth interpolation
 // Similar to Gain() above, but very cheap to call
 // value should be between 0 & 1 inclusive
-inline f32 SimpleSpline(f32 value) {
+constexpr inline f32 SimpleSpline(f32 value) {
   f32 valueSquared = value * value;
 
   // Nice little ease-in, ease-out spline-like curve
@@ -1008,7 +1023,7 @@ inline f32 SimpleSpline(f32 value) {
 
 // remaps a value in [startInterval, startInterval+rangeInterval] from linear to
 // spline using SimpleSpline
-inline f32 SimpleSplineRemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
+constexpr inline f32 SimpleSplineRemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
   f32 cVal = (val - A) / (B - A);
   return C + (D - C) * SimpleSpline(cVal);
@@ -1016,7 +1031,8 @@ inline f32 SimpleSplineRemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
 
 // remaps a value in [startInterval, startInterval+rangeInterval] from linear to
 // spline using SimpleSpline
-inline f32 SimpleSplineRemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
+constexpr inline f32 SimpleSplineRemapValClamped(f32 val, f32 A, f32 B, f32 C,
+                                                 f32 D) {
   if (A == B) return val >= B ? D : C;
   f32 cVal = (val - A) / (B - A);
   cVal = std::clamp(cVal, 0.0f, 1.0f);
@@ -1055,7 +1071,7 @@ SOURCE_FORCEINLINE unsigned long RoundFloatToUnsignedLong(f32 f) {
 #else
   u8 nResult[8];
 
-#if defined(_WIN32)
+#if defined(OS_WIN)
   __asm
   {
       fld f
@@ -1070,7 +1086,7 @@ SOURCE_FORCEINLINE unsigned long RoundFloatToUnsignedLong(f32 f) {
 }
 
 // Fast, accurate ftol:
-SOURCE_FORCEINLINE int Float2Int(f32 a) {
+constexpr SOURCE_FORCEINLINE int Float2Int(f32 a) {
   // Rely on compiler to generate CVTTSS2SI on x86
   return static_cast<int>(a);
 }
@@ -1092,8 +1108,7 @@ inline int Floor2Int(f32 a) {
 }
 
 // Fast color conversion from f32 to u8
-
-SOURCE_FORCEINLINE u8 FastFToC(f32 c) {
+constexpr SOURCE_FORCEINLINE u8 FastFToC(f32 c) {
   // ieee trick
   volatile f32 dc = c * 255.0f + (f32)(1 << 23);
   // return the lsb
@@ -1101,9 +1116,6 @@ SOURCE_FORCEINLINE u8 FastFToC(f32 c) {
 }
 
 // Purpose: Bound input f32 to .001 (millisecond) boundary
-// Input  : in -
-// Output : inline f32
-
 inline f32 ClampToMsec(f32 in) {
   int msec = Floor2Int(in * 1000.0f + 0.5f);
   return msec / 1000.0f;
@@ -1135,9 +1147,11 @@ inline int Ceil2Int(f32 a) {
   (((B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x)))
 
 // Get the barycentric coordinates of "pt" in triangle [A,B,C].
-inline void GetBarycentricCoords2D(Vector2D const &A, Vector2D const &B,
-                                   Vector2D const &C, Vector2D const &pt,
-                                   f32 bcCoords[3]) {
+constexpr inline void GetBarycentricCoords2D(Vector2D const &A,
+                                             Vector2D const &B,
+                                             Vector2D const &C,
+                                             Vector2D const &pt,
+                                             f32 bcCoords[3]) {
   // Note, because to top and bottom are both x2, the issue washes out in the
   // composite
   f32 invTriArea = 1.0f / TriArea2DTimesTwo(A, B, C);
@@ -1152,18 +1166,19 @@ inline void GetBarycentricCoords2D(Vector2D const &A, Vector2D const &B,
 // Return true of the sphere might touch the box (the sphere is actually
 // treated like a box itself, so this may return true if the sphere's bounding
 // box touches a corner of the box but the sphere itself doesn't).
-inline bool QuickBoxSphereTest(const Vector &vOrigin, f32 flRadius,
-                               const Vector &bbMin, const Vector &bbMax) {
+constexpr inline bool QuickBoxSphereTest(const Vector &vOrigin, f32 flRadius,
+                                         const Vector &bbMin,
+                                         const Vector &bbMax) {
   return vOrigin.x - flRadius < bbMax.x && vOrigin.x + flRadius > bbMin.x &&
          vOrigin.y - flRadius < bbMax.y && vOrigin.y + flRadius > bbMin.y &&
          vOrigin.z - flRadius < bbMax.z && vOrigin.z + flRadius > bbMin.z;
 }
 
 // Return true of the boxes intersect (but not if they just touch).
-inline bool QuickBoxIntersectTest(const Vector &vBox1Min,
-                                  const Vector &vBox1Max,
-                                  const Vector &vBox2Min,
-                                  const Vector &vBox2Max) {
+constexpr inline bool QuickBoxIntersectTest(const Vector &vBox1Min,
+                                            const Vector &vBox1Max,
+                                            const Vector &vBox2Min,
+                                            const Vector &vBox2Max) {
   return vBox1Min.x < vBox2Max.x && vBox1Max.x > vBox2Min.x &&
          vBox1Min.y < vBox2Max.y && vBox1Max.y > vBox2Min.y &&
          vBox1Min.z < vBox2Max.z && vBox1Max.z > vBox2Min.z;
@@ -1311,7 +1326,7 @@ void Hermite_SplineBasis(f32 t, f32 basis[]);
 void Hermite_Spline(const Quaternion &q0, const Quaternion &q1,
                     const Quaternion &q2, f32 t, Quaternion &output);
 
-// See http://en.wikipedia.org/wiki/Kochanek-Bartels_curves
+// See https://en.wikipedia.org/wiki/Kochanek-Bartels_spline
 //
 // Tension:  -1 = Round -> 1 = Tight
 // Bias:     -1 = Pre-shoot (bias left) -> 1 = Post-shoot (bias right)
@@ -1443,10 +1458,10 @@ void MathLib_Init(f32 gamma = 2.2f, f32 texGamma = 2.2f, f32 brightness = 0.0f,
                   int overbright = 2.0f, bool bAllow3DNow = true,
                   bool bAllowSSE = true, bool bAllowSSE2 = true,
                   bool bAllowMMX = true);
-bool MathLib_3DNowEnabled(void);
-bool MathLib_MMXEnabled(void);
-bool MathLib_SSEEnabled(void);
-bool MathLib_SSE2Enabled(void);
+bool MathLib_3DNowEnabled();
+bool MathLib_MMXEnabled();
+bool MathLib_SSEEnabled();
+bool MathLib_SSE2Enabled();
 
 f32 Approach(f32 target, f32 value, f32 speed);
 f32 ApproachAngle(f32 target, f32 value, f32 speed);
@@ -1475,39 +1490,33 @@ int ClipPolyToPlane_Precise(f64 *inVerts, int vertCount, f64 *outVerts,
                             f64 fOnPlaneEpsilon = 0.1);
 
 // Computes a reasonable tangent space for a triangle
-
 void CalcTriangleTangentSpace(const Vector &p0, const Vector &p1,
                               const Vector &p2, const Vector2D &t0,
                               const Vector2D &t1, const Vector2D &t2,
                               Vector &sVect, Vector &tVect);
 
 // Transforms a AABB into another space; which will inherently grow the box.
-
 void TransformAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                    const Vector &vecMaxsIn, Vector &vecMinsOut,
                    Vector &vecMaxsOut);
 
 // Uses the inverse transform of in1
-
 void ITransformAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                     const Vector &vecMaxsIn, Vector &vecMinsOut,
                     Vector &vecMaxsOut);
 
 // Rotates a AABB into another space; which will inherently grow the box.
 // (same as TransformAABB, but doesn't take the translation into account)
-
 void RotateAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                 const Vector &vecMaxsIn, Vector &vecMinsOut,
                 Vector &vecMaxsOut);
 
 // Uses the inverse transform of in1
-
 void IRotateAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                  const Vector &vecMaxsIn, Vector &vecMinsOut,
                  Vector &vecMaxsOut);
 
 // Transform a plane
-
 inline void MatrixTransformPlane(const matrix3x4_t &src,
                                  const cplane_t &inPlane, cplane_t &outPlane) {
   // What we want to do is the following:
@@ -1708,7 +1717,6 @@ SOURCE_FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal,
 
   f32 x = cX - 128.0f;
   f32 y = cY - 128.0f;
-  f32 z;
 
   f32 zSignBit =
       x < 0 ? 1.0f : 0.0f;  // z and t negative bits (like slt asm instruction)
@@ -1729,7 +1737,7 @@ SOURCE_FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal,
 
   x = (x * xSign - xSignBit) / 63.0f;  // 0..1 range
   y = (y * ySign - ySignBit) / 63.0f;
-  z = 1.0f - x - y;
+  f32 z = 1.0f - x - y;
 
   f32 oolen = 1.0f / sqrt(x * x + y * y + z * z);  // Normalize and
   x *= oolen * xSign;                              // Recover signs
@@ -1739,9 +1747,8 @@ SOURCE_FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal,
   pNormal[0] = x;
   pNormal[1] = y;
   pNormal[2] = z;
-  if (bIsTangent) {
-    pNormal[3] = tSign;
-  }
+
+  if (bIsTangent) pNormal[3] = tSign;
 
   return pNormal;
 }
@@ -1766,6 +1773,7 @@ SOURCE_FORCEINLINE u32 *PackNormal_UBYTE4(f32 nx, f32 ny, f32 nz,
   f32 ySign = ny < 0.0f ? -1.0f : 1.0f;
   f32 zSign = nz < 0.0f ? -1.0f : 1.0f;
   f32 tSign = binormalSign;
+
   Assert((binormalSign == +1.0f) || (binormalSign == -1.0f));
 
   f32 xSignBit = 0.5f * (1 - xSign);  // [-1,+1] -> [1,0]
@@ -1814,10 +1822,10 @@ SOURCE_FORCEINLINE u32 *PackNormal_UBYTE4(const f32 *pNormal,
                            bIsTangent, binormalSign);
 }
 
-// Convert RGB to HSV
+// Convert RGB to HSV.
 void RGBtoHSV(const Vector &rgb, Vector &hsv);
 
-// Convert HSV to RGB
+// Convert HSV to RGB.
 void HSVtoRGB(const Vector &hsv, Vector &rgb);
 
 #endif  // SOURCE_MATHLIB_MATHLIB_H_

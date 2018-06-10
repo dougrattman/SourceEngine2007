@@ -19,34 +19,51 @@
 #define SOURCE_MATHLIB_HALTON_H_
 
 #include "base/include/base_types.h"
+#include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "tier0/include/floattypes.h"
 
 class HaltonSequenceGenerator_t {
  public:
-  HaltonSequenceGenerator_t(i32 base);  // < base MUST be prime, >= 2
-  f32 GetElement(i32 element);
+  constexpr HaltonSequenceGenerator_t(i32 base)
+      : seed_{1},
+        base_{base},
+        fbase_{(f32)base} {}  // < base MUST be prime, >= 2
+  constexpr f32 GetElement(int elem) const {
+    i32 tmpseed{seed_};
+    f32 ret{0.0f}, base_inv{1.0f / fbase_};
 
-  inline f32 NextValue() { return GetElement(seed++); }
+    while (tmpseed) {
+      const f32 dig{(f32)(tmpseed % base_)};
+
+      ret += dig * base_inv;
+      base_inv /= fbase_;
+      tmpseed /= base_;
+    }
+
+    return ret;
+  }
+
+  constexpr inline f32 NextValue() { return GetElement(seed_++); }
 
  private:
-  i32 seed;
-  i32 base;
-  f32 fbase;  //< base as a f32
+  i32 seed_;
+  i32 base_;
+  f32 fbase_;  //< base as a f32
 };
 
 //< pseudo-random sphere sampling
 class DirectionalSampler_t {
  public:
-  DirectionalSampler_t() : zdot(2), vrot(3) {}
+  constexpr DirectionalSampler_t() : zdot{2}, vrot{3} {}
 
   Vector NextValue() {
     // map from 0..1 to -1..1
-    f32 zvalue = 2 * zdot.NextValue() - 1.0f;
+    const f32 zvalue{2 * zdot.NextValue() - 1.0f};
     // now, generate a random rotation angle for x/y
-    f32 theta = 2.0 * M_PI * vrot.NextValue();
-    f32 phi = acos(zvalue);
-    f32 sin_p = sin(phi);
+    const f32 theta{2.0f * M_PI_F * vrot.NextValue()};
+    const f32 phi{acos(zvalue)};
+    const f32 sin_p{sin(phi)};
     return Vector{cos(theta) * sin_p, sin(theta) * sin_p, zvalue};
   }
 
