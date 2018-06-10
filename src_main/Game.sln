@@ -303,7 +303,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{05D8
 	ProjectSection(SolutionItems) = preProject
 		base\include\base_types.h = base\include\base_types.h
 		base\include\check.h = base\include\check.h
+		base\include\chrono.h = base\include\chrono.h
+		base\include\chrono.x86-64.asm = base\include\chrono.x86-64.asm
 		base\include\compiler_specific.h = base\include\compiler_specific.h
+		base\include\cpu_instruction_set.h = base\include\cpu_instruction_set.h
 		base\include\errno_info.h = base\include\errno_info.h
 		base\include\i18n.h = base\include\i18n.h
 		base\include\macros.h = base\include\macros.h
@@ -458,6 +461,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libice", "deps\libice\libice.vcxproj", "{E408B2FB-DFE8-4DD2-A25F-17D2CF6F653B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxzip", "deps\libxzip\libxzip.vcxproj", "{ADB3939B-7067-46DD-AE77-6023974A5CB9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lzma", "utils\lzma\lzma.vcxproj", "{AFCED408-C836-4BB4-8B55-4559E6E17D8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1083,6 +1088,14 @@ Global
 		{ADB3939B-7067-46DD-AE77-6023974A5CB9}.Release|Win32.Build.0 = Release|Win32
 		{ADB3939B-7067-46DD-AE77-6023974A5CB9}.Release|x64.ActiveCfg = Release|x64
 		{ADB3939B-7067-46DD-AE77-6023974A5CB9}.Release|x64.Build.0 = Release|x64
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Debug|Win32.Build.0 = Debug|Win32
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Debug|x64.ActiveCfg = Debug|x64
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Debug|x64.Build.0 = Debug|x64
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Release|Win32.ActiveCfg = Release|Win32
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Release|Win32.Build.0 = Release|Win32
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Release|x64.ActiveCfg = Release|x64
+		{AFCED408-C836-4BB4-8B55-4559E6E17D8E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1095,6 +1108,7 @@ Global
 		{2016F937-136A-4182-BA4C-E179BE64AD52} = {FCB545F9-7A56-4890-8BB1-9C1DF2B27CEB}
 		{08257043-FE59-4E3F-8C99-A181397052D0} = {FCB545F9-7A56-4890-8BB1-9C1DF2B27CEB}
 		{8BE8D44D-B656-40C7-83D2-D51309021093} = {FCB545F9-7A56-4890-8BB1-9C1DF2B27CEB}
+		{D98F41BD-A135-4FEA-A53A-C6553419DA29} = {FCB545F9-7A56-4890-8BB1-9C1DF2B27CEB}
 		{34F3258C-13AF-4A09-8BF6-2E333ABB5516} = {9E90BC8B-72C2-4CFA-BEE8-AC985D294932}
 		{44E09827-E566-4B28-940F-B62EF25AF59D} = {9E90BC8B-72C2-4CFA-BEE8-AC985D294932}
 		{30E9C02B-BCF4-43A4-8804-4E5B58066770} = {9E90BC8B-72C2-4CFA-BEE8-AC985D294932}
@@ -1106,6 +1120,7 @@ Global
 		{594A6F34-A5B3-4434-9DCB-51353A2A92A6} = {9E90BC8B-72C2-4CFA-BEE8-AC985D294932}
 		{174AE21E-645A-4C8F-9AD1-680C6DCEE36E} = {1EDD6487-EC43-4EFC-8412-786E4C9D7065}
 		{C2199634-6C18-4D43-9F85-CAA40AC80729} = {FCB545F9-7A56-4890-8BB1-9C1DF2B27CEB}
+		{2E7C1C1B-2947-4B7F-9AB3-E23B8A63E053} = {FCB545F9-7A56-4890-8BB1-9C1DF2B27CEB}
 		{0B224B51-553F-4688-833F-C86B5D87328C} = {9E90BC8B-72C2-4CFA-BEE8-AC985D294932}
 		{B26A7060-8424-4E9C-AD77-595E56F718F2} = {149EB2D5-F9C4-4F53-AFE1-1782C535ADFB}
 		{55C42863-4405-4359-BF60-E369F07C4A9B} = {149EB2D5-F9C4-4F53-AFE1-1782C535ADFB}

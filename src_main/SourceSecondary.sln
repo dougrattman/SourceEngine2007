@@ -8,13 +8,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dedicated_main", "dedicated
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dbmon", "devtools\dbmon\dbmon.vcxproj", "{B198CF2E-8465-4986-8B51-CFF9DB268530}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "getmirror", "devtools\getmirror\getmirror.vcproj", "{D6F3B6EA-1174-4406-9471-5A9326FAC63B}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Smtpmail", "devtools\smtpmail\smtpmail.vcxproj", "{5452DB56-C839-4990-A1E8-670C38E120BA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sscode", "devtools\sscode\sscode.vcproj", "{EAE0C329-1593-4851-9EBB-DB2B333299A5}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "syncfrommirror", "devtools\syncfrommirror\syncfrommirror.vcproj", "{0058F035-36D4-4D46-9C15-B13E255216EC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tagbuild", "devtools\tagbuild\tagbuild.vcxproj", "{B0B9A462-50A0-4EC2-9C94-44BA49D8CC40}"
 EndProject
