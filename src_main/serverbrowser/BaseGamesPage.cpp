@@ -521,7 +521,7 @@ void CBaseGamesPage::ServerResponded(int iServer,
       char time_buf[64];
       strftime(buf, sizeof(time_buf), "%a %d %b %I:%M%p", &now);
       Q_strlower(buf + strlen(buf) - 4,
-                 SOURCE_ARRAYSIZE(buf) - strlen(buf) + 4);
+                 std::size(buf) - strlen(buf) + 4);
       kv->SetString("LastPlayed", buf);
     }
   }
@@ -598,7 +598,7 @@ void CBaseGamesPage::OnButtonToggled(Panel *panel, int state) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseGamesPage::UpdateDerivedLayouts(void) {
+void CBaseGamesPage::UpdateDerivedLayouts() {
   char rgchControlSettings[SOURCE_MAX_PATH];
   if (m_pCustomResFilename) {
     Q_snprintf(rgchControlSettings, sizeof(rgchControlSettings), "%s",

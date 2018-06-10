@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{cac8d888-8d46-4ac4-9171-b80da1be156e}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\SOFTIMAGE">
+      <UniqueIdentifier>{c8d1f3e4-c6ad-42a4-aaf1-d6b39119a460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{4b9177c5-9434-4bfc-9caa-e96ad79cc253}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{4467ffda-5c37-4283-9bd7-38224751679f}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Script1.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SMDExport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDSkeleton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SMDExport.def">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="SMDExportOptions.spdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SIBCMath.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCMathLib.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCMatrix.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCMatrix33d.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCMatrix44d.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCMatrixMNd.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCString.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCUtil.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCVector.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCVector2Dd.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCVector3Dd.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCVector4Dd.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SIBCVectorwd.h">
+      <Filter>Source Files\SOFTIMAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDSkeleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\lib\common\XSICore_static.lib" />
+  </ItemGroup>
+</Project>

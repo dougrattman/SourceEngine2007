@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5bc8f1c9-b578-4264-aba5-5f81b33bab0a}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{989e0a4a-dbc0-4df1-b366-4a863d3d5a17}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Miscellaneous Files">
+      <UniqueIdentifier>{a1135e7b-093d-4e21-97db-8693289afaf5}</UniqueIdentifier>
+      <Extensions>txt</Extensions>
+    </Filter>
+    <Filter Include="libs">
+      <UniqueIdentifier>{d8e99383-1058-45fe-94c2-65ea5c18d58c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CVsMasterCmd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CVsMayaMasterApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DCCMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\public\interpolatortypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MayaVGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\tier0\include\memoverride.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\public\movieobjects\movieobjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vsMasterInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CVsMasterCmd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CVsMayaMasterApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\public\xsi\5.1\IDccMain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\public\xsi\5.1\IMayaVGui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\lib\public\appframework.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\datamodel.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\dme_controls.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\dmserializers.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\mathlib.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\matsys_controls.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\movieobjects.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\tier0.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\tier1.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\tier2.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\tier3.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\xsi\5.1\valveMaya.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\vgui_controls.lib">
+      <Filter>libs</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\vstdlib.lib">
+      <Filter>libs</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

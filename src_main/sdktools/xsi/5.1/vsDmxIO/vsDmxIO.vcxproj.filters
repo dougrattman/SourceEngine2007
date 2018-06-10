@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{f51c79fe-5e36-41bd-9ded-278c9205bee1}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{b5f1b40d-539a-4d12-9128-37275537a603}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Miscellaneous Files">
+      <UniqueIdentifier>{cafe85ab-859d-4d18-bc09-079dfc1075f1}</UniqueIdentifier>
+      <Extensions>txt</Extensions>
+    </Filter>
+    <Filter Include="libs">
+      <UniqueIdentifier>{1445a072-2362-4bc1-933c-879a6d797ccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\Valve">
+      <UniqueIdentifier>{35e3ecbe-e679-4b16-9d05-9f307d2172fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\Maya">
+      <UniqueIdentifier>{c6ceafab-4cff-4882-b637-5d7ef9fcb8fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mel">
+      <UniqueIdentifier>{91e9671e-9542-4df8-9db3-d969a89c04ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{695373c9-7599-4315-9c48-9231ef478a54}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CVsDmxIOCmd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CVsDmxIOTranslator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vsDmxIOInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\public\interpolatortypes.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\tier0\include\memoverride.cc">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\public\movieobjects\movieobjects.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CVsDmxIOTranslator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\public\interpolatortypes.h">
+      <Filter>external</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\lib\public\mathlib.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\movieobjects.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\scenedatabase.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\tier0.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\tier1.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\tier2.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\maya\7.0\valveMaya.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\public\vstdlib.lib">
+      <Filter>libs\Valve</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\common\maya\7.0\Foundation.lib">
+      <Filter>libs\Maya</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\common\maya\7.0\OpenMaya.lib">
+      <Filter>libs\Maya</Filter>
+    </Library>
+    <Library Include="..\..\..\..\lib\common\maya\7.0\OpenMayaAnim.lib">
+      <Filter>libs\Maya</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\scripts\vsDmxIOTranslatorOptions.mel">
+      <Filter>mel</Filter>
+    </None>
+  </ItemGroup>
+</Project>

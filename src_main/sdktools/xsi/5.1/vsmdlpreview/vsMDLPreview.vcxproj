@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F045DB25-D4C7-463C-B5A0-A7600939E409}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.27625.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\common;..\..\..\..\public;..\..\..\..\public\tier1;..\..\..\..\common\xsi\5.1;..\..\..\..\public\xsi\5.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AFXDLL;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ProgramDataBaseFileName>$(IntDir)vsMDLPreview.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <CustomBuildStep>
+      <Command>if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll attrib -r ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll
+if exist "$(TargetDir)"vsMDLPreview.dll copy "$(TargetDir)"vsMDLPreview.dll ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll
+if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb attrib -r ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb
+if exist "$(TargetDir)"vsMDLPreview.pdb copy "$(TargetDir)"vsMDLPreview.pdb ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb
+</Command>
+      <Outputs>..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll;..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Link>
+      <AdditionalOptions>/subsystem:windows /dll /incremental:yes /debug /machine:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>comctl32.lib;opengl32.lib;sicppsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Debug\vsMDLPreview.dll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\common\xsi\5.1;..\..\..\..\lib\public\xsi\5.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ProgramDatabaseFile>Debug/vsMDLPreview.pdb</ProgramDatabaseFile>
+      <ImportLibrary />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\common;..\..\..\..\public;..\..\..\..\public\tier1;..\..\..\..\common\xsi\5.1;..\..\..\..\public\xsi\5.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_AFXDLL;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ProgramDataBaseFileName>$(IntDir)vsMDLPreview.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <CustomBuildStep>
+      <Command>if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll attrib -r ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll
+if exist "$(TargetDir)"vsMDLPreview.dll copy "$(TargetDir)"vsMDLPreview.dll ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll
+if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb attrib -r ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb
+if exist "$(TargetDir)"vsMDLPreview.pdb copy "$(TargetDir)"vsMDLPreview.pdb ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb
+</Command>
+      <Outputs>..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.dll;..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\bin\vsMDLPreview.pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Link>
+      <AdditionalDependencies>comctl32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Release\vsMDLPreview.vll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\common\xsi\5.1;..\..\..\..\lib\public\xsi\5.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcd.lib;libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>Release/vsMDLPreview.pdb</ProgramDatabaseFile>
+      <ImportLibrary />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\public\interpolatortypes.cpp" />
+    <ClCompile Include="..\..\..\..\public\vgui_controls\vgui_controls.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\include\memoverride.cc" />
+    <ClCompile Include="vsMDLPreview.cpp" />
+    <ClCompile Include="vsMDLPreviewInit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\common\maya\7.0\maya\flib.h" />
+    <ClInclude Include="..\..\..\..\common\maya\7.0\maya\ilib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\game\sdktools\maya\7.0\modules\utilities\scripts\vsMDLPreview.mel" />
+    <None Include="..\..\..\..\..\game\sdktools\maya\7.0\modules\vsmdlpreview\icons\out_vsMDLPreviewLocator.xpm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\lib\public\dme_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\mathlib.lib" />
+    <Library Include="..\..\..\..\lib\public\matsys_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\movieobjects.lib" />
+    <Library Include="..\..\..\..\lib\public\scenedatabase.lib" />
+    <Library Include="..\..\..\..\lib\public\tier0.lib" />
+    <Library Include="..\..\..\..\lib\public\tier1.lib" />
+    <Library Include="..\..\..\..\lib\public\tier2.lib" />
+    <Library Include="..\..\..\..\lib\public\tier3.lib" />
+    <Library Include="..\..\..\..\lib\public\vgui_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\vstdlib.lib" />
+    <Library Include="..\..\..\..\lib\public\xsi\5.1\valveMaya.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

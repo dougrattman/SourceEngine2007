@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{c31ba89f-f98e-471f-8d2a-36fe0fdd9c33}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{b9bb18e1-3564-4f7f-b998-a4748e61c19f}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Miscellaneous Files">
+      <UniqueIdentifier>{83059560-baef-4137-89a2-f8f9ba497be6}</UniqueIdentifier>
+      <Extensions>txt</Extensions>
+    </Filter>
+    <Filter Include="mel">
+      <UniqueIdentifier>{23629e2d-a9c7-4978-927b-40176a5f5ad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="icons">
+      <UniqueIdentifier>{8f3bcd37-019b-49d9-aebb-5c926ba43411}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\public\interpolatortypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\tier0\include\memoverride.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\public\vgui_controls\vgui_controls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vsMDLPreview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vsMDLPreviewInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\common\maya\7.0\maya\flib.h">
+      <Filter>Miscellaneous Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\common\maya\7.0\maya\ilib.h">
+      <Filter>Miscellaneous Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\game\sdktools\maya\7.0\modules\utilities\scripts\vsMDLPreview.mel">
+      <Filter>mel</Filter>
+    </None>
+    <None Include="..\..\..\..\..\game\sdktools\maya\7.0\modules\vsmdlpreview\icons\out_vsMDLPreviewLocator.xpm">
+      <Filter>icons</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\lib\public\dme_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\mathlib.lib" />
+    <Library Include="..\..\..\..\lib\public\matsys_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\movieobjects.lib" />
+    <Library Include="..\..\..\..\lib\public\scenedatabase.lib" />
+    <Library Include="..\..\..\..\lib\public\tier0.lib" />
+    <Library Include="..\..\..\..\lib\public\tier1.lib" />
+    <Library Include="..\..\..\..\lib\public\tier2.lib" />
+    <Library Include="..\..\..\..\lib\public\tier3.lib" />
+    <Library Include="..\..\..\..\lib\public\xsi\5.1\valveMaya.lib" />
+    <Library Include="..\..\..\..\lib\public\vgui_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\vstdlib.lib" />
+  </ItemGroup>
+</Project>

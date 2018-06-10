@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0220F025-A543-4C77-82F2-E27EA8780801}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.27625.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\common;..\..\..\..\public;..\..\..\..\public\tier1;..\..\..\..\public\xsi\5.1;..\..\..\..\common\xsi\5.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AFXDLL;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ProgramDataBaseFileName>$(IntDir)vsMaster.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <CustomBuildStep>
+      <Command>if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll attrib -r  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll
+if exist "$(TargetDir)"vsMaster.dll copy "$(TargetDir)"vsMaster.dll  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll
+if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb attrib -r  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb
+if exist "$(TargetDir)"vsMaster.pdb copy "$(TargetDir)"vsMaster.pdb  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb
+</Command>
+      <Outputs>..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll;..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Link>
+      <AdditionalOptions>/subsystem:windows /dll /incremental:yes /debug /machine:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>sicppsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Debug\vsMaster.dll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\common\xsi\5.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcd.lib;libcmt.lib;advapi32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ProgramDatabaseFile>Debug/vsMaster.pdb</ProgramDatabaseFile>
+      <ImportLibrary />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\common;..\..\..\..\public;..\..\..\..\public\tier1;..\..\..\..\public\xsi\5.1;..\..\..\..\common\xsi\5.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_AFXDLL;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ProgramDataBaseFileName>$(IntDir)vsMaster.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <CustomBuildStep>
+      <Command>if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll attrib -r  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll
+if exist "$(TargetDir)"vsMaster.dll copy "$(TargetDir)"vsMaster.dll  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll
+if exist ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb attrib -r  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb
+if exist "$(TargetDir)"vsMaster.pdb copy "$(TargetDir)"vsMaster.pdb  ..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb
+</Command>
+      <Outputs>..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.dll;..\..\..\..\..\game\sdktools\xsi\5.1\valveSource\application\plugins\vsMaster.pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Link>
+      <AdditionalOptions>/subsystem:windows /incremental:no /machine:I386  %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>sicppsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Release\vsMaster.dll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\common\xsi\5.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcd.lib;libcmtd.lib;aviapi32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>Release/vsMaster.pdb</ProgramDatabaseFile>
+      <ImportLibrary />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\public\interpolatortypes.cpp" />
+    <ClCompile Include="..\..\..\..\public\movieobjects\movieobjects.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\include\memoverride.cc" />
+    <ClCompile Include="CVsMasterCmd.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CVsMayaMasterApp.cpp" />
+    <ClCompile Include="DCCMain.cpp" />
+    <ClCompile Include="MayaVGui.cpp" />
+    <ClCompile Include="vsMasterInit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\public\xsi\5.1\IDccMain.h" />
+    <ClInclude Include="..\..\..\..\public\xsi\5.1\IMayaVGui.h" />
+    <ClInclude Include="CVsMasterCmd.h" />
+    <ClInclude Include="CVsMayaMasterApp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\lib\public\appframework.lib" />
+    <Library Include="..\..\..\..\lib\public\datamodel.lib" />
+    <Library Include="..\..\..\..\lib\public\dme_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\dmserializers.lib" />
+    <Library Include="..\..\..\..\lib\public\mathlib.lib" />
+    <Library Include="..\..\..\..\lib\public\matsys_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\movieobjects.lib" />
+    <Library Include="..\..\..\..\lib\public\tier0.lib" />
+    <Library Include="..\..\..\..\lib\public\tier1.lib" />
+    <Library Include="..\..\..\..\lib\public\tier2.lib" />
+    <Library Include="..\..\..\..\lib\public\tier3.lib" />
+    <Library Include="..\..\..\..\lib\public\vgui_controls.lib" />
+    <Library Include="..\..\..\..\lib\public\vstdlib.lib" />
+    <Library Include="..\..\..\..\lib\public\xsi\5.1\valveMaya.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7D864193-FC35-4F28-8AD7-2497C4240FE9}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.27625.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\common;..\..\..\..\public;..\..\..\..\public\tier1;..\..\..\..\public\maya\7.0;..\..\..\..\common\maya\7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AFXDLL;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ProgramDataBaseFileName>$(IntDir)vsDmxIO.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <CustomBuildStep>
+      <Command>if exist ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll attrib -r ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll
+if exist "$(TargetDir)"vsDmxIO.mll copy "$(TargetDir)"vsDmxIO.mll ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll
+if exist ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb attrib -r ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb
+if exist "$(TargetDir)"vsDmxIO.pdb copy "$(TargetDir)"vsDmxIO.pdb ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb
+</Command>
+      <Outputs>..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll;..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Link>
+      <AdditionalOptions>/subsystem:windows /dll /incremental:yes /debug /machine:I386 /export:initializePlugin /export:uninitializePlugin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Debug\vsDmxIO.mll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\common\maya\7.0;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ProgramDatabaseFile>Debug/vsDmxIO.pdb</ProgramDatabaseFile>
+      <ImportLibrary />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\common;..\..\..\..\public;..\..\..\..\public\tier1;..\..\..\..\public\maya\7.0;..\..\..\..\common\maya\7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ProgramDataBaseFileName>$(IntDir)vsDmxIO.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <CustomBuildStep>
+      <Command>if exist ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll attrib -r ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll
+if exist "$(TargetDir)"vsDmxIO.mll copy "$(TargetDir)"vsDmxIO.mll ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll
+if exist ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb attrib -r ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb
+if exist "$(TargetDir)"vsDmxIO.pdb copy "$(TargetDir)"vsDmxIO.pdb ..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb
+</Command>
+      <Outputs>..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.mll;..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\vsDmxIO.pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Link>
+      <AdditionalOptions>/subsystem:windows /incremental:no /machine:I386 /export:initializePlugin /export:uninitializePlugin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Release\vsDmxIO.mll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\common\maya\7.0;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcd.lib;libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>Release/vsDmxIO.pdb</ProgramDatabaseFile>
+      <ImportLibrary />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\public\interpolatortypes.cpp" />
+    <ClCompile Include="..\..\..\..\public\movieobjects\movieobjects.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\include\memoverride.cc" />
+    <ClCompile Include="CVsDmxIOCmd.cpp" />
+    <ClCompile Include="CVsDmxIOTranslator.cpp" />
+    <ClCompile Include="vsDmxIOInit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\public\interpolatortypes.h" />
+    <ClInclude Include="CVsDmxIOTranslator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\lib\common\maya\7.0\Foundation.lib" />
+    <Library Include="..\..\..\..\lib\common\maya\7.0\OpenMaya.lib" />
+    <Library Include="..\..\..\..\lib\common\maya\7.0\OpenMayaAnim.lib" />
+    <Library Include="..\..\..\..\lib\public\mathlib.lib" />
+    <Library Include="..\..\..\..\lib\public\maya\7.0\valveMaya.lib" />
+    <Library Include="..\..\..\..\lib\public\movieobjects.lib" />
+    <Library Include="..\..\..\..\lib\public\scenedatabase.lib" />
+    <Library Include="..\..\..\..\lib\public\tier0.lib" />
+    <Library Include="..\..\..\..\lib\public\tier1.lib" />
+    <Library Include="..\..\..\..\lib\public\tier2.lib" />
+    <Library Include="..\..\..\..\lib\public\vstdlib.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\scripts\vsDmxIOTranslatorOptions.mel" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
