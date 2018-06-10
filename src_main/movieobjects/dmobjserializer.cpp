@@ -4,6 +4,7 @@
 
 // Valve includes
 #include "movieobjects/dmobjserializer.h"
+
 #include "filesystem.h"
 #include "mathlib/mathlib.h"
 #include "movieobjects/dmecombinationoperator.h"
@@ -265,8 +266,7 @@ CDmeVertexDeltaData *CVertexData::AddDelta(CDmeMesh *pMesh, bool bAbsolute,
           m_normals[i] -= bindNormalData[i];
         }
 
-        int *pNormalIndices =
-            reinterpret_cast<int *>(stackalloc(nNormalCount * sizeof(int)));
+        int *pNormalIndices = stack_alloc<int>(nNormalCount);
         int nNormalDeltaCount = 0;
         for (int i = 0; i < nNormalCount; ++i) {
           const Vector &n = m_normals[i];
@@ -492,8 +492,8 @@ CDmElement *CDmObjSerializer::ReadOBJ(CUtlBuffer &buf, DmFileId_t dmFileId,
         continue;
       }
 
-      if (pFilename && sscanf_s(pBuf, "mtllib %4096s", tmpBuf1,
-                                SOURCE_ARRAYSIZE(tmpBuf1)) == 1) {
+      if (pFilename &&
+          sscanf_s(pBuf, "mtllib %4096s", tmpBuf1, std::size(tmpBuf1)) == 1) {
         CUtlString mtlLib(tmpBuf1);
 
         strcpy(tmpBuf0, pFilename);
@@ -512,8 +512,7 @@ CDmElement *CDmObjSerializer::ReadOBJ(CUtlBuffer &buf, DmFileId_t dmFileId,
         continue;
       }
 
-      if (sscanf_s(pBuf, "usemtl %4096s", tmpBuf1, SOURCE_ARRAYSIZE(tmpBuf1)) ==
-          1) {
+      if (sscanf_s(pBuf, "usemtl %4096s", tmpBuf1, std::size(tmpBuf1)) == 1) {
         // Remove any 'SG' suffix from the material
         const u32 sLen = Q_strlen(tmpBuf1);
         if (sLen && !Q_strcmp(tmpBuf1 + sLen - 2, "SG")) {
@@ -530,7 +529,7 @@ CDmElement *CDmObjSerializer::ReadOBJ(CUtlBuffer &buf, DmFileId_t dmFileId,
         continue;
       }
 
-      if (sscanf_s(pBuf, "g %4096s", tmpBuf1, SOURCE_ARRAYSIZE(tmpBuf1)) == 1) {
+      if (sscanf_s(pBuf, "g %4096s", tmpBuf1, std::size(tmpBuf1)) == 1) {
         groupName = tmpBuf1;
         if (pFaceIndices == NULL) {
           pFaceIndices = faceSetData.GetFaceSetIndices(tmpBuf1);
@@ -1026,8 +1025,7 @@ void CDmObjSerializer::ParseMtlLib(CUtlBuffer &buf) {
 
     if (StringHasPrefix(tmpBuf0, "newmtl ")) {
       char mtlName[1024];
-      if (sscanf_s(tmpBuf0, "newmtl %s", mtlName, SOURCE_ARRAYSIZE(mtlName)) ==
-          1) {
+      if (sscanf_s(tmpBuf0, "newmtl %s", mtlName, std::size(mtlName)) == 1) {
         // Remove any 'SG' suffix from the material
         const u32 sLen = Q_strlen(mtlName);
         if (sLen > 2 && !Q_strcmp(mtlName + sLen - 2, "SG")) {
@@ -1046,8 +1044,7 @@ void CDmObjSerializer::ParseMtlLib(CUtlBuffer &buf) {
 
       char tgaPath[SOURCE_MAX_PATH];
       char tgaName[1024];
-      if (sscanf_s(tmpBuf0, "map_Kd %s", tgaPath, SOURCE_ARRAYSIZE(tgaPath)) ==
-          1) {
+      if (sscanf_s(tmpBuf0, "map_Kd %s", tgaPath, std::size(tgaPath)) == 1) {
         // Try a cheesy hack - look for /materialsrc/ and set the material name
         // off the entire path minus extension
         Q_strncpy(tmpBuf0, tgaPath, sizeof(tmpBuf0));

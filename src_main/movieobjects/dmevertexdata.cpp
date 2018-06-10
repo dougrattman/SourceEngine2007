@@ -49,8 +49,8 @@ void CDmeVertexDataBase::OnDestruction() {}
 void CDmeVertexDataBase::UpdateStandardFieldInfo(int nFieldIndex,
                                                  const char *pFieldName,
                                                  DmAttributeType_t attrType) {
-  static_assert(SOURCE_ARRAYSIZE(g_pStandardFieldNames) == STANDARD_FIELD_COUNT);
-  static_assert(SOURCE_ARRAYSIZE(g_pStandardFieldTypes) == STANDARD_FIELD_COUNT);
+  static_assert(std::size(g_pStandardFieldNames) == STANDARD_FIELD_COUNT);
+  static_assert(std::size(g_pStandardFieldTypes) == STANDARD_FIELD_COUNT);
 
   for (int i = 0; i < STANDARD_FIELD_COUNT; ++i) {
     if (!Q_stricmp(pFieldName, g_pStandardFieldNames[i])) {

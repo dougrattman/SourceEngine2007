@@ -26,7 +26,6 @@
 #include "tier1/keyvalues.h"
 #include "tier3/tier3.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -434,7 +433,8 @@ bool CDmeMesh::AddVertexDelta(CDmeVertexData *pBaseState, void *pVertexData,
     const CUtlVector<int> &list =
         pBaseState->FindVertexIndicesFromDataIndex(nBaseFieldIndex, nDataIndex);
     Assert(list.Count() > 0);
-    // TODO(d.rattman): Average everything in the list.. shouldn't be necessary though
+    // TODO(d.rattman): Average everything in the list.. shouldn't be necessary
+    // though
     float flSpeed = speedDelta.Get(speedIndices.Get(list[0]));
     float flActualWeight = Lerp(flSpeed, flLaggedWeight, flWeight);
 
@@ -522,7 +522,8 @@ bool CDmeMesh::AddStereoVertexDelta(
       const CUtlVector<int> &list = pBaseState->FindVertexIndicesFromDataIndex(
           nBaseFieldIndex, nDataIndex);
       Assert(list.Count() > 0);
-      // TODO(d.rattman): Average everything in the list.. shouldn't be necessary though
+      // TODO(d.rattman): Average everything in the list.. shouldn't be
+      // necessary though
       float flRightAmount = balanceDelta[balanceIndices[list[0]]];
       float flWeight = Lerp(flRightAmount, flLeftWeight, flRightWeight);
 
@@ -547,7 +548,8 @@ bool CDmeMesh::AddStereoVertexDelta(
     const CUtlVector<int> &list =
         pBaseState->FindVertexIndicesFromDataIndex(nBaseFieldIndex, nDataIndex);
     Assert(list.Count() > 0);
-    // TODO(d.rattman): Average everything in the list.. shouldn't be necessary though
+    // TODO(d.rattman): Average everything in the list.. shouldn't be necessary
+    // though
     float flRightAmount = balanceDelta[balanceIndices[list[0]]];
     float flWeight = Lerp(flRightAmount, flLeftWeight, flRightWeight);
     float flLaggedWeight =
@@ -1260,8 +1262,7 @@ const char *SortDeltaName(const char *pInDeltaName, char *pOutDeltaName,
                           int nOutDeltaNameBufLen) {
   if (!pInDeltaName || !strchr(pInDeltaName, '_')) return pInDeltaName;
 
-  char **ppDeltaNames = reinterpret_cast<char **>(
-      stackalloc(nOutDeltaNameBufLen * sizeof(char *)));
+  char **ppDeltaNames = stack_alloc<char *>(nOutDeltaNameBufLen);
   memset(ppDeltaNames, 0, nOutDeltaNameBufLen * sizeof(char *));
 
   const char *pStart = pInDeltaName;
@@ -1272,8 +1273,7 @@ const char *SortDeltaName(const char *pInDeltaName, char *pOutDeltaName,
         (pUnderBar ? pUnderBar - pStart : Q_strlen(pStart)) + 1;
 
     if (nControlNameBufLen) {
-      ppDeltaNames[nDimensionCount] = reinterpret_cast<char *>(
-          stackalloc(nControlNameBufLen * sizeof(char)));
+      ppDeltaNames[nDimensionCount] = stack_alloc<char>(nControlNameBufLen);
       Q_strncpy(ppDeltaNames[nDimensionCount], pStart, nControlNameBufLen);
       ++nDimensionCount;
     }
@@ -1314,9 +1314,8 @@ CDmeVertexDeltaData *CDmeMesh::FindOrCreateDeltaState(
   CDmeVertexDeltaData *pDeltaState = FindDeltaState(pInDeltaName);
   if (pDeltaState) return pDeltaState;
 
-  const int nDeltaNameBufLen = Q_strlen(pInDeltaName) + 1;
-  char *pDeltaNameBuf =
-      reinterpret_cast<char *>(stackalloc(nDeltaNameBufLen * sizeof(char)));
+  const usize nDeltaNameBufLen = strlen(pInDeltaName) + 1;
+  char *pDeltaNameBuf = stack_alloc<char>(nDeltaNameBufLen);
   const char *pDeltaName =
       SortDeltaName(pInDeltaName, pDeltaNameBuf, nDeltaNameBufLen);
 
@@ -1336,16 +1335,15 @@ int CDmeMesh::FindDeltaStateIndex(const char *pInDeltaName) const {
   const char *pDeltaName = pInDeltaName;
 
   if (strchr(pInDeltaName, '_')) {
-    const int nDeltaNameBufLen = Q_strlen(pInDeltaName) + 1;
-    char *pDeltaNameBuf =
-        reinterpret_cast<char *>(stackalloc(nDeltaNameBufLen * sizeof(char)));
+    const int nDeltaNameBufLen = strlen(pInDeltaName) + 1;
+    char *pDeltaNameBuf = stack_alloc<char>(nDeltaNameBufLen);
     pDeltaName = SortDeltaName(pInDeltaName, pDeltaNameBuf, nDeltaNameBufLen);
   }
 
   int dn = DeltaStateCount();
   for (int di = 0; di < dn; ++di) {
     CDmeVertexDeltaData *pDeltaState = GetDeltaState(di);
-    if (!Q_stricmp(pDeltaName, pDeltaState->GetName())) return di;
+    if (!_stricmp(pDeltaName, pDeltaState->GetName())) return di;
   }
 
   return -1;
@@ -1376,7 +1374,7 @@ void CDmeMesh::SetDeltaStateWeight(int nDeltaIndex, MeshDeltaWeightType_t type,
 //-----------------------------------------------------------------------------
 // Determines the appropriate vertex format for hardware meshes
 //-----------------------------------------------------------------------------
-VertexFormat_t CDmeMesh::ComputeHwMeshVertexFormat(void) {
+VertexFormat_t CDmeMesh::ComputeHwMeshVertexFormat() {
   bool bIsDX7 =
       !g_pMaterialSystemHardwareConfig->SupportsVertexAndPixelShaders();
   VertexFormat_t vertexFormat = VERTEX_POSITION | VERTEX_COLOR | VERTEX_NORMAL |
@@ -1384,11 +1382,11 @@ VertexFormat_t CDmeMesh::ComputeHwMeshVertexFormat(void) {
                                 VERTEX_BONEWEIGHT(2) | VERTEX_BONE_INDEX |
                                 (bIsDX7 ? 0 : VERTEX_USERDATA_SIZE(4));
 
-  // TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it
-  // saves enough memory (use 'mem_dumpvballocs') vertexFormat |=
+  // TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and
+  // if it saves enough memory (use 'mem_dumpvballocs') vertexFormat |=
   // VERTEX_FORMAT_COMPRESSED;
-  // TODO(d.rattman): check for and strip unused vertex elements (see 'bHasNormals', etc,
-  // in CreateHwMesh below)
+  // TODO(d.rattman): check for and strip unused vertex elements (see
+  // 'bHasNormals', etc, in CreateHwMesh below)
 
   return vertexFormat;
 }
@@ -1480,8 +1478,8 @@ IMesh *CDmeMesh::CreateHwMesh(CDmeFaceSet *pFaceSet) {
       meshBuilder.Color4ub(255, 255, 255, 255);
     }
 
-    // TODO(d.rattman): Note that this will break once we exceeed the max joint count
-    // that the hardware can handle
+    // TODO(d.rattman): Note that this will break once we exceeed the max joint
+    // count that the hardware can handle
     const float *pJointWeight = pBind->GetJointWeights(vi);
     const int *pJointIndices = pBind->GetJointIndices(vi);
     for (int i = 0; i < nJointCount; ++i) {

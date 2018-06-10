@@ -1,10 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Launcher for hammer, which is sitting in its own DLL
 
 #include "base/include/windows/windows_light.h"
 
-#include "SteamWriteMinidump.h"
 #include "appframework/AppFramework.h"
 #include "datacache/idatacache.h"
 #include "datacache/imdlcache.h"

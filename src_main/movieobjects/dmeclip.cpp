@@ -919,7 +919,7 @@ void CDmeFilmClip::SetOverlayAlpha(float alpha) {
   }
 }
 
-bool CDmeFilmClip::HasOpaqueOverlay(void) {
+bool CDmeFilmClip::HasOpaqueOverlay() {
   if (m_MaterialOverlayEffect->GetMaterial()->IsTranslucent() ||
       (m_MaterialOverlayEffect->GetAlpha() < 1.0f)) {
     return false;

@@ -66,11 +66,11 @@ void CDmeMaterialOverlayFXClip::SetAlpha(float flAlpha) {
   m_Color.SetAlpha(flAlpha * 255);
 }
 
-float CDmeMaterialOverlayFXClip::GetAlpha(void) {
+float CDmeMaterialOverlayFXClip::GetAlpha() {
   return ((float)m_Color.a()) / 255.0f;
 }
 
-bool CDmeMaterialOverlayFXClip::HasOpaqueOverlay(void) {
+bool CDmeMaterialOverlayFXClip::HasOpaqueOverlay() {
   if (m_OverlayMaterial)
     return (!m_OverlayMaterial->IsTranslucent() && (m_Color.a() == 255) &&
             m_bFullScreen);
