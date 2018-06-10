@@ -17,7 +17,7 @@ the_interface IDataCache;
 // Support types and enums
 
 // Unique (per section) identifier for a cache item defined by client
-using DataCacheClientID_t = u32;
+using DataCacheClientID_t = uintptr_t;
 
 // Cache-defined handle for a cache item
 SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);

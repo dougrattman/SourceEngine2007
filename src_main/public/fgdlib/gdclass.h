@@ -34,8 +34,8 @@ class GDclass {
   //
   // Interface to class information:
   //
-  inline const char *GetName() { return (m_szName); }
-  inline const char *GetDescription(void);
+  inline const char *GetName() { return m_szName; }
+  inline const char *GetDescription();
 
   //
   // Reading a class from the game data file:
@@ -45,7 +45,7 @@ class GDclass {
   //
   // Interface to variable information (keys):
   //
-  inline int GetVariableCount() { return (m_nVariables); }
+  inline int GetVariableCount() { return m_nVariables; }
   GDinputvariable *GetVariableAt(int iIndex);
   void GetHelperForGDVar(GDinputvariable *pVar,
                          CUtlVector<const char *> *helperName);

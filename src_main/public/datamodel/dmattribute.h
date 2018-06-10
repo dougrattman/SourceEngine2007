@@ -309,7 +309,7 @@ inline void CDmAttribute::SetValue(E *pValue) {
 
 template <>
 inline void CDmAttribute::SetValue(const char *pValue) {
-  int nLen = pValue ? Q_strlen(pValue) + 1 : 0;
+  usize nLen = pValue ? strlen(pValue) + 1 : 0;
   CUtlString str(pValue, nLen);
   return SetValue(str);
 }

@@ -482,8 +482,8 @@ inline CDmAttribute *CDmElement::AddAttributeElement(
   CDmAttribute *pAttribute = AddAttribute(pAttributeName, AT_ELEMENT);
   if (!pAttribute) return NULL;
 
-  // TODO(d.rattman): If the attribute exists but has a different element type symbol,
-  // should we complain?
+  // TODO(d.rattman): If the attribute exists but has a different element type
+  // symbol, should we complain?
   pAttribute->SetElementTypeSymbol(E::GetStaticTypeSymbol());
   return pAttribute;
 }
@@ -494,8 +494,8 @@ inline CDmAttribute *CDmElement::AddAttributeElementArray(
   CDmAttribute *pAttribute = AddAttribute(pAttributeName, AT_ELEMENT_ARRAY);
   if (!pAttribute) return NULL;
 
-  // TODO(d.rattman): If the attribute exists but has a different element type symbol,
-  // should we complain?
+  // TODO(d.rattman): If the attribute exists but has a different element type
+  // symbol, should we complain?
   pAttribute->SetElementTypeSymbol(E::GetStaticTypeSymbol());
   return pAttribute;
 }
@@ -557,7 +557,7 @@ inline CDmAttribute *CDmElement::SetValue(const char *pAttributeName,
 template <>
 inline CDmAttribute *CDmElement::SetValue(const char *pAttributeName,
                                           const char *pValue) {
-  int nLen = pValue ? Q_strlen(pValue) + 1 : 0;
+  usize nLen = pValue ? strlen(pValue) + 1 : 0;
   CUtlString str(pValue, nLen);
   return SetValue(pAttributeName, str);
 }

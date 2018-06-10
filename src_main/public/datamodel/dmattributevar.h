@@ -1016,7 +1016,7 @@ inline const char *CDmaString::Get() const { return Value().Get(); }
 inline CDmaString::operator const char *() const { return Value().Get(); }
 
 inline void CDmaString::Set(const char *pValue) {
-  CUtlString str(pValue, pValue ? Q_strlen(pValue) + 1 : 0);
+  CUtlString str(pValue, pValue ? strlen(pValue) + 1 : 0);
   m_pAttribute->SetValue(str);
 }
 

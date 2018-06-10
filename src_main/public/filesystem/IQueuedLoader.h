@@ -38,7 +38,7 @@ struct LoaderJob_t {
   bool m_bPersistTargetData;    // caller wants ownership of i/o buffer
 };
 
-enum ResourcePreload_t {
+enum ResourcePreload_t : intptr_t {
   RESOURCEPRELOAD_UNKNOWN,
   RESOURCEPRELOAD_SOUND,
   RESOURCEPRELOAD_MATERIAL,

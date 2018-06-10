@@ -370,7 +370,6 @@ class CBuildFactoryHelper {
 // hooks that function up to the helper list so that the CHud objects can create
 // the elements by name, with no header file dependency, etc.
 #define DECLARE_BUILD_FACTORY(className)                   \
-  \ 
   static vgui::Panel *Create_##className##() {             \
     return new className(nullptr, nullptr);                \
   };                                                       \
