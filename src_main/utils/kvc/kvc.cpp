@@ -139,7 +139,7 @@ void Con_Printf(const char *fmt, ...) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void printusage(void) {
+void printusage() {
   vprint(0,
          "usage:  kvc <wildcard path> [<wildcard path>] <outputfile>\n\
 		\t-v = verbose output\n\
@@ -285,7 +285,7 @@ void BuildFileListFromWildcard(CUtlVector<CUtlSymbol> &files,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CheckLogFile(void) {
+void CheckLogFile() {
   if (uselogfile) {
     _unlink("log.txt");
     vprint(0, "    Outputting to log.txt\n");

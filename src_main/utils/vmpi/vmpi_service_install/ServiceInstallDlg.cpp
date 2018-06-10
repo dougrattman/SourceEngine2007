@@ -589,7 +589,7 @@ void RemoveRegistryKeys()
 
 bool IsAnInstallFile( const char *pName )
 {
-	for ( int i=0; i < SOURCE_ARRAYSIZE( g_pInstallFiles ); i++ )
+	for ( int i=0; i < std::size( g_pInstallFiles ); i++ )
 	{
 		if ( V_stricmp( g_pInstallFiles[i], pName ) == 0 )
 			return true;
@@ -866,7 +866,7 @@ void CServiceInstallDlg::OnInstall()
 	char chDir[SOURCE_MAX_PATH];
 	GetModuleFileName( NULL, chDir, sizeof( chDir ) );
 	V_StripFilename( chDir );
-	for ( int i=0; i < SOURCE_ARRAYSIZE( g_pInstallFiles ); i++ )
+	for ( int i=0; i < std::size( g_pInstallFiles ); i++ )
 	{
 		char srcFilename[SOURCE_MAX_PATH], destFilename[SOURCE_MAX_PATH];
 		V_ComposeFileName( chDir, g_pInstallFiles[i], srcFilename, sizeof( srcFilename ) );
@@ -1024,7 +1024,7 @@ void CServiceInstallDlg::VerifyInstallFiles()
 	GetModuleFileName( NULL, chDir, sizeof( chDir ) );
 	V_StripFilename( chDir );	 
 	
-	for ( int i=0; i < SOURCE_ARRAYSIZE( g_pInstallFiles ); i++ )
+	for ( int i=0; i < std::size( g_pInstallFiles ); i++ )
 	{
 		char filename[SOURCE_MAX_PATH];
 		V_ComposeFileName( chDir, g_pInstallFiles[i], filename, sizeof( filename ) );

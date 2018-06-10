@@ -113,7 +113,7 @@ void CBanPanel::OnServerDataResponse(const char *value, const char *response) {
     float banTime = 0.0f;
     char id[64] = {0};
     while (3 == sscanf_s(response, "%i %s : %f min\n", &item, id,
-                         SOURCE_ARRAYSIZE(id), &banTime)) {
+                         std::size(id), &banTime)) {
       KeyValues *ban = new KeyValues("ban");
 
       // determine type

@@ -70,7 +70,7 @@ void ChunkError(unsigned int id) {}
 //-----------------------------------------------------------------------------
 // Purpose: Init to empty wave
 //-----------------------------------------------------------------------------
-CAudioSourceWave::CAudioSourceWave(void) {
+CAudioSourceWave::CAudioSourceWave() {
   m_bits = 0;
   m_rate = 0;
   m_channels = 0;
@@ -82,7 +82,7 @@ CAudioSourceWave::CAudioSourceWave(void) {
   m_sampleCount = 0;
 }
 
-CAudioSourceWave::~CAudioSourceWave(void) {
+CAudioSourceWave::~CAudioSourceWave() {
   // for non-standard waves, we store a copy of the header in RAM
   delete[] m_pHeader;
   //	m_pWords points into m_pWordBuffer, no need to delete
@@ -124,7 +124,7 @@ void CAudioSourceWave::Init(const char *pHeaderBuffer, int headerSize) {
 // Purpose:
 // Output : float
 //-----------------------------------------------------------------------------
-float CAudioSourceWave::TrueSampleSize(void) {
+float CAudioSourceWave::TrueSampleSize() {
   if (m_format == WAVE_FORMAT_ADPCM) {
     return 0.5f;
   }
@@ -135,7 +135,7 @@ float CAudioSourceWave::TrueSampleSize(void) {
 // Purpose: Total number of samples in this source
 // Output : int
 //-----------------------------------------------------------------------------
-int CAudioSourceWave::SampleCount(void) {
+int CAudioSourceWave::SampleCount() {
   if (m_format == WAVE_FORMAT_ADPCM) {
     ADPCMWAVEFORMAT *pFormat = (ADPCMWAVEFORMAT *)m_pHeader;
     int blockSize =
@@ -216,7 +216,7 @@ void CAudioSourceWave::ParseChunk(IterateRIFF &walk, int chunkName) {
 // Purpose:
 // Output : CSentence
 //-----------------------------------------------------------------------------
-CSentence *CAudioSourceWave::GetSentence(void) { return &m_Sentence; }
+CSentence *CAudioSourceWave::GetSentence() { return &m_Sentence; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Bastardized construction routine.  This is just to avoid complex
@@ -253,7 +253,7 @@ class CAudioSourceMemWave : public CAudioSourceWave {
 
   virtual int GetOutputData(void **pData, int samplePosition, int sampleCount,
                             bool forward = true);
-  virtual float GetRunningLength(void) {
+  virtual float GetRunningLength() {
     return CAudioSourceWave::GetRunningLength();
   };
 
@@ -269,8 +269,8 @@ class CAudioSourceMemWave : public CAudioSourceWave {
 class CWaveDataMemory : public CWaveData {
  public:
   CWaveDataMemory(CAudioSourceWave &source) : m_source(source) {}
-  ~CWaveDataMemory(void) {}
-  CAudioSourceWave &Source(void) { return m_source; }
+  ~CWaveDataMemory() {}
+  CAudioSourceWave &Source() { return m_source; }
 
   // this file is in memory, simply pass along the data request to the source
   virtual int ReadSourceData(void **pData, int sampleIndex, int sampleCount,
@@ -285,17 +285,17 @@ class CWaveDataMemory : public CWaveData {
 //-----------------------------------------------------------------------------
 // Purpose: NULL the wave data pointer (we haven't loaded yet)
 //-----------------------------------------------------------------------------
-CAudioSourceMemWave::CAudioSourceMemWave(void) { m_pData = NULL; }
+CAudioSourceMemWave::CAudioSourceMemWave() { m_pData = NULL; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Free any wave data we've allocated
 //-----------------------------------------------------------------------------
-CAudioSourceMemWave::~CAudioSourceMemWave(void) { delete[] m_pData; }
+CAudioSourceMemWave::~CAudioSourceMemWave() { delete[] m_pData; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Creates a mixer and initializes it with an appropriate mixer
 //-----------------------------------------------------------------------------
-CAudioMixer *CAudioSourceMemWave::CreateMixer(void) {
+CAudioMixer *CAudioSourceMemWave::CreateMixer() {
   return CreateWaveMixer(new CWaveDataMemory(*this), m_format, m_channels,
                          m_bits);
 }
@@ -379,7 +379,7 @@ int CAudioSourceWave::ParseCueChunk(IterateRIFF &walk) {
 //-----------------------------------------------------------------------------
 // Purpose: get the wave header
 //-----------------------------------------------------------------------------
-void *CAudioSourceWave::GetHeader(void) { return m_pHeader; }
+void *CAudioSourceWave::GetHeader() { return m_pHeader; }
 
 //-----------------------------------------------------------------------------
 // Purpose: wrap the position wrt looping

@@ -340,7 +340,7 @@ class BugReporter : public IBugReporter {
       SubstituteBugId((int)bugId, textbuf, textbuflen, buf);
 
       // Update the description with the substituted text!!!
-      rc = TrkSetDescriptionData(trk_record_handle_, Q_strlen(textbuf) + 1,
+      rc = TrkSetDescriptionData(trk_record_handle_, strlen(textbuf) + 1,
                                  (const char *)textbuf, 0);
 
       delete[] textbuf;
@@ -515,16 +515,14 @@ class BugReporter : public IBugReporter {
 
     GetPrivateProfileStringA("login", "userid1",
                              kDefaultUserName,  // default
-                             user_name, std::size(user_name),
-                             "PVCSTRK.ini");
+                             user_name, std::size(user_name), "PVCSTRK.ini");
 
     // if userid1 didn't have a valid name in it try userid0
     if (!Q_stricmp(user_name, kDefaultUserName) ||
         !Q_stricmp(user_name, "BELMAPNTKY")) {
       GetPrivateProfileStringA("login", "userid0",
                                kDefaultUserName,  // default
-                               user_name, std::size(user_name),
-                               "PVCSTRK.ini");
+                               user_name, std::size(user_name), "PVCSTRK.ini");
     }
 
     // TODO(d.rattman): Exceptionally insecure, rewrite.
@@ -601,8 +599,7 @@ class BugReporter : public IBugReporter {
                   "Login failed (TrkGetLoginDBMSName).");
       return rc;
     }
-    rc =
-        TrkGetLoginProjectName(*trk_handle, std::size(project), project);
+    rc = TrkGetLoginProjectName(*trk_handle, std::size(project), project);
     if (rc != TRK_SUCCESS) {
       ReportError(rc, "TrkGetLoginProjectName",
                   "Login failed (TrkGetLoginProjectName).");

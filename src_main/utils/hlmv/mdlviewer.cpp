@@ -311,7 +311,7 @@ MDLViewer::~MDLViewer() {
 //-----------------------------------------------------------------------------
 // Purpose: Reloads the currently loaded model file.
 //-----------------------------------------------------------------------------
-void MDLViewer::Refresh(void) {
+void MDLViewer::Refresh() {
   g_pStudioModel->ReleaseStudioModel();
   g_pMDLCache->Flush();
   if (recentFiles[0][0] != '\0') {
@@ -737,7 +737,7 @@ void MDLViewer::redraw() {
 // Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int MDLViewer::GetCurrentHitboxSet(void) {
+int MDLViewer::GetCurrentHitboxSet() {
   return d_cpl ? d_cpl->GetCurrentHitboxSet() : 0;
 }
 

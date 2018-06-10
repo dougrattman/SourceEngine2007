@@ -1,15 +1,4 @@
-//=========== (C) Copyright 1999 Valve, L.L.C. All rights reserved. ===========
-//
-// The copyright to the contents herein is the property of Valve, L.L.C.
-// The contents may be used and/or copied only with the written permission of
-// Valve, L.L.C., or in accordance with the terms and conditions stipulated in
-// the agreement/contract under which the contents have been supplied.
-//
-// $Header: $
-// $NoKeywords: $
-//
-// Material editor
-//=============================================================================
+//=========== (C) Copyright 1999 Valve, L.L.C. All rights reserved.
 
 #include "FileSystem.h"
 #include "appframework/tier2app.h"
@@ -689,9 +678,9 @@ void CShaderAPITestApp::CreateShaders(const char *pVShader, int nVBufLen,
 
   m_hGeometryShader = GEOMETRY_SHADER_HANDLE_INVALID;
   if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() >= 100) {
-    //		m_hGeometryShader = m_pShaderDevice->CreateGeometryShader( pGShader,
-    //nGBufLen, "gs_4_0" ); 		Assert( m_hGeometryShader !=
-    //GEOMETRY_SHADER_HANDLE_INVALID );
+    //		m_hGeometryShader = m_pShaderDevice->CreateGeometryShader(
+    //pGShader,  nGBufLen, "gs_4_0" ); 		Assert( m_hGeometryShader !=
+    // GEOMETRY_SHADER_HANDLE_INVALID );
   }
 
   m_hPixelShader = m_pShaderDevice->CreatePixelShader(pPShader, nPBufLen,
@@ -879,11 +868,12 @@ bool CShaderAPITestApp::CreateDynamicCombos_Ver5(uint8 *pComboBuffer,
 
       case 0x40000000:  // lzma compressed
       {
-        CLZMA lzDecoder;
+        LZMA lzDecoder;
         nBlockSize &= 0x3fffffff;
 
-        size_t nOutsize = lzDecoder.Uncompress(
-            reinterpret_cast<uint8 *>(pCompressedShaders), pUnpackBuffer);
+        size_t nOutsize =
+            lzDecoder.Uncompress(reinterpret_cast<u8 *>(pCompressedShaders),
+                                 pUnpackBuffer, MAX_SHADER_UNPACKED_BLOCK_SIZE);
         pCompressedShaders += nBlockSize;
         nBlockSize = nOutsize;  // how much data there is
       } break;

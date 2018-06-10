@@ -18,8 +18,8 @@
 void OutputMaterialFile(char *filestub, bool bEnableAlphaTest,
                         float alphaTest = 0.0f) {
   char filename[SOURCE_MAX_PATH];
-  _snprintf(filename, SOURCE_MAX_PATH, "%smaterials\\Trees\\%s_VertexLit.vmt", gamedir,
-            filestub);
+  _snprintf(filename, SOURCE_MAX_PATH, "%smaterials\\Trees\\%s_VertexLit.vmt",
+            gamedir, filestub);
   FILE *file = fopen(filename, "wt");
   if (!file) return;
 
@@ -37,8 +37,8 @@ void OutputMaterialFile(char *filestub, bool bEnableAlphaTest,
 void OutputLeafMaterialFile(char *filestub, bool bEnableAlphaTest,
                             float alphaTest = 0.0f, float *pCenter = NULL) {
   char filename[SOURCE_MAX_PATH];
-  _snprintf(filename, SOURCE_MAX_PATH, "%smaterials\\Trees\\%s_TreeLeaf.vmt", gamedir,
-            filestub);
+  _snprintf(filename, SOURCE_MAX_PATH, "%smaterials\\Trees\\%s_TreeLeaf.vmt",
+            gamedir, filestub);
   FILE *file = fopen(filename, "wt");
   if (!file) return;
 

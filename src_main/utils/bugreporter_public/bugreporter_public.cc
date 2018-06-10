@@ -171,8 +171,8 @@ class BugReporter : public IBugReporter {
     return bug_strings_.String(report_types_[index]);
   }
 
-  virtual char const *GetRepositoryURL(void) { return NULL; }
-  virtual char const *GetSubmissionURL(void) { return NULL; }
+  virtual char const *GetRepositoryURL() { return NULL; }
+  virtual char const *GetSubmissionURL() { return NULL; }
 
   virtual int GetLevelCount(int area) { return 0; }
   virtual char const *GetLevel(int area, int index) { return ""; }

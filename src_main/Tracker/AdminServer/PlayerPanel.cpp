@@ -168,8 +168,8 @@ void CPlayerPanel::OnServerDataResponse(const char *value,
       parse++;  // move past end quote
 
       if (6 != sscanf_s(parse, " %s %s %d %d %d %d\n", authID,
-                        SOURCE_ARRAYSIZE(authID), netAdr,
-                        SOURCE_ARRAYSIZE(netAdr), &ping, &packetLoss, &frags,
+                        std::size(authID), netAdr,
+                        std::size(netAdr), &ping, &packetLoss, &frags,
                         &connectTime))
         break;
 
@@ -334,7 +334,9 @@ void CPlayerPanel::OnOpenContextMenu(int itemID) {
                   // get the server
                   unsigned int playerID =
      m_pPlayerListPanel->GetDataItem(m_pPlayerListPanel->GetSelectedRow(0))->userData;
-                  
+                  
+
+
 
 
 

@@ -1,14 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
 
 #ifndef SOUNDEMITTERSYSTEMBASE_H
 #define SOUNDEMITTERSYSTEMBASE_H
 
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 
+#include "base/include/base_types.h"
 #include "interval.h"
 #include "soundflags.h"
 #include "tier1/KeyValues.h"
@@ -25,12 +22,12 @@ struct CSoundEntry {
   bool m_bIsOverride : 1;
 
   bool IsOverride() const { return m_bIsOverride; }
+
   class CSoundEntryLess {
    public:
-    bool Less(CSoundEntry *const &lhs, CSoundEntry *const &rhs, void *pCtx) {
-      return (Q_stricmp(lhs->m_Name.String(), rhs->m_Name.String()) < 0)
-                 ? true
-                 : false;
+    bool Less(CSoundEntry *const &lhs, CSoundEntry *const &rhs,
+              void *pCtx) const {
+      return _stricmp(lhs->m_Name.String(), rhs->m_Name.String()) < 0;
     }
   };
 };
@@ -137,7 +134,7 @@ class CSoundEmitterSystemBase : public ISoundEmitterSystemBase {
 
   void LoadGlobalActors();
 
-  float TranslateAttenuation(const char *key);
+  f32 TranslateAttenuation(const char *key);
   soundlevel_t TranslateSoundLevel(const char *key);
   int TranslateChannel(const char *name);
 

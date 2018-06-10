@@ -235,13 +235,13 @@ void CGamePanelInfo::AddToConsole(const char *msg) {
   if (m_pServerLogPanel) {
     // hack, look for restart message
     if (*msg == 3 && !strncmp(msg + 1, "MasterRequestRestart",
-                              strlen("MasterRequestRestart"))) {
+                              std::size("MasterRequestRestart") - 1)) {
       OnMasterRequestRestart();
     } else if (*msg == 3 && !strncmp(msg + 1, "MasterOutOfDate",
-                                     strlen("MasterOutOfDate"))) {
+                                     std::size("MasterOutOfDate") - 1)) {
       const char *details = strstr(msg, "MasterOutOfDate");
       if (details) {
-        OnMasterOutOfDate(details + strlen("MasterOutOfDate"));
+        OnMasterOutOfDate(details + std::size("MasterOutOfDate") - 1);
       }
     } else {
       // nothing special, just print
@@ -256,7 +256,7 @@ void CGamePanelInfo::OnMasterOutOfDate(const char *msg) {
   // open a dialog informing user that they need to restart the server
   if (!m_hOutOfDateQueryBox.Get()) {
     size_t full_msg_size{strlen(msg) +
-                         strlen("\n\nDo you wish to shutdown now?\n") + 1};
+                         std::size("\n\nDo you wish to shutdown now?\n")};
     char *fullmsg = (char *)_alloca(full_msg_size);
 
     sprintf_s(fullmsg, full_msg_size, "%s\n\nDo you wish to shutdown now?\n",

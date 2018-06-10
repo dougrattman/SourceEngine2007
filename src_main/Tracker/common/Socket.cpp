@@ -4,6 +4,7 @@
 
 #include <cassert>
 
+#include "base/include/chrono.h"
 #include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
@@ -168,7 +169,7 @@ static DWORD WINAPI SocketThreadFunc(LPVOID threadobject) {
 //-----------------------------------------------------------------------------
 // Purpose: Construction
 //-----------------------------------------------------------------------------
-CSocketThread::CSocketThread(void) {
+CSocketThread::CSocketThread() {
   InitTimer();
 
   m_pSocketList = NULL;
@@ -185,7 +186,7 @@ CSocketThread::CSocketThread(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CSocketThread::~CSocketThread(void) {
+CSocketThread::~CSocketThread() {
   Lock();
   if (m_hThread) {
     SetEvent(m_hShutdown);
@@ -210,21 +211,15 @@ CSocketThread::~CSocketThread(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Initialize socket thread timer
 //-----------------------------------------------------------------------------
-void CSocketThread::InitTimer(void) {
-  BOOL success;
-  LARGE_INTEGER PerformanceFreq;
-  unsigned int lowpart, highpart;
-
+void CSocketThread::InitTimer() {
   // Start clock at zero
   m_dCurrentTime = 0.0;
 
-  success = QueryPerformanceFrequency(&PerformanceFreq);
-  assert(success);
-
+  i64 frequency{source::chrono::HpetTimer::Frequency()};
   // get 32 out of the 64 time bits such that we have around
   // 1 microsecond resolution
-  lowpart = (unsigned int)PerformanceFreq.LowPart;
-  highpart = (unsigned int)PerformanceFreq.HighPart;
+  u32 lowpart = (u32)(frequency && 0xFFFFFFFF);
+  u32 highpart = (u32)((frequency >> 32) && 0xFFFFFFFF);
 
   m_nTimeSampleShift = 0;
 
@@ -238,16 +233,16 @@ void CSocketThread::InitTimer(void) {
   m_dClockFrequency = 1.0 / (double)lowpart;
 
   // Get initial sample
-  unsigned int temp;
-  LARGE_INTEGER PerformanceCount;
-  QueryPerformanceCounter(&PerformanceCount);
+  u32 temp;
+  i64 PerformanceCount{source::chrono::HpetTimer::Stamp()};
+
   if (!m_nTimeSampleShift) {
-    temp = (unsigned int)PerformanceCount.LowPart;
+    temp = (u32)(PerformanceCount && 0xFFFFFFFF);
   } else {
     // Rotate counter to right by m_nTimeSampleShift places
-    temp =
-        ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
-        ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
+    temp = ((u32)(PerformanceCount && 0xFFFFFFFF) >> m_nTimeSampleShift) |
+           ((u32)((PerformanceCount >> 32) && 0xFFFFFFFF)
+            << (32 - m_nTimeSampleShift));
   }
 
   // Set first time stamp
@@ -258,21 +253,20 @@ void CSocketThread::InitTimer(void) {
 // Purpose: Thread local timer function
 // Output : float
 //-----------------------------------------------------------------------------
-float CSocketThread::GetClock(void) {
-  LARGE_INTEGER PerformanceCount;
-  unsigned int temp, t2;
+float CSocketThread::GetClock() {
+  u32 temp, t2;
   double time;
 
   // Get sample counter
-  QueryPerformanceCounter(&PerformanceCount);
+  i64 PerformanceCount{source::chrono::HpetTimer::Stamp()};
 
   if (!m_nTimeSampleShift) {
-    temp = (unsigned int)PerformanceCount.LowPart;
+    temp = (u32)(PerformanceCount && 0xFFFFFFFF);
   } else {
     // Rotate counter to right by m_nTimeSampleShift places
-    temp =
-        ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
-        ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
+    temp = ((u32)(PerformanceCount && 0xFFFFFFFF) >> m_nTimeSampleShift) |
+           ((u32)((PerformanceCount >> 32) && 0xFFFFFFFF)
+            << (32 - m_nTimeSampleShift));
   }
 
   // check for turnover or backward time
@@ -302,13 +296,13 @@ float CSocketThread::GetClock(void) {
 // Purpose: Returns handle of shutdown event
 // Output : HANDLE
 //-----------------------------------------------------------------------------
-HANDLE CSocketThread::GetShutdownHandle(void) { return m_hShutdown; }
+HANDLE CSocketThread::GetShutdownHandle() { return m_hShutdown; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns head of socket list
 // Output : CSocketThread::threadsocket_t
 //-----------------------------------------------------------------------------
-CSocketThread::threadsocket_t *CSocketThread::GetSocketList(void) {
+CSocketThread::threadsocket_t *CSocketThread::GetSocketList() {
   return m_pSocketList;
 }
 
@@ -369,12 +363,12 @@ void CSocketThread::RemoveSocketFromThread(CSocket *socket) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSocketThread::Lock(void) { VCRHook_EnterCriticalSection(&cs); }
+void CSocketThread::Lock() { VCRHook_EnterCriticalSection(&cs); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CSocketThread::Unlock(void) { LeaveCriticalSection(&cs); }
+void CSocketThread::Unlock() { LeaveCriticalSection(&cs); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructs a message handler for incoming socket messages
@@ -406,7 +400,7 @@ CMsgHandler::CMsgHandler(HANDLERTYPE type, void *typeinfo /*=NULL*/) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CMsgHandler::~CMsgHandler(void) {}
+CMsgHandler::~CMsgHandler() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Default message handler for received messages
@@ -458,7 +452,7 @@ bool CMsgHandler::ProcessMessage(netadr_t *from, CMsgBuffer *msg) {
 //-----------------------------------------------------------------------------
 // Purpose: Get next in chain of handlers
 //-----------------------------------------------------------------------------
-CMsgHandler *CMsgHandler::GetNext(void) const { return m_pNext; }
+CMsgHandler *CMsgHandler::GetNext() const { return m_pNext; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Set next in handler chain
@@ -470,7 +464,7 @@ void CMsgHandler::SetNext(CMsgHandler *next) { m_pNext = next; }
 // Purpose: Get underlying socket object
 // Output : CSocket
 //-----------------------------------------------------------------------------
-CSocket *CMsgHandler::GetSocket(void) const { return m_pSocket; }
+CSocket *CMsgHandler::GetSocket() const { return m_pSocket; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Set underlying socket object
@@ -564,7 +558,7 @@ CSocket::CSocket(const char *socketname, int port /*= -1*/)
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CSocket::~CSocket(void) {
+CSocket::~CSocket() {
   DeleteCriticalSection((CRITICAL_SECTION *)m_pBufferCS);
   delete (CRITICAL_SECTION *)m_pBufferCS;
 
@@ -693,14 +687,14 @@ int CSocket::Broadcast(int port, CMsgBuffer *msg /*= NULL*/) {
 // Purpose: Retrieve internal message buffer
 // Output : CMsgBuffer
 //-----------------------------------------------------------------------------
-CMsgBuffer *CSocket::GetSendBuffer(void) { return &m_SendBuffer; }
+CMsgBuffer *CSocket::GetSendBuffer() { return &m_SendBuffer; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Called once per frame (outside of the socket thread) to allow socket
 // to receive incoming messages
 //  and route them as appropriate
 //-----------------------------------------------------------------------------
-void CSocket::Frame(void) {
+void CSocket::Frame() {
   // No data waiting
   if (!m_MsgBuffers.Size()) return;
 
@@ -729,19 +723,19 @@ void CSocket::Frame(void) {
 // Purpose: Is socket set up correctly
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CSocket::IsValid(void) const { return m_bValid; }
+bool CSocket::IsValid() const { return m_bValid; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 // Output : float
 //-----------------------------------------------------------------------------
-float CSocket::GetClock(void) { return GetSocketThread()->GetClock(); }
+float CSocket::GetClock() { return GetSocketThread()->GetClock(); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Resolves the socket address
 // Output : const netadr_t
 //-----------------------------------------------------------------------------
-const netadr_t *CSocket::GetAddress(void) {
+const netadr_t *CSocket::GetAddress() {
   assert(m_bValid);
 
   if (!m_bResolved) {
@@ -763,17 +757,17 @@ void CSocket::SetUserData(unsigned int userData) { m_nUserData = userData; }
 // Purpose: Let the user store/retrieve a 32 bit value
 // Output : unsigned int
 //-----------------------------------------------------------------------------
-unsigned int CSocket::GetUserData(void) const { return m_nUserData; }
+unsigned int CSocket::GetUserData() const { return m_nUserData; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the underlying socket id number for setting up the fd_set
 //-----------------------------------------------------------------------------
-int CSocket::GetSocketNumber(void) const { return m_Socket; }
+int CSocket::GetSocketNumber() const { return m_Socket; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Called once FD_ISSET is detected
 //-----------------------------------------------------------------------------
-bool CSocket::ReceiveData(void) {
+bool CSocket::ReceiveData() {
   // Check for data
   struct sockaddr from;
   int fromlen;

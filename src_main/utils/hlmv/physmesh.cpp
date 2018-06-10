@@ -222,7 +222,7 @@ public:
 			Q_strncpy( parentName, pWord, sizeof(parentName) );
 			pWord = strtok( NULL, "," );
 			Q_strncpy( childName, pWord, sizeof(childName) );
-			if ( pEdit->mergeCount < SOURCE_ARRAYSIZE(pEdit->mergeList) )
+			if ( pEdit->mergeCount < std::size(pEdit->mergeList) )
 			{
 				merge_t *pMerge = &pEdit->mergeList[pEdit->mergeCount];
 				pEdit->mergeCount++;

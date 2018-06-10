@@ -80,9 +80,9 @@ CAudioMixerWaveADPCM::CAudioMixerWaveADPCM(CWaveData *data)
   }
 }
 
-CAudioMixerWaveADPCM::~CAudioMixerWaveADPCM(void) { delete[] m_pSamples; }
+CAudioMixerWaveADPCM::~CAudioMixerWaveADPCM() { delete[] m_pSamples; }
 
-int CAudioMixerWaveADPCM::NumChannels(void) {
+int CAudioMixerWaveADPCM::NumChannels() {
   if (m_pFormat) {
     return m_pFormat->wfx.nChannels;
   }
@@ -287,7 +287,7 @@ void CAudioMixerWaveADPCM::DecompressBlockStereo(short *pOut, const char *pIn,
   }
 }
 
-bool CAudioMixerWaveADPCM::DecodeBlock(void) {
+bool CAudioMixerWaveADPCM::DecodeBlock() {
   char tmpBlock[MAX_BLOCK_SIZE];
   char *pData;
 

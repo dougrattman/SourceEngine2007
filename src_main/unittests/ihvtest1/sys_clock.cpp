@@ -1,14 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//=============================================================================//
 
-#define WIN32_LEAN_AND_MEAN
+#include <cassert>
+
+#include "base/include/chrono.h"
 #include "base/include/windows/windows_light.h"
-
-#include <assert.h>
 
 #pragma optimize("", off)
 
@@ -96,29 +91,23 @@ static CSysClock g_Clock;
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CSysClock::CSysClock(void) { m_bInitialized = false; }
+CSysClock::CSysClock() { m_bInitialized = false; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Initialize the clock
 //-----------------------------------------------------------------------------
-void CSysClock::Init(void) {
-  BOOL success;
-  LARGE_INTEGER PerformanceFreq;
-  unsigned int lowpart, highpart;
-
+void CSysClock::Init() {
   MaskExceptions();
   Sys_SetFPCW();
 
   // Start clock at zero
   m_dCurrentTime = 0.0;
 
-  success = QueryPerformanceFrequency(&PerformanceFreq);
-  assert(success);
-
+  i64 frequency{source::chrono::HpetTimer::Frequency()};
   // get 32 out of the 64 time bits such that we have around
   // 1 microsecond resolution
-  lowpart = (unsigned int)PerformanceFreq.LowPart;
-  highpart = (unsigned int)PerformanceFreq.HighPart;
+  u32 lowpart = (u32)(frequency.LowPart && 0xFFFFFFFF);
+  u32 highpart = (u32)((frequency >> 32) && 0xFFFFFFFF);
 
   m_nTimeSampleShift = 0;
 
@@ -132,16 +121,16 @@ void CSysClock::Init(void) {
   m_dClockFrequency = 1.0 / (double)lowpart;
 
   // Get initial sample
-  unsigned int temp;
-  LARGE_INTEGER PerformanceCount;
-  QueryPerformanceCounter(&PerformanceCount);
+  u32 temp;
+  i64 PerformanceCount{source::chrono::HpetTimer::Stamp()};
+
   if (!m_nTimeSampleShift) {
-    temp = (unsigned int)PerformanceCount.LowPart;
+    temp = (u32)(PerformanceCount && 0xFFFFFFFF);
   } else {
     // Rotate counter to right by m_nTimeSampleShift places
-    temp =
-        ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
-        ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
+    temp = ((u32)(PerformanceCount && 0xFFFFFFFF) >> m_nTimeSampleShift) |
+           ((u32)((PerformanceCount >> 32) && 0xFFFFFFFF)
+            << (32 - m_nTimeSampleShift));
   }
 
   // Set first time stamp
@@ -152,7 +141,7 @@ void CSysClock::Init(void) {
   SetStartTime();
 }
 
-void CSysClock::SetStartTime(void) {
+void CSysClock::SetStartTime() {
   GetTime();
 
   m_dCurrentTime = 0.0;
@@ -160,8 +149,7 @@ void CSysClock::SetStartTime(void) {
   m_uiPreviousTime = (unsigned int)m_dCurrentTime;
 }
 
-double CSysClock::GetTime(void) {
-  LARGE_INTEGER PerformanceCount;
+double CSysClock::GetTime() {
   unsigned int temp, t2;
   double time;
 
@@ -172,15 +160,15 @@ double CSysClock::GetTime(void) {
   Sys_PushFPCW_SetHigh();
 
   // Get sample counter
-  QueryPerformanceCounter(&PerformanceCount);
+  i64 PerformanceCount{source::chrono::HpetTimer::Stamp()};
 
   if (!m_nTimeSampleShift) {
-    temp = (unsigned int)PerformanceCount.LowPart;
+    temp = (u32)(PerformanceCount && 0xFFFFFFFF);
   } else {
     // Rotate counter to right by m_nTimeSampleShift places
-    temp =
-        ((unsigned int)PerformanceCount.LowPart >> m_nTimeSampleShift) |
-        ((unsigned int)PerformanceCount.HighPart << (32 - m_nTimeSampleShift));
+    temp = ((u32)(PerformanceCount && 0xFFFFFFFF) >> m_nTimeSampleShift) |
+           ((u32)((PerformanceCount >> 32) && 0xFFFFFFFF)
+            << (32 - m_nTimeSampleShift));
   }
 
   // check for turnover or backward time
@@ -210,9 +198,9 @@ double CSysClock::GetTime(void) {
 // Purpose: Sample the high-precision clock
 // Output : double
 //-----------------------------------------------------------------------------
-double Plat_FloatTime(void) { return g_Clock.GetTime(); }
+double Plat_FloatTime() { return g_Clock.GetTime(); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Initialize high-precision clock
 //-----------------------------------------------------------------------------
-void Sys_InitFloatTime(void) { g_Clock.Init(); }
+void Sys_InitFloatTime() { g_Clock.Init(); }

@@ -78,7 +78,7 @@ CMayaVGui::CMayaVGui(void) : BaseClass(false) {
   m_bIsInitialized = false;
 }
 
-CMayaVGui::~CMayaVGui(void) {}
+CMayaVGui::~CMayaVGui() {}
 
 //-----------------------------------------------------------------------------
 // Connection

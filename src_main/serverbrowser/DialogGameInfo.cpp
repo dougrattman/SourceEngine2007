@@ -601,12 +601,12 @@ void CDialogGameInfo::ApplyConnectCommand( const gameserveritem_t &server )
 	// set the server password, if any
 	if ( m_szPassword[0] )
 	{
-		Q_snprintf( command, SOURCE_ARRAYSIZE( command ), "password \"%s\"\n", m_szPassword );
+		Q_snprintf( command, std::size( command ), "password \"%s\"\n", m_szPassword );
 		g_pRunGameEngine->AddTextCommand( command );
 	}
 
 	// send engine command to change servers
-	Q_snprintf( command, SOURCE_ARRAYSIZE( command ), "connect %s\n", server.m_NetAdr.GetConnectionAddressString() );
+	Q_snprintf( command, std::size( command ), "connect %s\n", server.m_NetAdr.GetConnectionAddressString() );
 	g_pRunGameEngine->AddTextCommand( command );
 }
 
@@ -673,7 +673,7 @@ void CDialogGameInfo::ConnectToServer()
 	else
 	{
 		char connectArgs[256];
-		ConstructConnectArgs( connectArgs, SOURCE_ARRAYSIZE( connectArgs ), m_Server );
+		ConstructConnectArgs( connectArgs, std::size( connectArgs ), m_Server );
 		
 		if ( ( m_Server.m_bSecure && JoiningSecureServerCall() )|| !m_Server.m_bSecure )
 		{

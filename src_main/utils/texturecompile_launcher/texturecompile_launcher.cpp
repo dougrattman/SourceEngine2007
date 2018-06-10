@@ -39,7 +39,7 @@ void MakeFullPath(const char *pIn, char *pOut, int outLen) {
   }
 }
 
-void Pause(void) {
+void Pause() {
   //	printf( "Pause\n" );
   //	fflush( stdout );
   //	getch();

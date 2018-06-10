@@ -508,7 +508,7 @@ void CServerBrowserDialog::OnConnectToGame(KeyValues *pMessageValues) {
 //-----------------------------------------------------------------------------
 // Purpose: Clears currently connected server
 //-----------------------------------------------------------------------------
-void CServerBrowserDialog::OnDisconnectFromGame(void) {
+void CServerBrowserDialog::OnDisconnectFromGame() {
   m_bCurrentlyConnected = false;
   memset(&m_CurrentConnection, 0, sizeof(gameserveritem_t));
 

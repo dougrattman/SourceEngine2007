@@ -142,12 +142,12 @@ class CAudioDeviceWave : public IAudioDevice {
 //-----------------------------------------------------------------------------
 // Singleton
 //-----------------------------------------------------------------------------
-IAudioDevice *Audio_CreateWaveDevice(void) { return new CAudioDeviceWave; }
+IAudioDevice *Audio_CreateWaveDevice() { return new CAudioDeviceWave; }
 
 //-----------------------------------------------------------------------------
 // Init, shutdown
 //-----------------------------------------------------------------------------
-bool CAudioDeviceWave::Init(void) {
+bool CAudioDeviceWave::Init() {
   m_hWaveData = NULL;
   m_hWaveHdr = NULL;
   m_waveOutHandle = NULL;
@@ -171,7 +171,7 @@ bool CAudioDeviceWave::Init(void) {
   return true;
 }
 
-void CAudioDeviceWave::Shutdown(void) { CloseWaveOut(); }
+void CAudioDeviceWave::Shutdown() { CloseWaveOut(); }
 
 //-----------------------------------------------------------------------------
 // WAV out device
@@ -183,7 +183,7 @@ inline bool CAudioDeviceWave::ValidWaveOut(void) const {
 //-----------------------------------------------------------------------------
 // Opens the windows wave out device
 //-----------------------------------------------------------------------------
-void CAudioDeviceWave::OpenWaveOut(void) {
+void CAudioDeviceWave::OpenWaveOut() {
   WAVEFORMATEX waveFormat;
   memset(&waveFormat, 0, sizeof(waveFormat));
 
@@ -231,7 +231,7 @@ void CAudioDeviceWave::OpenWaveOut(void) {
 //-----------------------------------------------------------------------------
 // Closes the windows wave out device
 //-----------------------------------------------------------------------------
-void CAudioDeviceWave::CloseWaveOut(void) {
+void CAudioDeviceWave::CloseWaveOut() {
   if (ValidWaveOut()) {
     waveOutReset(m_waveOutHandle);
     FreeOutputBuffers();
@@ -460,7 +460,7 @@ void CAudioDeviceWave::Mix16Stereo(channel_t *pChannel, short *pData,
   }
 }
 
-void CAudioDeviceWave::MixBegin(void) {
+void CAudioDeviceWave::MixBegin() {
   memset(m_paintbuffer, 0, sizeof(m_paintbuffer));
 }
 
@@ -538,7 +538,7 @@ bool CAudioDeviceWave::IsSourceReferencedByActiveBuffer(CAudioMixer *mixer) {
   return false;
 }
 
-CAudioDeviceWave::CAudioBuffer *CAudioDeviceWave::GetEmptyBuffer(void) {
+CAudioDeviceWave::CAudioBuffer *CAudioDeviceWave::GetEmptyBuffer() {
   CAudioBuffer *pOutput = NULL;
   if (ValidWaveOut()) {
     for (int i = 0; i < OUTPUT_BUFFER_COUNT; i++) {
@@ -565,7 +565,7 @@ void CAudioDeviceWave::SilenceBuffer(short *pSamples, int sampleCount) {
   }
 }
 
-void CAudioDeviceWave::Flush(void) { waveOutReset(m_waveOutHandle); }
+void CAudioDeviceWave::Flush() { waveOutReset(m_waveOutHandle); }
 
 // mix a buffer up to time (time is absolute)
 void CAudioDeviceWave::Update(float time) {
@@ -743,7 +743,7 @@ void CAudioDeviceWave::AddSource(CAudioMixer *pSource) {
   pSource->SetActive(true);
 }
 
-void CAudioDeviceWave::StopSounds(void) {
+void CAudioDeviceWave::StopSounds() {
   for (int i = 0; i < MAX_CHANNELS; i++) {
     if (m_sourceList[i]) {
       FreeChannel(i);
@@ -768,7 +768,7 @@ void CAudioDeviceWave::FreeChannel(int channelIndex) {
   }
 }
 
-int CAudioDeviceWave::GetOutputPosition(void) {
+int CAudioDeviceWave::GetOutputPosition() {
   if (!m_waveOutHandle) return 0;
 
   MMTIME mmtime;

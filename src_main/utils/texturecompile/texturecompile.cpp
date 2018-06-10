@@ -76,7 +76,7 @@ CUtlStringMap<bool> g_Master_TextureHadError;
 
 CDispatchReg g_DistributeWorkReg(WORKUNIT_PACKETID, DistributeWorkDispatch);
 
-unsigned long VMPI_Stats_GetJobWorkerID(void) { return 0; }
+unsigned long VMPI_Stats_GetJobWorkerID() { return 0; }
 
 bool StartWorkDispatch(MessageBuffer *pBuf, int iSource, int iPacketID) {
   g_bGotStartWorkPacket = true;
@@ -208,7 +208,7 @@ void VTFNameToTGAName(const char *pSrcName, char *pDstName) {
     Q_strncpy(pDstName, pSrcName, pMaterials - pSrcName + 1);
   }
   Q_strcat(pDstName, "materialsrc", SOURCE_MAX_PATH);
-  Q_strcat(pDstName, pMaterials + strlen("materials"), SOURCE_MAX_PATH);
+  Q_strcat(pDstName, pMaterials + std::size("materials") - 1, SOURCE_MAX_PATH);
   Q_StripExtension(pDstName, pDstName, strlen(pDstName));
   Q_strcat(pDstName, ".tga", SOURCE_MAX_PATH);
 }
@@ -296,7 +296,7 @@ void MakeDirHier(const char *pPath) {
   mkdir(temp);
 }
 
-void Worker_ReadFilesToCopy(void) {
+void Worker_ReadFilesToCopy() {
   // Create virtual files for all of the stuff that we need to compile the
   // shader make sure and prefix the file name so that it doesn't find it
   // locally.
@@ -436,14 +436,14 @@ void Worker_GetLocalCopyOfBinary(const char *pFilename) {
   fclose(fp2);
 }
 
-void Worker_GetLocalCopyOfBinaries(void) {
+void Worker_GetLocalCopyOfBinaries() {
   Worker_GetLocalCopyOfBinary("vtex.exe");
   Worker_GetLocalCopyOfBinary("vtex_dll.dll");
   Worker_GetLocalCopyOfBinary("vstdlib.dll");
   Worker_GetLocalCopyOfBinary("tier0.dll");
 }
 
-void Shared_ParseListOfCompileCommands(void) {
+void Shared_ParseListOfCompileCommands() {
   char buf[1024];
 
   char fileListFileName[1024];
@@ -490,7 +490,7 @@ void SetupPaths(int argc, char **argv) {
   g_bVerbose = CommandLine()->FindParm("-verbose") != 0;
 }
 
-void SetupDebugFile(void) {
+void SetupDebugFile() {
 #ifdef DEBUGFP
   const char *pComputerName = getenv("COMPUTERNAME");
   char filename[SOURCE_MAX_PATH];

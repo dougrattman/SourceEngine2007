@@ -23,10 +23,10 @@ class CKeyValuesSystem : public IKeyValuesSystem {
   // registers the size of the KeyValues in the specified instance
   // so it can build a properly sized memory pool for the KeyValues objects
   // the sizes will usually never differ but this is for versioning safety
-  void RegisterSizeofKeyValues(int size) override;
+  void RegisterSizeofKeyValues(usize size) override;
 
   // allocates/frees a KeyValues object from the shared mempool
-  void *AllocKeyValuesMemory(int size) override;
+  void *AllocKeyValuesMemory(usize size) override;
   void FreeKeyValuesMemory(void *pMem) override;
 
   // symbol table access (used for key names)
@@ -48,7 +48,7 @@ class CKeyValuesSystem : public IKeyValuesSystem {
 #ifdef KEYVALUES_USE_POOL
   CMemoryPool *m_pMemPool;
 #endif
-  int m_iMaxKeyValuesSize;
+  usize m_iMaxKeyValuesSize;
 
   // string hash table
   CMemoryStack m_Strings;
@@ -124,7 +124,7 @@ CKeyValuesSystem::~CKeyValuesSystem() {
 // Registers the size of the KeyValues in the specified instance so it can build
 // a properly sized memory pool for the KeyValues objects the sizes will usually
 // never differ but this is for versioning safety.
-void CKeyValuesSystem::RegisterSizeofKeyValues(int size) {
+void CKeyValuesSystem::RegisterSizeofKeyValues(usize size) {
   if (size > m_iMaxKeyValuesSize) {
     m_iMaxKeyValuesSize = size;
   }
@@ -144,7 +144,7 @@ static void KVLeak(char const *fmt, ...) {
 #endif
 
 // Allocates a KeyValues object from the shared mempool.
-void *CKeyValuesSystem::AllocKeyValuesMemory(int size) {
+void *CKeyValuesSystem::AllocKeyValuesMemory(usize size) {
 #ifdef KEYVALUES_USE_POOL
   // allocate, if we don't have one yet
   if (!m_pMemPool) {
@@ -165,7 +165,7 @@ void CKeyValuesSystem::FreeKeyValuesMemory(void *pMem) {
 #ifdef KEYVALUES_USE_POOL
   m_pMemPool->Free(pMem);
 #else
-  free(pMem);
+  heap_free(pMem);
 #endif
 }
 

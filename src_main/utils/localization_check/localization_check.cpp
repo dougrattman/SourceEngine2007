@@ -107,7 +107,7 @@ void vprint(int depth, const char *fmt, ...);
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void printusage(void) {
+void printusage() {
   vprint(0,
          "usage:  localization_check <opts> languagename\n\
 		\t-v = verbose output\n\
@@ -150,7 +150,7 @@ class CSceneTokenProcessor : public ISceneTokenProcessor {
 // Purpose:
 // Output : const char
 //-----------------------------------------------------------------------------
-const char *CSceneTokenProcessor::CurrentToken(void) { return token; }
+const char *CSceneTokenProcessor::CurrentToken() { return token; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -165,7 +165,7 @@ bool CSceneTokenProcessor::GetToken(bool crossline) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CSceneTokenProcessor::TokenAvailable(void) {
+bool CSceneTokenProcessor::TokenAvailable() {
   return ::TokenAvailable() ? true : false;
 }
 
@@ -391,7 +391,7 @@ void BuildFileList(CUtlVector<CUtlSymbol> &files, char const *rootdir,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CheckLogFile(void) {
+void CheckLogFile() {
   if (uselogfile) {
     _unlink("log.txt");
     vprint(0, "    Outputting to log.txt\n");
@@ -1095,7 +1095,7 @@ void SpewDuplicatedText(char const *lang, const char *entry,
   }
 }
 
-void CheckDuplcatedText(void) {
+void CheckDuplcatedText() {
   g_pFullFileSystem->RemoveFile("cc_duplicatedtext.txt", "GAME");
 
   for (int lang = 0; lang < CC_NUM_LANGUAGES; ++lang) {

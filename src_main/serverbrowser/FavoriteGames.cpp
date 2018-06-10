@@ -175,6 +175,6 @@ void CFavoriteGames::OnConnectToGame() {
 //-----------------------------------------------------------------------------
 // Purpose: disables adding current server
 //-----------------------------------------------------------------------------
-void CFavoriteGames::OnDisconnectFromGame(void) {
+void CFavoriteGames::OnDisconnectFromGame() {
   m_pAddCurrentServer->SetEnabled(false);
 }
