@@ -15,7 +15,6 @@
 #include <zmouse.h>
 #include <cstdio>
 #include "FileSystem.h"
-#include "SteamBootStrapper.h"
 #include "VPanel.h"
 #include "base/include/chrono.h"
 #include "base/include/compiler_specific.h"
@@ -83,8 +82,7 @@ class SurfacePlat {
   HPanel lastKeyFocusIndex;  // index to the last panel to have the focus
 };
 
-class Texture {
- public:
+struct Texture {
   int _id;
   HBITMAP _bitmap;
   HBITMAP _maskBitmap;
@@ -98,12 +96,8 @@ class Texture {
 };
 }  // namespace vgui
 
-//-----------------------------------------------------------------------------
-// Purpose: Implementation of ISurface for use running under windows, renders
-// using GDI
-//			This is not used in the game, EngineSurface is used
-// instead
-//-----------------------------------------------------------------------------
+// Purpose: Implementation of ISurface for use running under windows, renders using GDI
+// This is not used in the game, EngineSurface is used instead
 class CWin32Surface : public ISurface {
  public:
   friend class CIconImage;
@@ -380,7 +374,7 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CWin32Surface, ISurface,
 #define WM_MY_TRAY_NOTIFICATION (WM_USER + 1)
 
 static UINT staticShutdownMsg = 0;
-static HICON staticDefaultCursor[20];
+static HCURSOR staticDefaultCursor[20];
 static WNDCLASS staticWndclass = {NULL};
 static ATOM staticWndclassAtom = 0;
 static bool staticStaticDataInitialized = false;
@@ -1336,7 +1330,7 @@ void CWin32Surface::DrawSetTextureFile(int id, const char *filename,
       // strip off the vgui/ and try again
       const char *psz = Q_stristr(filename, "vgui/");
       if (psz) {
-        success = LoadTGA(texture, filename + strlen("vgui/"));
+        success = LoadTGA(texture, filename + std::size("vgui/") - 1);
       }
     }
 
@@ -2955,47 +2949,34 @@ bool CWin32Surface::SupportsFeature(SurfaceFeature_e feature) {
 void CWin32Surface::initStaticData() {
   // load up all default cursors, this gets called everytime a Surface is
   // created, but  who cares
-  staticDefaultCursor[dc_none] = 0;
-  staticDefaultCursor[dc_arrow] = (HICON)LoadCursor(0, (LPCTSTR)OCR_NORMAL);
-  staticDefaultCursor[dc_ibeam] = (HICON)LoadCursor(0, (LPCTSTR)OCR_IBEAM);
-  staticDefaultCursor[dc_hourglass] = (HICON)LoadCursor(0, (LPCTSTR)OCR_WAIT);
+  staticDefaultCursor[dc_none] = nullptr;
+  staticDefaultCursor[dc_arrow] = LoadCursorW(0, (LPCWSTR)OCR_NORMAL);
+  staticDefaultCursor[dc_ibeam] = LoadCursorW(0, (LPCWSTR)OCR_IBEAM);
+  staticDefaultCursor[dc_hourglass] = LoadCursorW(0, (LPCWSTR)OCR_WAIT);
   staticDefaultCursor[dc_waitarrow] =
-      (HICON)LoadCursor(0, (LPCTSTR)OCR_APPSTARTING);
-  staticDefaultCursor[dc_crosshair] = (HICON)LoadCursor(0, (LPCTSTR)OCR_CROSS);
-  staticDefaultCursor[dc_up] = (HICON)LoadCursor(0, (LPCTSTR)OCR_UP);
+      LoadCursorW(0, (LPCWSTR)OCR_APPSTARTING);
+  staticDefaultCursor[dc_crosshair] = LoadCursorW(0, (LPCWSTR)OCR_CROSS);
+  staticDefaultCursor[dc_up] = LoadCursorW(0, (LPCWSTR)OCR_UP);
   staticDefaultCursor[dc_sizenwse] =
-      (HICON)LoadCursor(0, (LPCTSTR)OCR_SIZENWSE);
+      LoadCursorW(0, (LPCWSTR)OCR_SIZENWSE);
   staticDefaultCursor[dc_sizenesw] =
-      (HICON)LoadCursor(0, (LPCTSTR)OCR_SIZENESW);
-  staticDefaultCursor[dc_sizewe] = (HICON)LoadCursor(0, (LPCTSTR)OCR_SIZEWE);
-  staticDefaultCursor[dc_sizens] = (HICON)LoadCursor(0, (LPCTSTR)OCR_SIZENS);
-  staticDefaultCursor[dc_sizeall] = (HICON)LoadCursor(0, (LPCTSTR)OCR_SIZEALL);
-  staticDefaultCursor[dc_no] = (HICON)LoadCursor(0, (LPCTSTR)OCR_NO);
-  staticDefaultCursor[dc_hand] = (HICON)LoadCursor(0, (LPCTSTR)32649);
+      LoadCursorW(0, (LPCWSTR)OCR_SIZENESW);
+  staticDefaultCursor[dc_sizewe] = LoadCursorW(0, (LPCWSTR)OCR_SIZEWE);
+  staticDefaultCursor[dc_sizens] = LoadCursorW(0, (LPCWSTR)OCR_SIZENS);
+  staticDefaultCursor[dc_sizeall] = LoadCursorW(0, (LPCWSTR)OCR_SIZEALL);
+  staticDefaultCursor[dc_no] = LoadCursorW(0, (LPCWSTR)OCR_NO);
+  staticDefaultCursor[dc_hand] = LoadCursorW(0, (LPCWSTR)OCR_HAND);
 
   // make and register a very simple Window Class
   memset(&staticWndclass, 0, sizeof(staticWndclass));
   staticWndclass.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
   staticWndclass.lpfnWndProc = staticProc;
-  staticWndclass.hInstance = GetModuleHandle(nullptr);
+  staticWndclass.hInstance = GetModuleHandleW(nullptr);
 
   // Get the resource ID of the icon group from the environment...default to
   // 101.
-  DWORD wIconID = 101;
-  usize icon_id_size;
-  char sIconResourceID[32];
-
-  if (!getenv_s(&icon_id_size, sIconResourceID,
-                szSteamBootStrapperIconIdEnvVar) &&
-      icon_id_size > 0) {
-    DWORD wTmpIconID = 0;
-    if (sscanf_s(sIconResourceID, "%u", &wTmpIconID) == 1 && wTmpIconID > 101) {
-      wIconID = wTmpIconID;
-    }
-  }
   staticWndclass.hIcon =
-      ::LoadIcon(staticWndclass.hInstance, MAKEINTRESOURCE(wIconID));
-
+      ::LoadIconW(staticWndclass.hInstance, MAKEINTRESOURCEW(101));
   staticWndclass.lpszClassName = "Surface";
   staticWndclassAtom = ::RegisterClass(&staticWndclass);
 

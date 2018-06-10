@@ -4,11 +4,6 @@
 ./common/xbox
 ./devtools
 ./devtools/bin
-./dx10sdk
-./dx10sdk/Utilities
-./dx10sdk/Utilities/dx9_30
-./dx9sdk
-./dx9sdk/utilities
 ./game
 ./game/client
 ./game/client/episodic

@@ -2177,7 +2177,7 @@ int RichText::ParseTextStringForUrls(const char *text, int startPos,
       bURLFound = true;
       clickable = true;
       // get the url
-      i += Q_strlen("<a href=");
+      i += std::size("<a href=") - 1;
       const char *pchURLEnd = Q_strstr(text + i, ">");
       Q_strncpy(pchURL, text + i, std::min(pchURLEnd - text - i + 1, cchURL));
       i += (pchURLEnd - text - i + 1);
@@ -2187,7 +2187,7 @@ int RichText::ParseTextStringForUrls(const char *text, int startPos,
       Q_strncpy(pchURLText, text + i,
                 std::min(pchURLEnd - text - i + 1, cchURLText));
       i += (pchURLEnd - text - i);
-      i += Q_strlen("</a>");
+      i += std::size("</a>") - 1;
 
       // we're done
       return i;
