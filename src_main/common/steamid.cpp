@@ -15,19 +15,12 @@
 #include "steamcommon.h"
 #endif
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-// Input  : pchSteamID -		text representation of a Steam ID
-//-----------------------------------------------------------------------------
 CSteamID::CSteamID(const char *pchSteamID,
                    EUniverse eDefaultUniverse /* = k_EUniverseInvalid */) {
   SetFromString(pchSteamID, eDefaultUniverse);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Initializes a steam ID from a string
-// Input  : pchSteamID -		text representation of a Steam ID
-//-----------------------------------------------------------------------------
 void CSteamID::SetFromString(const char *pchSteamID,
                              EUniverse eDefaultUniverse) {
   int nAccountID = -1;
@@ -83,12 +76,9 @@ void CSteamID::SetFromString(const char *pchSteamID,
 }
 
 #if defined(INCLUDED_STEAM_COMMON_STEAMCOMMON_H)
-//-----------------------------------------------------------------------------
 // Purpose: Initializes a steam ID from a Steam2 ID string
 // Input:	pchSteam2ID -	Steam2 ID (as a string #:#:#) to convert
-//			eUniverse -		universe this ID belongs to
-// Output:	true if successful, false otherwise
-//-----------------------------------------------------------------------------
+// eUniverse -		universe this ID belongs to
 bool CSteamID::SetFromSteam2String(const char *pchSteam2ID,
                                    EUniverse eUniverse) {
   Assert(pchSteam2ID);
@@ -127,12 +117,10 @@ bool CSteamID::SetFromSteam2String(const char *pchSteam2ID,
 }
 #endif
 
-//-----------------------------------------------------------------------------
 // Purpose: Renders the steam ID to a buffer.  NOTE: for convenience of calling
 //			code, this code returns a pointer to a static buffer and
 // is NOT thread-safe.
 // Output:  buffer with rendered Steam ID
-//-----------------------------------------------------------------------------
 char *CSteamID::Render() const {
   const int k_cBufLen = 255;
   const int k_cBufs = 4;  // # of static bufs to use (so people can compose
@@ -162,23 +150,19 @@ char *CSteamID::Render() const {
   return pchBuf;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Renders the passed-in steam ID to a buffer.  NOTE: for convenience
 // of calling
 //			code, this code returns a pointer to a static buffer and
 // is NOT thread-safe.
 // Input:	64-bit representation of Steam ID to render
 // Output:  buffer with rendered Steam ID
-//-----------------------------------------------------------------------------
 char *CSteamID::Render(uint64_t ulSteamID) {
   CSteamID steamID(ulSteamID);
   return steamID.Render();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: some steamIDs are for internal use only
 // This is really debug code, but we run with asserts on in retail, so ...
-//-----------------------------------------------------------------------------
 bool CSteamID::BValidExternalSteamID() const {
   if (m_EAccountType == k_EAccountTypePending) return false;
   if (m_EAccountType != k_EAccountTypeAnonGameServer &&
