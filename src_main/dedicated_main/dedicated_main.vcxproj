@@ -23,7 +23,7 @@
     <ProjectGuid>{A05B0719-C37D-492D-BBF8-6CE4B5F028C5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>dedicatedmain</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -117,10 +117,11 @@
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ConformanceMode>true</ConformanceMode>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,7 +137,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "srcds$(TargetExt)"</Command>
-      <Message>Publishing srcds$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'srcds$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"srcds\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"srcds.exe\";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -162,6 +163,8 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -177,7 +180,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "srcds$(TargetExt)"</Command>
-      <Message>Publishing srcds$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'srcds$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"srcds\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"srcds.exe\";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -204,11 +207,12 @@
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
       <MinimalRebuild>true</MinimalRebuild>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <EnablePREfast>false</EnablePREfast>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -226,7 +230,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "srcds$(TargetExt)"</Command>
-      <Message>Publishing srcds$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'srcds$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"srcds\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"srcds.exe\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -255,6 +259,8 @@
       <EnablePREfast>false</EnablePREfast>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -272,7 +278,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "srcds$(TargetExt)"</Command>
-      <Message>Publishing srcds$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'srcds$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"srcds\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"srcds.exe\";%(PreprocessorDefinitions)</PreprocessorDefinitions>

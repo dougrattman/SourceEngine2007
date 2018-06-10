@@ -24,7 +24,7 @@
     <SccAuxPath />
     <SccLocalPath />
     <SccProvider />
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
     <ProjectName>vaudio_miles</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -147,6 +147,7 @@
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -186,7 +187,6 @@
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\deps\miles\lib\$(PlatformShortName)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;mss$(PlatformArchitecture).lib</AdditionalDependencies>
-      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -202,6 +202,7 @@
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -252,6 +253,7 @@
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -287,7 +289,6 @@
       <LargeAddressAware>true</LargeAddressAware>
       <AdditionalLibraryDirectories>$(SolutionDir)\deps\miles\lib\$(PlatformShortName)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;mss$(PlatformArchitecture).lib</AdditionalDependencies>
-      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -303,6 +304,7 @@
     </ResourceCompile>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

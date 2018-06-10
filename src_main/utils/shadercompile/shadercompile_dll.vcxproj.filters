@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{323a7879-0422-41e6-b545-fdf14d3ba3de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{91c7a1df-b9a0-41e7-83f1-1e4996ec4d2a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{f4a0a6ee-623e-4e38-a4e8-1f0b04f7ff04}</UniqueIdentifier>
     </Filter>
@@ -48,11 +45,6 @@
     <ClCompile Include="..\common\vmpi_tools_shared.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\lib\common\vc8\lzma.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cfgprocessor.h">

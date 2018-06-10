@@ -1054,9 +1054,6 @@
     <Library Include="..\..\lib\public\dmserializers.lib">
       <Filter>Link Libraries</Filter>
     </Library>
-    <Library Include="..\..\lib\common\vc8\lzma.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
     <Library Include="..\..\lib\public\mathlib.lib">
       <Filter>Link Libraries</Filter>
     </Library>

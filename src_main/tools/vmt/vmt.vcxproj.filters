@@ -7,9 +7,6 @@
     <Filter Include="Link Libraries">
       <UniqueIdentifier>{9f3dc0a1-5bd9-4412-a863-d517021da29e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{4652e8a8-de13-4af0-9c17-b4d331c2fcc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{8af4f455-fdff-454a-b91c-cf9f9ab7ecc1}</UniqueIdentifier>
     </Filter>
@@ -38,55 +35,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\lib\public\datamodel.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\dme_controls.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\dmserializers.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\mathlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\matsys_controls.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\movieobjects.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\sfmobjects.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier0.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier1.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier2.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier3.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\toolutils.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vgui_controls.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vstdlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="vmt.vpc">
-      <Filter>Resources</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\public\interpolatortypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,5 +44,10 @@
     <ClInclude Include="vmttool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\lib\public\sfmobjects.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
   </ItemGroup>
 </Project>

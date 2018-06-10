@@ -4,12 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{65bb53b4-c1c8-42db-9f76-c0df9c1a9add}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{23968331-a08b-48f3-b8ee-769712965aeb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{5fb332a9-2230-47bf-9701-99d1a19ff7e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{a26f8a2b-ecac-4ff4-aa02-57689da1509b}</UniqueIdentifier>
     </Filter>
@@ -21,11 +15,6 @@
     <ClCompile Include="filememcache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dx_proxy_dx9_v30_pc.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\dx_proxy\dx_proxy.h">

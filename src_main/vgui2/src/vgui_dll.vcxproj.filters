@@ -122,9 +122,6 @@
     <ClInclude Include="..\..\public\vgui\KeyCode.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\SteamBootStrapper.h">
-      <Filter>Public Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\public\vstdlib\strtools.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>

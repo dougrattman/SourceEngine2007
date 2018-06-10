@@ -4,12 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{706c9c99-70a9-4174-b00f-a6fdbdfe1c36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{684d601e-7399-4a75-811d-42f3a17d7c8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectX Header Files">
-      <UniqueIdentifier>{689cbb40-ff76-4d3b-b137-8c89d6791313}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Public Header Files">
       <UniqueIdentifier>{aa6afeb7-29c1-448b-812a-f1535751ef75}</UniqueIdentifier>
     </Filter>
@@ -65,29 +59,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\dx10sdk\Include\D3DX10math.inl">
-      <Filter>DirectX Header Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\dx10sdk\Include\D3D10.h">
-      <Filter>DirectX Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dx10sdk\Include\D3DX10.h">
-      <Filter>DirectX Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dx10sdk\Include\D3DX10core.h">
-      <Filter>DirectX Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dx10sdk\Include\D3DX10math.h">
-      <Filter>DirectX Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dx10sdk\Include\D3DX10mesh.h">
-      <Filter>DirectX Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dx10sdk\Include\D3DX10tex.h">
-      <Filter>DirectX Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\public\materialsystem\idebugtextureinfo.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
@@ -196,10 +167,5 @@
     <ClInclude Include="wmi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx10.lib">
-      <Filter>Link Libraries</Filter>
-    </CustomBuild>
   </ItemGroup>
 </Project>

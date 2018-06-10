@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{a69d3ae6-d620-4d98-9d05-ea5f749d955b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{75c0b99e-5d8e-4f5c-a99f-92b3e124bd42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{3cf59e06-c1a8-4760-b54b-8cc7c897ac1a}</UniqueIdentifier>
     </Filter>
@@ -18,11 +15,6 @@
     <ClCompile Include="nvtristripobjects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="nvtristriplib.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nvtristrip.h">

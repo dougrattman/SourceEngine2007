@@ -23,7 +23,7 @@
     <ProjectGuid>{93106DEA-05C9-47BB-A37C-114B484BAFB9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>launchermain</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -104,7 +104,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME=L"Half-Life 2";WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -115,11 +115,12 @@
       </MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <ConformanceMode>true</ConformanceMode>
       <ExceptionHandling>Async</ExceptionHandling>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,7 +136,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "hl2$(TargetExt)"</Command>
-      <Message>Publishing hl2$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'hl2$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
@@ -148,7 +149,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME=L"Half-Life 2";_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -160,6 +161,8 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ConformanceMode>true</ConformanceMode>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,7 +178,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "hl2$(TargetExt)"</Command>
-      <Message>Publishing hl2$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'hl2$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
@@ -190,7 +193,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME=L"Half-Life 2";WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -200,12 +203,13 @@
       <OmitFramePointers>true</OmitFramePointers>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <EnablePREfast>false</EnablePREfast>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
       <ExceptionHandling>Async</ExceptionHandling>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -223,7 +227,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "hl2$(TargetExt)"</Command>
-      <Message>Publishing hl2$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'hl2$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
@@ -238,7 +242,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME=L"Half-Life 2";NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -251,6 +255,8 @@
       <EnablePREfast>false</EnablePREfast>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -268,7 +274,7 @@
     </Manifest>
     <PostBuildEvent>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "hl2$(TargetExt)"</Command>
-      <Message>Publishing hl2$(TargetExt) to game directory.</Message>
+      <Message>Publishing 'hl2$(TargetExt)' artifact(s) to game/...</Message>
     </PostBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>

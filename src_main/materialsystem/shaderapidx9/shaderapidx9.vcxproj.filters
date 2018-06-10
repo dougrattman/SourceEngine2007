@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{1dcee3af-c3b2-4bde-be9f-cfc943eb88ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{9bd24837-eb18-4da6-9a3a-140e73404337}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Public Header Files">
       <UniqueIdentifier>{77b21d06-0cd6-44d1-ba55-aaef860cecef}</UniqueIdentifier>
     </Filter>
@@ -72,11 +69,6 @@
     <ClCompile Include="wmi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\dx9sdk\lib\d3dx9.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\public\materialsystem\idebugtextureinfo.h">

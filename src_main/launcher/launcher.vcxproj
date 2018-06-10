@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{174AE21E-645A-4C8F-9AD1-680C6DCEE36E}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -100,13 +100,12 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Async</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -116,12 +115,13 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnablePREfast>false</EnablePREfast>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <ConformanceMode>true</ConformanceMode>
       <StringPooling>true</StringPooling>
       <SDLCheck>true</SDLCheck>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -142,7 +142,7 @@
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
-      <Message>Publishing $(TargetFileName) to game/bin directory.</Message>
+      <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -154,12 +154,11 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Async</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -170,11 +169,12 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnablePREfast>false</EnablePREfast>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <ConformanceMode>true</ConformanceMode>
       <StringPooling>true</StringPooling>
       <SDLCheck>true</SDLCheck>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -194,7 +194,7 @@
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
-      <Message>Publishing $(TargetFileName) to game/bin directory.</Message>
+      <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -209,12 +209,11 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -223,13 +222,14 @@
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <MinimalRebuild>true</MinimalRebuild>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <EnablePREfast>false</EnablePREfast>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
       <StringPooling>true</StringPooling>
       <SDLCheck>true</SDLCheck>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -246,13 +246,13 @@
       <DelayLoadDLLs>user32.dll;shell32.dll;advapi32.dll</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
     </Link>
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
-      <Message>Publishing $(TargetFileName) to game/bin directory.</Message>
+      <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -267,12 +267,11 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;SOURCE_APP_NAME="Half-Life 2";WIN32;_WINDOWS;_USRDLL;LAUNCHERONLY;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -281,12 +280,13 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <EnablePREfast>false</EnablePREfast>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
       <StringPooling>true</StringPooling>
       <SDLCheck>true</SDLCheck>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -302,13 +302,13 @@
       <DelayLoadDLLs>user32.dll;shell32.dll;advapi32.dll</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
     </Link>
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
-      <Message>Publishing $(TargetFileName) to game/bin directory.</Message>
+      <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
       <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
