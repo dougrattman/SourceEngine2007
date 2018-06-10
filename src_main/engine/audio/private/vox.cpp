@@ -604,10 +604,10 @@ ch *VOX_LookupNumber(ch *pGroupName, int ipick) {
   // construct group name from V_NUMBERS + TYPE
 
   ch sznumbers[16];
-  int glen = Q_strlen(pGroupName);
-  int slen = Q_strlen("V_NUMBERS");
+  usize glen = strlen(pGroupName);
+  constexpr usize slen = std::size("V_NUMBERS") - 1;
 
-  Q_strcpy(sznumbers, "V_NUMBERS");
+  strcpy_s(sznumbers, "V_NUMBERS");
 
   // insert type character
   sznumbers[slen] = pGroupName[glen - 1];
@@ -1473,10 +1473,10 @@ void VOX_AddNumbers(ch *pGroupName, CUtlVector<WordBuf> &list) {
   // construct group name from V_NUMBERS + TYPE
   for (int i = 0; i <= 30; ++i) {
     ch sznumbers[16];
-    int glen = Q_strlen(pGroupName);
-    int slen = Q_strlen("V_NUMBERS");
+    usize glen = strlen(pGroupName);
+    constexpr usize slen = std::size("V_NUMBERS") - 1;
 
-    Q_strcpy(sznumbers, "V_NUMBERS");
+    strcpy_s(sznumbers, "V_NUMBERS");
 
     // insert type character
     sznumbers[slen] = pGroupName[glen - 1];
@@ -1485,7 +1485,7 @@ void VOX_AddNumbers(ch *pGroupName, CUtlVector<WordBuf> &list) {
     WordBuf w;
     // w.Set( VOX_LookupString( VOX_LookupSentenceByIndex( sznumbers, i, NULL ),
     // NULL ) );
-    w.Set(VOX_LookupSentenceByIndex(sznumbers, i, NULL));
+    w.Set(VOX_LookupSentenceByIndex(sznumbers, i, nullptr));
     list.AddToTail(w);
   }
 }
