@@ -170,7 +170,7 @@ class CIndexBuffer {
 #endif
   }
 
-  LPDIRECT3DINDEXBUFFER GetInterface() const { return m_pIB; }
+  IDirect3DIndexBuffer *GetInterface() const { return m_pIB; }
 
   // Use at beginning of frame to force a flush of VB contents on first draw.
   void FlushAtFrameStart() { m_bFlush = true; }
@@ -384,7 +384,7 @@ class CIndexBuffer {
     LOCKFLAGS_APPEND = D3DLOCK_NOSYSLOCK | D3DLOCK_NOOVERWRITE
   };
 
-  LPDIRECT3DINDEXBUFFER m_pIB;
+  IDirect3DIndexBuffer *m_pIB;
 
   int m_IndexCount;
   int m_Position;

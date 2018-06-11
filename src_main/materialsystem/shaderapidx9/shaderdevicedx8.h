@@ -156,7 +156,12 @@ class CShaderDeviceDx8 : public CShaderDeviceBase {
   virtual bool InitDevice(void *hWnd, int nAdapter,
                           const ShaderDeviceInfo_t &info);
   virtual void ShutdownDevice();
-  virtual bool IsDeactivated() const;
+
+  // Used to determine if we're deactivated
+  SOURCE_FORCEINLINE virtual bool IsDeactivated() const {
+    return m_DeviceState != DEVICE_STATE_OK || m_bQueuedDeviceLost ||
+           m_numReleaseResourcesRefCount;
+  }
 
   // Other public methods
  public:
@@ -304,11 +309,5 @@ class Direct3DDevice9Wrapper;
 Direct3DDevice9Wrapper *Dx9Device();
 
 extern CShaderDeviceDx8 *g_pShaderDeviceDx8;
-
-// Used to determine if we're deactivated
-SOURCE_FORCEINLINE bool CShaderDeviceDx8::IsDeactivated() const {
-  return m_DeviceState != DEVICE_STATE_OK || m_bQueuedDeviceLost ||
-         m_numReleaseResourcesRefCount;
-}
 
 #endif  // MATERIALSYSTEM_SHADERAPIDX9_SHADERDEVICEDX8_H_

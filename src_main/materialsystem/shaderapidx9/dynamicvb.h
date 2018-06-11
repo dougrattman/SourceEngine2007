@@ -167,7 +167,7 @@ class CVertexBuffer {
     }
   }
 
-  LPDIRECT3DVERTEXBUFFER GetInterface() const { return m_pVB; };
+  IDirect3DVertexBuffer* GetInterface() const { return m_pVB; };
 
   // Use at beginning of frame to force a flush of VB contents on first draw
   void FlushAtFrameStart() { m_bFlush = true; }
@@ -387,7 +387,7 @@ class CVertexBuffer {
     LOCKFLAGS_APPEND = D3DLOCK_NOSYSLOCK | D3DLOCK_NOOVERWRITE
   };
 
-  LPDIRECT3DVERTEXBUFFER m_pVB;
+  IDirect3DVertexBuffer* m_pVB;
 
   int m_nBufferSize;
   int m_Position;

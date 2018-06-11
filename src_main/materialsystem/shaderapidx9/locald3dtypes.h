@@ -16,8 +16,7 @@ struct IDirect3D10BaseTexture {
   ID3D10RenderTargetView *m_pRTView;
 };
 
-class CDx10Types {
- public:
+struct CDx10Types {
   typedef struct IDirect3D10BaseTexture IDirect3DTexture;
   // TODO(d.rattman): What is this called now ?
   // typedef ID3D10TextureCube IDirect3DCubeTexture;
@@ -31,10 +30,6 @@ class CDx10Types {
   typedef ID3D10ShaderResourceView IDirect3DSurface;
   typedef ID3DX10Font ID3DXFont;
   typedef ID3D10Query ID3DQuery;
-
-  typedef ID3D10Device *LPDIRECT3DDEVICE;
-  typedef ID3D10Buffer *LPDIRECT3DINDEXBUFFER;
-  typedef ID3D10Buffer *LPDIRECT3DVERTEXBUFFER;
 };
 
 #endif  // DX10
@@ -58,55 +53,48 @@ struct IDirect3DVertexShader9;
 struct IDirect3DPixelShader9;
 struct IDirect3DVolumeTexture9;
 
-typedef struct _D3DLIGHT9 D3DLIGHT9;
-typedef struct _D3DADAPTER_IDENTIFIER9 D3DADAPTER_IDENTIFIER9;
-typedef struct _D3DCAPS9 D3DCAPS9;
-typedef struct _D3DVIEWPORT9 D3DVIEWPORT9;
-typedef struct _D3DMATERIAL9 D3DMATERIAL9;
-typedef IDirect3DTexture9 IDirect3DTexture;
-typedef IDirect3DBaseTexture9 IDirect3DBaseTexture;
-typedef IDirect3DCubeTexture9 IDirect3DCubeTexture;
-typedef IDirect3DVolumeTexture9 IDirect3DVolumeTexture;
-typedef IDirect3DDevice9 IDirect3DDevice;
-typedef D3DMATERIAL9 D3DMATERIAL;
-typedef D3DLIGHT9 D3DLIGHT;
-typedef IDirect3DSurface9 IDirect3DSurface;
-typedef D3DCAPS9 D3DCAPS;
-typedef IDirect3DIndexBuffer9 IDirect3DIndexBuffer;
-typedef IDirect3DVertexBuffer9 IDirect3DVertexBuffer;
-typedef IDirect3DPixelShader9 IDirect3DPixelShader;
-typedef IDirect3DDevice *LPDIRECT3DDEVICE;
-typedef IDirect3DIndexBuffer *LPDIRECT3DINDEXBUFFER;
-typedef IDirect3DVertexBuffer *LPDIRECT3DVERTEXBUFFER;
+using D3DLIGHT9 = struct _D3DLIGHT9;
+using D3DADAPTER_IDENTIFIER9 = struct _D3DADAPTER_IDENTIFIER9;
+using D3DCAPS9 = struct _D3DCAPS9;
+using D3DVIEWPORT9 = struct _D3DVIEWPORT9;
+using D3DMATERIAL9 = struct _D3DMATERIAL9;
+using IDirect3DTexture = IDirect3DTexture9;
+using IDirect3DBaseTexture = IDirect3DBaseTexture9;
+using IDirect3DCubeTexture = IDirect3DCubeTexture9;
+using IDirect3DVolumeTexture = IDirect3DVolumeTexture9;
+using IDirect3DDevice = IDirect3DDevice9;
+using D3DMATERIAL = D3DMATERIAL9;
+using D3DLIGHT = D3DLIGHT9;
+using IDirect3DSurface = IDirect3DSurface9;
+using D3DCAPS = D3DCAPS9;
+using IDirect3DIndexBuffer = IDirect3DIndexBuffer9;
+using IDirect3DVertexBuffer = IDirect3DVertexBuffer9;
+using IDirect3DPixelShader = IDirect3DPixelShader9;
 
-class CDx9Types {
- public:
-  typedef IDirect3DTexture9 IDirect3DTexture;
-  typedef IDirect3DBaseTexture9 IDirect3DBaseTexture;
-  typedef IDirect3DCubeTexture9 IDirect3DCubeTexture;
-  typedef IDirect3DVolumeTexture9 IDirect3DVolumeTexture;
-  typedef IDirect3DDevice9 IDirect3DDevice;
-  typedef D3DMATERIAL9 D3DMATERIAL;
-  typedef D3DLIGHT9 D3DLIGHT;
-  typedef IDirect3DSurface9 IDirect3DSurface;
-  typedef D3DCAPS9 D3DCAPS;
-  typedef IDirect3DIndexBuffer9 IDirect3DIndexBuffer;
-  typedef IDirect3DVertexBuffer9 IDirect3DVertexBuffer;
-  typedef IDirect3DPixelShader9 IDirect3DPixelShader;
-  typedef IDirect3DDevice *LPDIRECT3DDEVICE;
-  typedef IDirect3DIndexBuffer *LPDIRECT3DINDEXBUFFER;
-  typedef IDirect3DVertexBuffer *LPDIRECT3DVERTEXBUFFER;
+struct CDx9Types {
+  using IDirect3DTexture = IDirect3DTexture9;
+  using IDirect3DBaseTexture = IDirect3DBaseTexture9;
+  using IDirect3DCubeTexture = IDirect3DCubeTexture9;
+  using IDirect3DVolumeTexture = IDirect3DVolumeTexture9;
+  using IDirect3DDevice = IDirect3DDevice9;
+  using D3DMATERIAL = D3DMATERIAL9;
+  using D3DLIGHT = D3DLIGHT9;
+  using IDirect3DSurface = IDirect3DSurface9;
+  using D3DCAPS = D3DCAPS9;
+  using IDirect3DIndexBuffer = IDirect3DIndexBuffer9;
+  using IDirect3DVertexBuffer = IDirect3DVertexBuffer9;
+  using IDirect3DPixelShader = IDirect3DPixelShader9;
 };
 
-typedef void *HardwareShader_t;
+using HardwareShader_t = void *;
 
 // The vertex and pixel shader type
-typedef int VertexShader_t;
-typedef int PixelShader_t;
+using VertexShader_t = int;
+using PixelShader_t = int;
 
 // Bitpattern for an invalid shader
 #define INVALID_SHADER (0xFFFFFFFF)
-#define INVALID_HARDWARE_SHADER (NULL)
+#define INVALID_HARDWARE_SHADER (nullptr)
 
 #define D3DSAMP_NOTSUPPORTED D3DSAMP_FORCE_DWORD
 #define D3DRS_NOTSUPPORTED D3DRS_FORCE_DWORD
