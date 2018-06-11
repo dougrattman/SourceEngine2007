@@ -3,14 +3,12 @@
 #ifndef MATERIALSYSTEM_SHADERAPIDX9_TEXTUREDX8_H_
 #define MATERIALSYSTEM_SHADERAPIDX9_TEXTUREDX8_H_
 
+#include "base/include/base_types.h"
 #include "bitmap/imageformat.h"
 #include "locald3dtypes.h"
 #include "shaderapi/ishaderapi.h"
 
 class CPixelWriter;
-
-// Returns the size of texture memory
-int ComputeTextureMemorySize(const GUID &nDeviceId, D3DDEVTYPE deviceType);
 
 // Texture creation
 IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int depth,
@@ -36,7 +34,7 @@ struct TextureLoadInfo_t {
   int m_nHeight;
   int m_nZOffset;  // What z-slice of the volume texture are we loading?
   ImageFormat m_SrcFormat;
-  unsigned char *m_pSrcData;
+  u8 *m_pSrcData;
 };
 
 // Texture image upload
@@ -52,7 +50,7 @@ bool LockTexture(ShaderAPITextureHandle_t textureHandle, int copy,
                  D3DCUBEMAP_FACES cubeFaceID, int xOffset, int yOffset,
                  int width, int height, bool bDiscard, CPixelWriter &writer);
 
-void UnlockTexture(ShaderAPITextureHandle_t textureHandle, int copy,
+bool UnlockTexture(ShaderAPITextureHandle_t textureHandle, int copy,
                    IDirect3DBaseTexture *pTexture, int level,
                    D3DCUBEMAP_FACES cubeFaceID);
 

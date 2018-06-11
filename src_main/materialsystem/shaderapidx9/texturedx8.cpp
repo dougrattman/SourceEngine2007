@@ -5,7 +5,7 @@
 #include "ColorFormatDX8.h"
 #include "ShaderAPIDX8_Global.h"
 #include "UtlVector.h"
-#include "filesystem.h"
+#include "base/include/windows/com_ptr.h"
 #include "locald3dtypes.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "recording.h"
@@ -19,87 +19,73 @@
 
 static int s_TextureCount = 0;
 
-//-----------------------------------------------------------------------------
 // Stats...
-//-----------------------------------------------------------------------------
 
 int TextureCount() { return s_TextureCount; }
 
-static bool IsVolumeTexture(IDirect3DBaseTexture *pBaseTexture) {
-  if (!pBaseTexture) {
-    return false;
-  }
-
-  return (pBaseTexture->GetType() == D3DRTYPE_VOLUMETEXTURE);
+static bool IsVolumeTexture(IDirect3DBaseTexture *texture) {
+  return texture && texture->GetType() == D3DRTYPE_VOLUMETEXTURE;
 }
 
-static HRESULT GetLevelDesc(IDirect3DBaseTexture *pBaseTexture, UINT level,
+static HRESULT GetLevelDesc(IDirect3DBaseTexture *texture, UINT level,
                             D3DSURFACE_DESC *pDesc) {
   MEM_ALLOC_D3D_CREDIT();
 
-  if (!pBaseTexture) {
-    return (HRESULT)-1;
+  if (texture) {
+    switch (texture->GetType()) {
+      case D3DRTYPE_TEXTURE:
+        return ((IDirect3DTexture *)texture)->GetLevelDesc(level, pDesc);
+
+      case D3DRTYPE_CUBETEXTURE:
+        return ((IDirect3DCubeTexture *)texture)->GetLevelDesc(level, pDesc);
+    }
   }
 
-  HRESULT hr;
-  switch (pBaseTexture->GetType()) {
-    case D3DRTYPE_TEXTURE:
-      hr = ((IDirect3DTexture *)pBaseTexture)->GetLevelDesc(level, pDesc);
-      break;
-    case D3DRTYPE_CUBETEXTURE:
-      hr = ((IDirect3DCubeTexture *)pBaseTexture)->GetLevelDesc(level, pDesc);
-      break;
-    default:
-      return (HRESULT)-1;
-  }
-  return hr;
+  return E_INVALIDARG;
 }
 
-static HRESULT GetSurfaceFromTexture(IDirect3DBaseTexture *pBaseTexture,
-                                     UINT level, D3DCUBEMAP_FACES cubeFaceID,
-                                     IDirect3DSurface **ppSurfLevel) {
+static HRESULT GetSurfaceFromTexture(IDirect3DBaseTexture *texture, UINT level,
+                                     D3DCUBEMAP_FACES cubeFaceID,
+                                     IDirect3DSurface **surface) {
   MEM_ALLOC_D3D_CREDIT();
 
-  if (!pBaseTexture) {
-    return (HRESULT)-1;
+  if (texture) {
+    switch (texture->GetType()) {
+      case D3DRTYPE_TEXTURE:
+        return ((IDirect3DTexture *)texture)->GetSurfaceLevel(level, surface);
+
+      case D3DRTYPE_CUBETEXTURE:
+        return ((IDirect3DCubeTexture *)texture)
+            ->GetCubeMapSurface(cubeFaceID, level, surface);
+
+      default:
+        Assert(0);
+        return E_INVALIDARG;
+    }
   }
 
-  HRESULT hr;
-
-  switch (pBaseTexture->GetType()) {
-    case D3DRTYPE_TEXTURE:
-      hr = ((IDirect3DTexture *)pBaseTexture)
-               ->GetSurfaceLevel(level, ppSurfLevel);
-      break;
-    case D3DRTYPE_CUBETEXTURE:
-      hr = ((IDirect3DCubeTexture *)pBaseTexture)
-               ->GetCubeMapSurface(cubeFaceID, level, ppSurfLevel);
-      break;
-    default:
-      Assert(0);
-      return (HRESULT)-1;
-  }
-  return hr;
+  return E_POINTER;
 }
 
-//-----------------------------------------------------------------------------
 // Gets the image format of a texture
-//-----------------------------------------------------------------------------
-static ImageFormat GetImageFormat(IDirect3DBaseTexture *pTexture) {
+static ImageFormat GetImageFormat(IDirect3DBaseTexture *texture) {
   MEM_ALLOC_D3D_CREDIT();
 
-  if (pTexture) {
-    HRESULT hr;
-    if (!IsVolumeTexture(pTexture)) {
+  if (texture) {
+    if (!IsVolumeTexture(texture)) {
       D3DSURFACE_DESC desc;
-      hr = GetLevelDesc(pTexture, 0, &desc);
-      if (!FAILED(hr)) return ImageLoader::D3DFormatToImageFormat(desc.Format);
+      HRESULT hr = GetLevelDesc(texture, 0, &desc);
+
+      if (SUCCEEDED(hr))
+        return ImageLoader::D3DFormatToImageFormat(desc.Format);
     } else {
       D3DVOLUME_DESC desc;
-      IDirect3DVolumeTexture *pVolumeTexture =
-          static_cast<IDirect3DVolumeTexture *>(pTexture);
-      hr = pVolumeTexture->GetLevelDesc(0, &desc);
-      if (!FAILED(hr)) return ImageLoader::D3DFormatToImageFormat(desc.Format);
+      IDirect3DVolumeTexture *volume_texture =
+          static_cast<IDirect3DVolumeTexture *>(texture);
+      HRESULT hr = volume_texture->GetLevelDesc(0, &desc);
+
+      if (SUCCEEDED(hr))
+        return ImageLoader::D3DFormatToImageFormat(desc.Format);
     }
   }
 
@@ -107,32 +93,28 @@ static ImageFormat GetImageFormat(IDirect3DBaseTexture *pTexture) {
   return (ImageFormat)-1;
 }
 
-//-----------------------------------------------------------------------------
 // Allocates the D3DTexture
-//-----------------------------------------------------------------------------
 IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
                                        ImageFormat dstFormat, int numLevels,
-                                       int nCreationFlags) {
-  if (nDepth <= 0) {
-    nDepth = 1;
-  }
+                                       int creation_flags) {
+  if (nDepth <= 0) nDepth = 1;
 
-  bool isCubeMap = (nCreationFlags & TEXTURE_CREATE_CUBEMAP) != 0;
-  bool bIsRenderTarget = (nCreationFlags & TEXTURE_CREATE_RENDERTARGET) != 0;
-  bool bManaged = (nCreationFlags & TEXTURE_CREATE_MANAGED) != 0;
-  bool isDynamic = (nCreationFlags & TEXTURE_CREATE_DYNAMIC) != 0;
-  bool bAutoMipMap = (nCreationFlags & TEXTURE_CREATE_AUTOMIPMAP) != 0;
-  bool bVertexTexture = (nCreationFlags & TEXTURE_CREATE_VERTEXTEXTURE) != 0;
-  bool bAllowNonFilterable =
-      (nCreationFlags & TEXTURE_CREATE_UNFILTERABLE_OK) != 0;
-  bool bVolumeTexture = (nDepth > 1);
+  bool isCubeMap = (creation_flags & TEXTURE_CREATE_CUBEMAP) != 0;
+  bool isRenderTarget = (creation_flags & TEXTURE_CREATE_RENDERTARGET) != 0;
+  bool isManaged = (creation_flags & TEXTURE_CREATE_MANAGED) != 0;
+  bool isDynamic = (creation_flags & TEXTURE_CREATE_DYNAMIC) != 0;
+  bool isAutoMipMap = (creation_flags & TEXTURE_CREATE_AUTOMIPMAP) != 0;
+  bool isVertexTexture = (creation_flags & TEXTURE_CREATE_VERTEXTEXTURE) != 0;
+  bool isAllowNonFilterable =
+      (creation_flags & TEXTURE_CREATE_UNFILTERABLE_OK) != 0;
+  bool isVolumeTexture = (nDepth > 1);
 
   // NOTE: This function shouldn't be used for creating depth buffers!
-  Assert(!(nCreationFlags & TEXTURE_CREATE_DEPTHBUFFER) != 0);
+  Assert(!(creation_flags & TEXTURE_CREATE_DEPTHBUFFER) != 0);
 
   D3DFORMAT d3dFormat =
       ImageLoader::ImageFormatToD3DFormat(FindNearestSupportedFormat(
-          dstFormat, bVertexTexture, bIsRenderTarget, bAllowNonFilterable));
+          dstFormat, isVertexTexture, isRenderTarget, isAllowNonFilterable));
 
   if (d3dFormat == D3DFMT_UNKNOWN) {
     Warning("ShaderAPIDX8::CreateD3DTexture: Invalid color format!\n");
@@ -140,33 +122,31 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
     return 0;
   }
 
-  IDirect3DBaseTexture *pBaseTexture = NULL;
-  IDirect3DTexture *pD3DTexture = NULL;
-  IDirect3DCubeTexture *pD3DCubeTexture = NULL;
-  IDirect3DVolumeTexture *pD3DVolumeTexture = NULL;
-  HRESULT hr = S_OK;
-  DWORD usage = 0;
-
-  if (bIsRenderTarget) {
-    usage |= D3DUSAGE_RENDERTARGET;
-  }
+  DWORD usage = isRenderTarget ? D3DUSAGE_RENDERTARGET : 0;
   if (isDynamic) {
     usage |= D3DUSAGE_DYNAMIC;
   }
-  if (bAutoMipMap) {
+  if (isAutoMipMap) {
     usage |= D3DUSAGE_AUTOGENMIPMAP;
   }
 
+  IDirect3DBaseTexture *base_texture = NULL;
+  HRESULT hr = S_OK;
   if (isCubeMap) {
+    IDirect3DCubeTexture *pD3DCubeTexture = NULL;
+
     hr = Dx9Device()->CreateCubeTexture(
         width, numLevels, usage, d3dFormat,
-        bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DCubeTexture, NULL);
-    pBaseTexture = pD3DCubeTexture;
-  } else if (bVolumeTexture) {
+        isManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DCubeTexture, NULL);
+    base_texture = pD3DCubeTexture;
+  } else if (isVolumeTexture) {
+    IDirect3DVolumeTexture *pD3DVolumeTexture = NULL;
+
     hr = Dx9Device()->CreateVolumeTexture(
         width, height, nDepth, numLevels, usage, d3dFormat,
-        bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DVolumeTexture, NULL);
-    pBaseTexture = pD3DVolumeTexture;
+        isManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DVolumeTexture,
+        NULL);
+    base_texture = pD3DVolumeTexture;
   } else {
     // Override usage and managed params if using special hardware shadow depth
     // map formats...
@@ -176,19 +156,20 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
       // Not putting D3DUSAGE_RENDERTARGET here causes D3D debug spew later, but
       // putting the flag causes this create to fail...
       usage = D3DUSAGE_DEPTHSTENCIL;
-      bManaged = false;
+      isManaged = false;
     }
 
     // Override managed param if using special 0 texture format
     if (d3dFormat == NVFMT_NULL) {
-      bManaged = false;
+      isManaged = false;
     }
 
+    IDirect3DTexture *pD3DTexture = NULL;
     hr = Dx9Device()->CreateTexture(
         width, height, numLevels, usage, d3dFormat,
-        bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DTexture, NULL);
+        isManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DTexture, NULL);
 
-    pBaseTexture = pD3DTexture;
+    base_texture = pD3DTexture;
   }
 
   if (FAILED(hr)) {
@@ -199,7 +180,7 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
       case D3DERR_OUTOFVIDEOMEMORY:
         // This conditional is here so that we don't complain when testing
         // how much video memory we have. . this is kinda gross.
-        if (bManaged) {
+        if (isManaged) {
           Warning("ShaderAPIDX8::CreateD3DTexture: D3DERR_OUTOFVIDEOMEMORY\n");
         }
         break;
@@ -209,7 +190,8 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
       default:
         break;
     }
-    return 0;
+
+    return nullptr;
   }
 
 #ifdef MEASURE_DRIVER_ALLOCATIONS
@@ -236,7 +218,7 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
 
   ++s_TextureCount;
 
-  return pBaseTexture;
+  return base_texture;
 }
 
 //-----------------------------------------------------------------------------
@@ -271,26 +253,16 @@ void DestroyD3DTexture(IDirect3DBaseTexture *pD3DTex) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *pTex -
-// Output : int
-//-----------------------------------------------------------------------------
-unsigned long GetD3DTextureRefCount(IDirect3DBaseTexture *pTex) {
-  if (!pTex) return 0;
+unsigned long GetD3DTextureRefCount(IDirect3DBaseTexture *texture) {
+  if (texture) {
+    texture->AddRef();
+    return texture->Release();
+  }
 
-  pTex->AddRef();
-  return pTex->Release();
+  return 0UL;
 }
 
-//-----------------------------------------------------------------------------
-// See version 13 for a function that converts a texture to a mipmap
-// (ConvertToMipmap)
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Lock, unlock a texture...
-//-----------------------------------------------------------------------------
 
 static RECT s_LockedSrcRect;
 static D3DLOCKED_RECT s_LockedRect;
@@ -299,96 +271,100 @@ static bool s_bInLock = false;
 #endif
 
 bool LockTexture(ShaderAPITextureHandle_t bindId, int copy,
-                 IDirect3DBaseTexture *pTexture, int level,
+                 IDirect3DBaseTexture *base_texture, int level,
                  D3DCUBEMAP_FACES cubeFaceID, int xOffset, int yOffset,
                  int width, int height, bool bDiscard, CPixelWriter &writer) {
   Assert(!s_bInLock);
 
-  IDirect3DSurface *pSurf;
-  HRESULT hr = GetSurfaceFromTexture(pTexture, level, cubeFaceID, &pSurf);
-  if (FAILED(hr)) return false;
+  source::windows::com_ptr<IDirect3DSurface> surface;
+  HRESULT hr = GetSurfaceFromTexture(base_texture, level, cubeFaceID, &surface);
 
-  s_LockedSrcRect.left = xOffset;
-  s_LockedSrcRect.right = xOffset + width;
-  s_LockedSrcRect.top = yOffset;
-  s_LockedSrcRect.bottom = yOffset + height;
+  if (SUCCEEDED(hr)) {
+    s_LockedSrcRect.left = xOffset;
+    s_LockedSrcRect.right = xOffset + width;
+    s_LockedSrcRect.top = yOffset;
+    s_LockedSrcRect.bottom = yOffset + height;
 
-  unsigned int flags = D3DLOCK_NOSYSLOCK;
-  flags |= bDiscard ? D3DLOCK_DISCARD : 0;
-  RECORD_COMMAND(DX8_LOCK_TEXTURE, 6);
-  RECORD_INT(bindId);
-  RECORD_INT(copy);
-  RECORD_INT(level);
-  RECORD_INT(cubeFaceID);
-  RECORD_STRUCT(&s_LockedSrcRect, sizeof(s_LockedSrcRect));
-  RECORD_INT(flags);
+    const DWORD flags = D3DLOCK_NOSYSLOCK | (bDiscard ? D3DLOCK_DISCARD : 0);
 
-  hr = pSurf->LockRect(&s_LockedRect, &s_LockedSrcRect, flags);
-  pSurf->Release();
+    RECORD_COMMAND(DX8_LOCK_TEXTURE, 6);
+    RECORD_INT(bindId);
+    RECORD_INT(copy);
+    RECORD_INT(level);
+    RECORD_INT(cubeFaceID);
+    RECORD_STRUCT(&s_LockedSrcRect, sizeof(s_LockedSrcRect));
+    RECORD_INT(flags);
 
-  if (FAILED(hr)) return false;
+    hr = surface->LockRect(&s_LockedRect, &s_LockedSrcRect, flags);
+  }
 
-  writer.SetPixelMemory(GetImageFormat(pTexture), s_LockedRect.pBits,
-                        s_LockedRect.Pitch);
+  if (SUCCEEDED(hr)) {
+    writer.SetPixelMemory(GetImageFormat(base_texture), s_LockedRect.pBits,
+                          s_LockedRect.Pitch);
 
-#ifdef _DEBUG
-  s_bInLock = true;
+#ifndef NDEBUG
+    s_bInLock = true;
 #endif
-  return true;
+
+    return true;
+  }
+
+  return false;
 }
 
-void UnlockTexture(ShaderAPITextureHandle_t bindId, int copy,
-                   IDirect3DBaseTexture *pTexture, int level,
+bool UnlockTexture(ShaderAPITextureHandle_t bindId, int copy,
+                   IDirect3DBaseTexture *texture, int level,
                    D3DCUBEMAP_FACES cubeFaceID) {
   Assert(s_bInLock);
 
-  IDirect3DSurface *pSurf;
-  HRESULT hr = GetSurfaceFromTexture(pTexture, level, cubeFaceID, &pSurf);
-  if (FAILED(hr)) return;
+  source::windows::com_ptr<IDirect3DSurface> surface;
+  HRESULT hr = GetSurfaceFromTexture(texture, level, cubeFaceID, &surface);
 
+  if (SUCCEEDED(hr)) {
 #ifdef RECORD_TEXTURES
-  int width = s_LockedSrcRect.right - s_LockedSrcRect.left;
-  int height = s_LockedSrcRect.bottom - s_LockedSrcRect.top;
-  int imageFormatSize = ImageLoader::SizeInBytes(GetImageFormat(pTexture));
-  Assert(imageFormatSize != 0);
-  int validDataBytesPerRow = imageFormatSize * width;
-  int storeSize = validDataBytesPerRow * height;
-  static CUtlVector<unsigned char> tmpMem;
-  if (tmpMem.Size() < storeSize) {
-    tmpMem.AddMultipleToTail(storeSize - tmpMem.Size());
-  }
-  unsigned char *pDst = tmpMem.Base();
-  unsigned char *pSrc = (unsigned char *)s_LockedRect.pBits;
-  RECORD_COMMAND(DX8_SET_TEXTURE_DATA, 3);
-  RECORD_INT(validDataBytesPerRow);
-  RECORD_INT(height);
-  int i;
-  for (i = 0; i < height; i++) {
-    memcpy(pDst, pSrc, validDataBytesPerRow);
-    pDst += validDataBytesPerRow;
-    pSrc += s_LockedRect.Pitch;
-  }
-  RECORD_STRUCT(tmpMem.Base(), storeSize);
+    int width = s_LockedSrcRect.right - s_LockedSrcRect.left;
+    int height = s_LockedSrcRect.bottom - s_LockedSrcRect.top;
+    int imageFormatSize = ImageLoader::SizeInBytes(GetImageFormat(pTexture));
+    Assert(imageFormatSize != 0);
+    int validDataBytesPerRow = imageFormatSize * width;
+    int storeSize = validDataBytesPerRow * height;
+    static CUtlVector<u8> tmpMem;
+    if (tmpMem.Size() < storeSize) {
+      tmpMem.AddMultipleToTail(storeSize - tmpMem.Size());
+    }
+    u8 *pDst = tmpMem.Base();
+    u8 *pSrc = (u8 *)s_LockedRect.pBits;
+    RECORD_COMMAND(DX8_SET_TEXTURE_DATA, 3);
+    RECORD_INT(validDataBytesPerRow);
+    RECORD_INT(height);
+    int i;
+    for (i = 0; i < height; i++) {
+      memcpy(pDst, pSrc, validDataBytesPerRow);
+      pDst += validDataBytesPerRow;
+      pSrc += s_LockedRect.Pitch;
+    }
+    RECORD_STRUCT(tmpMem.Base(), storeSize);
 #endif  // RECORD_TEXTURES
 
-  RECORD_COMMAND(DX8_UNLOCK_TEXTURE, 4);
-  RECORD_INT(bindId);
-  RECORD_INT(copy);
-  RECORD_INT(level);
-  RECORD_INT(cubeFaceID);
+    RECORD_COMMAND(DX8_UNLOCK_TEXTURE, 4);
+    RECORD_INT(bindId);
+    RECORD_INT(copy);
+    RECORD_INT(level);
+    RECORD_INT(cubeFaceID);
 
-  hr = pSurf->UnlockRect();
-  pSurf->Release();
-#ifdef _DEBUG
-  s_bInLock = false;
+    hr = surface->UnlockRect();
+
+#ifndef NDEBUG
+    s_bInLock = false;
 #endif
+  }
+
+  return SUCCEEDED(hr);
 }
 
-//-----------------------------------------------------------------------------
 // Compute texture size based on compression
-//-----------------------------------------------------------------------------
 
-static inline int DetermineGreaterPowerOfTwo(int val) {
+static constexpr inline int DetermineGreaterPowerOfTwo(int val) {
   int num = 1;
   while (val > num) {
     num <<= 1;
@@ -397,7 +373,7 @@ static inline int DetermineGreaterPowerOfTwo(int val) {
   return num;
 }
 
-inline int DeterminePowerOfTwo(int val) {
+static constexpr inline int DeterminePowerOfTwo(int val) {
   int pow = 0;
   while ((val & 0x1) == 0x0) {
     val >>= 1;
@@ -407,83 +383,70 @@ inline int DeterminePowerOfTwo(int val) {
   return pow;
 }
 
-//-----------------------------------------------------------------------------
 // Blit in bits
-//-----------------------------------------------------------------------------
+
 // NOTE: IF YOU CHANGE THIS, CHANGE THE VERSION IN PLAYBACK.CPP!!!!
 // OPTIMIZE??: could lock the texture directly instead of the surface in dx9.
 static void BlitSurfaceBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
                             int srcStride) {
-  // Get the level of the texture we want to write into
-  IDirect3DSurface *pTextureLevel;
-  HRESULT hr = GetSurfaceFromTexture(info.m_pTexture, info.m_nLevel,
-                                     info.m_CubeFaceID, &pTextureLevel);
-  if (FAILED(hr)) return;
-
-  RECT srcRect;
   D3DLOCKED_RECT lockedRect;
 
-  srcRect.left = xOffset;
-  srcRect.right = xOffset + info.m_nWidth;
-  srcRect.top = yOffset;
-  srcRect.bottom = yOffset + info.m_nHeight;
+  // Get the level of the texture we want to write into
+  source::windows::com_ptr<IDirect3DSurface> surface;
+  HRESULT hr = GetSurfaceFromTexture(info.m_pTexture, info.m_nLevel,
+                                     info.m_CubeFaceID, &surface);
+
+  if (SUCCEEDED(hr)) {
+    RECT srcRect{xOffset, yOffset, xOffset + info.m_nWidth,
+                 yOffset + info.m_nHeight};
 
 #ifndef RECORD_TEXTURES
-  RECORD_COMMAND(DX8_LOCK_TEXTURE, 6);
-  RECORD_INT(info.m_TextureHandle);
-  RECORD_INT(info.m_nCopy);
-  RECORD_INT(info.m_nLevel);
-  RECORD_INT(info.m_CubeFaceID);
-  RECORD_STRUCT(&srcRect, sizeof(srcRect));
-  RECORD_INT(D3DLOCK_NOSYSLOCK);
+    RECORD_COMMAND(DX8_LOCK_TEXTURE, 6);
+    RECORD_INT(info.m_TextureHandle);
+    RECORD_INT(info.m_nCopy);
+    RECORD_INT(info.m_nLevel);
+    RECORD_INT(info.m_CubeFaceID);
+    RECORD_STRUCT(&srcRect, sizeof(srcRect));
+    RECORD_INT(D3DLOCK_NOSYSLOCK);
 #endif
 
-  // lock the region (could be the full surface or less)
-  if (FAILED(
-          pTextureLevel->LockRect(&lockedRect, &srcRect, D3DLOCK_NOSYSLOCK))) {
+    // lock the region (could be the full surface or less)
+    hr = surface->LockRect(&lockedRect, &srcRect, D3DLOCK_NOSYSLOCK);
+  }
+
+  if (SUCCEEDED(hr)) {
+    // garymcthack : need to make a recording command for this.
+    ImageFormat dstFormat = GetImageFormat(info.m_pTexture);
+    u8 *pImage = (u8 *)lockedRect.pBits;
+
+    ShaderUtil()->ConvertImageFormat(info.m_pSrcData, info.m_SrcFormat, pImage,
+                                     dstFormat, info.m_nWidth, info.m_nHeight,
+                                     srcStride, lockedRect.Pitch);
+
+#ifndef RECORD_TEXTURES
+    RECORD_COMMAND(DX8_UNLOCK_TEXTURE, 4);
+    RECORD_INT(info.m_TextureHandle);
+    RECORD_INT(info.m_nCopy);
+    RECORD_INT(info.m_nLevel);
+    RECORD_INT(info.m_CubeFaceID);
+#endif
+
+    hr = surface->UnlockRect();
+  } else {
     Warning("CShaderAPIDX8::BlitTextureBits: couldn't lock texture rect\n");
-    pTextureLevel->Release();
     return;
   }
 
-  // garymcthack : need to make a recording command for this.
-  ImageFormat dstFormat = GetImageFormat(info.m_pTexture);
-  unsigned char *pImage = (unsigned char *)lockedRect.pBits;
-  ShaderUtil()->ConvertImageFormat(info.m_pSrcData, info.m_SrcFormat, pImage,
-                                   dstFormat, info.m_nWidth, info.m_nHeight,
-                                   srcStride, lockedRect.Pitch);
-
-#ifndef RECORD_TEXTURES
-  RECORD_COMMAND(DX8_UNLOCK_TEXTURE, 4);
-  RECORD_INT(info.m_TextureHandle);
-  RECORD_INT(info.m_nCopy);
-  RECORD_INT(info.m_nLevel);
-  RECORD_INT(info.m_CubeFaceID);
-#endif
-
-  if (FAILED(pTextureLevel->UnlockRect())) {
+  if (SUCCEEDED(hr)) {
+    ;
+  } else {
     Warning("CShaderAPIDX8::BlitTextureBits: couldn't unlock texture rect\n");
-    pTextureLevel->Release();
-    return;
   }
-
-  pTextureLevel->Release();
 }
 
-//-----------------------------------------------------------------------------
 // Blit in bits
-//-----------------------------------------------------------------------------
 static void BlitVolumeBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
                            int srcStride) {
-  D3DBOX srcBox;
-  D3DLOCKED_BOX lockedBox;
-  srcBox.Left = xOffset;
-  srcBox.Right = xOffset + info.m_nWidth;
-  srcBox.Top = yOffset;
-  srcBox.Bottom = yOffset + info.m_nHeight;
-  srcBox.Front = info.m_nZOffset;
-  srcBox.Back = info.m_nZOffset + 1;
-
 #ifndef RECORD_TEXTURES
   RECORD_COMMAND(DX8_LOCK_TEXTURE, 6);
   RECORD_INT(info.m_TextureHandle);
@@ -494,44 +457,58 @@ static void BlitVolumeBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
   RECORD_INT(D3DLOCK_NOSYSLOCK);
 #endif
 
-  IDirect3DVolumeTexture *pVolumeTexture =
-      static_cast<IDirect3DVolumeTexture *>(info.m_pTexture);
-  if (FAILED(pVolumeTexture->LockBox(info.m_nLevel, &lockedBox, &srcBox,
-                                     D3DLOCK_NOSYSLOCK))) {
-    Warning("BlitVolumeBits: couldn't lock volume texture rect\n");
+  D3DBOX srcBox{xOffset,
+                yOffset,
+                xOffset + info.m_nWidth,
+                yOffset + info.m_nHeight,
+                info.m_nZOffset,
+                info.m_nZOffset + 1};
+  D3DLOCKED_BOX lockedBox;
+
+  auto *volume_texture = static_cast<IDirect3DVolumeTexture *>(info.m_pTexture);
+  HRESULT hr = volume_texture->LockBox(info.m_nLevel, &lockedBox, &srcBox,
+                                       D3DLOCK_NOSYSLOCK);
+
+  if (SUCCEEDED(hr)) {
+    // garymcthack : need to make a recording command for this.
+    ImageFormat dstFormat = GetImageFormat(info.m_pTexture);
+    u8 *pImage = (u8 *)lockedBox.pBits;
+    ShaderUtil()->ConvertImageFormat(info.m_pSrcData, info.m_SrcFormat, pImage,
+                                     dstFormat, info.m_nWidth, info.m_nHeight,
+                                     srcStride, lockedBox.RowPitch);
+
+#ifndef RECORD_TEXTURES
+    RECORD_COMMAND(DX8_UNLOCK_TEXTURE, 4);
+    RECORD_INT(info.m_TextureHandle);
+    RECORD_INT(info.m_nCopy);
+    RECORD_INT(info.m_nLevel);
+    RECORD_INT(info.m_CubeFaceID);
+
+    hr = volume_texture->UnlockBox(info.m_nLevel);
+#endif
+  } else {
+    Warning("BlitVolumeBits: couldn't lock volume texture rect (0x%8.8x)\n",
+            hr);
     return;
   }
 
-  // garymcthack : need to make a recording command for this.
-  ImageFormat dstFormat = GetImageFormat(info.m_pTexture);
-  unsigned char *pImage = (unsigned char *)lockedBox.pBits;
-  ShaderUtil()->ConvertImageFormat(info.m_pSrcData, info.m_SrcFormat, pImage,
-                                   dstFormat, info.m_nWidth, info.m_nHeight,
-                                   srcStride, lockedBox.RowPitch);
-
-#ifndef RECORD_TEXTURES
-  RECORD_COMMAND(DX8_UNLOCK_TEXTURE, 4);
-  RECORD_INT(info.m_TextureHandle);
-  RECORD_INT(info.m_nCopy);
-  RECORD_INT(info.m_nLevel);
-  RECORD_INT(info.m_CubeFaceID);
-#endif
-
-  if (FAILED(pVolumeTexture->UnlockBox(info.m_nLevel))) {
-    Warning("BlitVolumeBits: couldn't unlock volume texture rect\n");
-    return;
+  if (SUCCEEDED(hr)) {
+    ;
+  } else {
+    Warning("BlitVolumeBits: couldn't unlock volume texture rect (0x%8.8x)\n",
+            hr);
   }
 }
 
-// TODO(d.rattman): How do I blit from D3DPOOL_SYSTEMMEM to D3DPOOL_MANAGED?  I
-// used to use CopyRects for this.  UpdateSurface doesn't work because it can't
-// blit to anything besides D3DPOOL_DEFAULT. We use this only in the case where
-// we need to create a < 4x4 miplevel for a compressed texture.  We end up
-// creating a 4x4 system memory texture, and blitting it into the proper
-// miplevel. 6) LockRects should be used for copying between SYSTEMMEM and
-// MANAGED.  For such a small copy, you'd avoid a significant amount of overhead
-// from the old CopyRects code.  Ideally, you should just lock the bottom of
-// MANAGED and generate your sub-4x4 data there.
+// TODO(d.rattman): How do I blit from D3DPOOL_SYSTEMMEM to D3DPOOL_MANAGED? I
+// used to use CopyRects for this.  UpdateSurface doesn't work because it
+// can't blit to anything besides D3DPOOL_DEFAULT.  We use this only in the
+// case where we need to create a < 4x4 miplevel for a compressed texture.  We
+// end up creating a 4x4 system memory texture, and blitting it into the
+// proper miplevel. 6) LockRects should be used for copying between SYSTEMMEM
+// and MANAGED.  For such a small copy, you'd avoid a significant amount of
+// overhead from the old CopyRects code.  Ideally, you should just lock the
+// bottom of MANAGED and generate your sub-4x4 data there.
 
 // NOTE: IF YOU CHANGE THIS, CHANGE THE VERSION IN PLAYBACK.CPP!!!!
 static void BlitTextureBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
@@ -570,16 +547,14 @@ static void BlitTextureBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Texture image upload
-//-----------------------------------------------------------------------------
 void LoadTexture(TextureLoadInfo_t &info) {
   MEM_ALLOC_D3D_CREDIT();
 
   Assert(info.m_pSrcData);
   Assert(info.m_pTexture);
 
-#ifdef _DEBUG
+#ifndef NDEBUG
   ImageFormat format = GetImageFormat(info.m_pTexture);
   Assert((format != -1) &&
          (format == FindNearestSupportedFormat(format, false, false, false)));
@@ -589,15 +564,13 @@ void LoadTexture(TextureLoadInfo_t &info) {
   BlitTextureBits(info, 0, 0, 0);
 }
 
-//-----------------------------------------------------------------------------
 // Upload to a sub-piece of a texture
-//-----------------------------------------------------------------------------
 void LoadSubTexture(TextureLoadInfo_t &info, int xOffset, int yOffset,
                     int srcStride) {
   Assert(info.m_pSrcData);
   Assert(info.m_pTexture);
 
-#ifdef _DEBUG
+#ifndef NDEBUG
   ImageFormat format = GetImageFormat(info.m_pTexture);
   Assert((format == FindNearestSupportedFormat(format, false, false, false)) &&
          (format != -1));
@@ -605,77 +578,4 @@ void LoadSubTexture(TextureLoadInfo_t &info, int xOffset, int yOffset,
 
   // Copy in the bits...
   BlitTextureBits(info, xOffset, yOffset, srcStride);
-}
-
-//-----------------------------------------------------------------------------
-// Returns the size of texture memory, in MB
-//-----------------------------------------------------------------------------
-// Helps with startup time.. we don't use the texture memory size for anything
-// anyways
-#define DONT_CHECK_MEM
-
-int ComputeTextureMemorySize(const GUID &nDeviceGUID, D3DDEVTYPE deviceType) {
-  FileHandle_t file =
-      g_pFullFileSystem->Open("vidcfg.bin", "rb", "EXECUTABLE_PATH");
-  if (file) {
-    GUID deviceId;
-    int texSize;
-    g_pFullFileSystem->Read(&deviceId, sizeof(deviceId), file);
-    g_pFullFileSystem->Read(&texSize, sizeof(texSize), file);
-    g_pFullFileSystem->Close(file);
-    if (nDeviceGUID == deviceId) {
-      return texSize;
-    }
-  }
-  // How much texture memory?
-  if (deviceType == D3DDEVTYPE_REF) return 64 * 1024 * 1024;
-
-  // Sadly, the only way to compute texture memory size
-  // is to allocate a crapload of textures until we can't any more
-  ImageFormat fmt =
-      FindNearestSupportedFormat(IMAGE_FORMAT_BGR565, false, false, false);
-#ifndef DONT_CHECK_MEM
-  int textureSize =
-#endif
-      ShaderUtil()->GetMemRequired(256, 256, 1, fmt, false);
-
-  int totalSize = 0;
-  CUtlVector<IDirect3DBaseTexture *> textures;
-
-#ifndef DONT_CHECK_MEM
-  while (true) {
-    RECORD_COMMAND(DX8_CREATE_TEXTURE, 7);
-    RECORD_INT(textures.Count());
-    RECORD_INT(256);
-    RECORD_INT(256);
-    RECORD_INT(ImageLoader::ImageFormatToD3DFormat(fmt));
-    RECORD_INT(1);
-    RECORD_INT(false);
-    RECORD_INT(1);
-
-    IDirect3DBaseTexture *pTex = CreateD3DTexture(256, 256, 1, fmt, 1, 0);
-    if (!pTex) break;
-    totalSize += textureSize;
-
-    textures.AddToTail(pTex);
-  }
-
-  // Free all the temp textures
-  for (int i = textures.Size(); --i >= 0;) {
-    RECORD_COMMAND(DX8_DESTROY_TEXTURE, 1);
-    RECORD_INT(i);
-
-    DestroyD3DTexture(textures[i]);
-  }
-#else
-  totalSize = 102236160;
-#endif
-  file = g_pFullFileSystem->Open("vidcfg.bin", "wb", "EXECUTABLE_PATH");
-  if (file) {
-    g_pFullFileSystem->Write(&nDeviceGUID, sizeof(GUID), file);
-    g_pFullFileSystem->Write(&totalSize, sizeof(totalSize), file);
-    g_pFullFileSystem->Close(file);
-  }
-
-  return totalSize;
 }
