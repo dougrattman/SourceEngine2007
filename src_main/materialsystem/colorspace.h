@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef COLORSPACE_H
-#define COLORSPACE_H
+#ifndef SOURCE_MATERIALSYSTEM_COLORSPACE_H_
+#define SOURCE_MATERIALSYSTEM_COLORSPACE_H_
 
 #include "mathlib/bumpvects.h"
 #include "mathlib/mathlib.h"
@@ -39,7 +39,7 @@ void LinearToBumpedLightmap(const float *linearColor,
 int LinearToScreenGamma(float f);
 
 SOURCE_FORCEINLINE void LinearToLightmap(unsigned char *pDstRGB,
-                                  const float *pSrcRGB) {
+                                         const float *pSrcRGB) {
   Vector tmpVect;
 #if 1
   int i, j;
@@ -68,7 +68,7 @@ SOURCE_FORCEINLINE void LinearToLightmap(unsigned char *pDstRGB,
 // Clamp the three values for bumped lighting such that we trade off
 // directionality for brightness.
 SOURCE_FORCEINLINE void ColorClampBumped(Vector &color1, Vector &color2,
-                                  Vector &color3) {
+                                         Vector &color3) {
   Vector maxs;
   Vector *colors[3] = {&color1, &color2, &color3};
   maxs[0] = VectorMaximum(color1);
@@ -190,15 +190,13 @@ SOURCE_FORCEINLINE void LinearToBumpedLightmap(
 
 uint16_t LinearFloatToCorrectedShort(float in);
 
-inline unsigned short LinearToUnsignedShort(float in, int nFractionalBits) {
-  unsigned short out;
+inline u16 LinearToUnsignedShort(float in, int nFractionalBits) {
   in = in * (1 << nFractionalBits);
   in = std::min(in, 65535.f);
-  out = std::max(in, 0.0f);
-  return out;
+  return std::max(in, 0.0f);
 }
 
-inline void ClampToHDR(const Vector &in, unsigned short out[3]) {
+inline void ClampToHDR(const Vector &in, u16 out[3]) {
   Vector tmp = in;
 
   out[0] = LinearFloatToCorrectedShort(in.x);
@@ -206,12 +204,10 @@ inline void ClampToHDR(const Vector &in, unsigned short out[3]) {
   out[2] = LinearFloatToCorrectedShort(in.z);
 }
 
-SOURCE_FORCEINLINE void LinearToBumpedLightmap(const float *linearColor,
-                                        const float *linearBumpColor1,
-                                        const float *linearBumpColor2,
-                                        const float *linearBumpColor3,
-                                        float *ret, float *retBump1,
-                                        float *retBump2, float *retBump3) {
+SOURCE_FORCEINLINE void LinearToBumpedLightmap(
+    const float *linearColor, const float *linearBumpColor1,
+    const float *linearBumpColor2, const float *linearBumpColor3, float *ret,
+    float *retBump1, float *retBump2, float *retBump3) {
   const Vector &linearUnbumped = *((const Vector *)linearColor);
   Vector linearBump1 = *((const Vector *)linearBumpColor1);
   Vector linearBump2 = *((const Vector *)linearBumpColor2);
@@ -299,11 +295,12 @@ SOURCE_FORCEINLINE void LinearToBumpedLightmap(
 
 // input: floats [0 .. 16.0f]
 // output: shorts [0 .. 65535]
-SOURCE_FORCEINLINE void LinearToBumpedLightmap(
-    const float *linearColor, const float *linearBumpColor1,
-    const float *linearBumpColor2, const float *linearBumpColor3,
-    unsigned short *ret, unsigned short *retBump1, unsigned short *retBump2,
-    unsigned short *retBump3) {
+SOURCE_FORCEINLINE void LinearToBumpedLightmap(const float *linearColor,
+                                               const float *linearBumpColor1,
+                                               const float *linearBumpColor2,
+                                               const float *linearBumpColor3,
+                                               u16 *ret, u16 *retBump1,
+                                               u16 *retBump2, u16 *retBump3) {
   Vector linearUnbumped, linearBump1, linearBump2, linearBump3;
   LinearToBumpedLightmap(linearColor, linearBumpColor1, linearBumpColor2,
                          linearBumpColor3, &linearUnbumped.x, &linearBump1.x,
@@ -316,4 +313,4 @@ SOURCE_FORCEINLINE void LinearToBumpedLightmap(
 }
 };  // namespace ColorSpace
 
-#endif  // COLORSPACE_H
+#endif  // SOURCE_MATERIALSYSTEM_COLORSPACE_H_

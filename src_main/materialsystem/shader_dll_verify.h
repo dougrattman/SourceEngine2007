@@ -3,11 +3,9 @@
 // Purpose: This is temporary obfuscation code to verify that a base shader
 // DLL comes from us (because it includes some interfaces that we don't
 // give out with the SDK).
-//
-//=============================================================================
 
-#ifndef SHADER_DLL_VERIFY_H
-#define SHADER_DLL_VERIFY_H
+#ifndef SOURCE_MATERIALSYSTEM_SHADER_DLL_VERIFY_H_
+#define SOURCE_MATERIALSYSTEM_SHADER_DLL_VERIFY_H_
 
 #include "tier0/include/platform.h"
 #include "tier1/checksum_crc.h"
@@ -17,7 +15,7 @@
 #define SHADER_DLL_VERIFY_DATA_PTR_OFFSET 43
 
 #define SHADER_DLL_FNNAME_1 "_ftol3"
-typedef void (*ShaderDLLVerifyFn)(char *pData);
+using ShaderDLLVerifyFn = void (*)(char *pData);
 
 the_interface IShaderDLLVerification {
  public:
@@ -28,4 +26,4 @@ the_interface IShaderDLLVerification {
   virtual CRC32_t Function5() = 0;
 };
 
-#endif  // SHADER_DLL_VERIFY_H
+#endif  // SOURCE_MATERIALSYSTEM_SHADER_DLL_VERIFY_H_

@@ -204,7 +204,7 @@ class CMaterial : public IMaterialInternal {
 
   virtual uint32_t GetChangeID() const { return m_ChangeID; }
 
-  virtual bool IsRealTimeVersion(void) const { return true; }
+  virtual bool IsRealTimeVersion() const { return true; }
   virtual IMaterialInternal *GetRealTimeVersion() { return this; }
   virtual IMaterialInternal *GetQueueFriendlyVersion() {
     return &m_QueueFriendlyVersion;
@@ -304,8 +304,8 @@ class CMaterial : public IMaterialInternal {
   int m_minLightmapPageID;
   int m_maxLightmapPageID;
 
-  unsigned short m_MappingWidth;
-  unsigned short m_MappingHeight;
+  u16 m_MappingWidth;
+  u16 m_MappingHeight;
 
   IShader *m_pShader;
 
@@ -314,7 +314,7 @@ class CMaterial : public IMaterialInternal {
   CUtlSymbol m_TextureGroupName;
 
   CInterlockedInt m_RefCount;
-  unsigned short m_Flags;
+  u16 m_Flags;
 
   unsigned char m_VarCount;
   unsigned char m_ProxyCount;
@@ -582,8 +582,7 @@ void CMaterial::CleanUpShaderParams() {
       IMaterialVar::Destroy(m_pShaderParams[i]);
     }
 
-    free(m_pShaderParams);
-    m_pShaderParams = 0;
+    heap_free(m_pShaderParams);
   }
   m_VarCount = 0;
 }
@@ -651,9 +650,8 @@ void CMaterial::CleanUpMaterialProxy() {
   for (int i = m_ProxyCount; --i >= 0;) {
     proxy_factory->DeleteProxy(m_ppProxies[i]);
   }
-  free(m_ppProxies);
+  heap_free(m_ppProxies);
 
-  m_ppProxies = nullptr;
   m_ProxyCount = 0;
 }
 
@@ -2056,7 +2054,7 @@ PreviewImageRetVal_t CMaterial::GetPreviewImageProperties(
   }
 
   int nHeaderSize = VTFFileHeaderSize(VTF_MAJOR_VERSION);
-  unsigned char *pMem = (unsigned char *)stackalloc(nHeaderSize);
+  u8 *pMem = stack_alloc<u8>(nHeaderSize);
   CUtlBuffer buf(pMem, nHeaderSize);
 
   if (!g_pFullFileSystem->ReadFile(pFileName, nullptr, buf, nHeaderSize)) {
@@ -2187,7 +2185,7 @@ IMaterialVar *CMaterial::FindVar(char const *pVarName, bool *pFound,
 }
 
 struct tokencache_t {
-  unsigned short symbol;
+  u16 symbol;
   unsigned char varIndex;
   unsigned char cached;
 };

@@ -1,11 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
-#ifndef CMATERIALSYSTEM_H
-#define CMATERIALSYSTEM_H
+#ifndef SOURCE_MATERIALSYSTEM_CMATERIALSYSTEM_H_
+#define SOURCE_MATERIALSYSTEM_CMATERIALSYSTEM_H_
 
 #include "tier1/delegates.h"
 
@@ -32,22 +28,15 @@
 #pragma once
 #endif
 
-//-----------------------------------------------------------------------------
-
 class CJob;
 struct DeferredUpdateLightmapInfo_t;
 
 // typedefs to allow use of delegation macros
 typedef int LightmapOffset_t[2];
 
-//-----------------------------------------------------------------------------
-
 extern CThreadFastMutex g_MatSysMutex;
 
-//-----------------------------------------------------------------------------
 // The material system implementation
-//-----------------------------------------------------------------------------
-
 class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
                         public IShaderUtil {
   typedef CTier2AppSystem<IMaterialSystemInternal> BaseClass;
@@ -56,13 +45,9 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   CMaterialSystem();
   ~CMaterialSystem();
 
-  //---------------------------------------------------------
   // Initialization and shutdown
-  //---------------------------------------------------------
 
-  //
   // IAppSystem
-  //
   virtual bool Connect(CreateInterfaceFn factory);
   virtual void Disconnect();
   virtual void *QueryInterface(const char *pInterfaceName);
@@ -101,9 +86,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   virtual MaterialThreadMode_t GetThreadMode();
   virtual void ExecuteQueued();
 
-  //---------------------------------------------------------
   // Component accessors
-  //---------------------------------------------------------
   const CMatLightmaps *GetLightmaps() const { return &m_Lightmaps; }
   CMatLightmaps *GetLightmaps() { return &m_Lightmaps; }
 
@@ -126,9 +109,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   virtual void ReloadFilesInList(IFileList *pFilesToReload);
 
  public:
-  //---------------------------------------------------------
   // Config management
-  //---------------------------------------------------------
 
   // IMaterialSystem
   virtual IMaterialSystemHardwareConfig *GetHardwareConfig(const char *pVersion,
@@ -150,8 +131,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   MaterialSystem_Config_t &GetConfig();
 
  private:
-  //---------------------------------
-
   // This is called when the config changes
   void GenerateConfigFromConfigKeyValues(MaterialSystem_Config_t *pConfig,
                                          bool bOverwriteCommandLineValues);
@@ -164,9 +143,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   void WriteConfigurationInfoToConVars(bool bOverwriteCommandLineValues = true);
 
  public:
-  // -----------------------------------------------------------
   // Device methods
-  // -----------------------------------------------------------
   int GetDisplayAdapterCount() const;
   int GetCurrentAdapter() const;
   void GetDisplayAdapterInfo(int adapter, MaterialAdapterInfo_t &info) const;
@@ -225,9 +202,8 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
 
   DELEGATE_TO_OBJECT_0C(int, GetNumActiveDeformations, g_pShaderAPI);
 
-  // -----------------------------------------------------------
   // Window methods
-  // -----------------------------------------------------------
+
   // Creates/ destroys a child window
   bool AddView(void *hwnd);
   void RemoveView(void *hwnd);
@@ -235,9 +211,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   // Sets the view
   void SetView(void *hwnd);
 
-  // -----------------------------------------------------------
   // Control flow
-  // -----------------------------------------------------------
   void BeginFrame(float frameTime);
   void EndFrame();
   virtual bool IsInFrame() const;
@@ -255,9 +229,8 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
 
   void NoteAnisotropicLevel(int currentLevel);
 
-  // -----------------------------------------------------------
   // Device loss/restore
-  // -----------------------------------------------------------
+
   // Installs a function to be called when we need to release vertex buffers
   void AddReleaseFunc(MaterialBufferReleaseFunc_t func);
   void RemoveReleaseFunc(MaterialBufferReleaseFunc_t func);
@@ -278,9 +251,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   // the time (Hammer)
   void HandleDeviceLost();
 
-  // -----------------------------------------------------------
   // Shaders
-  // -----------------------------------------------------------
   int ShaderCount() const;
   int GetShaders(int nFirstShader, int nCount, IShader **ppShaderList) const;
   int ShaderFlagCount() const;
@@ -288,15 +259,11 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   void GetShaderFallback(const char *pShaderName, char *pFallbackShader,
                          int nFallbackLength);
 
-  // -----------------------------------------------------------
   // Material proxies
-  // -----------------------------------------------------------
   IMaterialProxyFactory *GetMaterialProxyFactory();
   void SetMaterialProxyFactory(IMaterialProxyFactory *pFactory);
 
-  // -----------------------------------------------------------
   // Editor mode
-  // -----------------------------------------------------------
   bool InEditorMode() const;
 
   // Used to enable editor materials. Must be called before Init.
@@ -305,15 +272,11 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   // Can we use editor materials?
   bool CanUseEditorMaterials() const;
 
-  // -----------------------------------------------------------
   // Stub mode mode
-  // -----------------------------------------------------------
   void SetInStubMode(bool bInStubMode);
   bool IsInStubMode();
 
-  //---------------------------------------------------------
   // Image formats
-  //---------------------------------------------------------
   ImageFormatInfo_t const &ImageFormatInfo(ImageFormat fmt) const;
 
   int GetMemRequired(int width, int height, int depth, ImageFormat format,
@@ -324,9 +287,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
                           int width, int height, int srcStride = 0,
                           int dstStride = 0);
 
-  //---------------------------------------------------------
   // Debug support
-  //---------------------------------------------------------
   void CreateDebugMaterials();
   void CleanUpDebugMaterials();
 
@@ -336,9 +297,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   void ToggleSuppressMaterial(const char *pMaterialName);
   void ToggleDebugMaterial(const char *pMaterialName);
 
-  //---------------------------------------------------------
   // Misc features
-  //---------------------------------------------------------
 
   // returns whether fast clipping is being used or not - needed to be exposed
   // for better per-object clip behavior
@@ -346,9 +305,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
 
   int StencilBufferBits();
 
-  //---------------------------------------------------------
   // Standard material and textures
-  //---------------------------------------------------------
   void AllocateStandardTextures();
   void ReleaseStandardTextures();
 
@@ -391,9 +348,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
     return m_MaxDepthTextureHandle;
   }
 
-  //---------------------------------------------------------
   // Material and texture management
-  //---------------------------------------------------------
   void UncacheAllMaterials();
   void UncacheUnusedMaterials(bool bRecomputeStateSnapshots);
   void CacheUsedMaterials();
@@ -413,8 +368,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
     return m_pForcedTextureLoadPathID;
   }
 
-  //---------------------------------
-
   DELEGATE_TO_OBJECT_0C(MaterialHandle_t, FirstMaterial, &m_MaterialDict);
   DELEGATE_TO_OBJECT_1C(MaterialHandle_t, NextMaterial, MaterialHandle_t,
                         &m_MaterialDict);
@@ -429,8 +382,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   DELEGATE_TO_OBJECT_1V(RemoveMaterial, IMaterialInternal *, &m_MaterialDict);
   DELEGATE_TO_OBJECT_1V(RemoveMaterialSubRect, IMaterialInternal *,
                         &m_MaterialDict);
-
-  //---------------------------------
 
   ITexture *FindTexture(const char *pTextureName, const char *pTextureGroupName,
                         bool complain = true);
@@ -447,9 +398,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
                                     const char *pTextureGroupName, int w, int h,
                                     ImageFormat fmt, int nFlags);
 
-  //
   // Render targets
-  //
   void BeginRenderTargetAllocation();
   void EndRenderTargetAllocation();  // Simulate an Alt-Tab in here, which
                                      // causes a release/restore of all
@@ -491,8 +440,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
       unsigned int textureFlags = TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT,
       unsigned int renderTargetFlags = 0);
 
-  // -----------------------------------------------------------
-
   bool OnDrawMesh(IMesh *pMesh, int firstIndex, int numIndices);
   bool OnDrawMesh(IMesh *pMesh, CPrimList *pLists, int nLists);
   DELEGATE_TO_OBJECT_3(bool, OnSetFlexMesh, IMesh *, IMesh *, int,
@@ -507,9 +454,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   DELEGATE_TO_OBJECT_0(bool, OnFlushBufferedPrimitives,
                        GetRenderContextInternal());
 
-  // -----------------------------------------------------------
   // Lightmaps delegates
-  // -----------------------------------------------------------
   DELEGATE_TO_OBJECT_0V(BeginLightmapAllocation, &m_Lightmaps);
 
   void EndLightmapAllocation() {
@@ -533,9 +478,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   DELEGATE_TO_OBJECT_0V(BeginUpdateLightmaps, &m_Lightmaps);
   DELEGATE_TO_OBJECT_0V(EndUpdateLightmaps, &m_Lightmaps);
 
-  // -----------------------------------------------------------
   // Render context delegates
-  // -----------------------------------------------------------
 
   // IMaterialSystem
   DELEGATE_TO_OBJECT_3V(ClearBuffers, bool, bool, bool,
@@ -572,26 +515,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
                         ShaderColorCorrectionInfo_t *,
                         g_pColorCorrectionSystem);
 
-#if defined(_X360)
-  void ListUsedMaterials();
-  HXUIFONT OpenTrueTypeFont(const char *pFontname, int tall, int style);
-  void CloseTrueTypeFont(HXUIFONT hFont);
-  bool GetTrueTypeFontMetrics(HXUIFONT hFont, XUIFontMetrics *pFontMetrics,
-                              XUICharMetrics charMetrics[256]);
-  // Render a sequence of characters and extract the data into a buffer
-  // For each character, provide the width+height of the font texture subrect,
-  // an offset to apply when rendering the glyph, and an offset into a buffer to
-  // receive the RGBA data
-  bool GetTrueTypeGlyphs(HXUIFONT hFont, int numChars, wchar_t *pWch,
-                         int *pOffsetX, int *pOffsetY, int *pWidth,
-                         int *pHeight, unsigned char *pRGBA, int *pOffset);
-  void ReadBackBuffer(Rect_t *pSrcRect, Rect_t *pDstRect, unsigned char *pData,
-                      ImageFormat dstFormat, int nDstStride);
-  void PersistDisplay();
-  void *GetD3DDevice();
-  bool OwnGPUResources(bool bEnable);
-#endif
-
   MaterialLock_t Lock();
   void Unlock(MaterialLock_t);
   CMatCallQueue *GetRenderCallQueue();
@@ -600,7 +523,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
 
   virtual void CompactMemory();
 
-  // -----------------------------------------------------------
  private:
   CON_COMMAND_MEMBER_F(CMaterialSystem, "mat_showmaterials",
                        DebugPrintUsedMaterials, "Show materials.", 0);
@@ -616,11 +538,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
                        "Reloads a single material", FCVAR_CHEAT);
   CON_COMMAND_MEMBER_F(CMaterialSystem, "mat_reloadtextures", ReloadTextures,
                        "Reloads all textures", FCVAR_CHEAT);
-
-#if defined(_X360)
-  CON_COMMAND_MEMBER_F(CMaterialSystem, "mat_material_list", ListUsedMaterials,
-                       "Show used textures.", 0);
-#endif
 
   friend void *InstantiateMaterialSystemV76Interface();
   friend CMaterialSystem *CMatLightmaps::GetMaterialSystem() const;
@@ -672,12 +589,9 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   ShaderAPITextureHandle_t m_GreyTextureHandle;
   ShaderAPITextureHandle_t m_GreyAlphaZeroTextureHandle;
   ShaderAPITextureHandle_t m_WhiteTextureHandle;
-  ShaderAPITextureHandle_t m_LinearToGammaTableTextureHandle;  // linear to
-                                                               // gamma srgb
-                                                               // conversion
-                                                               // lookup for the
-                                                               // current
-                                                               // hardware
+  // linear to gamma srgb conversion lookup for the
+  // current hardware
+  ShaderAPITextureHandle_t m_LinearToGammaTableTextureHandle;
   ShaderAPITextureHandle_t
       m_LinearToGammaIdentityTableTextureHandle;  // An identity lookup for when
                                                   // srgb writes are off
@@ -687,9 +601,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   // Have we allocated the standard lightmaps?
   bool m_StandardTexturesAllocated;
 
-  //---------------------------------
   // Shared materials used for debugging....
-  //---------------------------------
 
   enum BufferClearType_t {
     BUFFER_CLEAR_NONE,
@@ -704,8 +616,6 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   IMaterialInternal *m_pDrawFlatMaterial;
   IMaterialInternal *m_pRenderTargetBlitMaterial;
 
-  //---------------------------------
-
   const char *m_pForcedTextureLoadPathID;
   uint32_t m_nRenderThreadID;
   bool m_bAllocatingRenderTargets;
@@ -713,17 +623,11 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   bool m_bGeneratedConfig;
   bool m_bInFrame;
 
-  //---------------------------------
-
   CJob *m_pActiveAsyncJob;
 };
-
-//-----------------------------------------------------------------------------
 
 inline CMaterialSystem *CMatLightmaps::GetMaterialSystem() const {
   return GET_OUTER(CMaterialSystem, m_Lightmaps);
 }
 
-//-----------------------------------------------------------------------------
-
-#endif  // CMATERIALSYSTEM_H
+#endif  // SOURCE_MATERIALSYSTEM_CMATERIALSYSTEM_H_

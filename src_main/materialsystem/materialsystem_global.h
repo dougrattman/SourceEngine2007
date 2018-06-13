@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef MATERIALSYSTEM_GLOBAL_H
-#define MATERIALSYSTEM_GLOBAL_H
+#ifndef SOURCE_MATERIALSYSTEM_MATERIALSYSTEM_GLOBAL_H_
+#define SOURCE_MATERIALSYSTEM_MATERIALSYSTEM_GLOBAL_H_
 
 #include "imaterialsysteminternal.h"
 #include "tier0/include/dbg.h"
@@ -46,8 +46,6 @@ extern uint32_t g_nDebugVarsSignature;
 // extern MaterialSystem_ErrorFunc_t	Error;
 // extern MaterialSystem_WarningFunc_t Warning;
 
-extern int g_FrameNum;
-
 extern IShaderAPI* g_pShaderAPI;
 extern IShaderDeviceMgr* g_pShaderDeviceMgr;
 extern IShaderDevice* g_pShaderDevice;
@@ -90,4 +88,4 @@ inline IColorCorrectionSystem* ColorCorrectionSystem() {
 void EnableThreadedMaterialVarAccess(bool bEnable, IMaterialVar** ppParams,
                                      int nVarCount);
 
-#endif  // MATERIALSYSTEM_GLOBAL_H
+#endif  // SOURCE_MATERIALSYSTEM_MATERIALSYSTEM_GLOBAL_H_

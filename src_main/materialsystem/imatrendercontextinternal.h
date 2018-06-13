@@ -1,11 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
-#ifndef IMATRENDERCONTEXTINTERNAL_H
-#define IMATRENDERCONTEXTINTERNAL_H
+#ifndef SOURCE_MATERIALSYSTEM_IMATRENDERCONTEXTINTERNAL_H_
+#define SOURCE_MATERIALSYSTEM_IMATRENDERCONTEXTINTERNAL_H_
 
 #include "materialsystem/imesh.h"
 
@@ -16,7 +12,7 @@ the_interface IMatRenderContextInternal : public IMatRenderContext {
   // For now, stuck implementing these until IMaterialSystem is reworked
   bool Connect(CreateInterfaceFn) { return true; }
   void Disconnect() {}
-  void *QueryInterface(const char *pszInterface) { return NULL; }
+  void *QueryInterface(const char *pszInterface) { return nullptr; }
   InitReturnVal_t Init() { return INIT_OK; }
   void Shutdown() {}
 
@@ -64,4 +60,4 @@ the_interface IMatRenderContextInternal : public IMatRenderContext {
   virtual CMatCallQueue *GetCallQueueInternal() = 0;
 };
 
-#endif  // IMATRENDERCONTEXTINTERNAL_H
+#endif  // SOURCE_MATERIALSYSTEM_IMATRENDERCONTEXTINTERNAL_H_

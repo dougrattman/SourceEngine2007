@@ -1,7 +1,7 @@
 // Copyright © 2005, Valve Corporation, All rights reserved.
 
-#ifndef PCH_MATERIALSYSTEM_H
-#define PCH_MATERIALSYSTEM_H
+#ifndef SOURCE_MATERIALSYSTEM_PCH_MATERIALSYSTEM_H_
+#define SOURCE_MATERIALSYSTEM_PCH_MATERIALSYSTEM_H_
 
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"
@@ -44,4 +44,4 @@
 #include "imaterialinternal.h"
 #include "imaterialsysteminternal.h"
 
-#endif  // PCH_MATERIALSYSTEM_H
+#endif  // SOURCE_MATERIALSYSTEM_PCH_MATERIALSYSTEM_H_

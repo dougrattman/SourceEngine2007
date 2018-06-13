@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef IMATERIALSYSTEMINTERNAL_H
-#define IMATERIALSYSTEMINTERNAL_H
+#ifndef SOURCE_MATERIALSYSTEM_IMATERIALSYSTEMINTERNAL_H_
+#define SOURCE_MATERIALSYSTEM_IMATERIALSYSTEMINTERNAL_H_
 
 #include "materialsystem/imaterialsystem.h"
 #include "tier1/callqueue.h"
@@ -22,9 +22,9 @@ class CMatCallQueue {
     m_nBreakSerialNumber = 0;
   }
 
-  size_t GetMemoryUsed() { return m_Allocator.GetUsed(); }
+  size_t GetMemoryUsed() const { return m_Allocator.GetUsed(); }
 
-  int Count() {
+  int Count() const {
     int i = 0;
     Elem_t *pCurrent = m_pHead;
     while (pCurrent) {
@@ -89,7 +89,7 @@ class CMatCallQueue {
         pfnProxied FUNC_FUNCTOR_CALL_ARGS_##N));                        \
   }
 
-  //-------------------------------------
+    //-------------------------------------
 
 #define DEFINE_MATCALLQUEUE_MEMBER_QUEUE_CALL(N)                    \
   template <typename OBJECT_TYPE_PTR, typename FUNCTION_CLASS,      \
@@ -103,7 +103,7 @@ class CMatCallQueue {
         pObject, pfnProxied FUNC_FUNCTOR_CALL_ARGS_##N));           \
   }
 
-  //-------------------------------------
+    //-------------------------------------
 
 #define DEFINE_MATCALLQUEUE_CONST_MEMBER_QUEUE_CALL(N)              \
   template <typename OBJECT_TYPE_PTR, typename FUNCTION_CLASS,      \
@@ -192,4 +192,4 @@ the_interface IMaterialSystemInternal : public IMaterialSystem {
   virtual uint32_t GetRenderThreadId() const = 0;
 };
 
-#endif  // IMATERIALSYSTEMINTERNAL_H
+#endif  // SOURCE_MATERIALSYSTEM_IMATERIALSYSTEMINTERNAL_H_

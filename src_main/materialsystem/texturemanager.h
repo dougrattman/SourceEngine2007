@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef TEXTUREMANAGER_H
-#define TEXTUREMANAGER_H
+#ifndef SOURCE_MATERIALSYSTEM_TEXTUREMANAGER_H_
+#define SOURCE_MATERIALSYSTEM_TEXTUREMANAGER_H_
 
 #include "itextureinternal.h"
 #include "shaderapi/ishaderdynamic.h"
@@ -113,10 +113,9 @@ the_interface ITextureManager {
 };
 
 // Singleton instance
-
 inline ITextureManager *TextureManager() {
   extern ITextureManager *g_pTextureManager;
   return g_pTextureManager;
 }
 
-#endif  // TEXTUREMANAGER_H
+#endif  // SOURCE_MATERIALSYSTEM_TEXTUREMANAGER_H_

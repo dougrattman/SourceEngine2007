@@ -1,18 +1,10 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
-#ifndef CMATNULLRENDERCONTEXT_H
-#define CMATNULLRENDERCONTEXT_H
-
-#if defined( _WIN32 )
-#pragma once
-#endif
+#ifndef SOURCE_MATERIALSYSTEM_CMATNULLRENDERCONTEXT_H_
+#define SOURCE_MATERIALSYSTEM_CMATNULLRENDERCONTEXT_H_
 
 class CMatRenderContextBase;
 
 CMatRenderContextBase *CreateNullRenderContext();
 
-#endif // CMATNULLRENDERCONTEXT_H
+#endif  // SOURCE_MATERIALSYSTEM_CMATNULLRENDERCONTEXT_H_

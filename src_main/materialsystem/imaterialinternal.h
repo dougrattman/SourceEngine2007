@@ -1,16 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//
 
-#ifndef IMATERIALINTERNAL_H
-#define IMATERIALINTERNAL_H
-
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_MATERIALSYSTEM_IMATERIALINTERNAL_H_
+#define SOURCE_MATERIALSYSTEM_IMATERIALINTERNAL_H_
 
 // identifier was truncated to '255' characters in the debug information
 #include "filesystem.h"
@@ -164,4 +155,4 @@ extern bool LoadVMTFile(KeyValues &vmtKeyValues, KeyValues &patchKeyValues,
                         const char *pMaterialName, bool bUsesUNCFilename,
                         CUtlVector<FileNameHandle_t> *pIncludes);
 
-#endif  // IMATERIALINTERNAL_H
+#endif  // SOURCE_MATERIALSYSTEM_IMATERIALINTERNAL_H_

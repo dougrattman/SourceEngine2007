@@ -1,170 +1,126 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
-#ifndef CMATERIALDICT_H
-#define CMATERIALDICT_H
+#ifndef SOURCE_MATERIALSYSTEM_CMATERIALDICT_H_
+#define SOURCE_MATERIALSYSTEM_CMATERIALDICT_H_
 
-#include "tier1/utlsymbol.h"
 #include "tier1/utlrbtree.h"
+#include "tier1/utlsymbol.h"
 
 #ifndef MATSYS_INTERNAL
-#error "This file is private to the implementation of IMaterialSystem/IMaterialSystemInternal"
+#error \
+    "This file is private to the implementation of IMaterialSystem/IMaterialSystemInternal"
 #endif
-
-#if defined( _WIN32 )
-#pragma once
-#endif
-
-//-----------------------------------------------------------------------------
 
 class IMaterial;
 class IMaterialInternal;
-typedef unsigned short MaterialHandle_t;
+typedef u16 MaterialHandle_t;
 
-//-----------------------------------------------------------------------------
 // Dictionary of all known materials
-//-----------------------------------------------------------------------------
+class CMaterialDict {
+ public:
+  CMaterialDict()
+      : m_MaterialDict(0, 256, MaterialLessFunc),
+        m_MissingList(0, 32, MissingMaterialLessFunc) {}
 
-class CMaterialDict
-{
-public:
-	CMaterialDict() :
-		m_MaterialDict( 0, 256, MaterialLessFunc ),
-		m_MissingList( 0, 32, MissingMaterialLessFunc )
-	{
-	}
+  void Shutdown();
 
-	void Shutdown();
+  int GetNumMaterials(void) const { return m_MaterialDict.Count(); }
 
-	int 		GetNumMaterials( void ) const;
+  // Handle to material
+  IMaterial* GetMaterial(MaterialHandle_t h) const {
+    return m_MaterialDict[h].m_pMaterial;
+  }
 
-	IMaterial* GetMaterial( MaterialHandle_t h ) const;
-	IMaterialInternal * GetMaterialInternal( MaterialHandle_t idx ) const;
+  IMaterialInternal* GetMaterialInternal(MaterialHandle_t idx) const {
+    Assert((m_MaterialDict[idx].m_pMaterial == nullptr) ||
+           m_MaterialDict[idx].m_pMaterial->IsRealTimeVersion());
+    return m_MaterialDict[idx].m_pMaterial;
+  }
 
-	MaterialHandle_t	FirstMaterial() const;
-	MaterialHandle_t	NextMaterial( MaterialHandle_t h ) const;
-	MaterialHandle_t	InvalidMaterial() const;
+  // Material iteration methods
+  MaterialHandle_t FirstMaterial() const {
+    return m_MaterialDict.FirstInorder();
+  }
+  MaterialHandle_t NextMaterial(MaterialHandle_t h) const {
+    return m_MaterialDict.NextInorder(h);
+  }
 
-	IMaterialInternal *	FindMaterial( const char *pszName, bool bManuallyCreated ) const;
+  // Invalid index handle....
+  MaterialHandle_t InvalidMaterial() const {
+    return m_MaterialDict.InvalidIndex();
+  }
 
-	void 	AddMaterialToMaterialList( IMaterialInternal *pMaterial );
-	void 	RemoveMaterialFromMaterialList( IMaterialInternal *pMaterial );
+  IMaterialInternal* FindMaterial(const char* pszName,
+                                  bool bManuallyCreated) const {
+    MaterialLookup_t lookup;
+    lookup.m_Name = pszName;
+    lookup.m_bManuallyCreated = bManuallyCreated;  // This causes the search to
+                                                   // find only file-created
+                                                   // materials
 
-	void 	RemoveMaterial( IMaterialInternal *pMaterial );
-	void 	RemoveMaterialSubRect( IMaterialInternal *pMaterial );
+    MaterialHandle_t h = m_MaterialDict.Find(lookup);
 
-	IMaterialInternal*	AddMaterial( const char* pName, const char *pTextureGroupName );
-	// pKeyValues and pPatchKeyValues should come from LoadVMTFile()
-	IMaterialInternal*  AddMaterialSubRect( const char* pName, const char *pTextureGroupName, KeyValues *pKeyValues, KeyValues *pPatchKeyValues ); 
+    if (h != m_MaterialDict.InvalidIndex()) {
+      return m_MaterialDict[h].m_pMaterial;
+    }
 
-	bool 	NoteMissing( const char *pszName );
+    return nullptr;
+  }
 
-protected: /*private:*/
-	void 	RemoveAllMaterials();
-	void 	RemoveAllMaterialsFromMaterialList();
-	void 	RemoveMaterialFromMaterialList( MaterialHandle_t h );
+  void AddMaterialToMaterialList(IMaterialInternal* pMaterial);
+  void RemoveMaterialFromMaterialList(IMaterialInternal* pMaterial);
 
+  void RemoveMaterial(IMaterialInternal* pMaterial);
+  void RemoveMaterialSubRect(IMaterialInternal* pMaterial);
 
-	// Stores a dictionary of materials, searched by name
-	struct MaterialLookup_t
-	{
-		IMaterialInternal* m_pMaterial;
-		CUtlSymbol m_Name;
-		bool m_bManuallyCreated;
-	};
+  IMaterialInternal* AddMaterial(const char* pName,
+                                 const char* pTextureGroupName);
+  // pKeyValues and pPatchKeyValues should come from LoadVMTFile()
+  IMaterialInternal* AddMaterialSubRect(const char* pName,
+                                        const char* pTextureGroupName,
+                                        KeyValues* pKeyValues,
+                                        KeyValues* pPatchKeyValues);
 
-	// Stores a dictionary of missing materials to cut down on redundant warning messages
-	// TODO:  1) Could add a counter
-	//        2) Could dump to file/console at exit for exact list of missing materials
-	struct MissingMaterial_t
-	{
-		CUtlSymbol	m_Name;
-	};
+  bool NoteMissing(const char* pszName) {
+    MissingMaterial_t missing;
+    missing.m_Name = pszName;
+    if (m_MissingList.Find(missing) != m_MissingList.InvalidIndex()) {
+      return false;
+    }
 
-	static bool MaterialLessFunc( const MaterialLookup_t& src1, 
-		const MaterialLookup_t& src2 );
+    m_MissingList.Insert(missing);
+    return true;
+  }
 
-	static bool MissingMaterialLessFunc( const MissingMaterial_t& src1, 
-		const MissingMaterial_t& src2 );
+ protected: /*private:*/
+  void RemoveAllMaterials();
+  void RemoveAllMaterialsFromMaterialList();
+  void RemoveMaterialFromMaterialList(MaterialHandle_t h);
 
-	CUtlRBTree< MaterialLookup_t, MaterialHandle_t > m_MaterialDict;
-	CUtlRBTree< MissingMaterial_t, int > m_MissingList;
+  // Stores a dictionary of materials, searched by name
+  struct MaterialLookup_t {
+    IMaterialInternal* m_pMaterial;
+    CUtlSymbol m_Name;
+    bool m_bManuallyCreated;
+  };
+
+  // Stores a dictionary of missing materials to cut down on redundant warning
+  // messages
+  // TODO:  1) Could add a counter
+  //        2) Could dump to file/console at exit for exact list of missing
+  //        materials
+  struct MissingMaterial_t {
+    CUtlSymbol m_Name;
+  };
+
+  static bool MaterialLessFunc(const MaterialLookup_t& src1,
+                               const MaterialLookup_t& src2);
+
+  static bool MissingMaterialLessFunc(const MissingMaterial_t& src1,
+                                      const MissingMaterial_t& src2);
+
+  CUtlRBTree<MaterialLookup_t, MaterialHandle_t> m_MaterialDict;
+  CUtlRBTree<MissingMaterial_t, int> m_MissingList;
 };
 
-//-----------------------------------------------------------------------------
-// Material iteration methods
-//-----------------------------------------------------------------------------
-inline MaterialHandle_t CMaterialDict::FirstMaterial() const
-{
-	return m_MaterialDict.FirstInorder();
-}
-
-inline MaterialHandle_t CMaterialDict::NextMaterial( MaterialHandle_t h ) const
-{
-	return m_MaterialDict.NextInorder(h);
-}
-
-inline int CMaterialDict::GetNumMaterials( )	const
-{
-	return m_MaterialDict.Count();
-}
-
-
-//-----------------------------------------------------------------------------
-// Invalid index handle....
-//-----------------------------------------------------------------------------
-inline MaterialHandle_t CMaterialDict::InvalidMaterial() const
-{
-	return m_MaterialDict.InvalidIndex();
-}
-
-
-//-----------------------------------------------------------------------------
-// Handle to material
-//-----------------------------------------------------------------------------
-inline IMaterial* CMaterialDict::GetMaterial( MaterialHandle_t idx ) const
-{
-	return m_MaterialDict[idx].m_pMaterial;
-}
-
-inline IMaterialInternal* CMaterialDict::GetMaterialInternal( MaterialHandle_t idx ) const
-{
-	Assert( (m_MaterialDict[idx].m_pMaterial == NULL) || m_MaterialDict[idx].m_pMaterial->IsRealTimeVersion() );	
-	return m_MaterialDict[idx].m_pMaterial;
-}
-
-inline IMaterialInternal* CMaterialDict::FindMaterial( const char *pszName, bool bManuallyCreated ) const
-{
-	MaterialLookup_t lookup;
-	lookup.m_Name = pszName;
-	lookup.m_bManuallyCreated = bManuallyCreated;	// This causes the search to find only file-created materials
-
-	MaterialHandle_t h = m_MaterialDict.Find( lookup );
-
-	if ( h != m_MaterialDict.InvalidIndex() )
-	{
-		return m_MaterialDict[h].m_pMaterial;
-	}
-
-	return NULL;
-}
-
-inline bool CMaterialDict::NoteMissing( const char *pszName )
-{
-	MissingMaterial_t missing;
-	missing.m_Name = pszName;
-	if ( m_MissingList.Find( missing ) != m_MissingList.InvalidIndex() )
-	{
-		return false;
-	}
-
-	m_MissingList.Insert( missing );
-	return true;
-}
-
-//-----------------------------------------------------------------------------
-
-#endif // CMATERIALDICT_H
+#endif  // SOURCE_MATERIALSYSTEM_CMATERIALDICT_H_

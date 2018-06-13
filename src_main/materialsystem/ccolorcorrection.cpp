@@ -22,10 +22,8 @@
 
 class ITextureInternal;
 
-//-----------------------------------------------------------------------------
 //	Holds all the necessary information for a single color correction lookup
 //  function
-//-----------------------------------------------------------------------------
 struct ColorCorrectionLookup_t {
   ColorCorrectionHandle_t m_Handle;
 
@@ -63,13 +61,13 @@ ColorCorrectionLookup_t::~ColorCorrectionLookup_t() {
     for (int i = 0; i < COLOR_CORRECTION_MAX_TEXTURES; i++) {
       if (m_pColorCorrectionTexture ==
           TextureManager()->ColorCorrectionTexture(i)) {
-        TextureManager()->SetColorCorrectionTexture(i, NULL);
+        TextureManager()->SetColorCorrectionTexture(i, nullptr);
       }
     }
 
     m_pColorCorrectionTexture->DecrementReferenceCount();
     ITextureInternal::Destroy(m_pColorCorrectionTexture);
-    m_pColorCorrectionTexture = NULL;
+    m_pColorCorrectionTexture = nullptr;
   }
 }
 
@@ -319,13 +317,11 @@ void CColorCorrectionSystem::SortLookups() {
 
   for (int i = m_ColorCorrectionList.Count(); i < COLOR_CORRECTION_MAX_TEXTURES;
        i++) {
-    TextureManager()->SetColorCorrectionTexture(i, NULL);
+    TextureManager()->SetColorCorrectionTexture(i, nullptr);
   }
 }
 
-//-----------------------------------------------------------------------------
 //  Find the ColorCorrectionLookup_t corresponding to the specified handle
-//-----------------------------------------------------------------------------
 ColorCorrectionLookup_t *CColorCorrectionSystem::FindLookup(
     ColorCorrectionHandle_t handle) {
   for (int i = 0; i < m_ColorCorrectionList.Count(); i++) {
@@ -334,12 +330,10 @@ ColorCorrectionLookup_t *CColorCorrectionSystem::FindLookup(
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 //  Find the handle associated with a specified name
-//-----------------------------------------------------------------------------
 ColorCorrectionHandle_t CColorCorrectionSystem::GetLookupHandle(
     const char *pName) {
   // case and slash insensitive
@@ -378,9 +372,7 @@ ColorCorrectionHandle_t CColorCorrectionSystem::AddLookup(const char *pName) {
   return handle;
 }
 
-//-----------------------------------------------------------------------------
 //  Remove the specified color correction lookup
-//-----------------------------------------------------------------------------
 bool CColorCorrectionSystem::RemoveLookup(ColorCorrectionHandle_t handle) {
   if (handle == m_DefaultColorCorrectionHandle) return false;
 
@@ -398,9 +390,7 @@ bool CColorCorrectionSystem::RemoveLookup(ColorCorrectionHandle_t handle) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
 //  Sets the weight for the specified color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::SetLookupWeight(ColorCorrectionHandle_t handle,
                                              float flWeight) {
   if (handle == m_DefaultColorCorrectionHandle) {
@@ -416,9 +406,7 @@ void CColorCorrectionSystem::SetLookupWeight(ColorCorrectionHandle_t handle,
   SortLookups();
 }
 
-//-----------------------------------------------------------------------------
 //  Gets the weight for the specified color correction lookup
-//-----------------------------------------------------------------------------
 float CColorCorrectionSystem::GetLookupWeight(ColorCorrectionHandle_t handle) {
   if (handle == m_DefaultColorCorrectionHandle) {
     return m_DefaultColorCorrectionWeight;
@@ -430,9 +418,7 @@ float CColorCorrectionSystem::GetLookupWeight(ColorCorrectionHandle_t handle) {
   return lookup->m_flWeight;
 }
 
-//-----------------------------------------------------------------------------
 //  Gets the weight for the color correction lookup specified by index
-//-----------------------------------------------------------------------------
 float CColorCorrectionSystem::GetLookupWeight(int i) {
   if (i < m_ColorCorrectionList.Count()) {
     if (i == -1) return m_DefaultColorCorrectionWeight;
@@ -444,9 +430,7 @@ float CColorCorrectionSystem::GetLookupWeight(int i) {
   return 0.0f;
 }
 
-//-----------------------------------------------------------------------------
 //  Lock the specified color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::LockLookup(ColorCorrectionHandle_t handle) {
   if (handle == m_DefaultColorCorrectionHandle) {
     return;
@@ -458,9 +442,7 @@ void CColorCorrectionSystem::LockLookup(ColorCorrectionHandle_t handle) {
   lookup->m_bLocked = true;
 }
 
-//-----------------------------------------------------------------------------
 //  Set the mapping for the specified color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::SetLookup(ColorCorrectionHandle_t handle,
                                        RGBX5551_t inColor, color24 outColor) {
   if (handle == m_DefaultColorCorrectionHandle) return;
@@ -471,9 +453,7 @@ void CColorCorrectionSystem::SetLookup(ColorCorrectionHandle_t handle,
   SetLookupPtr(lookup, inColor, outColor);
 }
 
-//-----------------------------------------------------------------------------
 //  Set the mapping for the specified color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::SetLookupPtr(ColorCorrectionLookup_t *lookup,
                                           RGBX5551_t inColor,
                                           color24 outColor) {
@@ -484,9 +464,7 @@ void CColorCorrectionSystem::SetLookupPtr(ColorCorrectionLookup_t *lookup,
                                  COLOR_CORRECTION_TEXTURE_SIZE] = outColor;
 }
 
-//-----------------------------------------------------------------------------
 //  Get the mapping for the specified color correction lookup
-//-----------------------------------------------------------------------------
 color24 CColorCorrectionSystem::GetLookup(ColorCorrectionHandle_t handle,
                                           RGBX5551_t inColor) {
   if (handle == m_DefaultColorCorrectionHandle) {
@@ -509,9 +487,7 @@ color24 CColorCorrectionSystem::GetLookup(ColorCorrectionHandle_t handle,
                                         COLOR_CORRECTION_TEXTURE_SIZE];
 }
 
-//-----------------------------------------------------------------------------
 //  Unlock the specified color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::UnlockLookup(ColorCorrectionHandle_t handle) {
   if (handle == m_DefaultColorCorrectionHandle) {
     return;
@@ -521,13 +497,10 @@ void CColorCorrectionSystem::UnlockLookup(ColorCorrectionHandle_t handle) {
   if (!lookup) return;
 
   lookup->m_bLocked = false;
-
   lookup->m_pColorCorrectionTexture->Download();
 }
 
-//-----------------------------------------------------------------------------
 //  Load the specified file into the color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::LoadLookup(ColorCorrectionHandle_t handle,
                                         const char *pLookupName) {
   if (handle == m_DefaultColorCorrectionHandle) {
@@ -572,9 +545,7 @@ void CColorCorrectionSystem::LoadLookup(ColorCorrectionHandle_t handle,
   }
 }
 
-//-----------------------------------------------------------------------------
 //  Copy the data to the specified color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::CopyLookup(ColorCorrectionHandle_t handle,
                                         const color24 *pSrcColorCorrection) {
   if (handle == m_DefaultColorCorrectionHandle) {
@@ -592,9 +563,7 @@ void CColorCorrectionSystem::CopyLookup(ColorCorrectionHandle_t handle,
                COLOR_CORRECTION_TEXTURE_SIZE * COLOR_CORRECTION_TEXTURE_SIZE);
 }
 
-//-----------------------------------------------------------------------------
 //  Reset the mapping for the specified color correction lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::ResetLookup(ColorCorrectionHandle_t handle) {
   if (handle == m_DefaultColorCorrectionHandle) {
     return;
@@ -620,9 +589,7 @@ void CColorCorrectionSystem::ResetLookup(ColorCorrectionHandle_t handle) {
   }
 }
 
-//-----------------------------------------------------------------------------
 //  Reset the weight to zero for all lookups
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::ResetLookupWeights() {
   m_DefaultColorCorrectionWeight = 0.0f;
 
@@ -636,38 +603,28 @@ void CColorCorrectionSystem::ResetLookupWeights() {
   }
 }
 
-//-----------------------------------------------------------------------------
 //  Convert a color from RGBX5551_t to color24
-//-----------------------------------------------------------------------------
 color24 CColorCorrectionSystem::ConvertToColor24(RGBX5551_t inColor) {
-  color24 out;
-  out.r = (inColor.r << 3) | (inColor.r >> 2);
-  out.g = (inColor.g << 3) | (inColor.g >> 2);
-  out.b = (inColor.b << 3) | (inColor.b >> 2);
-  return out;
+  return color24{(inColor.r << 3) | (inColor.r >> 2),
+                 (inColor.g << 3) | (inColor.g >> 2),
+                 (inColor.b << 3) | (inColor.b >> 2)};
 }
 
-//-----------------------------------------------------------------------------
 //  Call ReleaseTexture for all ColorCorrectionLookup_t
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::ReleaseTextures() {
   for (int i = 0; i < m_ColorCorrectionList.Count(); i++) {
     m_ColorCorrectionList[i]->ReleaseTexture();
   }
 }
 
-//-----------------------------------------------------------------------------
 //  Call RestoreTexture for all ColorCorrectionLookup_t
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::RestoreTextures() {
   for (int i = 0; i < m_ColorCorrectionList.Count(); i++) {
     m_ColorCorrectionList[i]->RestoreTexture();
   }
 }
 
-//-----------------------------------------------------------------------------
 //  Normalize the active set of color correction weights
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::GetNormalizedWeights(float *pDefaultWeight,
                                                   float *pLookupWeights) {
   float total_weight = 0.0f;
@@ -694,9 +651,7 @@ void CColorCorrectionSystem::GetNormalizedWeights(float *pDefaultWeight,
   }
 }
 
-//-----------------------------------------------------------------------------
 //  Returns the number of active lookup
-//-----------------------------------------------------------------------------
 int CColorCorrectionSystem::GetNumLookups() {
   int i;
   for (i = 0;
@@ -708,20 +663,15 @@ int CColorCorrectionSystem::GetNumLookups() {
   return i;
 }
 
-//-----------------------------------------------------------------------------
 // Enables/disables resetting of this lookup
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::SetResetable(ColorCorrectionHandle_t handle,
                                           bool bResetable) {
   ColorCorrectionLookup_t *lookup = FindLookup(handle);
-  if (lookup) {
-    lookup->m_bResetable = bResetable;
-  }
+
+  if (lookup) lookup->m_bResetable = bResetable;
 }
 
-//-----------------------------------------------------------------------------
 // Returns info for the shaders to control color correction
-//-----------------------------------------------------------------------------
 void CColorCorrectionSystem::GetCurrentColorCorrection(
     ShaderColorCorrectionInfo_t *pInfo) {
   pInfo->m_bIsEnabled = m_bEnabled && (GetNumLookups() > 0 ||

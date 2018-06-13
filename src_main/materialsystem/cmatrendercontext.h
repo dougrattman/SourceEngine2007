@@ -1,11 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
-#ifndef CMATERIALRENDERSTATE_H
-#define CMATERIALRENDERSTATE_H
+#ifndef SOURCE_MATERIALSYSTEM_CMATERIALRENDERSTATE_H_
+#define SOURCE_MATERIALSYSTEM_CMATERIALRENDERSTATE_H_
 
 #include "bitvec.h"
 #include "imaterialinternal.h"
@@ -23,10 +19,6 @@
 #ifndef MATSYS_INTERNAL
 #error \
     "This file is private to the implementation of IMaterialSystem/IMaterialSystemInternal"
-#endif
-
-#if defined(_WIN32)
-#pragma once
 #endif
 
 //-----------------------------------------------------------------------------
@@ -136,12 +128,13 @@ class CMatRenderContextBase : public CRefCounted1<IMatRenderContextInternal> {
     return m_pCurMatrixItem->matrix;
   }
 
-  virtual void UpdateHeightClipUserClipPlane(void) {}
-  virtual void ApplyCustomClipPlanes(void) {}
+  virtual void UpdateHeightClipUserClipPlane() {}
+  virtual void ApplyCustomClipPlanes() {}
 
   float ComputePixelDiameterOfSphere(const Vector &origin, float flRadius);
   float ComputePixelWidthOfSphere(
-      const Vector &origin, float flRadius);  // TODO(d.rattman): REMOVE THIS FUNCTION!
+      const Vector &origin,
+      float flRadius);  // TODO(d.rattman): REMOVE THIS FUNCTION!
 
   virtual void GetWorldSpaceCameraPosition(Vector *pCameraPos);
   virtual void GetWorldSpaceCameraVectors(Vector *pVecForward,
@@ -193,7 +186,7 @@ class CMatRenderContextBase : public CRefCounted1<IMatRenderContextInternal> {
 
  protected:
   CMatRenderContextBase();
-  virtual void CommitRenderTargetAndViewport(void) {}
+  virtual void CommitRenderTargetAndViewport() {}
   void RecomputeViewState();
   void RecomputeViewProjState();
   void CurrentMatrixChanged();
@@ -343,7 +336,8 @@ class CMatRenderContext : public CMatRenderContextBase {
   // Allows us to override the depth buffer setting of a material
   DELEGATE_TO_OBJECT_2V(OverrideDepthEnable, bool, bool, g_pShaderAPI);
 
-  // TODO(d.rattman): This is a hack required for NVidia/XBox, can they fix in drivers?
+  // TODO(d.rattman): This is a hack required for NVidia/XBox, can they fix in
+  // drivers?
   void DrawScreenSpaceQuad(IMaterial *pMaterial);
 
   int CompareMaterialCombos(IMaterial *pMaterial1, IMaterial *pMaterial2,
@@ -417,7 +411,7 @@ class CMatRenderContext : public CMatRenderContextBase {
   void FogColor3ubv(unsigned char const *rgb);
   void FogMaxDensity(float flMaxDensity);
 
-  MaterialFogMode_t GetFogMode(void) { return g_pShaderAPI->GetSceneFogMode(); }
+  MaterialFogMode_t GetFogMode() { return g_pShaderAPI->GetSceneFogMode(); }
   void GetFogColor(unsigned char *rgb) { g_pShaderAPI->GetSceneFogColor(rgb); }
   DELEGATE_TO_OBJECT_3V(GetFogDistances, float *, float *, float *,
                         g_pShaderAPI);
@@ -702,7 +696,7 @@ inline void CMatRenderContext::FogMaxDensity(float flMaxDensity) {
   g_pShaderAPI->FogMaxDensity(flMaxDensity);
 }
 
-inline ITexture *CMatRenderContext::GetLocalCubemap(void) {
+inline ITexture *CMatRenderContext::GetLocalCubemap() {
   return m_pLocalCubemapTexture;
 }
 
@@ -738,14 +732,10 @@ inline enum MaterialHeightClipMode_t CMatRenderContextBase::GetHeightClipMode(
   return m_HeightClipMode;
 }
 
-inline int CMatRenderContextBase::GetLightmapPage(void) {
-  return m_lightmapPageID;
-}
+inline int CMatRenderContextBase::GetLightmapPage() { return m_lightmapPageID; }
 
 inline CMaterialSystem *CMatRenderContext::GetMaterialSystem() const {
   return m_pMaterialSystem;
 }
 
-//-----------------------------------------------------------------------------
-
-#endif  // CMATERIALRENDERSTATE_H
+#endif  // SOURCE_MATERIALSYSTEM_CMATERIALRENDERSTATE_H_

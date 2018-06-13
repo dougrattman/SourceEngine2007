@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef ITEXTUREINTERNAL_H
-#define ITEXTUREINTERNAL_H
+#ifndef SOURCE_MATERIALSYSTEM_ITEXTUREINTERNAL_H_
+#define SOURCE_MATERIALSYSTEM_ITEXTUREINTERNAL_H_
 
 #include "materialsystem/itexture.h"
 #include "shaderapi/ishaderapi.h"
@@ -135,4 +135,4 @@ inline char *NormalizeTextureName(const char *pName, char *pOutName,
   return pOutName;
 }
 
-#endif  // ITEXTUREINTERNAL_H
+#endif  // SOURCE_MATERIALSYSTEM_ITEXTUREINTERNAL_H_

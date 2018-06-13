@@ -1,24 +1,23 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef IMAGEPACKER_H
-#define IMAGEPACKER_H
+#ifndef SOURCE_MATERIALSYSTEM_IMAGEPACKER_H_
+#define SOURCE_MATERIALSYSTEM_IMAGEPACKER_H_
 
 #include "tier1/utlrbtree.h"
 #include "tier1/utlvector.h"
 
 #define MAX_MAX_LIGHTMAP_WIDTH 2048
 
-//-----------------------------------------------------------------------------
 // This packs a single lightmap
-//-----------------------------------------------------------------------------
 class CImagePacker {
  public:
   bool Reset(int nSortId, int maxLightmapWidth, int maxLightmapHeight);
   bool AddBlock(int width, int height, int *returnX, int *returnY);
   void GetMinimumDimensions(int *returnWidth, int *returnHeight);
-  float GetEfficiency(void);
-  int GetSortId() const;
-  void IncrementSortId();
+  float GetEfficiency();
+
+  int GetSortId() const { return m_nSortID; }
+  void IncrementSortId() { ++m_nSortID; }
 
  protected:
   int GetMaxYIndex(int firstX, int width);
@@ -37,11 +36,4 @@ class CImagePacker {
   int m_nSortID;
 };
 
-//-----------------------------------------------------------------------------
-// Inline methods
-//-----------------------------------------------------------------------------
-inline int CImagePacker::GetSortId() const { return m_nSortID; }
-
-inline void CImagePacker::IncrementSortId() { ++m_nSortID; }
-
-#endif  // IMAGEPACKER_H
+#endif  // SOURCE_MATERIALSYSTEM_IMAGEPACKER_H_

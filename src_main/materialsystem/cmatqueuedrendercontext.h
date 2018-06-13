@@ -1,11 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
-#ifndef CMATQUEUEDRENDERCONTEXT_H
-#define CMATQUEUEDRENDERCONTEXT_H
+#ifndef SOURCE_MATERIALSYSTEM_CMATQUEUEDRENDERCONTEXT_H_
+#define SOURCE_MATERIALSYSTEM_CMATQUEUEDRENDERCONTEXT_H_
 
 #include "cmatrendercontext.h"
 #include "imatrendercontextinternal.h"
@@ -15,10 +11,6 @@
 #include "tier1/utlenvelope.h"
 
 #include "tier0/include/memdbgon.h"
-
-#if defined(_WIN32)
-#pragma once
-#endif
 
 #ifndef MATSYS_INTERNAL
 #error \
@@ -501,12 +493,11 @@ class CPrimList;
 #define FATAL_QUEUE 1
 
 #ifdef FATAL_QUEUE
-#define CannotSupport()                                           \
+#define CannotSupport()                              \
   Msg("Called function that cannot be supported\n"); \
   DebuggerBreakIfDebugging()
 #else
-#define CannotSupport() \
-  Msg("Called function that cannot be supported\n")
+#define CannotSupport() Msg("Called function that cannot be supported\n")
 #endif
 
 //-----------------------------------------------------------------------------
@@ -877,7 +868,7 @@ class CMatQueuedRenderContext : public CMatRenderContextBase {
     return false;
   }
 
-  bool InFlashlightMode(void) const {
+  bool InFlashlightMode() const {
     CannotSupport();
     return false;
   }
@@ -888,7 +879,7 @@ class CMatQueuedRenderContext : public CMatRenderContextBase {
                       bEnable);
   }
 
-  virtual bool GetFlashlightMode(void) const { return m_bFlashlightEnable; }
+  virtual bool GetFlashlightMode() const { return m_bFlashlightEnable; }
 
   void BeginPIXEvent(unsigned long color, const char *pszName) {
     m_queue.QueueCall(m_pHardwareContext, &IMatRenderContext::BeginPIXEvent,
@@ -914,8 +905,8 @@ class CMatQueuedRenderContext : public CMatRenderContextBase {
                        m_pHardwareContext);
   virtual void AccumulateMorph(IMorph *pMorph, int nMorphCount,
                                const MorphWeight_t *pWeights) {
-    // TODO(d.rattman): Must copy off the morph weights here. Not sure the pattern for
-    // this.
+    // TODO(d.rattman): Must copy off the morph weights here. Not sure the
+    // pattern for this.
     Assert(0);
   }
   virtual bool GetMorphAccumulatorTexCoord(Vector2D *pTexCoord, IMorph *pIMorph,
@@ -1076,8 +1067,6 @@ class CMatQueuedRenderContext : public CMatRenderContextBase {
   CCallQueueExternal m_CallQueueExternal;
 };
 
-//-----------------------------------------------------------------------------
-
 #include "tier0/include/memdbgoff.h"
 
-#endif  // CMATQUEUEDRENDERCONTEXT_H
+#endif  // SOURCE_MATERIALSYSTEM_CMATQUEUEDRENDERCONTEXT_H_
