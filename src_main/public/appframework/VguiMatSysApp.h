@@ -9,6 +9,8 @@
 
 #include "appframework/tier3app.h"
 
+SOURCE_FORWARD_DECLARE_HANDLE(HWND);
+
 // The application object.
 class CVguiMatSysApp : public CVguiSteamApp {
   using BaseClass = CVguiSteamApp;
@@ -45,10 +47,10 @@ class CVguiMatSysApp : public CVguiSteamApp {
   virtual bool AppUsesReadPixels() { return false; }
 
   // Creates the app window.
-  virtual void *CreateAppWindow(ch const *title, bool is_windowed, i32 width,
-                                i32 height);
+  virtual HWND CreateAppWindow(ch const *title, bool is_windowed, i32 width,
+                               i32 height);
 
-  void *m_HWnd;
+  HWND m_HWnd;
   i32 m_nWidth;
   i32 m_nHeight;
 };

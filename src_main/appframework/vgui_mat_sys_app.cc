@@ -27,9 +27,6 @@
 
 #include "tier0/include/memdbgon.h"
 
-
-
-
 // Create all singleton systems
 bool CVguiMatSysApp::Create() {
   AppSystemInfo_t app_systems[] = {
@@ -62,8 +59,8 @@ bool CVguiMatSysApp::Create() {
 void CVguiMatSysApp::Destroy() {}
 
 // Window management
-void *CVguiMatSysApp::CreateAppWindow(ch const *pTitle, bool bWindowed, i32 w,
-                                      i32 h) {
+HWND CVguiMatSysApp::CreateAppWindow(ch const *pTitle, bool bWindowed, i32 w,
+                                     i32 h) {
   WNDCLASSEX wc{sizeof(wc)};
   wc.style = CS_OWNDC | CS_DBLCLKS;
   wc.lpfnWndProc = DefWindowProc;
@@ -97,10 +94,10 @@ void *CVguiMatSysApp::CreateAppWindow(ch const *pTitle, bool bWindowed, i32 w,
   AdjustWindowRectEx(&windowRect, style, FALSE, 0);
 
   // Create the window
-  void *hWnd = CreateWindow(wc.lpszClassName, pTitle, style, 0, 0,
-                            windowRect.right - windowRect.left,
-                            windowRect.bottom - windowRect.top, nullptr,
-                            nullptr, (HINSTANCE)GetAppInstance(), nullptr);
+  HWND hWnd = CreateWindow(wc.lpszClassName, pTitle, style, 0, 0,
+                           windowRect.right - windowRect.left,
+                           windowRect.bottom - windowRect.top, nullptr, nullptr,
+                           (HINSTANCE)GetAppInstance(), nullptr);
 
   if (!hWnd) return nullptr;
 
@@ -113,7 +110,7 @@ void *CVguiMatSysApp::CreateAppWindow(ch const *pTitle, bool bWindowed, i32 w,
 
   // In VCR modes, keep it in the upper left so mouse coordinates are always
   // relative to the window.
-  SetWindowPos((HWND)hWnd, nullptr, CenterX, CenterY, 0, 0,
+  SetWindowPos(hWnd, nullptr, CenterX, CenterY, 0, 0,
                SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW | SWP_DRAWFRAME);
 
   return hWnd;
