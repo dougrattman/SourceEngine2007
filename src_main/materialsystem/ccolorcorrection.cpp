@@ -605,9 +605,9 @@ void CColorCorrectionSystem::ResetLookupWeights() {
 
 //  Convert a color from RGBX5551_t to color24
 color24 CColorCorrectionSystem::ConvertToColor24(RGBX5551_t inColor) {
-  return color24{(inColor.r << 3) | (inColor.r >> 2),
-                 (inColor.g << 3) | (inColor.g >> 2),
-                 (inColor.b << 3) | (inColor.b >> 2)};
+  return color24{u8((inColor.r << 3) | (inColor.r >> 2)),
+                 u8((inColor.g << 3) | (inColor.g >> 2)),
+                 u8((inColor.b << 3) | (inColor.b >> 2))};
 }
 
 //  Call ReleaseTexture for all ColorCorrectionLookup_t

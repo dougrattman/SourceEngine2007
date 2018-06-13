@@ -343,7 +343,7 @@ class CMatNullRenderContext : public CMatRenderContextBase {
               "CMatNullRenderContext only provides base features, not a stub "
               "(right now)");
   }
-  virtual bool GetFlashlightMode(void) const {
+  virtual bool GetFlashlightMode() const {
     AssertMsg(0,
               "CMatNullRenderContext only provides base features, not a stub "
               "(right now)");
@@ -588,7 +588,7 @@ class CMatNullRenderContext : public CMatRenderContextBase {
               "(right now)");
   }
 
-  void PerformFullScreenStencilOperation(void) {
+  void PerformFullScreenStencilOperation() {
     AssertMsg(0,
               "CMatNullRenderContext only provides base features, not a stub "
               "(right now)");
@@ -877,14 +877,6 @@ class CMatNullRenderContext : public CMatRenderContextBase {
       ITexture *pTexture, MaterialNonInteractiveMode_t mode) {}
   virtual void EnableNonInteractiveMode(MaterialNonInteractiveMode_t mode) {}
   virtual void RefreshFrontBufferNonInteractive() {}
-
-#if defined(_X360)
-  virtual void PushVertexShaderGPRAllocation(int iVertexShaderCount = 64) {
-    Assert(0);
-  }
-
-  virtual void PopVertexShaderGPRAllocation(void) { Assert(0); }
-#endif
 
   int m_WidthBackBuffer, m_HeightBackBuffer;
 };

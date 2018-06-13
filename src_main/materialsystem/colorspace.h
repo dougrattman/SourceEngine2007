@@ -188,7 +188,7 @@ SOURCE_FORCEINLINE void LinearToBumpedLightmap(
   retBump3[2] = RoundFloatToByte(correctedBumpColor3[2] * 255.0f);
 }
 
-uint16_t LinearFloatToCorrectedShort(float in);
+u16 LinearFloatToCorrectedShort(float in);
 
 inline u16 LinearToUnsignedShort(float in, int nFractionalBits) {
   in = in * (1 << nFractionalBits);

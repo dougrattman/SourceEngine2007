@@ -67,7 +67,7 @@ class CMaterialVar : public IMaterialVar {
 
   virtual void CopyFrom(IMaterialVar *pMaterialVar);
 
-  SOURCE_FORCEINLINE void Init(void) {
+  SOURCE_FORCEINLINE void Init() {
     m_nNumVectorComps = 4;
     m_VecVal.Init();
     m_pStringVal = NULL;
@@ -401,7 +401,7 @@ const char *CMaterialVar::GetName() const {
 //-----------------------------------------------------------------------------
 // Thread-safe versions
 //-----------------------------------------------------------------------------
-int CMaterialVar::GetIntValueInternal(void) const {
+int CMaterialVar::GetIntValueInternal() const {
   CMatCallQueue *pCallQueue = MaterialSystem()->GetRenderCallQueue();
   if (pCallQueue && !m_bFakeMaterialVar) {
     if (!s_bEnableThreadedAccess) {
@@ -416,7 +416,7 @@ int CMaterialVar::GetIntValueInternal(void) const {
   return m_intVal;
 }
 
-float CMaterialVar::GetFloatValueInternal(void) const {
+float CMaterialVar::GetFloatValueInternal() const {
   CMatCallQueue *pCallQueue = MaterialSystem()->GetRenderCallQueue();
   if (pCallQueue && !m_bFakeMaterialVar) {
     if (!s_bEnableThreadedAccess) {
@@ -544,7 +544,7 @@ void CMaterialVar::SetIntValue(int val) {
 //-----------------------------------------------------------------------------
 // string
 //-----------------------------------------------------------------------------
-const char *CMaterialVar::GetStringValue(void) const {
+const char *CMaterialVar::GetStringValue() const {
   CMatCallQueue *pCallQueue = MaterialSystem()->GetRenderCallQueue();
   if (pCallQueue && !m_bFakeMaterialVar) {
     if (!s_bEnableThreadedAccess) {
@@ -726,7 +726,7 @@ void CMaterialVar::GetFourCCValue(FourCC *type, void **ppData) {
 //-----------------------------------------------------------------------------
 // texture
 //-----------------------------------------------------------------------------
-ITexture *CMaterialVar::GetTextureValue(void) {
+ITexture *CMaterialVar::GetTextureValue() {
   CMatCallQueue *pCallQueue = MaterialSystem()->GetRenderCallQueue();
   if (pCallQueue && !m_bFakeMaterialVar) {
     if (!s_bEnableThreadedAccess) {
@@ -812,7 +812,7 @@ void CMaterialVar::SetTextureValue(ITexture *texture) {
 //-----------------------------------------------------------------------------
 // material
 //-----------------------------------------------------------------------------
-IMaterial *CMaterialVar::GetMaterialValue(void) {
+IMaterial *CMaterialVar::GetMaterialValue() {
   CMatCallQueue *pCallQueue = MaterialSystem()->GetRenderCallQueue();
   if (pCallQueue && !m_bFakeMaterialVar) {
     if (!s_bEnableThreadedAccess) {
@@ -1095,7 +1095,7 @@ void CMaterialVar::SetMatrixValue(VMatrix const &matrix) {
   VarChanged();
 }
 
-bool CMaterialVar::MatrixIsIdentity(void) const {
+bool CMaterialVar::MatrixIsIdentity() const {
   if (m_Type != MATERIAL_VAR_TYPE_MATRIX) {
     return true;
   }

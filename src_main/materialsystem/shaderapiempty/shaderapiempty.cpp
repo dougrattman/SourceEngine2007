@@ -21,7 +21,8 @@ class CEmptyMesh : public IMesh {
   CEmptyMesh(bool bIsDynamic);
   virtual ~CEmptyMesh();
 
-  // TODO(d.rattman): Make this work! Unsupported methods of IIndexBuffer + IVertexBuffer
+  // TODO(d.rattman): Make this work! Unsupported methods of IIndexBuffer +
+  // IVertexBuffer
   virtual bool Lock(int nMaxIndexCount, bool bAppend, IndexDesc_t &desc);
   virtual void Unlock(int nWrittenIndexCount, IndexDesc_t &desc);
   virtual void ModifyBegin(bool bReadOnly, int nFirstIndex, int nIndexCount,
@@ -225,65 +226,82 @@ class CShaderDeviceEmpty : public IShaderDevice {
   CShaderDeviceEmpty() : m_DynamicMesh(true), m_Mesh(false) {}
 
   // Methods of IShaderDevice
-  virtual int GetCurrentAdapter() const { return 0; }
-  virtual bool IsUsingGraphics() const { return false; }
-  virtual void SpewDriverInfo() const;
-  virtual ImageFormat GetBackBufferFormat() const {
+
+  void ReleaseResources() override;
+  void ReacquireResources() override;
+
+  ImageFormat GetBackBufferFormat() const override {
     return IMAGE_FORMAT_RGB888;
   }
-  virtual void GetBackBufferDimensions(int &width, int &height) const;
-  virtual int StencilBufferBits() const { return 0; }
-  virtual bool IsAAEnabled() const { return false; }
-  virtual void Present() {}
-  virtual void GetWindowSize(int &width, int &height) const;
-  virtual bool AddView(void *hwnd);
-  virtual void RemoveView(void *hwnd);
-  virtual void SetView(void *hwnd);
-  virtual void ReleaseResources();
-  virtual void ReacquireResources();
-  virtual IMesh *CreateStaticMesh(VertexFormat_t fmt,
-                                  const char *pTextureBudgetGroup,
-                                  IMaterial *pMaterial = NULL);
-  virtual void DestroyStaticMesh(IMesh *mesh);
-  virtual IShaderBuffer *CompileShader(const char *pProgram, size_t nBufLen,
-                                       const char *pShaderVersion) {
+  void GetBackBufferDimensions(int &width, int &height) const override;
+
+  int GetCurrentAdapter() const override { return 0; }
+
+  bool IsUsingGraphics() const override { return false; }
+
+  void SpewDriverInfo() const override;
+
+  int StencilBufferBits() const override { return 0; }
+
+  bool IsAAEnabled() const override { return false; }
+
+  void Present() override {}
+
+  void GetWindowSize(int &width, int &height) const override;
+
+  void SetHardwareGammaRamp(float fGamma, float fGammaTVRangeMin,
+                            float fGammaTVRangeMax, float fGammaTVExponent,
+                            bool bTVEnabled) override {}
+
+  bool AddView(HWND hwnd) override;
+  void RemoveView(HWND hwnd) override;
+  void SetView(HWND hwnd) override;
+
+  IShaderBuffer *CompileShader(const char *pProgram, size_t nBufLen,
+                               const char *pShaderVersion) override {
     return NULL;
   }
-  virtual VertexShaderHandle_t CreateVertexShader(
-      IShaderBuffer *pShaderBuffer) {
+  VertexShaderHandle_t CreateVertexShader(
+      IShaderBuffer *pShaderBuffer) override {
     return VERTEX_SHADER_HANDLE_INVALID;
   }
-  virtual void DestroyVertexShader(VertexShaderHandle_t hShader) {}
-  virtual GeometryShaderHandle_t CreateGeometryShader(
-      IShaderBuffer *pShaderBuffer) {
+  void DestroyVertexShader(VertexShaderHandle_t hShader) override {}
+
+  GeometryShaderHandle_t CreateGeometryShader(
+      IShaderBuffer *pShaderBuffer) override {
     return GEOMETRY_SHADER_HANDLE_INVALID;
   }
-  virtual void DestroyGeometryShader(GeometryShaderHandle_t hShader) {}
-  virtual PixelShaderHandle_t CreatePixelShader(IShaderBuffer *pShaderBuffer) {
+  void DestroyGeometryShader(GeometryShaderHandle_t hShader) override {}
+
+  PixelShaderHandle_t CreatePixelShader(IShaderBuffer *pShaderBuffer) override {
     return PIXEL_SHADER_HANDLE_INVALID;
   }
-  virtual void DestroyPixelShader(PixelShaderHandle_t hShader) {}
-  virtual IVertexBuffer *CreateVertexBuffer(ShaderBufferType_t type,
-                                            VertexFormat_t fmt,
-                                            int nVertexCount,
-                                            const char *pBudgetGroup);
-  virtual void DestroyVertexBuffer(IVertexBuffer *pVertexBuffer);
-  virtual IIndexBuffer *CreateIndexBuffer(ShaderBufferType_t bufferType,
-                                          MaterialIndexFormat_t fmt,
-                                          int nIndexCount,
-                                          const char *pBudgetGroup);
-  virtual void DestroyIndexBuffer(IIndexBuffer *pIndexBuffer);
-  virtual IVertexBuffer *GetDynamicVertexBuffer(int streamID,
-                                                VertexFormat_t vertexFormat,
-                                                bool bBuffered);
-  virtual IIndexBuffer *GetDynamicIndexBuffer(MaterialIndexFormat_t fmt,
-                                              bool bBuffered);
-  virtual void SetHardwareGammaRamp(float fGamma, float fGammaTVRangeMin,
-                                    float fGammaTVRangeMax,
-                                    float fGammaTVExponent, bool bTVEnabled) {}
-  virtual void EnableNonInteractiveMode(MaterialNonInteractiveMode_t mode,
-                                        ShaderNonInteractiveInfo_t *pInfo) {}
-  virtual void RefreshFrontBufferNonInteractive() {}
+  void DestroyPixelShader(PixelShaderHandle_t hShader) override {}
+
+  IMesh *CreateStaticMesh(VertexFormat_t fmt, const char *pTextureBudgetGroup,
+                          IMaterial *pMaterial = NULL) override;
+  void DestroyStaticMesh(IMesh *mesh) override;
+
+  IVertexBuffer *CreateVertexBuffer(ShaderBufferType_t type, VertexFormat_t fmt,
+                                    int nVertexCount,
+                                    const char *pBudgetGroup) override;
+  void DestroyVertexBuffer(IVertexBuffer *pVertexBuffer) override;
+
+  IIndexBuffer *CreateIndexBuffer(ShaderBufferType_t bufferType,
+                                  MaterialIndexFormat_t fmt, int nIndexCount,
+                                  const char *pBudgetGroup) override;
+  void DestroyIndexBuffer(IIndexBuffer *pIndexBuffer) override;
+
+  IVertexBuffer *GetDynamicVertexBuffer(int streamID,
+                                        VertexFormat_t vertexFormat,
+                                        bool bBuffered) override;
+  IIndexBuffer *GetDynamicIndexBuffer(MaterialIndexFormat_t fmt,
+                                      bool bBuffered) override;
+
+  void EnableNonInteractiveMode(MaterialNonInteractiveMode_t mode,
+                                ShaderNonInteractiveInfo_t *pInfo) override {}
+
+  void RefreshFrontBufferNonInteractive() override {}
 
  private:
   CEmptyMesh m_Mesh;
@@ -292,7 +310,8 @@ class CShaderDeviceEmpty : public IShaderDevice {
 
 static CShaderDeviceEmpty s_ShaderDeviceEmpty;
 
-// TODO(d.rattman): Remove; it's for backward compat with the materialsystem only for now
+// TODO(d.rattman): Remove; it's for backward compat with the materialsystem
+// only for now
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShaderDeviceEmpty, IShaderDevice,
                                   SHADER_DEVICE_INTERFACE_VERSION,
                                   s_ShaderDeviceEmpty)
@@ -301,14 +320,15 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShaderDeviceEmpty, IShaderDevice,
 class CShaderDeviceMgrEmpty : public IShaderDeviceMgr {
  public:
   // Methods of IAppSystem
-  virtual bool Connect(CreateInterfaceFn factory);
-  virtual void Disconnect();
-  virtual void *QueryInterface(const char *pInterfaceName);
-  virtual InitReturnVal_t Init();
-  virtual void Shutdown();
 
- public:
+  bool Connect(CreateInterfaceFn factory) override;
+  void Disconnect() override;
+  void *QueryInterface(const char *pInterfaceName) override;
+  InitReturnVal_t Init() override;
+  void Shutdown() override;
+
   // Methods of IShaderDeviceMgr
+
   virtual int GetAdapterCount() const;
   virtual void GetAdapterInfo(int adapter, MaterialAdapterInfo_t &info) const;
   virtual bool GetRecommendedConfigurationInfo(int nAdapter, int nDXLevel,
@@ -319,7 +339,7 @@ class CShaderDeviceMgrEmpty : public IShaderDeviceMgr {
   virtual void GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
                                   int nAdapter) const;
   virtual bool SetAdapter(int nAdapter, int nFlags);
-  virtual CreateInterfaceFn SetMode(void *hWnd, int nAdapter,
+  virtual CreateInterfaceFn SetMode(HWND hWnd, int nAdapter,
                                     const ShaderDeviceInfo_t &mode);
   virtual void AddModeChangeCallback(ShaderModeChangeCallbackFunc_t func) {}
   virtual void RemoveModeChangeCallback(ShaderModeChangeCallbackFunc_t func) {}
@@ -387,7 +407,7 @@ class CShaderAPIEmpty : public IShaderAPI,
   void ClearSnapshots();
 
   // Sets the mode...
-  bool SetMode(void *hwnd, int nAdapter, const ShaderDeviceInfo_t &info) {
+  bool SetMode(HWND hwnd, int nAdapter, const ShaderDeviceInfo_t &info) {
     return true;
   }
 
@@ -1054,7 +1074,8 @@ class CShaderAPIEmpty : public IShaderAPI,
 static CShaderAPIEmpty g_ShaderAPIEmpty;
 static CShaderShadowEmpty g_ShaderShadow;
 
-// TODO(d.rattman): Remove; it's for backward compat with the materialsystem only for now
+// TODO(d.rattman): Remove; it's for backward compat with the materialsystem
+// only for now
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShaderAPIEmpty, IShaderAPI,
                                   SHADERAPI_INTERFACE_VERSION, g_ShaderAPIEmpty)
 
@@ -1078,12 +1099,15 @@ static void *ShaderInterfaceFactory(const char *pInterfaceName,
   if (pReturnCode) {
     *pReturnCode = IFACE_OK;
   }
-  if (!Q_stricmp(pInterfaceName, SHADER_DEVICE_INTERFACE_VERSION))
-    return static_cast<IShaderDevice *>(&s_ShaderDeviceEmpty);
-  if (!Q_stricmp(pInterfaceName, SHADERAPI_INTERFACE_VERSION))
-    return static_cast<IShaderAPI *>(&g_ShaderAPIEmpty);
-  if (!Q_stricmp(pInterfaceName, SHADERSHADOW_INTERFACE_VERSION))
-    return static_cast<IShaderShadow *>(&g_ShaderShadow);
+
+  if (!_stricmp(pInterfaceName, SHADER_DEVICE_INTERFACE_VERSION))
+    return implicit_cast<IShaderDevice *>(&s_ShaderDeviceEmpty);
+
+  if (!_stricmp(pInterfaceName, SHADERAPI_INTERFACE_VERSION))
+    return implicit_cast<IShaderAPI *>(&g_ShaderAPIEmpty);
+
+  if (!_stricmp(pInterfaceName, SHADERSHADOW_INTERFACE_VERSION))
+    return implicit_cast<IShaderShadow *>(&g_ShaderShadow);
 
   if (pReturnCode) {
     *pReturnCode = IFACE_FAILED;
@@ -1119,9 +1143,10 @@ bool CShaderDeviceMgrEmpty::SetAdapter(int nAdapter, int nFlags) {
   return true;
 }
 
-// TODO(d.rattman): Is this a public interface? Might only need to be private to shaderapi
+// TODO(d.rattman): Is this a public interface? Might only need to be private to
+// shaderapi
 CreateInterfaceFn CShaderDeviceMgrEmpty::SetMode(
-    void *hWnd, int nAdapter, const ShaderDeviceInfo_t &mode) {
+    HWND hWnd, int nAdapter, const ShaderDeviceInfo_t &mode) {
   return ShaderInterfaceFactory;
 }
 
@@ -1170,12 +1195,12 @@ void CShaderDeviceEmpty::GetBackBufferDimensions(int &width,
 void CShaderDeviceEmpty::SpewDriverInfo() const { Warning("Empty shader\n"); }
 
 // Creates/ destroys a child window
-bool CShaderDeviceEmpty::AddView(void *hwnd) { return true; }
+bool CShaderDeviceEmpty::AddView(HWND hwnd) { return true; }
 
-void CShaderDeviceEmpty::RemoveView(void *hwnd) {}
+void CShaderDeviceEmpty::RemoveView(HWND hwnd) {}
 
 // Activates a view
-void CShaderDeviceEmpty::SetView(void *hwnd) {}
+void CShaderDeviceEmpty::SetView(HWND hwnd) {}
 
 void CShaderDeviceEmpty::ReleaseResources() {}
 

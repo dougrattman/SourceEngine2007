@@ -20,7 +20,7 @@
 // // IMaterialSystem and IMesh stub classes.
 // ----------------------------------------------------------------------------------------
 // //
-CUtlVector<unsigned short> g_DummyIndices;
+CUtlVector<u16> g_DummyIndices;
 
 class CDummyMesh : public IMesh {
  public:
@@ -51,7 +51,7 @@ class CDummyMesh : public IMesh {
 
   // TODO(d.rattman): Make this work! Unsupported methods of IIndexBuffer
   virtual bool Lock(int nMaxIndexCount, bool bAppend, IndexDesc_t &desc) {
-    static unsigned short dummyIndex;
+    static u16 dummyIndex;
     desc.m_pIndices = &dummyIndex;
     desc.m_nIndexSize = 0;
     desc.m_nFirstIndex = 0;
@@ -63,7 +63,7 @@ class CDummyMesh : public IMesh {
 
   virtual void ModifyBegin(bool bReadOnly, int nFirstIndex, int nIndexCount,
                            IndexDesc_t &desc) {
-    static unsigned short dummyIndex;
+    static u16 dummyIndex;
     desc.m_pIndices = &dummyIndex;
     desc.m_nIndexSize = 0;
     desc.m_nFirstIndex = 0;
@@ -193,7 +193,7 @@ CDummyMesh *GetDummyMesh() {
 class CDummyTexture : public ITexture {
  public:
   // Various texture polling methods
-  virtual const char *GetName(void) const { return "DummyTexture"; }
+  virtual const char *GetName() const { return "DummyTexture"; }
   virtual int GetMappingWidth() const { return 512; }
   virtual int GetMappingHeight() const { return 512; }
   virtual int GetActualWidth() const { return 512; }
@@ -216,8 +216,8 @@ class CDummyTexture : public ITexture {
   }
 
   // Methods associated with reference count
-  virtual void IncrementReferenceCount(void) {}
-  virtual void DecrementReferenceCount(void) {}
+  virtual void IncrementReferenceCount() {}
+  virtual void DecrementReferenceCount() {}
 
   // Used to modify the texture bits (procedural textures only)
   virtual void SetTextureRegenerator(ITextureRegenerator *pTextureRegen) {}
@@ -230,7 +230,7 @@ class CDummyTexture : public ITexture {
 
   // Uses for stats. . .get the approximate size of the texture in it's current
   // format.
-  virtual int GetApproximateVidMemBytes(void) const { return 64; }
+  virtual int GetApproximateVidMemBytes() const { return 64; }
 
   virtual bool IsError() const { return false; }
 
@@ -255,7 +255,7 @@ class CDummyTexture : public ITexture {
 
   virtual void SwapContents(ITexture *pOther) {}
 
-  virtual unsigned int GetFlags(void) const { return 0; }
+  virtual unsigned int GetFlags() const { return 0; }
   virtual void ForceLODOverride(int iNumLodsOverrideUpOrDown) { NULL; }
 };
 
@@ -269,17 +269,17 @@ static VMatrix g_DummyMatrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
 class CDummyMaterialVar : public IMaterialVar {
  public:
-  virtual char const *GetName(void) const { return "DummyMaterialVar"; }
+  virtual char const *GetName() const { return "DummyMaterialVar"; }
   virtual MaterialVarSym_t GetNameAsSymbol() const { return 0; }
 
   virtual void SetFloatValue(float val) {}
-  virtual float GetFloatValueInternal(void) const { return 1; }
+  virtual float GetFloatValueInternal() const { return 1; }
 
   virtual void SetIntValue(int val) {}
-  virtual int GetIntValueInternal(void) const { return 1; }
+  virtual int GetIntValueInternal() const { return 1; }
 
   virtual void SetStringValue(char const *val) {}
-  virtual char const *GetStringValue(void) const { return ""; }
+  virtual char const *GetStringValue() const { return ""; }
 
   // Use FourCC values to pass app-defined data structures between
   // the proxy and the shader. The shader should ignore the data if
@@ -308,12 +308,12 @@ class CDummyMaterialVar : public IMaterialVar {
   virtual int VectorSizeInternal() const { return 3; }
 
   // revisit: is this a good interface for textures?
-  virtual ITexture *GetTextureValue(void) { return &g_DummyTexture; }
+  virtual ITexture *GetTextureValue() { return &g_DummyTexture; }
 
   virtual void SetTextureValue(ITexture *) {}
   virtual operator ITexture *() { return GetTextureValue(); }
 
-  virtual IMaterial *GetMaterialValue(void) {
+  virtual IMaterial *GetMaterialValue() {
     extern IMaterial *g_pDummyMaterial;
     return g_pDummyMaterial;
   }
@@ -433,10 +433,10 @@ class CDummyHardwareConfig : public IMaterialSystemHardwareConfig {
   virtual int MaxHWMorphBatchCount() const { return 0; }
   virtual bool SupportsHDRMode(HDRType_t nMode) const { return 0; }
   virtual bool IsDX10Card() const { return 0; }
-  virtual bool GetHDREnabled(void) const { return true; }
+  virtual bool GetHDREnabled() const { return true; }
   virtual void SetHDREnabled(bool bEnable) {}
-  virtual bool SupportsBorderColor(void) const { return true; }
-  virtual bool SupportsFetch4(void) const { return false; }
+  virtual bool SupportsBorderColor() const { return true; }
+  virtual bool SupportsFetch4() const { return false; }
 };
 CDummyHardwareConfig g_DummyHardwareConfig;
 
@@ -477,7 +477,7 @@ class CDummyMaterial : public IMaterial {
 
   virtual int GetNumAnimationFrames() { return 0; }
 
-  virtual bool InMaterialPage(void) { return false; }
+  virtual bool InMaterialPage() { return false; }
 
   virtual void GetMaterialOffset(float *pOffset) {
     pOffset[0] = 0.0f;
@@ -489,7 +489,7 @@ class CDummyMaterial : public IMaterial {
     pScale[1] = 1.0f;
   }
 
-  virtual IMaterial *GetMaterialPage(void) { return NULL; }
+  virtual IMaterial *GetMaterialPage() { return NULL; }
 
   virtual IMaterialVar *FindVar(const char *varName, bool *found,
                                 bool complain = true) {
@@ -501,11 +501,11 @@ class CDummyMaterial : public IMaterial {
     return NULL;
   }
 
-  virtual void IncrementReferenceCount(void) {}
+  virtual void IncrementReferenceCount() {}
 
-  virtual void DecrementReferenceCount(void) {}
+  virtual void DecrementReferenceCount() {}
 
-  virtual int GetEnumerationID(void) const { return 0; }
+  virtual int GetEnumerationID() const { return 0; }
 
   virtual void GetLowResColorSample(float s, float t, float *color) const {}
 
@@ -524,12 +524,12 @@ class CDummyMaterial : public IMaterial {
   virtual VertexFormat_t GetVertexFormat() const { return 0; }
 
   // returns true if this material uses a material proxy
-  virtual bool HasProxy(void) const { return false; }
+  virtual bool HasProxy() const { return false; }
   virtual void CallBindProxy(void *) {}
 
-  virtual bool UsesEnvCubemap(void) { return false; }
+  virtual bool UsesEnvCubemap() { return false; }
 
-  virtual bool NeedsTangentSpace(void) { return false; }
+  virtual bool NeedsTangentSpace() { return false; }
 
   virtual bool NeedsPowerOfTwoFrameBufferTexture(
       bool bCheckSpecificToThisFrame) {
@@ -540,7 +540,7 @@ class CDummyMaterial : public IMaterial {
     return false;
   }
 
-  virtual bool NeedsSoftwareSkinning(void) { return false; }
+  virtual bool NeedsSoftwareSkinning() { return false; }
 
   // Apply constant color or alpha modulation
   virtual void AlphaModulate(float alpha) {}
@@ -571,10 +571,10 @@ class CDummyMaterial : public IMaterial {
   virtual void SetShader(const char *pShaderName) {}
 
   // Can't be const because the material might have to precache itself.
-  virtual int GetNumPasses(void) { return 1; }
+  virtual int GetNumPasses() { return 1; }
 
   // Can't be const because the material might have to precache itself.
-  virtual int GetTextureMemoryBytes(void) { return 64; }
+  virtual int GetTextureMemoryBytes() { return 64; }
 
   // Meant to be used with materials created using CreateMaterial
   // It updates the materials to reflect the current values stored in the
@@ -582,16 +582,16 @@ class CDummyMaterial : public IMaterial {
   virtual void Refresh() {}
 
   // GR - returns true is material uses lightmap alpha for blending
-  virtual bool NeedsLightmapBlendAlpha(void) { return false; }
+  virtual bool NeedsLightmapBlendAlpha() { return false; }
 
   // returns true if the shader doesn't do lighting itself and requires
   // the data that is sent to it to be prelighted
-  virtual bool NeedsSoftwareLighting(void) { return false; }
+  virtual bool NeedsSoftwareLighting() { return false; }
 
   // Gets at the shader parameters
   virtual int ShaderParamCount() const { return 0; }
 
-  virtual IMaterialVar **GetShaderParams(void) { return 0; }
+  virtual IMaterialVar **GetShaderParams() { return 0; }
 
   virtual bool IsErrorMaterial() const { return false; }
   virtual void SetUseFixedFunctionBakedLighting(bool bEnable) {}
@@ -684,16 +684,16 @@ class CDummyMaterialSystem
   virtual void GetDisplayMode(MaterialVideoMode_t &mode) const {}
 
   // Sets the mode...
-  virtual bool SetMode(void *hwnd, const MaterialSystem_Config_t &config) {
+  virtual bool SetMode(HWND hwnd, const MaterialSystem_Config_t &config) {
     return true;
   }
 
   // Creates/ destroys a child window
-  virtual bool AddView(void *hwnd) { return false; }
-  virtual void RemoveView(void *hwnd) {}
+  virtual bool AddView(HWND hwnd) { return false; }
+  virtual void RemoveView(HWND hwnd) {}
 
   // Sets the view
-  virtual void SetView(void *hwnd) {}
+  virtual void SetView(HWND hwnd) {}
 
   // return true if lightmaps need to be redownloaded
   // Call this before rendering each frame with the current config
@@ -777,7 +777,7 @@ class CDummyMaterialSystem
   // pass in NULL for the regular backbuffer.
   virtual void SetRenderTarget(ITexture *pTexture) {}
 
-  virtual ITexture *GetRenderTarget(void) { return &g_DummyTexture; }
+  virtual ITexture *GetRenderTarget() { return &g_DummyTexture; }
 
   virtual void SetRenderTargetEx(int nRenderTargetID, ITexture *pTexture) {}
 
@@ -882,7 +882,7 @@ class CDummyMaterialSystem
 
   virtual void ClearBuffersObeyStencil(bool bClearColor, bool bClearDepth) {}
 
-  virtual void PerformFullScreenStencilOperation(void) {}
+  virtual void PerformFullScreenStencilOperation() {}
 
   // read to a unsigned char rgb image.
   virtual void ReadPixels(int x, int y, int width, int height,
@@ -923,14 +923,14 @@ class CDummyMaterialSystem
   //
   virtual void DebugPrintUsedMaterials(const char *pSearchSubString,
                                        bool bVerbose) {}
-  virtual void DebugPrintUsedTextures(void) {}
+  virtual void DebugPrintUsedTextures() {}
   virtual void ToggleSuppressMaterial(char const *pMaterialName) {}
   virtual void ToggleDebugMaterial(char const *pMaterialName) {}
 
   // matrix api
   virtual void MatrixMode(MaterialMatrixMode_t matrixMode) {}
-  virtual void PushMatrix(void) {}
-  virtual void PopMatrix(void) {}
+  virtual void PushMatrix() {}
+  virtual void PopMatrix() {}
   /*
           virtual void				LoadMatrix( float * )
           {
@@ -956,7 +956,7 @@ class CDummyMaterialSystem
                          matrix3x4_t *pMatrix) {
     SetIdentityMatrix(*pMatrix);
   }
-  virtual void LoadIdentity(void) {}
+  virtual void LoadIdentity() {}
   virtual void Ortho(double left, double top, double right, double bottom,
                      double zNear, double zFar) {}
   virtual void PerspectiveX(double fovx, double aspect, double zNear,
@@ -994,7 +994,7 @@ class CDummyMaterialSystem
 
   // Fog methods...
   virtual void FogMode(MaterialFogMode_t fogMode) {}
-  MaterialFogMode_t GetFogMode(void) { return MATERIAL_FOG_NONE; }
+  MaterialFogMode_t GetFogMode() { return MATERIAL_FOG_NONE; }
   virtual void FogStart(float fStart) {}
   virtual void FogEnd(float fEnd) {}
   virtual void FogMaxDensity(float flMaxDensity) {}
@@ -1095,7 +1095,7 @@ class CDummyMaterialSystem
   virtual void RemoveRestoreFunc(MaterialBufferRestoreFunc_t func) {}
 
   // Stuff for probing properties of shaders.
-  virtual int GetNumShaders(void) const { return 0; }
+  virtual int GetNumShaders() const { return 0; }
   virtual const char *GetShaderName(int shaderID) const { return NULL; }
   virtual int GetNumShaderParams(int shaderID) const { return 0; }
   virtual const char *GetShaderParamName(int shaderID, int paramID) const {
@@ -1150,7 +1150,7 @@ class CDummyMaterialSystem
     h = 768;
   }
 
-  ImageFormat GetBackBufferFormat(void) const { return IMAGE_FORMAT_RGBA8888; }
+  ImageFormat GetBackBufferFormat() const { return IMAGE_FORMAT_RGBA8888; }
 
   // TODO(d.rattman): This is a hack required for NVidia/XBox, can they fix in
   // drivers?
@@ -1195,7 +1195,7 @@ class CDummyMaterialSystem
     return 1.0f;
   }
 
-  OcclusionQueryObjectHandle_t CreateOcclusionQueryObject(void) {
+  OcclusionQueryObjectHandle_t CreateOcclusionQueryObject() {
     return INVALID_OCCLUSION_QUERY_OBJECT_HANDLE;
   }
 
@@ -1212,8 +1212,8 @@ class CDummyMaterialSystem
     return 0;
   }
   virtual void SetFlashlightMode(bool) {}
-  virtual bool GetFlashlightMode(void) const { return false; }
-  virtual bool InFlashlightMode(void) const { return false; }
+  virtual bool GetFlashlightMode() const { return false; }
+  virtual bool InFlashlightMode() const { return false; }
   virtual void SetFlashlightState(const FlashlightState_t &state,
                                   const VMatrix &worldToTexture) {}
   virtual void SetFlashlightStateEx(const FlashlightState_t &state,
@@ -1335,7 +1335,7 @@ class CDummyMaterialSystem
                                    int nViewX, int nViewY, int nViewW,
                                    int nViewH) {}
 
-  void PopRenderTargetAndViewport(void) {}
+  void PopRenderTargetAndViewport() {}
 
   virtual int ShaderFlagCount() const { return 0; }
 
@@ -1374,11 +1374,11 @@ class CDummyMaterialSystem
     return Vector(0, 0, 0);
   }
 
-  void ReleaseResources(void) {}
+  void ReleaseResources() {}
 
-  void ReacquireResources(void) {}
+  void ReacquireResources() {}
 
-  Vector GetToneMappingScaleLinear(void) { return Vector(1, 1, 1); }
+  Vector GetToneMappingScaleLinear() { return Vector(1, 1, 1); }
 
   virtual void GetMaxToRender(IMesh *pMesh, bool bMaxUntilFlush, int *pMaxVerts,
                               int *pMaxIndices) {
@@ -1429,11 +1429,11 @@ class CDummyMaterialSystem
 
   virtual void PushCustomClipPlane(const float *pPlane) {}
 
-  virtual void PopCustomClipPlane(void) {}
+  virtual void PopCustomClipPlane() {}
 
   virtual bool EnableClipping(bool bEnable) { return true; }
 
-  virtual void PushHeightClipPlane(void) {}
+  virtual void PushHeightClipPlane() {}
   void ResetToneMappingScale(float sc) {}
   void TurnOnToneMapping() {}
 
@@ -1442,11 +1442,11 @@ class CDummyMaterialSystem
     max_dxlevel = recommended_dxlevel = 90;
   }
 
-  virtual bool UsingFastClipping(void) {
+  virtual bool UsingFastClipping() {
     return true;  // true for "crappier" hardware, so true is safer than false
   }
 
-  virtual int StencilBufferBits(void) { return 0; }
+  virtual int StencilBufferBits() { return 0; }
 
   virtual void DisableAllLocalLights() {}
   virtual int CompareMaterialCombos(IMaterial *pMaterial1,
@@ -1486,9 +1486,9 @@ class CDummyMaterialSystem
 
   virtual void SetGoalToneMappingScale(float) {}
 
-  virtual bool SupportsShadowDepthTextures(void) { return false; }
+  virtual bool SupportsShadowDepthTextures() { return false; }
 
-  virtual bool SupportsFetch4(void) { return false; }
+  virtual bool SupportsFetch4() { return false; }
 
   virtual void SetShadowDepthBiasFactors(float fShadowSlopeScaleDepthBias,
                                          float fShadowDepthBias) {}
@@ -1594,7 +1594,7 @@ class CDummyMaterialSystem
   virtual void RemoveTextureAlias(const char *pAlias) {}
 
   virtual void SetExcludedTextures(const char *pScriptName) {}
-  virtual void UpdateExcludedTextures(void) {}
+  virtual void UpdateExcludedTextures() {}
 
   virtual void SetFlexWeights(int nFirstWeight, int nCount,
                               const MorphWeight_t *pWeights) {}
@@ -1618,41 +1618,6 @@ class CDummyMaterialSystem
       ITexture *pTexture, MaterialNonInteractiveMode_t mode) {}
   virtual void EnableNonInteractiveMode(MaterialNonInteractiveMode_t mode) {}
   virtual void RefreshFrontBufferNonInteractive() {}
-
-#if defined(_X360)
-  virtual void ListUsedMaterials(void) {}
-  virtual HXUIFONT OpenTrueTypeFont(const char *pFontname, int tall,
-                                    int style) {
-    return (HXUIFONT)0;
-  }
-  virtual void CloseTrueTypeFont(HXUIFONT hFont) {}
-  virtual bool GetTrueTypeFontMetrics(HXUIFONT hFont,
-                                      XUIFontMetrics *pFontMetrics,
-                                      XUICharMetrics charMetrics[256]) {
-    pFontMetrics->fLineHeight = 0.0f;
-    pFontMetrics->fMaxAscent = 0.0f;
-    pFontMetrics->fMaxDescent = 0.0f;
-    pFontMetrics->fMaxWidth = 0.0f;
-    pFontMetrics->fMaxHeight = 0.0f;
-    pFontMetrics->fMaxAdvance = 0.0f;
-    return true;
-  }
-
-  virtual bool GetTrueTypeGlyphs(HXUIFONT hFont, int numChars, wchar_t *pWch,
-                                 int *pOffsetX, int *pOffsetY, int *pWidth,
-                                 int *pHeight, unsigned char *pRGBA,
-                                 int *pRGBAOffset) {
-    return false;
-  }
-
-  virtual void PersistDisplay() {}
-  virtual void *GetD3DDevice() { return NULL; }
-
-  virtual void PushVertexShaderGPRAllocation(int iVertexShaderCount = 64){};
-  virtual void PopVertexShaderGPRAllocation(void){};
-
-  virtual bool OwnGPUResources(bool bEnable) { return false; }
-#endif
 
   virtual void CompactMemory() {}
 

@@ -41,11 +41,7 @@
 #define GREY_TEXTURE_SIZE 1
 #define NORMALIZATION_CUBEMAP_SIZE 32
 
-//-----------------------------------------------------------------------------
-//
 // Various procedural texture regeneration classes
-//
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Creates a checkerboard texture
@@ -500,9 +496,9 @@ class CTextureManager : public ITextureManager {
   // Restores a single texture
   void RestoreTexture(ITextureInternal *pTex);
 
-  CUtlDict<ITextureInternal *, unsigned short> m_TextureList;
-  CUtlDict<const char *, unsigned short> m_TextureAliases;
-  CUtlDict<int, unsigned short> m_TextureExcludes;
+  CUtlDict<ITextureInternal *, u16> m_TextureList;
+  CUtlDict<const char *, u16> m_TextureAliases;
+  CUtlDict<int, u16> m_TextureExcludes;
 
   int m_iNextTexID;
   int m_nFlags;
@@ -785,7 +781,7 @@ void CTextureManager::SetColorCorrectionTexture(int i,
 //-----------------------------------------------------------------------------
 // Releases all textures (cause we've lost video memory)
 //-----------------------------------------------------------------------------
-void CTextureManager::ReleaseTextures(void) {
+void CTextureManager::ReleaseTextures() {
   g_pShaderAPI->SetFullScreenTextureHandle(INVALID_SHADERAPI_TEXTURE_HANDLE);
 
   for (int i = m_TextureList.First(); i != m_TextureList.InvalidIndex();
@@ -908,9 +904,7 @@ static void ForceTextureIntoHardware(ITexture *pTexture, IMaterial *pMaterial,
 //-----------------------------------------------------------------------------
 // Reloads all textures
 //-----------------------------------------------------------------------------
-void CTextureManager::ForceAllTexturesIntoHardware(void) {
-  if (IsX360()) return;
-
+void CTextureManager::ForceAllTexturesIntoHardware() {
   IMaterial *pMaterial = MaterialSystem()->FindMaterial("engine/preloadtexture",
                                                         "texture preload");
   pMaterial =
@@ -1155,7 +1149,7 @@ void CTextureManager::SetExcludedTextures(const char *pScriptName) {
   }
 }
 
-void CTextureManager::UpdateExcludedTextures(void) {
+void CTextureManager::UpdateExcludedTextures() {
   for (int i = m_TextureList.First(); i != m_TextureList.InvalidIndex();
        i = m_TextureList.Next(i)) {
     m_TextureList[i]->UpdateExcludedState();
@@ -1229,7 +1223,7 @@ void CTextureManager::ResetTextureFilteringState() {
   }
 }
 
-void CTextureManager::RemoveUnusedTextures(void) {
+void CTextureManager::RemoveUnusedTextures() {
   int iNext;
   for (int i = m_TextureList.First(); i != m_TextureList.InvalidIndex();
        i = iNext) {
@@ -1273,22 +1267,9 @@ void CTextureManager::ReloadFilesInList(IFileList *pFilesToReload) {
   }
 }
 
-void CTextureManager::ReleaseTempRenderTargetBits(void) {
-  if (IsX360())  // only sane on 360
-  {
-    int iNext;
-    for (int i = m_TextureList.First(); i != m_TextureList.InvalidIndex();
-         i = iNext) {
-      iNext = m_TextureList.Next(i);
+void CTextureManager::ReleaseTempRenderTargetBits() {}
 
-      if (m_TextureList[i]->IsTempRenderTarget()) {
-        m_TextureList[i]->Release();
-      }
-    }
-  }
-}
-
-void CTextureManager::DebugPrintUsedTextures(void) {
+void CTextureManager::DebugPrintUsedTextures() {
   for (int i = m_TextureList.First(); i != m_TextureList.InvalidIndex();
        i = m_TextureList.Next(i)) {
     ITextureInternal *pTexture = m_TextureList[i];

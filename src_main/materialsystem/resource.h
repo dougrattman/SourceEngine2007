@@ -1,10 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE 101
-#define _APS_NEXT_COMMAND_VALUE 40001
-#define _APS_NEXT_CONTROL_VALUE 1000
-#define _APS_NEXT_SYMED_VALUE 101
-#endif
-#endif
+#include "base/include/windows/product_version.h"
+
+#define HALFLIFE_VER_FILEDESCRIPTION_STR \
+  "Awesome Half-Life 2 material system library"

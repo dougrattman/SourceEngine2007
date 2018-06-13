@@ -30,22 +30,22 @@ class CShaderDeviceMgrDx10 : public CShaderDeviceMgrBase {
   virtual ~CShaderDeviceMgrDx10();
 
   // Methods of IAppSystem
-  virtual bool Connect(CreateInterfaceFn factory);
-  virtual void Disconnect();
-  virtual InitReturnVal_t Init();
-  virtual void Shutdown();
+  bool Connect(CreateInterfaceFn factory) override;
+  void Disconnect() override;
+  InitReturnVal_t Init() override;
+  void Shutdown() override;
 
   // Methods of IShaderDeviceMgr
-  virtual int GetAdapterCount() const;
-  virtual void GetAdapterInfo(int adapter, MaterialAdapterInfo_t &info) const;
-  virtual int GetModeCount(int nAdapter) const;
-  virtual void GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
-                           int mode) const;
-  virtual void GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
-                                  int nAdapter) const;
-  virtual bool SetAdapter(int nAdapter, int nFlags);
-  virtual CreateInterfaceFn SetMode(void *hWnd, int nAdapter,
-                                    const ShaderDeviceInfo_t &mode);
+  int GetAdapterCount() const override;
+  void GetAdapterInfo(int adapter, MaterialAdapterInfo_t &info) const override;
+  int GetModeCount(int nAdapter) const override;
+  void GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
+                   int mode) const override;
+  void GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
+                          int nAdapter) const override;
+  bool SetAdapter(int nAdapter, int nFlags) override;
+  CreateInterfaceFn SetMode(HWND hWnd, int nAdapter,
+                            const ShaderDeviceInfo_t &mode) override;
 
  private:
   // Initialize adapter information
@@ -56,7 +56,7 @@ class CShaderDeviceMgrDx10 : public CShaderDeviceMgrBase {
                           IDXGIOutput *pOutput);
 
   // Returns the amount of video memory in bytes for a particular adapter
-  virtual u64 GetVidMemBytes(u32 nAdapter) const;
+  virtual u64 GetVidMemBytes(u32 nAdapter) const override;
 
   // Returns the appropriate adapter output to use
   IDXGIOutput *GetAdapterOutput(int nAdapter) const;
@@ -77,68 +77,100 @@ class CShaderDeviceMgrDx10 : public CShaderDeviceMgrBase {
 //-----------------------------------------------------------------------------
 class CShaderDeviceDx10 : public CShaderDeviceBase {
  public:
-  // constructor, destructor
   CShaderDeviceDx10();
   virtual ~CShaderDeviceDx10();
 
- public:
   // Methods of IShaderDevice
-  virtual bool IsUsingGraphics() const;
-  virtual int GetCurrentAdapter() const;
-  virtual ImageFormat GetBackBufferFormat() const;
-  virtual void GetBackBufferDimensions(int &width, int &height) const;
-  virtual void SpewDriverInfo() const;
-  virtual void Present();
-  virtual IShaderBuffer *CompileShader(const char *pProgram, size_t nBufLen,
-                                       const char *pShaderVersion);
-  virtual VertexShaderHandle_t CreateVertexShader(IShaderBuffer *pShader);
-  virtual void DestroyVertexShader(VertexShaderHandle_t hShader);
-  virtual GeometryShaderHandle_t CreateGeometryShader(
-      IShaderBuffer *pShaderBuffer);
-  virtual void DestroyGeometryShader(GeometryShaderHandle_t hShader);
-  virtual PixelShaderHandle_t CreatePixelShader(IShaderBuffer *pShaderBuffer);
-  virtual void DestroyPixelShader(PixelShaderHandle_t hShader);
-  virtual void ReleaseResources() {}
-  virtual void ReacquireResources() {}
-  virtual IMesh *CreateStaticMesh(VertexFormat_t format,
-                                  const char *pTextureBudgetGroup,
-                                  IMaterial *pMaterial);
-  virtual void DestroyStaticMesh(IMesh *mesh);
-  virtual IVertexBuffer *CreateVertexBuffer(ShaderBufferType_t type,
-                                            VertexFormat_t fmt,
-                                            int nVertexCount,
-                                            const char *pTextureBudgetGroup);
-  virtual void DestroyVertexBuffer(IVertexBuffer *pVertexBuffer);
-  virtual IIndexBuffer *CreateIndexBuffer(ShaderBufferType_t type,
-                                          MaterialIndexFormat_t fmt,
-                                          int nIndexCount,
-                                          const char *pTextureBudgetGroup);
-  virtual void DestroyIndexBuffer(IIndexBuffer *pIndexBuffer);
-  virtual IVertexBuffer *GetDynamicVertexBuffer(int nStreamID,
-                                                VertexFormat_t vertexFormat,
-                                                bool bBuffered = true);
-  virtual IIndexBuffer *GetDynamicIndexBuffer(MaterialIndexFormat_t fmt,
-                                              bool bBuffered = true);
-  virtual void SetHardwareGammaRamp(float fGamma, float fGammaTVRangeMin,
-                                    float fGammaTVRangeMax,
-                                    float fGammaTVExponent, bool bTVEnabled);
+
+  void ReleaseResources() override {}
+  void ReacquireResources() override {}
+
+  ImageFormat GetBackBufferFormat() const override;
+  void GetBackBufferDimensions(int &width, int &height) const override;
+
+  int GetCurrentAdapter() const override;
+
+  bool IsUsingGraphics() const override;
+
+  void SpewDriverInfo() const override;
+
+  void Present() override;
+
+  void SetHardwareGammaRamp(float fGamma, float fGammaTVRangeMin,
+                            float fGammaTVRangeMax, float fGammaTVExponent,
+                            bool bTVEnabled) override;
+
+  IShaderBuffer *CompileShader(const char *pProgram, size_t nBufLen,
+                               const char *pShaderVersion) override;
+
+  VertexShaderHandle_t CreateVertexShader(IShaderBuffer *pShader) override;
+  void DestroyVertexShader(VertexShaderHandle_t hShader) override;
+
+  GeometryShaderHandle_t CreateGeometryShader(
+      IShaderBuffer *pShaderBuffer) override;
+  void DestroyGeometryShader(GeometryShaderHandle_t hShader) override;
+
+  PixelShaderHandle_t CreatePixelShader(IShaderBuffer *pShaderBuffer) override;
+  void DestroyPixelShader(PixelShaderHandle_t hShader);
+
+  IMesh *CreateStaticMesh(VertexFormat_t format,
+                          const char *pTextureBudgetGroup,
+                          IMaterial *pMaterial) override;
+  void DestroyStaticMesh(IMesh *mesh) override;
+
+  IVertexBuffer *CreateVertexBuffer(ShaderBufferType_t type, VertexFormat_t fmt,
+                                    int nVertexCount,
+                                    const char *pTextureBudgetGroup) override;
+  void DestroyVertexBuffer(IVertexBuffer *pVertexBuffer) override;
+
+  IIndexBuffer *CreateIndexBuffer(ShaderBufferType_t type,
+                                  MaterialIndexFormat_t fmt, int nIndexCount,
+                                  const char *pTextureBudgetGroup) override;
+  void DestroyIndexBuffer(IIndexBuffer *pIndexBuffer) override;
+
+  IVertexBuffer *GetDynamicVertexBuffer(int nStreamID,
+                                        VertexFormat_t vertexFormat,
+                                        bool bBuffered = true) override;
+  IIndexBuffer *GetDynamicIndexBuffer(MaterialIndexFormat_t fmt,
+                                      bool bBuffered = true) override;
 
   // A special path used to tick the front buffer while loading on the 360
-  virtual void EnableNonInteractiveMode(MaterialNonInteractiveMode_t mode,
-                                        ShaderNonInteractiveInfo_t *pInfo) {}
-  virtual void RefreshFrontBufferNonInteractive() {}
+  void EnableNonInteractiveMode(MaterialNonInteractiveMode_t mode,
+                                ShaderNonInteractiveInfo_t *pInfo) override {}
+  void RefreshFrontBufferNonInteractive() override {}
 
- public:
   // Methods of CShaderDeviceBase
-  virtual bool InitDevice(void *hWnd, int nAdapter,
-                          const ShaderDeviceInfo_t &mode);
-  virtual void ShutdownDevice();
-  virtual bool IsDeactivated() const { return false; }
+
+  bool InitDevice(HWND hWnd, int nAdapter,
+                  const ShaderDeviceInfo_t &mode) override;
+  void ShutdownDevice() override;
+  bool IsDeactivated() const override { return false; }
 
   // Other public methods
-  ID3D10VertexShader *GetVertexShader(VertexShaderHandle_t hShader) const;
-  ID3D10GeometryShader *GetGeometryShader(GeometryShaderHandle_t hShader) const;
-  ID3D10PixelShader *GetPixelShader(PixelShaderHandle_t hShader) const;
+
+  // Inline methods of CShaderDeviceDx10
+  ID3D10VertexShader *GetVertexShader(VertexShaderHandle_t hShader) const {
+    if (hShader != VERTEX_SHADER_HANDLE_INVALID)
+      return m_VertexShaderDict[(VertexShaderIndex_t)hShader].m_pShader;
+
+    return nullptr;
+  }
+
+  ID3D10GeometryShader *GetGeometryShader(
+      GeometryShaderHandle_t hShader) const {
+    if (hShader != GEOMETRY_SHADER_HANDLE_INVALID)
+      return m_GeometryShaderDict[(GeometryShaderIndex_t)hShader].m_pShader;
+
+    return nullptr;
+  }
+
+  ID3D10PixelShader *GetPixelShader(PixelShaderHandle_t hShader) const {
+    if (hShader != PIXEL_SHADER_HANDLE_INVALID)
+      return m_PixelShaderDict[(PixelShaderIndex_t)hShader].m_pShader;
+
+    return nullptr;
+  }
+
   ID3D10InputLayout *GetInputLayout(VertexShaderHandle_t hShader,
                                     VertexFormat_t format);
 
@@ -148,11 +180,11 @@ class CShaderDeviceDx10 : public CShaderDeviceBase {
     VertexFormat_t m_VertexFormat;
   };
 
-  typedef CUtlRBTree<InputLayout_t, unsigned short> InputLayoutDict_t;
+  using InputLayoutDict_t = CUtlRBTree<InputLayout_t, u16>;
 
   static bool InputLayoutLessFunc(const InputLayout_t &lhs,
                                   const InputLayout_t &rhs) {
-    return (lhs.m_VertexFormat < rhs.m_VertexFormat);
+    return lhs.m_VertexFormat < rhs.m_VertexFormat;
   }
 
   struct VertexShader_t {
@@ -162,7 +194,7 @@ class CShaderDeviceDx10 : public CShaderDeviceBase {
     size_t m_nByteCodeLen;
     InputLayoutDict_t m_InputLayouts;
 
-    VertexShader_t() : m_InputLayouts(0, 0, InputLayoutLessFunc) {}
+    VertexShader_t() : m_InputLayouts{0, 0, InputLayoutLessFunc} {}
   };
 
   struct GeometryShader_t {
@@ -175,10 +207,10 @@ class CShaderDeviceDx10 : public CShaderDeviceBase {
     ID3D10ShaderReflection *m_pInfo;
   };
 
-  typedef CUtlFixedLinkedList<VertexShader_t>::IndexType_t VertexShaderIndex_t;
-  typedef CUtlFixedLinkedList<GeometryShader_t>::IndexType_t
-      GeometryShaderIndex_t;
-  typedef CUtlFixedLinkedList<PixelShader_t>::IndexType_t PixelShaderIndex_t;
+  using VertexShaderIndex_t = CUtlFixedLinkedList<VertexShader_t>::IndexType_t;
+  using GeometryShaderIndex_t =
+      CUtlFixedLinkedList<GeometryShader_t>::IndexType_t;
+  using PixelShaderIndex_t = CUtlFixedLinkedList<PixelShader_t>::IndexType_t;
 
   void SetupHardwareCaps();
   void ReleaseInputLayouts(VertexShaderIndex_t nIndex);
@@ -197,38 +229,10 @@ class CShaderDeviceDx10 : public CShaderDeviceBase {
   friend ID3D10RenderTargetView *D3D10RenderTargetView();
 };
 
-//-----------------------------------------------------------------------------
-// Inline methods of CShaderDeviceDx10
-//-----------------------------------------------------------------------------
-inline ID3D10VertexShader *CShaderDeviceDx10::GetVertexShader(
-    VertexShaderHandle_t hShader) const {
-  if (hShader != VERTEX_SHADER_HANDLE_INVALID)
-    return m_VertexShaderDict[(VertexShaderIndex_t)hShader].m_pShader;
-  return NULL;
-}
-
-inline ID3D10GeometryShader *CShaderDeviceDx10::GetGeometryShader(
-    GeometryShaderHandle_t hShader) const {
-  if (hShader != GEOMETRY_SHADER_HANDLE_INVALID)
-    return m_GeometryShaderDict[(GeometryShaderIndex_t)hShader].m_pShader;
-  return NULL;
-}
-
-inline ID3D10PixelShader *CShaderDeviceDx10::GetPixelShader(
-    PixelShaderHandle_t hShader) const {
-  if (hShader != PIXEL_SHADER_HANDLE_INVALID)
-    return m_PixelShaderDict[(PixelShaderIndex_t)hShader].m_pShader;
-  return NULL;
-}
-
-//-----------------------------------------------------------------------------
 // Singleton
-//-----------------------------------------------------------------------------
 extern CShaderDeviceDx10 *g_pShaderDeviceDx10;
 
-//-----------------------------------------------------------------------------
 // Utility methods
-//-----------------------------------------------------------------------------
 inline ID3D10Device *D3D10Device() { return g_pShaderDeviceDx10->m_pDevice; }
 
 inline IDXGISwapChain *D3D10SwapChain() {

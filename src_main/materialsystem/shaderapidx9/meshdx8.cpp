@@ -50,8 +50,8 @@ extern ConVar mat_debugalttab;
 
 //#define DRAW_SELECTION 1
 static bool g_bDrawSelection = true;  // only used in DRAW_SELECTION
-static unsigned int g_nScratchIndexBuffer =
-    0;  // shove indices into this if you don't actually want indices
+// shove indices into this if you don't actually want indices
+static unsigned int g_nScratchIndexBuffer = 0;
 
 //-----------------------------------------------------------------------------
 // Important enumerations
@@ -1983,8 +1983,8 @@ void CBaseMeshDX8::Spew(int nVertexCount, int nIndexCount,
 
   int numBoneWeights = NumBoneWeights(fmt);
   for (i = 0; i < nVertexCount; ++i) {
-    temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp,
-                      "[%4d] ", i + desc.m_nFirstVertex);
+    temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp, "[%4d] ",
+                      i + desc.m_nFirstVertex);
     if (fmt & VERTEX_POSITION) {
       D3DXVECTOR3 &pos = Position(desc, i);
       temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp,
@@ -1993,17 +1993,16 @@ void CBaseMeshDX8::Spew(int nVertexCount, int nIndexCount,
 
     if (fmt & VERTEX_WRINKLE) {
       float flWrinkle = Wrinkle(desc, i);
-      temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp,
-                        "Wr %8.2f ", flWrinkle);
+      temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp, "Wr %8.2f ",
+                        flWrinkle);
     }
 
     if (numBoneWeights > 0) {
-      temp +=
-          sprintf_s(temp, tempbuf + std::size(tempbuf) - temp, "BW ");
+      temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp, "BW ");
       float *pWeight = BoneWeight(desc, i);
       for (int j = 0; j < numBoneWeights; ++j) {
-        temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp,
-                          "%1.2f ", pWeight[j]);
+        temp += sprintf_s(temp, tempbuf + std::size(tempbuf) - temp, "%1.2f ",
+                          pWeight[j]);
       }
     }
     if (fmt & VERTEX_BONE_INDEX) {
@@ -4357,8 +4356,6 @@ void CMeshMgr::CleanUp() {
 // Fills a vertexID buffer
 //-----------------------------------------------------------------------------
 void CMeshMgr::FillVertexIDBuffer(CVertexBuffer *pVertexIDBuffer, int nCount) {
-  if (IsX360()) return;
-
   // Fill the buffer with the values 0->(nCount-1)
   int nBaseVertexIndex = 0;
   float *pBuffer = (float *)pVertexIDBuffer->Lock(nCount, nBaseVertexIndex);
@@ -4372,8 +4369,6 @@ void CMeshMgr::FillVertexIDBuffer(CVertexBuffer *pVertexIDBuffer, int nCount) {
 // Creates, destroys the vertexID buffer
 //-----------------------------------------------------------------------------
 void CMeshMgr::CreateVertexIDBuffer() {
-  if (IsX360()) return;
-
   DestroyVertexIDBuffer();
 
   // Track mesh allocations
@@ -4929,7 +4924,7 @@ IVertexBuffer *CMeshMgr::GetDynamicVertexBuffer(int streamID,
     return NULL;
   }
 
-  // MESHFIXME
+    // MESHFIXME
 #if 0
 	if ( ( m_BufferedMode != bBuffered ) && m_BufferedMode )
 	{
@@ -5063,10 +5058,10 @@ bool CMeshMgr::SetRenderState(int nVertexOffsetInBytes, int nFirstVertexIdx,
     return false;
   }
 
-  // make sure the vertex format is a superset of the current material's
-  // vertex format...
-  // MESHFIXME : This path is only used for the new index/vertex buffer
-  // interfaces.
+    // make sure the vertex format is a superset of the current material's
+    // vertex format...
+    // MESHFIXME : This path is only used for the new index/vertex buffer
+    // interfaces.
 #if 0
 	// TODO(d.rattman):
 	if ( !IsValidVertexFormat( vertexFormat ) )

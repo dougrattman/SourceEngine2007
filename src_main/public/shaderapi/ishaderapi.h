@@ -140,7 +140,7 @@ enum ShaderAPIOcclusionQueryResult_t {
 //-----------------------------------------------------------------------------
 // This is what the material system gets to see.
 //-----------------------------------------------------------------------------
-#define SHADERAPI_INTERFACE_VERSION "ShaderApi029"
+#define SHADERAPI_INTERFACE_VERSION "ShaderApi030"
 the_interface IShaderAPI : public IShaderDynamicAPI {
  public:
   // NOTE: These methods have been ported to DX10
@@ -169,7 +169,7 @@ the_interface IShaderAPI : public IShaderDynamicAPI {
   // NOTE: These methods have not yet been ported to DX10
 
   // Sets the mode...
-  virtual bool SetMode(void *hwnd, int nAdapter,
+  virtual bool SetMode(HWND hwnd, int nAdapter,
                        const ShaderDeviceInfo_t &info) = 0;
 
   virtual void ChangeVideoMode(const ShaderDeviceInfo_t &info) = 0;

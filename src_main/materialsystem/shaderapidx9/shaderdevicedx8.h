@@ -12,7 +12,7 @@
 #include "tier1/utlvector.h"
 
 // Describes which D3DDEVTYPE to use
-#define SOURCE_DX9_DEVICE_TYPE D3DDEVTYPE_HAL
+constexpr inline D3DDEVTYPE SOURCE_DX9_DEVICE_TYPE{D3DDEVTYPE_HAL};
 
 // By default, PIX profiling is explicitly disallowed using the
 // D3DPERF_SetOptions(1) API on PC. Uncomment to use PIX instrumentation:
@@ -22,33 +22,36 @@
 
 // The Base implementation of the shader device
 class CShaderDeviceMgrDx8 : public CShaderDeviceMgrBase {
-  typedef CShaderDeviceMgrBase BaseClass;
+  using BaseClass = CShaderDeviceMgrBase;
 
  public:
-  // constructor, destructor
   CShaderDeviceMgrDx8();
   virtual ~CShaderDeviceMgrDx8();
 
   // Methods of IAppSystem
-  virtual bool Connect(CreateInterfaceFn factory);
-  virtual void Disconnect();
-  virtual InitReturnVal_t Init();
-  virtual void Shutdown();
 
-  // Methods of IShaderDevice
-  virtual int GetAdapterCount() const;
-  virtual void GetAdapterInfo(int adapter, MaterialAdapterInfo_t &info) const;
-  virtual int GetModeCount(int nAdapter) const;
-  virtual void GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
-                           int mode) const;
-  virtual void GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
-                                  int nAdapter) const;
-  virtual bool SetAdapter(int nAdapter, int nFlags);
-  virtual CreateInterfaceFn SetMode(void *hWnd, int nAdapter,
-                                    const ShaderDeviceInfo_t &mode);
+  bool Connect(CreateInterfaceFn factory) override;
+  void Disconnect() override;
+  InitReturnVal_t Init() override;
+  void Shutdown() override;
+
+  // Methods of IShaderDeviceMgr
+
+  int GetAdapterCount() const override;
+  void GetAdapterInfo(int adapter, MaterialAdapterInfo_t &info) const override;
+
+  int GetModeCount(int nAdapter) const override;
+  void GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
+                   int mode) const override;
+  void GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
+                          int nAdapter) const override;
+
+  bool SetAdapter(int nAdapter, int nFlags) override;
+  CreateInterfaceFn SetMode(HWND hWnd, int nAdapter,
+                            const ShaderDeviceInfo_t &mode) override;
 
   // Determines hardware caps from D3D
-  bool ComputeCapsFromD3D(HardwareCaps_t *pCaps, int nAdapter);
+  bool ComputeCapsFromD3D(HardwareCaps_t *pCaps, u32 nAdapter);
 
   // Forces caps to a specific dx level
   void ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
@@ -58,7 +61,7 @@ class CShaderDeviceMgrDx8 : public CShaderDeviceMgrBase {
   bool ValidateMode(int nAdapter, const ShaderDeviceInfo_t &info) const;
 
   // Returns the amount of video memory in bytes for a particular adapter
-  virtual u64 GetVidMemBytes(u32 adapter_idx) const;
+  virtual u64 GetVidMemBytes(u32 adapter_idx) const override;
 
   SOURCE_FORCEINLINE IDirect3D9 *D3D() const { return m_pD3D; }
 
@@ -100,81 +103,90 @@ extern CShaderDeviceMgrDx8 *g_pShaderDeviceMgrDx8;
 // IDirect3D accessor
 inline IDirect3D9 *D3D() { return g_pShaderDeviceMgrDx8->D3D(); }
 
-// The Dx8implementation of the shader device
+// The Dx8 implementation of the shader device
 class CShaderDeviceDx8 : public CShaderDeviceBase {
-  // Methods of IShaderDevice
  public:
-  virtual bool IsUsingGraphics() const;
-  virtual ImageFormat GetBackBufferFormat() const;
-  virtual void GetBackBufferDimensions(int &width, int &height) const;
-  virtual void Present();
-  virtual IShaderBuffer *CompileShader(const char *pProgram, size_t nBufLen,
-                                       const char *pShaderVersion);
-  virtual VertexShaderHandle_t CreateVertexShader(IShaderBuffer *pBuffer);
-  virtual void DestroyVertexShader(VertexShaderHandle_t hShader);
-  virtual GeometryShaderHandle_t CreateGeometryShader(
-      IShaderBuffer *pShaderBuffer);
-  virtual void DestroyGeometryShader(GeometryShaderHandle_t hShader);
-  virtual PixelShaderHandle_t CreatePixelShader(IShaderBuffer *pShaderBuffer);
-  virtual void DestroyPixelShader(PixelShaderHandle_t hShader);
-  virtual void ReleaseResources();
-  virtual void ReacquireResources();
-  virtual IMesh *CreateStaticMesh(VertexFormat_t format,
-                                  const char *pBudgetGroup,
-                                  IMaterial *pMaterial = NULL);
-  virtual void DestroyStaticMesh(IMesh *mesh);
-  virtual IVertexBuffer *CreateVertexBuffer(ShaderBufferType_t type,
-                                            VertexFormat_t fmt,
-                                            int nVertexCount,
-                                            const char *pBudgetGroup);
-  virtual void DestroyVertexBuffer(IVertexBuffer *pVertexBuffer);
-  virtual IIndexBuffer *CreateIndexBuffer(ShaderBufferType_t bufferType,
-                                          MaterialIndexFormat_t fmt,
-                                          int nIndexCount,
-                                          const char *pBudgetGroup);
-  virtual void DestroyIndexBuffer(IIndexBuffer *pIndexBuffer);
-  virtual IVertexBuffer *GetDynamicVertexBuffer(int nStreamID,
-                                                VertexFormat_t vertexFormat,
-                                                bool bBuffered = true);
-  virtual IIndexBuffer *GetDynamicIndexBuffer(MaterialIndexFormat_t fmt,
-                                              bool bBuffered = true);
-  virtual void SetHardwareGammaRamp(float fGamma, float fGammaTVRangeMin,
-                                    float fGammaTVRangeMax,
-                                    float fGammaTVExponent, bool bTVEnabled);
-  virtual void SpewDriverInfo() const;
-  virtual int GetCurrentAdapter() const;
-  virtual void EnableNonInteractiveMode(
-      MaterialNonInteractiveMode_t mode,
-      ShaderNonInteractiveInfo_t *pInfo = NULL);
-  virtual void RefreshFrontBufferNonInteractive();
+  CShaderDeviceDx8();
+  virtual ~CShaderDeviceDx8();
 
-  // Alternative method for ib/vs
-  // NOTE: If this works, remove GetDynamicVertexBuffer/IndexBuffer
+  // Methods of IShaderDevice
+
+  void ReleaseResources() override;
+  void ReacquireResources() override;
+
+  ImageFormat GetBackBufferFormat() const override;
+  void GetBackBufferDimensions(int &width, int &height) const override;
+
+  int GetCurrentAdapter() const override;
+
+  bool IsUsingGraphics() const override;
+
+  void SpewDriverInfo() const override;
+
+  void Present() override;
+
+  IShaderBuffer *CompileShader(const char *pProgram, size_t nBufLen,
+                               const char *pShaderVersion) override;
+
+  VertexShaderHandle_t CreateVertexShader(IShaderBuffer *pBuffer) override;
+  void DestroyVertexShader(VertexShaderHandle_t hShader) override;
+
+  GeometryShaderHandle_t CreateGeometryShader(
+      IShaderBuffer *pShaderBuffer) override;
+  void DestroyGeometryShader(GeometryShaderHandle_t hShader) override;
+
+  PixelShaderHandle_t CreatePixelShader(IShaderBuffer *pShaderBuffer) override;
+  void DestroyPixelShader(PixelShaderHandle_t hShader) override;
+
+  IMesh *CreateStaticMesh(VertexFormat_t format, const char *pBudgetGroup,
+                          IMaterial *pMaterial = nullptr) override;
+  void DestroyStaticMesh(IMesh *mesh) override;
+
+  IVertexBuffer *CreateVertexBuffer(ShaderBufferType_t type, VertexFormat_t fmt,
+                                    int nVertexCount,
+                                    const char *pBudgetGroup) override;
+  void DestroyVertexBuffer(IVertexBuffer *pVertexBuffer) override;
+
+  IIndexBuffer *CreateIndexBuffer(ShaderBufferType_t bufferType,
+                                  MaterialIndexFormat_t fmt, int nIndexCount,
+                                  const char *pBudgetGroup) override;
+  void DestroyIndexBuffer(IIndexBuffer *pIndexBuffer) override;
+
+  IVertexBuffer *GetDynamicVertexBuffer(int nStreamID,
+                                        VertexFormat_t vertexFormat,
+                                        bool bBuffered = true) override;
+  IIndexBuffer *GetDynamicIndexBuffer(MaterialIndexFormat_t fmt,
+                                      bool bBuffered = true) override;
+
+  void SetHardwareGammaRamp(float fGamma, float fGammaTVRangeMin,
+                            float fGammaTVRangeMax, float fGammaTVExponent,
+                            bool bTVEnabled) override;
+
+  void EnableNonInteractiveMode(
+      MaterialNonInteractiveMode_t mode,
+      ShaderNonInteractiveInfo_t *pInfo = nullptr) override;
+  void RefreshFrontBufferNonInteractive() override;
 
   // Methods of CShaderDeviceBase
- public:
-  virtual bool InitDevice(void *hWnd, int nAdapter,
-                          const ShaderDeviceInfo_t &info);
-  virtual void ShutdownDevice();
+
+  bool InitDevice(HWND hWnd, int nAdapter,
+                  const ShaderDeviceInfo_t &info) override;
+  void ShutdownDevice() override;
 
   // Used to determine if we're deactivated
-  SOURCE_FORCEINLINE virtual bool IsDeactivated() const {
+  SOURCE_FORCEINLINE bool IsDeactivated() const override {
     return m_DeviceState != DEVICE_STATE_OK || m_bQueuedDeviceLost ||
            m_numReleaseResourcesRefCount;
   }
 
+  // Call this when another app is initializing or finished initializing
+  void OtherAppInitializing(bool initializing) override;
+
   // Other public methods
  public:
-  // constructor, destructor
-  CShaderDeviceDx8();
-  virtual ~CShaderDeviceDx8();
-
-  // Call this when another app is initializing or finished initializing
-  virtual void OtherAppInitializing(bool initializing);
-
   // TODO(d.rattman): Make private
   // Which device are we using?
-  UINT m_DisplayAdapter;
+  u32 m_DisplayAdapter;
   D3DDEVTYPE m_DeviceType;
 
  protected:
@@ -206,18 +218,18 @@ class CShaderDeviceDx8 : public CShaderDeviceBase {
 
  protected:
   // Creates the D3D Device
-  bool CreateD3DDevice(void *pHWnd, int nAdapter,
+  bool CreateD3DDevice(HWND pHWnd, int nAdapter,
                        const ShaderDeviceInfo_t &info);
 
   // Actually creates the D3D Device once the present parameters are set up
-  IDirect3DDevice9 *InvokeCreateDevice(void *hWnd, int nAdapter,
+  IDirect3DDevice9 *InvokeCreateDevice(HWND hWnd, int nAdapter,
                                        DWORD deviceCreationFlags);
 
   // Checks for CreateQuery support
   void DetectQuerySupport(IDirect3DDevice9 *pD3DDevice);
 
   // Computes the presentation parameters
-  void SetPresentParameters(void *hWnd, int nAdapter,
+  void SetPresentParameters(HWND hWnd, int nAdapter,
                             const ShaderDeviceInfo_t &info);
 
   // Computes the supersample flags
@@ -239,8 +251,8 @@ class CShaderDeviceDx8 : public CShaderDeviceBase {
   bool ResizeWindow(const ShaderDeviceInfo_t &info);
 
   // Deals with the frame synching object
-  void AllocFrameSyncObjects(void);
-  void FreeFrameSyncObjects(void);
+  void AllocFrameSyncObjects();
+  void FreeFrameSyncObjects();
 
   // Alloc and free objects that are necessary for frame syncing
   void AllocFrameSyncTextureObject();
@@ -264,8 +276,6 @@ class CShaderDeviceDx8 : public CShaderDeviceBase {
   void ReacquireResourcesInternal(bool bResetState = false,
                                   bool bForceReacquire = false,
                                   char const *pszForceReason = NULL);
-
-  IDirect3DDevice9 *m_pD3DDevice;
 
   D3DPRESENT_PARAMETERS m_PresentParameters;
   ImageFormat m_AdapterFormat;

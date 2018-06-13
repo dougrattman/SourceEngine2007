@@ -16,8 +16,7 @@ to fix ENVMAPMASKSCALE, BUMPOFFSET in lightmappedgeneric*.cpp and
 vertexlitgeneric*.cpp fix this:
 
 TODO(d.rattman): This also depends on the vertex format and
-whether or not we are static lit in dx9 #ifndef SHADERAPIDX9 if
-(m_DynamicState.m_VertexShader != shader) // garymcthack #endif // !SHADERAPIDX9
+whether or not we are static lit in dx9
 unrelated to dx9:
 mat_fullbright 1 doesn't work properly on alpha materials in testroom_standards
 */
@@ -561,7 +560,8 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
   //
 
   // Sets the mode...
-  bool SetMode(void *hwnd, int nAdapter, const ShaderDeviceInfo_t &info);
+  bool SetMode(HWND hwnd, int nAdapter,
+               const ShaderDeviceInfo_t &info) override;
 
   // Change the video mode after it's already been set.
   void ChangeVideoMode(const ShaderDeviceInfo_t &info);
@@ -2064,7 +2064,7 @@ void CShaderAPIDx8::OnDeviceShutdown() {
 //-----------------------------------------------------------------------------
 // Sets the mode...
 //-----------------------------------------------------------------------------
-bool CShaderAPIDx8::SetMode(void *hWnd, int nAdapter,
+bool CShaderAPIDx8::SetMode(HWND hWnd, int nAdapter,
                             const ShaderDeviceInfo_t &info) {
   //
   // TODO(d.rattman): Note that this entire function is backward compat and will
@@ -2211,11 +2211,7 @@ void CShaderAPIDx8::OverrideCaps(int nForcedDXLevel) {
 //-----------------------------------------------------------------------------
 void CShaderAPIDx8::DXSupportLevelChanged() {
   LOCK_SHADERAPI();
-  if (IsPC()) {
-    OverrideCaps(ShaderUtil()->GetConfig().dxSupportLevel);
-  } else {
-    Assert(0);
-  }
+  OverrideCaps(ShaderUtil()->GetConfig().dxSupportLevel);
 }
 
 //-----------------------------------------------------------------------------
@@ -2486,7 +2482,7 @@ void CShaderAPIDx8::SetStandardVertexShaderConstants(float fOverbright) {
       // Use COLOR instead of UBYTE4 since Geforce3 does not support it
       // vConst.w should be 3, but due to about hack, mul by 255 and add epsilon
       // 360 supports UBYTE4, so no fixup required
-      (IsPC() || !IsX360()) ? 765.01f : 3.0f,
+      765.01f,
       nModelIndex);  // DX8 has different constant packing
 
   SetVertexShaderConstant(VERTEX_SHADER_LIGHT_INDEX,
@@ -3090,7 +3086,6 @@ void CShaderAPIDx8::ResetRenderState(bool bFullReset) {
     SetSamplerState(i, D3DSAMP_BORDERCOLOR, RGB(0, 0, 0));
   }
 
-  // TODO(d.rattman): This barfs with the debug runtime on 6800.
   for (i = 0; i < g_pHardwareConfig->ActualCaps().m_nVertexTextureCount; i++) {
     m_DynamicState.m_VertexTextureState[i].m_BoundTexture =
         INVALID_SHADERAPI_TEXTURE_HANDLE;
@@ -3311,14 +3306,11 @@ void CShaderAPIDx8::SetDefaultState() {
 
   // TODO(d.rattman): This is a brutal hack. We only need to load these
   // transforms for fixed-function hardware. Cap the max here to 4.
-  if (IsPC()) {
-    numTextureStages = std::min(numTextureStages, 4);
-    int i;
-    for (i = 0; i < numTextureStages; i++) {
-      CShaderAPIDx8::DisableTextureTransform((TextureStage_t)i);
-      CShaderAPIDx8::MatrixMode((MaterialMatrixMode_t)(MATERIAL_TEXTURE0 + i));
-      CShaderAPIDx8::LoadIdentity();
-    }
+  numTextureStages = std::min(numTextureStages, 4);
+  for (int i = 0; i < numTextureStages; i++) {
+    CShaderAPIDx8::DisableTextureTransform((TextureStage_t)i);
+    CShaderAPIDx8::MatrixMode((MaterialMatrixMode_t)(MATERIAL_TEXTURE0 + i));
+    CShaderAPIDx8::LoadIdentity();
   }
   CShaderAPIDx8::MatrixMode(MATERIAL_MODEL);
 
@@ -3486,7 +3478,7 @@ void CShaderAPIDx8::DiscardVertexBuffers() {
 }
 
 void CShaderAPIDx8::ForceHardwareSync_WithManagedTexture() {
-  if (IsX360() || !m_pFrameSyncTexture) return;
+  if (!m_pFrameSyncTexture) return;
 
   // Set the default state for everything so we don't get more than we ask for
   // here!
@@ -3912,8 +3904,6 @@ bool CShaderAPIDx8::PIXError() {
 // Check for device lost
 //-----------------------------------------------------------------------------
 void CShaderAPIDx8::ChangeVideoMode(const ShaderDeviceInfo_t &info) {
-  if (IsX360()) return;
-
   LOCK_SHADERAPI();
 
   m_PendingVideoModeChangeConfig = info;
@@ -4718,56 +4708,6 @@ void CShaderAPIDx8::EnableFastClip(bool bEnable) {
   }
 }
 
-/*
-// -----------------------------------------------------------------------------
-// SetInvariantClipVolume - This routine takes six planes as input and sets the
-// appropriate Direct3D user clip plane state
-// What we mean by "invariant clipping" here is that certain devices implement
-// user clip planes at the raster level, which means that multi-pass rendering
-// where one pass is unclipped (such as base geometry) and another pass *IS*
-// clipped (such as flashlight geometry), there is no z-fighting since the
-// clipping is implemented at the raster level in an "invariant" way
-// -----------------------------------------------------------------------------
-void CShaderAPIDx8::SetInvariantClipVolume( Frustum_t *pFrustumPlanes )
-{
-        // Only do this on modern nVidia hardware, which does invariant clipping
-        if ( m_VendorID == VENDORID_NVIDIA )
-        {
-                if ( pFrustumPlanes )
-                {
-//			if ()
-//			{
-//
-//			}
-
-                        for (int i=0; i<6; i++)
-                        {
-                                const cplane_t *pPlane =
-pFrustumPlanes->GetPlane(i);
-
-                                SetClipPlane( i, (float *) &pPlane->normal );
-                                EnableClipPlane( i, true );
-
-//	FRUSTUM_RIGHT		= 0,
-//	FRUSTUM_LEFT		= 1,
-//	FRUSTUM_TOP			= 2,
-//	FRUSTUM_BOTTOM		= 3,
-//	FRUSTUM_NEARZ		= 4,
-//	FRUSTUM_FARZ		= 5,
-
-                        }
-                }
-                else // NULL disables the invariant clip volume...
-                {
-                        for (int i=0; i<6; i++)
-                        {
-                                EnableClipPlane( i, false );
-                        }
-                }
-        }
-}
-*/
-
 //-----------------------------------------------------------------------------
 // Vertex blending
 //-----------------------------------------------------------------------------
@@ -5036,9 +4976,6 @@ static ConVar r_pixelfog("r_pixelfog", "1");
 bool CShaderAPIDx8::ShouldUsePixelFogForMode(MaterialFogMode_t fogMode) {
   if (fogMode == MATERIAL_FOG_NONE) return false;
 
-  if (IsX360())  // always use pixel fog in X360
-    return true;
-
   if (g_pHardwareConfig->Caps().m_nDXSupportLevel <
       90)  // pixel fog not available until at least ps2.0
     return false;
@@ -5283,24 +5220,20 @@ SOURCE_FORCEINLINE void CShaderAPIDx8::SetVertexShaderConstantInternal(
   // DX8 asm shaders use a constant mapping which has transforms and vertex
   // shader specific constants shifted down by 10 constants (two 5-constant
   // light structures)
-  if (IsPC()) {
-    if ((g_pHardwareConfig->Caps().m_nDXSupportLevel < 90) &&
-        (var >= VERTEX_SHADER_MODULATION_COLOR)) {
-      var -= 10;
-    }
-    Assert(var + numVecs <= g_pHardwareConfig->NumVertexShaderConstants());
-
-    if (!bForce &&
-        memcmp(pVec, &m_DynamicState.m_pVectorVertexShaderConstant[var],
-               numVecs * 4 * sizeof(float)) == 0) {
-      return;
-    }
-    Dx9Device()->SetVertexShaderConstantF(var, pVec, numVecs);
-    memcpy(&m_DynamicState.m_pVectorVertexShaderConstant[var], pVec,
-           numVecs * 4 * sizeof(float));
-  } else {
-    Assert(var + numVecs <= g_pHardwareConfig->NumVertexShaderConstants());
+  if ((g_pHardwareConfig->Caps().m_nDXSupportLevel < 90) &&
+      (var >= VERTEX_SHADER_MODULATION_COLOR)) {
+    var -= 10;
   }
+  Assert(var + numVecs <= g_pHardwareConfig->NumVertexShaderConstants());
+
+  if (!bForce &&
+      memcmp(pVec, &m_DynamicState.m_pVectorVertexShaderConstant[var],
+             numVecs * 4 * sizeof(float)) == 0) {
+    return;
+  }
+  Dx9Device()->SetVertexShaderConstantF(var, pVec, numVecs);
+  memcpy(&m_DynamicState.m_pVectorVertexShaderConstant[var], pVec,
+         numVecs * 4 * sizeof(float));
 
   memcpy(&m_DesiredState.m_pVectorVertexShaderConstant[var], pVec,
          numVecs * 4 * sizeof(float));
@@ -5569,11 +5502,9 @@ void CShaderAPIDx8::SetBooleanPixelShaderConstant(int var, int const *pVec,
     return;
   }
 
-  if (IsPC()) {
-    Dx9Device()->SetPixelShaderConstantB(var, pVec, numBools);
-    memcpy(&m_DynamicState.m_pBooleanPixelShaderConstant[var], pVec,
-           numBools * sizeof(BOOL));
-  }
+  Dx9Device()->SetPixelShaderConstantB(var, pVec, numBools);
+  memcpy(&m_DynamicState.m_pBooleanPixelShaderConstant[var], pVec,
+         numBools * sizeof(BOOL));
 
   memcpy(&m_DesiredState.m_pBooleanPixelShaderConstant[var], pVec,
          numBools * sizeof(BOOL));
@@ -5594,11 +5525,9 @@ void CShaderAPIDx8::SetIntegerPixelShaderConstant(int var, int const *pVec,
     return;
   }
 
-  if (IsPC()) {
-    Dx9Device()->SetPixelShaderConstantI(var, pVec, numIntVecs);
-    memcpy(&m_DynamicState.m_pIntegerPixelShaderConstant[var], pVec,
-           numIntVecs * sizeof(IntVector4D));
-  }
+  Dx9Device()->SetPixelShaderConstantI(var, pVec, numIntVecs);
+  memcpy(&m_DynamicState.m_pIntegerPixelShaderConstant[var], pVec,
+         numIntVecs * sizeof(IntVector4D));
 
   memcpy(&m_DesiredState.m_pIntegerPixelShaderConstant[var], pVec,
          numIntVecs * sizeof(IntVector4D));
@@ -5663,16 +5592,13 @@ inline ShaderAPITextureHandle_t CShaderAPIDx8::GetBoundTextureBindId(
 
 inline bool CShaderAPIDx8::WouldBeOverTextureLimit(
     ShaderAPITextureHandle_t hTexture) {
-  if (IsPC()) {
-    if (mat_texture_limit.GetInt() < 0) return false;
+  if (mat_texture_limit.GetInt() < 0) return false;
 
-    Texture_t &tex = GetTexture(hTexture);
-    if (tex.m_LastBoundFrame == m_CurrentFrame) return false;
+  Texture_t &tex = GetTexture(hTexture);
+  if (tex.m_LastBoundFrame == m_CurrentFrame) return false;
 
-    return m_nTextureMemoryUsedLastFrame + tex.GetMemUsage() >
-           (mat_texture_limit.GetInt() * 1024);
-  }
-  return false;
+  return m_nTextureMemoryUsedLastFrame + tex.GetMemUsage() >
+         (mat_texture_limit.GetInt() * 1024);
 }
 
 //-----------------------------------------------------------------------------
@@ -5922,19 +5848,6 @@ ShaderAPITextureHandle_t CShaderAPIDx8::CreateDepthTexture(
     Assert(0);
   }
 
-#ifdef _XBOX
-  D3DSURFACE_DESC desc;
-  hr = pTexture->GetDepthStencilSurface()->GetDesc(&desc);
-  Assert(!FAILED(hr));
-
-  pTexture->m_nTimesBoundThisFrame = 0;
-  pTexture->m_StaticSizeBytes = desc.Size;
-  pTexture->m_DynamicSizeBytes = 0;
-  pTexture->m_DebugName = pDebugName;
-  pTexture->m_TextureGroupName = TEXTURE_GROUP_RENDER_TARGET;
-  pTexture->SetImageFormat(IMAGE_FORMAT_UNKNOWN);
-#endif
-
   return i;
 }
 
@@ -5988,9 +5901,7 @@ void CShaderAPIDx8::CreateTextures(ShaderAPITextureHandle_t *pHandles,
                                    const char *pTextureGroupName) {
   LOCK_SHADERAPI();
 
-  if (depth == 0) {
-    depth = 1;
-  }
+  if (depth == 0) depth = 1;
 
   bool isCubeMap = (creationFlags & TEXTURE_CREATE_CUBEMAP) != 0;
   bool isRenderTarget = (creationFlags & TEXTURE_CREATE_RENDERTARGET) != 0;
@@ -6003,9 +5914,7 @@ void CShaderAPIDx8::CreateTextures(ShaderAPITextureHandle_t *pHandles,
   // Can't be both managed + dynamic. Dynamic is an optimization, but
   // if it's not managed, then we gotta do special client-specific stuff
   // So, managed wins out!
-  if (managed) {
-    isDynamic = false;
-  }
+  if (managed) isDynamic = false;
 
   // Create a set of texture handles
   CreateTextureHandles(pHandles, count);
@@ -7271,34 +7180,6 @@ void CShaderAPIDx8::CopyRenderTargetToTexture(
 void CShaderAPIDx8::ModifyVertexData() {
   // this should be a dead code path
   Assert(0);
-#if 0
-	// We have to modulate the vertex color by the constant color sometimes
-	if (IsModulatingVertexColor())
-	{
-		m_ModifyBuilder.Reset();
-
-		float factor[4];
-		unsigned char* pColor = (unsigned char*)&m_DynamicState.m_ConstantColor;
-		factor[0] = pColor[0] / 255.0f;
-		factor[1] = pColor[1] / 255.0f;
-		factor[2] = pColor[2] / 255.0f;
-		factor[3] = pColor[3] / 255.0f;
-
-		for ( int i = 0; i < m_ModifyBuilder.VertexCount(); ++i )
-		{
-			unsigned int color = m_ModifyBuilder.Color();
-			unsigned char* pVertexColor = (unsigned char*)&color;
-
-			pVertexColor[0] = (unsigned char)((float)pVertexColor[0] * factor[0]);
-			pVertexColor[1] = (unsigned char)((float)pVertexColor[1] * factor[1]);
-			pVertexColor[2] = (unsigned char)((float)pVertexColor[2] * factor[2]);
-			pVertexColor[3] = (unsigned char)((float)pVertexColor[3] * factor[3]);
-			m_ModifyBuilder.Color4ubv( pVertexColor );
-
-			m_ModifyBuilder.AdvanceVertex();
-		}
-	}
-#endif
 }
 
 #ifdef DEBUG_BOARD_STATE
@@ -7762,7 +7643,7 @@ void CShaderAPIDx8::UpdateMatrixTransform(TransformType_t type) {
     CacheWorldSpaceCameraPosition();
   }
 
-  if (!IsX360() && m_CurrStack == MATERIAL_PROJECTION) {
+  if (m_CurrStack == MATERIAL_PROJECTION) {
     CachePolyOffsetProjectionMatrix();
   }
 
@@ -8275,8 +8156,6 @@ void CShaderAPIDx8::CommitVertexShaderTransforms() {
 }
 
 void CShaderAPIDx8::UpdateFixedFunctionMatrix(int iMatrix) {
-  if (IsX360()) return;
-
   int matrix = MATERIAL_MODEL + iMatrix;
   if (FixedFunctionTransformChanged(matrix)) {
     SetTransform(D3DTS_WORLDMATRIX(iMatrix), &GetTransform(matrix));
@@ -8287,8 +8166,6 @@ void CShaderAPIDx8::UpdateFixedFunctionMatrix(int iMatrix) {
 }
 
 void CShaderAPIDx8::SetFixedFunctionStateSkinningMatrices() {
-  if (IsX360()) return;
-
   for (int i = 1; i < g_pHardwareConfig->MaxBlendMatrices(); i++) {
     UpdateFixedFunctionMatrix(i);
   }
@@ -8299,8 +8176,6 @@ void CShaderAPIDx8::SetFixedFunctionStateSkinningMatrices() {
 // pass basis
 //-----------------------------------------------------------------------------
 void CShaderAPIDx8::CommitPerPassFixedFunctionTransforms() {
-  if (IsX360()) return;
-
   // Update projection
   if (FixedFunctionTransformChanged(MATERIAL_PROJECTION)) {
     D3DTRANSFORMSTATETYPE matrix = D3DTS_PROJECTION;
@@ -8317,8 +8192,6 @@ void CShaderAPIDx8::CommitPerPassFixedFunctionTransforms() {
 //-----------------------------------------------------------------------------
 
 void CShaderAPIDx8::CommitFixedFunctionTransforms() {
-  if (IsX360()) return;
-
   // Update view + projection
   int i;
   for (i = MATERIAL_VIEW; i <= MATERIAL_PROJECTION; ++i) {
@@ -8345,12 +8218,10 @@ void CShaderAPIDx8::SetSkinningMatrices() {
 
   if (m_DynamicState.m_NumBones == 0) return;
 
-  if (IsX360() || UsesVertexShader(m_pMaterial->GetVertexFormat())) {
+  if (UsesVertexShader(m_pMaterial->GetVertexFormat())) {
     SetVertexShaderStateSkinningMatrices();
-  } else if (IsPC()) {
-    SetFixedFunctionStateSkinningMatrices();
   } else {
-    Assert(0);
+    SetFixedFunctionStateSkinningMatrices();
   }
 }
 

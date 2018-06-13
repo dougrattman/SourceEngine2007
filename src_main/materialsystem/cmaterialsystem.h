@@ -154,7 +154,7 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
 
   // Returns the mode info for the current display device
   void GetDisplayMode(MaterialVideoMode_t &info) const;
-  bool SetMode(void *hwnd, const MaterialSystem_Config_t &config);
+  bool SetMode(HWND hwnd, const MaterialSystem_Config_t &config);
 
   // Reports support for a given MSAA mode
   bool SupportsMSAAMode(int nMSAAMode);
@@ -205,11 +205,11 @@ class CMaterialSystem : public CTier2AppSystem<IMaterialSystemInternal>,
   // Window methods
 
   // Creates/ destroys a child window
-  bool AddView(void *hwnd);
-  void RemoveView(void *hwnd);
+  bool AddView(HWND hwnd);
+  void RemoveView(HWND hwnd);
 
   // Sets the view
-  void SetView(void *hwnd);
+  void SetView(HWND hwnd);
 
   // Control flow
   void BeginFrame(float frameTime);

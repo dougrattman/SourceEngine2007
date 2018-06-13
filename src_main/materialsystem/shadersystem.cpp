@@ -108,7 +108,7 @@ class CShaderSystem : public IShaderSystemInternal {
     // True if this is a mod's shader DLL, in which case it's not allowed to
     // override any existing shader names.
     bool m_bModShaderDLL;
-    CUtlDict<IShader *, unsigned short> m_ShaderDict;
+    CUtlDict<IShader *, u16> m_ShaderDict;
   };
 
  private:
@@ -194,7 +194,7 @@ class CShaderSystem : public IShaderSystemInternal {
 
   // Render state we're drawing with
   ShaderRenderState_t *m_pRenderState;
-  unsigned short m_hShaderDLL;
+  u16 m_hShaderDLL;
   unsigned char m_nModulation;
   unsigned char m_nRenderPass;
 
@@ -619,7 +619,7 @@ IShader *CShaderSystem::FindShader(char const *pShaderName) {
   // I'm currently assuming last added, first searched.
   for (int i = m_ShaderDLLs.Count(); --i >= 0;) {
     ShaderDLLInfo_t &info = m_ShaderDLLs[i];
-    unsigned short idx = info.m_ShaderDict.Find(pShaderName);
+    u16 idx = info.m_ShaderDict.Find(pShaderName);
     if (idx != info.m_ShaderDict.InvalidIndex()) {
       return info.m_ShaderDict[idx];
     }
@@ -641,7 +641,7 @@ int CShaderSystem::GetShaders(int nFirstShader, int nMaxCount,
   int nActualCount = 0;
   for (int i = m_ShaderDLLs.Count(); --i >= 0;) {
     const ShaderDLLInfo_t &info = m_ShaderDLLs[i];
-    for (unsigned short j = info.m_ShaderDict.First();
+    for (u16 j = info.m_ShaderDict.First();
          j != info.m_ShaderDict.InvalidIndex(); j = info.m_ShaderDict.Next(j)) {
       // Don't add shaders twice
       const char *pShaderName = info.m_ShaderDict.GetElementName(j);
@@ -1162,8 +1162,7 @@ bool CShaderSystem::ComputeVertexFormatFromSnapshot(
         pRenderState->m_pSnapshots[SHADER_USING_EDITOR].m_nPassCount;
   }
 
-  StateSnapshot_t *pSnapshots =
-      (StateSnapshot_t *)stackalloc(numSnapshots * sizeof(StateSnapshot_t));
+  StateSnapshot_t *pSnapshots = stack_alloc<StateSnapshot_t>(numSnapshots);
 
   int snapshotID = 0;
   AddSnapshotsToList(&pRenderState->m_pSnapshots[0], snapshotID, pSnapshots);

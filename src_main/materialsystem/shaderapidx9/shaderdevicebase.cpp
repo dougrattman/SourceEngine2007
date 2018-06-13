@@ -665,16 +665,20 @@ void *CShaderDeviceMgrBase::ShaderInterfaceFactory(const char *pInterfaceName,
   if (pReturnCode) {
     *pReturnCode = IFACE_OK;
   }
-  if (!Q_stricmp(pInterfaceName, SHADER_DEVICE_INTERFACE_VERSION))
-    return static_cast<IShaderDevice *>(g_pShaderDevice);
-  if (!Q_stricmp(pInterfaceName, SHADERAPI_INTERFACE_VERSION))
-    return static_cast<IShaderAPI *>(g_pShaderAPI);
-  if (!Q_stricmp(pInterfaceName, SHADERSHADOW_INTERFACE_VERSION))
-    return static_cast<IShaderShadow *>(g_pShaderShadow);
+
+  if (!_stricmp(pInterfaceName, SHADER_DEVICE_INTERFACE_VERSION))
+    return implicit_cast<IShaderDevice *>(g_pShaderDevice);
+
+  if (!_stricmp(pInterfaceName, SHADERAPI_INTERFACE_VERSION))
+    return implicit_cast<IShaderAPI *>(g_pShaderAPI);
+
+  if (!_stricmp(pInterfaceName, SHADERSHADOW_INTERFACE_VERSION))
+    return implicit_cast<IShaderShadow *>(g_pShaderShadow);
 
   if (pReturnCode) {
     *pReturnCode = IFACE_FAILED;
   }
+
   return nullptr;
 }
 
@@ -700,7 +704,7 @@ int CShaderDeviceBase::StencilBufferBits() const { return 0; }
 
 bool CShaderDeviceBase::IsAAEnabled() const { return false; }
 
-// Methods for interprocess communication to release resources
+  // Methods for interprocess communication to release resources
 
 #define MATERIAL_SYSTEM_WINDOW_ID 0xFEEDDEAD
 
@@ -735,7 +739,7 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam) {
 
 static BOOL CALLBACK EnumWindowsProcNotThis(HWND hWnd, LPARAM lParam) {
   if (g_pShaderDevice &&
-      (GetTopmostParentWindow((HWND)g_pShaderDevice->GetIPCHWnd()) == hWnd))
+      (GetTopmostParentWindow(g_pShaderDevice->GetIPCHWnd()) == hWnd))
     return TRUE;
 
   EnumChildWindows(hWnd, EnumChildWindowsProc, lParam);
@@ -772,10 +776,10 @@ static LRESULT CALLBACK ShaderApiDx9WndProc(HWND hWnd, UINT msg, WPARAM wParam,
 }
 
 // Install, remove ability to talk to other shaderapi apps
-void CShaderDeviceBase::InstallWindowHook(void *hWnd) {
+void CShaderDeviceBase::InstallWindowHook(HWND hWnd) {
   Assert(m_hWndCookie == nullptr);
 
-  HWND parent_window = GetTopmostParentWindow((HWND)hWnd);
+  HWND parent_window = GetTopmostParentWindow(hWnd);
 
   // Attach a child window to the parent; we're gonna store special info there
   // We can't use the USERDATA, cause other apps may want to use this.
@@ -798,17 +802,16 @@ void CShaderDeviceBase::InstallWindowHook(void *hWnd) {
                                parent_window, nullptr, instance, nullptr);
 
   // Marks it as a material system window
-  SetWindowLongPtrW((HWND)m_hWndCookie, GWLP_USERDATA,
-                    MATERIAL_SYSTEM_WINDOW_ID);
+  SetWindowLongPtrW(m_hWndCookie, GWLP_USERDATA, MATERIAL_SYSTEM_WINDOW_ID);
 }
 
-void CShaderDeviceBase::RemoveWindowHook(void *hWnd) {
+void CShaderDeviceBase::RemoveWindowHook(HWND hWnd) {
   if (m_hWndCookie) {
-    DestroyWindow((HWND)m_hWndCookie);
+    DestroyWindow(m_hWndCookie);
     m_hWndCookie = 0;
   }
 
-  HWND parent_window = GetTopmostParentWindow((HWND)hWnd);
+  HWND parent_window = GetTopmostParentWindow(hWnd);
   HINSTANCE instance =
       (HINSTANCE)GetWindowLongPtrW(parent_window, GWLP_HINSTANCE);
 
@@ -827,7 +830,7 @@ void CShaderDeviceBase::SendIPCMessage(IPCMessage_t msg) {
 }
 
 // Find view
-int CShaderDeviceBase::FindView(void *hWnd) const {
+int CShaderDeviceBase::FindView(HWND hWnd) const {
   /* TODO(d.rattman): Is this necessary?
   // Look for the view in the list of views
   for (int i = m_Views.Count(); --i >= 0; )
@@ -840,7 +843,7 @@ int CShaderDeviceBase::FindView(void *hWnd) const {
 }
 
 // Creates a child window
-bool CShaderDeviceBase::AddView(void *hWnd) {
+bool CShaderDeviceBase::AddView(HWND hWnd) {
   LOCK_SHADERAPI();
   /*
   // If we haven't created a device yet
@@ -868,7 +871,7 @@ bool CShaderDeviceBase::AddView(void *hWnd) {
   return true;
 }
 
-void CShaderDeviceBase::RemoveView(void *hWnd) {
+void CShaderDeviceBase::RemoveView(HWND hWnd) {
   LOCK_SHADERAPI();
   /*
   // Look for the view in the list of views
@@ -882,14 +885,14 @@ void CShaderDeviceBase::RemoveView(void *hWnd) {
 }
 
 // Activates a child window
-void CShaderDeviceBase::SetView(void *hWnd) {
+void CShaderDeviceBase::SetView(HWND hWnd) {
   LOCK_SHADERAPI();
 
   ShaderViewport_t viewport;
   g_pShaderAPI->GetViewports(&viewport, 1);
 
   // Get the window (*not* client) rect of the view window
-  m_ViewHWnd = (HWND)hWnd;
+  m_ViewHWnd = hWnd;
   GetWindowSize(m_nWindowWidth, m_nWindowHeight);
 
   // Reset the viewport (takes into account the view rect)
@@ -901,10 +904,10 @@ void CShaderDeviceBase::SetView(void *hWnd) {
 void CShaderDeviceBase::GetWindowSize(int &nWidth, int &nHeight) const {
   // If the window was minimized last time swap buffers happened, or if it's
   // iconic now, return 0 size
-  if (!m_bIsMinimized && !IsIconic((HWND)m_hWnd)) {
+  if (!m_bIsMinimized && !IsIconic(m_hWnd)) {
     // NOTE: Use the 'current view' (which may be the same as the main window)
     RECT rect;
-    GetClientRect((HWND)m_ViewHWnd, &rect);
+    GetClientRect(m_ViewHWnd, &rect);
     nWidth = rect.right - rect.left;
     nHeight = rect.bottom - rect.top;
   } else {

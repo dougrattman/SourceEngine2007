@@ -62,6 +62,7 @@ struct MM_QOS_t {
 
 #define NO_TIME_LIMIT 65000
 
+// TODO(d.rattman): Remove, only for XBOX.
 the_interface IMatchmaking {
  public:
   virtual void SessionNotification(const SESSION_NOTIFY notification,

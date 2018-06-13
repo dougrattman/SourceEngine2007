@@ -884,7 +884,7 @@ void CMaterialSystem::GetDisplayMode(MaterialVideoMode_t &info) const {
 //-----------------------------------------------------------------------------
 // Sets the mode...
 //-----------------------------------------------------------------------------
-bool CMaterialSystem::SetMode(void *hwnd,
+bool CMaterialSystem::SetMode(HWND hwnd,
                               const MaterialSystem_Config_t &config) {
   Assert(m_bGeneratedConfig);
 
@@ -935,16 +935,16 @@ bool CMaterialSystem::SetMode(void *hwnd,
 }
 
 // Creates/ destroys a child window
-bool CMaterialSystem::AddView(void *hwnd) {
+bool CMaterialSystem::AddView(HWND hwnd) {
   return g_pShaderDevice->AddView(hwnd);
 }
 
-void CMaterialSystem::RemoveView(void *hwnd) {
+void CMaterialSystem::RemoveView(HWND hwnd) {
   g_pShaderDevice->RemoveView(hwnd);
 }
 
 // Activates a view
-void CMaterialSystem::SetView(void *hwnd) { g_pShaderDevice->SetView(hwnd); }
+void CMaterialSystem::SetView(HWND hwnd) { g_pShaderDevice->SetView(hwnd); }
 
 //-----------------------------------------------------------------------------
 // Installs a function to be called when we need to release vertex buffers
@@ -1415,7 +1415,7 @@ void CMaterialSystem::WriteConfigurationInfoToConVars(
     pConfigName += 7;
     // check if legal
     bool bLegalVar = false;
-    for (usize i = 0; i < SOURCE_ARRAYSIZE(pConvarsAllowedInDXSupport); i++) {
+    for (usize i = 0; i < std::size(pConvarsAllowedInDXSupport); i++) {
       if (!_stricmp(pConvarsAllowedInDXSupport[i], pConfigName)) {
         bLegalVar = true;
         break;
@@ -2004,8 +2004,8 @@ IMaterial *CMaterialSystem::FindProceduralMaterial(
     const char *pMaterialName, const char *pTextureGroupName,
     KeyValues *pVMTKeyValues) {
   // We need lower-case symbols for this to work
-  int nLen = Q_strlen(pMaterialName) + 1;
-  char *pTemp = (char *)stackalloc(nLen);
+  usize nLen = strlen(pMaterialName) + 1;
+  char *pTemp = stack_alloc<char>(nLen);
   Q_strncpy(pTemp, pMaterialName, nLen);
   Q_strlower(pTemp, nLen);
   Q_FixSlashes(pTemp, '/');
@@ -2041,7 +2041,7 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
 
   // We need lower-case symbols for this to work
   usize nLen = strlen(pMaterialName) + 1;
-  char *pTemp = (char *)stackalloc(nLen);
+  char *pTemp = stack_alloc<char>(nLen);
   Q_StripExtension(pMaterialName, pTemp, nLen);
   Q_strlower(pTemp, nLen);
   Q_FixSlashes(pTemp, '/');
@@ -2054,8 +2054,8 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
   if (pExistingMaterial) return pExistingMaterial->GetQueueFriendlyVersion();
 
   // It hasn't been seen yet, so let's check to see if it's in the filesystem.
-  nLen = strlen("materials/") + strlen(pTemp) + strlen(".vmt") + 1;
-  char *vmtName = (char *)stackalloc(nLen);
+  nLen = std::size("materials/") + std::size(".vmt") - 1 + strlen(pTemp);
+  char *vmtName = stack_alloc<char>(nLen);
 
   // Check to see if this is a UNC-specified material name
   bool bIsUNC = pTemp[0] == '/' && pTemp[1] == '/' && pTemp[2] != '/';
@@ -2079,8 +2079,8 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
     pPatchKeyValues = NULL;
   } else {
     char *matNameWithExtension;
-    nLen = strlen(pTemp) + strlen(".vmt") + 1;
-    matNameWithExtension = (char *)stackalloc(nLen);
+    nLen = strlen(pTemp) + std::size(".vmt");
+    matNameWithExtension = stack_alloc<char>(nLen);
     strcpy_s(matNameWithExtension, nLen, pTemp);
     strcat_s(matNameWithExtension, nLen, ".vmt");
 
@@ -2109,7 +2109,7 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
 
     // convert to lowercase
     nLen = strlen(pTemp) + 1;
-    char *name = (char *)stackalloc(nLen);
+    char *name = stack_alloc<char>(nLen);
     strcpy_s(name, nLen, pTemp);
     Q_strlower(name, nLen);
 
@@ -2169,7 +2169,7 @@ void CMaterialSystem::SetExcludedTextures(const char *pScriptName) {
   TextureManager()->SetExcludedTextures(pScriptName);
 }
 
-void CMaterialSystem::UpdateExcludedTextures(void) {
+void CMaterialSystem::UpdateExcludedTextures() {
   TextureManager()->UpdateExcludedTextures();
   // Have to re-setup the representative textures since they may have been
   // removed out from under us by the queued loader.
@@ -2287,7 +2287,7 @@ void CMaterialSystem::CacheUsedMaterials() {
 //-----------------------------------------------------------------------------
 // Reloads textures + materials
 //-----------------------------------------------------------------------------
-void CMaterialSystem::ReloadTextures(void) {
+void CMaterialSystem::ReloadTextures() {
   // 360 should not have gotten here
   Assert(!IsX360());
 
@@ -2692,7 +2692,7 @@ void CMaterialSystem::ThreadExecuteQueuedContext(
   m_nRenderThreadID = 0xFFFFFFFF;
 }
 
-void CMaterialSystem::EndFrame(void) {
+void CMaterialSystem::EndFrame() {
   // Safety measure (calls should only come from the main thread, also check
   // correct pairing)
   if (!ThreadInMainThread() || !IsInFrame()) return;
@@ -2729,8 +2729,8 @@ void CMaterialSystem::EndFrame(void) {
       m_QueuedRenderContexts[m_iCurQueuedContext]
           .GetCallQueueInternal()
           ->QueueCall(g_pShaderAPI, &IShaderAPI::ReleaseThreadOwnership);
-      m_iCurQueuedContext = ((m_iCurQueuedContext + 1) %
-                             SOURCE_ARRAYSIZE(m_QueuedRenderContexts));
+      m_iCurQueuedContext =
+          ((m_iCurQueuedContext + 1) % std::size(m_QueuedRenderContexts));
       m_QueuedRenderContexts[m_iCurQueuedContext].BeginQueue(pPrevContext);
       m_QueuedRenderContexts[m_iCurQueuedContext]
           .GetCallQueueInternal()
@@ -2792,7 +2792,7 @@ void CMaterialSystem::EndFrame(void) {
     switch (m_ThreadMode) {
       case MATERIAL_SINGLE_THREADED:
         m_pRenderContext.Set(&m_HardwareRenderContext);
-        for (usize i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
+        for (usize i = 0; i < std::size(m_QueuedRenderContexts); i++) {
           Assert(m_QueuedRenderContexts[i].IsInitialized());
           m_QueuedRenderContexts[i].Term();
         }
@@ -2800,7 +2800,7 @@ void CMaterialSystem::EndFrame(void) {
 
       case MATERIAL_QUEUED_SINGLE_THREADED:
       case MATERIAL_QUEUED_THREADED:
-        for (usize i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
+        for (usize i = 0; i < std::size(m_QueuedRenderContexts); i++) {
           if (!m_QueuedRenderContexts[i].IsInitialized()) {
             m_QueuedRenderContexts[i].Init(this, &m_HardwareRenderContext);
           }
@@ -2862,8 +2862,7 @@ void CMaterialSystem::DebugPrintUsedMaterials(const char *pSearchSubString,
   int nNumErrors;
 
   // build a mapping to sort the material names
-  MaterialHandle_t *pSorted = (MaterialHandle_t *)stackalloc(
-      GetNumMaterials() * sizeof(MaterialHandle_t));
+  MaterialHandle_t *pSorted = stack_alloc<MaterialHandle_t>(GetNumMaterials());
   nSortedMaterials = 0;
   for (h = FirstMaterial(); h != InvalidMaterial(); h = NextMaterial(h)) {
     pSorted[nSortedMaterials++] = h;
@@ -2985,46 +2984,11 @@ void CMaterialSystem::DebugPrintUsedMaterials(const char *pSearchSubString,
   }
 }
 
-void CMaterialSystem::DebugPrintUsedTextures(void) {
+void CMaterialSystem::DebugPrintUsedTextures() {
   TextureManager()->DebugPrintUsedTextures();
 }
 
-#if defined(_X360)
-void CMaterialSystem::ListUsedMaterials(void) {
-  int numMaterials = GetNumMaterials();
-  xMaterialList_t *pMaterialList =
-      (xMaterialList_t *)stackalloc(numMaterials * sizeof(xMaterialList_t));
-
-  numMaterials = 0;
-  for (MaterialHandle_t hMaterial = FirstMaterial();
-       hMaterial != InvalidMaterial(); hMaterial = NextMaterial(hMaterial)) {
-    IMaterialInternal *pMaterial = GetMaterialInternal(hMaterial);
-    pMaterialList[numMaterials].pName = pMaterial->GetName();
-    pMaterialList[numMaterials].pShaderName =
-        pMaterial->GetShader() ? pMaterial->GetShader()->GetName() : "???";
-    pMaterialList[numMaterials].refCount = pMaterial->GetReferenceCount();
-    numMaterials++;
-  }
-
-  XBX_rMaterialList(numMaterials, pMaterialList);
-}
-#endif
-
 void CMaterialSystem::ToggleSuppressMaterial(char const *pMaterialName) {
-  /*
-  // This version suppresses all but the material
-  IMaterial *pMaterial = GetFirstMaterial();
-  while (pMaterial)
-  {
-          if (_stricmp(pMaterial->GetName(), pMaterialName))
-          {
-                  IMaterialInternal* pMatInt =
-  static_cast<IMaterialInternal*>(pMaterial); pMatInt->ToggleSuppression();
-          }
-          pMaterial = GetNextMaterial();
-  }
-  */
-
   // Note: if we use this function a lot, we'll want to do something else, like
   // have them pass in a texture group or reuse whatever texture group the
   // material already had. As it is, this is rarely used, so if it's not in
@@ -3117,10 +3081,9 @@ void CMaterialSystem::GetShaderFallback(const char *pShaderName,
   } while (true);
 }
 
-void CMaterialSystem::SwapBuffers(void) {
+void CMaterialSystem::SwapBuffers() {
   VPROF_BUDGET("CMaterialSystem::SwapBuffers", VPROF_BUDGETGROUP_SWAP_BUFFERS);
   GetRenderContextInternal()->SwapBuffers();
-  g_FrameNum++;
 }
 
 bool CMaterialSystem::InEditorMode() const {
@@ -3184,22 +3147,22 @@ bool CMaterialSystem::SupportsCSAAMode(int nNumSamples, int nQualityLevel) {
 }
 
 // Does the device support shadow depth texturing?
-bool CMaterialSystem::SupportsShadowDepthTextures(void) {
+bool CMaterialSystem::SupportsShadowDepthTextures() {
   return g_pShaderAPI->SupportsShadowDepthTextures();
 }
 
 // Does the device support Fetch4
-bool CMaterialSystem::SupportsFetch4(void) {
+bool CMaterialSystem::SupportsFetch4() {
   return g_pShaderAPI->SupportsFetch4();
 }
 
 // Vendor-dependent shadow depth texture format
-ImageFormat CMaterialSystem::GetShadowDepthTextureFormat(void) {
+ImageFormat CMaterialSystem::GetShadowDepthTextureFormat() {
   return g_pShaderAPI->GetShadowDepthTextureFormat();
 }
 
 // Vendor-dependent slim texture format
-ImageFormat CMaterialSystem::GetNullTextureFormat(void) {
+ImageFormat CMaterialSystem::GetNullTextureFormat() {
   return g_pShaderAPI->GetNullTextureFormat();
 }
 
@@ -3213,13 +3176,13 @@ bool CMaterialSystem::SupportsHDRMode(HDRType_t nHDRMode) {
   return HardwareConfig()->SupportsHDRMode(nHDRMode);
 }
 
-bool CMaterialSystem::UsesSRGBCorrectBlending(void) const {
+bool CMaterialSystem::UsesSRGBCorrectBlending() const {
   return HardwareConfig()->UsesSRGBCorrectBlending();
 }
 
 // Get video card identitier
 const MaterialSystemHardwareIdentifier_t &
-CMaterialSystem::GetVideoCardIdentifier(void) const {
+CMaterialSystem::GetVideoCardIdentifier() const {
   static MaterialSystemHardwareIdentifier_t foo;
   Assert(0);
   return foo;
@@ -3257,12 +3220,12 @@ void CMaterialSystem::HandleDeviceLost() {
   g_pShaderAPI->HandleDeviceLost();
 }
 
-bool CMaterialSystem::UsingFastClipping(void) {
+bool CMaterialSystem::UsingFastClipping() {
   return (HardwareConfig()->UseFastClipping() ||
           (HardwareConfig()->MaxUserClipPlanes() < 1));
 };
 
-int CMaterialSystem::StencilBufferBits(void) {
+int CMaterialSystem::StencilBufferBits() {
   return HardwareConfig()->StencilBufferBits();
 }
 
@@ -3376,12 +3339,12 @@ ITexture *CMaterialSystem::CreateNamedRenderTargetTextureEx2(
   return pTexture;
 }
 
-void CMaterialSystem::BeginRenderTargetAllocation(void) {
+void CMaterialSystem::BeginRenderTargetAllocation() {
   g_pShaderAPI->FlushBufferedPrimitives();
   m_bAllocatingRenderTargets = true;
 }
 
-void CMaterialSystem::EndRenderTargetAllocation(void) {
+void CMaterialSystem::EndRenderTargetAllocation() {
   g_pShaderAPI->FlushBufferedPrimitives();
   m_bAllocatingRenderTargets = false;
 
@@ -3478,7 +3441,7 @@ void CMaterialSystem::UnbindMaterial(IMaterial *pMaterial) {
 //
 //-----------------------------------------------------------------------------
 void CMaterialSystem::CompactMemory() {
-  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
+  for (usize i = 0; i < std::size(m_QueuedRenderContexts); i++) {
     m_QueuedRenderContexts[i].CompactMemory();
   }
 }

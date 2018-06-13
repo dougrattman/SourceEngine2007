@@ -180,7 +180,8 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
   void ClearSnapshots();
 
   // Sets the mode...
-  bool SetMode(void *hwnd, int nAdapter, const ShaderDeviceInfo_t &info) {
+  bool SetMode(HWND hwnd, int nAdapter,
+               const ShaderDeviceInfo_t &info) override {
     return true;
   }
 
@@ -747,9 +748,7 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
   virtual void ShaderLock() {}
   virtual void ShaderUnlock() {}
   virtual void EnableHWMorphing(bool bEnable) {}
-  ImageFormat GetNullTextureFormat() {
-    return IMAGE_FORMAT_ABGR8888;
-  }  // stub
+  ImageFormat GetNullTextureFormat() { return IMAGE_FORMAT_ABGR8888; }  // stub
   virtual void PushDeformation(DeformationBase_t const *Deformation) {}
 
   virtual void PopDeformation() {}

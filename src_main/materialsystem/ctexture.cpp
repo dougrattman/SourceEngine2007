@@ -331,29 +331,29 @@ class CTexture : public ITextureInternal {
   // if g_config.skipMipLevels != 0, or if the card has a hard limit
   // on the maximum texture size
   // This is the iWidth/iHeight for the data that m_pImageData points to.
-  unsigned short m_nMappingWidth;
-  unsigned short m_nMappingHeight;
-  unsigned short m_nMappingDepth;
+  u16 m_nMappingWidth;
+  u16 m_nMappingHeight;
+  u16 m_nMappingDepth;
 
   // This is the iWidth/iHeight for whatever is downloaded to the card.
-  unsigned short m_nActualWidth;   // needed for procedural
-  unsigned short m_nActualHeight;  // needed for procedural
-  unsigned short m_nActualDepth;
+  u16 m_nActualWidth;   // needed for procedural
+  u16 m_nActualHeight;  // needed for procedural
+  u16 m_nActualDepth;
 
-  unsigned short m_nActualMipCount;  // Mip count when it's actually used
-  unsigned short m_nFrameCount;
+  u16 m_nActualMipCount;  // Mip count when it's actually used
+  u16 m_nFrameCount;
 
-  unsigned short m_nOriginalRTWidth;  // The values they initially specified. We
-                                      // generated a different width
-  unsigned short m_nOriginalRTHeight;  // and height based on screen size and
-                                       // the flags they specify.
+  u16 m_nOriginalRTWidth;   // The values they initially specified. We
+                            // generated a different width
+  u16 m_nOriginalRTHeight;  // and height based on screen size and
+                            // the flags they specify.
 
   unsigned char m_LowResImageWidth;
   unsigned char m_LowResImageHeight;
 
-  unsigned short m_nDesiredDimensionLimit;  // part of texture exclusion
-  unsigned short m_nActualDimensionLimit;   // value not necessarily accurate,
-                                            // but mismatch denotes dirty state
+  u16 m_nDesiredDimensionLimit;  // part of texture exclusion
+  u16 m_nActualDimensionLimit;   // value not necessarily accurate,
+                                 // but mismatch denotes dirty state
 
   // The set of texture ids for each animation frame
   ShaderAPITextureHandle_t *m_pTextureHandles;
@@ -429,8 +429,8 @@ class CReferenceToHandleTexture : public ITextureInternal {
   CReferenceToHandleTexture();
   virtual ~CReferenceToHandleTexture();
 
-  virtual const char *GetName(void) const { return m_Name.String(); }
-  const char *GetTextureGroupName(void) const {
+  virtual const char *GetName() const { return m_Name.String(); }
+  const char *GetTextureGroupName() const {
     return m_TextureGroupName.String();
   }
 
@@ -459,9 +459,9 @@ class CReferenceToHandleTexture : public ITextureInternal {
 
   // Little helper polling methods
   virtual bool IsNormalMap() const { return false; }
-  virtual bool IsCubeMap(void) const { return false; }
+  virtual bool IsCubeMap() const { return false; }
   virtual bool IsRenderTarget() const { return false; }
-  virtual bool IsTempRenderTarget(void) const { return false; }
+  virtual bool IsTempRenderTarget() const { return false; }
   virtual bool IsProcedural() const { return true; }
   virtual bool IsMipmapped() const { return false; }
   virtual bool IsError() const { return false; }
@@ -501,7 +501,7 @@ class CReferenceToHandleTexture : public ITextureInternal {
     return NULL;
   }
 
-  virtual int GetApproximateVidMemBytes(void) const { return 32; }
+  virtual int GetApproximateVidMemBytes() const { return 32; }
 
   // Stretch blit the framebuffer into this texture.
   virtual void CopyFrameBufferToMe(int nRenderTargetID = 0,
@@ -541,10 +541,10 @@ class CReferenceToHandleTexture : public ITextureInternal {
   virtual bool IsPreloaded() const { return true; }
 
   virtual void MarkAsExcluded(bool bSet, int nDimensionsLimit) { NULL; }
-  virtual bool UpdateExcludedState(void) { return true; }
+  virtual bool UpdateExcludedState() { return true; }
 
   // Retrieve the vtf flags mask
-  virtual unsigned int GetFlags(void) const { return 0; }
+  virtual unsigned int GetFlags() const { return 0; }
 
   virtual void ForceLODOverride(int iNumLodsOverrideUpOrDown) { NULL; }
 
@@ -759,11 +759,7 @@ CTexture::CTexture() : m_ImageFormat(IMAGE_FORMAT_UNKNOWN) {
 
   m_LowResImageWidth = 0;
   m_LowResImageHeight = 0;
-#if !defined(_X360)
   m_pLowResImage = NULL;
-#else
-  *(unsigned int *)m_LowResImageSample = 0;
-#endif
 
   m_nDesiredDimensionLimit = 0;
   m_nActualDimensionLimit = 0;
@@ -841,7 +837,7 @@ void CTexture::Init(int w, int h, int d, ImageFormat fmt, int iFlags,
 // Shuts down the texture
 //-----------------------------------------------------------------------------
 void CTexture::Shutdown() {
-  // Clean up the low-res texture
+// Clean up the low-res texture
 #if !defined(_X360)
   delete[] m_pLowResImage;
   m_pLowResImage = 0;
@@ -1778,9 +1774,9 @@ bool CTexture::SetRenderTarget(int nRenderTargetID, ITexture *pDepthTexture) {
 //-----------------------------------------------------------------------------
 // Reference counting
 //-----------------------------------------------------------------------------
-void CTexture::IncrementReferenceCount(void) { ++m_nRefCount; }
+void CTexture::IncrementReferenceCount() { ++m_nRefCount; }
 
-void CTexture::DecrementReferenceCount(void) {
+void CTexture::DecrementReferenceCount() {
   --m_nRefCount;
 
   /* TODO(d.rattman): Probably have to remove this from the texture manager
@@ -1856,19 +1852,19 @@ bool CTexture::IsTranslucent() const {
          0;
 }
 
-bool CTexture::IsNormalMap(void) const {
+bool CTexture::IsNormalMap() const {
   return ((m_nFlags & TEXTUREFLAGS_NORMAL) != 0);
 }
 
-bool CTexture::IsCubeMap(void) const {
+bool CTexture::IsCubeMap() const {
   return ((m_nFlags & TEXTUREFLAGS_ENVMAP) != 0);
 }
 
-bool CTexture::IsRenderTarget(void) const {
+bool CTexture::IsRenderTarget() const {
   return ((m_nFlags & TEXTUREFLAGS_RENDERTARGET) != 0);
 }
 
-bool CTexture::IsTempRenderTarget(void) const {
+bool CTexture::IsTempRenderTarget() const {
   return ((m_nInternalFlags & TEXTUREFLAGSINTERNAL_TEMPRENDERTARGET) != 0);
 }
 
@@ -1955,7 +1951,7 @@ void CTexture::Precache() {
 
   int nVersion = VTF_MAJOR_VERSION;
   int nHeaderSize = VTFFileHeaderSize(nVersion);
-  unsigned char *pMem = (unsigned char *)stackalloc(nHeaderSize);
+  u8 *pMem = stack_alloc<u8>(nHeaderSize);
   CUtlBuffer buf(pMem, nHeaderSize);
   if (!g_pFullFileSystem->ReadFile(pCacheFileName, NULL, buf, nHeaderSize)) {
     goto precacheFailed;
@@ -2042,8 +2038,8 @@ void *CTexture::GetResourceData(uint32_t eDataType, size_t *pnumBytes) const {
 #pragma pack(1)
 
 struct DXTColBlock {
-  unsigned short col0;
-  unsigned short col1;
+  u16 col0;
+  u16 col1;
 
   // no bit fields - use bytes
   unsigned char row[4];
@@ -2947,7 +2943,7 @@ void CTexture::GetLowResColorSample(float s, float t, float *color) const {
   color[2] = sColor[0][2] * (1.0f - fracT) + sColor[1][2] * fracT;
 }
 
-int CTexture::GetApproximateVidMemBytes(void) const {
+int CTexture::GetApproximateVidMemBytes() const {
   ImageFormat format = GetImageFormat();
   int width = GetActualWidth();
   int height = GetActualHeight();
@@ -2988,8 +2984,7 @@ void CTexture::SwapContents(ITexture *pOther) {
             "Texture swapping broken");
 
   CTexture *pOtherAsCTexture = (CTexture *)pOther;
-
-  CTexture *pTemp = (CTexture *)stackalloc(sizeof(CTexture));
+  CTexture *pTemp = stack_alloc<CTexture>(1);
 
   // swap everything
   memcpy(pTemp, this, sizeof(CTexture));
@@ -3027,7 +3022,7 @@ void CTexture::MarkAsExcluded(bool bSet, int nDimensionsLimit) {
   }
 }
 
-bool CTexture::UpdateExcludedState(void) {
+bool CTexture::UpdateExcludedState() {
   bool bDesired = (m_nInternalFlags & TEXTUREFLAGSINTERNAL_SHOULDEXCLUDE) != 0;
   bool bActual = (m_nInternalFlags & TEXTUREFLAGSINTERNAL_EXCLUDED) != 0;
   if ((bDesired == bActual) &&
@@ -3047,11 +3042,11 @@ bool CTexture::UpdateExcludedState(void) {
   return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Saving all the texture LOD modifications to content
-//
-//////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  //
+  // Saving all the texture LOD modifications to content
+  //
+  //////////////////////////////////////////////////////////////////////////
 
 #ifdef OS_WIN
 static bool SetBufferValue(char *chTxtFileBuffer, usize txt_file_buffer_size,
@@ -3240,7 +3235,7 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
 
       if (!g_pFullFileSystem->RelativePathToFullPath(
               chResolveNameArg, "game", chResolveName,
-              SOURCE_ARRAYSIZE(chResolveName) - 1)) {
+              std::size(chResolveName) - 1)) {
         Warning(
             " mat_texture_list_txlod_sync save - texture '%s' is not loaded "
             "from file system.\n",
@@ -3267,13 +3262,11 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
                                               // extension
 
       // 1.tga
-      sprintf_s(pExtPut,
-                chResolveName + SOURCE_ARRAYSIZE(chResolveName) - pExtPut,
+      sprintf_s(pExtPut, chResolveName + std::size(chResolveName) - pExtPut,
                 ".tga");
       if (g_pFullFileSystem->FileExists(chResolveName)) {
         // Have tga - pump in the txt file
-        sprintf_s(pExtPut,
-                  chResolveName + SOURCE_ARRAYSIZE(chResolveName) - pExtPut,
+        sprintf_s(pExtPut, chResolveName + std::size(chResolveName) - pExtPut,
                   ".txt");
 
         CUtlBuffer bufTxtFileBuffer(0, 0, CUtlBuffer::TEXT_BUFFER);
@@ -3307,8 +3300,7 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
       }
 
       // 2.psd
-      sprintf_s(pExtPut,
-                chResolveName + SOURCE_ARRAYSIZE(chResolveName) - pExtPut,
+      sprintf_s(pExtPut, chResolveName + std::size(chResolveName) - pExtPut,
                 ".psd");
       if (g_pFullFileSystem->FileExists(chResolveName)) {
         char chCommand[SOURCE_MAX_PATH];
@@ -3357,8 +3349,8 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
       }
 
       // 3. - error
-      sprintf_s(pExtPut,
-                chResolveName + SOURCE_ARRAYSIZE(chResolveName) - pExtPut, "");
+      sprintf_s(pExtPut, chResolveName + std::size(chResolveName) - pExtPut,
+                "");
       {
         Warning(" '%s' : doesn't specify a valid TGA or PSD file!\n",
                 chResolveName);

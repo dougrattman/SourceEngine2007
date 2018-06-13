@@ -41,7 +41,7 @@ CShaderDeviceDx10 *g_pShaderDeviceDx10 = &g_ShaderDeviceDx10;
 // constructor, destructor
 //-----------------------------------------------------------------------------
 CShaderDeviceMgrDx10::CShaderDeviceMgrDx10() {
-  m_pDXGIFactory = NULL;
+  m_pDXGIFactory = nullptr;
   m_bObeyDxCommandlineOverride = true;
 }
 
@@ -71,7 +71,7 @@ void CShaderDeviceMgrDx10::Disconnect() {
 
   if (m_pDXGIFactory) {
     m_pDXGIFactory->Release();
-    m_pDXGIFactory = NULL;
+    m_pDXGIFactory = nullptr;
   }
 
   BaseClass::Disconnect();
@@ -94,7 +94,7 @@ void CShaderDeviceMgrDx10::Shutdown() {
 
   if (g_pShaderDevice) {
     g_pShaderDevice->ShutdownDevice();
-    g_pShaderDevice = NULL;
+    g_pShaderDevice = nullptr;
   }
 }
 
@@ -140,7 +140,7 @@ void CShaderDeviceMgrDx10::InitAdapterInfo() {
 bool CShaderDeviceMgrDx10::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
                                               IDXGIAdapter *pAdapter,
                                               IDXGIOutput *pOutput) {
-  HRESULT hr = pAdapter->CheckInterfaceSupport(__uuidof(ID3D10Device), NULL);
+  HRESULT hr = pAdapter->CheckInterfaceSupport(__uuidof(ID3D10Device), nullptr);
   if (hr != S_OK) {
     // Fall back to Dx9
     return false;
@@ -151,7 +151,7 @@ bool CShaderDeviceMgrDx10::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   Assert(!FAILED(hr));
   if (FAILED(hr)) return false;
 
-  bool bForceFloatHDR = (CommandLine()->CheckParm("-floathdr") != NULL);
+  bool bForceFloatHDR = (CommandLine()->CheckParm("-floathdr") != nullptr);
 
   // DX10 settings
   // NOTE: We'll need to have different settings for dx10.1 and dx11
@@ -257,7 +257,7 @@ IDXGIAdapter *CShaderDeviceMgrDx10::GetAdapter(int nAdapter) const {
 
   IDXGIAdapter *pAdapter;
   HRESULT hr = m_pDXGIFactory->EnumAdapters(nAdapter, &pAdapter);
-  return (FAILED(hr)) ? NULL : pAdapter;
+  return (FAILED(hr)) ? nullptr : pAdapter;
 }
 
 //-----------------------------------------------------------------------------
@@ -300,7 +300,7 @@ IDXGIOutput *CShaderDeviceMgrDx10::GetAdapterOutput(int nAdapter) const {
     return pOutput;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -394,7 +394,7 @@ bool CShaderDeviceMgrDx10::SetAdapter(int nAdapter, int nFlags) {
 // Sets the mode
 //-----------------------------------------------------------------------------
 CreateInterfaceFn CShaderDeviceMgrDx10::SetMode(
-    void *hWnd, int nAdapter, const ShaderDeviceInfo_t &mode) {
+    HWND hWnd, int nAdapter, const ShaderDeviceInfo_t &mode) {
   LOCK_SHADERAPI();
 
   Assert(nAdapter < GetAdapterCount());
@@ -412,22 +412,22 @@ CreateInterfaceFn CShaderDeviceMgrDx10::SetMode(
 
   if (g_pShaderAPI) {
     g_pShaderAPI->OnDeviceShutdown();
-    g_pShaderAPI = NULL;
+    g_pShaderAPI = nullptr;
   }
 
   if (g_pShaderDevice) {
     g_pShaderDevice->ShutdownDevice();
-    g_pShaderDevice = NULL;
+    g_pShaderDevice = nullptr;
   }
 
-  g_pShaderShadow = NULL;
+  g_pShaderShadow = nullptr;
 
   ShaderDeviceInfo_t adjustedMode = mode;
   adjustedMode.m_nDXLevel = nDXLevel;
   if (!g_pShaderDeviceDx10->InitDevice(hWnd, nAdapter, adjustedMode))
-    return NULL;
+    return nullptr;
 
-  if (!g_pShaderAPIDx10->OnDeviceInit()) return NULL;
+  if (!g_pShaderAPIDx10->OnDeviceInit()) return nullptr;
 
   g_pShaderDevice = g_pShaderDeviceDx10;
   g_pShaderAPI = g_pShaderAPIDx10;
@@ -446,10 +446,10 @@ CreateInterfaceFn CShaderDeviceMgrDx10::SetMode(
 // constructor, destructor
 //-----------------------------------------------------------------------------
 CShaderDeviceDx10::CShaderDeviceDx10() {
-  m_pDevice = NULL;
-  m_pOutput = NULL;
-  m_pSwapChain = NULL;
-  m_pRenderTargetView = NULL;
+  m_pDevice = nullptr;
+  m_pOutput = nullptr;
+  m_pSwapChain = nullptr;
+  m_pRenderTargetView = nullptr;
 }
 
 CShaderDeviceDx10::~CShaderDeviceDx10() {}
@@ -457,7 +457,7 @@ CShaderDeviceDx10::~CShaderDeviceDx10() {}
 //-----------------------------------------------------------------------------
 // Sets the mode
 //-----------------------------------------------------------------------------
-bool CShaderDeviceDx10::InitDevice(void *hWnd, int nAdapter,
+bool CShaderDeviceDx10::InitDevice(HWND hWnd, int nAdapter,
                                    const ShaderDeviceInfo_t &mode) {
   // Make sure we've been shutdown previously
   if (m_nAdapter != -1) {
@@ -485,7 +485,7 @@ bool CShaderDeviceDx10::InitDevice(void *hWnd, int nAdapter,
       mode.m_DisplayMode.m_nRefreshRateDenominator;
   sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
   sd.BufferCount = mode.m_nBackBufferCount;
-  sd.OutputWindow = (HWND)hWnd;
+  sd.OutputWindow = hWnd;
   sd.Windowed = mode.m_bWindowed ? TRUE : FALSE;
   sd.Flags = mode.m_bWindowed ? 0 : DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
@@ -503,7 +503,7 @@ bool CShaderDeviceDx10::InitDevice(void *hWnd, int nAdapter,
 #endif
 
   HRESULT hr = D3D10CreateDeviceAndSwapChain(
-      pAdapter, D3D10_DRIVER_TYPE_HARDWARE, NULL, nDeviceFlags,
+      pAdapter, D3D10_DRIVER_TYPE_HARDWARE, nullptr, nDeviceFlags,
       D3D10_SDK_VERSION, &sd, &m_pSwapChain, &m_pDevice);
 
   if (FAILED(hr)) return false;
@@ -514,12 +514,12 @@ bool CShaderDeviceDx10::InitDevice(void *hWnd, int nAdapter,
                                (LPVOID *)&pBackBuffer);
   if (FAILED(hr)) return FALSE;
 
-  hr = m_pDevice->CreateRenderTargetView(pBackBuffer, NULL,
+  hr = m_pDevice->CreateRenderTargetView(pBackBuffer, nullptr,
                                          &m_pRenderTargetView);
   pBackBuffer->Release();
   if (FAILED(hr)) return FALSE;
 
-  m_pDevice->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
+  m_pDevice->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
 
   m_hWnd = hWnd;
   m_nAdapter = nAdapter;
@@ -540,25 +540,25 @@ bool CShaderDeviceDx10::InitDevice(void *hWnd, int nAdapter,
 void CShaderDeviceDx10::ShutdownDevice() {
   if (m_pRenderTargetView) {
     m_pRenderTargetView->Release();
-    m_pRenderTargetView = NULL;
+    m_pRenderTargetView = nullptr;
   }
 
   if (m_pDevice) {
     m_pDevice->Release();
-    m_pDevice = NULL;
+    m_pDevice = nullptr;
   }
 
   if (m_pSwapChain) {
     m_pSwapChain->Release();
-    m_pSwapChain = NULL;
+    m_pSwapChain = nullptr;
   }
 
   if (m_pOutput) {
     m_pOutput->Release();
-    m_pOutput = NULL;
+    m_pOutput = nullptr;
   }
 
-  m_hWnd = NULL;
+  m_hWnd = nullptr;
   m_nAdapter = -1;
 }
 
@@ -656,8 +656,8 @@ IShaderBuffer *CShaderDeviceDx10::CompileShader(const char *pProgram,
 
   ID3D10Blob *pCompiledShader, *pErrorMessages;
   HRESULT hr = D3DX10CompileFromMemory(
-      pProgram, nBufLen, "", NULL, NULL, "main", pShaderVersion, nCompileFlags,
-      0, NULL, &pCompiledShader, &pErrorMessages, NULL);
+      pProgram, nBufLen, "", nullptr, nullptr, "main", pShaderVersion,
+      nCompileFlags, 0, nullptr, &pCompiledShader, &pErrorMessages, nullptr);
 
   if (FAILED(hr)) {
     if (pErrorMessages) {
@@ -669,7 +669,7 @@ IShaderBuffer *CShaderDeviceDx10::CompileShader(const char *pProgram,
           pErrorMessage);
       pErrorMessages->Release();
     }
-    return NULL;
+    return nullptr;
   }
 
   // NOTE: This uses small block heap allocator; so I'm not going
@@ -692,7 +692,7 @@ void CShaderDeviceDx10::ReleaseInputLayouts(VertexShaderIndex_t nIndex) {
   while (hCurr != dict.InvalidIndex()) {
     if (dict[hCurr].m_pInputLayout) {
       dict[hCurr].m_pInputLayout->Release();
-      dict[hCurr].m_pInputLayout = NULL;
+      dict[hCurr].m_pInputLayout = nullptr;
     }
     hCurr = dict.NextInorder(hCurr);
   }
@@ -704,7 +704,7 @@ void CShaderDeviceDx10::ReleaseInputLayouts(VertexShaderIndex_t nIndex) {
 VertexShaderHandle_t CShaderDeviceDx10::CreateVertexShader(
     IShaderBuffer *pShaderBuffer) {
   // Create the vertex shader
-  ID3D10VertexShader *pShader = NULL;
+  ID3D10VertexShader *pShader = nullptr;
   HRESULT hr = m_pDevice->CreateVertexShader(
       pShaderBuffer->GetBits(), pShaderBuffer->GetSize(), &pShader);
 
@@ -749,7 +749,7 @@ void CShaderDeviceDx10::DestroyVertexShader(VertexShaderHandle_t hShader) {
 GeometryShaderHandle_t CShaderDeviceDx10::CreateGeometryShader(
     IShaderBuffer *pShaderBuffer) {
   // Create the geometry shader
-  ID3D10GeometryShader *pShader = NULL;
+  ID3D10GeometryShader *pShader = nullptr;
   HRESULT hr = m_pDevice->CreateGeometryShader(
       pShaderBuffer->GetBits(), pShaderBuffer->GetSize(), &pShader);
 
@@ -787,7 +787,7 @@ void CShaderDeviceDx10::DestroyGeometryShader(GeometryShaderHandle_t hShader) {
 PixelShaderHandle_t CShaderDeviceDx10::CreatePixelShader(
     IShaderBuffer *pShaderBuffer) {
   // Create the pixel shader
-  ID3D10PixelShader *pShader = NULL;
+  ID3D10PixelShader *pShader = nullptr;
   HRESULT hr = m_pDevice->CreatePixelShader(pShaderBuffer->GetBits(),
                                             pShaderBuffer->GetSize(), &pShader);
 
@@ -824,7 +824,7 @@ void CShaderDeviceDx10::DestroyPixelShader(PixelShaderHandle_t hShader) {
 //-----------------------------------------------------------------------------
 ID3D10InputLayout *CShaderDeviceDx10::GetInputLayout(
     VertexShaderHandle_t hShader, VertexFormat_t format) {
-  if (hShader == VERTEX_SHADER_HANDLE_INVALID) return NULL;
+  if (hShader == VERTEX_SHADER_HANDLE_INVALID) return nullptr;
 
   // TODO(d.rattman): VertexFormat_t is not the appropriate way of specifying
   // this because it has no stream information
@@ -850,7 +850,7 @@ IMesh *CShaderDeviceDx10::CreateStaticMesh(VertexFormat_t vertexFormat,
                                            const char *pBudgetGroup,
                                            IMaterial *pMaterial) {
   LOCK_SHADERAPI();
-  return NULL;
+  return nullptr;
 }
 
 void CShaderDeviceDx10::DestroyStaticMesh(IMesh *pMesh) { LOCK_SHADERAPI(); }
@@ -901,11 +901,11 @@ void CShaderDeviceDx10::DestroyIndexBuffer(IIndexBuffer *pIndexBuffer) {
 IVertexBuffer *CShaderDeviceDx10::GetDynamicVertexBuffer(
     int nStreamID, VertexFormat_t vertexFormat, bool bBuffered) {
   LOCK_SHADERAPI();
-  return NULL;
+  return nullptr;
 }
 
 IIndexBuffer *CShaderDeviceDx10::GetDynamicIndexBuffer(
     MaterialIndexFormat_t fmt, bool bBuffered) {
   LOCK_SHADERAPI();
-  return NULL;
+  return nullptr;
 }

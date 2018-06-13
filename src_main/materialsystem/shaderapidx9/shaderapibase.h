@@ -46,8 +46,7 @@ class CShaderAPIBase : public IShaderAPI {
 };
 
 // Pix measurement class.
-class CPixEvent {
- public:
+struct CPixEvent {
   CPixEvent(unsigned long color, const char* szName) {
     g_pShaderAPI->BeginPIXEvent(color, szName);
   }

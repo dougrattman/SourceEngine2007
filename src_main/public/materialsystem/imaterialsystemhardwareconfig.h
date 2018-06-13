@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef IMATERIALSYSTEMHARDWARECONFIG_H
-#define IMATERIALSYSTEMHARDWARECONFIG_H
+#ifndef SOURCE_MATERIALSYSTEM_IMATERIALSYSTEMHARDWARECONFIG_H_
+#define SOURCE_MATERIALSYSTEM_IMATERIALSYSTEMHARDWARECONFIG_H_
 
 #include "tier1/interface.h"
 
@@ -49,7 +49,7 @@ enum VertexCompressionType_t {
 //-----------------------------------------------------------------------------
 // Material system configuration
 //-----------------------------------------------------------------------------
-class IMaterialSystemHardwareConfig {
+the_interface IMaterialSystemHardwareConfig {
  public:
   // on xbox, some methods are inlined to return constants
 
@@ -65,8 +65,8 @@ class IMaterialSystemHardwareConfig {
   DEFCONFIGMETHOD(bool, SupportsPixelShaders_1_4(), true);
   DEFCONFIGMETHOD(bool, SupportsPixelShaders_2_0(), true);
   DEFCONFIGMETHOD(bool, SupportsVertexShaders_2_0(), true);
-  virtual int MaximumAnisotropicLevel()
-      const = 0;  // 0 means no anisotropic filtering
+  // 0 means no anisotropic filtering
+  virtual int MaximumAnisotropicLevel() const = 0;
   virtual int MaxTextureWidth() const = 0;
   virtual int MaxTextureHeight() const = 0;
   virtual u64 TextureMemorySize() const = 0;
@@ -159,11 +159,11 @@ class IMaterialSystemHardwareConfig {
 
   virtual bool SupportsHDRMode(HDRType_t nHDRMode) const = 0;
 
-  virtual bool GetHDREnabled(void) const = 0;
+  virtual bool GetHDREnabled() const = 0;
   virtual void SetHDREnabled(bool bEnable) = 0;
 
-  virtual bool SupportsBorderColor(void) const = 0;
-  virtual bool SupportsFetch4(void) const = 0;
+  virtual bool SupportsBorderColor() const = 0;
+  virtual bool SupportsFetch4() const = 0;
 };
 
-#endif  // IMATERIALSYSTEMHARDWARECONFIG_H
+#endif  // SOURCE_MATERIALSYSTEM_IMATERIALSYSTEMHARDWARECONFIG_H_

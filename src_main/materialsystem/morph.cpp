@@ -193,15 +193,15 @@ class CMorph : public IMorphInternal, public ITextureRegenerator {
   // accumulation texture).
   struct MorphSegment_t {
     unsigned int m_nFirstSrc;
-    unsigned short m_nFirstDest;
-    unsigned short m_nCount;
+    u16 m_nFirstDest;
+    u16 m_nCount;
   };
 
   struct MorphQuad_t {
     unsigned int m_nFirstSrc;
-    unsigned short m_nFirstDest;
-    unsigned short m_nCount;
-    unsigned short m_nQuadIndex;
+    u16 m_nFirstDest;
+    u16 m_nCount;
+    u16 m_nQuadIndex;
   };
 
   enum MorphTextureId_t {
@@ -1521,9 +1521,9 @@ void CMorph::AccumulateMorph(int nRenderId) {
   }
 
   // Clear the morph accumulator
-  // TODO(d.rattman): Can I avoid even changing the render target if I know the last time
-  // the morph accumulator was used that it was also cleared to black? Yes, but
-  // I need to deal with alt-tab.
+  // TODO(d.rattman): Can I avoid even changing the render target if I know the
+  // last time the morph accumulator was used that it was also cleared to black?
+  // Yes, but I need to deal with alt-tab.
   bool bRenderQuads = (nTotalQuadCount != 0) && (m_nTextureWidth != 0) &&
                       (m_nTextureHeight != 0);
   if (!bRenderQuads) return;
@@ -1549,8 +1549,8 @@ CMorphMgrRenderContext::CMorphMgrRenderContext() {
 }
 
 int CMorphMgrRenderContext::GetRenderId(CMorph *pMorph) {
-  // TODO(d.rattman): This could be done without all these comparisons, at the cost of
-  // memory + complexity. NOTE: m_nMorphCount <= 4.
+  // TODO(d.rattman): This could be done without all these comparisons, at the
+  // cost of memory + complexity. NOTE: m_nMorphCount <= 4.
   for (int i = 0; i < m_nMorphCount; ++i) {
     if (m_pMorphsToAccumulate[i] == pMorph) return i;
   }
@@ -1588,7 +1588,7 @@ bool CMorphMgr::ShouldAllocateScratchTextures() {
 // Allocates scratch textures used in hw morphing
 //-----------------------------------------------------------------------------
 void CMorphMgr::AllocateScratchTextures() {
-  // Debug using 32323232F because we can read that back reasonably.
+// Debug using 32323232F because we can read that back reasonably.
 #ifdef _DEBUG
   ImageFormat fmt = IMAGE_FORMAT_RGBA32323232F;
 #else
@@ -1625,8 +1625,8 @@ void CMorphMgr::AllocateScratchTextures() {
 
   m_nWeightWidth = m_nWeightHeight = nDim;
 
-  // TODO(d.rattman): Re-enable if NVidia gets a fast implementation using more shader
-  // constants
+  // TODO(d.rattman): Re-enable if NVidia gets a fast implementation using more
+  // shader constants
   m_bUsingConstantRegisters =
       false;  //( g_pMaterialSystemHardwareConfig->NumVertexShaderConstants() >=
               // VERTEX_SHADER_FLEX_WEIGHTS +
@@ -1870,7 +1870,7 @@ void CMorphMgr::DebugMorphAccumulator(IMatRenderContext *pRenderContext) {
                             MORPH_ACCUMULATOR_4TUPLES);
     }
   }
-  free(pBuf);
+  heap_free(pBuf);
 }
 
 //-----------------------------------------------------------------------------
@@ -1907,7 +1907,7 @@ void CMorphMgr::DebugMorphWeights(IMatRenderContext *pRenderContext) {
       Display32FTextureData(pBuf, i, pSubRect, pTexture, 1);
     }
   }
-  free(pBuf);
+  heap_free(pBuf);
 }
 
 //-----------------------------------------------------------------------------
@@ -2027,9 +2027,9 @@ void CMorphMgr::BeginMorphAccumulation(
   pRenderContext->SetFlashlightMode(false);
 
   if (!m_bUsingConstantRegisters) {
-    // TODO(d.rattman): We could theoretically avoid pushing this if we copied off all the
-    // weights and set the weight texture only at the end if any non-zero
-    // weights were sent down
+    // TODO(d.rattman): We could theoretically avoid pushing this if we copied
+    // off all the weights and set the weight texture only at the end if any
+    // non-zero weights were sent down
     pRenderContext->PushRenderTargetAndViewport(m_pMorphWeightTexture);
 
 #ifdef _DEBUG

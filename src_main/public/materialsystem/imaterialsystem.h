@@ -42,6 +42,8 @@ class ICallQueue;
 struct MorphWeight_t;
 class IFileList;
 
+SOURCE_FORWARD_DECLARE_HANDLE(HWND);
+
 // The vertex format type
 
 typedef uint64_t VertexFormat_t;
@@ -503,7 +505,7 @@ the_interface IMaterialSystem : public IAppSystem {
   virtual void GetDisplayMode(MaterialVideoMode_t & mode) const = 0;
 
   // Sets the mode...
-  virtual bool SetMode(void *hwnd, const MaterialSystem_Config_t &config) = 0;
+  virtual bool SetMode(HWND hwnd, const MaterialSystem_Config_t &config) = 0;
 
   virtual bool SupportsMSAAMode(int nMSAAMode) = 0;
 
@@ -529,11 +531,11 @@ the_interface IMaterialSystem : public IAppSystem {
   // -----------------------------------------------------------
 
   // Creates/ destroys a child window
-  virtual bool AddView(void *hwnd) = 0;
-  virtual void RemoveView(void *hwnd) = 0;
+  virtual bool AddView(HWND hwnd) = 0;
+  virtual void RemoveView(HWND hwnd) = 0;
 
   // Sets the view
-  virtual void SetView(void *hwnd) = 0;
+  virtual void SetView(HWND hwnd) = 0;
 
   // -----------------------------------------------------------
   // Control flow
@@ -740,8 +742,8 @@ the_interface IMaterialSystem : public IAppSystem {
       MaterialRenderTargetDepth_t depth = MATERIAL_RT_DEPTH_SHARED) = 0;
 
   virtual ITexture *CreateNamedRenderTargetTextureEx(
-      const char *pRTName,  // Pass in nullptr here for an unnamed render target.
-      int w, int h,
+      // Pass in nullptr here for an unnamed render target.
+      const char *pRTName, int w, int h,
       RenderTargetSizeMode_t sizeMode,  // Controls how size is generated (and
                                         // regenerated on video mode change).
       ImageFormat format,
@@ -759,8 +761,8 @@ the_interface IMaterialSystem : public IAppSystem {
 
   // Must be called between the above Begin-End calls!
   virtual ITexture *CreateNamedRenderTargetTextureEx2(
-      const char *pRTName,  // Pass in nullptr here for an unnamed render target.
-      int w, int h,
+      // Pass in nullptr here for an unnamed render target.
+      const char *pRTName, int w, int h,
       RenderTargetSizeMode_t sizeMode,  // Controls how size is generated (and
                                         // regenerated on video mode change).
       ImageFormat format,
@@ -904,8 +906,8 @@ the_interface IMatRenderContext : public IRefCounted {
                             bool bClearStencil = false) = 0;
 
   // read to a u8 rgb image.
-  virtual void ReadPixels(int x, int y, int width, int height,
-                          u8 *data, ImageFormat dstFormat) = 0;
+  virtual void ReadPixels(int x, int y, int width, int height, u8 *data,
+                          ImageFormat dstFormat) = 0;
 
   // Sets lighting
   virtual void SetAmbientLight(f32 r, f32 g, f32 b) = 0;
@@ -973,11 +975,10 @@ the_interface IMatRenderContext : public IRefCounted {
 
   virtual void FogColor3f(f32 r, f32 g, f32 b) = 0;
   virtual void FogColor3fv(f32 const *rgb) = 0;
-  virtual void FogColor3ub(u8 r, u8 g,
-                           u8 b) = 0;
+  virtual void FogColor3ub(u8 r, u8 g, u8 b) = 0;
   virtual void FogColor3ubv(u8 const *rgb) = 0;
 
-  virtual void GetFogColor(u8 *rgb) = 0;
+  virtual void GetFogColor(u8 * rgb) = 0;
 
   // Sets the number of bones for skinning
   virtual void SetNumBoneWeights(int numBones) = 0;
@@ -1049,10 +1050,8 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual void PopSelectionName() = 0;
 
   // Sets the Clear Color for ClearBuffer....
-  virtual void ClearColor3ub(u8 r, u8 g,
-                             u8 b) = 0;
-  virtual void ClearColor4ub(u8 r, u8 g, u8 b,
-                             u8 a) = 0;
+  virtual void ClearColor3ub(u8 r, u8 g, u8 b) = 0;
+  virtual void ClearColor4ub(u8 r, u8 g, u8 b, u8 a) = 0;
 
   // Allows us to override the depth buffer setting of a material
   virtual void OverrideDepthEnable(bool bEnable, bool bDepthEnable) = 0;
@@ -1070,8 +1069,7 @@ the_interface IMatRenderContext : public IRefCounted {
   // found the bug in it and everything's tuned to use it. It's returning values
   // which are 2x too big (it's returning sphere diameter x2) Use
   // ComputePixelDiameterOfSphere below in all new code instead.
-  virtual f32 ComputePixelWidthOfSphere(const Vector &origin,
-                                          f32 flRadius) = 0;
+  virtual f32 ComputePixelWidthOfSphere(const Vector &origin, f32 flRadius) = 0;
 
   //
   // Occlusion query support
@@ -1101,7 +1099,7 @@ the_interface IMatRenderContext : public IRefCounted {
   // This returns the diameter of the sphere in pixels based on
   // the current model, view, + projection matrices and viewport.
   virtual f32 ComputePixelDiameterOfSphere(const Vector &vecAbsOrigin,
-                                             f32 flRadius) = 0;
+                                           f32 flRadius) = 0;
 
   // By default, the material system applies the VIEW and PROJECTION matrices
   // to the user clip planes (which are specified in world space) to generate
@@ -1139,8 +1137,8 @@ the_interface IMatRenderContext : public IRefCounted {
 
   // Read w/ stretch to a host-memory buffer
   virtual void ReadPixelsAndStretch(Rect_t * pSrcRect, Rect_t * pDstRect,
-                                    u8 *pBuffer,
-                                    ImageFormat dstFormat, int nDstStride) = 0;
+                                    u8 * pBuffer, ImageFormat dstFormat,
+                                    int nDstStride) = 0;
 
   // Gets the window size
   virtual void GetWindowSize(int &width, int &height) const = 0;
@@ -1263,7 +1261,7 @@ the_interface IMatRenderContext : public IRefCounted {
   virtual bool EnableClipping(bool bEnable) = 0;
 
   // get fog distances entered with FogStart(), FogEnd(), and SetFogZ()
-  virtual void GetFogDistances(f32 *fStart, f32 *fEnd, f32 *fFogZ) = 0;
+  virtual void GetFogDistances(f32 * fStart, f32 * fEnd, f32 * fFogZ) = 0;
 
   // Hooks for firing PIX events from outside the Material System...
   virtual void BeginPIXEvent(unsigned long color, const char *szName) = 0;

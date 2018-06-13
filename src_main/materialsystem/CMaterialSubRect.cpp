@@ -1,8 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=====================================================================================//
 
 #include <ctype.h>
 #include <malloc.h>
@@ -52,10 +48,10 @@ class CMaterialSubRect : public IMaterialInternal {
   int GetMappingWidth();
   int GetMappingHeight();
 
-  bool InMaterialPage(void) { return true; }
+  bool InMaterialPage() { return true; }
   void GetMaterialOffset(float *pOffset);
   void GetMaterialScale(float *pScale);
-  IMaterial *GetMaterialPage(void) { return m_pMaterialPage; }
+  IMaterial *GetMaterialPage() { return m_pMaterialPage; }
 
   void IncrementReferenceCount(void);
   void DecrementReferenceCount(void);
@@ -118,14 +114,14 @@ class CMaterialSubRect : public IMaterialInternal {
     m_pMaterialPage->GetLowResColorSample(s, t, color);
   }
 
-  bool UsesEnvCubemap(void) { return m_pMaterialPage->UsesEnvCubemap(); }
-  bool NeedsSoftwareSkinning(void) {
+  bool UsesEnvCubemap() { return m_pMaterialPage->UsesEnvCubemap(); }
+  bool NeedsSoftwareSkinning() {
     return m_pMaterialPage->NeedsSoftwareSkinning();
   }
-  bool NeedsSoftwareLighting(void) {
+  bool NeedsSoftwareLighting() {
     return m_pMaterialPage->NeedsSoftwareLighting();
   }
-  bool NeedsTangentSpace(void) { return m_pMaterialPage->NeedsTangentSpace(); }
+  bool NeedsTangentSpace() { return m_pMaterialPage->NeedsTangentSpace(); }
   bool NeedsPowerOfTwoFrameBufferTexture(
       bool bCheckSpecificToThisFrame = true) {
     return m_pMaterialPage->NeedsPowerOfTwoFrameBufferTexture(
@@ -135,7 +131,7 @@ class CMaterialSubRect : public IMaterialInternal {
     return m_pMaterialPage->NeedsFullFrameBufferTexture(
         bCheckSpecificToThisFrame);
   }
-  bool NeedsLightmapBlendAlpha(void) {
+  bool NeedsLightmapBlendAlpha() {
     return m_pMaterialPage->NeedsLightmapBlendAlpha();
   }
 
@@ -168,8 +164,8 @@ class CMaterialSubRect : public IMaterialInternal {
 
   bool IsTwoSided() { return m_pMaterialPage->IsTwoSided(); }
 
-  int GetNumPasses(void) { return m_pMaterialPage->GetNumPasses(); }
-  int GetTextureMemoryBytes(void) {
+  int GetNumPasses() { return m_pMaterialPage->GetNumPasses(); }
+  int GetTextureMemoryBytes() {
     return m_pMaterialPage->GetTextureMemoryBytes();
   }
 
@@ -177,7 +173,7 @@ class CMaterialSubRect : public IMaterialInternal {
   void DrawMesh(VertexCompressionType_t vertexCompression) {
     m_pMaterialPage->DrawMesh(vertexCompression);
   }
-  void ReloadTextures(void) { m_pMaterialPage->ReloadTextures(); }
+  void ReloadTextures() { m_pMaterialPage->ReloadTextures(); }
   void SetMinLightmapPageID(int pageID) {
     m_pMaterialPage->SetMinLightmapPageID(pageID);
   }
@@ -205,7 +201,7 @@ class CMaterialSubRect : public IMaterialInternal {
   void CallBindProxy(void *proxyData) {
     m_pMaterialPage->CallBindProxy(proxyData);
   }
-  bool HasProxy(void) const { return m_pMaterialPage->HasProxy(); }
+  bool HasProxy() const { return m_pMaterialPage->HasProxy(); }
 
   // Sets the shader associated with the material
   void SetShader(const char *pShaderName) {
@@ -251,7 +247,7 @@ class CMaterialSubRect : public IMaterialInternal {
   bool IsSuppressed() const { return m_pMaterialPage->IsSuppressed(); }
 
   // Do we use fog?
-  bool UseFog(void) const { return m_pMaterialPage->UseFog(); }
+  bool UseFog() const { return m_pMaterialPage->UseFog(); }
 
   // Should we draw?
   void ToggleSuppression() { m_pMaterialPage->ToggleSuppression(); }
@@ -268,7 +264,7 @@ class CMaterialSubRect : public IMaterialInternal {
 
   // Gets at the shader parameters
   int ShaderParamCount() const { return m_pMaterialPage->ShaderParamCount(); }
-  IMaterialVar **GetShaderParams(void) {
+  IMaterialVar **GetShaderParams() {
     return m_pMaterialPage->GetShaderParams();
   }
 
@@ -300,16 +296,16 @@ class CMaterialSubRect : public IMaterialInternal {
     return m_pMaterialPage->GetChangeID();
   }
 
-  virtual bool IsRealTimeVersion(void) const { return true; }
-  virtual IMaterialInternal *GetRealTimeVersion(void) { return this; }
-  virtual IMaterialInternal *GetQueueFriendlyVersion(void) {
+  virtual bool IsRealTimeVersion() const { return true; }
+  virtual IMaterialInternal *GetRealTimeVersion() { return this; }
+  virtual IMaterialInternal *GetQueueFriendlyVersion() {
     return &m_QueueFriendlyVersion;
   };
 
-  virtual void PrecacheMappingDimensions(void) {
+  virtual void PrecacheMappingDimensions() {
     m_pMaterialPage->PrecacheMappingDimensions();
   }
-  virtual void FindRepresentativeTexture(void) {
+  virtual void FindRepresentativeTexture() {
     m_pMaterialPage->FindRepresentativeTexture();
   }
 
@@ -537,17 +533,17 @@ void CMaterialSubRect::GetMaterialScale(float *pScale) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMaterialSubRect::IncrementReferenceCount(void) { ++m_nRefCount; }
+void CMaterialSubRect::IncrementReferenceCount() { ++m_nRefCount; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMaterialSubRect::DecrementReferenceCount(void) { --m_nRefCount; }
+void CMaterialSubRect::DecrementReferenceCount() { --m_nRefCount; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int CMaterialSubRect::GetReferenceCount(void) const { return m_nRefCount; }
+int CMaterialSubRect::GetReferenceCount() const { return m_nRefCount; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -716,7 +712,7 @@ void CMaterialSubRect::ParseMaterialVars(KeyValues &keyValues) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMaterialSubRect::SetupMaterialVars(void) {
+void CMaterialSubRect::SetupMaterialVars() {
   if (!m_pMaterialPage) {
     DevWarning(1,
                "CMaterialSubRect::SetupMaterialVars: Invalid Material Page!\n");
@@ -847,7 +843,7 @@ bool CMaterialSubRect::IsPreloaded() const {
   return (m_fLocal & MATERIALSUBRECT_IS_PRELOADED) != 0;
 }
 
-void CMaterialSubRect::ArtificialAddRef(void) {
+void CMaterialSubRect::ArtificialAddRef() {
   if (m_fLocal & MATERIALSUBRECT_ARTIFICIAL_REFCOUNT) {
     // already done
     return;
@@ -857,7 +853,7 @@ void CMaterialSubRect::ArtificialAddRef(void) {
   m_nRefCount++;
 }
 
-void CMaterialSubRect::ArtificialRelease(void) {
+void CMaterialSubRect::ArtificialRelease() {
   if (!(m_fLocal & MATERIALSUBRECT_ARTIFICIAL_REFCOUNT)) {
     return;
   }

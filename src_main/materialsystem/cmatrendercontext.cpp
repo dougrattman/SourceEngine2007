@@ -4,10 +4,11 @@
 
 #define MATSYS_INTERNAL
 
+#include "cmatrendercontext.h"
+
 #include <cmath>
 #include "IHardwareConfigInternal.h"
 #include "cmaterialsystem.h"
-#include "cmatrendercontext.h"
 #include "ctype.h"
 #include "occlusionquerymgr.h"
 #include "texturemanager.h"
@@ -111,9 +112,9 @@ CMatRenderContextBase::CMatRenderContextBase()
   m_GoalToneMapScale = 1.0f;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  //
+  //-----------------------------------------------------------------------------
 
 #define g_pShaderAPI Cannot_use_ShaderAPI_in_CMatRenderContextBase
 
@@ -207,7 +208,7 @@ void CMatRenderContextBase::BindLocalCubemap(ITexture *pTexture) {
   }
 }
 
-ITexture *CMatRenderContextBase::GetRenderTarget(void) {
+ITexture *CMatRenderContextBase::GetRenderTarget() {
   if (m_RenderTargetStack.Count() > 0) {
     return m_RenderTargetStack.Top().m_pRenderTargets[0];
   } else {
@@ -581,7 +582,7 @@ void CMatRenderContextBase::PushRenderTargetAndViewport(ITexture *pTexture,
 // Pops from the render target stack
 // Also implicitly sets the render target to the new top of stack
 //-----------------------------------------------------------------------------
-void CMatRenderContextBase::PopRenderTargetAndViewport(void) {
+void CMatRenderContextBase::PopRenderTargetAndViewport() {
   // Check for underflow
   if (m_RenderTargetStack.Count() == 0) {
     Assert(
@@ -651,7 +652,7 @@ ConVar mat_hdr_tonemapscale("mat_hdr_tonemapscale", "1.0", FCVAR_CHEAT);
 ConVar mat_tonemap_algorithm("mat_tonemap_algorithm", "1", FCVAR_CHEAT,
                              "0 = Original Algorithm 1 = New Algorithm");
 
-void CMatRenderContextBase::TurnOnToneMapping(void) {
+void CMatRenderContextBase::TurnOnToneMapping() {
   if ((HardwareConfig()->GetHDRType() != HDR_TYPE_NONE) &&
       (m_FrameTime > 0.0f)) {
     float elapsed_time = m_FrameTime;
@@ -725,7 +726,7 @@ void CMatRenderContextBase::SetGoalToneMappingScale(float monoscale) {
   }
 }
 
-Vector CMatRenderContextBase::GetToneMappingScaleLinear(void) {
+Vector CMatRenderContextBase::GetToneMappingScaleLinear() {
   if (HardwareConfig()->GetHDRType() == HDR_TYPE_NONE) return Vector(1, 1, 1);
 
   return m_LastSetToneMapScale;
@@ -738,7 +739,6 @@ Vector CMatRenderContextBase::GetToneMappingScaleLinear(void) {
 //-----------------------------------------------------------------------------
 
 CMatRenderContext::CMatRenderContext() {
-  g_FrameNum = 0;
   m_pBatchIndices = NULL;
   m_pBatchMesh = NULL;
   m_pCurrentIndexBuffer = NULL;
@@ -1139,7 +1139,7 @@ void CMatRenderContext::PushCustomClipPlane(const float *pPlane) {
   ApplyCustomClipPlanes();
 }
 
-void CMatRenderContext::PopCustomClipPlane(void) {
+void CMatRenderContext::PopCustomClipPlane() {
   Assert(m_CustomClipPlanes.Count());
 
   // remove the endmost non-height plane found
@@ -1155,7 +1155,7 @@ void CMatRenderContext::PopCustomClipPlane(void) {
   ApplyCustomClipPlanes();
 }
 
-void CMatRenderContext::ApplyCustomClipPlanes(void) {
+void CMatRenderContext::ApplyCustomClipPlanes() {
   int iMaxClipPlanes = HardwareConfig()->MaxUserClipPlanes();
   int iCustomPlanes;
 
@@ -1897,7 +1897,7 @@ void CMatRenderContext::GetViewport(int &x, int &y, int &width,
 //-----------------------------------------------------------------------------
 // Methods related to user clip planes
 //-----------------------------------------------------------------------------
-void CMatRenderContext::UpdateHeightClipUserClipPlane(void) {
+void CMatRenderContext::UpdateHeightClipUserClipPlane() {
   PlaneStackElement pse;
   pse.bHack_IsHeightClipPlane = true;
 

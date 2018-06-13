@@ -23,8 +23,8 @@ CHardwareConfig::CHardwareConfig() {
   memset(&m_UnOverriddenCaps, 0, sizeof(HardwareCaps_t));
   m_bHDREnabled = false;
 
-  // TODO(d.rattman): This is kind of a hack to deal with DX8 worldcraft startup.
-  // We can at least have this much texture
+  // TODO(d.rattman): This is kind of a hack to deal with DX8 worldcraft
+  // startup. We can at least have this much texture
   m_Caps.m_MaxTextureWidth = m_Caps.m_MaxTextureHeight =
       m_Caps.m_MaxTextureDepth = 256;
 }
@@ -34,7 +34,7 @@ CHardwareConfig::CHardwareConfig() {
 //-----------------------------------------------------------------------------
 void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
                                          const HardwareCaps_t &actualCaps) {
-  if (!IsPC() || nDxLevel >= 100) return;
+  if (nDxLevel >= 100) return;
 
   pCaps->m_nDXSupportLevel = nDxLevel;
   switch (nDxLevel) {
@@ -390,7 +390,7 @@ void CHardwareConfig::SetupHardwareCaps(int nDXLevel,
   memcpy(&m_UnOverriddenCaps, &actualCaps, sizeof(HardwareCaps_t));
 
   // Don't bother with fallbacks for DX10 or consoles
-  if (!IsPC() || nDXLevel >= 100) return;
+  if (nDXLevel >= 100) return;
 
   // Slam the support level to what we were requested
   m_Caps.m_nDXSupportLevel = nDXLevel;
@@ -452,8 +452,8 @@ void CHardwareConfig::OverrideStreamOffsetSupport(bool bOverrideEnabled,
 // Implementation of IMaterialSystemHardwareConfig
 //-----------------------------------------------------------------------------
 bool CHardwareConfig::HasDestAlphaBuffer() const {
-  if (!g_pShaderDevice) return false;
-  return (g_pShaderDevice->GetBackBufferFormat() == IMAGE_FORMAT_BGRA8888);
+  return g_pShaderDevice &&
+         g_pShaderDevice->GetBackBufferFormat() == IMAGE_FORMAT_BGRA8888;
 }
 
 bool CHardwareConfig::HasStencilBuffer() const {
@@ -461,10 +461,11 @@ bool CHardwareConfig::HasStencilBuffer() const {
 }
 
 int CHardwareConfig::GetFrameBufferColorDepth() const {
-  if (!g_pShaderDevice) return 0;
-  return ShaderUtil()
-      ->ImageFormatInfo(g_pShaderDevice->GetBackBufferFormat())
-      .m_NumBytes;
+  return g_pShaderDevice
+             ? ShaderUtil()
+                   ->ImageFormatInfo(g_pShaderDevice->GetBackBufferFormat())
+                   .m_NumBytes
+             : 0;
 }
 
 int CHardwareConfig::GetSamplerCount() const { return m_Caps.m_NumSamplers; }

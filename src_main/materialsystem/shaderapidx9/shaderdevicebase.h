@@ -13,25 +13,27 @@
 
 class KeyValues;
 
-// Define this if you want to run with NVPERFHUD
+// Define this if you want to run with NVPERFHUD.
 //#define NVPERFHUD 1
 
-// The Base implementation of the shader device
+// The Base implementation of the shader device.
 class CShaderDeviceMgrBase : public IShaderDeviceMgr {
  public:
   CShaderDeviceMgrBase();
   virtual ~CShaderDeviceMgrBase();
 
   // Methods of IAppSystem
-  virtual bool Connect(CreateInterfaceFn factory);
-  virtual void Disconnect();
-  virtual void *QueryInterface(const ch *pInterfaceName);
+
+  bool Connect(CreateInterfaceFn factory) override;
+  void Disconnect() override;
+  void *QueryInterface(const ch *pInterfaceName) override;
 
   // Methods of IShaderDeviceMgr
-  virtual bool GetRecommendedConfigurationInfo(i32 nAdapter, i32 nDXLevel,
-                                               KeyValues *pCongifuration);
-  virtual void AddModeChangeCallback(ShaderModeChangeCallbackFunc_t func);
-  virtual void RemoveModeChangeCallback(ShaderModeChangeCallbackFunc_t func);
+
+  bool GetRecommendedConfigurationInfo(i32 nAdapter, i32 nDXLevel,
+                                       KeyValues *pCongifuration) override;
+  void AddModeChangeCallback(ShaderModeChangeCallbackFunc_t func) override;
+  void RemoveModeChangeCallback(ShaderModeChangeCallbackFunc_t func) override;
 
   // Reads in the hardware caps from the dxsupport.cfg file
   void ReadHardwareCaps(HardwareCaps_t &caps, i32 nDxLevel);
@@ -105,50 +107,48 @@ class CShaderDeviceBase : public IShaderDevice {
     EVICT_MESSAGE = 0x5E740DE2,
   };
 
+  CShaderDeviceBase();
+  virtual ~CShaderDeviceBase();
+
   // Methods of IShaderDevice
- public:
-  virtual ImageFormat GetBackBufferFormat() const;
-  virtual i32 StencilBufferBits() const;
-  virtual bool IsAAEnabled() const;
-  virtual bool AddView(void *hWnd);
-  virtual void RemoveView(void *hWnd);
-  virtual void SetView(void *hWnd);
-  virtual void GetWindowSize(i32 &nWidth, i32 &nHeight) const;
+
+  ImageFormat GetBackBufferFormat() const override;
+  i32 StencilBufferBits() const override;
+  bool IsAAEnabled() const override;
+  void GetWindowSize(i32 &nWidth, i32 &nHeight) const override;
+  bool AddView(HWND hWnd) override;
+  void RemoveView(HWND hWnd) override;
+  void SetView(HWND hWnd) override;
 
   // Methods exposed to the rest of shader api
-  virtual bool InitDevice(void *hWnd, i32 nAdapter,
+  virtual bool InitDevice(HWND hWnd, i32 nAdapter,
                           const ShaderDeviceInfo_t &mode) = 0;
   virtual void ShutdownDevice() = 0;
   virtual bool IsDeactivated() const = 0;
-
- public:
-  // constructor, destructor
-  CShaderDeviceBase();
-  virtual ~CShaderDeviceBase();
 
   virtual void OtherAppInitializing(bool initializing) {}
   virtual void EvictManagedResourcesInternal() {}
 
   // Inline methods
-  void *GetIPCHWnd() const { return m_hWndCookie; }
+  HWND GetIPCHWnd() const { return m_hWndCookie; }
   void SendIPCMessage(IPCMessage_t message);
 
  protected:
   // IPC communication for multiple shaderapi apps
-  void InstallWindowHook(void *hWnd);
-  void RemoveWindowHook(void *hWnd);
+  void InstallWindowHook(HWND hWnd);
+  void RemoveWindowHook(HWND hWnd);
 
   // Finds a child window
-  i32 FindView(void *hWnd) const;
+  i32 FindView(HWND hWnd) const;
 
   i32 m_nAdapter;
-  void *m_hWnd;
-  void *m_hWndCookie;
+  HWND m_hWnd;
+  HWND m_hWndCookie;
   bool m_bInitialized : 1;
   bool m_bIsMinimized : 1;
 
   // The current view hwnd
-  void *m_ViewHWnd;
+  HWND m_ViewHWnd;
 
   i32 m_nWindowWidth;
   i32 m_nWindowHeight;
@@ -167,16 +167,15 @@ class CShaderBuffer : public IShaderBuffer {
  public:
   CShaderBuffer(T *pBlob) : blob_{pBlob} {}
 
-  virtual usize GetSize() const { return blob_ ? blob_->GetBufferSize() : 0; }
+  usize GetSize() const override { return blob_ ? blob_->GetBufferSize() : 0; }
 
-  virtual const void *GetBits() const {
+  const void *GetBits() const override {
     return blob_ ? blob_->GetBufferPointer() : nullptr;
   }
 
-  virtual void Release() {
-    if (blob_) {
-      blob_->Release();
-    }
+  void Release() override {
+    if (blob_) blob_->Release();
+
     delete this;
   }
 

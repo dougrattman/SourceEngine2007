@@ -8,6 +8,7 @@
 
 #include "Recording.h"
 #include "ShaderAPIDX8_Global.h"
+#include "base/include/windows/windows_errno_info.h"
 #include "locald3dtypes.h"
 #include "materialsystem/ivballoctracker.h"
 #include "tier0/include/dbg.h"
@@ -21,7 +22,7 @@ class CVertexBuffer {
                 int vertexSize, int theVertexCount,
                 const char* pTextureBudgetName, bool bSoftwareVertexProcessing,
                 bool dynamic = false)
-      : m_pVB(0),
+      : m_pVB(nullptr),
         m_Position(0),
         m_VertexSize(vertexSize),
         m_VertexCount(theVertexCount),
@@ -38,7 +39,7 @@ class CVertexBuffer {
 
 #ifdef RECORDING
     // assign a UID
-    static unsigned int uid = 0;
+    static u16 uid = 0;
     m_UID = uid++;
 #endif
 
@@ -68,10 +69,7 @@ class CVertexBuffer {
     D3DVERTEXBUFFER_DESC desc;
     memset(&desc, 0x00, sizeof(desc));
     desc.Format = D3DFMT_VERTEXDATA;
-    desc.Size = m_nBufferSize;
     desc.Type = D3DRTYPE_VERTEXBUFFER;
-    desc.Pool = m_bDynamic ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED;
-    desc.FVF = theFVF;
 
     desc.Usage = D3DUSAGE_WRITEONLY;
     if (m_bDynamic) {
@@ -82,6 +80,10 @@ class CVertexBuffer {
     if (bSoftwareVertexProcessing) {
       desc.Usage |= D3DUSAGE_SOFTWAREPROCESSING;
     }
+
+    desc.Pool = m_bDynamic ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED;
+    desc.Size = m_nBufferSize;
+    desc.FVF = theFVF;
 
     RECORD_COMMAND(DX8_CREATE_VERTEX_BUFFER, 6);
     RECORD_INT(m_UID);
@@ -95,7 +97,8 @@ class CVertexBuffer {
                                           desc.Pool, &m_pVB, NULL);
 
     if (hr != D3D_OK) {
-      Warning("DynamicVertexBuffer: CreateVertexBuffer failed (0x%.8x).\n", hr);
+      Warning("DynamicVertexBuffer: CreateVertexBuffer failed: %s.\n",
+              source::windows::make_windows_errno_info(hr).description);
 
       if (hr == D3DERR_OUTOFVIDEOMEMORY || hr == E_OUTOFMEMORY) {
         // Don't have the memory for this.  Try flushing all managed resources
@@ -173,8 +176,7 @@ class CVertexBuffer {
   void FlushAtFrameStart() { m_bFlush = true; }
 
   // lock, unlock
-  unsigned char* Lock(int numVerts, int& baseVertexIndex) {
-    unsigned char* pLockedData = 0;
+  u8* Lock(int numVerts, int& baseVertexIndex) {
     baseVertexIndex = 0;
     int nBufferSize = numVerts * m_VertexSize;
 
@@ -184,11 +186,11 @@ class CVertexBuffer {
       return 0;
     }
 
-    if (!m_pVB) return 0;
+    if (!m_pVB) return nullptr;
 
-    DWORD dwFlags;
+    DWORD lock_flags;
     if (m_bDynamic) {
-      dwFlags = LOCKFLAGS_APPEND;
+      lock_flags = LOCKFLAGS_APPEND;
 
       // If either the user forced us to flush,
       // or there is not enough space for the vertex data,
@@ -197,11 +199,11 @@ class CVertexBuffer {
         m_bFlush = false;
         m_Position = 0;
 
-        dwFlags = LOCKFLAGS_FLUSH;
+        lock_flags = LOCKFLAGS_FLUSH;
       }
     } else {
       // Since we are a static VB, always lock the beginning of the buffer.
-      dwFlags = D3DLOCK_NOSYSLOCK;
+      lock_flags = D3DLOCK_NOSYSLOCK;
       m_Position = 0;
     }
 
@@ -210,15 +212,16 @@ class CVertexBuffer {
     RECORD_INT(m_UID);
     RECORD_INT(nLockOffset);
     RECORD_INT(nBufferSize);
-    RECORD_INT(dwFlags);
+    RECORD_INT(lock_flags);
 
-    HRESULT hr = m_bDynamic
-                     ? Dx9Device()->Lock(m_pVB, nLockOffset, nBufferSize,
-                                         reinterpret_cast<void**>(&pLockedData),
-                                         dwFlags, &m_LockData)
-                     : Dx9Device()->Lock(m_pVB, nLockOffset, nBufferSize,
-                                         reinterpret_cast<void**>(&pLockedData),
-                                         dwFlags);
+    u8* pLockedData = nullptr;
+    HRESULT hr{m_bDynamic
+                   ? Dx9Device()->Lock(m_pVB, nLockOffset, nBufferSize,
+                                       reinterpret_cast<void**>(&pLockedData),
+                                       lock_flags, &m_LockData)
+                   : Dx9Device()->Lock(m_pVB, nLockOffset, nBufferSize,
+                                       reinterpret_cast<void**>(&pLockedData),
+                                       lock_flags)};
 
     switch (hr) {
       case D3DERR_INVALIDCALL:
@@ -226,7 +229,7 @@ class CVertexBuffer {
             "D3DERR_INVALIDCALL - Vertex Buffer Lock Failed in %s on line "
             "%d(offset %d, size %d, flags 0x%x)\n",
             V_UnqualifiedFileName(__FILE__), __LINE__, nLockOffset, nBufferSize,
-            dwFlags);
+            lock_flags);
         break;
       case D3DERR_DRIVERINTERNALERROR:
         Warning(
@@ -234,7 +237,7 @@ class CVertexBuffer {
             "line "
             "%d (offset %d, size %d, flags 0x%x)\n",
             V_UnqualifiedFileName(__FILE__), __LINE__, nLockOffset, nBufferSize,
-            dwFlags);
+            lock_flags);
         break;
       case D3DERR_OUTOFVIDEOMEMORY:
         Warning(
@@ -242,7 +245,7 @@ class CVertexBuffer {
             "%d "
             "(offset %d, size %d, flags 0x%x)\n",
             V_UnqualifiedFileName(__FILE__), __LINE__, nLockOffset, nBufferSize,
-            dwFlags);
+            lock_flags);
         break;
     }
 
@@ -254,8 +257,8 @@ class CVertexBuffer {
     return pLockedData;
   }
 
-  unsigned char* Modify(bool bReadOnly, int firstVertex, int numVerts) {
-    unsigned char* pLockedData = 0;
+  u8* Modify(bool bReadOnly, int firstVertex, int numVerts) {
+    u8* pLockedData = 0;
 
     // D3D still returns a pointer when you call lock with 0 verts, so just in
     // case it's actually doing something, don't even try to lock the buffer
@@ -328,7 +331,7 @@ class CVertexBuffer {
   }
 
   // UID
-  unsigned int UID() const {
+  u16 UID() const {
 #ifdef RECORDING
     return m_UID;
 #else
@@ -394,9 +397,9 @@ class CVertexBuffer {
   int m_VertexCount;
   int m_VertexSize;
 
-  unsigned char m_bDynamic : 1;
-  unsigned char m_bLocked : 1;
-  unsigned char m_bFlush : 1;
+  u8 m_bDynamic : 1;
+  u8 m_bLocked : 1;
+  u8 m_bFlush : 1;
 
 #ifdef VPROF_ENABLED
   int m_Frame;
@@ -409,7 +412,7 @@ class CVertexBuffer {
 #endif
 
 #ifdef RECORDING
-  unsigned int m_UID;
+  u16 m_UID;
 #endif
 
   LockedBufferContext m_LockData;

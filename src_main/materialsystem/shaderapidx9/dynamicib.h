@@ -8,13 +8,13 @@
 
 #include "Recording.h"
 #include "ShaderAPIDX8_Global.h"
+#include "base/include/windows/windows_errno_info.h"
 #include "locald3dtypes.h"
 #include "shaderapi/IShaderUtil.h"
-
-#include "locald3dtypes.h"
-#include "tier0/include/memdbgon.h"
 #include "tier1/strtools.h"
 #include "tier1/utlqueue.h"
+
+#include "tier0/include/memdbgon.h"
 
 // Helper function to unbind an index buffer
 void Unbind(IDirect3DIndexBuffer9 *pIndexBuffer);
@@ -23,7 +23,7 @@ class CIndexBuffer {
  public:
   CIndexBuffer(Direct3DDevice9Wrapper *d3d9, int count,
                bool bSoftwareVertexProcessing, bool dynamic = false)
-      : m_pIB(0),
+      : m_pIB(nullptr),
         m_Position(0),
         m_bFlush(true),
         m_bLocked(false),
@@ -46,7 +46,7 @@ class CIndexBuffer {
 
 #ifdef RECORDING
     // assign a UID
-    static unsigned int uid = 0;
+    static u32 uid = 0;
     m_UID = uid++;
 #endif
 
@@ -57,9 +57,7 @@ class CIndexBuffer {
     D3DINDEXBUFFER_DESC desc;
     memset(&desc, 0x00, sizeof(desc));
     desc.Format = D3DFMT_INDEX16;
-    desc.Size = sizeof(unsigned short) * count;
     desc.Type = D3DRTYPE_INDEXBUFFER;
-    desc.Pool = D3DPOOL_DEFAULT;
 
     desc.Usage = D3DUSAGE_WRITEONLY;
     if (m_bDynamic) {
@@ -68,6 +66,9 @@ class CIndexBuffer {
     if (bSoftwareVertexProcessing) {
       desc.Usage |= D3DUSAGE_SOFTWAREPROCESSING;
     }
+
+    desc.Pool = D3DPOOL_DEFAULT;
+    desc.Size = sizeof(u16) * count;
 
     RECORD_COMMAND(DX8_CREATE_INDEX_BUFFER, 6);
     RECORD_INT(m_UID);
@@ -79,15 +80,16 @@ class CIndexBuffer {
 
 #ifdef CHECK_INDICES
     Assert(desc.Format == D3DFMT_INDEX16);
-    m_pShadowIndices = new unsigned short[count];
+    m_pShadowIndices = new u16[count];
     m_NumIndices = count;
 #endif
 
-    HRESULT hr =
-        d3d9->CreateIndexBuffer(count * IndexSize(), desc.Usage, desc.Format,
-                                desc.Pool, &m_pIB, nullptr);
+    HRESULT hr{d3d9->CreateIndexBuffer(count * IndexSize(), desc.Usage,
+                                       desc.Format, desc.Pool, &m_pIB,
+                                       nullptr)};
     if (hr != D3D_OK) {
-      Warning("DynamicIndexBuffer: CreateIndexBuffer failed (0x%.8x).\n", hr);
+      Warning("DynamicIndexBuffer: CreateIndexBuffer failed: %s.\n",
+              source::windows::make_windows_errno_info(hr).description);
 
       if (hr == D3DERR_OUTOFVIDEOMEMORY || hr == E_OUTOFMEMORY) {
         // Don't have the memory for this. Try flushing all managed resources
@@ -176,11 +178,9 @@ class CIndexBuffer {
   void FlushAtFrameStart() { m_bFlush = true; }
 
   // lock, unlock
-  unsigned short *Lock(bool bReadOnly, int numIndices, int &startIndex,
-                       int startPosition = -1) {
+  u16 *Lock(bool bReadOnly, int numIndices, int &startIndex,
+            int startPosition = -1) {
     Assert(!m_bLocked);
-
-    unsigned short *pLockedData = nullptr;
 
     // For write-combining, ensure we always have locked memory aligned to
     // 4-byte boundaries
@@ -188,7 +188,7 @@ class CIndexBuffer {
 
     // Ensure there is enough space in the IB for this data
     if (numIndices > m_IndexCount) {
-      Error("Too many indices for index buffer. Tell a programmer (%d>%d)\n",
+      Error("Too many indices for index buffer. Tell a programmer (%d > %d).\n",
             numIndices, m_IndexCount);
       Assert(false);
       return 0;
@@ -238,14 +238,15 @@ class CIndexBuffer {
     m_LockedNumIndices = numIndices;
 #endif
 
-    HRESULT hr =
+    u16 *pLockedData = nullptr;
+    HRESULT hr{
         m_bDynamic
             ? Dx9Device()->Lock(
                   m_pIB, position * IndexSize(), numIndices * IndexSize(),
                   reinterpret_cast<void **>(&pLockedData), dwFlags, &m_LockData)
             : Dx9Device()->Lock(
                   m_pIB, position * IndexSize(), numIndices * IndexSize(),
-                  reinterpret_cast<void **>(&pLockedData), dwFlags);
+                  reinterpret_cast<void **>(&pLockedData), dwFlags)};
 
     switch (hr) {
       case D3DERR_INVALIDCALL:
@@ -316,7 +317,7 @@ class CIndexBuffer {
   int IndexPosition() const { return m_Position; }
 
   // Index size
-  int IndexSize() const { return sizeof(unsigned short); }
+  int IndexSize() const { return sizeof(u16); }
 
   // Index count
   int IndexCount() const { return m_IndexCount; }
@@ -335,20 +336,20 @@ class CIndexBuffer {
   }
 
 #ifdef CHECK_INDICES
-  void UpdateShadowIndices(unsigned short *pData) {
+  void UpdateShadowIndices(u16 *pData) {
     Assert(m_LockedStartIndex + m_LockedNumIndices <= m_NumIndices);
     memcpy(m_pShadowIndices + m_LockedStartIndex, pData,
            m_LockedNumIndices * IndexSize());
   }
 
-  unsigned short GetShadowIndex(int i) {
+  u16 GetShadowIndex(int i) {
     Assert(i >= 0 && i < (int)m_NumIndices);
     return m_pShadowIndices[i];
   }
 #endif
 
   // UID
-  unsigned int UID() const {
+  u32 UID() const {
 #ifdef RECORDING
     return m_UID;
 #else
@@ -401,17 +402,17 @@ class CIndexBuffer {
 #endif
 
 #ifdef RECORDING
-  unsigned int m_UID;
+  u32 m_UID;
 #endif
 
   LockedBufferContext m_LockData;
 
  protected:
 #ifdef CHECK_INDICES
-  unsigned short *m_pShadowIndices;
-  unsigned int m_NumIndices;
-  unsigned int m_LockedStartIndex;
-  unsigned int m_LockedNumIndices;
+  u16 *m_pShadowIndices;
+  u32 m_NumIndices;
+  u32 m_LockedStartIndex;
+  u32 m_LockedNumIndices;
 #endif
 };
 

@@ -2,6 +2,7 @@
 
 #include "shaderdevicedx8.h"
 
+#include "base/include/windows/windows_errno_info.h"
 #include "colorformatdx8.h"
 #include "filesystem.h"
 #include "imeshdx8.h"
@@ -47,16 +48,14 @@ bool CShaderDeviceMgrDx8::Connect(CreateInterfaceFn factory) {
   if (!BaseClass::Connect(factory)) return false;
 
   m_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-  if (!m_pD3D) {
-    Warning("Failed to create D3D9!\n");
-    return false;
+  if (m_pD3D) {
+    InitAdapterInfo();
+    return true;
   }
 
-  // TODO(d.rattman): Want this to be here, but we can't because Steam
-  // hasn't had it's application ID set up yet.
-
-  //	InitAdapterInfo();
-  return true;
+  Warning("ShaderApiDx9: Create Direct3D9Ex device failed: %s\n",
+          source::windows::make_windows_errno_info(E_FAIL));
+  return false;
 }
 
 void CShaderDeviceMgrDx8::Disconnect() {
@@ -70,13 +69,7 @@ void CShaderDeviceMgrDx8::Disconnect() {
   BaseClass::Disconnect();
 }
 
-InitReturnVal_t CShaderDeviceMgrDx8::Init() {
-  // TODO(d.rattman): Remove call to InitAdapterInfo once Steam startup issues
-  // are resolved. Do it in Connect instead.
-  InitAdapterInfo();
-
-  return INIT_OK;
-}
+InitReturnVal_t CShaderDeviceMgrDx8::Init() { return INIT_OK; }
 
 void CShaderDeviceMgrDx8::Shutdown() {
   LOCK_SHADERAPI();
@@ -100,12 +93,12 @@ void CShaderDeviceMgrDx8::InitAdapterInfo() {
   m_bAdapterInfoIntialized = true;
   adapters_.RemoveAll();
 
-  int nCount = m_pD3D->GetAdapterCount();
-  for (int i = 0; i < nCount; ++i) {
-    int j = adapters_.AddToTail();
-    AdapterInfo_t &info = adapters_[j];
+  const u32 nCount{m_pD3D->GetAdapterCount()};
+  for (u32 i = 0; i < nCount; ++i) {
+    const int idx = adapters_.AddToTail();
+    AdapterInfo_t &info = adapters_[idx];
 
-#ifdef _DEBUG
+#ifndef NDEBUG
     memset(&info.m_ActualCaps, 0xDD, sizeof(info.m_ActualCaps));
 #endif
 
@@ -118,10 +111,9 @@ void CShaderDeviceMgrDx8::InitAdapterInfo() {
     ReadHardwareCaps(info.m_ActualCaps, info.m_ActualCaps.m_nMaxDXSupportLevel);
 
     // What's in "-shader" overrides dxsupport.cfg
-    const char *pShaderParam = CommandLine()->ParmValue("-shader");
-    if (pShaderParam) {
-      Q_strncpy(info.m_ActualCaps.m_pShaderDLL, pShaderParam,
-                sizeof(info.m_ActualCaps.m_pShaderDLL));
+    const char *shader_override = CommandLine()->ParmValue("-shader");
+    if (shader_override) {
+      strcpy_s(info.m_ActualCaps.m_pShaderDLL, shader_override);
     }
   }
 }
@@ -326,7 +318,7 @@ ConVar mat_depthbias_shadowmap("mat_depthbias_shadowmap", "0.0005",
 // Determine capabilities
 //-----------------------------------------------------------------------------
 bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
-                                             int nAdapter) {
+                                             u32 nAdapter) {
   D3DCAPS caps;
   // NOTE: When getting the caps, we want to be limited by the hardware
   // even if we're running with software T&L...
@@ -395,10 +387,8 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
     pCaps->m_SupportsPixelShaders_2_b = false;
   }
 
-  pCaps->m_bSoftwareVertexProcessing = false;
-  if (CommandLine()->CheckParm("-mat_softwaretl")) {
-    pCaps->m_bSoftwareVertexProcessing = true;
-  }
+  pCaps->m_bSoftwareVertexProcessing =
+      CommandLine()->CheckParm("-mat_softwaretl") != nullptr;
 
   if (!(caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)) {
     // no hardware t&l. . use software
@@ -822,23 +812,13 @@ void CShaderDeviceMgrDx8::ComputeDXSupportLevel(HardwareCaps_t &caps) {
 //-----------------------------------------------------------------------------
 // Gets the number of adapters...
 //-----------------------------------------------------------------------------
-int CShaderDeviceMgrDx8::GetAdapterCount() const {
-  // TODO(d.rattman): Remove call to InitAdapterInfo once Steam startup issues
-  // are resolved.
-  const_cast<CShaderDeviceMgrDx8 *>(this)->InitAdapterInfo();
-
-  return adapters_.Count();
-}
+int CShaderDeviceMgrDx8::GetAdapterCount() const { return adapters_.Count(); }
 
 //-----------------------------------------------------------------------------
 // Returns info about each adapter
 //-----------------------------------------------------------------------------
 void CShaderDeviceMgrDx8::GetAdapterInfo(int nAdapter,
                                          MaterialAdapterInfo_t &info) const {
-  // TODO(d.rattman): Remove call to InitAdapterInfo once Steam startup issues
-  // are resolved.
-  const_cast<CShaderDeviceMgrDx8 *>(this)->InitAdapterInfo();
-
   Assert((nAdapter >= 0) && (nAdapter < adapters_.Count()));
   const HardwareCaps_t &caps = adapters_[nAdapter].m_ActualCaps;
   memcpy(&info, &caps, sizeof(MaterialAdapterInfo_t));  //-V512
@@ -906,11 +886,10 @@ void CShaderDeviceMgrDx8::GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
   Assert(m_pD3D && (nAdapter < GetAdapterCount()));
   Assert(nMode < GetModeCount(nAdapter));
 
-  HRESULT hr;
   D3DDISPLAYMODE d3dInfo;
-
   // fixme - what format should I use here?
-  hr = D3D()->EnumAdapterModes(nAdapter, D3DFMT_X8R8G8B8, nMode, &d3dInfo);
+  HRESULT hr =
+      D3D()->EnumAdapterModes(nAdapter, D3DFMT_X8R8G8B8, nMode, &d3dInfo);
   Assert(!FAILED(hr));
 
   pInfo->m_nWidth = d3dInfo.Width;
@@ -944,7 +923,7 @@ void CShaderDeviceMgrDx8::GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
 //-----------------------------------------------------------------------------
 // Sets the video mode
 //-----------------------------------------------------------------------------
-CreateInterfaceFn CShaderDeviceMgrDx8::SetMode(void *hWnd, int nAdapter,
+CreateInterfaceFn CShaderDeviceMgrDx8::SetMode(HWND hWnd, int nAdapter,
                                                const ShaderDeviceInfo_t &mode) {
   LOCK_SHADERAPI();
 
@@ -968,7 +947,7 @@ CreateInterfaceFn CShaderDeviceMgrDx8::SetMode(void *hWnd, int nAdapter,
 
   bool bReacquireResourcesNeeded = false;
   if (g_pShaderDevice) {
-    bReacquireResourcesNeeded = IsPC();
+    bReacquireResourcesNeeded = true;
     g_pShaderDevice->ReleaseResources();
   }
 
@@ -1051,7 +1030,6 @@ CShaderDeviceDx8* g_pShaderDeviceDx8 = &s_ShaderDeviceDX8;
 // Constructor, destructor
 //-----------------------------------------------------------------------------
 CShaderDeviceDx8::CShaderDeviceDx8() {
-  m_pD3DDevice = nullptr;
   m_pFrameSyncQueryObject = nullptr;
   m_pFrameSyncTexture = nullptr;
   m_bQueuedDeviceLost = false;
@@ -1141,7 +1119,7 @@ D3DMULTISAMPLE_TYPE CShaderDeviceDx8::ComputeMultisampleType(int nSampleCount) {
 //-----------------------------------------------------------------------------
 // Sets the present parameters
 //-----------------------------------------------------------------------------
-void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
+void CShaderDeviceDx8::SetPresentParameters(HWND hWnd, int nAdapter,
                                             const ShaderDeviceInfo_t &info) {
   ShaderDisplayMode_t mode;
   g_pShaderDeviceMgr->GetCurrentModeInfo(&mode, nAdapter);
@@ -1153,8 +1131,7 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
   m_PresentParameters.SwapEffect =
       info.m_bUsingMultipleWindows ? D3DSWAPEFFECT_COPY : D3DSWAPEFFECT_DISCARD;
 
-  // for 360, we want to create it ourselves for hierarchical z support
-  m_PresentParameters.EnableAutoDepthStencil = IsX360() ? FALSE : TRUE;
+  m_PresentParameters.EnableAutoDepthStencil = TRUE;
 
   // What back-buffer format should we use?
   ImageFormat backBufferFormat = FindNearestSupportedBackBufferFormat(
@@ -1170,7 +1147,7 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
   D3DFORMAT nDepthFormat = m_bUsingStencil ? D3DFMT_D24S8 : D3DFMT_D24X8;
   m_PresentParameters.AutoDepthStencilFormat = FindNearestSupportedDepthFormat(
       nAdapter, m_AdapterFormat, backBufferFormat, nDepthFormat);
-  m_PresentParameters.hDeviceWindow = (HWND)hWnd;
+  m_PresentParameters.hDeviceWindow = hWnd;
 
   // store how many stencil buffer bits we have available with the depth/stencil
   // buffer
@@ -1189,7 +1166,7 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
       m_bUsingStencil = false;  // couldn't acquire a stencil buffer
   };
 
-  if (IsX360() || !info.m_bWindowed) {
+  if (!info.m_bWindowed) {
     bool useDefault = (info.m_DisplayMode.m_nWidth == 0) ||
                       (info.m_DisplayMode.m_nHeight == 0);
     m_PresentParameters.BackBufferCount = 1;
@@ -1287,14 +1264,14 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
 //-----------------------------------------------------------------------------
 // Initializes, shuts down the D3D device
 //-----------------------------------------------------------------------------
-bool CShaderDeviceDx8::InitDevice(void *hwnd, int nAdapter,
+bool CShaderDeviceDx8::InitDevice(HWND hwnd, int nAdapter,
                                   const ShaderDeviceInfo_t &info) {
   // windowed
-  if (!CreateD3DDevice((HWND)hwnd, nAdapter, info)) return false;
+  if (!CreateD3DDevice(hwnd, nAdapter, info)) return false;
 
   // Hook up our own windows proc to get at messages to tell us when
   // other instances of the material system are trying to set the mode
-  InstallWindowHook((HWND)m_hWnd);
+  InstallWindowHook(m_hWnd);
   return true;
 }
 
@@ -1307,7 +1284,7 @@ void CShaderDeviceDx8::ShutdownDevice() {
 #endif
     Dx9Device()->ShutDownDevice();
 
-    RemoveWindowHook((HWND)m_hWnd);
+    RemoveWindowHook(m_hWnd);
     m_hWnd = 0;
   }
 }
@@ -1586,8 +1563,7 @@ void CShaderDeviceDx8::DetectQuerySupport(IDirect3DDevice9 *pD3DDevice) {
 // Actually creates the D3D Device once the present parameters are set up
 //-----------------------------------------------------------------------------
 IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
-    void *hWnd, int nAdapter, DWORD deviceCreationFlags) {
-  IDirect3DDevice9 *pD3DDevice = nullptr;
+    HWND hWnd, int nAdapter, DWORD deviceCreationFlags) {
   D3DDEVTYPE devType = SOURCE_DX9_DEVICE_TYPE;
 
 #if NVPERFHUD
@@ -1597,17 +1573,15 @@ IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
       D3DCREATE_FPU_PRESERVE | D3DCREATE_HARDWARE_VERTEXPROCESSING;
 #endif
 
-  HRESULT hr =
-      D3D()->CreateDevice(nAdapter, devType, (HWND)hWnd, deviceCreationFlags,
-                          &m_PresentParameters, &pD3DDevice);
+  IDirect3DDevice9 *pD3DDevice = nullptr;
+  HRESULT hr = D3D()->CreateDevice(nAdapter, devType, hWnd, deviceCreationFlags,
+                                   &m_PresentParameters, &pD3DDevice);
 
   if (!FAILED(hr) && pD3DDevice) return pD3DDevice;
 
-  if (!IsPC()) return nullptr;
-
   // try again, other applications may be taking their time
   Sleep(1000);
-  hr = D3D()->CreateDevice(nAdapter, devType, (HWND)hWnd, deviceCreationFlags,
+  hr = D3D()->CreateDevice(nAdapter, devType, hWnd, deviceCreationFlags,
                            &m_PresentParameters, &pD3DDevice);
   if (!FAILED(hr) && pD3DDevice) return pD3DDevice;
 
@@ -1616,7 +1590,7 @@ IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
   if (m_PresentParameters.Windowed) {
     m_PresentParameters.SwapEffect = D3DSWAPEFFECT_COPY;
     m_PresentParameters.BackBufferCount = 0;
-    hr = D3D()->CreateDevice(nAdapter, devType, (HWND)hWnd, deviceCreationFlags,
+    hr = D3D()->CreateDevice(nAdapter, devType, hWnd, deviceCreationFlags,
                              &m_PresentParameters, &pD3DDevice);
   }
   if (!FAILED(hr) && pD3DDevice) return pD3DDevice;
@@ -1634,17 +1608,17 @@ IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
 //-----------------------------------------------------------------------------
 // Creates the D3D Device
 //-----------------------------------------------------------------------------
-bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
+bool CShaderDeviceDx8::CreateD3DDevice(HWND pHWnd, int nAdapter,
                                        const ShaderDeviceInfo_t &info) {
   Assert(info.m_nVersion == SHADER_DEVICE_INFO_VERSION);
 
   MEM_ALLOC_CREDIT_(__FILE__ ": D3D Device");
 
-  HWND hWnd = (HWND)pHWnd;
+  HWND hWnd = pHWnd;
 
 #if !defined(PIX_INSTRUMENTATION)
-  D3DPERF_SetOptions(
-      1);  // Explicitly disallow PIX instrumented profiling in external builds
+  // Explicitly disallow PIX instrumented profiling in external builds
+  D3DPERF_SetOptions(1);
 #endif
 
   // Get some caps....
@@ -1707,15 +1681,11 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
 
   // TODO(d.rattman): Bake this into hardware config
   // What texture formats do we support?
-  if (D3DSupportsCompressedTextures()) {
-    g_pHardwareConfig->CapsForEdit().m_SupportsCompressedTextures =
-        COMPRESSED_TEXTURES_ON;
-  } else {
-    g_pHardwareConfig->CapsForEdit().m_SupportsCompressedTextures =
-        COMPRESSED_TEXTURES_OFF;
-  }
+  g_pHardwareConfig->CapsForEdit().m_SupportsCompressedTextures =
+      D3DSupportsCompressedTextures() ? COMPRESSED_TEXTURES_ON
+                                      : COMPRESSED_TEXTURES_OFF;
 
-  return (!FAILED(hr));
+  return SUCCEEDED(hr);
 }
 
 //-----------------------------------------------------------------------------
@@ -1904,8 +1874,6 @@ void CShaderDeviceDx8::ReacquireResourcesInternal(bool bResetState,
 // Changes the window size
 //-----------------------------------------------------------------------------
 bool CShaderDeviceDx8::ResizeWindow(const ShaderDeviceInfo_t &info) {
-  if (IsX360()) return false;
-
   m_bPendingVideoModeChange = false;
 
   // We don't need to do crap if the window was set up to set up
@@ -1916,7 +1884,7 @@ bool CShaderDeviceDx8::ResizeWindow(const ShaderDeviceInfo_t &info) {
 
   ReleaseResources();
 
-  SetPresentParameters((HWND)m_hWnd, m_DisplayAdapter, info);
+  SetPresentParameters(m_hWnd, m_DisplayAdapter, info);
   HRESULT hr = Dx9Device()->Reset(&m_PresentParameters);
   if (FAILED(hr)) {
     Warning("ResizeWindow: Reset failed, hr = 0x%08X.\n", hr);
@@ -1931,11 +1899,7 @@ bool CShaderDeviceDx8::ResizeWindow(const ShaderDeviceInfo_t &info) {
 //-----------------------------------------------------------------------------
 // Queue up the fact that the device was lost
 //-----------------------------------------------------------------------------
-void CShaderDeviceDx8::MarkDeviceLost() {
-  if (IsX360()) return;
-
-  m_bQueuedDeviceLost = true;
-}
+void CShaderDeviceDx8::MarkDeviceLost() { m_bQueuedDeviceLost = true; }
 
 //-----------------------------------------------------------------------------
 // Checks if the device was lost
@@ -1949,7 +1913,7 @@ void CShaderDeviceDx8::CheckDeviceLost(bool bOtherAppInitializing) {
   // but that seems to only make sense if we have resizable windows where
   // we do *not* allocate buffers as large as the entire current video mode
   // which we're not doing
-  m_bIsMinimized = (IsIconic((HWND)m_hWnd) != FALSE);
+  m_bIsMinimized = IsIconic(m_hWnd) != FALSE;
   m_bOtherAppInitializing = bOtherAppInitializing;
 
   RECORD_COMMAND(DX8_TEST_COOPERATIVE_LEVEL, 0);
@@ -2149,10 +2113,10 @@ void CShaderDeviceDx8::Present() {
 
   // If we're not iconified, try to present (without this check, we can flicker
   // when Alt-Tabbed away)
-  if (IsIconic((HWND)m_hWnd) == 0) {
-    if ((m_IsResizing || (m_ViewHWnd != (HWND)m_hWnd))) {
+  if (IsIconic(m_hWnd) == 0) {
+    if ((m_IsResizing || (m_ViewHWnd != m_hWnd))) {
       RECT destRect;
-      GetClientRect((HWND)m_ViewHWnd, &destRect);
+      GetClientRect(m_ViewHWnd, &destRect);
 
       ShaderViewport_t viewport;
       g_pShaderAPI->GetViewports(&viewport, 1);
@@ -2163,7 +2127,7 @@ void CShaderDeviceDx8::Present() {
       srcRect.top = viewport.m_nTopLeftY;
       srcRect.bottom = viewport.m_nTopLeftY + viewport.m_nHeight;
 
-      hr = Dx9Device()->Present(&srcRect, &destRect, (HWND)m_ViewHWnd, 0);
+      hr = Dx9Device()->Present(&srcRect, &destRect, m_ViewHWnd, 0);
     } else {
       g_pShaderAPI->OwnGPUResources(false);
       hr = Dx9Device()->Present(0, 0, 0, 0);

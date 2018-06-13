@@ -1,8 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
 #include "pch_materialsystem.h"
 
@@ -18,10 +14,6 @@ ConVar mat_report_queue_status("mat_report_queue_status", "0");
 
 IVertexBuffer::~IVertexBuffer() {}
 IIndexBuffer::~IIndexBuffer() {}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 
 #if defined(_WIN32)
 void FastCopy(uint8_t *pDest, const uint8_t *pSrc, size_t nBytes) {
@@ -217,35 +209,35 @@ class CMatQueuedMesh : public IMesh {
 
   void ModifyEnd(MeshDesc_t &desc) { CannotSupport(); }
 
-  void GenerateSequentialIndexBuffer(unsigned short *pIndexMemory,
-                                     int numIndices, int firstVertex) {
+  void GenerateSequentialIndexBuffer(u16 *pIndexMemory, int numIndices,
+                                     int firstVertex) {
     Assert(pIndexMemory == m_pIndexData);
     m_pCallQueue->QueueCall(&::GenerateSequentialIndexBuffer, pIndexMemory,
                             numIndices, firstVertex);
   }
 
-  void GenerateQuadIndexBuffer(unsigned short *pIndexMemory, int numIndices,
+  void GenerateQuadIndexBuffer(u16 *pIndexMemory, int numIndices,
                                int firstVertex) {
     Assert(pIndexMemory == m_pIndexData);
     m_pCallQueue->QueueCall(&::GenerateQuadIndexBuffer, pIndexMemory,
                             numIndices, firstVertex);
   }
 
-  void GeneratePolygonIndexBuffer(unsigned short *pIndexMemory, int numIndices,
+  void GeneratePolygonIndexBuffer(u16 *pIndexMemory, int numIndices,
                                   int firstVertex) {
     Assert(pIndexMemory == m_pIndexData);
     m_pCallQueue->QueueCall(&::GeneratePolygonIndexBuffer, pIndexMemory,
                             numIndices, firstVertex);
   }
 
-  void GenerateLineStripIndexBuffer(unsigned short *pIndexMemory,
-                                    int numIndices, int firstVertex) {
+  void GenerateLineStripIndexBuffer(u16 *pIndexMemory, int numIndices,
+                                    int firstVertex) {
     Assert(pIndexMemory == m_pIndexData);
     m_pCallQueue->QueueCall(&::GenerateLineStripIndexBuffer, pIndexMemory,
                             numIndices, firstVertex);
   }
 
-  void GenerateLineLoopIndexBuffer(unsigned short *pIndexMemory, int numIndices,
+  void GenerateLineLoopIndexBuffer(u16 *pIndexMemory, int numIndices,
                                    int firstVertex) {
     Assert(pIndexMemory == m_pIndexData);
     m_pCallQueue->QueueCall(&::GenerateLineLoopIndexBuffer, pIndexMemory,
@@ -410,8 +402,7 @@ class CMatQueuedMesh : public IMesh {
           i++;
         }
         while (i < nIndices) {
-          int nToCopy =
-              std::min(SOURCE_ARRAYSIZE(tempIndices), (usize)nIndices - i);
+          int nToCopy = std::min(std::size(tempIndices), (usize)nIndices - i);
           for (int j = 0; j < nToCopy; j++) {
             tempIndices[j] = pIndexData[i + j] + desc.m_nFirstVertex;
           }
@@ -569,7 +560,7 @@ class CMatQueuedMesh : public IMesh {
   int m_nVerts;
   int m_nIndices;
 
-  unsigned short m_VertexSize;
+  u16 m_VertexSize;
   MaterialPrimitiveType_t m_Type;
 
   // Used in rendering sub-parts of the mesh
@@ -579,10 +570,10 @@ class CMatQueuedMesh : public IMesh {
   IMesh *m_pVertexOverride;
   IMesh *m_pIndexOverride;
 
-  static unsigned short gm_ScratchIndexBuffer;
+  static u16 gm_ScratchIndexBuffer;
 };
 
-unsigned short CMatQueuedMesh::gm_ScratchIndexBuffer;
+u16 CMatQueuedMesh::gm_ScratchIndexBuffer;
 
 //-----------------------------------------------------------------------------
 //
@@ -858,9 +849,7 @@ void CMatQueuedRenderContext::SetFogZ(float fogZ) {
   m_queue.QueueCall(m_pHardwareContext, &IMatRenderContext::SetFogZ, fogZ);
 }
 
-MaterialFogMode_t CMatQueuedRenderContext::GetFogMode(void) {
-  return m_FogMode;
-}
+MaterialFogMode_t CMatQueuedRenderContext::GetFogMode() { return m_FogMode; }
 
 void CMatQueuedRenderContext::FogColor3f(float r, float g, float b) {
   FogColor3ub(std::clamp((int)(r * 255.0f), 0, 255),

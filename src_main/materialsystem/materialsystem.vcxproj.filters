@@ -13,6 +13,9 @@
     <Filter Include="Shader Source">
       <UniqueIdentifier>{ee62a8a2-a565-4207-b370-70c114d20f1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{1b0a88c5-a674-4b99-b5cf-934a6c3996c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ccolorcorrection.cpp">
@@ -284,5 +287,13 @@
     <ClInclude Include="texturemanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="materialsystem.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
