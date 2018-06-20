@@ -63,9 +63,7 @@ struct VTexVMTParam_t {
 class SmartIVtfTexture {
  public:
   explicit SmartIVtfTexture(IVTFTexture *pVtf) : m_p(pVtf) {}
-  ~SmartIVtfTexture() {
-    if (m_p) DestroyVTFTexture(m_p);
-  }
+  ~SmartIVtfTexture() { DestroyVTFTexture(m_p); }
 
  private:
   SmartIVtfTexture(SmartIVtfTexture const &x);
@@ -636,9 +634,9 @@ void MakeSrcFileName(ch (&pSrcName)[scr_name_size], u32 flags,
   if (bNormalToDUDV) {
     ch *pNormalString = Q_stristr((ch *)pFullNameWithoutExtension, "_dudv");
     if (pNormalString) {
-      Q_strncpy(tempBuf, pFullNameWithoutExtension, std::size(tempBuf));
+      strcpy_s(tempBuf, pFullNameWithoutExtension);
       ch *dudv = Q_stristr(tempBuf, "_dudv");
-      Q_strcpy(dudv, std::size(tempBuf) - (dudv - tempBuf), "_normal");
+      strcpy_s(dudv, std::size(tempBuf) - (dudv - tempBuf), "_normal");
       pFullNameWithoutExtension = tempBuf;
     } else {
       Assert(Q_stristr((ch *)pFullNameWithoutExtension, "_dudv"));
@@ -697,7 +695,7 @@ static bool LoadFile(const ch *pFileName, CUtlBuffer &buf, bool bFailOnError,
   fseek(fp, 0, SEEK_SET);
 
   buf.EnsureCapacity(nFileLength);
-  int nBytesRead = fread(buf.Base(), 1, nFileLength, fp);
+  usize nBytesRead = fread(buf.Base(), 1, nFileLength, fp);
   fclose(fp);
 
   buf.SeekPut(CUtlBuffer::SEEK_HEAD, nBytesRead);
@@ -1308,7 +1306,7 @@ void PreprocessSkyBox(ch *pFullNameWithoutExtension, int *iSkyboxFace) {
 
   // Since they passed in only one face of the skybox, there's a 2 letter
   // extension we want to get rid of.
-  int len = strlen(pFullNameWithoutExtension);
+  usize len = strlen(pFullNameWithoutExtension);
   if (len >= 3) {
     // Make sure there really is a 2 letter extension.
     ch *pEnd = &pFullNameWithoutExtension[len - 2];
@@ -1678,7 +1676,7 @@ static bool LoadConfigFile(const ch *pFileBaseName, VTexConfigInfo_t &info,
   // Tries to load .txt, then .psd
 
   size_t lenBaseName = strlen(pFileBaseName);
-  size_t file_name_size{lenBaseName + strlen(".tga") + 1};
+  size_t file_name_size{lenBaseName + std::size(".tga")};
   ch *pFileName = stack_alloc<ch>(file_name_size);
   strcpy_s(pFileName, file_name_size, pFileBaseName);
   strcat_s(pFileName, file_name_size, ".tga");
@@ -1917,7 +1915,7 @@ bool GetOutputDir(const ch *inputName, ch (&outputDir)[out_dir_size]) {
     if (!pTmp) {
       return false;
     }
-    pTmp += strlen("materialsrc/");
+    pTmp += std::size("materialsrc/") - 1;
     strcpy_s(outputDir, gamedir);
     strcat_s(outputDir, "materials/");
     strcat_s(outputDir, pTmp);
@@ -2024,22 +2022,24 @@ bool Process_File(ch *pInputBaseName, int maxlen) {
     ch *pMaterials = strstr(outputDir, "/materials/");
     if (pGame && pMaterials && (pGame < pMaterials)) {
       // "u:/data/game/tf/materials/"  ->  "u:/data/content/tf/materialsrc/"
-      int numExtraBytes =
-          strlen("/content/.../materialsrc/") - strlen("/game/.../materials/");
-      int numConvertBytes = pMaterials + strlen("/materials/") - outputDir;
+      isize numExtraBytes = std::size("/content/.../materialsrc/") -
+                            std::size("/game/.../materials/");
+      isize numConvertBytes =
+          pMaterials + std::size("/materials/") - 1 - outputDir;
       memmove(outputDir + numConvertBytes + numExtraBytes,
               outputDir + numConvertBytes,
               strlen(outputDir) - numConvertBytes + 1);
 
-      int numMidBytes = pMaterials - pGame - strlen("/game");
-      memmove(pGame + strlen("/content"), pGame + strlen("/game"), numMidBytes);
+      isize numMidBytes = pMaterials - pGame - std::size("/game") + 1;
+      memmove(pGame + std::size("/content") - 1, pGame + std::size("/game") - 1,
+              numMidBytes);
 
-      memmove(pGame, "/content", strlen("/content"));
-      memmove(pGame + strlen("/content") + numMidBytes, "/materialsrc/",
-              strlen("/materialsrc/"));
+      memmove(pGame, "/content", std::size("/content") - 1);
+      memmove(pGame + std::size("/content") - 1 + numMidBytes, "/materialsrc/",
+              std::size("/materialsrc/") - 1);
     }
 
-    Q_strncpy(pInputBaseName, outputDir, maxlen);
+    strcpy_s(pInputBaseName, maxlen, outputDir);
   }
 
   if (!g_Quiet) {
@@ -2079,12 +2079,6 @@ bool Process_File(ch *pInputBaseName, int maxlen) {
 
     AttachShtFile(pInputBaseName, pVtf, NULL);
 
-    // Update the CRC
-    // if ( puiDataHash )
-    // {
-    //	pVtf->InitResourceDataSection( VTexConfigInfo_t::VTF_INPUTSRC_CRC,
-    //*puiDataHash );
-    // }
     // Remove the CRC when quick-converting
     pVtf->SetResourceData(VTexConfigInfo_t::VTF_INPUTSRC_CRC, NULL, 0);
 
@@ -2150,7 +2144,7 @@ bool Process_File(ch *pInputBaseName, int maxlen) {
           if (!g_Quiet)
             fprintf(stderr, "Creating vmt file: %s/%s\n", tmp, pBaseName);
 
-          tmp += strlen("materials/");
+          tmp += std::size("materials/") - 1;
           fprintf(fp, "\"%s\"\n", g_ShaderName);
           fprintf(fp, "{\n");
           fprintf(fp, "\t\"$baseTexture\" \"%s/%s\"\n", tmp, pBaseName);
@@ -2257,7 +2251,7 @@ int CVTex::VTex(int argc, ch **argv) {
     SpewOutputFunc(VTexOutputFunc);
   }
 
-  MathLib_Init(2.2f, 2.2f, 0.0f, 1.0f, false, false, false, false);
+  MathLib_Init(2.2f, 2.2f, 0.0f, 1.0f);
   if (argc < 2) {
     Usage();
   }

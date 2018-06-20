@@ -881,17 +881,6 @@ void HtmlWindow::CreateBrowser(bool AllowJavaScript) {
 HtmlWindow::~HtmlWindow() {
   html_windows.FindAndRemove(this);
 
-  // we are being destroyed, reset the IE hwnd's window proc (or else we crash)
-  /*	if ( m_hIEWndProc )
-
-  if ( m_IEHWndPlat )
-  {
-          if ( m_IEHWndPlat->hdc )
-          {
-                  ::SetWindowLong( m_ieHWND, GWL_WNDPROC, (long)m_hIEWndProc );
-                  m_hIEWndProc = NULL;
-          }
-  */
   if (m_oleInPlaceObject) {
     m_oleInPlaceObject->InPlaceDeactivate();
     m_oleInPlaceObject->UIDeactivate();
@@ -2010,7 +1999,7 @@ HRESULT FS_IDispatch::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
     }
 
     case DISPID_NEWWINDOW2: {
-      // stop new browser windows being opened if we are in the engine
+    // stop new browser windows being opened if we are in the engine
 #ifdef VGUIMATSURFACE_DLL_EXPORT
       if (!vgui::surface()->SupportsFeature(
               vgui::ISurface::OPENING_NEW_HTML_WINDOWS))

@@ -29,7 +29,6 @@
 #include "tier0/include/dbg.h"
 #include "tier2/tier2.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -259,13 +258,13 @@ void EnableInput(bool bEnable) { s_bInputEnabled = bEnable; }
 //-----------------------------------------------------------------------------
 void InputAttachToWindow(void *hwnd) {
   s_ChainedWindowProc = (WNDPROC)GetWindowLongPtr((HWND)hwnd, GWLP_WNDPROC);
-  SetWindowLongPtr((HWND)hwnd, GWLP_WNDPROC, (LONG)MatSurfaceWindowProc);
+  SetWindowLongPtrW((HWND)hwnd, GWLP_WNDPROC, (LONG)MatSurfaceWindowProc);
 }
 
 void InputDetachFromWindow(void *hwnd) {
   if (!hwnd) return;
   if (s_ChainedWindowProc) {
-    SetWindowLongPtr((HWND)hwnd, GWLP_WNDPROC, (LONG)s_ChainedWindowProc);
+    SetWindowLongPtrW((HWND)hwnd, GWLP_WNDPROC, (LONG)s_ChainedWindowProc);
     s_ChainedWindowProc = NULL;
   }
 }

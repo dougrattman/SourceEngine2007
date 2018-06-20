@@ -1907,13 +1907,14 @@ void CWin32Surface::SetAsToolBar(VPANEL panel, bool state) {
   panel = GetContextPanelForChildPanel(panel);
   if (panel && PLAT(panel)) {
     if (state) {
-      ::SetWindowLong(
+      ::SetWindowLongPtrW(
           PLAT(panel)->hwnd, GWL_EXSTYLE,
-          ::GetWindowLong(PLAT(panel)->hwnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
+          ::GetWindowLongPtr(PLAT(panel)->hwnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
     } else {
-      ::SetWindowLong(
+      ::SetWindowLongPtrW(
           PLAT(panel)->hwnd, GWL_EXSTYLE,
-          ::GetWindowLong(PLAT(panel)->hwnd, GWL_EXSTYLE) & ~WS_EX_TOOLWINDOW);
+                      ::GetWindowLongPtr(PLAT(panel)->hwnd, GWL_EXSTYLE) &
+                          ~WS_EX_TOOLWINDOW);
     }
   }
 }
@@ -2005,7 +2006,7 @@ void CWin32Surface::CreatePopup(VPANEL panel, bool minimised,
   plat->textureDC = NULL;
 
   ::SetBkMode(plat->hdc, TRANSPARENT);
-  ::SetWindowLong(plat->hwnd, GWL_USERDATA,
+  ::SetWindowLongPtrW(plat->hwnd, GWL_USERDATA,
                   (LONG)g_pIVgui->PanelToHandle(panel));
   ::SetTextAlign(plat->hdc, TA_LEFT | TA_TOP | TA_UPDATECP);
 
@@ -2076,7 +2077,7 @@ void CWin32Surface::ReleasePanel(VPANEL panel) {
     SetPanelVisible(panel, false);
 
     // free all the windows/bitmap/DC handles we are using
-    ::SetWindowLong(plat->hwnd, GWL_USERDATA, (LONG)-1);
+    ::SetWindowLongPtrW(plat->hwnd, GWL_USERDATA, (LONG)-1);
     ::SetWindowPos(plat->hwnd, HWND_BOTTOM, 0, 0, 1, 1,
                    SWP_NOREDRAW | SWP_HIDEWINDOW);
 
@@ -2242,7 +2243,7 @@ void CWin32Surface::ApplyChanges() {
     }
 
     // check to see if the win32 window is visible
-    if (::GetWindowLong(Plat->hwnd, GWL_STYLE) & WS_VISIBLE) {
+    if (::GetWindowLongPtr(Plat->hwnd, GWL_STYLE) & WS_VISIBLE) {
       // check to see if embedded VPanel is not visible, if so then hide the
       // win32 window
       if (!((VPanel *)panel)->IsVisible()) {
@@ -3046,7 +3047,7 @@ static LRESULT CALLBACK staticProc(HWND hwnd, UINT msg, WPARAM wparam,
   IClientPanel *client = NULL;
 
   if (staticSurfaceAvailable) {
-    panel = g_pIVgui->HandleToPanel(::GetWindowLong(hwnd, GWL_USERDATA));
+    panel = g_pIVgui->HandleToPanel(::GetWindowLongPtr(hwnd, GWL_USERDATA));
 
     if (panel) {
       client = ((VPanel *)panel)->Client();

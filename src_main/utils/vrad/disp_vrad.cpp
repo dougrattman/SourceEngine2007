@@ -40,7 +40,7 @@ int FindNeighborCornerVert(CCoreDispInfo *pDisp, const Vector &vTest) {
 template <size_t neighbors_size>
 int GetAllNeighbors(const CCoreDispInfo *pDisp,
                     int (&iNeighbors)[neighbors_size]) {
-  int nNeighbors = 0;
+  usize nNeighbors = 0;
 
   // Check corner neighbors.
   for (int iCorner = 0; iCorner < 4; iCorner++) {

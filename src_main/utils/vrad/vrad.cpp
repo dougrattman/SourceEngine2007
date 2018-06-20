@@ -1,6 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vrad.h"
+
 #include "byteswap.h"
 #include "leaf_ambient_lighting.h"
 #include "lightmap.h"
@@ -206,8 +207,7 @@ void ReadLightFile(char *filename) {
 
     scan += strspn(scan, " \t");
     char NoShadName[1024];
-    if (sscanf_s(scan, "noshadow %s", NoShadName,
-                 std::size(NoShadName)) == 1) {
+    if (sscanf_s(scan, "noshadow %s", NoShadName, std::size(NoShadName)) == 1) {
       char *dot = strchr(NoShadName, '.');
       if (dot)  // if they specify .vmt, kill it
         *dot = 0;
@@ -223,8 +223,7 @@ void ReadLightFile(char *filename) {
       if (num_texlights == MAX_TEXLIGHTS)
         Error("Too many texlights, max = %d", MAX_TEXLIGHTS);
 
-      int argCnt =
-          sscanf_s(scan, "%s ", szTexlight, std::size(szTexlight));
+      int argCnt = sscanf_s(scan, "%s ", szTexlight, std::size(szTexlight));
 
       if (argCnt != 1) {
         if (strlen(scan) > 4)
@@ -947,7 +946,8 @@ int max_transfer;
 // Purpose: Computes the form factor from a polygon patch to a differential
 // patch
 //          using formula 81 of Philip Dutre's Global Illumination Compendium,
-//          phil@graphics.cornell.edu, http://www.graphics.cornell.edu/~phil/GI/
+//          phil@graphics.cornell.edu,
+//          https://people.cs.kuleuven.be/~philip.dutre/GI/
 //-----------------------------------------------------------------------------
 float FormFactorPolyToDiff(CPatch *pPolygon, CPatch *pDifferential) {
   winding_t *pWinding = pPolygon->winding;
@@ -1309,14 +1309,14 @@ void CollectLight(Vector &total) {
   }
 }
 
-/*
-=============
-GatherLight
+  /*
+  =============
+  GatherLight
 
-Get light from other patches
-  Run multi-threaded
-=============
-*/
+  Get light from other patches
+    Run multi-threaded
+  =============
+  */
 
 #ifdef _WIN32
 #pragma warning(disable : 4701)
@@ -2090,7 +2090,7 @@ void VRAD_Finish() {
 // Run startup code like initialize mathlib (called from main() and from the
 // WorldCraft interface into vrad).
 void VRAD_Init() {
-  MathLib_Init(2.2f, 2.2f, 0.0f, 2.0f, false, false, false, false);
+  MathLib_Init(2.2f, 2.2f, 0.0f, 2.0f);
   InstallAllocationFunctions();
   InstallSpewFunction();
 }
