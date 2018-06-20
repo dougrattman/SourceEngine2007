@@ -1688,7 +1688,7 @@ bool VMPI_GetNextMessage(MessageBuffer *pBuf, int *pSource,
   DWORD timeout = startTimeout;
 
   while (1) {
-    DWORD ret = WaitForMultipleObjects(SOURCE_ARRAYSIZE(handles), handles,
+    DWORD ret = WaitForMultipleObjects(std::size(handles), handles,
                                        FALSE, timeout);
     if (ret == WAIT_TIMEOUT) {
       return false;
@@ -1984,7 +1984,7 @@ bool VMPI_Send2Chunks(const void *pChunk1, int chunk1Len, const void *pChunk2,
                       int chunk2Len, int iDest, int fVMPISendFlags) {
   const void *pChunks[2] = {pChunk1, pChunk2};
   int len[2] = {chunk1Len, chunk2Len};
-  return VMPI_SendChunks(pChunks, len, SOURCE_ARRAYSIZE(pChunks), iDest,
+  return VMPI_SendChunks(pChunks, len, std::size(pChunks), iDest,
                          fVMPISendFlags);
 }
 
@@ -1993,7 +1993,7 @@ bool VMPI_Send3Chunks(const void *pChunk1, int chunk1Len, const void *pChunk2,
                       int iDest, int fVMPISendFlags) {
   const void *pChunks[3] = {pChunk1, pChunk2, pChunk3};
   int len[3] = {chunk1Len, chunk2Len, chunk3Len};
-  return VMPI_SendChunks(pChunks, len, SOURCE_ARRAYSIZE(pChunks), iDest,
+  return VMPI_SendChunks(pChunks, len, std::size(pChunks), iDest,
                          fVMPISendFlags);
 }
 

@@ -900,7 +900,7 @@ inline bool CMasterMulticastThread::Thread_SendFileChunk_Multicast(
                      (sockaddr *)&m_MulticastAddr, sizeof(m_MulticastAddr));
     bSuccess = (ret == (int)nWantedBytes);
   } else {
-    WSASendTo(m_Socket, bufs, SOURCE_ARRAYSIZE(bufs), &nBytesSent, 0,
+    WSASendTo(m_Socket, bufs, std::size(bufs), &nBytesSent, 0,
               (sockaddr *)&m_MulticastAddr, sizeof(m_MulticastAddr), NULL,
               NULL);
     bSuccess = (nBytesSent == nWantedBytes);
@@ -1422,7 +1422,7 @@ bool CMasterVMPIFileSystem::HandleFileSystemPacket(MessageBuffer *pBuf,
       int chunkLen[4] = {sizeof(cPacket), sizeof(requestID), sizeof(fileID),
                          sizeof(bZeroLength)};
 
-      VMPI_SendChunks(pChunks, chunkLen, SOURCE_ARRAYSIZE(pChunks), iSource);
+      VMPI_SendChunks(pChunks, chunkLen, std::size(pChunks), iSource);
     }
       return true;
 

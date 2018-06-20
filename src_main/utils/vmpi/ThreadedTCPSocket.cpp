@@ -346,7 +346,7 @@ class CThreadedTCPSocket : public IThreadedTCPSocket {
       HANDLE handles[] = {m_hExitThreadsEvent.GetEventHandle(),
                           m_hSendCompletionEvent.GetEventHandle(),
                           m_hReadyToSendEvent.GetEventHandle()};
-      int nHandles = SOURCE_ARRAYSIZE(handles);
+      int nHandles = std::size(handles);
 
       // While waiting for send completion, don't handle "ready to send" events.
       if (m_bWaitingForSendCompletion) --nHandles;
@@ -511,7 +511,7 @@ class CThreadedTCPSocket : public IThreadedTCPSocket {
                         m_hRecvEvent.GetEventHandle()};
 
     while (1) {
-      DWORD waitValue = WaitForMultipleObjects(SOURCE_ARRAYSIZE(handles), handles,
+      DWORD waitValue = WaitForMultipleObjects(std::size(handles), handles,
                                                FALSE, KEEPALIVE_TIMEOUT);
       switch (waitValue) {
         case WAIT_TIMEOUT: {

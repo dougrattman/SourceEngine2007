@@ -164,7 +164,7 @@ class CWorkerMulticastListener {
     const void *pChunks[4] = {packetID, &requestID, (void *)pFilename, pPathID};
     int chunkLengths[4] = {sizeof(packetID), sizeof(requestID),
                            strlen(pFilename) + 1, strlen(pPathID) + 1};
-    VMPI_SendChunks(pChunks, chunkLengths, SOURCE_ARRAYSIZE(pChunks), 0);
+    VMPI_SendChunks(pChunks, chunkLengths, std::size(pChunks), 0);
 
     // Wait for the file ID to come back.
     CFileResponse response;
@@ -319,11 +319,11 @@ class CWorkerMulticastListener {
 
     // Setup a filename to print some debug spew with.
     char printableFilename[58];
-    if (V_strlen(pFilename) > SOURCE_ARRAYSIZE(printableFilename) - 1) {
+    if (V_strlen(pFilename) > std::size(printableFilename) - 1) {
       V_strncpy(printableFilename, "[...]", sizeof(printableFilename));
       V_strncat(
           printableFilename,
-          &pFilename[V_strlen(pFilename) - SOURCE_ARRAYSIZE(printableFilename) +
+          &pFilename[V_strlen(pFilename) - std::size(printableFilename) +
                      1 + V_strlen(printableFilename)],
           sizeof(printableFilename));
     } else {

@@ -164,7 +164,7 @@ private:
 		// 
 		while ( 1 )
 		{
-			int ret = WaitForMultipleObjects( SOURCE_ARRAYSIZE( hEvents ), hEvents, false, INFINITE );
+			int ret = WaitForMultipleObjects( std::size( hEvents ), hEvents, false, INFINITE );
 			if ( ret == WAIT_OBJECT_0 )
 				break;
 

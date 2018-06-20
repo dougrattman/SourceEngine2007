@@ -85,8 +85,8 @@ static LRESULT CALLBACK TrackerWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
   switch (uMsg) {
     case WM_PAINT: {
       // Do one pass for each color..
-      HBRUSH hStateColors[SOURCE_ARRAYSIZE(g_StateColors)];
-      for (int i = 0; i < SOURCE_ARRAYSIZE(hStateColors); i++)
+      HBRUSH hStateColors[std::size(g_StateColors)];
+      for (size_t i = 0; i < std::size(hStateColors); i++)
         hStateColors[i] = CreateSolidBrush(g_StateColors[i]);
 
       // Copy the WU statuses.
@@ -102,7 +102,7 @@ static LRESULT CALLBACK TrackerWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
       PAINTSTRUCT ps;
       HDC hDC = BeginPaint(hwnd, &ps);
-      for (int iState = 0; iState < SOURCE_ARRAYSIZE(hStateColors); iState++) {
+      for (size_t iState = 0; iState < std::size(hStateColors); iState++) {
         HGDIOBJ hOldObj = SelectObject(hDC, hStateColors[iState]);
 
         for (int iWU = 0; iWU < wuStatus.Count(); iWU++) {
