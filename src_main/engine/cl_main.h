@@ -160,6 +160,9 @@ void CL_SetSteamCrashComment();
 void CL_CheckForPureServerWhitelist();
 void CL_HandlePureServerWhitelist(CPureServerWhitelist *pWhitelist);
 
+void CL_GetBackgroundLevelName(ch *pszBackgroundName, size_t bufSize,
+                               bool bMapName);
+
 // Special mode where the client uses a console window and has no graphics.
 // Useful for stress-testing a server without having to round up 32 people.
 extern bool g_bTextMode;

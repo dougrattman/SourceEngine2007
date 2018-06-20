@@ -17,8 +17,6 @@
 
 #include "tier0/include/memdbgon.h"
 
-extern IXboxSystem *g_pXboxSystem;
-
 #define ASYNC_OK 0
 #define ASYNC_FAIL 1
 
@@ -76,15 +74,9 @@ void CSession::ResetSession() {
 // Purpose: Set session contexts and properties
 //-----------------------------------------------------------------------------
 void CSession::SetContext(const uint32_t nContextId,
-                          const uint32_t nContextValue, const bool bAsync) {
-  g_pXboxSystem->UserSetContext(XBX_GetPrimaryUserId(), nContextId,
-                                nContextValue, bAsync);
-}
+                          const uint32_t nContextValue, const bool bAsync) {}
 void CSession::SetProperty(const uint32_t nPropertyId, const uint32_t cbValue,
-                           const void *pvValue, const bool bAsync) {
-  g_pXboxSystem->UserSetProperty(XBX_GetPrimaryUserId(), nPropertyId, cbValue,
-                                 pvValue, bAsync);
-}
+                           const void *pvValue, const bool bAsync) {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Send a notification to GameUI
@@ -142,15 +134,7 @@ void CSession::JoinLocal(const CClientInfo *pClient) {
     bPrivate[i] = pClient->m_bInvited;
   }
 
-  // X360TBD: Make async?
-  uint32_t ret = g_pXboxSystem->SessionJoinLocal(
-      m_hSession, pClient->m_cPlayers, nUserIndex, bPrivate, false);
-  if (ret != ERROR_SUCCESS) {
-    // Handle error
-    Warning("Failed to add local players\n");
-  } else {
-    UpdateSlots(pClient, true);
-  }
+  UpdateSlots(pClient, true);
 }
 
 //-----------------------------------------------------------------------------
@@ -165,15 +149,7 @@ void CSession::JoinRemote(const CClientInfo *pClient) {
     bPrivate[i] = pClient->m_bInvited;
   }
 
-  // X360TBD: Make async?
-  uint32_t ret = g_pXboxSystem->SessionJoinRemote(
-      m_hSession, pClient->m_cPlayers, xuids, bPrivate, false);
-  if (ret != ERROR_SUCCESS) {
-    // Handle error
-    Warning("Join Remote Error\n");
-  } else {
-    UpdateSlots(pClient, true);
-  }
+  UpdateSlots(pClient, true);
 }
 
 //-----------------------------------------------------------------------------
@@ -186,15 +162,7 @@ void CSession::RemoveLocal(const CClientInfo *pClient) {
     nUserIndex[i] = pClient->m_iControllers[i];
   }
 
-  // X360TBD: Make async?
-  uint32_t ret = g_pXboxSystem->SessionLeaveLocal(
-      m_hSession, pClient->m_cPlayers, nUserIndex, false);
-  if (ret != ERROR_SUCCESS) {
-    // Handle error
-    Warning("Failed to remove local players\n");
-  } else {
-    UpdateSlots(pClient, false);
-  }
+  UpdateSlots(pClient, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -207,15 +175,7 @@ void CSession::RemoveRemote(const CClientInfo *pClient) {
     xuids[i] = pClient->m_xuids[i];
   }
 
-  // X360TBD: Make async?
-  uint32_t ret = g_pXboxSystem->SessionLeaveRemote(
-      m_hSession, pClient->m_cPlayers, xuids, false);
-  if (ret != ERROR_SUCCESS) {
-    // Handle error
-    Warning("Failed to remove remote players\n");
-  } else {
-    UpdateSlots(pClient, false);
-  }
+  UpdateSlots(pClient, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -237,19 +197,6 @@ bool CSession::CreateSession() {
     m_bIsArbitrated = true;
   }
 
-  m_hCreateHandle = g_pXboxSystem->CreateAsyncHandle();
-
-  // Create the session
-  uint32_t ret = g_pXboxSystem->CreateSession(
-      flags, XBX_GetPrimaryUserId(), m_nPlayerSlots[SLOTS_TOTALPUBLIC],
-      m_nPlayerSlots[SLOTS_TOTALPRIVATE], &m_SessionNonce, &m_SessionInfo,
-      &m_hSession, true, &m_hCreateHandle);
-
-  if (ret != ERROR_SUCCESS && ret != ERROR_IO_PENDING) {
-    Warning("XSessionCreate failed with error %d\n", ret);
-    return false;
-  }
-
   SwitchToState(SESSION_STATE_CREATING);
 
   return true;
@@ -259,28 +206,14 @@ bool CSession::CreateSession() {
 // Purpose: Check for completion while creating a new session
 //-----------------------------------------------------------------------------
 void CSession::UpdateCreating() {
-  DWORD ret = g_pXboxSystem->GetOverlappedResult(m_hCreateHandle, NULL, false);
-  if (ret == ERROR_IO_INCOMPLETE) {
-    // Still waiting
-    return;
-  } else {
-    SESSION_STATE nextState = SESSION_STATE_IDLE;
+  SESSION_STATE nextState = SESSION_STATE_IDLE;
 
-    // Operation completed
-    SESSION_NOTIFY notification =
-        IsHost() ? SESSION_NOTIFY_CREATED_HOST : SESSION_NOTIFY_CREATED_CLIENT;
-    if (ret != ERROR_SUCCESS) {
-      Warning("CSession: CreateSession failed. Error %d\n", ret);
+  // Operation completed
+  SESSION_NOTIFY notification =
+      IsHost() ? SESSION_NOTIFY_CREATED_HOST : SESSION_NOTIFY_CREATED_CLIENT;
 
-      nextState = SESSION_STATE_NONE;
-      notification = SESSION_NOTIFY_FAIL_CREATE;
-    }
-
-    g_pXboxSystem->ReleaseAsyncHandle(m_hCreateHandle);
-
-    SendNotification(notification);
-    SwitchToState(nextState);
-  }
+  SendNotification(notification);
+  SwitchToState(nextState);
 }
 
 //-----------------------------------------------------------------------------
@@ -289,9 +222,6 @@ void CSession::UpdateCreating() {
 void CSession::CancelCreateSession() {
 #ifndef OS_POSIX
   if (m_SessionState != SESSION_STATE_CREATING) return;
-
-  g_pXboxSystem->CancelOverlappedOperation(&m_hCreateHandle);
-  g_pXboxSystem->ReleaseAsyncHandle(m_hCreateHandle);
 
   if (INVALID_HANDLE_VALUE != m_hSession) {
     CloseHandle(m_hSession);
@@ -303,69 +233,25 @@ void CSession::CancelCreateSession() {
 //-----------------------------------------------------------------------------
 // Purpose: Close an existing session
 //-----------------------------------------------------------------------------
-void CSession::DestroySession() {
-  // TODO: Make this async
-  uint32_t ret = g_pXboxSystem->DeleteSession(m_hSession, false);
-  if (ret != ERROR_SUCCESS) {
-    Warning("Failed to delete session with error %d.\n", ret);
-  }
-}
+void CSession::DestroySession() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Register for arbritation in a ranked match
 //-----------------------------------------------------------------------------
 void CSession::RegisterForArbitration() {
-  uint32_t bytes = 0;
-  m_pRegistrationResults = NULL;
-
-  // Call once to determine size of results buffer
-  int ret = g_pXboxSystem->SessionArbitrationRegister(
-      m_hSession, 0, m_SessionNonce, &bytes, NULL, false);
-  if (ret != ERROR_INSUFFICIENT_BUFFER) {
-    Warning("Failed registering for arbitration\n");
-    return;
-  }
-
-  m_pRegistrationResults = (XSESSION_REGISTRATION_RESULTS *)new byte[bytes];
-
-  m_hRegisterHandle = g_pXboxSystem->CreateAsyncHandle();
-
-  ret = g_pXboxSystem->SessionArbitrationRegister(
-      m_hSession, 0, m_SessionNonce, &bytes, m_pRegistrationResults, true,
-      &m_hRegisterHandle);
-  if (ret != ERROR_IO_PENDING) {
-    Warning("Failed registering for arbitration\n");
-  }
-
-  m_SessionState = SESSION_STATE_REGISTERING;
+  Warning("Failed registering for arbitration\n");
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Check for completion of arbitration registration
 //-----------------------------------------------------------------------------
 void CSession::UpdateRegistering() {
-  DWORD ret =
-      g_pXboxSystem->GetOverlappedResult(m_hRegisterHandle, NULL, false);
-  if (ret == ERROR_IO_INCOMPLETE) {
-    // Still waiting
-    return;
-  } else {
-    SESSION_STATE nextState = SESSION_STATE_IDLE;
+  SESSION_STATE nextState = SESSION_STATE_IDLE;
+  // Operation completed
+  SESSION_NOTIFY notification = SESSION_NOTIFY_REGISTER_COMPLETED;
 
-    // Operation completed
-    SESSION_NOTIFY notification = SESSION_NOTIFY_REGISTER_COMPLETED;
-    if (ret != ERROR_SUCCESS) {
-      Warning("CSession: Registration failed. Error %d\n", ret);
-
-      nextState = SESSION_STATE_NONE;
-      notification = SESSION_NOTIFY_FAIL_REGISTER;
-    }
-
-    g_pXboxSystem->ReleaseAsyncHandle(m_hRegisterHandle);
-
-    SendNotification(notification);
-    SwitchToState(nextState);
-  }
+  SendNotification(notification);
+  SwitchToState(nextState);
 }
 
 //-----------------------------------------------------------------------------
@@ -374,47 +260,22 @@ void CSession::UpdateRegistering() {
 bool CSession::MigrateHost() {
   if (IsHost()) {
     // Migrate call will fill this in for us
-    Q_memcpy(&m_NewSessionInfo, &m_SessionInfo, sizeof(m_NewSessionInfo));
+    memcpy(&m_NewSessionInfo, &m_SessionInfo, sizeof(m_NewSessionInfo));
   }
 
-  m_hMigrateHandle = g_pXboxSystem->CreateAsyncHandle();
-
-  int ret = g_pXboxSystem->SessionMigrate(
-      m_hSession, m_nOwnerId, &m_NewSessionInfo, true, &m_hMigrateHandle);
-  if (ret != ERROR_IO_PENDING) {
-    return false;
-  }
-
-  SwitchToState(SESSION_STATE_MIGRATING);
-
-  return true;
+  return false;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Check for completion while migrating a session
 //-----------------------------------------------------------------------------
 void CSession::UpdateMigrating() {
-  DWORD ret = g_pXboxSystem->GetOverlappedResult(m_hMigrateHandle, NULL, false);
-  if (ret == ERROR_IO_INCOMPLETE) {
-    // Still waiting
-    return;
-  } else {
-    SESSION_STATE nextState = SESSION_STATE_IDLE;
+  SESSION_STATE nextState = SESSION_STATE_IDLE;
+  // Operation completed
+  SESSION_NOTIFY notification = SESSION_NOTIFY_MIGRATION_COMPLETED;
 
-    // Operation completed
-    SESSION_NOTIFY notification = SESSION_NOTIFY_MIGRATION_COMPLETED;
-    if (ret != ERROR_SUCCESS) {
-      Warning("CSession: MigrateSession failed. Error %d\n", ret);
-
-      nextState = SESSION_STATE_NONE;
-      notification = SESSION_NOTIFY_FAIL_MIGRATE;
-    }
-
-    g_pXboxSystem->ReleaseAsyncHandle(m_hMigrateHandle);
-
-    SendNotification(notification);
-    SwitchToState(nextState);
-  }
+  SendNotification(notification);
+  SwitchToState(nextState);
 }
 
 //-----------------------------------------------------------------------------

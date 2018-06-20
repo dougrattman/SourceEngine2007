@@ -123,8 +123,8 @@ struct DecalBatchList_t {
   IMaterial *m_pMaterial;
   void *m_pProxy;
   int m_iLightmapPage;
-  unsigned short m_iStartIndex;
-  unsigned short m_nIndexCount;
+  u16 m_iStartIndex;
+  u16 m_nIndexCount;
 };
 
 struct DecalMeshList_t {

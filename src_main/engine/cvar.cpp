@@ -243,14 +243,12 @@ void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
 #ifndef SWDS
     if (sv.IsDedicated()) {
       // Dedicated servers don't have g_pVGuiLocalize, so fall back
-      mbstowcs_s(&converted_chars_num, unicode, pszValue,
-                 SOURCE_ARRAYSIZE(unicode));
+      mbstowcs_s(&converted_chars_num, unicode, pszValue, std::size(unicode));
     } else {
       g_pVGuiLocalize->ConvertANSIToUnicode(pszValue, unicode, sizeof(unicode));
     }
 #else
-    mbstowcs(&converted_chars_num, unicode, pszValue,
-             SOURCE_ARRAYSIZE(unicode));
+    mbstowcs(&converted_chars_num, unicode, pszValue, std::size(unicode));
 #endif
     wchar_t newUnicode[512];
     // Clear out new string
@@ -598,11 +596,9 @@ static ConVarFlags_t g_ConVarFlags[] = {
 
 static void PrintListHeader(FileHandle_t &f) {
   char csvflagstr[1024];
-
   csvflagstr[0] = 0;
 
-  int c = SOURCE_ARRAYSIZE(g_ConVarFlags);
-  for (int i = 0; i < c; ++i) {
+  for (usize i = 0; i < std::size(g_ConVarFlags); ++i) {
     char csvf[64];
 
     ConVarFlags_t &entry = g_ConVarFlags[i];
@@ -626,22 +622,21 @@ static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
   flagstr[0] = 0;
   csvflagstr[0] = 0;
 
-  size_t c = SOURCE_ARRAYSIZE(g_ConVarFlags);
+  size_t c = std::size(g_ConVarFlags);
   for (size_t i = 0; i < c; ++i) {
     char fl[32];
     char csvf[64];
 
     ConVarFlags_t &entry = g_ConVarFlags[i];
     if (var->IsFlagSet(entry.bit)) {
-      Q_snprintf(fl, SOURCE_ARRAYSIZE(fl), ", %s", entry.shortdesc);
-      Q_strncat(flagstr, fl, SOURCE_ARRAYSIZE(flagstr), COPY_ALL_CHARACTERS);
-      Q_snprintf(csvf, SOURCE_ARRAYSIZE(csvf), "\"%s\",", entry.desc);
+      Q_snprintf(fl, std::size(fl), ", %s", entry.shortdesc);
+      Q_strncat(flagstr, fl, std::size(flagstr), COPY_ALL_CHARACTERS);
+      Q_snprintf(csvf, std::size(csvf), "\"%s\",", entry.desc);
     } else {
-      Q_snprintf(csvf, SOURCE_ARRAYSIZE(csvf), ",");
+      Q_snprintf(csvf, std::size(csvf), ",");
     }
 
-    Q_strncat(csvflagstr, csvf, SOURCE_ARRAYSIZE(csvflagstr),
-              COPY_ALL_CHARACTERS);
+    Q_strncat(csvflagstr, csvf, std::size(csvflagstr), COPY_ALL_CHARACTERS);
   }
 
   char valstr[32];
@@ -649,19 +644,19 @@ static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
 
   // Clean up integers
   if (var->GetInt() == (int)var->GetFloat()) {
-    Q_snprintf(valstr, SOURCE_ARRAYSIZE(valstr), "%-8i", var->GetInt());
+    Q_snprintf(valstr, std::size(valstr), "%-8i", var->GetInt());
   } else {
-    Q_snprintf(valstr, SOURCE_ARRAYSIZE(valstr), "%-8.3f", var->GetFloat());
+    Q_snprintf(valstr, std::size(valstr), "%-8.3f", var->GetFloat());
   }
 
   // Print to console
-  ConMsg("%-40s : %-8s : %-16s : %s\n", var->GetName(), valstr, flagstr,
-         StripTabsAndReturns(var->GetHelpText(), tempbuff,
-                             SOURCE_ARRAYSIZE(tempbuff)));
+  ConMsg(
+      "%-40s : %-8s : %-16s : %s\n", var->GetName(), valstr, flagstr,
+      StripTabsAndReturns(var->GetHelpText(), tempbuff, std::size(tempbuff)));
   if (logging) {
     g_pFileSystem->FPrintf(
         f, "\"%s\",\"%s\",%s,\"%s\"\n", var->GetName(), valstr, csvflagstr,
-        StripQuotes(var->GetHelpText(), tempbuff, SOURCE_ARRAYSIZE(tempbuff)));
+        StripQuotes(var->GetHelpText(), tempbuff, std::size(tempbuff)));
   }
 }
 
@@ -675,7 +670,7 @@ static void PrintCommand(const ConCommand *cmd, bool logging, FileHandle_t &f) {
 
     emptyflags[0] = 0;
 
-    int c = SOURCE_ARRAYSIZE(g_ConVarFlags);
+    int c = std::size(g_ConVarFlags);
     for (int i = 0; i < c; ++i) {
       char csvf[64];
       Q_snprintf(csvf, sizeof(csvf), ",");
@@ -911,7 +906,7 @@ void CCvarUtilities::CvarFindFlags_f(const CCommand &args) {
     ConMsg("Usage:  findflags <string>\n");
     ConMsg("Available flags to search for: \n");
 
-    for (int i = 0; i < SOURCE_ARRAYSIZE(g_ConVarFlags); i++) {
+    for (usize i = 0; i < std::size(g_ConVarFlags); i++) {
       ConMsg("   - %s\n", g_ConVarFlags[i].desc);
     }
     return;
@@ -926,7 +921,7 @@ void CCvarUtilities::CvarFindFlags_f(const CCommand &args) {
     if (var->IsFlagSet(FCVAR_DEVELOPMENTONLY) || var->IsFlagSet(FCVAR_HIDDEN))
       continue;
 
-    for (int i = 0; i < SOURCE_ARRAYSIZE(g_ConVarFlags); i++) {
+    for (usize i = 0; i < std::size(g_ConVarFlags); i++) {
       if (!var->IsFlagSet(g_ConVarFlags[i].bit)) continue;
 
       if (!V_stristr(g_ConVarFlags[i].desc, search)) continue;

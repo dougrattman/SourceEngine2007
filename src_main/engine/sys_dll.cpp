@@ -484,7 +484,7 @@ void *GameFactory(const ch *interface_name, int *return_code) {
 CreateInterfaceFn g_GameSystemFactory = GameFactory;
 
 bool Sys_InitGame(CreateInterfaceFn create_interface_fn, const ch *base_dir,
-                  void *window, bool is_dedicated) {
+                  HWND *window, bool is_dedicated) {
   InitMathlib();
 
   FileSystem_SetWhitelistSpewFlags();
@@ -503,7 +503,7 @@ bool Sys_InitGame(CreateInterfaceFn create_interface_fn, const ch *base_dir,
 
 #ifdef OS_WIN
   // Grab main window pointer
-  pmainwindow = (HWND *)window;
+  pmainwindow = window;
 #endif
 
   // Remember that this is a dedicated server

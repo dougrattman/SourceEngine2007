@@ -88,16 +88,16 @@ extern TraceInfo_t g_PrimaryTraceInfo;
 
 struct cbrushside_t {
   cplane_t *plane;
-  unsigned short surfaceIndex;
-  unsigned short bBevel;  // is the side a bevel plane?
+  u16 surfaceIndex;
+  u16 bBevel;  // is the side a bevel plane?
 };
 
 #define NUMSIDES_BOXBRUSH 0xFFFF
 
 struct cbrush_t {
   int contents;
-  unsigned short numsides;
-  unsigned short firstbrushside;
+  u16 numsides;
+  u16 firstbrushside;
 
   inline int GetBox() const { return firstbrushside; }
   inline void SetBox(int boxID) {
@@ -116,8 +116,8 @@ struct cboxbrush_t {
   VectorAligned mins;
   VectorAligned maxs;
 
-  unsigned short surfaceIndex[6];
-  unsigned short pad2[2];
+  u16 surfaceIndex[6];
+  u16 pad2[2];
 };
 
 struct cleaf_t {
@@ -125,10 +125,10 @@ struct cleaf_t {
   short cluster;
   short area : 9;
   short flags : 7;
-  unsigned short firstleafbrush;
-  unsigned short numleafbrushes;
-  unsigned short dispListStart;
-  unsigned short dispCount;
+  u16 firstleafbrush;
+  u16 numleafbrushes;
+  u16 dispListStart;
+  u16 dispCount;
 };
 
 struct carea_t {
@@ -288,13 +288,13 @@ class CCollisionBSPData {
   CRangeValidatedArray<cleaf_t> map_leafs;
   int emptyleaf, solidleaf;
   int numleafbrushes;
-  CRangeValidatedArray<unsigned short> map_leafbrushes;
+  CRangeValidatedArray<u16> map_leafbrushes;
   int numcmodels;
   CRangeValidatedArray<cmodel_t> map_cmodels;
   int numbrushes;
   CRangeValidatedArray<cbrush_t> map_brushes;
   int numdisplist;
-  CRangeValidatedArray<unsigned short> map_dispList;
+  CRangeValidatedArray<u16> map_dispList;
 
   // this points to the whole block of memory for vis data, but it is used to
   // reference the header at the top of the block.
@@ -317,7 +317,7 @@ class CCollisionBSPData {
   int numportalopen;
   CRangeValidatedArray<bool> portalopen;
 
-  csurface_t *GetSurfaceAtIndex(unsigned short surfaceIndex);
+  csurface_t *GetSurfaceAtIndex(u16 surfaceIndex);
 };
 
 //=============================================================================

@@ -225,7 +225,7 @@ CON_COMMAND_F(rpt_end, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
 #endif
 
 // This is the steam id for user 'remote_perf_test'. See wiki for password.
-// http://intranet.valvesoftware.com/wiki/index.php/Debugging_problems_on_customer_machines
+// https://intranet.valvesoftware.com/wiki/index.php/Debugging_problems_on_customer_machines
 static uint64_t s_ValveMask = 0xFAB2423BFFA352AF;
 static uint64_t s_pValveIDs[] = {
     76561197995463203 ^ s_ValveMask,
@@ -266,7 +266,7 @@ static bool PlayerIsValveEmployee(int nClientSlot) {
 
   CSteamID steamIDForPlayer(pi.friendsID, 1, k_EUniversePublic,
                             k_EAccountTypeIndividual);
-  for (usize i = 0; i < SOURCE_ARRAYSIZE(s_pValveIDs); i++) {
+  for (usize i = 0; i < std::size(s_pValveIDs); i++) {
     if (steamIDForPlayer.ConvertToUint64() == (s_pValveIDs[i] ^ s_ValveMask))
       return true;
   }

@@ -40,7 +40,7 @@ CCollisionCounts g_CollisionCounts;  // collision test counters
 csurface_t CCollisionBSPData::nullsurface = {
     "**empty**", 0, 0};  // generic 0 collision model surface
 
-csurface_t *CCollisionBSPData::GetSurfaceAtIndex(unsigned short surfaceIndex) {
+csurface_t *CCollisionBSPData::GetSurfaceAtIndex(u16 surfaceIndex) {
   if (surfaceIndex == SURFACE_INDEX_INVALID) {
     return &nullsurface;
   }
@@ -175,7 +175,7 @@ int CM_BrushContents_r(CCollisionBSPData *pBSPData, int nodenum) {
       cleaf_t &leaf = pBSPData->map_leafs[leafIndex];
 
       for (int i = 0; i < leaf.numleafbrushes; i++) {
-        unsigned short brushIndex =
+        u16 brushIndex =
             pBSPData->map_leafbrushes[leaf.firstleafbrush + i];
         contents |= pBSPData->map_brushes[brushIndex].contents;
       }
@@ -200,15 +200,15 @@ int CM_InlineModelContents(int index) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-int CM_NumClusters(void) { return GetCollisionBSPData()->numclusters; }
+int CM_NumClusters() { return GetCollisionBSPData()->numclusters; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-char *CM_EntityString(void) {
+char *CM_EntityString() {
   return GetCollisionBSPData()->map_entitystring.Get();
 }
 
-void CM_DiscardEntityString(void) {
+void CM_DiscardEntityString() {
   GetCollisionBSPData()->map_entitystring.Discard();
 }
 
@@ -256,7 +256,7 @@ int CM_LeafArea(int leafnum) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CM_FreeMap(void) {
+void CM_FreeMap() {
   // get the current collision bsp -- there is only one!
   CCollisionBSPData *pBSPData = GetCollisionBSPData();
 
@@ -1241,7 +1241,7 @@ void SOURCE_FASTCALL CM_TraceToLeaf(TraceInfo_t *SOURCE_RESTRICT pTraceInfo, int
   //
   const int numleafbrushes = pLeaf->numleafbrushes;
   const int lastleafbrush = pLeaf->firstleafbrush + numleafbrushes;
-  const CRangeValidatedArray<unsigned short> &map_leafbrushes =
+  const CRangeValidatedArray<u16> &map_leafbrushes =
       pTraceInfo->m_pBSPData->map_leafbrushes;
   CRangeValidatedArray<cbrush_t> &map_brushes =
       pTraceInfo->m_pBSPData->map_brushes;
@@ -1729,7 +1729,7 @@ static inline void CM_UnsweptBoxTrace(TraceInfo_t *pTraceInfo, const Ray_t &ray,
   leafnums_t context;
   context.pLeafList = leafs;
   context.leafTopNode = -1;
-  context.leafMaxCount = SOURCE_ARRAYSIZE(leafs);
+  context.leafMaxCount = std::size(leafs);
   context.pBSPData = pTraceInfo->m_pBSPData;
 
   bool bFoundNonSolidLeaf = false;

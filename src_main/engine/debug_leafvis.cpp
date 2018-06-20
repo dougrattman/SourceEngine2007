@@ -148,7 +148,7 @@ void CSGPlaneList(leafvis_t *pVis, CUtlVector<cplane_t> &planeList) {
   }
 }
 
-void LeafvisChanged(IConVar *pLeafvisVar, const char *pOld, float flOldValue) {
+void LeafvisChanged(IConVar *pLeafvisVar, const ch *pOld, float flOldValue) {
   if (g_LeafVis) {
     delete g_LeafVis;
     g_LeafVis = NULL;
@@ -381,7 +381,7 @@ void RecomputeClipbrushes(bool bEnabled) {
 }
 
 // NOTE: UNDONE: This doesn't work on brush models - only the world.
-void ClipChanged(IConVar *pConVar, const char *pOld, float flOldValue) {
+void ClipChanged(IConVar *pConVar, const ch *pOld, float flOldValue) {
   ConVarRef clipVar(pConVar);
   RecomputeClipbrushes(clipVar.GetBool());
 }
@@ -439,7 +439,7 @@ static void CubeFace(CMeshBuilder &meshBuilder, const Vector &org, int v0,
 //-----------------------------------------------------------------------------
 // Purpose: Draw the leaf geometry that was computed by LeafVisBuild()
 //-----------------------------------------------------------------------------
-void LeafVisDraw(void) {
+void LeafVisDraw() {
   if (g_FrustumVis) {
     DrawLeafvis(g_FrustumVis);
   }

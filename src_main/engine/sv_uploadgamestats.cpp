@@ -397,7 +397,7 @@ class CUploadGameStats : public IUploadGameStats {
       UUID newId;
       UuidCreate(&newId);
       char hex[17];
-      Q_memset(hex, 0, sizeof(hex));
+      memset(hex, 0, sizeof(hex));
       Q_binarytohex((const uint8_t*)&newId, sizeof(newId), hex, sizeof(hex));
 
       // If running at Valve, copy in the users name here
@@ -405,7 +405,7 @@ class CUploadGameStats : public IUploadGameStats {
 #if defined(_WIN32)
         bool bOk = true;
         char username[64];
-        Q_memset(username, 0, sizeof(username));
+        memset(username, 0, sizeof(username));
         DWORD length = sizeof(username) - 1;
         if (!GetUserName(username, &length)) {
           bOk = false;
@@ -429,9 +429,9 @@ class CUploadGameStats : public IUploadGameStats {
 
       temp->WriteString("PseudoUUID", hex);
 
-      Q_strncpy(buf, hex, bufsize);
+      strcpy_s(buf, bufsize, hex);
     } else {
-      Q_strncpy(buf, uuid, bufsize);
+      strcpy_s(buf, bufsize, uuid);
     }
 
     ReleaseInstancedRegistry(temp);
@@ -470,7 +470,7 @@ void UpdateProgress(const TGameStatsParameters& params, char const* fmt, ...) {
   char str[2048];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf_s(str, sizeof(str) - 1, fmt, argptr);
+  vsprintf_s(str, fmt, argptr);
   va_end(argptr);
 
   char outstr[2060];

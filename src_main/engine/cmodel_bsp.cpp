@@ -29,7 +29,7 @@ IPhysicsCollision *physcollision = NULL;
 // local forward declarations
 void CollisionBSPData_LoadTextures(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadTexinfo(CCollisionBSPData *pBSPData,
-                                  CUtlVector<unsigned short> &map_texinfo);
+                                  CUtlVector<u16> &map_texinfo);
 void CollisionBSPData_LoadLeafs_Version_0(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadLeafs_Version_1(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadLeafs(CCollisionBSPData *pBSPData);
@@ -37,7 +37,7 @@ void CollisionBSPData_LoadLeafBrushes(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadPlanes(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadBrushes(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadBrushSides(CCollisionBSPData *pBSPData,
-                                     CUtlVector<unsigned short> &map_texinfo);
+                                     CUtlVector<u16> &map_texinfo);
 void CollisionBSPData_LoadSubmodels(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadNodes(CCollisionBSPData *pBSPData);
 void CollisionBSPData_LoadAreas(CCollisionBSPData *pBSPData);
@@ -171,7 +171,7 @@ CDispCollTree *CollisionBSPData_GetCollisionTree(int i) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CollisionBSPData_LinkPhysics(void) {
+void CollisionBSPData_LinkPhysics() {
   //
   // initialize the physics surface properties -- if necessary!
   //
@@ -208,7 +208,7 @@ bool CollisionBSPData_Load(const char *pName, CCollisionBSPData *pBSPData) {
 
   // This is a table that maps texinfo references to csurface_t
   // It is freed after the map has been loaded
-  CUtlVector<unsigned short> map_texinfo;
+  CUtlVector<u16> map_texinfo;
 
   // copy map name
   Q_strncpy(pBSPData->map_name, pName, sizeof(pBSPData->map_name));
@@ -332,11 +332,11 @@ void CollisionBSPData_LoadTextures(CCollisionBSPData *pBSPData) {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void CollisionBSPData_LoadTexinfo(CCollisionBSPData *pBSPData,
-                                  CUtlVector<unsigned short> &map_texinfo) {
+                                  CUtlVector<u16> &map_texinfo) {
   CMapLoadHelper lh(LUMP_TEXINFO);
 
   texinfo_t *in;
-  unsigned short out;
+  u16 out;
   int i, count;
 
   in = (texinfo_t *)lh.LumpBase();
@@ -499,10 +499,10 @@ void CollisionBSPData_LoadLeafBrushes(CCollisionBSPData *pBSPData) {
   CMapLoadHelper lh(LUMP_LEAFBRUSHES);
 
   int i;
-  unsigned short *in;
+  u16 *in;
   int count;
 
-  in = (unsigned short *)lh.LumpBase();
+  in = (u16 *)lh.LumpBase();
   if (lh.LumpSize() % sizeof(*in)) {
     Sys_Error("CMod_LoadLeafBrushes: funny lump size");
   }
@@ -518,8 +518,7 @@ void CollisionBSPData_LoadLeafBrushes(CCollisionBSPData *pBSPData) {
   }
 
   pBSPData->map_leafbrushes.Attach(
-      count,
-      (unsigned short *)Hunk_Alloc(count * sizeof(unsigned short), false));
+      count, (u16 *)Hunk_Alloc(count * sizeof(u16), false));
   pBSPData->numleafbrushes = count;
 
   for (i = 0; i < count; i++, in++) {
@@ -620,7 +619,7 @@ inline bool IsBoxBrush(const cbrush_t &brush, dbrushside_t *pSides,
 
 inline void ExtractBoxBrush(cboxbrush_t *pBox, const cbrush_t &brush,
                             dbrushside_t *pSides, cplane_t *pPlanes,
-                            CUtlVector<unsigned short> &map_texinfo) {
+                            CUtlVector<u16> &map_texinfo) {
   // brush.numsides is no longer valid.  Assume numsides == 6
   for (int i = 0; i < 6; i++) {
     dbrushside_t *side = pSides + i + brush.firstbrushside;
@@ -647,7 +646,7 @@ inline void ExtractBoxBrush(cboxbrush_t *pBox, const cbrush_t &brush,
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void CollisionBSPData_LoadBrushSides(CCollisionBSPData *pBSPData,
-                                     CUtlVector<unsigned short> &map_texinfo) {
+                                     CUtlVector<u16> &map_texinfo) {
   CMapLoadHelper lh(LUMP_BRUSHSIDES);
 
   int i, j;
@@ -1019,10 +1018,8 @@ void CollisionBSPData_LoadDispInfo(CCollisionBSPData *pBSPData) {
       g_DispCollTreeCount * sizeof(alignedbbox_t), false);
 
   // Build the inverse mapping from disp index to face
-  int nMemSize = coreDispCount * sizeof(unsigned short);
-  unsigned short *pDispIndexToFaceIndex =
-      (unsigned short *)stackalloc(nMemSize);
-  memset(pDispIndexToFaceIndex, 0xFF, nMemSize);
+  u16 *pDispIndexToFaceIndex = stack_alloc<u16>(coreDispCount);
+  memset(pDispIndexToFaceIndex, 0xFF, coreDispCount * sizeof(u16));
 
   int i;
   for (i = 0; i < faceCount; ++i, ++pFaces) {
@@ -1032,7 +1029,7 @@ void CollisionBSPData_LoadDispInfo(CCollisionBSPData *pBSPData) {
     // get the current displacement build surface
     if (pFaces->dispinfo >= coreDispCount) continue;
 
-    pDispIndexToFaceIndex[pFaces->dispinfo] = (unsigned short)i;
+    pDispIndexToFaceIndex[pFaces->dispinfo] = (u16)i;
   }
 
   // Load one dispinfo from disk at a time and set it up.
@@ -1051,7 +1048,7 @@ void CollisionBSPData_LoadDispInfo(CCollisionBSPData *pBSPData) {
 
   for (i = 0; i < coreDispCount; ++i) {
     // Find the face associated with this dispinfo
-    unsigned short nFaceIndex = pDispIndexToFaceIndex[i];
+    u16 nFaceIndex = pDispIndexToFaceIndex[i];
     if (nFaceIndex == 0xFFFF) continue;
 
     // Load up the dispinfo and create the CCoreDispInfo from it.
@@ -1157,10 +1154,10 @@ void CollisionBSPData_LoadDispInfo(CCollisionBSPData *pBSPData) {
   CM_CreateDispPhysCollide(pDispPhys, lhDispPhys.LumpSize());
 }
 
-//=============================================================================
-//
-// Collision Count Functions
-//
+  //=============================================================================
+  //
+  // Collision Count Functions
+  //
 
 #ifdef COUNT_COLLISIONS
 //-----------------------------------------------------------------------------

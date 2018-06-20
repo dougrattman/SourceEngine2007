@@ -2400,7 +2400,7 @@ rva_t *RVA_Alloc(int *D, int *a, int *b, int m, flt_t *pflt, int fparallel,
 
       // value of ftaps is the seed for all tap values
 
-      float t1 = std::max(MSEC_TO_SAMPS(5), D[i] * (1.0f - ftaps * 3.141592f));
+      float t1 = std::max(MSEC_TO_SAMPS(5), D[i] * (1.0f - ftaps * M_PI_F));
       float t2 = std::max(MSEC_TO_SAMPS(7), D[i] * (1.0f - ftaps * 1.697043f));
       float t3 = std::max(MSEC_TO_SAMPS(10), D[i] * (1.0f - ftaps * 0.96325f));
 

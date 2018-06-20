@@ -98,12 +98,13 @@ void CScratchPadGraph::UpdateTicksAndStuff(float flTime, float flValue) {
 
     // Extend the lines attached to the time labels.
     for (int i = 0; i < m_nTimeLabelsDrawn; i++) {
-      float flTime =
+      float the_time =
           m_flTimeOrigin + m_nTimeLabelsDrawn * m_flTimeLabelEveryNSeconds;
 
       m_pPad->DrawLine(
-          CSPVert((const Vector &)GetSamplePosition(flTime, m_flHighestValue)),
-          CSPVert((const Vector &)GetSamplePosition(flTime, flValue)));
+          CSPVert(
+              (const Vector &)GetSamplePosition(the_time, m_flHighestValue)),
+          CSPVert((const Vector &)GetSamplePosition(the_time, flValue)));
     }
 
     m_flHighestValue = flValue;
@@ -115,21 +116,21 @@ void CScratchPadGraph::UpdateTicksAndStuff(float flTime, float flValue) {
   while (m_nTimeLabelsDrawn < iHighestTextLabel) {
     CTextParams params;
 
-    float flTime =
+    float the_time =
         m_flTimeOrigin + m_nTimeLabelsDrawn * m_flTimeLabelEveryNSeconds;
 
     params.m_bSolidBackground = true;
-    params.m_vPos = GetSamplePosition(flTime, m_flValueOrigin - 5);
+    params.m_vPos = GetSamplePosition(the_time, m_flValueOrigin - 5);
     params.m_bTwoSided = true;
 
     char str[512];
-    Q_snprintf(str, sizeof(str), "time: %.2f", flTime);
+    Q_snprintf(str, sizeof(str), "time: %.2f", the_time);
     m_pPad->DrawText(str, params);
 
     // Now draw the vertical line for the value..
     m_pPad->DrawLine(
-        CSPVert((const Vector &)GetSamplePosition(flTime, m_flValueOrigin)),
-        CSPVert((const Vector &)GetSamplePosition(flTime, m_flHighestValue)));
+        CSPVert((const Vector &)GetSamplePosition(the_time, m_flValueOrigin)),
+        CSPVert((const Vector &)GetSamplePosition(the_time, m_flHighestValue)));
 
     m_nTimeLabelsDrawn++;
   }

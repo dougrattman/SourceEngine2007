@@ -303,9 +303,9 @@ class CGame : public IGame {
 #endif  // !defined( SWDS )
   }
 
-  void SetGameWindow(void *hWnd) override {
+  void SetGameWindow(HWND hWnd) override {
     is_external_window_ = true;
-    SetMainWindow((HWND)hWnd);
+    SetMainWindow(hWnd);
   }
 
   // This is used in edit mode to override the default wnd proc associated
@@ -409,9 +409,9 @@ class CGame : public IGame {
 #endif  // SWDS
   }
 
-  void *GetMainWindow() const override { return hwnd_; }
+  HWND GetMainWindow() const override { return hwnd_; }
 
-  void **GetMainWindowAddress() const override { return (void **)&hwnd_; }
+  HWND *GetMainWindowAddress() override { return &hwnd_; }
 
   std::tuple<i32, i32, i32> GetDesktopInfo() const override {
     // order of initialization means that this might get called early.  In that
@@ -602,7 +602,7 @@ class CGame : public IGame {
           rcWindow.right = rcWindow.left + last_restored_client_rect_.right;
           rcWindow.bottom = rcWindow.top + last_restored_client_rect_.bottom;
 
-          ::AdjustWindowRect(&rcWindow, ::GetWindowLong(hWnd, GWL_STYLE),
+          ::AdjustWindowRect(&rcWindow, ::GetWindowLongPtr(hWnd, GWL_STYLE),
                              FALSE);
           ::MoveWindow(hWnd, rcWindow.left, rcWindow.top,
                        rcWindow.right - rcWindow.left,

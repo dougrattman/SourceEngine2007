@@ -53,7 +53,7 @@ class CGameServer : public CBaseServer {
   void SendClientMessages(bool bSendSnapshots);
   void FinishRestore();
   void BroadcastSound(SoundInfo_t &sound, IRecipientFilter &filter);
-  bool IsLevelMainMenuBackground(void) { return m_bIsLevelMainMenuBackground; }
+  bool IsLevelMainMenuBackground() { return m_bIsLevelMainMenuBackground; }
 
   // This is true when we start a level and sv_pure is set to 1.
   bool IsInPureServerMode() const;

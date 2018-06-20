@@ -11,7 +11,7 @@ class Vector;
 struct Ray_t;
 
 // Handle to an renderable in the client leaf system
-typedef unsigned short BSPTreeDataHandle_t;
+typedef u16 BSPTreeDataHandle_t;
 
 enum { TREEDATA_INVALID_HANDLE = (BSPTreeDataHandle_t)~0 };
 

@@ -677,7 +677,7 @@ ShadowHandle_t CShadowMgr::CreateShadowEx(IMaterial* pMaterial,
   if ((creationFlags & SHADOW_FLASHLIGHT) != 0) {
     shadow.m_FlashlightHandle = m_FlashlightStates.AddToTail();
     m_FlashlightStates[shadow.m_FlashlightHandle].m_Shadow = h;
-    if (!IsX360() && !r_flashlight_version2.GetInt()) {
+    if (!r_flashlight_version2.GetInt()) {
       AllocFlashlightMaterialBuckets(shadow.m_FlashlightHandle);
     }
   }
@@ -1443,23 +1443,6 @@ void DrawFrustum(Frustum_t& frustum) {
   }
 }
 
-// static void LineDrawHelper( const Vector &startShadowSpace, const Vector
-// &endShadowSpace, 						   const VMatrix
-//&shadowToWorld, unsigned char r, unsigned char g,
-//						   unsigned char b, bool ignoreZ
-//)
-//{
-//	Vector startWorldSpace, endWorldSpace;
-//	Vector3DMultiplyPositionProjective( shadowToWorld, startShadowSpace,
-// startWorldSpace ); 	Vector3DMultiplyPositionProjective( shadowToWorld,
-// endShadowSpace, endWorldSpace );
-//
-//	CDebugOverlay::AddLineOverlay( startWorldSpace,
-//		endWorldSpace,
-//		r, g, b, ignoreZ
-//		, 0.0 );
-//}
-
 void CShadowMgr::ProjectFlashlight(ShadowHandle_t handle,
                                    const VMatrix& worldToShadow, int nLeafCount,
                                    const int* pLeafList) {
@@ -1468,7 +1451,7 @@ void CShadowMgr::ProjectFlashlight(ShadowHandle_t handle,
 
   Shadow_t& shadow = m_Shadows[handle];
 
-  if (!IsX360() && !r_flashlight_version2.GetInt()) {
+  if (!r_flashlight_version2.GetInt()) {
     // First, we need to remove the shadow from all surfaces it may
     // currently be in; in other words we're invalidating the shadow surface
     // cache

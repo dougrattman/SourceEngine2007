@@ -4,22 +4,22 @@
 
 #include "cl_demoeditorpanel.h"
 
-#include <vgui/ISurface.h>
-#include <vgui/ISystem.h>
-#include <vgui/IVGui.h>
-#include <vgui_controls/Button.h>
-#include <vgui_controls/CheckButton.h>
-#include <vgui_controls/Controls.h>
-#include <vgui_controls/FileOpenDialog.h>
-#include <vgui_controls/Label.h>
-#include <vgui_controls/ListPanel.h>
-#include <vgui_controls/Menu.h>
-#include <vgui_controls/MenuButton.h>
-#include <vgui_controls/ProgressBar.h>
-#include <vgui_controls/PropertySheet.h>
 #include "cl_demoaction.h"
 #include "cl_demoactioneditors.h"
 #include "cl_demoactionmanager.h"
+#include "vgui/ISurface.h"
+#include "vgui/ISystem.h"
+#include "vgui/IVGui.h"
+#include "vgui_controls/Button.h"
+#include "vgui_controls/CheckButton.h"
+#include "vgui_controls/Controls.h"
+#include "vgui_controls/FileOpenDialog.h"
+#include "vgui_controls/Label.h"
+#include "vgui_controls/ListPanel.h"
+#include "vgui_controls/Menu.h"
+#include "vgui_controls/MenuButton.h"
+#include "vgui_controls/ProgressBar.h"
+#include "vgui_controls/PropertySheet.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -37,8 +37,7 @@ class CNewActionButton : public vgui::MenuButton {
 
  public:
   // Construction
-  CNewActionButton(vgui::Panel *parent, const char *panelName,
-                   const char *text);
+  CNewActionButton(vgui::Panel *parent, const ch *panelName, const ch *text);
 
  private:
   // Menu associated with this button
@@ -48,8 +47,8 @@ class CNewActionButton : public vgui::MenuButton {
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CNewActionButton::CNewActionButton(Panel *parent, const char *panelName,
-                                   const char *text)
+CNewActionButton::CNewActionButton(Panel *parent, const ch *panelName,
+                                   const ch *text)
     : BaseClass(parent, panelName, text) {
   // Assume no menu
   m_pMenu = new Menu(this, "DemoEditNewAction");
@@ -57,7 +56,7 @@ CNewActionButton::CNewActionButton(Panel *parent, const char *panelName,
   int count = NUM_DEMO_ACTIONS;
   int i;
   for (i = 1; i < count; i++) {
-    char const *actionType = CBaseDemoAction::NameForType((DEMOACTION)i);
+    ch const *actionType = CBaseDemoAction::NameForType((DEMOACTION)i);
 
     m_pMenu->AddMenuItem(actionType, actionType, parent);
     m_pMenu->SetItemEnabled(actionType,
@@ -159,7 +158,7 @@ void CDemoEditorPanel::OnTick() {
 // Input  : *command -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CDemoEditorPanel::IsNewActionCommand(char const *command) {
+bool CDemoEditorPanel::IsNewActionCommand(ch const *command) {
   DEMOACTION type = CBaseDemoAction::TypeForName(command);
   if (type != DEMO_ACTION_UNKNOWN) {
     return true;
@@ -171,7 +170,7 @@ bool CDemoEditorPanel::IsNewActionCommand(char const *command) {
 // Purpose:
 // Input  : *actiontype -
 //-----------------------------------------------------------------------------
-void CDemoEditorPanel::CreateNewAction(char const *actiontype) {
+void CDemoEditorPanel::CreateNewAction(ch const *actiontype) {
   if (m_hCurrentEditor != NULL) return;
 
   DEMOACTION type = CBaseDemoAction::TypeForName(actiontype);
@@ -195,7 +194,7 @@ void CDemoEditorPanel::CreateNewAction(char const *actiontype) {
 // Purpose:
 // Input  : *command -
 //-----------------------------------------------------------------------------
-void CDemoEditorPanel::OnCommand(const char *command) {
+void CDemoEditorPanel::OnCommand(const ch *command) {
   if (!Q_strcasecmp(command, "edit")) {
     OnEdit();
   } else if (!Q_strcasecmp(command, "delete")) {
@@ -219,7 +218,7 @@ void CDemoEditorPanel::OnCommand(const char *command) {
   }
 }
 
-void CDemoEditorPanel::OnVDMChanged(void) { OnRefresh(); }
+void CDemoEditorPanel::OnVDMChanged() { OnRefresh(); }
 
 void CDemoEditorPanel::PurgeActionList() {
   if (!m_pActions) {
@@ -310,7 +309,7 @@ void CDemoEditorPanel::OnRevert() {
   OnRefresh();
 }
 
-CBaseDemoAction *CDemoEditorPanel::FindActionByName(char const *name) {
+CBaseDemoAction *CDemoEditorPanel::FindActionByName(ch const *name) {
   int count = demoaction->GetActionCount();
   int i;
   for (i = 0; i < count; i++) {

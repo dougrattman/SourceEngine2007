@@ -23,7 +23,7 @@ class CDemoActionManager : public IDemoActionManager {
   virtual void Init(void);
   virtual void Shutdown(void);
 
-  virtual void StartPlaying(char const *demfilename);
+  virtual void StartPlaying(ch const *demfilename);
   virtual void StopPlaying();
 
   virtual void Update(bool newframe, int demotick, float demotime);
@@ -31,7 +31,7 @@ class CDemoActionManager : public IDemoActionManager {
   virtual void SaveToBuffer(CUtlBuffer &buf);
   virtual void SaveToFile(void);
 
-  virtual char const *GetCurrentDemoFile(void);
+  virtual ch const *GetCurrentDemoFile(void);
 
   virtual int GetActionCount(void);
   virtual CBaseDemoAction *GetAction(int index);
@@ -49,7 +49,7 @@ class CDemoActionManager : public IDemoActionManager {
   virtual bool OverrideView(democmdinfo_t &info, int tick);
 
  private:
-  void OnVDMLoaded(char const *demfilename);
+  void OnVDMLoaded(ch const *demfilename);
   void ClearAll();
 
   CUtlVector<CBaseDemoAction *> m_ActionStack;
@@ -59,7 +59,7 @@ class CDemoActionManager : public IDemoActionManager {
   float m_flPrevTime;
 
   bool m_bDirty;
-  char m_szCurrentFile[MAX_OSPATH];
+  ch m_szCurrentFile[MAX_OSPATH];
   long m_lFileTime;
 };
 
@@ -85,12 +85,12 @@ CDemoActionManager::~CDemoActionManager() {}
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionManager::Init(void) {}
+void CDemoActionManager::Init() {}
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionManager::Shutdown(void) {
+void CDemoActionManager::Shutdown() {
   StopPlaying();
   ClearAll();
   m_ActionStack.Purge();
@@ -100,16 +100,16 @@ void CDemoActionManager::Shutdown(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Reload without saving
 //-----------------------------------------------------------------------------
-void CDemoActionManager::ReloadFromDisk(void) {
-  char metafile[512];
+void CDemoActionManager::ReloadFromDisk() {
+  ch metafile[512];
   Q_StripExtension(m_szCurrentFile, metafile, sizeof(metafile));
   Q_DefaultExtension(metafile, ".vdm", sizeof(metafile));
 
   ClearAll();
 
-  // const char *buffer = NULL;
+  // const ch *buffer = NULL;
   // int sz = 0;
-  // buffer = (const char *)COM_LoadFile( metafile, 5, &sz );
+  // buffer = (const ch *)COM_LoadFile( metafile, 5, &sz );
   //	if ( buffer )
   //	{
   m_lFileTime = g_pFileSystem->GetFileTime(metafile);
@@ -122,7 +122,7 @@ void CDemoActionManager::ReloadFromDisk(void) {
       // Iterate over all metaclasses...
       KeyValues *pIter = kv->GetFirstSubKey();
       while (pIter) {
-        char factorytouse[512];
+        ch factorytouse[512];
 
         Q_strncpy(factorytouse, pIter->GetName(), sizeof(factorytouse));
 
@@ -167,7 +167,7 @@ void CDemoActionManager::ReloadFromDisk(void) {
 // Purpose:
 // Input  : *demfilename -
 //-----------------------------------------------------------------------------
-void CDemoActionManager::StartPlaying(char const *demfilename) {
+void CDemoActionManager::StartPlaying(ch const *demfilename) {
   Assert(demfilename);
 
   // Clear anything currently pending
@@ -177,7 +177,7 @@ void CDemoActionManager::StartPlaying(char const *demfilename) {
 
   Q_strncpy(m_szCurrentFile, demfilename, sizeof(m_szCurrentFile));
 
-  char metafile[512];
+  ch metafile[512];
   Q_StripExtension(demfilename, metafile, sizeof(metafile));
   Q_DefaultExtension(metafile, ".vdm", sizeof(metafile));
 
@@ -281,14 +281,14 @@ void CDemoActionManager::SaveToBuffer(CUtlBuffer &buf) {
 // Purpose:
 // Input  : *demfilename -
 //-----------------------------------------------------------------------------
-void CDemoActionManager::SaveToFile(void) {
+void CDemoActionManager::SaveToFile() {
   // Nothing loaded
   if (m_szCurrentFile[0] == 0) return;
 
   // It's not dirty
   if (!m_bDirty) return;
 
-  char metafile[512];
+  ch metafile[512];
   Q_StripExtension(m_szCurrentFile, metafile, sizeof(metafile));
   Q_DefaultExtension(metafile, ".vdm", sizeof(metafile));
 
@@ -314,7 +314,7 @@ void CDemoActionManager::SaveToFile(void) {
 // Purpose:
 // Input  : *demfilename -
 //-----------------------------------------------------------------------------
-void CDemoActionManager::OnVDMLoaded(char const *demfilename) {
+void CDemoActionManager::OnVDMLoaded(ch const *demfilename) {
   // Notify UI?
 
   if (g_pDemoUI) {
@@ -326,7 +326,7 @@ void CDemoActionManager::OnVDMLoaded(char const *demfilename) {
   }
 }
 
-char const *CDemoActionManager::GetCurrentDemoFile(void) {
+ch const *CDemoActionManager::GetCurrentDemoFile() {
   return m_szCurrentFile;
 }
 
@@ -334,7 +334,7 @@ char const *CDemoActionManager::GetCurrentDemoFile(void) {
 // Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CDemoActionManager::GetActionCount(void) {
+int CDemoActionManager::GetActionCount() {
   int count = m_ActionStack.Count();
   return count;
 }
@@ -377,7 +377,7 @@ void CDemoActionManager::RemoveAction(CBaseDemoAction *action) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CDemoActionManager::IsDirty(void) const { return m_bDirty; }
+bool CDemoActionManager::IsDirty() const { return m_bDirty; }
 
 //-----------------------------------------------------------------------------
 // Purpose:

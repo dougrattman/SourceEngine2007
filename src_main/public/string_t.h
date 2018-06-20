@@ -13,7 +13,7 @@
 
 typedef int string_t;
 
-// Purpose: The correct way to specify the NULL string as a constant.
+// Purpose: The correct way to specify the nullptr string as a constant.
 #define NULL_STRING 0
 
 // Purpose: Given a string_t, make a C string. By convention the result string
@@ -52,8 +52,9 @@ struct castable_string_t : public string_t {
   }
 };
 
-// Purpose: The correct way to specify the NULL string as a constant.
-#define NULL_STRING castable_string_t()
+// Purpose: The correct way to specify the nullptr string as a constant.
+#define NULL_STRING \
+  castable_string_t {}
 
 // Purpose: Given a string_t, make a C string. By convention the result string
 //  pointer should be considered transient and should not be stored.

@@ -27,15 +27,15 @@ bool CL_IsHL2Demo() { return false; }
 
 bool CL_IsPortalDemo() { return false; }
 
-bool HandleRedirectAndDebugLog(const char *msg);
+bool HandleRedirectAndDebugLog(const ch *msg);
 
 void BeginLoadingUpdates(MaterialNonInteractiveMode_t mode) {}
 void RefreshScreenIfNecessary() {}
 void EndLoadingUpdates() {}
 
-void Con_ColorPrintf(const Color &clr, const char *fmt, ...) {
+void Con_ColorPrintf(const Color &clr, const ch *fmt, ...) {
   va_list argptr;
-  char msg[MAXPRINTMSG];
+  ch msg[MAXPRINTMSG];
   static bool inupdate;
 
   if (!host_initialized) return;
@@ -51,9 +51,9 @@ void Con_ColorPrintf(const Color &clr, const char *fmt, ...) {
   Msg("%s", msg);
 }
 
-void Con_NPrintf(int pos, const char *fmt, ...) {
+void Con_NPrintf(int pos, const ch *fmt, ...) {
   va_list argptr;
-  char text[4096];
+  ch text[4096];
   va_start(argptr, fmt);
   Q_vsnprintf(text, sizeof(text), fmt, argptr);
   va_end(argptr);
@@ -61,13 +61,13 @@ void Con_NPrintf(int pos, const char *fmt, ...) {
   Msg("%s", text);
 }
 
-void SCR_UpdateScreen(void) {}
+void SCR_UpdateScreen() {}
 
-void SCR_EndLoadingPlaque(void) {}
+void SCR_EndLoadingPlaque() {}
 
 void ClientDLL_FrameStageNotify(ClientFrameStage_t frameStage) {}
 
-ClientClass *ClientDLL_GetAllClasses(void) { return g_pClientClassHead; }
+ClientClass *ClientDLL_GetAllClasses() { return g_pClientClassHead; }
 
 #define LIGHT_MIN_LIGHT_VALUE 0.03f
 
@@ -105,22 +105,22 @@ float ComputeLightRadius(dworldlight_t *pLight, bool bIsHDR) {
 
 CClientState::CClientState() {}
 CClientState::~CClientState() {}
-void CClientState::ConnectionClosing(const char *reason) {}
-void CClientState::ConnectionCrashed(const char *reason) {}
+void CClientState::ConnectionClosing(const ch *reason) {}
+void CClientState::ConnectionCrashed(const ch *reason) {}
 bool CClientState::ProcessConnectionlessPacket(netpacket_t *packet) {
   return false;
 }
 void CClientState::PacketStart(int incoming_sequence,
                                int outgoing_acknowledged) {}
-void CClientState::PacketEnd(void) {}
-void CClientState::FileRequested(const char *fileName,
+void CClientState::PacketEnd() {}
+void CClientState::FileRequested(const ch *fileName,
                                  unsigned int transferID) {}
 void CClientState::Disconnect(bool showmainmenu) {}
 void CClientState::FullConnect(netadr_t &adr) {}
 bool CClientState::SetSignonState(int state, int count) { return false; }
-void CClientState::SendClientInfo(void) {}
-void CClientState::InstallStringTableCallback(char const *tableName) {}
-bool CClientState::InstallEngineStringTableCallback(char const *tableName) {
+void CClientState::SendClientInfo() {}
+void CClientState::InstallStringTableCallback(ch const *tableName) {}
+bool CClientState::InstallEngineStringTableCallback(ch const *tableName) {
   return false;
 }
 void CClientState::ReadEnterPVS(CEntityReadInfo &u) {}
@@ -128,8 +128,8 @@ void CClientState::ReadLeavePVS(CEntityReadInfo &u) {}
 void CClientState::ReadDeltaEnt(CEntityReadInfo &u) {}
 void CClientState::ReadPreserveEnt(CEntityReadInfo &u) {}
 void CClientState::ReadDeletions(CEntityReadInfo &u) {}
-const char *CClientState::GetCDKeyHash(void) { return "123"; }
-void CClientState::Clear(void) {}
+const ch *CClientState::GetCDKeyHash() { return "123"; }
+void CClientState::Clear() {}
 bool CClientState::ProcessGameEvent(SVC_GameEvent *msg) { return true; }
 bool CClientState::ProcessUserMessage(SVC_UserMessage *msg) { return true; }
 bool CClientState::ProcessEntityMessage(SVC_EntityMessage *msg) { return true; }
@@ -152,12 +152,12 @@ bool CClientState::ProcessPacketEntities(SVC_PacketEntities *msg) {
 bool CClientState::ProcessSounds(SVC_Sounds *msg) { return true; }
 bool CClientState::ProcessPrefetch(SVC_Prefetch *msg) { return true; }
 float CClientState::GetTime() const { return 0.0f; }
-void CClientState::FileDenied(const char *fileName, unsigned int transferID) {}
-void CClientState::FileReceived(const char *fileName, unsigned int transferID) {
+void CClientState::FileDenied(const ch *fileName, unsigned int transferID) {}
+void CClientState::FileReceived(const ch *fileName, unsigned int transferID) {
 }
 void CClientState::RunFrame() {}
 void CClientState::ConsistencyCheck(bool bChanged) {}
-bool CClientState::HookClientStringTable(char const *tableName) {
+bool CClientState::HookClientStringTable(ch const *tableName) {
   return false;
 }
 

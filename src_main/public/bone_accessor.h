@@ -97,7 +97,7 @@ inline matrix3x4_t &CBoneAccessor::GetBoneForWrite(int iBone) {
   return m_pBones[iBone];
 }
 
-inline matrix3x4_t *CBoneAccessor::GetBoneArrayForWrite(void) const {
+inline matrix3x4_t *CBoneAccessor::GetBoneArrayForWrite() const {
   return m_pBones;
 }
 

@@ -60,7 +60,7 @@ void TxViewPanel::OnTick() {
   ;
 }
 
-void TxViewPanel::OnCommand(const char *command) {
+void TxViewPanel::OnCommand(const ch *command) {
   if (!Q_strcasecmp(command, "refresh")) {
     ;
   } else {
@@ -72,7 +72,7 @@ void TxViewPanel::OnMessage(const KeyValues *params, vgui::VPANEL fromPanel) {
   BaseClass::OnMessage(params, fromPanel);
 }
 
-void TxViewPanel::OnFileSelected(const char *fullpath) {
+void TxViewPanel::OnFileSelected(const ch *fullpath) {
   if (!fullpath || !fullpath[0]) return;
 
   ;

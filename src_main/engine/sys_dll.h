@@ -5,6 +5,7 @@
 #ifndef SYS_DLL_H
 #define SYS_DLL_H
 
+#include "base/include/macros.h"
 #include "tier1/interface.h"
 
 class IHammer;
@@ -55,8 +56,10 @@ struct modinfo_t {
 
 extern modinfo_t gmodinfo;
 
+SOURCE_FORWARD_DECLARE_HANDLE(HWND);
+
 bool Sys_InitGame(CreateInterfaceFn create_interface_fn,
-                 const ch *base_directory, void *window, bool is_dedicated);
+                  const ch *base_directory, HWND *window, bool is_dedicated);
 void Sys_ShutdownGame();
 
 void LoadEntityDLLs(const char *szBaseDir);

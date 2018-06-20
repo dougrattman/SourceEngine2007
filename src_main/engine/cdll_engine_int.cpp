@@ -1,9 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose:
-//
 // 4-23-98
-// JOHN:  implementation of interface between client-side DLL and game engine.
+// JOHN: implementation of interface between client-side DLL and game engine.
 //  The cdll shouldn't have to know anything about networking or file formats.
 //  This file is Win32-dependant
 
@@ -91,8 +89,6 @@ IMaterial *BrushModel_GetLightingAndMaterial(const Vector &start,
                                              Vector &diffuseLightColor,
                                              Vector &baseColor);
 const ch *Key_NameForBinding(const ch *pBinding);
-void CL_GetBackgroundLevelName(ch *pszBackgroundName, size_t bufSize,
-                               bool bMapName);
 CreateInterfaceFn g_ClientFactory = NULL;
 extern ch gpszVersionString[32];
 extern int g_iSteamAppID;
@@ -662,9 +658,7 @@ bool CEngineClient::Con_IsVisible() { return ::Con_IsVisible(); }
 
 int CEngineClient::GetLocalPlayer() { return cl.m_nPlayerSlot + 1; }
 
-float CEngineClient::GetLastTimeStamp() {
-  return cl.m_flLastServerTickTime;
-}
+float CEngineClient::GetLastTimeStamp() { return cl.m_flLastServerTickTime; }
 
 bool CEngineClient::MapHasHDRLighting() {
   return modelloader->LastLoadedMapHasHDRLighting();
@@ -1059,9 +1053,7 @@ INetChannelInfo *CEngineClient::GetNetChannelInfo() {
 
 bool CEngineClient::IsPlayingDemo() { return demoplayer->IsPlayingBack(); }
 
-bool CEngineClient::IsRecordingDemo() {
-  return demorecorder->IsRecording();
-}
+bool CEngineClient::IsRecordingDemo() { return demorecorder->IsRecording(); }
 
 bool CEngineClient::IsPlayingTimeDemo() {
   return demoplayer->IsPlayingTimeDemo();
@@ -1207,42 +1199,22 @@ void CEngineClient::SetMostRecentSaveGame(const ch *lpszFilename) {
 // The Engine needs to stabilize to a safe quiet state. More frames are going
 // to and have to run, but the true exit will occur.
 //-----------------------------------------------------------------------------
-void CEngineClient::StartXboxExitingProcess() {
-  if (IsPC()) {
-    // not for PC
-    return;
-  }
-
-  g_pInputSystem->StopRumble();
-
-  // save out the achievements
-  g_pAchievementMgr->SaveGlobalStateIfDirty(false);
-
-  S_StopAllSounds(true);
-
-  // Shutdown QMS, need to go back to single threaded
-  Host_AllowQueuedMaterialSystem(false);
-}
+void CEngineClient::StartXboxExitingProcess() {}
 
 bool CEngineClient::IsSaveInProgress() {
   return saverestore->IsSaveInProgress();
 }
 
-extern IXboxSystem *g_pXboxSystem;
-
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-uint32_t CEngineClient::OnStorageDeviceAttached() {
-  return g_pXboxSystem->OpenContainers();
-}
+uint32_t CEngineClient::OnStorageDeviceAttached() { return 0; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
 void CEngineClient::OnStorageDeviceDetached() {
   XBX_SetStorageDeviceId(XBX_INVALID_STORAGE_ID);
-  g_pXboxSystem->CloseContainers();
 }
 
 void CEngineClient::ResetDemoInterpolation() {

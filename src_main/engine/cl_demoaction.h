@@ -159,7 +159,7 @@ the_interface CBaseDemoAction {
 };
 
 #define DECLARE_DEMOACTION(type, classname)                   \
-  static CBaseDemoAction *FnCreate##classname(void) {         \
+  static CBaseDemoAction *FnCreate##classname() {             \
     CBaseDemoAction *item = new classname();                  \
     if (item) item->SetType(type);                            \
     return item;                                              \

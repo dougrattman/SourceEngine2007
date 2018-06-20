@@ -74,7 +74,7 @@ void CDemoActionSkipAhead::SetSkipToTime(float t) {
   m_flSkipToTime = t;
 }
 
-void CDemoActionSkipAhead::FireAction(void) {
+void CDemoActionSkipAhead::FireAction() {
   // demo->StartSkippingAhead( m_bUsingSkipFrame, m_nSkipToFrame, m_flSkipToTime
   // ); demo->PushDemoAction( GetActionName() );
 
@@ -109,7 +109,7 @@ bool CDemoActionStopPlayback::Update(const DemoActionTimingContext &tc) {
   return true;
 }
 
-void CDemoActionStopPlayback::FireAction(void) {
+void CDemoActionStopPlayback::FireAction() {
   if (demoplayer->IsPlayingBack()) {
     Cbuf_AddText("disconnect\n");
   }
@@ -137,22 +137,22 @@ bool CDemoActionPlayCommands::Init(KeyValues *pInitData) {
 // Purpose:
 // Input  : *stream -
 //-----------------------------------------------------------------------------
-void CDemoActionPlayCommands::SetCommandStream(char const *stream) {
+void CDemoActionPlayCommands::SetCommandStream(ch const *stream) {
   Q_strncpy(m_szCommandStream, stream, sizeof(m_szCommandStream));
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : char
+// Output : ch
 //-----------------------------------------------------------------------------
-char const *CDemoActionPlayCommands::GetCommandStream(void) const {
+ch const *CDemoActionPlayCommands::GetCommandStream() const {
   return m_szCommandStream;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionPlayCommands::FireAction(void) {
+void CDemoActionPlayCommands::FireAction() {
   if (GetCommandStream()[0]) {
     Cbuf_AddText(va("%s\n", GetCommandStream()));
   }
@@ -194,9 +194,9 @@ bool CDemoActionScreenFadeStart::Init(KeyValues *pInitData) {
   int a = pInitData->GetInt("a", 255);
 
   fade.duration =
-      (unsigned short)((float)(1 << SCREENFADE_FRACBITS) * duration);
+      (u16)((float)(1 << SCREENFADE_FRACBITS) * duration);
   fade.holdTime =
-      (unsigned short)((float)(1 << SCREENFADE_FRACBITS) * holdTime);
+      (u16)((float)(1 << SCREENFADE_FRACBITS) * holdTime);
 
   fade.fadeFlags = 0;
 
@@ -228,12 +228,12 @@ bool CDemoActionScreenFadeStart::Init(KeyValues *pInitData) {
 // Purpose:
 // Output : ScreenFade_t const
 //-----------------------------------------------------------------------------
-ScreenFade_t *CDemoActionScreenFadeStart::GetScreenFade(void) { return &fade; }
+ScreenFade_t *CDemoActionScreenFadeStart::GetScreenFade() { return &fade; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionScreenFadeStart::FireAction(void) {
+void CDemoActionScreenFadeStart::FireAction() {
   g_ClientDLL->View_Fade((ScreenFade_t *)GetScreenFade());
   SetFinishedAction(true);
 }
@@ -278,15 +278,15 @@ DECLARE_DEMOACTION(DEMO_ACTION_SCREENFADE_START, CDemoActionScreenFadeStart);
 // Purpose:
 // Input  : *text -
 //-----------------------------------------------------------------------------
-void CDemoActionTextMessageStart::SetMessageText(char const *text) {
+void CDemoActionTextMessageStart::SetMessageText(ch const *text) {
   Q_strncpy(m_szMessageText, text, sizeof(m_szMessageText));
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : char const
+// Output : ch const
 //-----------------------------------------------------------------------------
-char const *CDemoActionTextMessageStart::GetMessageText(void) const {
+ch const *CDemoActionTextMessageStart::GetMessageText() const {
   return m_szMessageText;
 }
 
@@ -294,15 +294,15 @@ char const *CDemoActionTextMessageStart::GetMessageText(void) const {
 // Purpose:
 // Input  : *font -
 //-----------------------------------------------------------------------------
-void CDemoActionTextMessageStart::SetFontName(char const *font) {
+void CDemoActionTextMessageStart::SetFontName(ch const *font) {
   Q_strncpy(m_szVguiFont, font, sizeof(m_szVguiFont));
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : char const
+// Output : ch const
 //-----------------------------------------------------------------------------
-char const *CDemoActionTextMessageStart::GetFontName(void) const {
+ch const *CDemoActionTextMessageStart::GetFontName() const {
   if (!Q_strcasecmp("TextMessageDefault", m_szVguiFont)) {
     return "";
   }
@@ -361,18 +361,18 @@ bool CDemoActionTextMessageStart::Init(KeyValues *pInitData) {
 // Purpose:
 // Output : ScreenFade_t const
 //-----------------------------------------------------------------------------
-client_textmessage_t *CDemoActionTextMessageStart::GetTextMessage(void) {
+client_textmessage_t *CDemoActionTextMessageStart::GetTextMessage() {
   return &message;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionTextMessageStart::FireAction(void) {
+void CDemoActionTextMessageStart::FireAction() {
   GetTextMessage()->pVGuiSchemeFontName = GetFontName();
 
   TextMessage_DemoMessageFull(GetMessageText(), GetTextMessage());
-  CL_HudMessage((const char *)DEMO_MESSAGE);
+  CL_HudMessage((const ch *)DEMO_MESSAGE);
   SetFinishedAction(true);
 }
 
@@ -441,15 +441,15 @@ void CDemoActionCDTrackStart::SetTrack(int track) { m_nCDTrack = track; }
 // Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CDemoActionCDTrackStart::GetTrack(void) const { return m_nCDTrack; }
+int CDemoActionCDTrackStart::GetTrack() const { return m_nCDTrack; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionCDTrackStart::FireAction(void) {
+void CDemoActionCDTrackStart::FireAction() {
   if (GetTrack() != -1) {
 #if 0
-		char szCommand[ 256 ];
+		ch szCommand[ 256 ];
 		Q_snprintf( szCommand, sizeof( szCommand ), "cd stop\ncd play %i\n", GetTrack() );
 		Cbuf_AddText( szCommand );
 #endif
@@ -474,7 +474,7 @@ DECLARE_DEMOACTION(DEMO_ACTION_PLAYCDTRACK_START, CDemoActionCDTrackStart);
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionCDTrackStop::FireAction(void) {
+void CDemoActionCDTrackStop::FireAction() {
 #if 0
 	Cbuf_AddText( "cd stop\n" );
 #endif
@@ -504,22 +504,22 @@ bool CDemoActionPlaySoundStart::Init(KeyValues *pInitData) {
 // Purpose:
 // Input  : *stream -
 //-----------------------------------------------------------------------------
-void CDemoActionPlaySoundStart::SetSoundName(char const *name) {
+void CDemoActionPlaySoundStart::SetSoundName(ch const *name) {
   Q_strncpy(m_szSoundName, name, sizeof(m_szSoundName));
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : char
+// Output : ch
 //-----------------------------------------------------------------------------
-char const *CDemoActionPlaySoundStart::GetSoundName(void) const {
+ch const *CDemoActionPlaySoundStart::GetSoundName() const {
   return m_szSoundName;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionPlaySoundStart::FireAction(void) {
+void CDemoActionPlaySoundStart::FireAction() {
   Vector vDummyOrigin;
   vDummyOrigin.Init();
 
@@ -673,14 +673,14 @@ void CDemoActionChangePlaybackRate::SetPlaybackRate(float rate) {
 // Purpose:
 // Input  : t -
 //-----------------------------------------------------------------------------
-float CDemoActionChangePlaybackRate::GetPlaybackRate(void) const {
+float CDemoActionChangePlaybackRate::GetPlaybackRate() const {
   return m_flPlaybackRate;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionChangePlaybackRate::FireAction(void) {
+void CDemoActionChangePlaybackRate::FireAction() {
   // m_flSavePlaybackRate = demoplayer->Get	GetPlaybackRateModifier();
   demoplayer->SetPlaybackTimeScale(m_flPlaybackRate);
   SetActionFired(true);
@@ -689,7 +689,7 @@ void CDemoActionChangePlaybackRate::FireAction(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionChangePlaybackRate::OnActionFinished(void) {
+void CDemoActionChangePlaybackRate::OnActionFinished() {
   // demo->SetPlaybackRateModifier( m_flSavePlaybackRate );
 }
 
@@ -738,14 +738,14 @@ void CDemoActionPausePlayback::SetPauseTime(float t) {
 // Purpose:
 // Input  : t -
 //-----------------------------------------------------------------------------
-float CDemoActionPausePlayback::GetPauseTime(void) const {
+float CDemoActionPausePlayback::GetPauseTime() const {
   return m_flPauseTime;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoActionPausePlayback::FireAction(void) {
+void CDemoActionPausePlayback::FireAction() {
   demoplayer->PausePlayback(GetPauseTime());
   SetActionFired(true);
 }
@@ -755,7 +755,7 @@ DECLARE_DEMOACTION(DEMO_ACTION_PAUSE, CDemoActionPausePlayback);
 #include "tier0/include/memdbgon.h"
 
 extern float scr_demo_override_fov;
-extern float host_time;
+extern double host_time;
 
 CDemoActionZoom::CDemoActionZoom() {
   m_bSpline = false;
@@ -796,7 +796,7 @@ bool CDemoActionZoom::Update(const DemoActionTimingContext &tc) {
 
   if (GetActionFired()) {
     // See if we're done yet
-    float elapsed = host_time - m_flFOVStartTime;
+    double elapsed = host_time - m_flFOVStartTime;
     if (elapsed > m_flFOVRateOut) {
       if (m_bStayout) {
         scr_demo_override_fov = m_flFinalFOV;
@@ -852,7 +852,7 @@ bool CDemoActionZoom::Update(const DemoActionTimingContext &tc) {
   return true;
 }
 
-void CDemoActionZoom::FireAction(void) {
+void CDemoActionZoom::FireAction() {
   m_flOriginalFOV = g_EngineRenderer->GetFov();
   scr_demo_override_fov = m_flOriginalFOV;
   m_flFOVStartTime = host_time;

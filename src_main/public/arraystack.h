@@ -29,7 +29,7 @@ class ArrayStack {
     }
   }
 
-  T Pop(void) {
+  T Pop() {
     if (m_stackDepth == 0) {
       printf("ArrayStack underflow\n");
       assert(0);

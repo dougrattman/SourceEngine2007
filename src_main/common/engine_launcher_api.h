@@ -5,6 +5,7 @@
 
 #include "appframework/IAppSystem.h"
 #include "base/include/base_types.h"
+#include "base/include/macros.h"
 
 class CAppSystemGroup;
 
@@ -31,6 +32,8 @@ enum {
   RUN_RESTART,
 };
 
+SOURCE_FORWARD_DECLARE_HANDLE(HWND);
+
 // Main engine interface to launcher + tools
 the_interface IEngineAPI : public IAppSystem {
  public:
@@ -41,7 +44,7 @@ the_interface IEngineAPI : public IAppSystem {
   virtual i32 Run() = 0;
 
   // Sets the engine to run in a particular editor window
-  virtual void SetEngineWindow(void *hWnd) = 0;
+  virtual void SetEngineWindow(HWND hWnd) = 0;
 
   // Sets the engine to run in a particular editor window
   virtual void PostConsoleCommand(const ch *command) = 0;
@@ -56,6 +59,6 @@ the_interface IEngineAPI : public IAppSystem {
   virtual void SetMap(const ch *map_name) = 0;
 };
 
-#define VENGINE_LAUNCHER_API_VERSION "VENGINE_LAUNCHER_API_VERSION004"
+#define VENGINE_LAUNCHER_API_VERSION "VENGINE_LAUNCHER_API_VERSION005"
 
 #endif  // ENGINE_LAUNCHER_APIH

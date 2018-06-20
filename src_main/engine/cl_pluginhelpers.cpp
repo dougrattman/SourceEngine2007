@@ -39,7 +39,7 @@ class CPluginMenu : public vgui::EditablePanel {
   virtual ~CPluginMenu();
 
   void Show(KeyValues *kv);
-  void OnCommand(const char *command);
+  void OnCommand(const ch *command);
 };
 
 //-----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ void CPluginMenu::Show(KeyValues *kv) {
   // now work out what buttons to display
   for (KeyValues *pCur = kv->GetFirstTrueSubKey(); pCur;
        pCur = pCur->GetNextTrueSubKey(), i++) {
-    char controlName[64];
+    ch controlName[64];
     Q_snprintf(controlName, sizeof(controlName), "option%i", i);
     vgui::Button *button =
         dynamic_cast<vgui::Button *>(FindChildByName(controlName, true));
@@ -93,7 +93,7 @@ void CPluginMenu::Show(KeyValues *kv) {
 //-----------------------------------------------------------------------------
 // Purpose: when a button is pressed send that command back to the engine
 //-----------------------------------------------------------------------------
-void CPluginMenu::OnCommand(const char *command) {
+void CPluginMenu::OnCommand(const ch *command) {
   Cbuf_AddText(command);
   Cbuf_AddText("\n");
 
@@ -114,7 +114,7 @@ class CPluginGameUIDialog : public vgui::Frame {
   virtual void Show(DIALOG_TYPE type, KeyValues *kv);
 
  protected:
-  void OnCommand(const char *cmd);
+  void OnCommand(const ch *cmd);
 
  private:
   CPluginMenu *m_Menu;
@@ -123,7 +123,7 @@ class CPluginGameUIDialog : public vgui::Frame {
   vgui::TextEntry *m_Entry;
   vgui::Label *m_EntryLabel;
   vgui::Button *m_CloseButton;
-  char m_szEntryCommand[255];
+  ch m_szEntryCommand[255];
 };
 
 //-----------------------------------------------------------------------------
@@ -157,11 +157,11 @@ CPluginGameUIDialog::~CPluginGameUIDialog() {}
 //-----------------------------------------------------------------------------
 // Purpose: called when the close button is pressed
 //-----------------------------------------------------------------------------
-void CPluginGameUIDialog::OnCommand(const char *cmd) {
+void CPluginGameUIDialog::OnCommand(const ch *cmd) {
   if (!Q_stricmp(cmd, "close")) {
     if (Q_strlen(m_szEntryCommand) > 0) {
-      char userCMD[512];
-      char entryText[255];
+      ch userCMD[512];
+      ch entryText[255];
       m_Entry->GetText(entryText, sizeof(entryText));
       Q_snprintf(userCMD, sizeof(userCMD), "%s %s\n", m_szEntryCommand,
                  entryText);
@@ -231,7 +231,7 @@ class CMessage : public vgui::Label {
   DECLARE_CLASS_SIMPLE(CMessage, vgui::Label);
 
  public:
-  CMessage(vgui::Panel *parent, const char *panelName, const char *text);
+  CMessage(vgui::Panel *parent, const ch *panelName, const ch *text);
   ~CMessage();
 
   bool HasExtraPanel() { return m_bHasExtraPanel; }
@@ -243,7 +243,7 @@ class CMessage : public vgui::Label {
   bool m_bHasExtraPanel;
 };
 
-CMessage::CMessage(vgui::Panel *parent, const char *panelName, const char *text)
+CMessage::CMessage(vgui::Panel *parent, const ch *panelName, const ch *text)
     : vgui::Label(parent, panelName, text) {
   m_bHasExtraPanel = false;
 }
@@ -488,7 +488,7 @@ void CPluginUIManager::Show(DIALOG_TYPE type, KeyValues *kv) {
   if (type == DIALOG_ASKCONNECT) {
     // Do the askconnect dialog.
     float flDuration = kv->GetFloat("time", 4.0f);
-    const char *pIP = kv->GetString("title", NULL);
+    const ch *pIP = kv->GetString("title", NULL);
     if (!pIP) {
       DevMsg("Ignoring DIALOG_ASKCONNECT message. No IP specified.");
       return;

@@ -129,8 +129,8 @@ void CDemoUIPanel::OnTick() {
 
   if (!IsVisible()) return;
 
-  char curtime[32];
-  char totaltime[32];
+  ch curtime[32];
+  ch totaltime[32];
   int curtick = 0;
   int totalticks = 0;
   float fProgress = 0.0f;
@@ -195,12 +195,12 @@ void CDemoUIPanel::OnTick() {
 }
 
 // Command issued
-void CDemoUIPanel::OnCommand(const char *command) {
+void CDemoUIPanel::OnCommand(const ch *command) {
   if (!Q_strcasecmp(command, "stop")) {
     Cbuf_AddText("disconnect\n");
   } else if (!Q_strcasecmp(command, "play")) {
     if (!demoplayer->IsPlayingBack()) {
-      char cmd[256];
+      ch cmd[256];
       Q_snprintf(cmd, sizeof(cmd), "playdemo %s\n",
                  demoaction->GetCurrentDemoFile());
 
@@ -220,10 +220,10 @@ void CDemoUIPanel::OnCommand(const char *command) {
   } else if (!Q_strcasecmp(command, "nextframe")) {
     demoplayer->SkipToTick(1, true, true);
   } else if (!Q_strcasecmp(command, "gototick")) {
-    char tick[32];
+    ch tick[32];
     m_pGotoTick->GetText(tick, sizeof(tick));
 
-    char cmd[256];
+    ch cmd[256];
     Q_snprintf(cmd, sizeof(cmd), "demo_gototick %s 0 1\n", tick);
 
     Cbuf_AddText(cmd);
@@ -275,7 +275,7 @@ void CDemoUIPanel::OnLoad() {
     }
   }
   if (m_hFileOpenDialog) {
-    char startPath[SOURCE_MAX_PATH];
+    ch startPath[SOURCE_MAX_PATH];
     Q_strncpy(startPath, com_gamedir, sizeof(startPath));
     Q_FixSlashes(startPath);
     m_hFileOpenDialog->SetStartDirectory(startPath);
@@ -283,14 +283,14 @@ void CDemoUIPanel::OnLoad() {
   }
 }
 
-void CDemoUIPanel::OnFileSelected(char const *fullpath) {
+void CDemoUIPanel::OnFileSelected(ch const *fullpath) {
   if (!fullpath || !fullpath[0]) return;
 
-  char relativepath[512];
+  ch relativepath[512];
   g_pFileSystem->FullPathToRelativePath(fullpath, relativepath,
                                         sizeof(relativepath));
 
-  char ext[10];
+  ch ext[10];
   Q_ExtractFileExtension(relativepath, ext, sizeof(ext));
 
   if (Q_strcasecmp(ext, "dem")) {
@@ -309,7 +309,7 @@ void CDemoUIPanel::OnFileSelected(char const *fullpath) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoUIPanel::OnVDMChanged(void) {
+void CDemoUIPanel::OnVDMChanged() {
   if (m_hDemoEditor != NULL) {
     m_hDemoEditor->OnVDMChanged();
   }
@@ -322,7 +322,7 @@ void CDemoUIPanel::OnVDMChanged(void) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CDemoUIPanel::IsHoldingFastForward(void) {
+bool CDemoUIPanel::IsHoldingFastForward() {
   if (!m_pFastForward->IsVisible()) return false;
 
   if (!m_pFastForward->IsEnabled()) return false;
@@ -330,7 +330,7 @@ bool CDemoUIPanel::IsHoldingFastForward(void) {
   return m_pFastForward->IsSelected();
 }
 
-float CDemoUIPanel::GetPlaybackScale(void) {
+float CDemoUIPanel::GetPlaybackScale() {
   float scale = 1.0f;
   float curval = (float)m_pSpeedScale->GetValue();
 
@@ -578,8 +578,8 @@ void CDemoUIPanel2::OnTick() {
 
   if (!IsVisible()) return;
 
-  char curtime[32];
-  char totaltime[32];
+  ch curtime[32];
+  ch totaltime[32];
   int curtick = 0;
   int totalticks = 0;
   float fProgress = 0.0f;
@@ -654,7 +654,7 @@ void CDemoUIPanel2::OnTick() {
 }
 
 // Command issued
-void CDemoUIPanel2::OnCommand(const char *command) {
+void CDemoUIPanel2::OnCommand(const ch *command) {
   if (!Q_strcasecmp(command, "stop")) {
     Cbuf_AddText("disconnect\n");
   } else if (!Q_strcasecmp(command, "play")) {
@@ -717,7 +717,7 @@ void CDemoUIPanel2::OnLoad() {
     }
   }
   if (m_hFileOpenDialog) {
-    char startPath[SOURCE_MAX_PATH];
+    ch startPath[SOURCE_MAX_PATH];
     Q_strncpy(startPath, com_gamedir, sizeof(startPath));
     Q_FixSlashes(startPath);
     m_hFileOpenDialog->SetStartDirectory(startPath);
@@ -725,14 +725,14 @@ void CDemoUIPanel2::OnLoad() {
   }
 }
 
-void CDemoUIPanel2::OnFileSelected(char const *fullpath) {
+void CDemoUIPanel2::OnFileSelected(ch const *fullpath) {
   if (!fullpath || !fullpath[0]) return;
 
-  char relativepath[512];
+  ch relativepath[512];
   g_pFileSystem->FullPathToRelativePath(fullpath, relativepath,
                                         sizeof(relativepath));
 
-  char ext[10];
+  ch ext[10];
   Q_ExtractFileExtension(relativepath, ext, sizeof(ext));
 
   if (Q_strcasecmp(ext, "dem")) {
@@ -748,9 +748,9 @@ void CDemoUIPanel2::OnFileSelected(char const *fullpath) {
   }
 }
 
-void CDemoUIPanel2::OnVDMChanged(void) {}
+void CDemoUIPanel2::OnVDMChanged() {}
 
-bool CDemoUIPanel2::IsHoldingFastForward(void) {
+bool CDemoUIPanel2::IsHoldingFastForward() {
   if (!m_pFastForward->IsVisible()) return false;
 
   if (!m_pFastForward->IsEnabled()) return false;
@@ -758,7 +758,7 @@ bool CDemoUIPanel2::IsHoldingFastForward(void) {
   return m_pFastForward->IsSelected();
 }
 
-float CDemoUIPanel2::GetPlaybackScale(void) {
+float CDemoUIPanel2::GetPlaybackScale() {
   float scale = 1.0f;
   float curval = (float)m_pSpeedScale->GetValue();
 

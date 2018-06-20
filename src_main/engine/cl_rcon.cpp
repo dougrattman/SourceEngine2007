@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:  implementation of the rcon client
 
@@ -26,14 +26,13 @@
 #endif
 
 #include "cmd.h"
+#include "deps/libxunzip/xunzip.h"
 #include "proto_oob.h"  // PORT_RCON define
 #include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 #include "vprof_engine.h"
-#include "deps/libxunzip/xunzip.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CRPTClient : public CRConClient {
@@ -64,12 +63,12 @@ CRConClient &RCONClient() { return g_RCONClient; }
 static CRPTClient g_RPTClient;
 CRConClient &RPTClient() { return g_RPTClient; }
 
-static void RconAddressChanged_f(IConVar *pConVar, const char *pOldString,
+static void RconAddressChanged_f(IConVar *pConVar, const ch *pOldString,
                                  float flOldValue) {
 #ifndef SWDS
   ConVarRef var(pConVar);
   netadr_t to;
-  const char *cmdargs = var.GetString();
+  const ch *cmdargs = var.GetString();
   if (!NET_StringToAdr(cmdargs, &to)) {
     Msg("Unable to resolve rcon address %s\n", var.GetString());
     return;
@@ -147,7 +146,7 @@ void CRConVProfExport::OnRemoteGroupData(const void *data, int len) {
   // to see the encoding of this data
   int nGroupCount = buf.GetInt();
   int nBase = m_Info.AddMultipleToTail(nGroupCount);
-  char temp[1024];
+  ch temp[1024];
   for (int i = 0; i < nGroupCount; ++i) {
     CExportedBudgetGroupInfo *pInfo = &m_Info[nBase + i];
 
@@ -160,7 +159,7 @@ void CRConVProfExport::OnRemoteGroupData(const void *data, int len) {
     int nLen = Q_strlen(temp);
 
     pInfo->m_Color.SetColor(red, green, blue, alpha);
-    char *pBuf = new char[nLen + 1];
+    ch *pBuf = new ch[nLen + 1];
     pInfo->m_pName = pBuf;
     memcpy(pBuf, temp, nLen + 1);
     pInfo->m_BudgetFlags = 0;
@@ -217,12 +216,12 @@ CRConClient::~CRConClient() {}
 //-----------------------------------------------------------------------------
 // Changes the password
 //-----------------------------------------------------------------------------
-void CRConClient::SetPassword(const char *pPassword) {
+void CRConClient::SetPassword(const ch *pPassword) {
   m_Socket.CloseAllAcceptedSockets();
   m_Password = pPassword;
 }
 
-void CRConClient::SetRemoteFileDirectory(const char *pDir) {
+void CRConClient::SetRemoteFileDirectory(const ch *pDir) {
   m_RemoteFileDir = pDir;
   m_nScreenShotIndex = 0;
   m_nConsoleLogIndex = 0;
@@ -302,7 +301,7 @@ void CRConClient::SendQueuedData() {
     size_t nSize = *(int *)m_SendBuffer.PeekGet();
     Assert(nSize >=
            m_SendBuffer.TellMaxPut() - m_SendBuffer.TellGet() - sizeof(int));
-    int ret = send(hSocket, (const char *)m_SendBuffer.PeekGet(),
+    int ret = send(hSocket, (const ch *)m_SendBuffer.PeekGet(),
                    nSize + sizeof(int), 0);
     if (ret != -1) {
       m_SendBuffer.SeekGet(CUtlBuffer::SEEK_CURRENT, nSize + sizeof(int));
@@ -353,7 +352,7 @@ void CRConClient::ParseReceivedData() {
           Assert(reqID == m_iAuthRequestID);
           m_bAuthenticated = true;
         }
-        char dummy[2];
+        ch dummy[2];
         m_RecvBuffer.GetString(dummy, sizeof(dummy));
         m_RecvBuffer.GetString(dummy, sizeof(dummy));
       } break;
@@ -383,7 +382,7 @@ void CRConClient::ParseReceivedData() {
       } break;
 
       case SERVERDATA_RESPONSE_STRING: {
-        char pBuf[2048];
+        ch pBuf[2048];
         m_RecvBuffer.GetString(pBuf, sizeof(pBuf));
         Msg("%s", pBuf);
       } break;
@@ -391,12 +390,12 @@ void CRConClient::ParseReceivedData() {
       default: {
         // Displays a message from the server
         int strLen = m_RecvBuffer.TellPut() - m_RecvBuffer.TellGet();
-        CUtlMemory<char> msg;
+        CUtlMemory<ch> msg;
         msg.EnsureCapacity(strLen + 1);
         m_RecvBuffer.GetString(msg.Base(), msg.Count());
 
         msg[msg.Count() - 1] = '\0';
-        Msg("%s", (const char *)msg.Base());
+        Msg("%s", (const ch *)msg.Base());
         m_RecvBuffer.GetString(msg.Base(),
                                msg.Count());  // ignore the second string
       } break;
@@ -440,7 +439,7 @@ void CRConClient::RunFrame() {
   SendQueuedData();
 
   SocketHandle_t hSocket = GetSocketHandle();
-  char ch;
+  ch ch;
   int pendingLen = recv(hSocket, &ch, sizeof(ch), MSG_PEEK);
   if (pendingLen == -1 && SocketWouldBlock()) return;
 
@@ -501,7 +500,7 @@ void CRConClient::SendResponse(CUtlBuffer &response, bool bAutoAuthenticate) {
     return;
   }
 
-  int ret = send(GetSocketHandle(), (const char *)response.Base(),
+  int ret = send(GetSocketHandle(), (const ch *)response.Base(),
                  response.TellMaxPut(), 0);
   if (ret == -1) {
     if (SocketWouldBlock()) {
@@ -517,8 +516,8 @@ void CRConClient::SendResponse(CUtlBuffer &response, bool bAutoAuthenticate) {
 // Purpose: builds a simple command to send to the server
 //-----------------------------------------------------------------------------
 void CRConClient::BuildResponse(CUtlBuffer &response,
-                                ServerDataRequestType_t msg,
-                                const char *pString1, const char *pString2) {
+                                ServerDataRequestType_t msg, const ch *pString1,
+                                const ch *pString2) {
   // build the response
   response.PutInt(0);  // the size, filled in below
   response.PutInt(m_iReqID++);
@@ -576,7 +575,7 @@ void CRConClient::Authenticate() {
 //-----------------------------------------------------------------------------
 // Purpose: send an rcon command to a connected server
 //-----------------------------------------------------------------------------
-void CRConClient::SendCmd(const char *msg) {
+void CRConClient::SendCmd(const ch *msg) {
   if (!IsConnected()) {
     if (!ConnectSocket()) return;
   }
@@ -644,14 +643,14 @@ void CRConClient::GrabConsoleLog() {
 // We've got data from the server, save it
 //-----------------------------------------------------------------------------
 void CRConClient::SaveRemoteScreenshot(const void *pBuffer, int nBufLen) {
-  char pScreenshotPath[SOURCE_MAX_PATH];
+  ch pScreenshotPath[SOURCE_MAX_PATH];
   do {
     Q_snprintf(pScreenshotPath, sizeof(pScreenshotPath),
                "%s/screenshot%04d.jpg", m_RemoteFileDir.Get(),
                m_nScreenShotIndex++);
   } while (g_pFullFileSystem->FileExists(pScreenshotPath, "MOD"));
 
-  char pFullPath[SOURCE_MAX_PATH];
+  ch pFullPath[SOURCE_MAX_PATH];
   GetModSubdirectory(pScreenshotPath, pFullPath, sizeof(pFullPath));
   HZIP hZip = OpenZip((void *)pBuffer, nBufLen, ZIP_MEMORY);
 
@@ -667,13 +666,13 @@ void CRConClient::SaveRemoteScreenshot(const void *pBuffer, int nBufLen) {
 void CRConClient::SaveRemoteConsoleLog(const void *pBuffer, int nBufLen) {
   if (nBufLen == 0) return;
 
-  char pLogPath[SOURCE_MAX_PATH];
+  ch pLogPath[SOURCE_MAX_PATH];
   do {
     Q_snprintf(pLogPath, sizeof(pLogPath), "%s/console%04d.log",
                m_RemoteFileDir.Get(), m_nConsoleLogIndex++);
   } while (g_pFullFileSystem->FileExists(pLogPath, "MOD"));
 
-  char pFullPath[SOURCE_MAX_PATH];
+  ch pFullPath[SOURCE_MAX_PATH];
   GetModSubdirectory(pLogPath, pFullPath, sizeof(pFullPath));
   HZIP hZip = OpenZip((void *)pBuffer, nBufLen, ZIP_MEMORY);
 

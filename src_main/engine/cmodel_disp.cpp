@@ -111,7 +111,7 @@ class CDispLeafBuilder {
     }
   }
   int GetDispListCount() { return m_dispList.Count(); }
-  void WriteLeafList(unsigned short *pLeafList) {
+  void WriteLeafList(u16 *pLeafList) {
     // clear current count if any
     for (int i = 0; i < m_pBSPData->numleafs; i++) {
       cleaf_t *pLeaf = &m_pBSPData->map_leafs[i];
@@ -124,7 +124,7 @@ class CDispLeafBuilder {
       pLeaf->dispCount++;
     }
     // point each leaf at the start of it's output range in the output array
-    unsigned short firstDispIndex = 0;
+    u16 firstDispIndex = 0;
     for (int i = 0; i < m_pBSPData->numleafs; i++) {
       cleaf_t *pLeaf = &m_pBSPData->map_leafs[i];
       pLeaf->dispListStart = firstDispIndex;
@@ -153,11 +153,11 @@ class CDispLeafBuilder {
  private:
   CCollisionBSPData *m_pBSPData;
   // this is a list of all of the leaf indices for each displacement
-  CUtlVector<unsigned short> m_dispList;
+  CUtlVector<u16> m_dispList;
   // this is the first entry into dispList for each displacement
   CUtlVector<int> m_firstIndex;
   // this is the # of leaf entries for each displacement
-  CUtlVector<unsigned short> m_leafCount;
+  CUtlVector<u16> m_leafCount;
 };
 
 //-----------------------------------------------------------------------------
@@ -181,7 +181,7 @@ void CM_DispTreeLeafnum(CCollisionBSPData *pBSPData) {
   int count = leafBuilder.GetDispListCount();
   pBSPData->map_dispList.Attach(
       count,
-      (unsigned short *)Hunk_Alloc(sizeof(unsigned short) * count, false));
+      (u16 *)Hunk_Alloc(sizeof(u16) * count, false));
   leafBuilder.WriteLeafList(pBSPData->map_dispList.Base());
 }
 
@@ -225,7 +225,7 @@ class CVirtualTerrain : public IVirtualMeshEvent {
     int index = (int)userData;
     pList->triangleCount = g_pDispCollTrees[index].AABBTree_GetTrisInSphere(
         center, radius, pList->triangleIndices,
-        SOURCE_ARRAYSIZE(pList->triangleIndices));
+        std::size(pList->triangleIndices));
   }
   void LevelInit(dphysdisp_t *pLump, int lumpSize) {
     if (!pLump) {
@@ -236,9 +236,9 @@ class CVirtualTerrain : public IVirtualMeshEvent {
     m_dispHullOffset.SetCount(g_DispCollTreeCount);
     Assert(pLump->numDisplacements == g_DispCollTreeCount);
     // count the size of the lump
-    unsigned short *pDataSize = (unsigned short *)(pLump + 1);
+    u16 *pDataSize = (u16 *)(pLump + 1);
     for (int i = 0; i < pLump->numDisplacements; i++) {
-      if (pDataSize[i] == (unsigned short)-1) {
+      if (pDataSize[i] == (u16)-1) {
         m_dispHullOffset[i] = -1;
         continue;
       }

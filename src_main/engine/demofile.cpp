@@ -1,15 +1,15 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "demofile.h"
 
-#include "tier0/include/dbg.h"
 #include <tier1/strtools.h>
 #include <utlbuffer.h>
 #include "demo.h"
 #include "filesystem_engine.h"
 #include "proto_version.h"
+#include "tier0/include/dbg.h"
 
-void Host_EndGame(bool bShowMainMenu, const char *message, ...);
+void Host_EndGame(bool bShowMainMenu, const ch *message, ...);
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -141,7 +141,7 @@ void CDemoFile::WriteCmdHeader(unsigned char cmd, int tick) {
   g_pFileSystem->Write(&tick, sizeof(int), m_hDemoFile);
 #endif
 
-  /*char *cmdname[] =
+  /*ch *cmdname[] =
   {
           "dem_unknown",
           "dem_signon",
@@ -194,7 +194,7 @@ void CDemoFile::ReadCmdHeader(unsigned char &cmd, int &tick) {
 #endif
 }
 
-void CDemoFile::WriteConsoleCommand(const char *cmdstring, int tick) {
+void CDemoFile::WriteConsoleCommand(const ch *cmdstring, int tick) {
   if (!cmdstring || !cmdstring[0]) return;
 
 #ifdef DEMO_FILE_UTLBUFFER
@@ -214,8 +214,8 @@ void CDemoFile::WriteConsoleCommand(const char *cmdstring, int tick) {
   WriteRawData(cmdstring, len);
 }
 
-const char *CDemoFile::ReadConsoleCommand() {
-  static char cmdstring[1024];
+const ch *CDemoFile::ReadConsoleCommand() {
+  static ch cmdstring[1024];
 
   ReadRawData(cmdstring, sizeof(cmdstring));
 
@@ -254,7 +254,7 @@ void CDemoFile::WriteNetworkDataTables(bf_write *buf, int tick) {
 
   WriteCmdHeader(dem_datatables, tick);
 
-  WriteRawData((char *)buf->GetBasePointer(), buf->GetNumBytesWritten());
+  WriteRawData((ch *)buf->GetBasePointer(), buf->GetNumBytesWritten());
 }
 
 //-----------------------------------------------------------------------------
@@ -264,7 +264,7 @@ void CDemoFile::WriteNetworkDataTables(bf_write *buf, int tick) {
 //-----------------------------------------------------------------------------
 int CDemoFile::ReadNetworkDataTables(bf_read *buf) {
   if (buf)
-    return ReadRawData((char *)buf->GetBasePointer(), buf->GetNumBytesLeft());
+    return ReadRawData((ch *)buf->GetBasePointer(), buf->GetNumBytesLeft());
   return ReadRawData(NULL, 0);  // skip data
 }
 
@@ -272,7 +272,7 @@ int CDemoFile::ReadNetworkDataTables(bf_read *buf) {
 // Purpose:
 // Input  : cmdnumber -
 //-----------------------------------------------------------------------------
-void CDemoFile::WriteUserCmd(int cmdnumber, const char *buffer,
+void CDemoFile::WriteUserCmd(int cmdnumber, const ch *buffer,
                              unsigned char bytes, int tick) {
 #ifdef DEMO_FILE_UTLBUFFER
   if (!m_Buffer.IsOpen()) return;
@@ -296,7 +296,7 @@ void CDemoFile::WriteUserCmd(int cmdnumber, const char *buffer,
 // Purpose:
 // Input  : discard -
 //-----------------------------------------------------------------------------
-int CDemoFile::ReadUserCmd(char *buffer, int &size) {
+int CDemoFile::ReadUserCmd(ch *buffer, int &size) {
   int outgoing_sequence;
 
 #ifdef DEMO_FILE_UTLBUFFER
@@ -334,7 +334,7 @@ void CDemoFile::SeekTo(int position, bool bRead) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-int CDemoFile::ReadRawData(char *buffer, int length) {
+int CDemoFile::ReadRawData(ch *buffer, int length) {
   int size;
 
 #ifdef DEMO_FILE_UTLBUFFER
@@ -391,7 +391,7 @@ int CDemoFile::ReadRawData(char *buffer, int length) {
   return size;
 }
 
-void CDemoFile::WriteRawData(const char *buffer, int length) {
+void CDemoFile::WriteRawData(const ch *buffer, int length) {
   MEM_ALLOC_CREDIT();
 
 #ifdef DEMO_FILE_UTLBUFFER
@@ -481,7 +481,7 @@ demoheader_t *CDemoFile::ReadDemoHeader() {
 void CDemoFile::WriteFileBytes(FileHandle_t fh, int length) {
 #ifdef DEMO_FILE_UTLBUFFER
   int copysize = length;
-  char copybuf[COM_COPY_CHUNK_SIZE];
+  ch copybuf[COM_COPY_CHUNK_SIZE];
 
   while (copysize > COM_COPY_CHUNK_SIZE) {
     g_pFileSystem->Read(copybuf, COM_COPY_CHUNK_SIZE, fh);
@@ -498,7 +498,7 @@ void CDemoFile::WriteFileBytes(FileHandle_t fh, int length) {
 #endif
 }
 
-bool CDemoFile::Open(const char *name, bool bReadOnly) {
+bool CDemoFile::Open(const ch *name, bool bReadOnly) {
 #ifdef DEMO_FILE_UTLBUFFER
   if (m_Buffer.IsOpen())
 #else

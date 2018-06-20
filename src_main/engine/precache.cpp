@@ -34,12 +34,12 @@ char const *GetFlagString(int flags) {
   return ret;
 }
 
-CPrecacheItem::CPrecacheItem(void) {
+CPrecacheItem::CPrecacheItem() {
   Init(TYPE_UNK, NULL);
   ResetStats();
 }
 
-void CPrecacheItem::ResetStats(void) {
+void CPrecacheItem::ResetStats() {
   m_uiRefcount = 0;
 #if DEBUG_PRECACHE
   m_flFirst = 0.0f;
@@ -47,7 +47,7 @@ void CPrecacheItem::ResetStats(void) {
 #endif
 }
 
-void CPrecacheItem::Reference(void) {
+void CPrecacheItem::Reference() {
   m_uiRefcount++;
 #if DEBUG_PRECACHE
   m_flMostRecent = realtime;
@@ -65,7 +65,7 @@ void CPrecacheItem::Init(int type, void const *ptr) {
   }
 }
 
-model_t *CPrecacheItem::GetModel(void) {
+model_t *CPrecacheItem::GetModel() {
   if (!u.model) return NULL;
 
   Assert(m_nType == TYPE_MODEL);
@@ -75,7 +75,7 @@ model_t *CPrecacheItem::GetModel(void) {
   return u.model;
 }
 
-char const *CPrecacheItem::GetGeneric(void) {
+char const *CPrecacheItem::GetGeneric() {
   if (!u.generic) return NULL;
 
   Assert(m_nType == TYPE_GENERIC);
@@ -85,7 +85,7 @@ char const *CPrecacheItem::GetGeneric(void) {
   return u.generic;
 }
 
-CSfxTable *CPrecacheItem::GetSound(void) {
+CSfxTable *CPrecacheItem::GetSound() {
   if (!u.sound) return NULL;
 
   Assert(m_nType == TYPE_SOUND);
@@ -95,7 +95,7 @@ CSfxTable *CPrecacheItem::GetSound(void) {
   return u.sound;
 }
 
-char const *CPrecacheItem::GetName(void) {
+char const *CPrecacheItem::GetName() {
   if (!u.name) return NULL;
 
   Assert(m_nType == TYPE_SOUND);
@@ -105,7 +105,7 @@ char const *CPrecacheItem::GetName(void) {
   return u.name;
 }
 
-char const *CPrecacheItem::GetDecal(void) {
+char const *CPrecacheItem::GetDecal() {
   if (!u.name) return NULL;
 
   Assert(m_nType == TYPE_DECAL);
@@ -131,7 +131,7 @@ void CPrecacheItem::SetDecal(char const *decalname) {
   Init(TYPE_DECAL, decalname);
 }
 
-float CPrecacheItem::GetFirstReference(void) {
+float CPrecacheItem::GetFirstReference() {
 #if DEBUG_PRECACHE
   return m_flFirst;
 #else
@@ -139,7 +139,7 @@ float CPrecacheItem::GetFirstReference(void) {
 #endif
 }
 
-float CPrecacheItem::GetMostRecentReference(void) {
+float CPrecacheItem::GetMostRecentReference() {
 #if DEBUG_PRECACHE
   return m_flMostRecent;
 #else
@@ -147,4 +147,4 @@ float CPrecacheItem::GetMostRecentReference(void) {
 #endif
 }
 
-unsigned int CPrecacheItem::GetReferenceCount(void) { return m_uiRefcount; }
+unsigned int CPrecacheItem::GetReferenceCount() { return m_uiRefcount; }

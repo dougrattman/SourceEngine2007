@@ -54,7 +54,7 @@ static ENTITYBITS s_EntityBits[MAX_EDICTS];
 //-----------------------------------------------------------------------------
 // Purpose: Zero out structure ( level transition/startup )
 //-----------------------------------------------------------------------------
-void CL_ResetEntityBits(void) { memset(s_EntityBits, 0, sizeof(s_EntityBits)); }
+void CL_ResetEntityBits() { memset(s_EntityBits, 0, sizeof(s_EntityBits)); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Record activity
@@ -186,7 +186,7 @@ CEntityReportPanel::CEntityReportPanel(vgui::Panel *parent)
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CEntityReportPanel::~CEntityReportPanel(void) {}
+CEntityReportPanel::~CEntityReportPanel() {}
 
 void CEntityReportPanel::ApplySchemeSettings(vgui::IScheme *pScheme) {
   BaseClass::ApplySchemeSettings(pScheme);
@@ -201,7 +201,7 @@ void CEntityReportPanel::ApplySchemeSettings(vgui::IScheme *pScheme) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CEntityReportPanel::ShouldDraw(void) {
+bool CEntityReportPanel::ShouldDraw() {
   if (!cl_entityreport.GetInt()) {
     return false;
   }
@@ -352,7 +352,7 @@ void CEntityReportPanel::Paint() {
 
       ApplyEffect(entry, r, g, b);
 
-      char text[256];
+      ch text[256];
       wchar_t unicode[256];
 
       Q_snprintf(text, sizeof(text), "(%i) %s", i,

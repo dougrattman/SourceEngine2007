@@ -25,7 +25,6 @@
 #include "vstdlib/random.h"
 #include "zone.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // This denotes an execution marker in the command stream.
@@ -241,8 +240,7 @@ static char const *Cmd_TranslateFileAssociation(char const *param) {
   // must have an extension to map
   if (!extension) return retval;
 
-  int c = SOURCE_ARRAYSIZE(g_FileAssociations);
-  for (int i = 0; i < c; i++) {
+  for (usize i = 0; i < std::size(g_FileAssociations); i++) {
     FileAssociationInfo &info = g_FileAssociations[i];
 
     if (!Q_strcmp(extension, info.extension + 1) &&
@@ -411,7 +409,7 @@ void Cmd_Exec_f(const CCommand &args) {
   // In case f was allocated and VCR mode spoofed f, free the old one we
   // allocated earlier.
   if (original_f != buf && original_f != f) {
-    free(original_f);
+    heap_free(original_f);
   }
 
   ConDMsg("execing %s\n", s);
@@ -445,7 +443,7 @@ void Cmd_Exec_f(const CCommand &args) {
     // Hack for VCR playback. vcrmode allocates the memory but doesn't use the
     // debug memory allocator, so we don't want to free what it allocated.
     if (f == original_f) {
-      free(f);
+      heap_free(f);
     }
   }
 }
@@ -525,34 +523,21 @@ CON_COMMAND(alias, "Alias a command.") {
   a->value = COM_StringCopy(cmd);
 }
 
-/*
-=============================================================================
-
-                                        COMMAND EXECUTION
-
-=============================================================================
-*/
+// COMMAND EXECUTION
 
 cmd_source_t cmd_source;
 int cmd_clientslot = -1;
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Output : void Cmd_Init
-//-----------------------------------------------------------------------------
 CON_COMMAND(cmd, "Forward command to server.") { Cmd_ForwardToServer(args); }
 
 CON_COMMAND_AUTOCOMPLETEFILE(exec, Cmd_Exec_f, "Execute script file.", "cfg",
                              cfg);
 
-void Cmd_Init(void) {
-  Sys_CreateFileAssociations(SOURCE_ARRAYSIZE(g_FileAssociations), g_FileAssociations);
+void Cmd_Init() {
+  Sys_CreateFileAssociations(std::size(g_FileAssociations), g_FileAssociations);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void Cmd_Shutdown(void) {
+void Cmd_Shutdown() {
   // TODO, cleanup
   while (cmd_alias) {
     cmdalias_t *next = cmd_alias->next;
@@ -562,9 +547,8 @@ void Cmd_Shutdown(void) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// TODO(d.rattman): Remove this! This is a temporary hack to deal with backward compat
-//-----------------------------------------------------------------------------
+// TODO(d.rattman): Remove this! This is a temporary hack to deal with backward
+// compat
 void Cmd_Dispatch(const ConCommandBase *pCommand, const CCommand &command) {
   ConCommand *pConCommand =
       const_cast<ConCommand *>(static_cast<const ConCommand *>(pCommand));
@@ -764,7 +748,7 @@ const ConCommandBase *Cmd_ExecuteCommand(const CCommand &command,
 // Sends the entire command line over to the server
 //-----------------------------------------------------------------------------
 void Cmd_ForwardToServer(const CCommand &args, bool bReliable) {
-  // YWB 6/3/98 Don't forward if this is a dedicated server
+// YWB 6/3/98 Don't forward if this is a dedicated server
 #ifndef SWDS
   char str[1024];
 

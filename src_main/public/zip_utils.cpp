@@ -282,7 +282,7 @@ class ZipFile {
         // Set any xzip configuration
         if (rec.commentLength) {
           char commentString[128];
-          int commentLength =
+          usize commentLength =
               std::min((usize)rec.commentLength, sizeof(commentString));
           buf.Get(commentString, commentLength);
           commentString[commentLength] = '\0';
@@ -395,7 +395,7 @@ class ZipFile {
         // Set any xzip configuration
         if (rec.commentLength) {
           char commentString[128];
-          int commentLength =
+          usize commentLength =
               std::min((usize)rec.commentLength, sizeof(commentString));
           Win32File::FileRead(hFile, commentString, commentLength);
           commentString[commentLength] = '\0';
@@ -543,7 +543,7 @@ class ZipFile {
       m_DiskCacheOffset = 0;
       m_SourceDiskOffset = 0;
     }
-    ~CZipEntry() { free(m_pData); }
+    ~CZipEntry() { heap_free(m_pData); }
 
     CZipEntry(const CZipEntry &src) {
       m_Name = src.m_Name;
@@ -696,7 +696,7 @@ void ZipFile::AddBufferToZip(const char *relativename, void *data, int length,
   // If already existing, throw away old data and update data and length
   if (index != m_Files.InvalidIndex()) {
     CZipEntry *update = &m_Files[index];
-    free(update->m_pData);
+    heap_free(update->m_pData);
 
     if (bTextMode) {
       update->m_pData = malloc(dstLength);
@@ -712,8 +712,7 @@ void ZipFile::AddBufferToZip(const char *relativename, void *data, int length,
       update->m_DiskCacheOffset = Win32File::FileTell(m_hDiskCacheWriteFile);
       Win32File::FileWrite(m_hDiskCacheWriteFile, update->m_pData,
                            update->m_Length);
-      free(update->m_pData);
-      update->m_pData = nullptr;
+      heap_free(update->m_pData);
     }
   } else {
     // Create a new entry
@@ -729,9 +728,9 @@ void ZipFile::AddBufferToZip(const char *relativename, void *data, int length,
 
       if (m_hDiskCacheWriteFile != INVALID_HANDLE_VALUE) {
         e.m_DiskCacheOffset = Win32File::FileTell(m_hDiskCacheWriteFile);
+
         Win32File::FileWrite(m_hDiskCacheWriteFile, e.m_pData, e.m_Length);
-        free(e.m_pData);
-        e.m_pData = nullptr;
+        heap_free(e.m_pData);
       }
     } else {
       e.m_pData = nullptr;
@@ -792,7 +791,7 @@ bool ZipFile::ReadFileFromZip(HANDLE hZipFile, const char *pRelativeName,
   void *pData = malloc(pEntry->m_Length);
   Win32File::FileSeek(hZipFile, pEntry->m_SourceDiskOffset, FILE_BEGIN);
   if (!Win32File::FileRead(hZipFile, pData, pEntry->m_Length)) {
-    free(pData);
+    heap_free(pData);
     return false;
   }
 
@@ -804,7 +803,7 @@ bool ZipFile::ReadFileFromZip(HANDLE hZipFile, const char *pRelativeName,
     buf.Put(pData, pEntry->m_Length);
   }
 
-  free(pData);
+  heap_free(pData);
 
   return true;
 }
@@ -846,7 +845,7 @@ void ZipFile::AddFileToZip(const char *relativename, const char *fullpath) {
     if (buf) {
       // Now add as a buffer
       AddBufferToZip(relativename, buf, size, false);
-      free(buf);
+      heap_free(buf);
     }
   }
 }
@@ -863,9 +862,9 @@ void ZipFile::RemoveFileFromZip(const char *relativename) {
   }
 }
 
-//	Purpose: Calculates how many bytes should be added to the extra field
-//  to push the start of the file data to the next aligned boundary
-//  Output: Required padding size
+// Purpose: Calculates how many bytes should be added to the extra field
+// to push the start of the file data to the next aligned boundary
+// Output: Required padding size
 u16 ZipFile::CalculatePadding(unsigned int filenameLen, unsigned int pos) {
   if (m_AlignmentSize == 0) {
     return 0;
@@ -912,8 +911,8 @@ void ZipFile::ParseXZipCommentString(const char *pCommentString) {
 // Purpose: Calculate the exact size of zip file, with headers and padding
 // Output : int
 unsigned int ZipFile::CalculateSize() {
-  unsigned int size = 0;
-  unsigned int dirHeaders = 0;
+  usize size = 0, dirHeaders = 0;
+
   for (int i = m_Files.FirstInorder(); i != m_Files.InvalidIndex();
        i = m_Files.NextInorder(i)) {
     CZipEntry *e = &m_Files[i];
@@ -930,8 +929,8 @@ unsigned int ZipFile::CalculateSize() {
     // calculate padding
     if (m_AlignmentSize != 0) {
       // round up to next boundary
-      unsigned int nextBoundary =
-          (size + m_AlignmentSize) & ~(m_AlignmentSize - 1);
+      usize nextBoundary =
+          (size + m_AlignmentSize) & ~((usize)m_AlignmentSize - 1);
 
       // the directory header also duplicates the padding
       dirHeaders += nextBoundary - size;
@@ -952,7 +951,6 @@ unsigned int ZipFile::CalculateSize() {
 }
 
 // Purpose: Print a directory of files in the zip
-
 void ZipFile::PrintDirectory() {
   for (int i = m_Files.FirstInorder(); i != m_Files.InvalidIndex();
        i = m_Files.NextInorder(i)) {
@@ -963,7 +961,6 @@ void ZipFile::PrintDirectory() {
 }
 
 // Purpose: Iterate through directory
-
 int ZipFile::GetNextFilename(int id, char *pBuffer, int bufferSize,
                              int &fileSize) {
   if (id == -1) {
@@ -985,7 +982,6 @@ int ZipFile::GetNextFilename(int id, char *pBuffer, int bufferSize,
 }
 
 // Purpose: Store data out to disk
-
 void ZipFile::SaveToDisk(FILE *fout) {
   FileWriteStream stream(fout);
   SaveDirectory(stream);
@@ -997,7 +993,6 @@ void ZipFile::SaveToDisk(HANDLE hOutFile) {
 }
 
 // Purpose: Store data out to a CUtlBuffer
-
 void ZipFile::SaveToBuffer(CUtlBuffer &buf) {
   BufferWriteStream stream(buf);
   SaveDirectory(stream);
@@ -1069,10 +1064,10 @@ void ZipFile::SaveDirectory(IWriteStream &stream) {
       stream.Put(e->m_pData, e->m_Length);
 
       if (m_hDiskCacheWriteFile != INVALID_HANDLE_VALUE) {
-        free(e->m_pData);
+        heap_free(e->m_pData);
 
         // temp hackery for the logic below to succeed
-        e->m_pData = (void *)0xFFFFFFFF;
+        e->m_pData = (void *)(intptr_t)-1;
       }
     }
   }
@@ -1093,7 +1088,7 @@ void ZipFile::SaveDirectory(IWriteStream &stream) {
     }
   }
 
-  int realNumFiles = 0;
+  u32 realNumFiles = 0;
   for (int i = m_Files.FirstInorder(); i != m_Files.InvalidIndex();
        i = m_Files.NextInorder(i)) {
     CZipEntry *e = &m_Files[i];
@@ -1178,7 +1173,7 @@ void ZipFile::SaveDirectory(IWriteStream &stream) {
   stream.Put(&rec, sizeof(rec));
   stream.Put(commentString, comment_size);
 
-  free(padding_buffer);
+  heap_free(padding_buffer);
 }
 
 class CZip : public IZip {

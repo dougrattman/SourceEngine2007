@@ -579,9 +579,9 @@ class CEnginePerfTools : public IEnginePerfTools {
 static CEnginePerfTools g_PerfTools;
 IEnginePerfTools *perftools = &g_PerfTools;
 
-void CEnginePerfTools::Init(void) {}
+void CEnginePerfTools::Init() {}
 
-void CEnginePerfTools::Shutdown(void) {
+void CEnginePerfTools::Shutdown() {
   if (g_pPerfUI) {
     g_pPerfUI->Shutdown();
   }

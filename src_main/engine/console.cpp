@@ -29,10 +29,10 @@ bool con_debuglogmapprefixed = false;
 static ConVar con_timestamp("con_timestamp", "0", 0,
                             "Prefix console.log entries with timestamps");
 
-void ConsoleLogFileCallback(IConVar *var, const char *pOldValue,
+void ConsoleLogFileCallback(IConVar *var, const ch *pOldValue,
                             float flOldValue) {
   ConVarRef ref(var->GetName());
-  const char *log_file = ref.GetString();
+  const ch *log_file = ref.GetString();
 
   if (!COM_IsValidPath(log_file)) {
     con_debuglog = CommandLine()->FindParm("-condebug") != 0;
@@ -45,19 +45,19 @@ ConVar con_logfile("con_logfile", "", 0,
                    "Console output gets written to this file", false, 0.0f,
                    false, 0.0f, ConsoleLogFileCallback);
 
-const char *GetConsoleLogFilename() {
-  const char *log_file = con_logfile.GetString();
+const ch *GetConsoleLogFilename() {
+  const ch *log_file = con_logfile.GetString();
   return !COM_IsValidPath(log_file) ? "console.log" : log_file;
 }
 
-static const char *GetTimestampString() {
-  static char timestamp[128];
+static const ch *GetTimestampString() {
+  static ch timestamp[128];
 
   tm today;
   VCRHook_LocalTime(&today);
-  Q_snprintf(timestamp, SOURCE_ARRAYSIZE(timestamp),
-             "%02i/%02i/%04i - %02i:%02i:%02i", today.tm_mon + 1, today.tm_mday,
-             1900 + today.tm_year, today.tm_hour, today.tm_min, today.tm_sec);
+  Q_snprintf(timestamp, std::size(timestamp), "%02i/%02i/%04i - %02i:%02i:%02i",
+             today.tm_mon + 1, today.tm_mday, 1900 + today.tm_year,
+             today.tm_hour, today.tm_min, today.tm_sec);
 
   return timestamp;
 }
@@ -118,10 +118,10 @@ class CConPanel : public CBasePanel {
 
   virtual bool ShouldDraw(void);
 
-  void Con_NPrintf(int idx, const char *msg);
-  void Con_NXPrintf(const struct con_nprint_s *info, const char *msg);
+  void Con_NPrintf(int idx, const ch *msg);
+  void Con_NXPrintf(const struct con_nprint_s *info, const ch *msg);
 
-  void AddToNotify(const Color &clr, char const *msg);
+  void AddToNotify(const Color &clr, ch const *msg);
   void ClearNofify();
 
  private:
@@ -228,20 +228,20 @@ void Con_Init() {
 
 void Con_Shutdown() { con_initialized = false; }
 
-void Con_DebugLog(const char *fmt, ...) {
+void Con_DebugLog(const ch *fmt, ...) {
   va_list argptr;
-  char data[MAXPRINTMSG];
+  ch data[MAXPRINTMSG];
 
   va_start(argptr, fmt);
   Q_vsnprintf(data, sizeof(data), fmt, argptr);
   va_end(argptr);
 
-  const char *file = GetConsoleLogFilename();
+  const ch *file = GetConsoleLogFilename();
 
   FileHandle_t fh = g_pFileSystem->Open(file, "a");
   if (fh != FILESYSTEM_INVALID_HANDLE) {
     if (con_debuglogmapprefixed) {
-      char const *prefix = MapReslistGenerator().LogPrefix();
+      ch const *prefix = MapReslistGenerator().LogPrefix();
       if (prefix) {
         g_pFileSystem->Write(prefix, strlen(prefix), fh);
       }
@@ -251,7 +251,7 @@ void Con_DebugLog(const char *fmt, ...) {
       static bool needTimestamp =
           true;  // Start the first line with a timestamp
       if (needTimestamp) {
-        const char *timestamp = GetTimestampString();
+        const ch *timestamp = GetTimestampString();
         g_pFileSystem->Write(timestamp, strlen(timestamp), fh);
         g_pFileSystem->Write(": ", 2, fh);
       }
@@ -269,17 +269,17 @@ static bool g_fIsDebugPrint = false;
 // Handles cursor positioning, line wrapping, etc
 static bool g_fColorPrintf = false;
 static bool g_bInColorPrint = false;
-extern CThreadLocalInt<> g_bInSpew;
+extern thread_local bool g_bInSpew;
 
-void Con_Printf(const char *fmt, ...);
+void Con_Printf(const ch *fmt, ...);
 
-void Con_ColorPrint(const Color &clr, char const *msg) {
+void Con_ColorPrint(const Color &clr, ch const *msg) {
   if (g_bInColorPrint) return;
 
   int nCon_Filter_Enable = con_filter_enable.GetInt();
   if (nCon_Filter_Enable > 0) {
-    const char *pszText = con_filter_text.GetString();
-    const char *pszIgnoreText = con_filter_text_out.GetString();
+    const ch *pszText = con_filter_text.GetString();
+    const ch *pszIgnoreText = con_filter_text_out.GetString();
 
     switch (nCon_Filter_Enable) {
       case 1:
@@ -314,7 +314,7 @@ void Con_ColorPrint(const Color &clr, char const *msg) {
 
   // also echo to debugging console
   if (Plat_IsInDebugSession() && !con_trace.GetInt()) {
-    Sys_OutputDebugString(msg);
+    Plat_DebugString(msg);
   }
 
   if (sv.IsDedicated()) {
@@ -358,7 +358,7 @@ void Con_ColorPrint(const Color &clr, char const *msg) {
 #endif
 
 // returns false if the print function shouldn't continue
-bool HandleRedirectAndDebugLog(const char *msg) {
+bool HandleRedirectAndDebugLog(const ch *msg) {
   // Add to redirected message
   if (SV_RedirectActive()) {
     SV_RedirectAddText(msg);
@@ -371,7 +371,7 @@ bool HandleRedirectAndDebugLog(const char *msg) {
   return con_initialized;
 }
 
-void Con_Print(const char *msg) {
+void Con_Print(const ch *msg) {
   if (!msg || !msg[0]) return;
 
   if (!HandleRedirectAndDebugLog(msg)) {
@@ -394,9 +394,9 @@ void Con_Print(const char *msg) {
 #endif
 }
 
-void Con_Printf(const char *fmt, ...) {
+void Con_Printf(const ch *fmt, ...) {
   va_list argptr;
-  char msg[MAXPRINTMSG];
+  ch msg[MAXPRINTMSG];
   static bool inupdate;
 
   va_start(argptr, fmt);
@@ -432,9 +432,9 @@ void Con_Printf(const char *fmt, ...) {
 }
 
 #ifndef SWDS
-void Con_ColorPrintf(const Color &clr, const char *fmt, ...) {
+void Con_ColorPrintf(const Color &clr, const ch *fmt, ...) {
   va_list argptr;
-  char msg[MAXPRINTMSG];
+  ch msg[MAXPRINTMSG];
   static bool inupdate;
 
   va_start(argptr, fmt);
@@ -453,9 +453,9 @@ void Con_ColorPrintf(const Color &clr, const char *fmt, ...) {
 #endif
 
 // A Con_Printf that only shows up if the "developer" cvar is set
-void Con_DPrintf(const char *fmt, ...) {
+void Con_DPrintf(const ch *fmt, ...) {
   va_list argptr;
-  char msg[MAXPRINTMSG];
+  ch msg[MAXPRINTMSG];
 
   va_start(argptr, fmt);
   Q_vsnprintf(msg, sizeof(msg), fmt, argptr);
@@ -478,9 +478,9 @@ void Con_DPrintf(const char *fmt, ...) {
 }
 
 // Okay to call even when the screen can't be updated
-void Con_SafePrintf(const char *fmt, ...) {
+void Con_SafePrintf(const ch *fmt, ...) {
   va_list argptr;
-  char msg[MAXPRINTMSG];
+  ch msg[MAXPRINTMSG];
 
   va_start(argptr, fmt);
   Q_vsnprintf(msg, sizeof(msg), fmt, argptr);
@@ -501,9 +501,9 @@ void Con_SafePrintf(const char *fmt, ...) {
 #ifndef SWDS
 bool Con_IsVisible() { return (EngineVGui()->IsConsoleVisible()); }
 
-void Con_NPrintf(int idx, const char *fmt, ...) {
+void Con_NPrintf(int idx, const ch *fmt, ...) {
   va_list argptr;
-  char outtext[MAXPRINTMSG];
+  ch outtext[MAXPRINTMSG];
 
   va_start(argptr, fmt);
   Q_vsnprintf(outtext, sizeof(outtext), fmt, argptr);
@@ -512,9 +512,9 @@ void Con_NPrintf(int idx, const char *fmt, ...) {
   g_pConPanel->Con_NPrintf(idx, outtext);
 }
 
-void Con_NXPrintf(const struct con_nprint_s *info, const char *fmt, ...) {
+void Con_NXPrintf(const struct con_nprint_s *info, const ch *fmt, ...) {
   va_list argptr;
-  char outtext[MAXPRINTMSG];
+  ch outtext[MAXPRINTMSG];
 
   va_start(argptr, fmt);
   Q_vsnprintf(outtext, sizeof(outtext), fmt, argptr);
@@ -543,7 +543,7 @@ CConPanel::CConPanel(vgui::Panel *parent) : CBasePanel(parent, "CConPanel") {
 
 CConPanel::~CConPanel() {}
 
-void CConPanel::Con_NPrintf(int idx, const char *msg) {
+void CConPanel::Con_NPrintf(int idx, const ch *msg) {
   if (idx < 0 || idx >= MAX_DBG_NOTIFY) return;
 
   swprintf_s(da_notify[idx].szNotify, L"%S", msg);
@@ -555,7 +555,7 @@ void CConPanel::Con_NPrintf(int idx, const char *msg) {
   m_bDrawDebugAreas = true;
 }
 
-void CConPanel::Con_NXPrintf(const struct con_nprint_s *info, const char *msg) {
+void CConPanel::Con_NXPrintf(const struct con_nprint_s *info, const ch *msg) {
   if (!info) return;
 
   if (info->index < 0 || info->index >= MAX_DBG_NOTIFY) return;
@@ -586,7 +586,7 @@ static void safestrncat(wchar_t *text, int maxCharactersWithNullTerminator,
   *p = 0;
 }
 
-void CConPanel::AddToNotify(const Color &clr, char const *msg) {
+void CConPanel::AddToNotify(const Color &clr, ch const *msg) {
   if (!host_initialized) return;
 
   // notify area only ever draws in developer mode - it should never be used for
@@ -761,7 +761,7 @@ ConVar con_nprint_bgalpha("con_nprint_bgalpha", "50", 0,
 ConVar con_nprint_bgborder("con_nprint_bgborder", "5", 0,
                            "Con_NPrint border size.");
 
-void CConPanel::DrawDebugAreas(void) {
+void CConPanel::DrawDebugAreas() {
   if (!m_bDrawDebugAreas) return;
 
   // Find the top and bottom of all the nprint text so we can draw a box behind
@@ -845,12 +845,12 @@ void CConPanel::Paint() {
 void CConPanel::PaintBackground() {
   if (!Con_IsVisible()) return;
 
-  char version[100];
-  Q_snprintf(version, SOURCE_ARRAYSIZE(version), "Source Engine %i (build %d)",
+  ch version[100];
+  Q_snprintf(version, std::size(version), "Source Engine %i (build %d)",
              PROTOCOL_VERSION, build_number());
   wchar_t unicode_version[200];
   g_pVGuiLocalize->ConvertANSIToUnicode(version, unicode_version,
-                                        SOURCE_ARRAYSIZE(unicode_version));
+                                        std::size(unicode_version));
 
   vgui::surface()->DrawSetTextColor(Color(255, 255, 255, 255));
 
@@ -861,18 +861,17 @@ void CConPanel::PaintBackground() {
 
   if (cl.IsActive()) {
     if (cl.m_NetChannel->IsLoopback()) {
-      Q_snprintf(version, SOURCE_ARRAYSIZE(version), "Map '%s'",
+      Q_snprintf(version, std::size(version), "Map '%s'",
                  cl.m_szLevelNameShort);
     } else {
-      Q_snprintf(version, SOURCE_ARRAYSIZE(version), "Server '%s' Map '%s'",
+      Q_snprintf(version, std::size(version), "Server '%s' Map '%s'",
                  cl.m_NetChannel->GetRemoteAddress().ToString(),
                  cl.m_szLevelNameShort);
     }
 
     wchar_t unicode_map_and_server[200];
-    g_pVGuiLocalize->ConvertANSIToUnicode(
-        version, unicode_map_and_server,
-        SOURCE_ARRAYSIZE(unicode_map_and_server));
+    g_pVGuiLocalize->ConvertANSIToUnicode(version, unicode_map_and_server,
+                                          std::size(unicode_map_and_server));
 
     const int tall = vgui::surface()->GetFontTall(m_hFont);
     const int x = wide - DrawTextLen(m_hFont, unicode_map_and_server) - 2;

@@ -131,7 +131,7 @@ void CSteam3Client::RunFrame() {
 void CSteam3Client::OnClientGameServerDeny(
     ClientGameServerDeny_t *pClientGameServerDeny) {
   if (pClientGameServerDeny->m_uAppID == (uint32_t)g_iSteamAppID) {
-    const char *pszReason = "Unknown";
+    const ch *pszReason = "Unknown";
     switch (pClientGameServerDeny->m_uReason) {
       case (k_EDenyInvalidVersion):
         pszReason = "Invalid version";

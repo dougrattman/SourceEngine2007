@@ -44,7 +44,7 @@ bool com_ignorecolons = false;
 // wordbreak parsing set
 static characterset_t g_BreakSet, g_BreakSetIncludingColons;
 
-ch com_token[1024];
+alignas(64) ch com_token[1024];
 
 /*
 All of Quake's data access is through a hierarchical file system, but the
@@ -248,7 +248,9 @@ bool COM_CheckGameDirectory(const ch *gamedir) {
   ch szGD[SOURCE_MAX_PATH];
 
   if (!gamedir || !gamedir[0]) {
-    ConMsg("Server didn't specify a gamedir, assuming no change\n");
+    ConMsg(
+        "COM_CheckGameDirectory: Server didn't specify a gamedir, assuming no "
+        "change\n");
     return true;
   }
 
@@ -274,27 +276,30 @@ int COM_FindFile(const ch *filename, FileHandle_t *file) {
 }
 
 int COM_OpenFile(const ch *filename, FileHandle_t *file) {
-  return COM_FindFile((ch *)filename, file);
+  return COM_FindFile(filename, file);
 }
 
 // The filename will be prefixed by the current game directory
 void COM_WriteFile(const ch *filename, void *data, int len) {
   usize nameLen = strlen(filename) + 2;
-  ch *pName = (ch *)_alloca(nameLen);
+  ch *name = stack_alloc<ch>(nameLen);
 
-  sprintf_s(pName, nameLen, "%s", filename);
+  sprintf_s(name, nameLen, "%s", filename);
 
-  Q_FixSlashes(pName);
-  COM_CreatePath(pName);
+  Q_FixSlashes(name);
+  COM_CreatePath(name);
 
-  FileHandle_t handle = g_pFileSystem->Open(pName, "wb");
-  if (!handle) {
-    Warning("COM_WriteFile: failed on %s\n", pName);
+  FileHandle_t handle{g_pFileSystem->Open(name, "wb")};
+  if (handle) {
+    stack_free(name);
+
+    g_pFileSystem->Write(data, len, handle);
+    g_pFileSystem->Close(handle);
+
     return;
   }
 
-  g_pFileSystem->Write(data, len, handle);
-  g_pFileSystem->Close(handle);
+  Warning("COM_WriteFile: failed on %s\n", name);
 }
 
 // Only used for CopyFile
@@ -312,26 +317,27 @@ void COM_CreatePath(const ch *path) {
   }
 }
 
-// Copies a file over from the net to the local cache, creating any directories
-// needed.  This is for the convenience of developers using ISDN from home.
+// Copies a file over from the net to the local cache, creating any
+// directories needed.  This is for the convenience of developers using ISDN
+// from home.
 bool COM_CopyFile(const ch *netpath, const ch *cachepath) {
-  FileHandle_t in = g_pFileSystem->Open(netpath, "rb");
+  FileHandle_t in{g_pFileSystem->Open(netpath, "rb")};
   if (in == FILESYSTEM_INVALID_HANDLE) return false;
 
   // create directories up to the cache file
   COM_CreatePath(cachepath);
 
-  FileHandle_t out = g_pFileSystem->Open(cachepath, "wb");
+  FileHandle_t out{g_pFileSystem->Open(cachepath, "wb")};
   if (out == FILESYSTEM_INVALID_HANDLE) {
     g_pFileSystem->Close(in);
     return false;
   }
 
-  ch buf[4096];
+  alignas(64) ch buf[4096];
 
-  long long remaining = g_pFileSystem->Size(in);
+  unsigned int remaining = g_pFileSystem->Size(in);
   while (remaining > 0) {
-    int count = remaining < sizeof(buf) ? remaining : sizeof(buf);
+    unsigned int count = remaining < sizeof(buf) ? remaining : sizeof(buf);
 
     g_pFileSystem->Read(buf, count, in);
     g_pFileSystem->Write(buf, count, out);
@@ -352,7 +358,7 @@ int COM_ExpandFilename(ch *filename, int maxlength) {
 
   if (g_pFileSystem->GetLocalPath(filename, expanded, sizeof(expanded)) !=
       nullptr) {
-    Q_strncpy(filename, expanded, maxlength);
+    strcpy_s(filename, maxlength, expanded);
     return 1;
   }
 
@@ -375,67 +381,71 @@ cache_user_t *loadcache;
 u8 *loadbuf;
 int loadsize;
 
-u8 *COM_LoadFile(const ch *path, int usehunk, int *pLength) {
-  if (pLength) *pLength = 0;
+u8 *COM_LoadFile(const ch *path, int hunk_mode, int *size) {
+  if (size) *size = 0;
 
   // look for it in the filesystem or pack files
-  FileHandle_t hFile;
-  int len = COM_OpenFile(path, &hFile);
-  if (!hFile) return nullptr;
+  FileHandle_t the_file;
+  const int len = COM_OpenFile(path, &the_file);
 
-  // Extract the filename base name for hunk tag
-  ch base[128];
-  Q_FileBase(path, base, sizeof(base));
+  if (the_file) {
+    // Extract the filename base name for hunk tag
+    ch base[128];
+    Q_FileBase(path, base, sizeof(base));
 
-  usize bufSize = len + 1;
-  byte *buf = nullptr;
+    usize buffer_size = len + 1;
+    u8 *buffer{nullptr};
 
-  switch (usehunk) {
-    case 1:
-      buf = (u8 *)Hunk_AllocName(bufSize, base);
-      break;
-    case 2:
-      AssertMsg(0, "Temp alloc no longer supported\n");
-      break;
-    case 3:
-      AssertMsg(0, "Cache alloc no longer supported\n");
-      break;
-    case 4: {
-      if (len + 1 > loadsize)
-        buf = (u8 *)malloc(bufSize);
-      else
-        buf = loadbuf;
-    } break;
-    case 5:
-      buf = (u8 *)malloc(bufSize);  // TODO(d.rattman): This is evil.
-      break;
-    default:
-      Sys_Error("COM_LoadFile: bad usehunk");
+    switch (hunk_mode) {
+      case 1:
+        buffer = (u8 *)Hunk_AllocName(buffer_size, base);
+        break;
+      case 4: {
+        if (len + 1 > loadsize)
+          buffer = heap_alloc<u8>(buffer_size);
+        else
+          buffer = loadbuf;
+      } break;
+      case 5:
+        buffer = heap_alloc<u8>(buffer_size);  // TODO(d.rattman): This is evil.
+        break;
+      case 2:
+        AssertMsg(0, "Temp alloc no longer supported\n");
+        break;
+      case 3:
+        AssertMsg(0, "Cache alloc no longer supported\n");
+        break;
+      default:
+        Sys_Error("COM_LoadFile: bad usehunk");
+    }
+
+    if (!buffer) {
+      Sys_Error("COM_LoadFile: not enough space for %s", path);
+      COM_CloseFile(the_file);  // exit here to prevent fault on oom (kdb)
+      return nullptr;
+    }
+
+    g_pFileSystem->ReadEx(buffer, buffer_size, len, the_file);
+    COM_CloseFile(the_file);
+
+    buffer[len] = 0;
+
+    if (size) *size = len;
+
+    return buffer;
   }
 
-  if (!buf) {
-    Sys_Error("COM_LoadFile: not enough space for %s", path);
-    COM_CloseFile(hFile);  // exit here to prevent fault on oom (kdb)
-    return nullptr;
-  }
-
-  g_pFileSystem->ReadEx(buf, bufSize, len, hFile);
-  COM_CloseFile(hFile);
-
-  ((u8 *)buf)[len] = 0;
-
-  if (pLength) *pLength = len;
-
-  return buf;
+  return nullptr;
 }
 
 void COM_CopyFileChunk(FileHandle_t dst, FileHandle_t src, int nSize) {
   int copysize = nSize;
-  ch copybuf[COM_COPY_CHUNK_SIZE];
+  alignas(64) ch copybuf[COM_COPY_CHUNK_SIZE];
 
   while (copysize > COM_COPY_CHUNK_SIZE) {
     g_pFileSystem->Read(copybuf, COM_COPY_CHUNK_SIZE, src);
     g_pFileSystem->Write(copybuf, COM_COPY_CHUNK_SIZE, dst);
+
     copysize -= COM_COPY_CHUNK_SIZE;
   }
 
@@ -451,8 +461,8 @@ u8 *COM_LoadStackFile(const ch *path, void *buffer, int bufsize,
                       int &filesize) {
   loadbuf = (u8 *)buffer;
   loadsize = bufsize;
-  u8 *buf = COM_LoadFile(path, 4, &filesize);
-  return buf;
+
+  return COM_LoadFile(path, 4, &filesize);
 }
 
 void COM_ShutdownFileSystem() {}
@@ -515,8 +525,8 @@ void COM_SetupLogDir(const ch *mapname) {
   }
 }
 
-// Return the final directory in the game dir (i.e "cstrike", "hl2", rather than
-// c:\blah\cstrike).
+// Return the final directory in the game dir (i.e "cstrike", "hl2", rather
+// than c:\blah\cstrike).
 const ch *COM_GetModDirectory() {
   static ch modDir[SOURCE_MAX_PATH];
 
@@ -539,7 +549,9 @@ const ch *COM_GetModDirectory() {
 }
 
 void COM_InitFilesystem(const ch *pFullModPath) {
-  CFSSearchPathsInit initInfo;
+  CFSSearchPathsInit init_info;
+
+  init_info.m_pDirectoryName = pFullModPath ? pFullModPath : GetCurrentGame();
 
 #ifndef SWDS
   // get Steam client language
@@ -547,26 +559,23 @@ void COM_InitFilesystem(const ch *pFullModPath) {
   language[0] = '\0';
   Sys_GetRegKeyValue("Software\\Valve\\Steam", "Language", language,
                      sizeof(language), "");
+
   if (strlen(language) > 0 && _stricmp(language, "english")) {
-    initInfo.m_pLanguage = language;
+    init_info.m_pLanguage = language;
   }
 #endif
 
-  initInfo.m_pFileSystem = g_pFileSystem;
-  initInfo.m_pDirectoryName = pFullModPath;
-  if (!initInfo.m_pDirectoryName) {
-    initInfo.m_pDirectoryName = GetCurrentGame();
-  }
+  init_info.m_pFileSystem = g_pFileSystem;
 
   // Load gameinfo.txt and setup all the search paths, just like the tools do.
-  FileSystem_LoadSearchPaths(initInfo);
+  FileSystem_LoadSearchPaths(init_info);
 
   // Enable file
-  KeyValues *modinfo = new KeyValues("ModInfo");
-  if (modinfo->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
+  KeyValues *mod_info = new KeyValues("ModInfo");
+  if (mod_info->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
     // If it's not singleplayer_only
-    if (V_stricmp(modinfo->GetString("type", "singleplayer_only"),
-                  "singleplayer_only") == 0) {
+    if (_stricmp(mod_info->GetString("type", "singleplayer_only"),
+                 "singleplayer_only") == 0) {
       DevMsg("Disabling whitelist file tracking in filesystem...\n");
       g_pFileSystem->EnableWhitelistFileTracking(false);
     } else {
@@ -574,10 +583,10 @@ void COM_InitFilesystem(const ch *pFullModPath) {
       g_pFileSystem->EnableWhitelistFileTracking(true);
     }
   }
-  modinfo->deleteThis();
+  mod_info->deleteThis();
 
   // The mod path becomes com_gamedir.
-  Q_MakeAbsolutePath(com_gamedir, sizeof(com_gamedir), initInfo.m_ModPath);
+  Q_MakeAbsolutePath(com_gamedir, sizeof(com_gamedir), init_info.m_ModPath);
 
   // Set com_basedir.
   // the "root" directory where hl2.exe is
@@ -599,44 +608,44 @@ void COM_InitFilesystem(const ch *pFullModPath) {
   // need to look in the registry for the audio language for this game. If the
   // games language is non-English then we add a search path entry for this
   // language that looks like this "game\<GAME>_<AUDIOLANG>\sound"
-  modinfo = new KeyValues("ModInfo");  //-V773
-  if (modinfo->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
-    const int nSteamAppId =
-        modinfo->FindKey("FileSystem")->GetInt("SteamAppId", 215);
-    ELanguage eAudioLanguage = k_Lang_English;
-    ch szAudioLanguageRegKey[SOURCE_MAX_PATH];
+  mod_info = new KeyValues("ModInfo");  //-V773
+  if (mod_info->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
+    const int steam_app_id{
+        mod_info->FindKey("FileSystem")->GetInt("SteamAppId", 215)};
+    ELanguage audio_language{k_Lang_English};
+    ch audio_language_reg_key[64];
     long lRegValue;
 
     // Construct registry key path
-    sprintf_s(szAudioLanguageRegKey, "Software\\Valve\\Steam\\Apps\\%d",
-              nSteamAppId);
-    Sys_GetRegKeyValueInt(szAudioLanguageRegKey, "language", &lRegValue,
+    sprintf_s(audio_language_reg_key, "Software\\Valve\\Steam\\Apps\\%d",
+              steam_app_id);
+    Sys_GetRegKeyValueInt(audio_language_reg_key, "language", &lRegValue,
                           k_Lang_English);
-    eAudioLanguage = (ELanguage)lRegValue;
+    audio_language = (ELanguage)lRegValue;
 
     // If audio language is not English and audio language is different from
     // Steam client language then add foreign language audio to the top of the
     // search path k_Lang_None means the game will follow the language of the
     // Steam client
-    if ((k_Lang_English != eAudioLanguage && k_Lang_None != eAudioLanguage) &&
-        (PchLanguageToELanguage(initInfo.m_pLanguage) != eAudioLanguage)) {
+    if ((k_Lang_English != audio_language && k_Lang_None != audio_language) &&
+        (PchLanguageToELanguage(init_info.m_pLanguage) != audio_language)) {
       // Now add all of the foreign language paths to the top of the
       // searchpaths list for
       KeyValues *pSearchPaths =
-          modinfo->FindKey("FileSystem")->FindKey("SearchPaths");
+          mod_info->FindKey("FileSystem")->FindKey("SearchPaths");
       CUtlVector<ch *> vSearchPaths;
       for (KeyValues *pCur = pSearchPaths->GetFirstValue(); pCur;
            pCur = pCur->GetNextValue()) {
         const ch *pPathID = pCur->GetName();
         const ch *pLocation = pCur->GetString();
 
-        if (V_stricmp(pPathID, "game") == 0 &&
+        if (_stricmp(pPathID, "game") == 0 &&
             (nullptr == V_strstr(pLocation, "|gameinfo_path|"))) {
           ch *szFullSearchPath = new ch[SOURCE_MAX_PATH];
 
           sprintf_s(szFullSearchPath, SOURCE_MAX_PATH, "%s%c%s_%s%c",
                     com_basedir, CORRECT_PATH_SEPARATOR, pLocation,
-                    GetLanguageShortName(eAudioLanguage),
+                    GetLanguageShortName(audio_language),
                     CORRECT_PATH_SEPARATOR);
           vSearchPaths.AddToHead(szFullSearchPath);
         }
@@ -654,7 +663,7 @@ void COM_InitFilesystem(const ch *pFullModPath) {
       g_pFileSystem->PrintSearchPaths();
 #endif
     }
-    modinfo->deleteThis();
+    mod_info->deleteThis();
   }
 #endif
 }  //-V773

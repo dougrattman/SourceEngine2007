@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -49,8 +49,8 @@ class CSmoothingTypeButton : public vgui::MenuButton {
 
  public:
   // Construction
-  CSmoothingTypeButton(vgui::Panel *parent, const char *panelName,
-                       const char *text);
+  CSmoothingTypeButton(vgui::Panel *parent, const ch *panelName,
+                       const ch *text);
 
  private:
   // Menu associated with this button
@@ -60,8 +60,8 @@ class CSmoothingTypeButton : public vgui::MenuButton {
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CSmoothingTypeButton::CSmoothingTypeButton(Panel *parent, const char *panelName,
-                                           const char *text)
+CSmoothingTypeButton::CSmoothingTypeButton(Panel *parent, const ch *panelName,
+                                           const ch *text)
     : BaseClass(parent, panelName, text) {
   // Assume no menu
   m_pMenu = new Menu(this, "DemoSmootherTypeMenu");
@@ -101,7 +101,7 @@ class CFixEdgeButton : public vgui::MenuButton {
 
  public:
   // Construction
-  CFixEdgeButton(vgui::Panel *parent, const char *panelName, const char *text);
+  CFixEdgeButton(vgui::Panel *parent, const ch *panelName, const ch *text);
 
  private:
   // Menu associated with this button
@@ -111,8 +111,8 @@ class CFixEdgeButton : public vgui::MenuButton {
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CFixEdgeButton::CFixEdgeButton(Panel *parent, const char *panelName,
-                               const char *text)
+CFixEdgeButton::CFixEdgeButton(Panel *parent, const ch *panelName,
+                               const ch *text)
     : BaseClass(parent, panelName, text) {
   // Assume no menu
   m_pMenu = new Menu(this, "DemoSmootherEdgeFixType");
@@ -231,7 +231,7 @@ CDemoSmootherPanel::CDemoSmootherPanel(vgui::Panel *parent)
 //-----------------------------------------------------------------------------
 CDemoSmootherPanel::~CDemoSmootherPanel() {}
 
-void CDemoSmootherPanel::Reset(void) {
+void CDemoSmootherPanel::Reset() {
   ClearSmoothingInfo(m_Smoothing);
 
   m_bPreviewing = false;
@@ -303,7 +303,7 @@ void CDemoSmootherPanel::OnTick() {
     return;
   }
 
-  char sz[512];
+  ch sz[512];
   if (m_bPreviewing) {
     Q_snprintf(sz, sizeof(sz), "%.3f at tick %i (%.3f s)",
                m_fPreviewCurrentTime, GetTickForFrame(m_nPreviewLastFrame),
@@ -333,7 +333,7 @@ bool CDemoSmootherPanel::CanEdit() {
 // Purpose:
 // Input  : *command -
 //-----------------------------------------------------------------------------
-void CDemoSmootherPanel::OnCommand(const char *command) {
+void CDemoSmootherPanel::OnCommand(const ch *command) {
   if (!Q_strcasecmp(command, "cancel")) {
     OnRevert();
     MarkForDeletion();
@@ -451,7 +451,7 @@ void CDemoSmootherPanel::OnReload() {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoSmootherPanel::OnVDMChanged(void) {
+void CDemoSmootherPanel::OnVDMChanged() {
   if (IsVisible()) {
     OnReload();
   } else {
@@ -495,7 +495,7 @@ void CDemoSmootherPanel::ApplySchemeSettings(vgui::IScheme *pScheme) {
 // Output : int
 //-----------------------------------------------------------------------------
 int CDemoSmootherPanel::GetStartFrame() {
-  char text[32];
+  ch text[32];
   m_pStartFrame->GetText(text, sizeof(text));
   int tick = atoi(text);
   return GetFrameForTick(tick);
@@ -506,7 +506,7 @@ int CDemoSmootherPanel::GetStartFrame() {
 // Output : int
 //-----------------------------------------------------------------------------
 int CDemoSmootherPanel::GetEndFrame() {
-  char text[32];
+  ch text[32];
   m_pEndFrame->GetText(text, sizeof(text));
   int tick = atoi(text);
   return GetFrameForTick(tick);
@@ -1039,8 +1039,9 @@ void CDemoSmootherPanel::OnStep(bool forward) {
   int c = m_Smoothing.smooth.Count();
 
   SetLastFrame(false, m_nPreviewLastFrame + (forward ? 1 : -1));
-  SetLastFrame(false, std::clamp(m_nPreviewLastFrame, std::max(m_nSelection[0] - 10, 0),
-                            std::min(m_nSelection[1] + 10, c - 1)));
+  SetLastFrame(
+      false, std::clamp(m_nPreviewLastFrame, std::max(m_nSelection[0] - 10, 0),
+                        std::min(m_nSelection[1] + 10, c - 1)));
   m_fPreviewCurrentTime = TICKS_TO_TIME(GetTickForFrame(m_nPreviewLastFrame));
 }
 
@@ -1058,7 +1059,7 @@ void CDemoSmootherPanel::DrawLegend(int startframe, int endframe) {
 
     if (!show) continue;
 
-    char sz[512];
+    ch sz[512];
     Q_snprintf(sz, sizeof(sz), "%.3f", TICKS_TO_TIME(sample->frametick));
 
     Vector fwd;
@@ -1145,7 +1146,7 @@ void CDemoSmootherPanel::OnSetKeys(float interval) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoSmootherPanel::OnSmoothSelectionAngles(void) {
+void CDemoSmootherPanel::OnSmoothSelectionAngles() {
   if (!m_bHasSelection) return;
 
   int c = m_Smoothing.smooth.Count();
@@ -1185,7 +1186,7 @@ void CDemoSmootherPanel::OnSmoothSelectionAngles(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoSmootherPanel::OnSmoothSelectionOrigin(void) {
+void CDemoSmootherPanel::OnSmoothSelectionOrigin() {
   if (!m_bHasSelection) return;
 
   int c = m_Smoothing.smooth.Count();
@@ -1258,7 +1259,7 @@ void CDemoSmootherPanel::PerformLinearInterpolatedAngleSmoothing(int startframe,
   }
 }
 
-void CDemoSmootherPanel::OnLinearInterpolateAnglesBasedOnEndpoints(void) {
+void CDemoSmootherPanel::OnLinearInterpolateAnglesBasedOnEndpoints() {
   if (!m_bHasSelection) return;
 
   int c = m_Smoothing.smooth.Count();
@@ -1272,7 +1273,7 @@ void CDemoSmootherPanel::OnLinearInterpolateAnglesBasedOnEndpoints(void) {
   PushRedo("linear interp angles");
 }
 
-void CDemoSmootherPanel::OnLinearInterpolateOriginBasedOnEndpoints(void) {
+void CDemoSmootherPanel::OnLinearInterpolateOriginBasedOnEndpoints() {
   if (!m_bHasSelection) return;
 
   int c = m_Smoothing.smooth.Count();
@@ -1312,7 +1313,7 @@ void CDemoSmootherPanel::OnLinearInterpolateOriginBasedOnEndpoints(void) {
   PushRedo("linear interp origin");
 }
 
-void CDemoSmootherPanel::OnRevertPoint(void) {
+void CDemoSmootherPanel::OnRevertPoint() {
   demosmoothing_t *p = GetCurrent();
   if (!p) return;
 
@@ -1332,7 +1333,7 @@ void CDemoSmootherPanel::OnRevertPoint(void) {
   PushRedo("revert point");
 }
 
-demosmoothing_t *CDemoSmootherPanel::GetCurrent(void) {
+demosmoothing_t *CDemoSmootherPanel::GetCurrent() {
   if (!CanEdit()) return NULL;
 
   int c = m_Smoothing.smooth.Count();
@@ -1410,7 +1411,7 @@ void CDemoSmootherPanel::FindSpanningPoints(
   prev = std::clamp(prev, 0, c - 1);
 }
 
-void CDemoSmootherPanel::OnSplineSampleOrigin(void) {
+void CDemoSmootherPanel::OnSplineSampleOrigin() {
   if (!m_bHasSelection) return;
 
   int c = m_Smoothing.smooth.Count();
@@ -1469,7 +1470,7 @@ void CDemoSmootherPanel::OnSplineSampleOrigin(void) {
   PushRedo("spline origin");
 }
 
-void CDemoSmootherPanel::OnSplineSampleAngles(void) {
+void CDemoSmootherPanel::OnSplineSampleAngles() {
   if (!m_bHasSelection) return;
 
   int c = m_Smoothing.smooth.Count();
@@ -1598,46 +1599,13 @@ void CDemoSmootherPanel::OnLookAtPoints(bool spline) {
 }
 
 void CDemoSmootherPanel::SetLastFrame(bool jumptotarget, int frame) {
-  // bool changed = frame != m_nPreviewLastFrame;
-
   int useFrame = std::max(m_Smoothing.m_nFirstSelectableSample, frame);
 
   m_nPreviewLastFrame = useFrame;
-
-  /* if ( changed && !m_pLockCamera->IsSelected()  )
-  {
-          // Reset default view/angles
-          demosmoothing_t	*p = GetCurrent();
-          if ( p )
-          {
-                  if ( p->samplepoint && !jumptotarget )
-                  {
-                          m_ViewOrigin = p->vecmoved;
-                          m_ViewAngles = p->angmoved;
-                  }
-                  else if ( p->targetpoint && jumptotarget )
-                  {
-                          m_ViewOrigin = p->vectarget - m_vecEyeOffset;
-                  }
-                  else
-                  {
-                          if ( m_bPreviewing && m_bPreviewOriginal )
-                          {
-                                  m_ViewOrigin = p->info.viewOrigin;
-                                  m_ViewAngles = p->info.viewAngles;
-                          }
-                          else
-                          {
-                                  m_ViewOrigin = p->info.GetViewOrigin();
-                                  m_ViewAngles = p->info.GetViewAngles();
-                          }
-                  }
-          }
-  } */
 }
 
 // Undo/Redo
-void CDemoSmootherPanel::Undo(void) {
+void CDemoSmootherPanel::Undo() {
   if (m_UndoStack.Size() > 0 && m_nUndoLevel > 0) {
     m_nUndoLevel--;
     DemoSmoothUndo *u = m_UndoStack[m_nUndoLevel];
@@ -1648,7 +1616,7 @@ void CDemoSmootherPanel::Undo(void) {
   InvalidateLayout();
 }
 
-void CDemoSmootherPanel::Redo(void) {
+void CDemoSmootherPanel::Redo() {
   if (m_UndoStack.Size() > 0 && m_nUndoLevel <= m_UndoStack.Size() - 1) {
     DemoSmoothUndo *u = m_UndoStack[m_nUndoLevel];
     Assert(u->redo);
@@ -1660,7 +1628,7 @@ void CDemoSmootherPanel::Redo(void) {
   InvalidateLayout();
 }
 
-void CDemoSmootherPanel::PushUndo(const char *description) {
+void CDemoSmootherPanel::PushUndo(const ch *description) {
   Assert(!m_bRedoPending);
   m_bRedoPending = true;
   WipeRedo();
@@ -1677,7 +1645,7 @@ void CDemoSmootherPanel::PushUndo(const char *description) {
   m_nUndoLevel++;
 }
 
-void CDemoSmootherPanel::PushRedo(const char *description) {
+void CDemoSmootherPanel::PushRedo(const ch *description) {
   Assert(m_bRedoPending);
   m_bRedoPending = false;
 
@@ -1689,7 +1657,7 @@ void CDemoSmootherPanel::PushRedo(const char *description) {
   undo->rdescription = COM_StringCopy(description);
 }
 
-void CDemoSmootherPanel::WipeUndo(void) {
+void CDemoSmootherPanel::WipeUndo() {
   while (m_UndoStack.Size() > 0) {
     DemoSmoothUndo *u = m_UndoStack[0];
     delete u->undo;
@@ -1702,7 +1670,7 @@ void CDemoSmootherPanel::WipeUndo(void) {
   m_nUndoLevel = 0;
 }
 
-void CDemoSmootherPanel::WipeRedo(void) {
+void CDemoSmootherPanel::WipeRedo() {
   // Wipe everything above level
   while (m_UndoStack.Size() > m_nUndoLevel) {
     DemoSmoothUndo *u = m_UndoStack[m_nUndoLevel];
@@ -1717,9 +1685,9 @@ void CDemoSmootherPanel::WipeRedo(void) {
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : const char
+// Output : const ch
 //-----------------------------------------------------------------------------
-const char *CDemoSmootherPanel::GetUndoDescription(void) {
+const ch *CDemoSmootherPanel::GetUndoDescription() {
   if (m_nUndoLevel != 0) {
     DemoSmoothUndo *u = m_UndoStack[m_nUndoLevel - 1];
     return u->udescription;
@@ -1729,9 +1697,9 @@ const char *CDemoSmootherPanel::GetUndoDescription(void) {
 
 //-----------------------------------------------------------------------------
 // Purpose:
-// Output : const char
+// Output : const ch
 //-----------------------------------------------------------------------------
-const char *CDemoSmootherPanel::GetRedoDescription(void) {
+const ch *CDemoSmootherPanel::GetRedoDescription() {
   if (m_nUndoLevel != m_UndoStack.Size()) {
     DemoSmoothUndo *u = m_UndoStack[m_nUndoLevel];
     return u->rdescription;
@@ -1743,7 +1711,7 @@ const char *CDemoSmootherPanel::GetRedoDescription(void) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CDemoSmootherPanel::CanRedo(void) {
+bool CDemoSmootherPanel::CanRedo() {
   if (!m_UndoStack.Count()) return false;
 
   if (m_nUndoLevel == m_UndoStack.Count()) return false;
@@ -1755,7 +1723,7 @@ bool CDemoSmootherPanel::CanRedo(void) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CDemoSmootherPanel::CanUndo(void) {
+bool CDemoSmootherPanel::CanUndo() {
   if (!m_UndoStack.Count()) return false;
 
   if (m_nUndoLevel == 0) return false;
@@ -1766,7 +1734,7 @@ bool CDemoSmootherPanel::CanUndo(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoSmootherPanel::OnToggleKeyFrame(void) {
+void CDemoSmootherPanel::OnToggleKeyFrame() {
   demosmoothing_t *p = GetCurrent();
   if (!p) return;
 
@@ -1797,7 +1765,7 @@ void CDemoSmootherPanel::OnToggleKeyFrame(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CDemoSmootherPanel::OnToggleLookTarget(void) {
+void CDemoSmootherPanel::OnToggleLookTarget() {
   demosmoothing_t *p = GetCurrent();
   if (!p) return;
 
@@ -2054,7 +2022,7 @@ void CDemoSmootherPanel::OnSmoothEdges(bool left, bool right) {
   int c = m_Smoothing.smooth.Count();
 
   // Get number of frames
-  char sz[512];
+  ch sz[512];
   m_pFixEdgeFrames->GetText(sz, sizeof(sz));
 
   int frames = atoi(sz);
@@ -2115,7 +2083,7 @@ void CDemoSmootherPanel::OnGotoFrame() {
   int c = m_Smoothing.smooth.Count();
   if (c < 2) return;
 
-  char sz[256];
+  ch sz[256];
   m_pGotoFrame->GetText(sz, sizeof(sz));
   int frame = atoi(sz);
 
@@ -2249,9 +2217,9 @@ void CDemoSmootherPanel::ParseSmoothingInfo(CDemoFile &demoFile,
   }
 }
 
-void CDemoSmootherPanel::LoadSmoothingInfo(const char *filename,
+void CDemoSmootherPanel::LoadSmoothingInfo(const ch *filename,
                                            CSmoothingContext &smoothing) {
-  char name[MAX_OSPATH];
+  ch name[MAX_OSPATH];
   Q_strncpy(name, filename, sizeof(name));
   Q_DefaultExtension(name, ".dem", sizeof(name));
 
@@ -2303,7 +2271,7 @@ void CDemoSmootherPanel::ClearSmoothingInfo(CSmoothingContext &smoothing) {
   }
 }
 
-void CDemoSmootherPanel::SaveSmoothingInfo(char const *filename,
+void CDemoSmootherPanel::SaveSmoothingInfo(ch const *filename,
                                            CSmoothingContext &smoothing) {
   // Nothing to do
   int c = smoothing.smooth.Count();
@@ -2318,7 +2286,7 @@ void CDemoSmootherPanel::SaveSmoothingInfo(char const *filename,
 
   int filesize = fs->Size(infile);
 
-  char outfilename[512];
+  ch outfilename[512];
   Q_StripExtension(filename, outfilename, sizeof(outfilename));
   Q_strncat(outfilename, "_smooth", sizeof(outfilename), COPY_ALL_CHARACTERS);
   Q_DefaultExtension(outfilename, ".dem", sizeof(outfilename));

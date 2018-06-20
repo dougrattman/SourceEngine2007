@@ -43,7 +43,7 @@ struct decal_t {
   void *userdata;  // For player decals only, decal index ( first player at slot
                    // 1 )
 
-  unsigned short m_iDecalPool;  // index into the decal pool.
+  u16 m_iDecalPool;  // index into the decal pool.
   int m_iSortTree;              // MaterialSort tree id
   int m_iSortMaterial;          // MaterialSort id.
 };

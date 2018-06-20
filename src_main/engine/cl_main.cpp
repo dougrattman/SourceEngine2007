@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -47,7 +47,6 @@
 #include "sys_dll.h"
 #include "testscriptmgr.h"
 #include "tier0/include/icommandline.h"
-#include "tier0/include/systeminformation.h"
 #include "tier0/include/vcrmode.h"
 #include "tier0/include/vprof.h"
 #include "tier2/tier2.h"
@@ -64,7 +63,7 @@ extern IVEngineClient *engineClient;
 void R_UnloadSkys();
 void CL_ResetEntityBits();
 void EngineTool_UpdateScreenshot();
-void WriteConfig_f(ConVar *var, const char *pOldString);
+void WriteConfig_f(ConVar *var, const ch *pOldString);
 
 // If we get more than 250 messages in the incoming buffer queue, dump any above
 // this #
@@ -110,8 +109,8 @@ static int cl_jpegquality = DEFAULT_JPEG_QUALITY;
 static ConVar jpeg_quality("jpeg_quality", "98", 0, "jpeg screenshot quality.");
 
 static int cl_snapshotnum = 0;
-static char cl_snapshotname[MAX_OSPATH];
-static char cl_snapshot_subdirname[MAX_OSPATH];
+static ch cl_snapshotname[MAX_OSPATH];
+static ch cl_snapshot_subdirname[MAX_OSPATH];
 
 // Must match game .dll definition
 // HACK HACK FOR E3 -- Remove this after E3
@@ -140,7 +139,7 @@ void CL_HandlePureServerWhitelist(CPureServerWhitelist *pWhitelist) {
 
   cl.m_pPureServerWhitelist = pWhitelist;
 
-  IFileList *pForceMatchList = NULL, *pAllowFromDiskList = NULL;
+  IFileList *pForceMatchList = nullptr, *pAllowFromDiskList = nullptr;
 
   if (pWhitelist) {
     pForceMatchList = pWhitelist->GetForceMatchList();
@@ -157,7 +156,7 @@ void CL_HandlePureServerWhitelist(CPureServerWhitelist *pWhitelist) {
                                        &pFilesToReload);
 
   if (pFilesToReload) {
-    // Handle sounds..
+  // Handle sounds..
 #if 0  // There are problems with the soundemittersystem + sv_pure currently.
 		if ( g_pSoundEmitterSystem )
 			g_pSoundEmitterSystem->ReloadFilesInList( pFilesToReload );
@@ -184,10 +183,7 @@ void CL_HandlePureServerWhitelist(CPureServerWhitelist *pWhitelist) {
 
   // Now that we've flushed any files that shouldn't have been on disk, we
   // should have a CRC set that we can check with the server.
-  if (pForceMatchList && pAllowFromDiskList)
-    cl.m_bCheckCRCsWithServer = true;
-  else
-    cl.m_bCheckCRCsWithServer = false;
+  cl.m_bCheckCRCsWithServer = pForceMatchList && pAllowFromDiskList;
 }
 
 void CL_PrintWhitelistInfo() {
@@ -214,8 +210,8 @@ void whitelist_f(const CCommand &args) {
   }
 
   if (pureLevel == 0) {
-    Warning("whitelist 0: CL_HandlePureServerWhitelist( NULL )\n");
-    CL_HandlePureServerWhitelist(NULL);
+    Warning("whitelist 0: CL_HandlePureServerWhitelist( nullptr )\n");
+    CL_HandlePureServerWhitelist(nullptr);
   } else {
     CPureServerWhitelist *pWhitelist =
         CPureServerWhitelist::Create(g_pFileSystem);
@@ -267,7 +263,7 @@ void CL_InitHL2DemoFlag() {
         g_pFileSystem->IsSteam()) {
       initialized = true;
       int nRet = 0;
-      char szSubscribedValue[10];
+      ch szSubscribedValue[10];
 
       if (VCRGetMode() != VCR_Playback)
         nRet = SteamApps()->GetAppData(220, "subscribed", szSubscribedValue,
@@ -306,7 +302,7 @@ void CL_InitPortalDemoFlag() {
         g_pFileSystem->IsSteam()) {
       initialized = true;
       int nRet = 0;
-      char szSubscribedValue[10];
+      ch szSubscribedValue[10];
 
       if (VCRGetMode() != VCR_Playback)
         nRet = SteamApps()->GetAppData(400, "subscribed", szSubscribedValue,
@@ -352,7 +348,7 @@ void CL_CheckClientState() {
   CL_SetupLocalNetworkBackDoor(useBackdoor);
 }
 
-bool CL_CheckCRCs(const char *pszMap) {
+bool CL_CheckCRCs(const ch *pszMap) {
   // Don't verify CRC if we are running a local server (i.e., we are playing
   // single player, or we are the server in multiplay
   if (sv.IsActive()) return true;
@@ -387,7 +383,7 @@ bool CL_CheckCRCs(const char *pszMap) {
 
   // Check to see that our copy of the client side dll matches the server's.
   // Client side DLL  CRC check.
-  char client_dll_name[MAX_QPATH];  // Client side DLL being used.
+  ch client_dll_name[MAX_QPATH];  // Client side DLL being used.
   sprintf_s(client_dll_name, "bin\\client.dll");
 
   CRC32_t clientDllCRC;
@@ -459,7 +455,7 @@ void CL_ReadPackets(bool bFinalTick) {
     }
   }
 
-  // check timeout, but not if running _DEBUG engine
+    // check timeout, but not if running _DEBUG engine
 #ifdef NDEBUG
   // Only check on final frame because that's when the server might send us a
   // packet in single player.  This avoids
@@ -493,10 +489,10 @@ void CL_ClearState() {
   // shutdown this level in the client DLL
   if (g_ClientDLL) {
     if (host_state.worldmodel) {
-      char mapname[256];
+      ch mapname[256];
       CL_SetupMapName(modelloader->GetName(host_state.worldmodel), mapname,
                       sizeof(mapname));
-      phonehome->Message(IPhoneHome::PHONE_MSG_MAPEND, mapname);
+      phonehome->Message(PhoneHomeMessage::MapEnd, mapname);
     }
     audiosourcecache->LevelShutdown();
     g_ClientDLL->LevelShutdown();
@@ -535,12 +531,12 @@ void CL_AddSound(const SoundInfo_t &sound) { g_SoundMessages.Insert(sound); }
 void CL_DispatchSound(const SoundInfo_t &sound) {
   CSfxTable *pSfx;
 
-  char name[MAX_QPATH];
+  ch name[MAX_QPATH];
   name[0] = 0;
 
   if (sound.bIsSentence) {
     // make dummy sfx for sentences
-    const char *pSentenceName = VOX_SentenceNameFromIndex(sound.nSoundNum);
+    const ch *pSentenceName = VOX_SentenceNameFromIndex(sound.nSoundNum);
     if (!pSentenceName) pSentenceName = "";
 
     sprintf_s(name, "%c%s", CHAR_SENTENCE, pSentenceName);
@@ -652,7 +648,7 @@ CON_COMMAND_F(connect, "Connect to specified server.", FCVAR_DONTRECORD) {
     return;
   }
 
-  const char *address = args.ArgS();
+  const ch *address = args.ArgS();
 
   // If it's not a single player connection to "localhost", initialize
   // networking & stop listenserver
@@ -681,9 +677,9 @@ CON_COMMAND_F(connect, "Connect to specified server.", FCVAR_DONTRECORD) {
 }
 
 // Takes the map name, strips path and extension
-void CL_SetupMapName(const char *pName, char *pFixedName, int maxlen) {
-  const char *pSlash = strrchr(pName, '\\');
-  const char *pSlash2 = strrchr(pName, '/');
+void CL_SetupMapName(const ch *pName, ch *pFixedName, int maxlen) {
+  const ch *pSlash = strrchr(pName, '\\');
+  const ch *pSlash2 = strrchr(pName, '/');
   if (pSlash2 > pSlash) pSlash = pSlash2;
   if (pSlash)
     ++pSlash;
@@ -691,16 +687,16 @@ void CL_SetupMapName(const char *pName, char *pFixedName, int maxlen) {
     pSlash = pName;
 
   strcpy_s(pFixedName, maxlen, pSlash);
-  char *pExt = strchr(pFixedName, '.');
+  ch *pExt = strchr(pFixedName, '.');
   if (pExt) *pExt = 0;
 }
 
 CPureServerWhitelist *CL_LoadWhitelist(INetworkStringTable *pTable,
-                                       const char *pName) {
+                                       const ch *pName) {
   // If there is no entry for the pure server whitelist, then sv_pure is off and
   // the client can do whatever it wants.
   int iString = pTable->FindStringIndex(pName);
-  if (iString == INVALID_STRING_INDEX) return NULL;
+  if (iString == INVALID_STRING_INDEX) return nullptr;
 
   int dataLen;
   const void *pData = pTable->GetStringUserData(iString, &dataLen);
@@ -711,9 +707,8 @@ CPureServerWhitelist *CL_LoadWhitelist(INetworkStringTable *pTable,
         CPureServerWhitelist::Create(g_pFullFileSystem);
     pWhitelist->Decode(buf);
     return pWhitelist;
-  } else {
-    return NULL;
   }
+  return nullptr;
 }
 
 void CL_CheckForPureServerWhitelist() {
@@ -724,7 +719,7 @@ void CL_CheckForPureServerWhitelist() {
   // Don't do sv_pure stuff in SP games or HLTV
   if (cl.m_nMaxClients <= 1 || cl.ishltv) return;
 
-  CPureServerWhitelist *pWhitelist = NULL;
+  CPureServerWhitelist *pWhitelist = nullptr;
   if (cl.m_pServerStartupTable)
     pWhitelist =
         CL_LoadWhitelist(cl.m_pServerStartupTable, "PureServerWhitelist");
@@ -738,7 +733,7 @@ void CL_CheckForPureServerWhitelist() {
     CL_HandlePureServerWhitelist(pWhitelist);
   } else {
     Msg("No pure server whitelist. sv_pure = 0\n");
-    CL_HandlePureServerWhitelist(NULL);
+    CL_HandlePureServerWhitelist(nullptr);
   }
 }
 
@@ -754,10 +749,9 @@ int CL_GetServerQueryPort() {
   int dataLen;
   const void *pData =
       cl.m_pServerStartupTable->GetStringUserData(iString, &dataLen);
-  if (pData && dataLen == sizeof(int))
-    return *((const int *)pData);
-  else
-    return 0;
+  if (pData && dataLen == sizeof(int)) return *((const int *)pData);
+
+  return 0;
 }
 
 /*
@@ -768,7 +762,8 @@ void CL_RegisterResources() {
   host_state.SetWorldModel(cl.GetModel(1));
   if (!host_state.worldmodel) {
     Host_Error(
-        "CL_RegisterResources: host_state.worldmodel/cl.GetModel(1)==NULL\n");
+        "CL_RegisterResources: "
+        "host_state.worldmodel/cl.GetModel(1)==nullptr\n");
   }
 
   // Force main window to repaint... (only does something if running shaderapi
@@ -908,7 +903,7 @@ void CL_FullyConnected() {
 }
 
 // Called to play the next demo in the demo loop
-void CL_NextDemo(void) {
+void CL_NextDemo() {
   if (cl.demonum == -1) return;  // don't play demos
 
   SCR_BeginLoadingPlaque();
@@ -933,7 +928,7 @@ void CL_NextDemo(void) {
 ConVar cl_screenshotname("cl_screenshotname", "", 0, "Custom Screenshot name");
 
 // We'll take a snapshot at the next available opportunity
-void CL_TakeScreenshot(const char *name) {
+void CL_TakeScreenshot(const ch *name) {
   cl_takesnapshot = true;
   cl_takejpeg = false;
 
@@ -947,7 +942,7 @@ void CL_TakeScreenshot(const char *name) {
     }
   }
 
-  cl_snapshot_subdirname[0] = 0;
+  cl_snapshot_subdirname[0] = '\0';
 }
 
 CON_COMMAND_F(screenshot, "Take a screenshot.", FCVAR_CLIENTCMD_CAN_EXECUTE) {
@@ -976,7 +971,7 @@ CON_COMMAND_F(devshots_screenshot,
 }
 
 // We'll take a snapshot at the next available opportunity
-void CL_TakeJpeg(const char *name, int quality) {
+void CL_TakeJpeg(const ch *name, int quality) {
   // Don't playback screenshots unless specifically requested.
   if (demoplayer->IsPlayingBack() && !cl_playback_screenshots.GetBool()) return;
 
@@ -984,17 +979,17 @@ void CL_TakeJpeg(const char *name, int quality) {
   cl_takejpeg = true;
   cl_jpegquality = std::clamp(quality, 1, 100);
 
-  if (name != NULL) {
-    Q_strncpy(cl_snapshotname, name, sizeof(cl_snapshotname));
+  if (name != nullptr) {
+    strcpy_s(cl_snapshotname, name);
   } else {
-    cl_snapshotname[0] = 0;
+    cl_snapshotname[0] = '\0';
   }
 }
 
 CON_COMMAND(jpeg, "Take a jpeg screenshot:  jpeg <filename> <quality 1-100>.") {
   if (args.ArgC() >= 2) {
     CL_TakeJpeg(args[1],
-                args.ArgC() == 3 ? Q_atoi(args[2]) : jpeg_quality.GetInt());
+                args.ArgC() == 3 ? atoi(args[2]) : jpeg_quality.GetInt());
   } else {
     CL_TakeJpeg(nullptr, jpeg_quality.GetInt());
   }
@@ -1006,8 +1001,7 @@ void CL_TakeSnapshotAndSwap() {
   if (is_read_pixels_from_front_buffer) Shader_SwapBuffers();
 
   if (cl_takesnapshot) {
-    char base[MAX_OSPATH];
-    char filename[MAX_OSPATH];
+    ch base[MAX_OSPATH], filename[MAX_OSPATH];
     IClientEntity *world = entitylist->GetClientEntity(0);
 
     g_pFileSystem->CreateDirHierarchy("screenshots", "DEFAULT_WRITE_PATH");
@@ -1019,7 +1013,7 @@ void CL_TakeSnapshotAndSwap() {
       Q_strncpy(base, "Snapshot", sizeof(base));
     }
 
-    char extension[MAX_OSPATH];
+    ch extension[MAX_OSPATH];
     Q_snprintf(extension, sizeof(extension), ".%s",
                cl_takejpeg ? "jpg" : "tga");
 
@@ -1036,7 +1030,7 @@ void CL_TakeSnapshotAndSwap() {
                  extension);
 
       int iNumber = 0;
-      char renamedfile[MAX_OSPATH];
+      ch renamedfile[MAX_OSPATH];
 
       while (1) {
         Q_snprintf(renamedfile, sizeof(renamedfile), "screenshots/%s_%04d%s",
@@ -1099,7 +1093,7 @@ bool IsIntegralValue(float flValue, float flTolerance = 0.001f) {
 }
 
 static float s_flPreviousHostFramerate = 0;
-void CL_StartMovie(const char *filename, int flags, int nWidth, int nHeight,
+void CL_StartMovie(const ch *filename, int flags, int nWidth, int nHeight,
                    float flFrameRate, int avi_jpeg_quality) {
   Assert(g_hCurrentAVI == AVIHANDLE_INVALID);
 
@@ -1128,10 +1122,8 @@ void CL_StartMovie(const char *filename, int flags, int nWidth, int nHeight,
     if (IsIntegralValue(flFrameRate)) {
       params.m_nFrameRate = RoundFloatToInt(flFrameRate);
       params.m_nFrameScale = 1;
-    } else if (IsIntegralValue(flFrameRate * 1001.0f /
-                               1000.0f))  // 1001 is the ntsc divisor
-                                          // (30*1000/1001 = 29.97, etc)
-    {
+    } else if (IsIntegralValue(flFrameRate * 1001.0f / 1000.0f)) {
+      // 1001 is the ntsc divisor (30*1000/1001 = 29.97, etc)
       params.m_nFrameRate = RoundFloatToInt(flFrameRate * 1001);
       params.m_nFrameScale = 1001;
     } else {
@@ -1165,13 +1157,8 @@ void CL_EndMovie() {
 bool CL_IsRecordingMovie() { return cl_movieinfo.IsRecording(); }
 
 /*
-===============
-CL_StartMovie_f
-
 Sets the engine up to dump frames
-===============
 */
-
 CON_COMMAND_F(startmovie, "Start recording movie frames.", FCVAR_DONTRECORD) {
   if (cmd_source != src_command) return;
 
@@ -1188,9 +1175,9 @@ CON_COMMAND_F(startmovie, "Start recording movie frames.", FCVAR_DONTRECORD) {
         "%d\n",
         DEFAULT_JPEG_QUALITY);
     ConMsg(" ]\n");
-    ConMsg("e.g.:  startmovie testmovie jpg wav jpeg_qality 75\n");
+    ConMsg("e.g.:  startmovie testmovie jpg wav jpeg_quality 85\n");
     ConMsg(
-        "Using AVI will bring up a dialog for choosing the codec, which may "
+        "Using AVI can bring up a dialog for choosing the codec, which may "
         "not show if you are running the engine in fullscreen mode!\n");
     return;
   }
@@ -1206,23 +1193,18 @@ CON_COMMAND_F(startmovie, "Start recording movie frames.", FCVAR_DONTRECORD) {
   if (args.ArgC() > 2) {
     flags = 0;
     for (int i = 2; i < args.ArgC(); ++i) {
-      if (!Q_stricmp(args[i], "avi")) {
+      if (!_stricmp(args[i], "avi")) {
         flags |= MovieInfo_t::FMOVIE_AVI | MovieInfo_t::FMOVIE_AVISOUND;
-      }
-      if (!Q_stricmp(args[i], "raw")) {
+      } else if (!_stricmp(args[i], "raw")) {
         flags |= MovieInfo_t::FMOVIE_TGA | MovieInfo_t::FMOVIE_WAV;
-      }
-      if (!Q_stricmp(args[i], "tga")) {
+      } else if (!_stricmp(args[i], "tga")) {
         flags |= MovieInfo_t::FMOVIE_TGA;
-      }
-      if (!Q_stricmp(args[i], "jpeg") || !Q_stricmp(args[i], "jpg")) {
+      } else if (!_stricmp(args[i], "jpeg") || !_stricmp(args[i], "jpg")) {
         flags &= ~MovieInfo_t::FMOVIE_TGA;
         flags |= MovieInfo_t::FMOVIE_JPG;
-      }
-      if (!Q_stricmp(args[i], "jpeg_quality")) {
-        movie_jpeg_quality = std::clamp(Q_atoi(args[++i]), 1, 100);
-      }
-      if (!Q_stricmp(args[i], "wav")) {
+      } else if (!_stricmp(args[i], "jpeg_quality")) {
+        movie_jpeg_quality = std::clamp(atoi(args[++i]), 1, 100);
+      } else if (!_stricmp(args[i], "wav")) {
         flags |= MovieInfo_t::FMOVIE_WAV;
       }
     }
@@ -1236,9 +1218,8 @@ CON_COMMAND_F(startmovie, "Start recording movie frames.", FCVAR_DONTRECORD) {
   }
 
   float flFrameRate = host_framerate.GetFloat();
-  if (flFrameRate == 0.0f) {
-    flFrameRate = 30.0f;
-  }
+  if (flFrameRate == 0.0f) flFrameRate = 30.0f;
+
   CL_StartMovie(args[1], flags, videomode->GetModeWidth(),
                 videomode->GetModeHeight(), flFrameRate, movie_jpeg_quality);
   ConMsg(
@@ -1248,22 +1229,22 @@ CON_COMMAND_F(startmovie, "Start recording movie frames.", FCVAR_DONTRECORD) {
 
 // Ends frame dumping.
 CON_COMMAND_F(endmovie, "Stop recording movie frames.", FCVAR_DONTRECORD) {
-  if (!CL_IsRecordingMovie()) {
-    ConMsg("No movie started.\n");
-  } else {
+  if (CL_IsRecordingMovie()) {
     CL_EndMovie();
     ConMsg("Stopped recording movie...\n");
+  } else {
+    ConMsg("No movie started.\n");
   }
 }
 
 // Send the rest of the command line over as an unconnected command.
 CON_COMMAND_F(rcon, "Issue an rcon command.", FCVAR_DONTRECORD) {
-  char message[1024];  // Command message
-  char szParam[256];
+  ch message[1024];  // Command message
+  ch szParam[256];
   message[0] = 0;
 
   for (int i = 1; i < args.ArgC(); i++) {
-    const char *pParam = args[i];
+    const ch *pParam = args[i];
     // put quotes around empty arguments so we can pass things like this: rcon
     // sv_password "" otherwise the "" on the end is lost
     if (strchr(pParam, ' ') || strlen(pParam) == 0) {
@@ -1297,8 +1278,6 @@ CON_COMMAND_F(box, "Draw a debug box.", FCVAR_CHEAT) {
 
 // Debugging changes the view entity to the specified index
 CON_COMMAND_F(cl_view, "Set the view entity index.", FCVAR_CHEAT) {
-  int nNewView;
-
   if (args.ArgC() != 2) {
     ConMsg("cl_view entity#\nCurrent %i\n", cl.m_nViewEntity);
     return;
@@ -1306,13 +1285,13 @@ CON_COMMAND_F(cl_view, "Set the view entity index.", FCVAR_CHEAT) {
 
   if (cl.m_nMaxClients > 1) return;
 
-  nNewView = atoi(args[1]);
+  int nNewView = atoi(args[1]);
   if (!nNewView) return;
-
   if (nNewView > entitylist->GetHighestEntityIndex()) return;
 
   cl.m_nViewEntity = nNewView;
   videomode->MarkClientViewRectDirty();  // Force recalculation
+
   ConMsg("View entity set to %i\n", nNewView);
 }
 
@@ -1556,7 +1535,7 @@ void CL_Move(float accumulated_extra_samples, bool bFinalTick) {
   }
 
   // Remember outgoing command that we are sending
-  cl.lastoutgoingcommand = cl.m_NetChannel->SendDatagram(NULL);
+  cl.lastoutgoingcommand = cl.m_NetChannel->SendDatagram(nullptr);
   cl.chokedcommands = 0;
 
   // calc next packet send time
@@ -1590,13 +1569,13 @@ void CL_LatchInterpolationAmount() {
   cl.m_NetChannel->SetInterpolationAmount(flInterp);
 }
 
-void CL_HudMessage(const char *pMessage) {
+void CL_HudMessage(const ch *pMessage) {
   if (g_ClientDLL) g_ClientDLL->HudText(pMessage);
 }
 
 CON_COMMAND_F(cl_showents, "Dump entity list to console.", FCVAR_CHEAT) {
   for (int i = 0; i < entitylist->GetMaxEntities(); i++) {
-    char entStr[256], classStr[256];
+    ch entStr[256], classStr[256];
     IClientNetworkable *client_networkable;
 
     if ((client_networkable = entitylist->GetClientNetworkable(i)) != nullptr) {
@@ -1621,7 +1600,7 @@ bool CL_ShouldLoadBackgroundLevel(const CCommand &args) {
 
   // If TF2 and PC we don't want to load the background map.
   bool bIsTF2 = (Q_stricmp(COM_GetModDirectory(), "tf") == 0);
-  if (bIsTF2 && IsPC()) return false;
+  if (bIsTF2) return false;
 
   if (args.ArgC() == 2) {
     // presence of args identifies an end-of-game situation
@@ -1635,7 +1614,7 @@ bool CL_ShouldLoadBackgroundLevel(const CCommand &args) {
 
     if (!Q_stricmp(args[1], "playendgamevid")) {
       // Bail back to the menu and play the end game video.
-      CommandLine()->AppendParm("-endgamevid", NULL);
+      CommandLine()->AppendParm("-endgamevid", nullptr);
       CommandLine()->RemoveParm("-recapvid");
       HostState_Restart();
       return false;
@@ -1643,7 +1622,7 @@ bool CL_ShouldLoadBackgroundLevel(const CCommand &args) {
 
     if (!Q_stricmp(args[1], "playrecapvid")) {
       // Bail back to the menu and play the recap video
-      CommandLine()->AppendParm("-recapvid", NULL);
+      CommandLine()->AppendParm("-recapvid", nullptr);
       CommandLine()->RemoveParm("-endgamevid");
       HostState_Restart();
       return false;
@@ -1696,7 +1675,7 @@ int CL_GetBackgroundLevelIndex(int nNumChapters) {
 //-----------------------------------------------------------------------------
 // Purpose: returns the name of the background level to load
 //-----------------------------------------------------------------------------
-void CL_GetBackgroundLevelName(char *pszBackgroundName, size_t bufSize,
+void CL_GetBackgroundLevelName(ch *pszBackgroundName, size_t bufSize,
                                bool bMapName) {
   strcpy_s(pszBackgroundName, bufSize, DEFAULT_BACKGROUND_NAME);
 
@@ -1706,19 +1685,19 @@ void CL_GetBackgroundLevelName(char *pszBackgroundName, size_t bufSize,
                                  "scripts/ChapterBackgrounds.txt")) {
     KeyValues *pChapterRoot = pChapterFile;
 
-    const char *szChapterIndex;
+    const ch *szChapterIndex;
     int nNumChapters = 1;
     KeyValues *pChapters = pChapterFile->GetNextKey();
     if (bMapName && pChapters) {
-      const char *pszName = pChapters->GetName();
+      const ch *pszName = pChapters->GetName();
       if (pszName && pszName[0] && !strncmp("BackgroundMaps", pszName, 14)) {
         pChapterRoot = pChapters;
         pChapters = pChapters->GetFirstSubKey();
       } else {
-        pChapters = NULL;
+        pChapters = nullptr;
       }
     } else {
-      pChapters = NULL;
+      pChapters = nullptr;
     }
 
     if (!pChapters) {
@@ -1741,7 +1720,7 @@ void CL_GetBackgroundLevelName(char *pszBackgroundName, size_t bufSize,
     int nChapterToLoad = CL_GetBackgroundLevelIndex(nNumChapters);
 
     // Find the chapter background with this index
-    char buf[4];
+    ch buf[4];
     sprintf_s(buf, "%d", nChapterToLoad);
     KeyValues *pLoadChapter = pChapterRoot->FindKey(buf);
 
@@ -1759,7 +1738,7 @@ void CL_GetBackgroundLevelName(char *pszBackgroundName, size_t bufSize,
 //-----------------------------------------------------------------------------
 void CL_CheckToDisplayStartupMenus(const CCommand &args) {
   if (CL_ShouldLoadBackgroundLevel(args)) {
-    char szBackgroundName[SOURCE_MAX_PATH];
+    ch szBackgroundName[SOURCE_MAX_PATH];
     CL_GetBackgroundLevelName(szBackgroundName, sizeof(szBackgroundName), true);
 
     char cmd[SOURCE_MAX_PATH];
@@ -1838,17 +1817,17 @@ void CL_DemoCheckGameUIRevealTime() {
 // Purpose: setup a debug string that is uploaded on crash
 //----------------------------------------------------------------------------
 extern bool g_bV3SteamInterface;
-char g_minidumpinfo[4096] = {0};
-void DisplaySystemVersion(char *osversion, size_t maxlen);
+ch g_minidumpinfo[4096] = {0};
+void DisplaySystemVersion(ch *osversion, size_t maxlen);
 
 void CL_SetPagedPoolInfo() {}
 
 void CL_SetSteamCrashComment() {
-  char map[80];
-  char videoinfo[2048];
-  char misc[256];
-  char driverinfo[2048];
-  char osversion[256];
+  ch map[80];
+  ch videoinfo[2048];
+  ch misc[256];
+  ch driverinfo[2048];
+  ch osversion[256];
 
   map[0] = 0;
   driverinfo[0] = 0;
@@ -1858,29 +1837,29 @@ void CL_SetSteamCrashComment() {
 
   if (host_state.worldmodel) {
     CL_SetupMapName(modelloader->GetName(host_state.worldmodel), map,
-                    SOURCE_ARRAYSIZE(map));
+                    std::size(map));
   }
 
-  DisplaySystemVersion(osversion, SOURCE_ARRAYSIZE(osversion));
+  DisplaySystemVersion(osversion, std::size(osversion));
 
   MaterialAdapterInfo_t info;
   materials->GetDisplayAdapterInfo(materials->GetCurrentAdapter(), info);
 
-  const char *dxlevel = "Unk";
+  const ch *dxlevel = "Unk";
   if (g_pMaterialSystemHardwareConfig) {
     dxlevel = COM_DXLevelToString(
         g_pMaterialSystemHardwareConfig->GetDXSupportLevel());
   }
 
   // Make a string out of the high part and low parts of driver version
-  char szDXDriverVersion[64];
-  Q_snprintf(szDXDriverVersion, SOURCE_ARRAYSIZE(szDXDriverVersion),
-             "%u.%u.%u.%u", info.m_nDriverVersionHigh >> 16,
+  ch szDXDriverVersion[64];
+  Q_snprintf(szDXDriverVersion, std::size(szDXDriverVersion), "%u.%u.%u.%u",
+             info.m_nDriverVersionHigh >> 16,
              info.m_nDriverVersionHigh & 0xffff, info.m_nDriverVersionLow >> 16,
              info.m_nDriverVersionLow & 0xffff);
 
   Q_snprintf(
-      driverinfo, SOURCE_ARRAYSIZE(driverinfo),
+      driverinfo, std::size(driverinfo),
       "Driver Name:  %s\nDriver Version: %s\nVendorId / DeviceId:  0x%x / "
       "0x%x\nSubSystem / Rev:  0x%x / 0x%x\nDXLevel:  %s\nVid:  %i x %i",
       info.m_pDriverName, szDXDriverVersion, info.m_VendorID, info.m_DeviceID,
@@ -1902,7 +1881,7 @@ void CL_SetSteamCrashComment() {
   ConVarRef mat_motion_blur_enabled("mat_motion_blur_enabled");
   ConVarRef mat_queue_mode("mat_queue_mode");
 
-  Q_snprintf(videoinfo, SOURCE_ARRAYSIZE(videoinfo),
+  Q_snprintf(videoinfo, std::size(videoinfo),
              "picmip: %i forceansio: %i trilinear: %i antialias: %i vsync: %i "
              "rootlod: %i reducefillrate: %i\n"
              "shadowrendertotexture: %i r_flashlightdepthtexture %i "
@@ -1921,19 +1900,19 @@ void CL_SetSteamCrashComment() {
     latency = 1000.0f * cl.m_NetChannel->GetAvgLatency(FLOW_OUTGOING);
   }
 
-  Q_snprintf(misc, SOURCE_ARRAYSIZE(misc),
+  Q_snprintf(misc, std::size(misc),
              "skill:%i rate %i update %.2f cmd %.2f latency %.2f msec",
              skill.GetInt(), cl_rate->GetInt(), cl_updaterate->GetFloat(),
              cl_cmdrate->GetFloat(), latency);
 
-  const char *pNetChannel = "Not Connected";
+  const ch *pNetChannel = "Not Connected";
   if (cl.m_NetChannel) {
     pNetChannel = cl.m_NetChannel->GetRemoteAddress().ToString();
   }
 
   CL_SetPagedPoolInfo();
 
-  Q_snprintf(g_minidumpinfo, SOURCE_ARRAYSIZE(g_minidumpinfo),
+  Q_snprintf(g_minidumpinfo, std::size(g_minidumpinfo),
              "Map: %s\n"
              "Game: %s\n"
              "Build: %i\n"
@@ -1946,8 +1925,8 @@ void CL_SetSteamCrashComment() {
              map, com_gamedir, build_number(), misc, pNetChannel,
              CommandLine()->GetCmdLine(), driverinfo, videoinfo, osversion);
 
-  char full[4096];
-  Q_snprintf(full, SOURCE_ARRAYSIZE(full), "%s\n", g_minidumpinfo);
+  ch full[4096];
+  Q_snprintf(full, std::size(full), "%s\n", g_minidumpinfo);
 
 #ifndef NO_STEAM
   SteamAPI_SetMiniDumpComment(full);
@@ -1965,9 +1944,9 @@ static ConCommand startupmenu("startupmenu", &CL_CheckToDisplayStartupMenus,
 ConVar cl_language("cl_language", "english", FCVAR_USERINFO,
                    "Language (from HKCU\\Software\\Valve\\Steam\\Language)");
 void CL_InitLanguageCvar() {
-  // !! bug do i need to do something linux-wise here.
+// !! bug do i need to do something linux-wise here.
 #ifdef _WIN32
-  char language[64];
+  ch language[64];
   if (IsPC()) {
     memset(language, 0, sizeof(language));
     vgui::system()->GetRegistryString(
@@ -1983,40 +1962,24 @@ void CL_InitLanguageCvar() {
 #endif
 }
 
-/*
-=================
-CL_Init
-=================
-*/
-void CL_Init(void) {
+void CL_Init() {
   cl.Clear();
 
-  char szRate[128];
-  szRate[0] = 0;
+  ch szRate[128];
+  szRate[0] = '\0';
 
   // get rate from registry
   Sys_GetRegKeyValue("Software\\Valve\\Steam", "Rate", szRate, sizeof(szRate),
-                     IsX360() ? "6000" : "10000");
+                     "10000");
 
-  if (Q_strlen(szRate) > 0) {
-    cl_rate->SetValue(std::clamp(Q_atoi(szRate), MIN_RATE, MAX_RATE));
+  if (strlen(szRate) > 0) {
+    cl_rate->SetValue(std::clamp(atoi(szRate), MIN_RATE, MAX_RATE));
   }
 
   CL_InitLanguageCvar();
-
-// We don't want to unlock all the chapters by default for cert!
-#if 0
-	if ( IsX360() && !IsRetail() )
-	{
-		sv_unlockedchapters.SetValue( 15 );
-	}
-#endif
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void CL_Shutdown(void) {}
+void CL_Shutdown() {}
 
 CON_COMMAND_F(cl_fullupdate, "Forces the server to send a full update packet",
               FCVAR_CHEAT) {
@@ -2024,7 +1987,6 @@ CON_COMMAND_F(cl_fullupdate, "Forces the server to send a full update packet",
 }
 
 #ifdef _DEBUG
-
 CON_COMMAND(cl_download, "Downloads a file from server.") {
   if (args.ArgC() != 2) return;
 
@@ -2032,7 +1994,6 @@ CON_COMMAND(cl_download, "Downloads a file from server.") {
 
   cl.m_NetChannel->RequestFile(args[1]);  // just for testing stuff
 }
-
 #endif  // _DEBUG
 
 CON_COMMAND_F(setinfo, "Addes a new user info value",
@@ -2042,9 +2003,7 @@ CON_COMMAND_F(setinfo, "Addes a new user info value",
     return;
   }
 
-  const char *name = args[1];
-  const char *value = args[2];
-
+  const ch *name = args[1], *value = args[2];
   ConCommandBase *pCommand = g_pCVar->FindCommandBase(name);
 
   if (pCommand) {
@@ -2059,16 +2018,15 @@ CON_COMMAND_F(setinfo, "Addes a new user info value",
     }
   } else {
     // cvar not found, create it now
-    size_t size = Q_strlen(name) + 1;
-    char *pszString = new char[size];
-    Q_strcpy(pszString, size, name);
+    size_t size = strlen(name) + 1;
+    ch *pszString = new ch[size];
+    strcpy_s(pszString, size, name);
 
     pCommand =
         new ConVar(pszString, "", FCVAR_USERINFO, "Custom user info value");
   }
 
   ConVar *pConVar = (ConVar *)pCommand;
-
   pConVar->SetValue(value);
 
   if (cl.IsConnected()) {
@@ -2091,19 +2049,11 @@ CON_COMMAND(cl_precacheinfo, "Show precache info (client).") {
   cl.DumpPrecacheStats(GENERIC_PRECACHE_TABLENAME);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *object -
-//			stringTable -
-//			stringNumber -
-//			*newString -
-//			*newData -
-//-----------------------------------------------------------------------------
 void Callback_ModelChanged(void *object, INetworkStringTable *stringTable,
-                           int stringNumber, const char *newString,
+                           int stringNumber, const ch *newString,
                            const void *newData) {
   if (stringTable == cl.m_pModelPrecacheTable) {
-    // Index 0 is always NULL, just ignore it
+    // Index 0 is always nullptr, just ignore it
     // Index 1 == the world, don't
     if (stringNumber >= 1) {
       cl.SetModel(stringNumber);
@@ -2113,19 +2063,11 @@ void Callback_ModelChanged(void *object, INetworkStringTable *stringTable,
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *object -
-//			stringTable -
-//			stringNumber -
-//			*newString -
-//			*newData -
-//-----------------------------------------------------------------------------
 void Callback_GenericChanged(void *object, INetworkStringTable *stringTable,
-                             int stringNumber, const char *newString,
+                             int stringNumber, const ch *newString,
                              const void *newData) {
   if (stringTable == cl.m_pGenericPrecacheTable) {
-    // Index 0 is always NULL, just ignore it
+    // Index 0 is always nullptr, just ignore it
     if (stringNumber >= 1) {
       cl.SetGeneric(stringNumber);
     }
@@ -2134,19 +2076,11 @@ void Callback_GenericChanged(void *object, INetworkStringTable *stringTable,
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *object -
-//			stringTable -
-//			stringNumber -
-//			*newString -
-//			*newData -
-//-----------------------------------------------------------------------------
 void Callback_SoundChanged(void *object, INetworkStringTable *stringTable,
-                           int stringNumber, const char *newString,
+                           int stringNumber, const ch *newString,
                            const void *newData) {
   if (stringTable == cl.m_pSoundPrecacheTable) {
-    // Index 0 is always NULL, just ignore it
+    // Index 0 is always nullptr, just ignore it
     if (stringNumber >= 1) {
       cl.SetSound(stringNumber);
     }
@@ -2156,7 +2090,7 @@ void Callback_SoundChanged(void *object, INetworkStringTable *stringTable,
 }
 
 void Callback_DecalChanged(void *object, INetworkStringTable *stringTable,
-                           int stringNumber, const char *newString,
+                           int stringNumber, const ch *newString,
                            const void *newData) {
   if (stringTable == cl.m_pDecalPrecacheTable) {
     cl.SetDecal(stringNumber);
@@ -2167,14 +2101,14 @@ void Callback_DecalChanged(void *object, INetworkStringTable *stringTable,
 
 void Callback_InstanceBaselineChanged(void *object,
                                       INetworkStringTable *stringTable,
-                                      int stringNumber, const char *newString,
+                                      int stringNumber, const ch *newString,
                                       const void *newData) {
   Assert(stringTable == cl.m_pInstanceBaselineTable);
   // cl.UpdateInstanceBaseline( stringNumber );
 }
 
 void Callback_UserInfoChanged(void *object, INetworkStringTable *stringTable,
-                              int stringNumber, const char *newString,
+                              int stringNumber, const ch *newString,
                               const void *newData) {
   Assert(stringTable == cl.m_pUserInfoTable);
 
@@ -2210,8 +2144,8 @@ void CL_HookClientStringTables() {
 
   for (int i = 0; i < numTables; i++) {
     // iterate through server tables
-    CNetworkStringTable *pTable =
-        (CNetworkStringTable *)cl.m_StringTableContainer->GetTable(i);
+    auto *pTable = assert_cast<CNetworkStringTable *>(
+        cl.m_StringTableContainer->GetTable(i));
 
     if (!pTable) continue;
 
@@ -2244,7 +2178,7 @@ void CL_InstallAndInvokeClientStringTableCallbacks() {
     for (int j = 0; j < pTable->GetNumStrings(); ++j) {
       int userDataSize;
       const void *pUserData = pTable->GetStringUserData(j, &userDataSize);
-      (*pNewFunction)(NULL, pTable, j, pTable->GetString(j), pUserData);
+      (*pNewFunction)(nullptr, pTable, j, pTable->GetString(j), pUserData);
     }
   }
 }

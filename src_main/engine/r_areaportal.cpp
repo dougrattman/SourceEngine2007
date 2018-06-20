@@ -34,8 +34,7 @@ class CAreaCullInfo {
   }
   Frustum_t m_Frustum;
   CPortalRect m_Rect;
-  unsigned short
-      m_GlobalCounter;  // Used to tell if it's been touched yet this frame.
+  u16 m_GlobalCounter;  // Used to tell if it's been touched yet this frame.
 };
 
 // ------------------------------------------------------------------------------------
@@ -53,11 +52,11 @@ static unsigned char g_AreaStack[32];
 static CUtlVector<CAreaCullInfo> g_AreaCullInfo;
 
 // List of areas marked visible this frame.
-static unsigned short g_VisibleAreas[MAX_MAP_AREAS];
+static u16 g_VisibleAreas[MAX_MAP_AREAS];
 static int g_nVisibleAreas;
 
 // Tied to CAreaCullInfo::m_GlobalCounter.
-static unsigned short g_GlobalCounter = 1;
+static u16 g_GlobalCounter = 1;
 
 // ------------------------------------------------------------------------------------
 // // Functions.

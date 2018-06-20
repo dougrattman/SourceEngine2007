@@ -154,7 +154,7 @@ CCoreDispSurface::CCoreDispSurface() { Init(); }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispSurface::Init(void) {
+void CCoreDispSurface::Init() {
   m_Index = -1;
 
   m_PointCount = 0;
@@ -245,7 +245,7 @@ void CCoreDispSurface::GeneratePointStartIndexFromMappingAxes(
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-int CCoreDispSurface::GenerateSurfPointStartIndex(void) {
+int CCoreDispSurface::GenerateSurfPointStartIndex() {
   //
   // get the minimum surface component values
   //
@@ -283,7 +283,7 @@ int CCoreDispSurface::GenerateSurfPointStartIndex(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-int CCoreDispSurface::FindSurfPointStartIndex(void) {
+int CCoreDispSurface::FindSurfPointStartIndex() {
   if (m_PointStartIndex != -1) return m_PointStartIndex;
 
   int minIndex = -1;
@@ -306,7 +306,7 @@ int CCoreDispSurface::FindSurfPointStartIndex(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispSurface::AdjustSurfPointData(void) {
+void CCoreDispSurface::AdjustSurfPointData() {
   Vector tmpPoints[4];
   Vector tmpNormals[4];
   Vector2D tmpTexCoords[4];
@@ -450,7 +450,7 @@ bool CCoreDispSurface::CalcLuxelCoords(int nLuxels, bool bAdjust,
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispNode::Init(void) {
+void CCoreDispNode::Init() {
   VectorClear(m_BBox[0]);
   VectorClear(m_BBox[1]);
 
@@ -597,7 +597,7 @@ void CCoreDispInfo::InitDispInfo(int power, int minTess, float smoothingAngle,
   m_pVerts = new CoreDispVert_t[size];
 
   int nIndexCount = size * 2 * 3;
-  m_RenderIndices = new unsigned short[nIndexCount];
+  m_RenderIndices = new u16[nIndexCount];
 
   int nNodeCount = GetNodeCount(power);
   m_Nodes = new CCoreDispNode[nNodeCount];
@@ -735,7 +735,7 @@ void CCoreDispInfo::BuildTriBLtoTR(int ndx) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::GenerateCollisionSurface(void) {
+void CCoreDispInfo::GenerateCollisionSurface() {
   // get width and height of displacement maps
   int nWidth = ((1 << m_Power) + 1);
   int nHeight = ((1 << m_Power) + 1);
@@ -765,7 +765,7 @@ void CCoreDispInfo::GenerateCollisionSurface(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::GenerateCollisionData(void) { GenerateCollisionSurface(); }
+void CCoreDispInfo::GenerateCollisionData() { GenerateCollisionSurface(); }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1315,7 +1315,7 @@ void CCoreDispInfo::CalcVertIndicesAtNodes(int nodeIndex) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::GenerateLODTree(void) {
+void CCoreDispInfo::GenerateLODTree() {
   //
   // calculate the displacement surface's vertex index at each quad-tree node
   // centroid
@@ -1467,7 +1467,7 @@ void CCoreDispInfo::CalcDispSurfAlphas( void )
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::GenerateDispSurfTangentSpaces(void) {
+void CCoreDispInfo::GenerateDispSurfTangentSpaces() {
   //
   // get texture axes from base surface
   //
@@ -1683,7 +1683,7 @@ bool CCoreDispInfo::DoesEdgeExist(int indexRow, int indexCol, int direction,
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::GenerateDispSurfNormals(void) {
+void CCoreDispInfo::GenerateDispSurfNormals() {
   // get the post spacing (size/interval of displacement surface)
   int postSpacing = GetPostSpacing();
 
@@ -1710,7 +1710,7 @@ void CCoreDispInfo::GenerateDispSurfNormals(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::GenerateDispSurf(void) {
+void CCoreDispInfo::GenerateDispSurf() {
   int i;
   CCoreDispSurface *pSurf = GetSurface();
   Vector points[4];
@@ -1789,7 +1789,7 @@ void CCoreDispInfo::GenerateDispSurf(void) {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // bool CCoreDispInfo::Create( int creationFlags )
-bool CCoreDispInfo::Create(void) {
+bool CCoreDispInfo::Create() {
   // sanity check
   CCoreDispSurface *pSurf = GetSurface();
   if (pSurf->GetPointCount() != 4) return false;
@@ -1819,7 +1819,7 @@ bool CCoreDispInfo::Create(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Create a displacement surface without generating the LOD for it.
 //-----------------------------------------------------------------------------
-bool CCoreDispInfo::CreateWithoutLOD(void) {
+bool CCoreDispInfo::CreateWithoutLOD() {
   // sanity check
   CCoreDispSurface *pSurf = GetSurface();
   if (pSurf->GetPointCount() != 4) return false;
@@ -2681,15 +2681,15 @@ bool CCoreDispInfo::SurfToBaseFacePlane(Vector const &surfPt, Vector &planePt) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int CCoreDispInfo::GetTriCount(void) {
+int CCoreDispInfo::GetTriCount() {
   return ((GetHeight() - 1) * (GetWidth() - 1) * 2);
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::GetTriIndices(int iTri, unsigned short &v1,
-                                  unsigned short &v2, unsigned short &v3) {
+void CCoreDispInfo::GetTriIndices(int iTri, u16 &v1,
+                                  u16 &v2, u16 &v3) {
   // Verify we have the correct data (only build when collision data is built).
   if (!m_pTris || (iTri < 0) || (iTri >= GetTriCount())) {
     Assert(iTri >= 0);
@@ -2707,8 +2707,8 @@ void CCoreDispInfo::GetTriIndices(int iTri, unsigned short &v1,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::SetTriIndices(int iTri, unsigned short v1,
-                                  unsigned short v2, unsigned short v3) {
+void CCoreDispInfo::SetTriIndices(int iTri, u16 v1,
+                                  u16 v2, u16 v3) {
   // Verify we have the correct data (only build when collision data is built).
   if (!m_pTris || (iTri < 0) || (iTri >= GetTriCount())) {
     Assert(iTri >= 0);
@@ -2744,7 +2744,7 @@ void CCoreDispInfo::GetTriPos(int iTri, Vector &v1, Vector &v2, Vector &v3) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::InitTris(void) {
+void CCoreDispInfo::InitTris() {
   // Verify we have the correct data (only build when collision data is built).
   if (!m_pTris) {
     Assert(m_pTris);
@@ -2760,7 +2760,7 @@ void CCoreDispInfo::InitTris(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CCoreDispInfo::CreateTris(void) {
+void CCoreDispInfo::CreateTris() {
   // Verify we have the correct data (only build when collision data is built).
   if (!m_pTris) {
     Assert(m_pTris);

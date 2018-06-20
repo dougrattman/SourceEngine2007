@@ -517,7 +517,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   }
 
   // Sets the engine to run in a particular editor window
-  void SetEngineWindow(void *hWnd) override {
+  void SetEngineWindow(HWND hWnd) override {
     if (!InEditMode()) return;
 
     // Detach input from the previous editor window
@@ -858,7 +858,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   }
 
  private:
-  void *editor_hwnd_;
+  HWND editor_hwnd_;
   bool is_running_simulation_;
   StartupInfo_t startup_info_;
 };

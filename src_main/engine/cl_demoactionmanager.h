@@ -17,7 +17,7 @@ struct democmdinfo_t;
 //-----------------------------------------------------------------------------
 the_interface IDemoActionManager {
  public:
-  virtual ~IDemoActionManager(void) {}
+  virtual ~IDemoActionManager() {}
 
   virtual void Init(void) = 0;
   virtual void Shutdown(void) = 0;

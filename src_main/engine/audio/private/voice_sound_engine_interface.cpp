@@ -8,7 +8,6 @@
 #include "ivoicecodec.h"
 #include "voice.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // ------------------------------------------------------------------------- //
@@ -223,8 +222,7 @@ void VoiceSE_Idle(float frametime) {
   }
 
   float percent = g_VoiceOverdriveDuration / voice_overdrivefadetime.GetFloat();
-  percent =
-      (float)(-cos(percent * 3.1415926535) * 0.5 + 0.5);  // Smooth it out..
+  percent = -cos(percent * M_PI_F) * 0.5f + 0.5f;  // Smooth it out..
   float voiceOverdrive = 1 + (voice_overdrive.GetFloat() - 1) * percent;
   g_SND_VoiceOverdriveInt = (int)(256 / voiceOverdrive);
 }

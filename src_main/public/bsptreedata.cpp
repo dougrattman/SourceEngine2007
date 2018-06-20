@@ -68,18 +68,18 @@ class CBSPTreeData : public IBSPTreeData, public ISpatialLeafEnumerator {
   // All the information associated with a particular handle
   struct HandleInfo_t {
     int m_UserId;               // Client-defined id
-    unsigned short m_LeafList;  // What leafs is it in?
+    u16 m_LeafList;  // What leafs is it in?
   };
 
   // The leaf contains an index into a list of elements
   struct Leaf_t {
-    unsigned short m_FirstElement;
+    u16 m_FirstElement;
   };
 
   // The handle knows about the leaves it lies in
   struct HandleInLeaf_t {
     int m_Leaf;  // what leaf is the handle in?
-    unsigned short
+    u16
         m_LeafElementIndex;  // what's the m_LeafElements index of the entry?
   };
 
@@ -87,13 +87,13 @@ class CBSPTreeData : public IBSPTreeData, public ISpatialLeafEnumerator {
   CUtlVector<Leaf_t> m_Leaf;
 
   // Stores all unique handles
-  CUtlLinkedList<HandleInfo_t, unsigned short> m_Handles;
+  CUtlLinkedList<HandleInfo_t, u16> m_Handles;
 
   // Maintains the list of all handles in a particular leaf
-  CUtlLinkedList<BSPTreeDataHandle_t, unsigned short, true> m_LeafElements;
+  CUtlLinkedList<BSPTreeDataHandle_t, u16, true> m_LeafElements;
 
   // Maintains the list of all leaves a particular handle spans
-  CUtlLinkedList<HandleInLeaf_t, unsigned short, true> m_HandleLeafList;
+  CUtlLinkedList<HandleInLeaf_t, u16, true> m_HandleLeafList;
 
   // Interface to BSP tree
   ISpatialQuery* m_pBSPTree;
@@ -182,14 +182,14 @@ void CBSPTreeData::Remove(BSPTreeDataHandle_t handle) {
 //-----------------------------------------------------------------------------
 void CBSPTreeData::AddHandleToLeaf(int leaf, BSPTreeDataHandle_t handle) {
   // Got to a leaf baby! Add the handle to the leaf's list of elements
-  unsigned short leafElement = m_LeafElements.Alloc(true);
+  u16 leafElement = m_LeafElements.Alloc(true);
   if (m_Leaf[leaf].m_FirstElement != m_LeafElements.InvalidIndex())
     m_LeafElements.LinkBefore(m_Leaf[leaf].m_FirstElement, leafElement);
   m_Leaf[leaf].m_FirstElement = leafElement;
   m_LeafElements[leafElement] = handle;
 
   // Insert the leaf into the handles's list of leaves
-  unsigned short handleElement = m_HandleLeafList.Alloc(true);
+  u16 handleElement = m_HandleLeafList.Alloc(true);
   if (m_Handles[handle].m_LeafList != m_HandleLeafList.InvalidIndex())
     m_HandleLeafList.LinkBefore(m_Handles[handle].m_LeafList, handleElement);
   m_Handles[handle].m_LeafList = handleElement;
@@ -217,17 +217,17 @@ void CBSPTreeData::InsertIntoTree(BSPTreeDataHandle_t handle,
 
 void CBSPTreeData::RemoveFromTree(BSPTreeDataHandle_t handle) {
   // Iterate over the list of all leaves the handle is in
-  unsigned short i = m_Handles[handle].m_LeafList;
+  u16 i = m_Handles[handle].m_LeafList;
   while (i != m_HandleLeafList.InvalidIndex()) {
     int leaf = m_HandleLeafList[i].m_Leaf;
-    unsigned short leafElement = m_HandleLeafList[i].m_LeafElementIndex;
+    u16 leafElement = m_HandleLeafList[i].m_LeafElementIndex;
 
     // Unhook the handle from the leaf handle list
     if (leafElement == m_Leaf[leaf].m_FirstElement)
       m_Leaf[leaf].m_FirstElement = m_LeafElements.Next(leafElement);
     m_LeafElements.Free(leafElement);
 
-    unsigned short prevNode = i;
+    u16 prevNode = i;
     i = m_HandleLeafList.Next(i);
     m_HandleLeafList.Free(prevNode);
   }
@@ -278,7 +278,7 @@ bool CBSPTreeData::EnumerateElementsInLeaf(int leaf,
   int nCount = CountElementsInLeaf(leaf);
 #endif
 
-  unsigned short idx = m_Leaf[leaf].m_FirstElement;
+  u16 idx = m_Leaf[leaf].m_FirstElement;
   while (idx != m_LeafElements.InvalidIndex()) {
     BSPTreeDataHandle_t handle = m_LeafElements[idx];
     if (!pEnum->EnumerateElement(m_Handles[handle].m_UserId, context)) {

@@ -42,7 +42,6 @@
 #include "voice.h"
 #include "vox.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
@@ -61,13 +60,13 @@ void CClientState::ConnectionClosing(const char *reason) {
   // if connected, shut down host
   if (m_nSignonState > SIGNONSTATE_NONE) {
     ConMsg("Disconnect: %s.\n", reason);
-    if (!Q_stricmp(reason, INVALID_STEAM_TICKET)) {
+    if (!_stricmp(reason, INVALID_STEAM_TICKET)) {
       g_eSteamLoginFailure = STEAMLOGINFAILURE_BADTICKET;
-    } else if (!Q_stricmp(reason, INVALID_STEAM_LOGON)) {
+    } else if (!_stricmp(reason, INVALID_STEAM_LOGON)) {
       g_eSteamLoginFailure = STEAMLOGINFAILURE_NOSTEAMLOGIN;
-    } else if (!Q_stricmp(reason, INVALID_STEAM_LOGGED_IN_ELSEWHERE)) {
+    } else if (!_stricmp(reason, INVALID_STEAM_LOGGED_IN_ELSEWHERE)) {
       g_eSteamLoginFailure = STEAMLOGINFAILURE_LOGGED_IN_ELSEWHERE;
-    } else if (!Q_stricmp(reason, INVALID_STEAM_VACBANSTATE)) {
+    } else if (!_stricmp(reason, INVALID_STEAM_VACBANSTATE)) {
       g_eSteamLoginFailure = STEAMLOGINFAILURE_VACBANNED;
     } else {
       g_eSteamLoginFailure = STEAMLOGINFAILURE_NONE;
@@ -595,7 +594,7 @@ bool CClientState::ProcessPacketEntities(SVC_PacketEntities *msg) {
   CL_PreprocessEntities();  // setup client prediction
 
   if (!msg->m_bIsDelta) {
-    // Delta too old or is initial message
+  // Delta too old or is initial message
 #ifndef _XBOX
     // we can start recording now that we've received an uncompressed packet
     demorecorder->SetSignonState(SIGNONSTATE_FULL);

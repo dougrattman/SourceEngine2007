@@ -12,13 +12,11 @@ CBaseDemoAction::CBaseDemoAction() {}
 
 CBaseDemoAction::~CBaseDemoAction() {}
 
-DEMOACTION CBaseDemoAction::GetType(void) const { return m_Type; }
+DEMOACTION CBaseDemoAction::GetType() const { return m_Type; }
 
 void CBaseDemoAction::SetType(DEMOACTION actionType) { m_Type = actionType; }
 
-DEMOACTIONTIMINGTYPE CBaseDemoAction::GetTimingType(void) const {
-  return m_Timing;
-}
+DEMOACTIONTIMINGTYPE CBaseDemoAction::GetTimingType() const { return m_Timing; }
 
 void CBaseDemoAction::SetTimingType(DEMOACTIONTIMINGTYPE timingtype) {
   m_Timing = timingtype;
@@ -26,7 +24,7 @@ void CBaseDemoAction::SetTimingType(DEMOACTIONTIMINGTYPE timingtype) {
 
 void CBaseDemoAction::SetActionFired(bool fired) { m_bActionFired = fired; }
 
-bool CBaseDemoAction::GetActionFired(void) const { return m_bActionFired; }
+bool CBaseDemoAction::GetActionFired() const { return m_bActionFired; }
 
 void CBaseDemoAction::SetFinishedAction(bool finished) {
   m_bActionFinished = finished;
@@ -35,9 +33,7 @@ void CBaseDemoAction::SetFinishedAction(bool finished) {
   }
 }
 
-bool CBaseDemoAction::HasActionFinished(void) const {
-  return m_bActionFinished;
-}
+bool CBaseDemoAction::HasActionFinished() const { return m_bActionFinished; }
 
 #include "tier0/include/memdbgoff.h"
 
@@ -50,19 +46,19 @@ void CBaseDemoAction::operator delete(void *pMem) {
 #ifdef _DEBUG
   // set the memory to a known value
   int size = _msize(pMem);
-  Q_memset(pMem, 0xcd, size);
+  memset(pMem, 0xcd, size);
 #endif
 
   // get the engine to free the memory
-  free(pMem);
+  heap_free(pMem);
 }
 
 #include "tier0/include/memdbgon.h"
 
 struct DemoActionDictionary {
   DEMOACTION actiontype;
-  ;
-  char const *name;
+
+  ch const *name;
   DEMOACTIONFACTORY_FUNC func;
   DEMOACTIONEDIT_FUNC editfunc;
 };
@@ -170,8 +166,8 @@ bool CBaseDemoAction::HasEditorFactory(DEMOACTION actionType) {
 
 struct DemoTimingTagDictionary {
   DEMOACTIONTIMINGTYPE timingtype;
-  ;
-  char const *name;
+
+  ch const *name;
 };
 
 static DemoTimingTagDictionary g_rgDemoTimingTypeNames[NUM_TIMING_TYPES] = {
@@ -180,7 +176,7 @@ static DemoTimingTagDictionary g_rgDemoTimingTypeNames[NUM_TIMING_TYPES] = {
     {ACTION_USES_TIME, "TimeUseClock"},
 };
 
-char const *CBaseDemoAction::NameForType(DEMOACTION actionType) {
+ch const *CBaseDemoAction::NameForType(DEMOACTION actionType) {
   int idx = (int)actionType;
   if (idx < 0 || idx >= NUM_DEMO_ACTIONS) {
     ConMsg("ERROR: CBaseDemoAction::NameForType type %i out of range\n", idx);
@@ -193,7 +189,7 @@ char const *CBaseDemoAction::NameForType(DEMOACTION actionType) {
   return entry->name;
 }
 
-DEMOACTION CBaseDemoAction::TypeForName(char const *name) {
+DEMOACTION CBaseDemoAction::TypeForName(ch const *name) {
   int c = NUM_DEMO_ACTIONS;
   int i;
   for (i = 0; i < c; i++) {
@@ -206,8 +202,7 @@ DEMOACTION CBaseDemoAction::TypeForName(char const *name) {
   return DEMO_ACTION_UNKNOWN;
 }
 
-char const *CBaseDemoAction::NameForTimingType(
-    DEMOACTIONTIMINGTYPE timingType) {
+ch const *CBaseDemoAction::NameForTimingType(DEMOACTIONTIMINGTYPE timingType) {
   int idx = (int)timingType;
   if (idx < 0 || idx >= NUM_TIMING_TYPES) {
     ConMsg("ERROR: CBaseDemoAction::NameForTimingType type %i out of range\n",
@@ -221,7 +216,7 @@ char const *CBaseDemoAction::NameForTimingType(
   return entry->name;
 }
 
-DEMOACTIONTIMINGTYPE CBaseDemoAction::TimingTypeForName(char const *name) {
+DEMOACTIONTIMINGTYPE CBaseDemoAction::TimingTypeForName(ch const *name) {
   int c = NUM_TIMING_TYPES;
   int i;
   for (i = 0; i < c; i++) {
@@ -237,12 +232,12 @@ DEMOACTIONTIMINGTYPE CBaseDemoAction::TimingTypeForName(char const *name) {
 static bool g_bSaveChained = false;
 
 // Purpose: Simple printf wrapper which handles tab characters
-void CBaseDemoAction::BufPrintf(int depth, CUtlBuffer &buf, char const *fmt,
+void CBaseDemoAction::BufPrintf(int depth, CUtlBuffer &buf, ch const *fmt,
                                 ...) {
   va_list argptr;
-  char string[1024];
+  ch string[1024];
   va_start(argptr, fmt);
-  Q_vsnprintf(string, sizeof(string), fmt, argptr);
+  vsprintf_s(string, fmt, argptr);
   va_end(argptr);
 
   while (depth-- > 0) {
@@ -288,13 +283,13 @@ void CBaseDemoAction::SaveToBuffer(int depth, int index, CUtlBuffer &buf) {
   BufPrintf(depth, buf, "}\n");
 }
 
-void CBaseDemoAction::SetActionName(char const *name) {
+void CBaseDemoAction::SetActionName(ch const *name) {
   Q_strncpy(m_szActionName, name, sizeof(m_szActionName));
 }
 
 // Purpose: Parse root data
 bool CBaseDemoAction::Init(KeyValues *pInitData) {
-  char const *actionname = pInitData->GetString("name", "");
+  ch const *actionname = pInitData->GetString("name", "");
   if (!actionname || !actionname[0]) {
     Msg("CBaseDemoAction::Init:  must specify a name for action!\n");
     return false;
@@ -315,7 +310,7 @@ bool CBaseDemoAction::Init(KeyValues *pInitData) {
   }
 
   // See if there's a target name
-  char const *target = pInitData->GetString("target", "");
+  ch const *target = pInitData->GetString("target", "");
   if (target && target[0]) {
     Q_strncpy(m_szActionTarget, target, sizeof(m_szActionTarget));
   }
@@ -323,12 +318,12 @@ bool CBaseDemoAction::Init(KeyValues *pInitData) {
   return true;
 }
 
-int CBaseDemoAction::GetStartTick(void) const {
+int CBaseDemoAction::GetStartTick() const {
   Assert(m_Timing == ACTION_USES_TICK);
   return m_nStartTick;
 }
 
-float CBaseDemoAction::GetStartTime(void) const {
+float CBaseDemoAction::GetStartTime() const {
   Assert(m_Timing == ACTION_USES_TIME);
   return m_flStartTime;
 }
@@ -375,27 +370,27 @@ bool CBaseDemoAction::Update(const DemoActionTimingContext &tc) {
   return true;
 }
 
-char const *CBaseDemoAction::GetActionName(void) const {
+ch const *CBaseDemoAction::GetActionName() const {
   Assert(m_szActionName[0]);
   return m_szActionName;
 }
 
-bool CBaseDemoAction::ActionHasTarget(void) const {
+bool CBaseDemoAction::ActionHasTarget() const {
   return m_szActionTarget[0] ? true : false;
 }
 
-char const *CBaseDemoAction::GetActionTarget(void) const {
+ch const *CBaseDemoAction::GetActionTarget() const {
   Assert(ActionHasTarget());
   return m_szActionTarget;
 }
 
-void CBaseDemoAction::SetActionTarget(char const *name) {
+void CBaseDemoAction::SetActionTarget(ch const *name) {
   Q_strncpy(m_szActionTarget, name, sizeof(m_szActionTarget));
 }
 
-void CBaseDemoAction::Reset(void) {
+void CBaseDemoAction::Reset() {
   SetActionFired(false);
   SetFinishedAction(false);
 }
 
-void CBaseDemoAction::OnActionFinished(void) {}
+void CBaseDemoAction::OnActionFinished() {}

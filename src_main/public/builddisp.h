@@ -68,9 +68,9 @@ class CCoreDispSurface {
   inline void GetLuxelCoords(int bumpIndex, Vector2D coords[4]) const;
 
   inline void SetLuxelU(int nU) { m_nLuxelU = nU; }
-  inline int GetLuxelU(void) { return m_nLuxelU; }
+  inline int GetLuxelU() { return m_nLuxelU; }
   inline void SetLuxelV(int nV) { m_nLuxelV = nV; }
-  inline int GetLuxelV(void) { return m_nLuxelV; }
+  inline int GetLuxelV() { return m_nLuxelV; }
   bool CalcLuxelCoords(int nLuxels, bool bAdjust, const Vector &vecU,
                        const Vector &vecV);
 
@@ -113,11 +113,11 @@ class CCoreDispSurface {
 
   // Indexed by CORNER_ defines.
   CDispCornerNeighbors *GetCornerNeighbors(int iCorner) {
-    Assert(iCorner >= 0 && iCorner < SOURCE_ARRAYSIZE(m_CornerNeighbors));
+    Assert(iCorner >= 0 && iCorner < std::size(m_CornerNeighbors));
     return &m_CornerNeighbors[iCorner];
   }
   const CDispCornerNeighbors *GetCornerNeighbors(int iCorner) const {
-    Assert(iCorner >= 0 && iCorner < SOURCE_ARRAYSIZE(m_CornerNeighbors));
+    Assert(iCorner >= 0 && iCorner < std::size(m_CornerNeighbors));
     return &m_CornerNeighbors[iCorner];
   }
 
@@ -132,11 +132,11 @@ class CCoreDispSurface {
   }
 
   CDispNeighbor *GetEdgeNeighbor(int iEdge) {
-    Assert(iEdge >= 0 && iEdge < SOURCE_ARRAYSIZE(m_EdgeNeighbors));
+    Assert(iEdge >= 0 && iEdge < std::size(m_EdgeNeighbors));
     return &m_EdgeNeighbors[iEdge];
   }
   const CDispNeighbor *GetEdgeNeighbor(int iEdge) const {
-    Assert(iEdge >= 0 && iEdge < SOURCE_ARRAYSIZE(m_EdgeNeighbors));
+    Assert(iEdge >= 0 && iEdge < std::size(m_EdgeNeighbors));
     return &m_EdgeNeighbors[iEdge];
   }
 
@@ -179,7 +179,7 @@ inline void CCoreDispSurface::SetHandle(int handle) { m_Index = handle; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispSurface::GetHandle(void) { return m_Index; }
+inline int CCoreDispSurface::GetHandle() { return m_Index; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -191,7 +191,7 @@ inline void CCoreDispSurface::SetPointCount(int count) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispSurface::GetPointCount(void) const { return m_PointCount; }
+inline int CCoreDispSurface::GetPointCount() const { return m_PointCount; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -313,7 +313,7 @@ inline void CCoreDispSurface::SetFlags(int flag) { m_Flags = flag; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispSurface::GetFlags(void) { return m_Flags; }
+inline int CCoreDispSurface::GetFlags() { return m_Flags; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -323,7 +323,7 @@ inline void CCoreDispSurface::SetContents(int contents) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispSurface::GetContents(void) { return m_Contents; }
+inline int CCoreDispSurface::GetContents() { return m_Contents; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -359,7 +359,7 @@ inline void CCoreDispSurface::SetPointStartIndex(int index) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispSurface::GetPointStartIndex(void) {
+inline int CCoreDispSurface::GetPointStartIndex() {
   return m_PointStartIndex;
 }
 
@@ -494,7 +494,7 @@ inline void CCoreDispNode::SetErrorTerm(float errorTerm) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline float CCoreDispNode::GetErrorTerm(void) { return m_ErrorTerm; }
+inline float CCoreDispNode::GetErrorTerm() { return m_ErrorTerm; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -504,7 +504,7 @@ inline void CCoreDispNode::SetCenterVertIndex(int index) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispNode::GetCenterVertIndex(void) { return m_VertIndex; }
+inline int CCoreDispNode::GetCenterVertIndex() { return m_VertIndex; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -618,8 +618,8 @@ struct CoreDispVert_t {
 #define COREDISPTRI_TAG_FORCE_BUILDABLE_VAL (1 << 5)
 
 struct CoreDispTri_t {
-  unsigned short m_iIndex[3];  // the three indices that make up a triangle
-  unsigned short m_uiTags;     // walkable, buildable, etc.
+  u16 m_iIndex[3];  // the three indices that make up a triangle
+  u16 m_uiTags;     // walkable, buildable, etc.
 };
 
 class CCoreDispInfo : public CDispUtilsHelper {
@@ -774,27 +774,27 @@ class CCoreDispInfo : public CDispUtilsHelper {
   inline float GetAlpha(int index);
 
   int GetTriCount(void);
-  void GetTriIndices(int iTri, unsigned short &v1, unsigned short &v2,
-                     unsigned short &v3);
-  void SetTriIndices(int iTri, unsigned short v1, unsigned short v2,
-                     unsigned short v3);
+  void GetTriIndices(int iTri, u16 &v1, u16 &v2,
+                     u16 &v3);
+  void SetTriIndices(int iTri, u16 v1, u16 v2,
+                     u16 v3);
   void GetTriPos(int iTri, Vector &v1, Vector &v2, Vector &v3);
-  inline void SetTriTag(int iTri, unsigned short nTag) {
+  inline void SetTriTag(int iTri, u16 nTag) {
     m_pTris[iTri].m_uiTags |= nTag;
   }
-  inline void ResetTriTag(int iTri, unsigned short nTag) {
+  inline void ResetTriTag(int iTri, u16 nTag) {
     m_pTris[iTri].m_uiTags &= ~nTag;
   }
-  inline void ToggleTriTag(int iTri, unsigned short nTag) {
+  inline void ToggleTriTag(int iTri, u16 nTag) {
     m_pTris[iTri].m_uiTags ^= nTag;
   }
-  inline bool IsTriTag(int iTri, unsigned short nTag) {
+  inline bool IsTriTag(int iTri, u16 nTag) {
     return ((m_pTris[iTri].m_uiTags & nTag) != 0);
   }
-  inline unsigned short GetTriTagValue(int iTri) {
+  inline u16 GetTriTagValue(int iTri) {
     return m_pTris[iTri].m_uiTags;
   }
-  inline void SetTriTagValue(int iTri, unsigned short nVal) {
+  inline void SetTriTagValue(int iTri, u16 nVal) {
     m_pTris[iTri].m_uiTags = nVal;
   }
 
@@ -826,7 +826,7 @@ class CCoreDispInfo : public CDispUtilsHelper {
 
   inline CoreDispVert_t *GetDispVert(int iVert) { return &m_pVerts[iVert]; }
   inline CoreDispVert_t *GetDispVertList();
-  inline unsigned short *GetRenderIndexList(void);
+  inline u16 *GetRenderIndexList(void);
 
   inline void SetTouched(bool touched);
   inline bool IsTouched(void);
@@ -848,13 +848,13 @@ class CCoreDispInfo : public CDispUtilsHelper {
   }
 
   void SetListIndex(int nIndex) { m_nListIndex = nIndex; }
-  int GetListIndex(void) { return m_nListIndex; }
+  int GetListIndex() { return m_nListIndex; }
 
   CBitVec<MAX_DISPVERTS> &GetAllowedVerts() { return m_AllowedVerts; }
   const CBitVec<MAX_DISPVERTS> &GetAllowedVerts() const {
     return m_AllowedVerts;
   }
-  void AllowedVerts_Clear(void) { m_AllowedVerts.SetAll(); }
+  void AllowedVerts_Clear() { m_AllowedVerts.SetAll(); }
   int AllowedVerts_GetNumDWords() const {
     return m_AllowedVerts.GetNumDWords();
   }
@@ -895,7 +895,7 @@ class CCoreDispInfo : public CDispUtilsHelper {
 
   // render specific data
   int m_RenderIndexCount;           // number of indices used in rendering
-  unsigned short *m_RenderIndices;  // rendering index list (list of triangles)
+  u16 *m_RenderIndices;  // rendering index list (list of triangles)
   int m_RenderCounter;  // counter to verify surfaces are renderered/collided
                         // with only once per frame
 
@@ -986,23 +986,23 @@ inline void CCoreDispInfo::SetPower(int power) { m_Power = power; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispInfo::GetPower(void) const { return m_Power; }
+inline int CCoreDispInfo::GetPower() const { return m_Power; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispInfo::GetPostSpacing(void) { return ((1 << m_Power) + 1); }
+inline int CCoreDispInfo::GetPostSpacing() { return ((1 << m_Power) + 1); }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispInfo::GetWidth(void) { return ((1 << m_Power) + 1); }
+inline int CCoreDispInfo::GetWidth() { return ((1 << m_Power) + 1); }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispInfo::GetHeight(void) { return ((1 << m_Power) + 1); }
+inline int CCoreDispInfo::GetHeight() { return ((1 << m_Power) + 1); }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispInfo::GetSize(void) const {
+inline int CCoreDispInfo::GetSize() const {
   return (((1 << m_Power) + 1) * ((1 << m_Power) + 1));
 }
 
@@ -1165,11 +1165,11 @@ inline void CCoreDispInfo::SetElevation(float elevation) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline float CCoreDispInfo::GetElevation(void) { return m_Elevation; }
+inline float CCoreDispInfo::GetElevation() { return m_Elevation; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline void CCoreDispInfo::ResetFieldVectors(void) {
+inline void CCoreDispInfo::ResetFieldVectors() {
   //	Vector normal;
   //	m_Surf.GetNormal( normal );
 
@@ -1198,7 +1198,7 @@ inline void CCoreDispInfo::GetFieldVector(int index, Vector &v) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline void CCoreDispInfo::ResetSubdivPositions(void) {
+inline void CCoreDispInfo::ResetSubdivPositions() {
   int size = GetSize();
   for (int i = 0; i < size; i++) {
     m_pVerts[i].m_SubdivPos.Init();
@@ -1223,7 +1223,7 @@ inline void CCoreDispInfo::GetSubdivPosition(int ndx, Vector &v) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline void CCoreDispInfo::ResetSubdivNormals(void) {
+inline void CCoreDispInfo::ResetSubdivNormals() {
   Vector normal;
   m_Surf.GetNormal(normal);
 
@@ -1251,7 +1251,7 @@ inline void CCoreDispInfo::GetSubdivNormal(int ndx, Vector &v) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline void CCoreDispInfo::ResetFieldDistances(void) {
+inline void CCoreDispInfo::ResetFieldDistances() {
   int size = GetSize();
   for (int i = 0; i < size; i++) {
     m_pVerts[i].m_FieldDistance = 0.0f;
@@ -1282,7 +1282,7 @@ inline void CCoreDispInfo::SetRenderIndexCount(int count) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CCoreDispInfo::GetRenderIndexCount(void) {
+inline int CCoreDispInfo::GetRenderIndexCount() {
   return m_RenderIndexCount;
 }
 
@@ -1308,7 +1308,7 @@ inline CoreDispVert_t *CCoreDispInfo::GetDispVertList() { return m_pVerts; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline unsigned short *CCoreDispInfo::GetRenderIndexList(void) {
+inline u16 *CCoreDispInfo::GetRenderIndexList() {
   return &m_RenderIndices[0];
 }
 
@@ -1318,7 +1318,7 @@ inline void CCoreDispInfo::SetTouched(bool touched) { m_bTouched = touched; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline bool CCoreDispInfo::IsTouched(void) { return m_bTouched; }
+inline bool CCoreDispInfo::IsTouched() { return m_bTouched; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

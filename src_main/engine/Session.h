@@ -5,7 +5,6 @@
 
 #include "const.h"
 #include "engine/imatchmaking.h"
-#include "ixboxsystem.h"
 #include "net.h"
 
 // valid session states
@@ -137,9 +136,6 @@ class CSession {
   uint32_t m_SessionState;
   double m_fOperationStartTime;
   CMatchmaking *m_pParent;
-  AsyncHandle_t m_hCreateHandle;
-  AsyncHandle_t m_hMigrateHandle;
-  AsyncHandle_t m_hRegisterHandle;
 
   XSESSION_REGISTRATION_RESULTS *m_pRegistrationResults;
 

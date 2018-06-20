@@ -52,7 +52,7 @@ static bool g_BaseActionEditSaveChained = false;
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionEditDialog::Init(void) {
+void CBaseActionEditDialog::Init() {
   // Fill in data from passed in action
   m_pActionName->SetText(m_pAction->GetActionName());
   m_pStartType->ActivateItem((int)m_pAction->GetTimingType());
@@ -75,21 +75,21 @@ void CBaseActionEditDialog::Init(void) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseActionEditDialog::OnSaveChanges(void) {
+bool CBaseActionEditDialog::OnSaveChanges() {
   bool bret = false;
   // No baseclass chain
   g_BaseActionEditSaveChained = true;
 
-  char actionname[512];
+  ch actionname[512];
   m_pActionName->GetText(actionname, sizeof(actionname));
   if (Q_strcmp(m_pAction->GetActionName(), actionname)) {
     bret = true;
     m_pAction->SetActionName(actionname);
   }
 
-  char starttext[512];
+  ch starttext[512];
   m_pStart->GetText(starttext, sizeof(starttext));
-  char starttype[512];
+  ch starttype[512];
   m_pStartType->GetText(starttype, sizeof(starttype));
 
   DEMOACTIONTIMINGTYPE timingType =
@@ -157,7 +157,7 @@ void CBaseActionEditDialog::OnCancel() {
 // Purpose:
 // Input  : *commands -
 //-----------------------------------------------------------------------------
-void CBaseActionEditDialog::OnCommand(char const *commands) {
+void CBaseActionEditDialog::OnCommand(ch const *commands) {
   if (!Q_strcasecmp(commands, "OK")) {
     OnClose();
   } else if (!Q_strcasecmp(commands, "Cancel")) {
@@ -182,7 +182,7 @@ CBaseActionWithTargetDialog::CBaseActionWithTargetDialog(
 //-----------------------------------------------------------------------------
 // Purpose: Slam text with text from action
 //-----------------------------------------------------------------------------
-void CBaseActionWithTargetDialog::Init(void) {
+void CBaseActionWithTargetDialog::Init() {
   BaseClass::Init();
 
   m_pActionTarget->SetText(m_pAction->GetActionTarget());
@@ -192,10 +192,10 @@ void CBaseActionWithTargetDialog::Init(void) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseActionWithTargetDialog::OnSaveChanges(void) {
+bool CBaseActionWithTargetDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char actiontarget[512];
+  ch actiontarget[512];
   m_pActionTarget->GetText(actiontarget, sizeof(actiontarget));
 
   if (Q_strcmp(m_pAction->GetActionTarget(), actiontarget)) {
@@ -222,7 +222,7 @@ class CBaseActionSkipAheadDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionSkipAhead *GetAction(void) {
+  CDemoActionSkipAhead *GetAction() {
     return static_cast<CDemoActionSkipAhead *>(m_pAction);
   }
 
@@ -246,7 +246,7 @@ CBaseActionSkipAheadDialog::CBaseActionSkipAheadDialog(CDemoEditorPanel *parent,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionSkipAheadDialog::Init(void) {
+void CBaseActionSkipAheadDialog::Init() {
   LoadControlSettings("resource\\BaseActionSkipAheadDialog.res");
 
   BaseClass::Init();
@@ -264,13 +264,13 @@ void CBaseActionSkipAheadDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionSkipAheadDialog::OnSaveChanges(void) {
+bool CBaseActionSkipAheadDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char skiptype[512];
+  ch skiptype[512];
   m_pSkipType->GetText(skiptype, sizeof(skiptype));
 
-  char skipto[512];
+  ch skipto[512];
   m_pSkip->GetText(skipto, sizeof(skipto));
 
   float fskip = (float)atof(skipto);
@@ -306,14 +306,14 @@ class CBaseActionStopPlaybackDialog : public CBaseActionEditDialog {
                                 CBaseDemoAction *action, bool newaction)
       : BaseClass(parent, action, newaction) {}
 
-  virtual void Init(void) {
+  virtual void Init() {
     LoadControlSettings("resource\\BaseActionStopPlaybackDialog.res");
 
     BaseClass::Init();
   }
 
  private:
-  CDemoActionStopPlayback *GetAction(void) {
+  CDemoActionStopPlayback *GetAction() {
     return static_cast<CDemoActionStopPlayback *>(m_pAction);
   }
 };
@@ -351,7 +351,7 @@ class CBaseActionScreenFadeStartDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionScreenFadeStart *GetAction(void) {
+  CDemoActionScreenFadeStart *GetAction() {
     return static_cast<CDemoActionScreenFadeStart *>(m_pAction);
   }
 
@@ -372,7 +372,7 @@ class CBaseActionScreenFadeStartDialog : public CBaseActionEditDialog {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionScreenFadeStartDialog::Init(void) {
+void CBaseActionScreenFadeStartDialog::Init() {
   LoadControlSettings("resource\\BaseActionScreenFadeStartDialog.res");
 
   BaseClass::Init();
@@ -405,7 +405,7 @@ void CBaseActionScreenFadeStartDialog::Init(void) {
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseActionScreenFadeStartDialog::OnSaveChanges(void) {
+bool CBaseActionScreenFadeStartDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
   // Grab current settings
@@ -423,18 +423,16 @@ bool CBaseActionScreenFadeStartDialog::OnSaveChanges(void) {
   int b = f->b;
   int a = f->a;
 
-  char sz[512];
+  ch sz[512];
   m_pDuration->GetText(sz, sizeof(sz));
   if ((float)atof(sz) != duration) {
     bret = true;
-    f->duration =
-        (unsigned short)((float)(1 << SCREENFADE_FRACBITS) * (float)atof(sz));
+    f->duration = (u16)((float)(1 << SCREENFADE_FRACBITS) * (float)atof(sz));
   }
   m_pHoldTime->GetText(sz, sizeof(sz));
   if ((float)atof(sz) != holdTime) {
     bret = true;
-    f->holdTime =
-        (unsigned short)((float)(1 << SCREENFADE_FRACBITS) * (float)atof(sz));
+    f->holdTime = (u16)((float)(1 << SCREENFADE_FRACBITS) * (float)atof(sz));
   }
 
   int rr, gg, bb, aa;
@@ -531,7 +529,7 @@ class CBaseActionTextMessageStartDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionTextMessageStart *GetAction(void) {
+  CDemoActionTextMessageStart *GetAction() {
     return static_cast<CDemoActionTextMessageStart *>(m_pAction);
   }
 
@@ -551,13 +549,13 @@ class CBaseActionTextMessageStartDialog : public CBaseActionEditDialog {
   };
 
   struct EffectType {
-    char const *name;
+    ch const *name;
   };
 
   static EffectType s_EffectTypes[];
 
-  static int EffectTypeForName(char const *name);
-  static char const *NameForEffectType(int type);
+  static int EffectTypeForName(ch const *name);
+  static ch const *NameForEffectType(int type);
 
   vgui::TextEntry *m_pFadeInTime;
   vgui::TextEntry *m_pFadeOutTime;
@@ -580,7 +578,7 @@ CBaseActionTextMessageStartDialog::EffectType
     CBaseActionTextMessageStartDialog::s_EffectTypes[] = {
         {"FADEINOUT"}, {"FLICKER"}, {"WRITEOUT "}};
 
-int CBaseActionTextMessageStartDialog::EffectTypeForName(char const *name) {
+int CBaseActionTextMessageStartDialog::EffectTypeForName(ch const *name) {
   int c = NUM_EFFECT_TYPES;
   int i;
   for (i = 0; i < c; i++) {
@@ -590,7 +588,7 @@ int CBaseActionTextMessageStartDialog::EffectTypeForName(char const *name) {
   return 0;
 }
 
-char const *CBaseActionTextMessageStartDialog::NameForEffectType(int type) {
+ch const *CBaseActionTextMessageStartDialog::NameForEffectType(int type) {
   Assert(type >= 0 && type < NUM_EFFECT_TYPES);
 
   return s_EffectTypes[type].name;
@@ -599,7 +597,7 @@ char const *CBaseActionTextMessageStartDialog::NameForEffectType(int type) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionTextMessageStartDialog::Init(void) {
+void CBaseActionTextMessageStartDialog::Init() {
   LoadControlSettings("resource\\BaseActionTextMessageStartDialog.res");
 
   BaseClass::Init();
@@ -661,7 +659,7 @@ bool CBaseActionTextMessageStartDialog::SaveDifferingFloat(
 
   Assert(curval && control);
 
-  char sz[512];
+  ch sz[512];
   control->GetText(sz, sizeof(sz));
 
   float fcontrol = (float)atof(sz);
@@ -685,7 +683,7 @@ bool CBaseActionTextMessageStartDialog::SaveDifferingInt(
 
   Assert(curval && control);
 
-  char sz[512];
+  ch sz[512];
   control->GetText(sz, sizeof(sz));
 
   int icontrol = atoi(sz);
@@ -703,7 +701,7 @@ bool CBaseActionTextMessageStartDialog::SaveDifferingColor(
 
   Assert(r && g && b && a && control);
 
-  char sz[512];
+  ch sz[512];
   control->GetText(sz, sizeof(sz));
 
   int rr, gg, bb, aa;
@@ -733,7 +731,7 @@ bool CBaseActionTextMessageStartDialog::SaveDifferingColor(
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseActionTextMessageStartDialog::OnSaveChanges(void) {
+bool CBaseActionTextMessageStartDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
   client_textmessage_t *tm = GetAction()->GetTextMessage();
@@ -748,7 +746,7 @@ bool CBaseActionTextMessageStartDialog::OnSaveChanges(void) {
   bret |= SaveDifferingColor(m_pColor1, &tm->r1, &tm->g1, &tm->b1, &tm->a1);
   bret |= SaveDifferingColor(m_pColor2, &tm->r2, &tm->g2, &tm->b2, &tm->a2);
 
-  char sz[1024];
+  ch sz[1024];
   m_pEffectType->GetText(sz, sizeof(sz));
   int iEffect = EffectTypeForName(sz);
   if (iEffect != tm->effect) {
@@ -789,7 +787,7 @@ class CBaseActionPlayCommandsDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionPlayCommands *GetAction(void) {
+  CDemoActionPlayCommands *GetAction() {
     return static_cast<CDemoActionPlayCommands *>(m_pAction);
   }
 
@@ -805,7 +803,7 @@ CBaseActionPlayCommandsDialog::CBaseActionPlayCommandsDialog(
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionPlayCommandsDialog::Init(void) {
+void CBaseActionPlayCommandsDialog::Init() {
   LoadControlSettings("resource\\BaseActionPlayCommandsDialog.res");
 
   BaseClass::Init();
@@ -817,10 +815,10 @@ void CBaseActionPlayCommandsDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionPlayCommandsDialog::OnSaveChanges(void) {
+bool CBaseActionPlayCommandsDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char commands[512];
+  ch commands[512];
   m_pCommands->GetText(commands, sizeof(commands));
 
   if (Q_strcasecmp(commands, GetAction()->GetCommandStream())) {
@@ -849,7 +847,7 @@ class CBaseActionCDTrackStartDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionCDTrackStart *GetAction(void) {
+  CDemoActionCDTrackStart *GetAction() {
     return static_cast<CDemoActionCDTrackStart *>(m_pAction);
   }
 
@@ -865,7 +863,7 @@ CBaseActionCDTrackStartDialog::CBaseActionCDTrackStartDialog(
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionCDTrackStartDialog::Init(void) {
+void CBaseActionCDTrackStartDialog::Init() {
   LoadControlSettings("resource\\BaseActionCDTrackStartDialog.res");
 
   BaseClass::Init();
@@ -877,10 +875,10 @@ void CBaseActionCDTrackStartDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionCDTrackStartDialog::OnSaveChanges(void) {
+bool CBaseActionCDTrackStartDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char track[512];
+  ch track[512];
   m_pTrackNumber->GetText(track, sizeof(track));
   int itrack = atoi(track);
 
@@ -910,10 +908,10 @@ class CBaseActionPlaySoundStartDialog : public CBaseActionEditDialog {
   // Returns true if changes were effected
   virtual bool OnSaveChanges(void);
 
-  virtual void OnCommand(char const *command);
+  virtual void OnCommand(ch const *command);
 
  private:
-  CDemoActionPlaySoundStart *GetAction(void) {
+  CDemoActionPlaySoundStart *GetAction() {
     return static_cast<CDemoActionPlaySoundStart *>(m_pAction);
   }
 
@@ -935,7 +933,7 @@ CBaseActionPlaySoundStartDialog::CBaseActionPlaySoundStartDialog(
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionPlaySoundStartDialog::Init(void) {
+void CBaseActionPlaySoundStartDialog::Init() {
   LoadControlSettings("resource\\BaseActionPlaySoundStartDialog.res");
 
   BaseClass::Init();
@@ -947,10 +945,10 @@ void CBaseActionPlaySoundStartDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionPlaySoundStartDialog::OnSaveChanges(void) {
+bool CBaseActionPlaySoundStartDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char soundname[512];
+  ch soundname[512];
   m_pSoundName->GetText(soundname, sizeof(soundname));
 
   if (Q_strcasecmp(soundname, GetAction()->GetSoundName())) {
@@ -961,18 +959,18 @@ bool CBaseActionPlaySoundStartDialog::OnSaveChanges(void) {
   return bret;
 }
 
-void CBaseActionPlaySoundStartDialog::OnFileSelected(char const *fullpath) {
+void CBaseActionPlaySoundStartDialog::OnFileSelected(ch const *fullpath) {
   if (!fullpath || !fullpath[0]) return;
 
-  char relativepath[512];
+  ch relativepath[512];
   g_pFileSystem->FullPathToRelativePath(fullpath, relativepath,
                                         sizeof(relativepath));
 
   Q_FixSlashes(relativepath);
 
-  char *soundname = relativepath;
-  if (!Q_strnicmp(relativepath, "sound\\", strlen("sound\\"))) {
-    soundname += strlen("sound\\");
+  ch *soundname = relativepath;
+  if (!Q_strnicmp(relativepath, "sound\\", std::size("sound\\") - 1)) {
+    soundname += std::size("sound\\") - 1;
   }
 
   m_pSoundName->SetText(soundname);
@@ -982,14 +980,14 @@ void CBaseActionPlaySoundStartDialog::OnFileSelected(char const *fullpath) {
   }
 }
 
-void CBaseActionPlaySoundStartDialog::OnCommand(char const *command) {
+void CBaseActionPlaySoundStartDialog::OnCommand(ch const *command) {
   if (!Q_strcasecmp(command, "choosesound")) {
     if (!m_hFileOpenDialog.Get()) {
       m_hFileOpenDialog =
           new vgui::FileOpenDialog(this, "Choose .wav file", true);
     }
     if (m_hFileOpenDialog) {
-      char startPath[SOURCE_MAX_PATH];
+      ch startPath[SOURCE_MAX_PATH];
       Q_strncpy(startPath, com_gamedir, sizeof(startPath));
       Q_FixSlashes(startPath);
       m_hFileOpenDialog->SetStartDirectory(va("%s/sound", startPath));
@@ -1017,7 +1015,7 @@ class CBaseActionWithStopTimeDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CBaseDemoActionWithStopTime *GetAction(void) {
+  CBaseDemoActionWithStopTime *GetAction() {
     return static_cast<CBaseDemoActionWithStopTime *>(m_pAction);
   }
 
@@ -1039,7 +1037,7 @@ CBaseActionWithStopTimeDialog::CBaseActionWithStopTimeDialog(
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionWithStopTimeDialog::Init(void) {
+void CBaseActionWithStopTimeDialog::Init() {
   BaseClass::Init();
 
   if (GetAction()->m_bUsingStopTick) {
@@ -1055,13 +1053,13 @@ void CBaseActionWithStopTimeDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionWithStopTimeDialog::OnSaveChanges(void) {
+bool CBaseActionWithStopTimeDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char stoptype[512];
+  ch stoptype[512];
   m_pStopType->GetText(stoptype, sizeof(stoptype));
 
-  char stop[512];
+  ch stop[512];
   m_pStop->GetText(stop, sizeof(stop));
 
   float fstop = (float)atof(stop);
@@ -1101,7 +1099,7 @@ class CBaseActionChangePlaybackRateDialog
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionChangePlaybackRate *GetAction(void) {
+  CDemoActionChangePlaybackRate *GetAction() {
     return static_cast<CDemoActionChangePlaybackRate *>(m_pAction);
   }
 
@@ -1117,7 +1115,7 @@ CBaseActionChangePlaybackRateDialog::CBaseActionChangePlaybackRateDialog(
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionChangePlaybackRateDialog::Init(void) {
+void CBaseActionChangePlaybackRateDialog::Init() {
   LoadControlSettings("resource\\BaseActionPlaybackRateDialog.res");
 
   BaseClass::Init();
@@ -1129,10 +1127,10 @@ void CBaseActionChangePlaybackRateDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionChangePlaybackRateDialog::OnSaveChanges(void) {
+bool CBaseActionChangePlaybackRateDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char rate[512];
+  ch rate[512];
   m_pRate->GetText(rate, sizeof(rate));
 
   float frate = (float)atof(rate);
@@ -1164,7 +1162,7 @@ class CBaseActionPauseDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionPausePlayback *GetAction(void) {
+  CDemoActionPausePlayback *GetAction() {
     return static_cast<CDemoActionPausePlayback *>(m_pAction);
   }
 
@@ -1181,7 +1179,7 @@ CBaseActionPauseDialog::CBaseActionPauseDialog(CDemoEditorPanel *parent,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionPauseDialog::Init(void) {
+void CBaseActionPauseDialog::Init() {
   LoadControlSettings("resource\\BaseActionPauseDialog.res");
 
   BaseClass::Init();
@@ -1193,10 +1191,10 @@ void CBaseActionPauseDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionPauseDialog::OnSaveChanges(void) {
+bool CBaseActionPauseDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char pausetime[512];
+  ch pausetime[512];
   m_pPauseTime->GetText(pausetime, sizeof(pausetime));
 
   float ftime = (float)atof(pausetime);
@@ -1239,7 +1237,7 @@ class CBaseActionZoomDialog : public CBaseActionEditDialog {
   virtual bool OnSaveChanges(void);
 
  private:
-  CDemoActionZoom *GetAction(void) {
+  CDemoActionZoom *GetAction() {
     return static_cast<CDemoActionZoom *>(m_pAction);
   }
 
@@ -1268,7 +1266,7 @@ CBaseActionZoomDialog::CBaseActionZoomDialog(CDemoEditorPanel *parent,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CBaseActionZoomDialog::Init(void) {
+void CBaseActionZoomDialog::Init() {
   LoadControlSettings("resource\\BaseActionZoomDialog.res");
 
   BaseClass::Init();
@@ -1286,10 +1284,10 @@ void CBaseActionZoomDialog::Init(void) {
 // Purpose:
 // Output : Returns true if changes were effected
 //-----------------------------------------------------------------------------
-bool CBaseActionZoomDialog::OnSaveChanges(void) {
+bool CBaseActionZoomDialog::OnSaveChanges() {
   bool bret = BaseClass::OnSaveChanges();
 
-  char sz[512];
+  ch sz[512];
   m_pFinalFOV->GetText(sz, sizeof(sz));
   float f = (float)atof(sz);
 

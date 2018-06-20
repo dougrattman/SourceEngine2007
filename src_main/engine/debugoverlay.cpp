@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:	Debugging overlay functions
 
@@ -290,7 +290,7 @@ int ScreenPosition(float flXPos, float flYPos, Vector& screen) {
 // Output :
 //-----------------------------------------------------------------------------
 void AddEntityTextOverlay(int ent_index, int line_offset, float duration, int r,
-                          int g, int b, int a, const char* text) {
+                          int g, int b, int a, const ch* text) {
   if (cl.IsPaused()) return;
 
   OverlayText_t* new_overlay = new OverlayText_t;
@@ -332,7 +332,7 @@ void AddGridOverlay(const Vector& vPos) {
 // Input  : Position of text & text
 // Output :
 //-----------------------------------------------------------------------------
-void AddTextOverlay(const Vector& textPos, float duration, const char* text) {
+void AddTextOverlay(const Vector& textPos, float duration, const ch* text) {
   if (cl.IsPaused()) return;
 
   OverlayText_t* new_overlay = new OverlayText_t;
@@ -357,7 +357,7 @@ void AddTextOverlay(const Vector& textPos, float duration, const char* text) {
 // Output :
 //-----------------------------------------------------------------------------
 void AddTextOverlay(const Vector& textPos, float duration, float alpha,
-                    const char* text) {
+                    const ch* text) {
   if (cl.IsPaused()) return;
 
   OverlayText_t* new_overlay = new OverlayText_t;
@@ -382,7 +382,7 @@ void AddTextOverlay(const Vector& textPos, float duration, float alpha,
 // Output  :
 //------------------------------------------------------------------------------
 void AddScreenTextOverlay(float flXPos, float flYPos, float duration, int r,
-                          int g, int b, int a, const char* text) {
+                          int g, int b, int a, const ch* text) {
   if (cl.IsPaused()) return;
 
   OverlayText_t* new_overlay = new OverlayText_t;
@@ -410,7 +410,7 @@ void AddScreenTextOverlay(float flXPos, float flYPos, float duration, int r,
 // Output :
 //-----------------------------------------------------------------------------
 void AddTextOverlay(const Vector& textPos, int line_offset, float duration,
-                    const char* text) {
+                    const ch* text) {
   if (cl.IsPaused()) return;
 
   OverlayText_t* new_overlay = new OverlayText_t;
@@ -431,7 +431,7 @@ void AddTextOverlay(const Vector& textPos, int line_offset, float duration,
 }
 
 void AddTextOverlay(const Vector& textPos, int line_offset, float duration,
-                    float alpha, const char* text) {
+                    float alpha, const ch* text) {
   if (cl.IsPaused()) return;
 
   OverlayText_t* new_overlay = new OverlayText_t;
@@ -452,7 +452,7 @@ void AddTextOverlay(const Vector& textPos, int line_offset, float duration,
 }
 
 void AddTextOverlay(const Vector& textPos, int line_offset, float duration,
-                    float r, float g, float b, float alpha, const char* text) {
+                    float r, float g, float b, float alpha, const ch* text) {
   if (cl.IsPaused()) return;
 
   OverlayText_t* new_overlay = new OverlayText_t;
@@ -667,7 +667,7 @@ void AddTriangleOverlay(const Vector& p1, const Vector& p2, const Vector& p3,
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
-void DrawGridOverlay(void) {
+void DrawGridOverlay() {
   static int gridSpacing = 100;
   static int numHorzSpaces = 16;
   static int numVertSpaces = 3;
@@ -717,7 +717,7 @@ void DrawGridOverlay(void) {
                  true);
       startLine[0] += gridSpacing;
     }
-    VectorScale(color, 0.7, color);
+    VectorScale(color, 0.7f, color);
     startGrid[2] -= gridSpacing;
   }
   s_bDrawGrid = false;
@@ -833,7 +833,7 @@ void DestroyOverlay(OverlayBase_t* pOverlay) {
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
-void DrawAllOverlays(void) {
+void DrawAllOverlays() {
   OverlayBase_t* pCurrOverlay = s_pOverlays;
   OverlayBase_t* pPrevOverlay = NULL;
   OverlayBase_t* pNextOverlay;
@@ -868,7 +868,7 @@ void DrawAllOverlays(void) {
 // Output  :
 //------------------------------------------------------------------------------
 // 0.01234f
-void PurgeServerOverlays(void) {
+void PurgeServerOverlays() {
   OverlayBase_t* pCurrOverlay = s_pOverlays;
 
   while (pCurrOverlay) {
@@ -885,7 +885,7 @@ void PurgeServerOverlays(void) {
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
-void Draw3DOverlays(void) {
+void Draw3DOverlays() {
   // If I'm just starting the map clear out all overlays
   static int previous_servercount = -1;
   if (previous_servercount != cl.m_nServerCount) {
@@ -906,7 +906,7 @@ void Draw3DOverlays(void) {
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
-void ClearAllOverlays(void) {
+void ClearAllOverlays() {
   while (s_pOverlays) {
     OverlayBase_t* pOldOverlay = s_pOverlays;
     s_pOverlays = s_pOverlays->m_pNextOverlay;
@@ -922,7 +922,7 @@ void ClearAllOverlays(void) {
   s_bDrawGrid = false;
 }
 
-void ClearDeadOverlays(void) {
+void ClearDeadOverlays() {
   OverlayText_t* pCurrText = s_pOverlayText;
   OverlayText_t* pLastText = NULL;
   OverlayText_t* pNextText = NULL;
@@ -956,12 +956,12 @@ void ClearDeadOverlays(void) {
 //-----------------------------------------------------------------------------
 class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
  private:
-  char m_text[1024];
+  ch m_text[1024];
   va_list m_argptr;
 
  public:
   void AddEntityTextOverlay(int ent_index, int line_offset, float duration,
-                            int r, int g, int b, int a, const char* format,
+                            int r, int g, int b, int a, const ch* format,
                             ...) {
     va_start(m_argptr, format);
     Q_vsnprintf(m_text, sizeof(m_text), format, m_argptr);
@@ -999,7 +999,7 @@ class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
                                       duration);
   }
 
-  void AddTextOverlay(const Vector& origin, float duration, const char* format,
+  void AddTextOverlay(const Vector& origin, float duration, const ch* format,
                       ...) {
     va_start(m_argptr, format);
     Q_vsnprintf(m_text, sizeof(m_text), format, m_argptr);
@@ -1009,7 +1009,7 @@ class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
   }
 
   void AddTextOverlay(const Vector& origin, int line_offset, float duration,
-                      const char* format, ...) {
+                      const ch* format, ...) {
     va_start(m_argptr, format);
     Q_vsnprintf(m_text, sizeof(m_text), format, m_argptr);
     va_end(m_argptr);
@@ -1019,7 +1019,7 @@ class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
 
   void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration,
                          float r, float g, float b, float alpha,
-                         const char* format, ...) {
+                         const ch* format, ...) {
     va_start(m_argptr, format);
     Q_vsnprintf(m_text, sizeof(m_text), format, m_argptr);
     va_end(m_argptr);
@@ -1030,7 +1030,7 @@ class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
 
   void AddTextOverlayRGB(const Vector& origin, int line_offset,
                          float flDuration, int r, int g, int b, int alpha,
-                         const char* format, ...) {
+                         const ch* format, ...) {
     va_start(m_argptr, format);
     Q_vsnprintf(m_text, sizeof(m_text), format, m_argptr);
     va_end(m_argptr);
@@ -1041,7 +1041,7 @@ class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
   }
 
   void AddScreenTextOverlay(float flXPos, float flYPos, float flDuration, int r,
-                            int g, int b, int a, const char* text) {
+                            int g, int b, int a, const ch* text) {
     CDebugOverlay::AddScreenTextOverlay(flXPos, flYPos, flDuration, r, g, b, a,
                                         text);
   }
@@ -1058,7 +1058,7 @@ class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
     return CDebugOverlay::ScreenPosition(flXPos, flYPos, screen);
   }
 
-  virtual OverlayText_t* GetFirst(void) {
+  virtual OverlayText_t* GetFirst() {
     return CDebugOverlay::s_pOverlayText;
   }
 
@@ -1066,7 +1066,7 @@ class CIVDebugOverlay : public IVDebugOverlay, public IVPhysicsDebugOverlay {
     return current->nextOverlayText;
   }
 
-  virtual void ClearDeadOverlays(void) { CDebugOverlay::ClearDeadOverlays(); }
+  virtual void ClearDeadOverlays() { CDebugOverlay::ClearDeadOverlays(); }
 
   virtual void ClearAllOverlays() { CDebugOverlay::ClearAllOverlays(); }
 

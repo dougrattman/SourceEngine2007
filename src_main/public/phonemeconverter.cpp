@@ -82,9 +82,8 @@ static PhonemeMap_t g_Phonemes[] = {
 // Output : const char
 //-----------------------------------------------------------------------------
 const char *ConvertPhoneme(int code) {
-  for (int i = 0; i < std::size(g_Phonemes); ++i) {
-    PhonemeMap_t *test = &g_Phonemes[i];
-    if (test->code == code) return test->string;
+  for (const auto &phoneme : g_Phonemes) {
+    if (phoneme.code == code) return phoneme.string;
   }
 
   Warning("Unrecognized phoneme code %i\n", code);
@@ -97,9 +96,8 @@ const char *ConvertPhoneme(int code) {
 // Output : int
 //-----------------------------------------------------------------------------
 int TextToPhoneme(const char *text) {
-  for (int i = 0; i < std::size(g_Phonemes); ++i) {
-    PhonemeMap_t *test = &g_Phonemes[i];
-    if (!_stricmp(test->string, text)) return test->code;
+  for (const auto &phoneme : g_Phonemes) {
+    if (!_stricmp(phoneme.string, text)) return phoneme.code;
   }
 
   Warning("Unrecognized phoneme %s\n", text);
@@ -112,9 +110,8 @@ int TextToPhoneme(const char *text) {
 // Output : float
 //-----------------------------------------------------------------------------
 float WeightForPhonemeCode(int code) {
-  for (int i = 0; i < std::size(g_Phonemes); ++i) {
-    PhonemeMap_t *test = &g_Phonemes[i];
-    if (test->code == code) return test->weight;
+  for (const auto &phoneme : g_Phonemes) {
+    if (phoneme.code == code) return phoneme.weight;
   }
 
   Warning("Unrecognized phoneme code %i\n", code);
@@ -127,9 +124,8 @@ float WeightForPhonemeCode(int code) {
 // Output : float
 //-----------------------------------------------------------------------------
 float WeightForPhoneme(char *text) {
-  for (int i = 0; i < std::size(g_Phonemes); ++i) {
-    PhonemeMap_t *test = &g_Phonemes[i];
-    if (!_stricmp(test->string, text)) return test->weight;
+  for (const auto &phoneme : g_Phonemes) {
+    if (!_stricmp(phoneme.string, text)) return phoneme.weight;
   }
 
   Warning("WeightForPhoneme:: Unrecognized phoneme %s\n", text);
@@ -149,7 +145,7 @@ const char *NameForPhonemeByIndex(int index) {
 // Output : int
 //-----------------------------------------------------------------------------
 int TextToPhonemeIndex(const char *text) {
-  for (int i = 0; i < std::size(g_Phonemes); ++i) {
+  for (usize i{0}; i < std::size(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
     if (!_stricmp(test->string, text)) return i;
   }

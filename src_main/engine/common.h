@@ -4,6 +4,7 @@
 #define COMMON_H
 
 #include "filesystem.h"
+#include "gameui/IGameUI.h"
 #include "mathlib/vector.h"  // NOTE(toml 05-01-02): solely for definition of QAngle
 #include "qlimits.h"
 #include "tier0/include/basetypes.h"
@@ -71,7 +72,7 @@ const ch *COM_ParseFile(const ch *data, ch *token, usize maxtoken);
 extern ch gszDisconnectReason[256];
 extern ch gszExtendedDisconnectReason[256];
 extern bool gfExtendedError;
-extern u8 g_eSteamLoginFailure;
+extern ESteamLoginFailure g_eSteamLoginFailure;
 void COM_ExplainDisconnection(bool bPrint, const ch *fmt, ...);
 
 // convert DX level to string.

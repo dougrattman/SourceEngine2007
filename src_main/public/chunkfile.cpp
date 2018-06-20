@@ -50,12 +50,12 @@
 //-----------------------------------------------------------------------------
 // Purpose: Constructor.
 //-----------------------------------------------------------------------------
-CChunkHandlerMap::CChunkHandlerMap(void) { m_pHandlers = NULL; }
+CChunkHandlerMap::CChunkHandlerMap() { m_pHandlers = NULL; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor. Frees handler list.
 //-----------------------------------------------------------------------------
-CChunkHandlerMap::~CChunkHandlerMap(void) {
+CChunkHandlerMap::~CChunkHandlerMap() {
   ChunkHandlerInfoNode_t *pNode = m_pHandlers;
   while (pNode != NULL) {
     ChunkHandlerInfoNode_t *pPrev = pNode;
@@ -139,7 +139,7 @@ ChunkHandler_t CChunkHandlerMap::GetHandler(const char *pszChunkName,
 //-----------------------------------------------------------------------------
 // Purpose: Constructor. Initializes data members.
 //-----------------------------------------------------------------------------
-CChunkFile::CChunkFile(void) {
+CChunkFile::CChunkFile() {
   m_hFile = NULL;
   m_nCurrentDepth = 0;
   m_szIndent[0] = '\0';
@@ -150,7 +150,7 @@ CChunkFile::CChunkFile(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Destructor. Closes the file if it is currently open.
 //-----------------------------------------------------------------------------
-CChunkFile::~CChunkFile(void) {
+CChunkFile::~CChunkFile() {
   if (m_hFile != NULL) {
     fclose(m_hFile);
   }
@@ -197,7 +197,7 @@ void CChunkFile::BuildIndentString(char *pszDest, int nDepth) {
 // Purpose:
 // Output : ChunkFileResult_t
 //-----------------------------------------------------------------------------
-ChunkFileResult_t CChunkFile::Close(void) {
+ChunkFileResult_t CChunkFile::Close() {
   if (m_hFile != NULL) {
     fclose(m_hFile);
     m_hFile = NULL;
@@ -210,7 +210,7 @@ ChunkFileResult_t CChunkFile::Close(void) {
 // Purpose:
 // Output : ChunkFileResult_t
 //-----------------------------------------------------------------------------
-ChunkFileResult_t CChunkFile::EndChunk(void) {
+ChunkFileResult_t CChunkFile::EndChunk() {
   if (m_nCurrentDepth > 0) {
     m_nCurrentDepth--;
     BuildIndentString(m_szIndent, m_nCurrentDepth);
@@ -359,7 +359,7 @@ ChunkFileResult_t CChunkFile::Open(const char *pszFileName,
 //-----------------------------------------------------------------------------
 // Purpose: Removes the topmost set of chunk handlers.
 //-----------------------------------------------------------------------------
-void CChunkFile::PopHandlers(void) {
+void CChunkFile::PopHandlers() {
   if (m_nHandlerStackDepth > 0) {
     m_nHandlerStackDepth--;
   }

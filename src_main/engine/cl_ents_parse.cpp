@@ -44,7 +44,7 @@ static ConVar cl_deltatrace(
 // #define DEBUG_NETWORKING 1
 
 #if defined(DEBUG_NETWORKING)
-void SpewToFile(char const *pFmt, ...);
+void SpewToFile(ch const *pFmt, ...);
 static ConVar cl_packettrace("cl_packettrace", "1", 0,
                              "For debugging, massive spew to file.");
 #define TRACE_PACKET(text)       \
@@ -79,10 +79,10 @@ static FileHandle_t OpenRecordingFile() {
 // Records an argument for a command, flushes when the command is done
 //-----------------------------------------------------------------------------
 
-void SpewToFile(char const *pFmt, ...) {
+void SpewToFile(ch const *pFmt, ...) {
   static CUtlVector<unsigned char> s_RecordingBuffer;
 
-  char temp[2048];
+  ch temp[2048];
   va_list args;
 
   va_start(args, pFmt);
@@ -113,7 +113,7 @@ void SpewToFile(char const *pFmt, ...) {
 // Purpose: Frees the client DLL's binding to the object.
 // Input  : iEnt -
 //-----------------------------------------------------------------------------
-void CL_DeleteDLLEntity(int iEnt, const char *reason,
+void CL_DeleteDLLEntity(int iEnt, const ch *reason,
                         bool bOnRecreatingAllEntities) {
   IClientNetworkable *pNet = entitylist->GetClientNetworkable(iEnt);
 
@@ -167,8 +167,8 @@ IClientNetworkable *CL_CreateDLLEntity(int entity_id, int class_id,
 
 void SpewBitStream(unsigned char *pMem, int bit, int lastbit) {
   int val = 0;
-  char buf[1024];
-  char *pTemp = buf;
+  ch buf[1024];
+  ch *pTemp = buf;
   int bitcount = 0;
   int charIdx = 1;
   while (bit < lastbit) {
@@ -247,9 +247,9 @@ static inline bool CL_IsPlayerIndex(int index) {
 //-----------------------------------------------------------------------------
 // Purpose: Bad data was received, just flushes incoming delta data.
 //-----------------------------------------------------------------------------
-void CL_FlushEntityPacket(CClientFrame *packet, char const *errorString, ...) {
+void CL_FlushEntityPacket(CClientFrame *packet, ch const *errorString, ...) {
   con_nprint_t np;
-  char str[2048];
+  ch str[2048];
   va_list marker;
 
   // Spit out an error.
@@ -260,11 +260,11 @@ void CL_FlushEntityPacket(CClientFrame *packet, char const *errorString, ...) {
   ConMsg("%s", str);
 
   np.fixed_width_font = false;
-  np.time_to_live = 1.0;
+  np.time_to_live = 1.0f;
   np.index = 0;
-  np.color[0] = 1.0;
-  np.color[1] = 0.2;
-  np.color[2] = 0.0;
+  np.color[0] = 1.0f;
+  np.color[1] = 0.2f;
+  np.color[2] = 0.0f;
   Con_NXPrintf(&np, "WARNING:  CL_FlushEntityPacket, %s", str);
 
   // Free packet memory.
@@ -351,7 +351,7 @@ void CL_CopyNewEntity(CEntityReadInfo &u, int iClass, int iSerialNum) {
 
   if (u.m_bUpdateBaselines) {
     // store this baseline in u.m_pUpdateBaselines
-    char packedData[MAX_PACKEDENTITY_DATA];
+    ch packedData[MAX_PACKEDENTITY_DATA];
     bf_write writeBuf("CL_CopyNewEntity->newBuf", packedData,
                       sizeof(packedData));
 
@@ -609,7 +609,7 @@ namespace CDebugOverlay {
 extern void PurgeServerOverlays(void);
 }
 
-void CL_PreprocessEntities(void) {
+void CL_PreprocessEntities() {
   // Zero latency!!! (single player or listen server?)
   bool bIsUsingMultiplayerNetworking = NET_IsMultiplayer();
   bool bLastOutgoingCommandEqualsLastAcknowledgedCommand =

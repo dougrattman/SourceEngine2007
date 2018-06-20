@@ -1590,16 +1590,14 @@ static bool ComputeNextIncrementalDemoFilename(ch *name, int namesize) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: List the contents of a demo file.
-//-----------------------------------------------------------------------------
 void CL_ListDemo_f(const CCommand &args) {
   if (cmd_source != src_command) return;
 
   // Find the file
   ch name[MAX_OSPATH];
 
-  Q_snprintf(name, sizeof(name), "%s", args[1]);
+  sprintf_s(name, "%s", args[1]);
 
   Q_DefaultExtension(name, ".dem", sizeof(name));
 
@@ -1608,7 +1606,7 @@ void CL_ListDemo_f(const CCommand &args) {
   CDemoFile demofile;
 
   if (!demofile.Open(name, true)) {
-    ConMsg("ERROR: couldn't open.\n");
+    ConMsg("Demo: Couldn't open %s.\n", name);
     return;
   }
 
