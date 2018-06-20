@@ -5,6 +5,7 @@
 #include <malloc.h>
 #include <cstdio>
 
+#include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 
 #include "tier0/include/memdbgon.h"
