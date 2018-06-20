@@ -127,6 +127,7 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>wsock32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -178,6 +179,7 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>wsock32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -236,6 +238,7 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>wsock32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -293,6 +296,7 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>wsock32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />

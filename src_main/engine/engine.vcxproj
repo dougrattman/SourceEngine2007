@@ -129,14 +129,13 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;binkw$(PlatformArchitecture).lib;delayimp.lib;dxguid.lib;dsound.lib;gdi32.lib;Rpcrt4.lib;shell32.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;vfw32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>
       </BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
-      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -187,13 +186,12 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;binkw$(PlatformArchitecture).lib;delayimp.lib;dxguid.lib;dsound.lib;gdi32.lib;Rpcrt4.lib;shell32.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;vfw32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>
       </BaseAddress>
-      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -246,7 +244,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;binkw$(PlatformArchitecture).lib;delayimp.lib;dxguid.lib;dsound.lib;gdi32.lib;Rpcrt4.lib;shell32.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;vfw32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -255,7 +253,6 @@
       <BaseAddress>
       </BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
-      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -308,7 +305,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;binkw$(PlatformArchitecture).lib;delayimp.lib;dxguid.lib;dsound.lib;gdi32.lib;Rpcrt4.lib;shell32.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;vfw32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -316,7 +313,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <BaseAddress>
       </BaseAddress>
-      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -1912,7 +1908,6 @@
     <ClCompile Include="vprof_engine.cpp" />
     <ClCompile Include="vprof_record.cpp" />
     <ClCompile Include="world.cpp" />
-    <ClCompile Include="xboxsystem.cpp" />
     <ClCompile Include="zone.cpp" />
   </ItemGroup>
   <ItemGroup>
