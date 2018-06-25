@@ -741,8 +741,8 @@ bool CDataCacheSection::DiscardItem(memhandle_t hItem,
     }
 #endif
 
-    pItem->pSection =
-        NULL;  // inhibit callbacks from lower level resource system
+    // inhibit callbacks from lower level resource system
+    pItem->pSection = NULL;
     m_LRU.DestroyResource(hItem);
     return true;
   }
@@ -753,7 +753,8 @@ bool CDataCacheSection::DiscardItemData(DataCacheItem_t *pItem,
                                         DataCacheNotificationType_t type) {
   if (pItem) {
     if (type != DC_NONE) {
-      Assert(type == DC_AGE_DISCARD || type == DC_FLUSH_DISCARD || DC_REMOVED);
+      Assert(type == DC_AGE_DISCARD || type == DC_FLUSH_DISCARD ||
+             type == DC_REMOVED);
 
       if (type == DC_AGE_DISCARD && m_pSharedCache->IsInFlush())
         type = DC_FLUSH_DISCARD;
@@ -885,7 +886,7 @@ void CDataCache::SetSize(int nMaxBytes) {
 // Purpose: Controls cache options.
 //-----------------------------------------------------------------------------
 void CDataCache::SetOptions(unsigned options) {
-  for (int i = 0; m_Sections.Count(); i++) {
+  for (int i = 0; i < m_Sections.Count(); i++) {
     m_Sections[i]->SetOptions(options);
   }
 }

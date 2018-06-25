@@ -144,12 +144,11 @@ static ConVar mod_test_verts_not_available("mod_test_verts_not_available", "0");
 static ConVar mod_load_mesh_async("mod_load_mesh_async",
                                   (AsyncMdlCache()) ? "1" : "0");
 static ConVar mod_load_anims_async("mod_load_anims_async",
-                                   (IsX360() || AsyncMdlCache()) ? "1" : "0");
+                                   (AsyncMdlCache()) ? "1" : "0");
 static ConVar mod_load_vcollide_async("mod_load_vcollide_async",
                                       (AsyncMdlCache()) ? "1" : "0");
 static ConVar mod_trace_load("mod_trace_load", "0");
-static ConVar mod_lock_mdls_on_load("mod_lock_mdls_on_load",
-                                    (IsX360()) ? "1" : "0");
+static ConVar mod_lock_mdls_on_load("mod_lock_mdls_on_load", "0");
 static ConVar mod_load_fakestall(
     "mod_load_fakestall", "0", 0,
     "Forces all ANI file loading to stall for specified ms\n");
@@ -187,11 +186,9 @@ static void MakeFilename(char szFileName[SOURCE_MAX_PATH],
 #endif
 }
 
-  //-----------------------------------------------------------------------------
-  // Async support
-  //-----------------------------------------------------------------------------
-
-#define MDLCACHE_NONE ((MDLCacheDataType_t)-1)
+//-----------------------------------------------------------------------------
+// Async support
+//-----------------------------------------------------------------------------
 
 struct AsyncInfo_t {
   AsyncInfo_t()
@@ -1226,6 +1223,8 @@ virtualmodel_t *CMDLCache::GetVirtualModelFast(const studiohdr_t *pStudioHdr,
     CMDLCacheCriticalSection criticalSection(this);
 
     AllocateVirtualModel(handle);
+
+    pStudioData = m_MDLDict[handle];
 
     // Group has to be zero to ensure refcounting is correct
     int nGroup = pStudioData->m_pVirtualModel->m_group.AddToTail();
