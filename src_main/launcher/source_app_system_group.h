@@ -26,9 +26,9 @@ class SourceAppSystemGroup : public CSteamAppSystemGroup {
         hammer_{nullptr},
         command_line_{command_line},
         file_system_access_logger_{file_system_access_logger},
-        scoped_com_initializer_{static_cast<COINIT>(COINIT_APARTMENTTHREADED |
-                                                    COINIT_SPEED_OVER_MEMORY |
-                                                    COINIT_DISABLE_OLE1DDE)} {
+        scoped_com_initializer_{COINIT_APARTMENTTHREADED |
+                                COINIT_SPEED_OVER_MEMORY |
+                                COINIT_DISABLE_OLE1DDE} {
     g_all_files_access_logger = &file_system_access_logger_;
   }
 
