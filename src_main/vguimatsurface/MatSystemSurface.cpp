@@ -324,9 +324,10 @@ void CMatSystemSurface::Shutdown() {
     while (RemoveFontResourceExA(m_CustomFontFileNames[i].String(), 0x10,
                                  nullptr) != FALSE &&
            (retries_count++ < 10)) {
-      Msg("Removed font resource %s on attempt %d.\n",
-          m_CustomFontFileNames[i].String(), retries_count);
     }
+
+    Msg("Removed font resource %s on attempt %d.\n",
+        m_CustomFontFileNames[i].String(), retries_count);
   }
 
   m_CustomFontFileNames.RemoveAll();
