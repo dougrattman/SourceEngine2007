@@ -263,7 +263,7 @@ bool CLC_FileCRCCheck::ReadFromBuffer(bf_read &buffer) {
   buffer.ReadOneBit();
 
   // Read the path ID.
-  int iCode = buffer.ReadUBitLong(2);
+  usize iCode = buffer.ReadUBitLong(2);
   if (iCode == 0) {
     buffer.ReadString(m_szPathID, sizeof(m_szPathID));
   } else if ((iCode - 1) < std::size(g_MostCommonPathIDs)) {

@@ -1063,7 +1063,12 @@ int ByteswapANIFile(studiohdr_t *pHdr, void *pDestBase, const void *pSrcBase,
 int ByteswapANI(studiohdr_t *pHdr, void *pDestBase, const void *pSrcBase,
                 const int fileSize) {
   // Make a working copy of the source to allow for alignment fixups
-  void *pNewSrcBase = malloc(fileSize + BYTESWAP_ALIGNMENT_PADDING);
+  void *pNewSrcBase = heap_alloc<u8>(fileSize + BYTESWAP_ALIGNMENT_PADDING);
+  if (!pNewSrcBase) {
+    if (g_bVerbose) Warning("ByteswapANI out of memory!\n");
+    return -1;
+  }
+
   memcpy(pNewSrcBase, pSrcBase, fileSize);
 
   int fixedFileSize = ByteswapANIFile(pHdr, pDestBase, pNewSrcBase, fileSize);
@@ -1083,14 +1088,19 @@ int ByteswapANI(studiohdr_t *pHdr, void *pDestBase, const void *pSrcBase,
     // assemble a new anim of compressed anim blocks
     // start with original size, with room for alignment padding
     fixedFileSize += (pHdr->numanimblocks + 1) * 2048;
-    u8 *pNewDestBase = (u8 *)malloc(fixedFileSize);
+    u8 *pNewDestBase = heap_alloc<u8>(fixedFileSize);
+    if (!pNewDestBase) {
+      if (g_bVerbose) Warning("ByteswapANI out of memory!\n");
+      return -1;
+    }
+
     memset(pNewDestBase, 0, fixedFileSize);
     u8 *pNewDest = pNewDestBase;
 
     // get the header payload as is
     // assuming the header is up to the first anim block
     mstudioanimblock_t *pAnimBlock = pHdr->pAnimBlock(1);
-    V_memcpy(pNewDest, pDestBase, pAnimBlock->datastart);
+    memcpy(pNewDest, pDestBase, pAnimBlock->datastart);
     pNewDest += pAnimBlock->datastart;
 
     ptrdiff_t padding = AlignValue(pNewDest - pNewDestBase, 2048);
@@ -1109,12 +1119,12 @@ int ByteswapANI(studiohdr_t *pHdr, void *pDestBase, const void *pSrcBase,
       void *pOutput;
       int outputSize;
       if (g_pCompressFunc(pInput, inputSize, &pOutput, &outputSize)) {
-        V_memcpy(pNewDest, pOutput, outputSize);
+        memcpy(pNewDest, pOutput, outputSize);
         pNewDest += outputSize;
         heap_free(pOutput);
       } else {
         // as is
-        V_memcpy(pNewDest, pInput, inputSize);
+        memcpy(pNewDest, pInput, inputSize);
         pNewDest += inputSize;
       }
 
@@ -1126,7 +1136,7 @@ int ByteswapANI(studiohdr_t *pHdr, void *pDestBase, const void *pSrcBase,
     }
 
     fixedFileSize = pNewDest - pNewDestBase;
-    V_memcpy(pDestBase, pNewDestBase, fixedFileSize);
+    memcpy(pDestBase, pNewDestBase, fixedFileSize);
     heap_free(pNewDestBase);
   }
 
@@ -1797,7 +1807,12 @@ int ByteswapMDLFile(void *pDestBase, void *pSrcBase, const int fileSize) {
 // the data and updating offsets, then the second pass does the final swap.
 int ByteswapMDL(void *pDestBase, const void *pSrcBase, const int fileSize) {
   // Make a working copy of the source to allow for alignment fixups
-  void *pNewSrcBase = malloc(fileSize + BYTESWAP_ALIGNMENT_PADDING);
+  void *pNewSrcBase = heap_alloc<u8>(fileSize + BYTESWAP_ALIGNMENT_PADDING);
+  if (!pNewSrcBase) {
+    if (g_bVerbose) Warning("ByteswapMDL out of memory!\n");
+    return -1;
+  }
+
   memcpy(pNewSrcBase, pSrcBase, fileSize);
 
   int fixedFileSize = ByteswapMDLFile(pDestBase, pNewSrcBase, fileSize);
@@ -1818,7 +1833,7 @@ int ByteswapMDL(void *pDestBase, const void *pSrcBase, const int fileSize) {
     void *pOutput;
     int outputSize;
     if (g_pCompressFunc(pInput, inputSize, &pOutput, &outputSize)) {
-      V_memcpy(pDestBase, pOutput, outputSize);
+      memcpy(pDestBase, pOutput, outputSize);
       heap_free(pOutput);
       fixedFileSize = outputSize;
     }
