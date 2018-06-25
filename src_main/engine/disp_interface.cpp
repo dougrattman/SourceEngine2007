@@ -113,7 +113,7 @@ void CDispInfo::GetBoundingBox(Vector &bbMin, Vector &bbMax) {
 void CDispInfo::SetParent(SurfaceHandle_t surfID) { m_ParentSurfID = surfID; }
 
 // returns surfID
-SurfaceHandle_t CDispInfo::GetParent(void) { return m_ParentSurfID; }
+SurfaceHandle_t CDispInfo::GetParent() { return m_ParentSurfID; }
 
 unsigned int CDispInfo::ComputeDynamicLightMask(dlight_t *pLights) {
   int lightMask = 0;
@@ -360,7 +360,7 @@ void CDispInfo::RemoveShadowDecal(DispShadowHandle_t h) {
 // //
 void CDispInfo::GenerateDecalFragments_R(CVertIndex const &nodeIndex,
                                          int iNodeBitIndex,
-                                         unsigned short decalHandle,
+                                         u16 decalHandle,
                                          CDispDecalBase *pDispDecal,
                                          int iLevel) {
   // Get the node info for this node...
@@ -404,7 +404,7 @@ void CDispInfo::GenerateDecalFragments_R(CVertIndex const &nodeIndex,
 
 void CDispInfo::GenerateDecalFragments(CVertIndex const &nodeIndex,
                                        int iNodeBitIndex,
-                                       unsigned short decalHandle,
+                                       u16 decalHandle,
                                        CDispDecalBase *pDispDecal) {
   GenerateDecalFragments_R(nodeIndex, iNodeBitIndex, decalHandle, pDispDecal,
                            0);
@@ -603,7 +603,7 @@ void DispInfo_DrawPrimLists(bool bShadowDepth) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void DecalDispSurfacesInit(void) {
+void DecalDispSurfacesInit() {
 #ifndef SWDS
   g_aDispDecalSortPool.RemoveAll();
   ++g_nDispDecalSortCheckCount;

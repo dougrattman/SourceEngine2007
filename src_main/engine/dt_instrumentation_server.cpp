@@ -43,12 +43,12 @@ class CDTISendTable {
 
   // This tracks how many times an entity was delta'd for each distance from a
   // client.
-  unsigned short m_DistanceDeltaCounts[NUM_DELTA_DISTANCE_BANDS];
+  u16 m_DistanceDeltaCounts[NUM_DELTA_DISTANCE_BANDS];
 };
 
 static CCycleCount g_TotalServerDTICycles;
 
-static CUtlLinkedList<CDTISendTable *, unsigned short> g_DTISendTables;
+static CUtlLinkedList<CDTISendTable *, u16> g_DTISendTables;
 
 bool g_bServerDTIEnabled = false;
 static char const *g_pServerDTIFilename = 0;

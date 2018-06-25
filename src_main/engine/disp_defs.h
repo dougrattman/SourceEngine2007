@@ -39,7 +39,7 @@ class CDispGroup;
 // These hold the HDISPINFOARRAYs.
 class CDispArray {
  public:
-  unsigned short m_CurTag;
+  u16 m_CurTag;
 
   CDispInfo *m_pDispInfos;
   int m_nDispInfos;
@@ -95,15 +95,15 @@ class CDispDecalBase {
 
   // Number of triangles + verts that got generated for this decal.
   unsigned char m_Flags;
-  unsigned short m_nVerts;
-  unsigned short m_nTris;
+  u16 m_nVerts;
+  u16 m_nTris;
 };
 
 //-----------------------------------------------------------------------------
 // Types associated with normal decals
 //-----------------------------------------------------------------------------
 
-typedef unsigned short DispDecalFragmentHandle_t;
+typedef u16 DispDecalFragmentHandle_t;
 
 enum { DISP_DECAL_FRAGMENT_HANDLE_INVALID = (DispDecalFragmentHandle_t)~0 };
 
@@ -138,7 +138,7 @@ class CDispDecalFragment {
 
 #pragma pack()
 
-typedef unsigned short DispShadowFragmentHandle_t;
+typedef u16 DispShadowFragmentHandle_t;
 
 enum { DISP_SHADOW_FRAGMENT_HANDLE_INVALID = (DispShadowFragmentHandle_t)~0 };
 

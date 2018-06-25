@@ -186,7 +186,7 @@ CSendNode::~CSendNode() {
 // -----------------------------------------------------------------------------
 // //
 
-bool PropOffsetLT(const unsigned short &a, const unsigned short &b) {
+bool PropOffsetLT(const u16 &a, const u16 &b) {
   return a < b;
 }
 
@@ -311,7 +311,7 @@ void SendTable_BuildHierarchy_IterateProps(
 
         // Setup a datatable prop for this node to reference (so the recursion
         // routines can get at the proxy).
-        if (bhs->m_nDatatableProps >= SOURCE_ARRAYSIZE(bhs->m_pDatatableProps))
+        if (bhs->m_nDatatableProps >= std::size(bhs->m_pDatatableProps))
           Error("Overflowed datatable prop list in SendTable '%s'.",
                 pTable->GetName());
 
@@ -356,7 +356,7 @@ void SendTable_BuildHierarchy(CSendNode *pNode, const SendTable *pTable,
   // Now add the properties.
 
   // Make sure there's room, then just copy the pointers from the loop above.
-  ErrorIfNot(bhs->m_nProps + nNonDatatableProps < SOURCE_ARRAYSIZE(bhs->m_pProps),
+  ErrorIfNot(bhs->m_nProps + nNonDatatableProps < std::size(bhs->m_pProps),
              ("SendTable_BuildHierarchy: overflowed prop buffer."));
 
   for (int i = 0; i < nNonDatatableProps; i++) {
@@ -406,7 +406,7 @@ void FillPathEntries_R(CSendTablePrecalc *pPrecalc, CSendNode *pNode,
   // Fill in this node's path.
   CSendTablePrecalc::CProxyPath &outProxyPath =
       pPrecalc->m_ProxyPaths[pNode->GetRecursiveProxyIndex()];
-  outProxyPath.m_iFirstEntry = (unsigned short)iCurEntry;
+  outProxyPath.m_iFirstEntry = (u16)iCurEntry;
 
   // Copy all the proxies leading to the parent.
   if (pParent) {

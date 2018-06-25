@@ -420,9 +420,6 @@
     <ClCompile Include="world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xboxsystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="zone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1652,9 +1649,6 @@
     <ClInclude Include="..\public\steam\steamtypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\SteamWriteMiniDump.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="studio_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -2342,9 +2336,6 @@
     <ClInclude Include="..\common\SteamCommon.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\SteamUserIDValidation.h">
-      <Filter>Public Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\string_t.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
@@ -2467,6 +2458,9 @@
     </ClInclude>
     <ClInclude Include="..\public\zip_uncompressed.h">
       <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="initmathlib.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -53,10 +53,10 @@ inline void LocalTransfer_FastType(T *pBlah, CServerDatatableStack &serverStack,
 void AddPropOffsetToMap(CSendTablePrecalc *pPrecalc, int iInProp,
                         int iInOffset) {
   Assert(iInProp < 0xFFFF && iInOffset < 0xFFFF);
-  unsigned short iProp = (unsigned short)iInProp;
-  unsigned short iOffset = (unsigned short)iInOffset;
+  u16 iProp = (u16)iInProp;
+  u16 iOffset = (u16)iInOffset;
 
-  unsigned short iOldIndex = pPrecalc->m_PropOffsetToIndexMap.Find(iOffset);
+  u16 iOldIndex = pPrecalc->m_PropOffsetToIndexMap.Find(iOffset);
 
   if (iOldIndex != pPrecalc->m_PropOffsetToIndexMap.InvalidIndex()) {
     return;
@@ -246,13 +246,13 @@ void LocalTransfer_InitFastCopy(
 
 inline int MapPropOffsetsToIndices(const CBaseEdict *pEdict,
                                    CSendTablePrecalc *pPrecalc,
-                                   const unsigned short *pOffsets,
-                                   unsigned short nOffsets,
-                                   unsigned short *pOut) {
+                                   const u16 *pOffsets,
+                                   u16 nOffsets,
+                                   u16 *pOut) {
   int iOut = 0;
 
-  for (unsigned short i = 0; i < nOffsets; i++) {
-    unsigned short index = pPrecalc->m_PropOffsetToIndexMap.Find(pOffsets[i]);
+  for (u16 i = 0; i < nOffsets; i++) {
+    u16 index = pPrecalc->m_PropOffsetToIndexMap.Find(pOffsets[i]);
     if (index == pPrecalc->m_PropOffsetToIndexMap.InvalidIndex()) {
       // Note: this SHOULD be fine. In all known cases, when NetworkStateChanged
       // is called with an offset, there should be a corresponding SendProp in
@@ -281,11 +281,11 @@ inline int MapPropOffsetsToIndices(const CBaseEdict *pEdict,
         }
       }
     } else {
-      unsigned short propIndex = pPrecalc->m_PropOffsetToIndexMap[index];
+      u16 propIndex = pPrecalc->m_PropOffsetToIndexMap[index];
 
       if (propIndex & PROP_INDEX_VECTOR_ELEM_MARKER) {
         // Look for all 3 vector elems here.
-        unsigned short curOffset = pOffsets[i];
+        u16 curOffset = pOffsets[i];
         for (int iVectorElem = 0; iVectorElem < 3; iVectorElem++) {
           index = pPrecalc->m_PropOffsetToIndexMap.Find(curOffset);
           if (index == 0xFFFF) {
@@ -307,13 +307,13 @@ inline int MapPropOffsetsToIndices(const CBaseEdict *pEdict,
   return iOut;
 }
 
-inline void FastSortList(unsigned short *pList, unsigned short nEntries) {
+inline void FastSortList(u16 *pList, u16 nEntries) {
   if (nEntries == 1) return;
 
-  unsigned short i = 0;
+  u16 i = 0;
   while (1) {
     if (pList[i + 1] < pList[i]) {
-      unsigned short tmp = pList[i + 1];
+      u16 tmp = pList[i + 1];
       pList[i + 1] = pList[i];
       pList[i] = tmp;
 
@@ -396,7 +396,7 @@ void LocalTransfer_TransferEntity(const CBaseEdict *pEdict,
   CEdictChangeInfo *pCI =
       &g_pSharedChangeInfo->m_ChangeInfos[pEdict->GetChangeInfo()];
 
-  unsigned short propIndices[MAX_CHANGE_OFFSETS * 3];
+  u16 propIndices[MAX_CHANGE_OFFSETS * 3];
 
   // This code tries to only copy fields expressly marked as "changed" (by
   // having the field offsets added to the changeoffsets vectors)

@@ -585,7 +585,7 @@ bool CompareVLA(DTTestClient *pClient, DTTestServer *pServer) {
 }
 
 void RandomlyChangeVLA(DTTestServer *pServer) {
-  pServer->m_VLALength = rand() % SOURCE_ARRAYSIZE(pServer->m_VLA);
+  pServer->m_VLALength = rand() % std::size(pServer->m_VLA);
   for (int i = 0; i < pServer->m_VLALength; i++)
     pServer->m_VLA[i] = rand() * rand();
 }
@@ -841,7 +841,7 @@ void RunDataTableTest() {
       int nDeltaProps =
           SendTable_CalcDelta(pSendTable, prevEncoded, sizeof(prevEncoded) * 8,
                               fullEncoded, bfFullEncoded.GetNumBitsWritten(),
-                              deltaProps, SOURCE_ARRAYSIZE(deltaProps), -1);
+                              deltaProps, std::size(deltaProps), -1);
 
       Assert(nDeltaProps != -1);  // BAD: buffer overflow
 

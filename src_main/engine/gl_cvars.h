@@ -33,12 +33,12 @@ static inline bool CanCheat() {
 #endif
 }
 
-static inline int WireFrameMode(void) {
+static inline int WireFrameMode() {
   if (CanCheat()) return mat_wireframe.GetInt();
   return 0;
 }
 
-static inline bool ShouldDrawInWireFrameMode(void) {
+static inline bool ShouldDrawInWireFrameMode() {
   if (CanCheat()) return (mat_wireframe.GetInt() != 0);
   return false;
 }

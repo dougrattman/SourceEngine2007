@@ -18,7 +18,6 @@
 #include "tier1/strtools.h"
 #include "vengineserver_impl.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 CDownloadListGenerator g_DownloadListGenerator;
@@ -136,7 +135,8 @@ void CDownloadListGenerator::OnModelPrecached(
     // directory, and we get the .vtf
     char file[SOURCE_MAX_PATH];
 
-    if (!Q_strnicmp(relativePathFileName, "materials", strlen("materials"))) {
+    if (!Q_strnicmp(relativePathFileName, "materials",
+                    std::size("materials") - 1)) {
       Q_strncpy(file, relativePathFileName, sizeof(file));
     } else {
       // prepend the materials directory
@@ -168,7 +168,7 @@ void CDownloadListGenerator::OnSoundPrecached(
 
   // prepend the sound/ directory if necessary
   char file[SOURCE_MAX_PATH];
-  if (!Q_strnicmp(relativePathFileName, "sound", strlen("sound"))) {
+  if (!Q_strnicmp(relativePathFileName, "sound", std::size("sound") - 1)) {
     Q_strncpy(file, relativePathFileName, sizeof(file));
   } else {
     // prepend the materials directory
@@ -221,7 +221,8 @@ void CDownloadListGenerator::ForceExactFile(const char *relativePathFileName,
       Q_strstr(relativePathFileName, ".vtf")) {
     // it's a materials file, make sure that it starts in the materials
     // directory, and we get the .vtf
-    if (!Q_strnicmp(relativePathFileName, "materials", strlen("materials"))) {
+    if (!Q_strnicmp(relativePathFileName, "materials",
+                    std::size("materials") - 1)) {
       Q_strncpy(file, relativePathFileName, sizeof(file));
     } else {
       // prepend the materials directory

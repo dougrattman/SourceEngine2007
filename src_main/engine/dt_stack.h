@@ -96,7 +96,7 @@ template <class DTStack, class ProxyCaller>
 inline unsigned char *UpdateRoutesExplicit_Template(DTStack *pStack,
                                                     ProxyCaller *caller) {
   // Early out.
-  unsigned short iPropProxyIndex =
+  u16 iPropProxyIndex =
       pStack->m_pPrecalc->m_PropProxyIndices[pStack->m_iCurProp];
   unsigned char **pTest = &pStack->m_pProxies[iPropProxyIndex];
   if (*pTest != (unsigned char *)0xFFFFFFFF) return *pTest;
@@ -106,7 +106,7 @@ inline unsigned char *UpdateRoutesExplicit_Template(DTStack *pStack,
 
   CSendTablePrecalc::CProxyPath &proxyPath =
       pStack->m_pPrecalc->m_ProxyPaths[iPropProxyIndex];
-  for (unsigned short i = 0; i < proxyPath.m_nEntries; i++) {
+  for (u16 i = 0; i < proxyPath.m_nEntries; i++) {
     CSendTablePrecalc::CProxyPathEntry *pEntry =
         &pStack->m_pPrecalc->m_ProxyPathEntries[proxyPath.m_iFirstEntry + i];
     int iProxy = pEntry->m_iProxy;
@@ -174,7 +174,7 @@ class CClientDatatableStack : public CDatatableStack {
    public:
     static inline unsigned char *CallProxy(CClientDatatableStack *pStack,
                                            unsigned char *pStructBase,
-                                           unsigned short iDatatableProp) {
+                                           u16 iDatatableProp) {
       const RecvProp *pProp =
           pStack->m_pDecoder->GetDatatableProp(iDatatableProp);
 
@@ -252,7 +252,7 @@ class CServerDatatableStack : public CDatatableStack {
    public:
     static inline unsigned char *CallProxy(CServerDatatableStack *pStack,
                                            unsigned char *pStructBase,
-                                           unsigned short iDatatableProp) {
+                                           u16 iDatatableProp) {
       const SendProp *pProp =
           pStack->m_pPrecalc->GetDatatableProp(iDatatableProp);
 

@@ -123,9 +123,6 @@ CBaseServer::CBaseServer()
   m_pServerStartupTable = nullptr;
   m_pDownloadableFileTable = nullptr;
 
-  m_fLastCPUCheckTime = 0;
-  m_fStartTime = 0;
-  m_fCPUPercent = 0;
   m_Socket = NS_SERVER;
   m_nTickCount = 0;
 
@@ -352,7 +349,7 @@ IClient *CBaseServer::ConnectClient(netadr_t &adr, int protocol, int challenge,
     // StartSteamValidation() above initialized the clients networkid
   }
 
-  if (netchan && !netchan->IsLoopback())
+  if (!netchan->IsLoopback())
     ConMsg("Client \"%s\" connected (%s).\n", client->GetClientName(),
            netchan->GetAddress());
 

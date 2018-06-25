@@ -26,7 +26,7 @@ CStatTime g_StatTime;
 
 CEngineStats::CEngineStats() : m_InFrame(false) { m_bInRun = false; }
 
-void CEngineStats::BeginRun(void) {
+void CEngineStats::BeginRun() {
   m_bInRun = true;
   m_totalNumFrames = 0;
 
@@ -34,17 +34,17 @@ void CEngineStats::BeginRun(void) {
   m_runStartTime = Plat_FloatTime();
 }
 
-void CEngineStats::EndRun(void) {
+void CEngineStats::EndRun() {
   m_runEndTime = Plat_FloatTime();
   m_bInRun = false;
 }
 
-void CEngineStats::BeginFrame(void) {
+void CEngineStats::BeginFrame() {
   m_bPaused = false;
   m_InFrame = false;
 }
 
-void CEngineStats::ComputeFrameTimeStats(void) {
+void CEngineStats::ComputeFrameTimeStats() {
   m_StatGroup.m_StatFrameTime[ENGINE_STATS_FRAME_TIME] =
       m_flFrameTime / 1000.0f;
   m_StatGroup.m_StatFrameTime[ENGINE_STATS_FPS_VARIABILITY] =
@@ -53,7 +53,7 @@ void CEngineStats::ComputeFrameTimeStats(void) {
       (m_flFrameTime != 0.0f) ? (1.0f / (1000.0f * m_flFrameTime)) : 0.0f;
 }
 
-void CEngineStats::EndFrame(void) {
+void CEngineStats::EndFrame() {
   if (!m_InFrame) return;
 }
 
@@ -92,4 +92,4 @@ double CEngineStats::TotalTimedStat(EngineTimedStatId_t stat) const {
   return m_StatGroup.m_TotalStatTime[stat];
 }
 
-double CEngineStats::GetRunTime(void) { return m_runEndTime - m_runStartTime; }
+double CEngineStats::GetRunTime() { return m_runEndTime - m_runStartTime; }

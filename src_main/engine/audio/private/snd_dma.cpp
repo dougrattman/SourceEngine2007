@@ -4698,16 +4698,7 @@ int S_StartStaticSound(StartSoundParams_t &params) {
 
   // First, make sure the sound source entity is even in the PVS.
   float flSoundRadius = 0.0f;
-
   bool looping = false;
-
-  /*
-  CAudioSource *pSource = pSfx ? pSfx->pSource : NULL;
-  if ( pSource )
-  {
-          looping = pSource->IsLooped();
-  }
-  */
 
   SpatializationInfo_t si;
   si.info.Set(params.soundsource, params.entchannel, params.pSfx ? sndname : "",
@@ -7078,13 +7069,13 @@ bool MXR_LoadAllSoundMixers() {
     // if no value specified, set to 0 length string
 
     if (com_token[0])
-      Q_memcpy(pgroup->szmixgroup, com_token,
-               std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
+      memcpy(pgroup->szmixgroup, com_token,
+             std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
 
     pstart = COM_Parse(pstart);
     if (com_token[0])
-      Q_memcpy(pgroup->szdir, com_token,
-               std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
+      memcpy(pgroup->szdir, com_token,
+             std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
 
     pgroup->classId = -1;
     pstart = COM_Parse(pstart);
@@ -7197,8 +7188,8 @@ bool MXR_LoadAllSoundMixers() {
 
     soundmixer_t *pmixer = &g_soundmixers[g_csoundmixers];
 
-    Q_memcpy(pmixer->szsoundmixer, com_token,
-             std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
+    memcpy(pmixer->szsoundmixer, com_token,
+           std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
 
     // init all mixer values to -1.
 

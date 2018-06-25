@@ -281,7 +281,7 @@ static inline void DumpHeaders(RequestContext &rc) {
  * Main download thread function - implements a (partial) synchronous HTTP
  * download.
  */
-DWORD SOURCE_STDCALL DownloadThread(void *voidPtr) {
+u32 SOURCE_STDCALL DownloadThread(void *voidPtr) {
   RequestContext &rc = *(RequestContext *)voidPtr;
 
   URL_COMPONENTS url;

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -14,7 +14,6 @@
 #include "screen.h"
 #include "view.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 Vector g_CurrentViewOrigin(0, 0, 0), g_CurrentViewForward(1, 0, 0),
@@ -22,45 +21,20 @@ Vector g_CurrentViewOrigin(0, 0, 0), g_CurrentViewForward(1, 0, 0),
 Vector g_MainViewOrigin(0, 0, 0), g_MainViewForward(1, 0, 0),
     g_MainViewRight(0, -1, 0), g_MainViewUp(0, 0, 1);
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *pMaterial -
-//-----------------------------------------------------------------------------
 void GL_UnloadMaterial(IMaterial *pMaterial) {
-  if (pMaterial) {
-    pMaterial->DecrementReferenceCount();
-  }
+  if (pMaterial) pMaterial->DecrementReferenceCount();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *pName -
-// Output : IMaterial
-//-----------------------------------------------------------------------------
-static IMaterial *GL_LoadMaterialNoRef(const char *pName,
-                                       const char *pTextureGroupName) {
-  IMaterial *material = NULL;
-
-  if (mat_loadtextures.GetInt()) {
-    material = materials->FindMaterial(pName, pTextureGroupName);
-  } else {
-    material = g_materialEmpty;
-  }
-
-  return material;
+static IMaterial *GL_LoadMaterialNoRef(const ch *pName,
+                                       const ch *pTextureGroupName) {
+  return mat_loadtextures.GetInt()
+             ? materials->FindMaterial(pName, pTextureGroupName)
+             : g_materialEmpty;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *pName -
-// Output : IMaterial
-//-----------------------------------------------------------------------------
-IMaterial *GL_LoadMaterial(const char *pName, const char *pTextureGroupName) {
-  IMaterial *material;
+IMaterial *GL_LoadMaterial(const ch *pName, const ch *pTextureGroupName) {
+  IMaterial *material = GL_LoadMaterialNoRef(pName, pTextureGroupName);
+  if (material) material->IncrementReferenceCount();
 
-  material = GL_LoadMaterialNoRef(pName, pTextureGroupName);
-  if (material) {
-    material->IncrementReferenceCount();
-  }
   return material;
 }

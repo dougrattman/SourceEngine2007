@@ -1,19 +1,15 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "filesystem_engine.h"
 
-#include <malloc.h>
-#include <cassert>
 #include <cstdlib>
 #include "bitmap/tgawriter.h"
 #include "filesystem.h"
-#include "quakedef.h"  // for MAX_OSPATH
 #include "tier2/tier2.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-IFileSystem *g_pFileSystem = NULL;
+IFileSystem *g_pFileSystem = nullptr;
 
 void fs_whitelist_spew_flags_changefn(IConVar *pConVar, const char *pOldValue,
                                       float flOldValue) {
@@ -23,7 +19,7 @@ void fs_whitelist_spew_flags_changefn(IConVar *pConVar, const char *pOldValue,
   }
 }
 
-#if defined(_DEBUG)
+#ifndef NDEBUG
 ConVar fs_whitelist_spew_flags(
     "fs_whitelist_spew_flags", "0", 0,
     "Set whitelist spew flags to a combination of these values:\n"
@@ -94,24 +90,17 @@ CON_COMMAND(fs_warning_level, "Set the filesystem warning level.") {
   g_pFileSystem->SetWarningLevel((FileWarningLevel_t)level);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Wrap Sys_LoadModule() with a filesystem GetLocalCopy() call to
-//			ensure have the file to load when running Steam.
-//-----------------------------------------------------------------------------
+// ensure have the file to load when running Steam.
 CSysModule *FileSystem_LoadModule(const char *path) {
-  if (g_pFileSystem)
-    return g_pFileSystem->LoadModule(path);
-  else
-    return Sys_LoadModule(path);
+  return g_pFileSystem ? g_pFileSystem->LoadModule(path) : Sys_LoadModule(path);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Provided for symmetry sake with FileSystem_LoadModule()...
-//-----------------------------------------------------------------------------
 void FileSystem_UnloadModule(CSysModule *pModule) { Sys_UnloadModule(pModule); }
 
 void FileSystem_SetWhitelistSpewFlags() {
-#if defined(_DEBUG)
+#ifndef NDEBUG
   if (!g_pFileSystem) {
     Assert(!"FileSystem_InitSpewFlags - no filesystem.");
     return;

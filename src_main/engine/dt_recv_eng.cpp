@@ -12,7 +12,6 @@
 #include "tier1/UtlLinkedList.h"
 #include "tier1/strtools.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CClientSendTable;
@@ -44,17 +43,16 @@ class CClientSendTable;
   FOR_EACH_PROP_R(SendTable, pTablePointer, tableCode, propCode)
 #define RECVPROP_VISIT(pTablePointer, tableCode, propCode) \
   FOR_EACH_PROP_R(RecvTable, pTablePointer, tableCode, propCode)
-#define SETUP_VISIT() \
-  class CDummyClass {}  // Workaround for parser bug in VC7.1
+#define SETUP_VISIT()
 
 // ------------------------------------------------------------------------------------
 // // Globals.
 // ------------------------------------------------------------------------------------
 // //
 
-CUtlLinkedList<RecvTable *, unsigned short> g_RecvTables;
-CUtlLinkedList<CRecvDecoder *, unsigned short> g_RecvDecoders;
-CUtlLinkedList<CClientSendTable *, unsigned short> g_ClientSendTables;
+CUtlLinkedList<RecvTable *, u16> g_RecvTables;
+CUtlLinkedList<CRecvDecoder *, u16> g_RecvDecoders;
+CUtlLinkedList<CClientSendTable *, u16> g_ClientSendTables;
 
 int g_nPropsDecoded = 0;
 
@@ -65,7 +63,8 @@ int g_nPropsDecoded = 0;
 
 RecvTable *FindRecvTable(const char *pName) {
   FOR_EACH_LL(g_RecvTables, i) {
-    if (_stricmp(g_RecvTables[i]->GetName(), pName) == 0) return g_RecvTables[i];
+    if (_stricmp(g_RecvTables[i]->GetName(), pName) == 0)
+      return g_RecvTables[i];
   }
   return 0;
 }
@@ -157,9 +156,10 @@ struct MatchingProp_t {
   }
 };
 
-static bool MatchRecvPropsToSendProps_R(
-    CUtlRBTree<MatchingProp_t, unsigned short> &lookup,
-    char const *sendTableName, SendTable *pSendTable, RecvTable *pRecvTable) {
+static bool MatchRecvPropsToSendProps_R(CUtlRBTree<MatchingProp_t, u16> &lookup,
+                                        char const *sendTableName,
+                                        SendTable *pSendTable,
+                                        RecvTable *pRecvTable) {
   for (int i = 0; i < pSendTable->m_nProps; i++) {
     SendProp *pSendProp = &pSendTable->m_pProps[i];
 
@@ -319,7 +319,7 @@ bool RecvTable_RecvClassInfos(bf_read *pBuf, bool bNeedsDecoder,
 }
 
 static void CopySendPropsToRecvProps(
-    CUtlRBTree<MatchingProp_t, unsigned short> &lookup,
+    CUtlRBTree<MatchingProp_t, u16> &lookup,
     const CUtlVector<const SendProp *> &sendProps,
     CUtlVector<const RecvProp *> &recvProps) {
   recvProps.SetSize(sendProps.Count());
@@ -353,8 +353,7 @@ bool RecvTable_CreateDecoders(const CStandardSendProxies *pSendProxies) {
     // For each decoder, precalculate the SendTable's flat property list.
     if (!pDecoder->m_Precalc.SetupFlatPropertyArray()) return false;
 
-    CUtlRBTree<MatchingProp_t, unsigned short> PropLookup(
-        0, 0, MatchingProp_t::LessFunc);
+    CUtlRBTree<MatchingProp_t, u16> PropLookup(0, 0, MatchingProp_t::LessFunc);
 
     // Now match RecvProp with SendProps.
     if (!MatchRecvPropsToSendProps_R(

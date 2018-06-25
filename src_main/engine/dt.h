@@ -111,14 +111,14 @@ class CSendNode {
   //
   // Returns DATATABLE_PROXY_INDEX_NOPROXY if the property has
   // SPROP_PROXY_ALWAYS_YES set.
-  unsigned short GetDataTableProxyIndex() const;
-  void SetDataTableProxyIndex(unsigned short val);
+  u16 GetDataTableProxyIndex() const;
+  void SetDataTableProxyIndex(u16 val);
 
   // Similar to m_DataTableProxyIndex, but doesn't use
   // DATATABLE_PROXY_INDEX_INVALID, so this can be used to index
   // CDataTableStack::m_pProxies.
-  unsigned short GetRecursiveProxyIndex() const;
-  void SetRecursiveProxyIndex(unsigned short val);
+  u16 GetRecursiveProxyIndex() const;
+  void SetRecursiveProxyIndex(u16 val);
 
  public:
   // Child datatables.
@@ -139,14 +139,14 @@ class CSendNode {
 
   // m_iFirstRecursiveProp to m_nRecursiveProps defines the list of propertise
   // of this node and all its children.
-  unsigned short m_iFirstRecursiveProp;
-  unsigned short m_nRecursiveProps;
+  u16 m_iFirstRecursiveProp;
+  u16 m_nRecursiveProps;
 
   // See GetDataTableProxyIndex().
-  unsigned short m_DataTableProxyIndex;
+  u16 m_DataTableProxyIndex;
 
   // See GetRecursiveProxyIndex().
-  unsigned short m_RecursiveProxyIndex;
+  u16 m_RecursiveProxyIndex;
 };
 
 inline int CSendNode::GetNumChildren() const { return m_Children.Count(); }
@@ -158,29 +158,29 @@ inline bool CSendNode::IsPropInRecursiveProps(int i) const {
   return index >= 0 && index < m_nRecursiveProps;
 }
 
-inline unsigned short CSendNode::GetDataTableProxyIndex() const {
+inline u16 CSendNode::GetDataTableProxyIndex() const {
   Assert(m_DataTableProxyIndex !=
          DATATABLE_PROXY_INDEX_INVALID);  // Make sure it's been set before.
   return m_DataTableProxyIndex;
 }
 
-inline void CSendNode::SetDataTableProxyIndex(unsigned short val) {
+inline void CSendNode::SetDataTableProxyIndex(u16 val) {
   m_DataTableProxyIndex = val;
 }
 
-inline unsigned short CSendNode::GetRecursiveProxyIndex() const {
+inline u16 CSendNode::GetRecursiveProxyIndex() const {
   return m_RecursiveProxyIndex;
 }
 
-inline void CSendNode::SetRecursiveProxyIndex(unsigned short val) {
+inline void CSendNode::SetRecursiveProxyIndex(u16 val) {
   m_RecursiveProxyIndex = val;
 }
 
 class CFastLocalTransferPropInfo {
  public:
-  unsigned short m_iRecvOffset;
-  unsigned short m_iSendOffset;
-  unsigned short m_iProp;
+  u16 m_iRecvOffset;
+  u16 m_iSendOffset;
+  u16 m_iProp;
 };
 
 class CFastLocalTransferInfo {
@@ -220,14 +220,14 @@ class CSendTablePrecalc {
  public:
   class CProxyPathEntry {
    public:
-    unsigned short m_iDatatableProp;  // Lookup into CSendTablePrecalc or
+    u16 m_iDatatableProp;  // Lookup into CSendTablePrecalc or
                                       // CRecvDecoder::m_DatatableProps.
-    unsigned short m_iProxy;
+    u16 m_iProxy;
   };
   class CProxyPath {
    public:
-    unsigned short m_iFirstEntry;  // Index into m_ProxyPathEntries.
-    unsigned short m_nEntries;
+    u16 m_iFirstEntry;  // Index into m_ProxyPathEntries.
+    u16 m_nEntries;
   };
 
   CUtlVector<CProxyPathEntry>
@@ -266,7 +266,7 @@ class CSendTablePrecalc {
   int m_nDataTableProxies;
 
   // Map prop offsets to indices for properties that can use it.
-  CUtlMap<unsigned short, unsigned short> m_PropOffsetToIndexMap;
+  CUtlMap<u16, u16> m_PropOffsetToIndexMap;
 };
 
 inline int CSendTablePrecalc::GetNumProps() const { return m_Props.Count(); }

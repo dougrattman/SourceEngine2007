@@ -79,7 +79,7 @@ inline void CDispNode::SetErrorTerm(float error) { m_ErrorTerm = error; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline float CDispNode::GetErrorTerm(void) { return m_ErrorTerm; }
+inline float CDispNode::GetErrorTerm() { return m_ErrorTerm; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -101,7 +101,7 @@ inline void CDispNode::SetOrigVertexIndex(int vertIndex) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline int CDispNode::GetOrigVertexIndex(void) { return m_OrigVertIndex; }
+inline int CDispNode::GetOrigVertexIndex() { return m_OrigVertIndex; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ inline void CDispNode::SetTouched(bool bTouched) { m_bTouched = bTouched; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline bool CDispNode::IsTouched(void) { return m_bTouched; }
+inline bool CDispNode::IsTouched() { return m_bTouched; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -129,5 +129,5 @@ inline void CDispNode::SetActivity(bool bActive) { m_bActive = bActive; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline bool CDispNode::IsActive(void) { return m_bActive; }
+inline bool CDispNode::IsActive() { return m_bActive; }
 #endif  // DISPNODE_H

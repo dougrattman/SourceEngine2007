@@ -66,7 +66,7 @@ class CPropCullStack : public CDatatableStack {
           // Add ALL properties under this proxy because the previous state
           // didn't have any of them.
           for (int i = 0; i < pNode->m_nRecursiveProps; i++) {
-            if (m_nNewProxyProps < SOURCE_ARRAYSIZE(m_NewProxyProps)) {
+            if (m_nNewProxyProps < std::size(m_NewProxyProps)) {
               m_NewProxyProps[m_nNewProxyProps] =
                   pNode->m_iFirstRecursiveProp + i;
             } else {
@@ -486,7 +486,7 @@ int SendTable_WriteAllDeltaProps(const SendTable *pTable, const void *pFromData,
 
   int nDeltaProps = SendTable_CalcDelta(pTable, pFromData, nFromDataBits,
                                         pToData, nToDataBits, deltaProps,
-                                        SOURCE_ARRAYSIZE(deltaProps), nObjectID);
+                                        std::size(deltaProps), nObjectID);
 
   // Write the properties.
   SendTable_WritePropList(pTable,
@@ -828,7 +828,7 @@ CRC32_t SendTable_CRCTable(CRC32_t &crc, SendTable *pTable) {
   return crc;
 }
 
-void SendTable_PrintStats(void) {
+void SendTable_PrintStats() {
   int numTables = 0;
   int numFloats = 0;
   int numStrings = 0;

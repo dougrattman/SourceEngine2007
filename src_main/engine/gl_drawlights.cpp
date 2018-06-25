@@ -309,7 +309,7 @@ void DrawSpotLight(dworldlight_t *pLight) {
 // Draws sprites over all visible lights
 // NOTE: This is used to render env-cubemaps
 //-----------------------------------------------------------------------------
-void DrawLightSprites(void) {
+void DrawLightSprites() {
   if (!s_bActivateLightSprites) return;
 
   int i;
@@ -349,9 +349,9 @@ void DrawLightSprites(void) {
 //-----------------------------------------------------------------------------
 // Draws debugging information for the lights
 //-----------------------------------------------------------------------------
-void DrawLightDebuggingInfo(void) {
+void DrawLightDebuggingInfo() {
   int i;
-  char buf[256];
+  ch buf[256];
   int lineOffset;
 
   int nLight = r_drawlights.GetInt();

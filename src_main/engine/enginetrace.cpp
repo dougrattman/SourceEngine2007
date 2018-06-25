@@ -109,8 +109,8 @@ the_interface CEngineTrace : public IEngineTrace {
                                  const Vector &vecAbsMaxs,
                                  IEntityEnumerator *pEnumerator);
 
-  // TODO(d.rattman): Different versions for client + server. Eventually we need to make
-  // these go away
+  // TODO(d.rattman): Different versions for client + server. Eventually we need
+  // to make these go away
   virtual void HandleEntityToCollideable(IHandleEntity * pHandleEntity,
                                          ICollideable * *ppCollide,
                                          const char **ppDebugName) = 0;
@@ -146,8 +146,8 @@ the_interface CEngineTrace : public IEngineTrace {
   virtual int GetLeafContainingPoint(const Vector &ptTest);
 
  private:
-  // TODO(d.rattman): Different versions for client + server. Eventually we need to make
-  // these go away
+  // TODO(d.rattman): Different versions for client + server. Eventually we need
+  // to make these go away
   virtual void SetTraceEntity(ICollideable * pCollideable,
                               trace_t * pTrace) = 0;
   virtual ICollideable *GetCollideable(IHandleEntity * pEntity) = 0;
@@ -580,8 +580,7 @@ void CEngineTrace::GetBrushesInAABB(const Vector &vMins, const Vector &vMaxs,
     ptBBoxExtents[i].z = (i & (1 << 2)) ? (vMaxs.z) : (vMins.z);
   }
 
-  int *pLeafList = (int *)stackalloc(pBSPData->numleafs * 2 *
-                                     sizeof(int));  // *2 just in case
+  int *pLeafList = stack_alloc<int>(pBSPData->numleafs * 2);  // *2 just in case
   int iNumLeafs =
       CM_BoxLeafnums(vMins, vMaxs, pLeafList, pBSPData->numleafs * 2, NULL);
 
@@ -607,7 +606,7 @@ CPhysCollide *CEngineTrace::GetCollidableFromDisplacementsInAABB(
     const Vector &vMins, const Vector &vMaxs) {
   CCollisionBSPData *pBSPData = GetCollisionBSPData();
 
-  int *pLeafList = (int *)stackalloc(pBSPData->numleafs * sizeof(int));
+  int *pLeafList = stack_alloc<int>(pBSPData->numleafs);
   int iLeafCount =
       CM_BoxLeafnums(vMins, vMaxs, pLeafList, pBSPData->numleafs, NULL);
 
@@ -674,9 +673,9 @@ CPhysCollide *CEngineTrace::GetCollidableFromDisplacementsInAABB(
           return NULL;
         }
 
-        unsigned short i0 = meshTriList.indices[k + 0];
-        unsigned short i1 = meshTriList.indices[k + 1];
-        unsigned short i2 = meshTriList.indices[k + 2];
+        u16 i0 = meshTriList.indices[k + 0];
+        u16 i1 = meshTriList.indices[k + 1];
+        u16 i2 = meshTriList.indices[k + 2];
 
         // Don't index past the end of the vert list
         Assert(i0 < meshTriList.vertexCount && i1 < meshTriList.vertexCount &&
@@ -1046,8 +1045,8 @@ void CEngineTrace::ClipRayToCollideable(const Ray_t &ray, unsigned int fMask,
     bTraced = ClipRayToVPhysics(ray, fMask, pEntity, pStudioHdr, pTrace);
   }
 
-  // TODO(d.rattman): Why aren't we using solid type to check what kind of collisions to
-  // test against?!?!
+  // TODO(d.rattman): Why aren't we using solid type to check what kind of
+  // collisions to test against?!?!
   if (!bTraced && pModel && pModel->type == mod_brush) {
     bTraced = ClipRayToBSP(ray, fMask, pEntity, pTrace);
   }
@@ -1766,9 +1765,9 @@ class CEnumerationFilter : public IPartitionEnumerator {
 void CEngineTrace::EnumerateEntities(const Ray_t &ray, bool bTriggers,
                                      IEntityEnumerator *pEnumerator) {
   m_traceStatCounters[TRACE_STAT_COUNTER_ENUMERATE]++;
-  // TODO(d.rattman): If we store CBaseHandles directly in the spatial partition, this
-  // method basically becomes obsolete. The spatial partition can be queried
-  // directly.
+  // TODO(d.rattman): If we store CBaseHandles directly in the spatial
+  // partition, this method basically becomes obsolete. The spatial partition
+  // can be queried directly.
   CEnumerationFilter enumerator(this, pEnumerator);
 
   int fMask =
@@ -1788,9 +1787,9 @@ void CEngineTrace::EnumerateEntities(const Vector &vecAbsMins,
                                      const Vector &vecAbsMaxs,
                                      IEntityEnumerator *pEnumerator) {
   m_traceStatCounters[TRACE_STAT_COUNTER_ENUMERATE]++;
-  // TODO(d.rattman): If we store CBaseHandles directly in the spatial partition, this
-  // method basically becomes obsolete. The spatial partition can be queried
-  // directly.
+  // TODO(d.rattman): If we store CBaseHandles directly in the spatial
+  // partition, this method basically becomes obsolete. The spatial partition
+  // can be queried directly.
   CEnumerationFilter enumerator(this, pEnumerator);
   SpatialPartition()->EnumerateElementsInBox(SpatialPartitionMask(), vecAbsMins,
                                              vecAbsMaxs, false, &enumerator);

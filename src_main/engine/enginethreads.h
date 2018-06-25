@@ -6,18 +6,10 @@
 #include "const.h"
 #include "tier0/include/threadtools.h"
 
-#ifdef SOURCE_MT
-
 extern bool g_bThreadedEngine;
 extern int g_nMaterialSystemThread;
 extern int g_nServerThread;
 
-#define IsEngineThreaded() (g_bThreadedEngine)
-
-#else
-
-#define IsEngineThreaded() (false)
-
-#endif
+inline bool IsEngineThreaded() { return g_bThreadedEngine; }
 
 #endif  // ENGINETHREADS_H

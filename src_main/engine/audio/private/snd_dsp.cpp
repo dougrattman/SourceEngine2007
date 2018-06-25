@@ -9343,45 +9343,5 @@ void DSP_DEBUGReloadPresetFile() {
 // UNDONE: not tested or used
 
 inline int S_Compress(int xin) {
-  return CLIP(xin >> 2);  // DEBUG - disabled
-
-  float Yn, Xn, Cn, Fn;
-  float C0 = 20000;  // threshold
-  float p = .3f;     // compression ratio
-  float g = 1;       // gain after compression
-
-  Xn = (float)xin;
-
-  // Compressor formula:
-  // Cn = l*Cn-1 + (1-l)*|Xn|				// peak detector with
-  // memory f(Cn) = (Cn/C0)^(p-1)	for Cn > C0	// gain function above
-  // threshold
-  // f(Cn) = 1				for C <= C0	// unity gain below
-  // threshold
-  // Yn = f(Cn) * Xn						// compressor
-  // output
-
-  // UNDONE: curves discontinuous at threshold, causes distortion, try
-  // catmul-rom
-
-  // float l = .5;		// compressor memory
-  // Cn = l * (*pCnPrev) + (1 - l) * fabs((float)xin);
-  //*pCnPrev = Cn;
-
-  Cn = fabs((float)xin);
-
-  if (Cn < C0)
-    Fn = 1;
-  else
-    Fn = powf((Cn / C0), (p - 1));
-
-  Yn = Fn * Xn * g;
-
-  // if (Cn > 0)
-  //	Msg("%d -> %d\n", xin, (int)Yn);	// DEBUG
-
-  // if (fabs(Yn) > 32767)
-  //	Yn = Yn;			// DEBUG
-
-  return (CLIP((int)Yn));
+  return CLIP(xin >> 2);
 }

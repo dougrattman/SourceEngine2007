@@ -19,17 +19,17 @@ CEngineRecipientFilter::CEngineRecipientFilter() { Reset(); }
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CEngineRecipientFilter::Reset(void) {
+void CEngineRecipientFilter::Reset() {
   m_bReliable = false;
   m_bInit = false;
   m_Recipients.RemoveAll();
 }
 
-void CEngineRecipientFilter::MakeReliable(void) { m_bReliable = true; }
+void CEngineRecipientFilter::MakeReliable() { m_bReliable = true; }
 
-void CEngineRecipientFilter::MakeInitMessage(void) { m_bInit = true; }
+void CEngineRecipientFilter::MakeInitMessage() { m_bInit = true; }
 
-int CEngineRecipientFilter::GetRecipientCount(void) const {
+int CEngineRecipientFilter::GetRecipientCount() const {
   return m_Recipients.Size();
 }
 
@@ -39,7 +39,7 @@ int CEngineRecipientFilter::GetRecipientIndex(int slot) const {
   return m_Recipients[slot];
 }
 
-void CEngineRecipientFilter::AddAllPlayers(void) {
+void CEngineRecipientFilter::AddAllPlayers() {
   m_Recipients.RemoveAll();
 
   for (int i = 0; i < sv.GetClientCount(); i++) {

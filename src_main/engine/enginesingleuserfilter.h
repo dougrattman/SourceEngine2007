@@ -13,8 +13,8 @@ class CEngineRecipientFilter : public IRecipientFilter {
   CEngineRecipientFilter();
   virtual int GetRecipientCount(void) const;
   virtual int GetRecipientIndex(int slot) const;
-  virtual bool IsReliable(void) const { return m_bReliable; };
-  virtual bool IsInitMessage(void) const { return m_bInit; };
+  virtual bool IsReliable() const { return m_bReliable; };
+  virtual bool IsInitMessage() const { return m_bInit; };
 
  public:
   void Reset(void);
@@ -45,15 +45,15 @@ class CEngineSingleUserFilter : public IRecipientFilter {
     m_bReliable = bReliable;
   }
 
-  virtual bool IsReliable(void) const { return m_bReliable; }
+  virtual bool IsReliable() const { return m_bReliable; }
 
-  virtual int GetRecipientCount(void) const { return 1; }
+  virtual int GetRecipientCount() const { return 1; }
 
   virtual int GetRecipientIndex(int slot) const { return m_nClientIndex; }
 
-  virtual bool IsBroadcastMessage(void) const { return false; }
+  virtual bool IsBroadcastMessage() const { return false; }
 
-  virtual bool IsInitMessage(void) const { return false; }
+  virtual bool IsInitMessage() const { return false; }
 
  private:
   int m_nClientIndex;

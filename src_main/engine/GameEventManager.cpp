@@ -7,7 +7,6 @@
 #include "server.h"
 #include "tier0/include/vprof.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -459,7 +458,7 @@ bool CGameEventManager::SerializeEvent(IGameEvent *event, bf_write *buf) {
         buf->WriteOneBit(event->GetInt(keyName, 0));
         break;
       default:
-        DevMsg(1, "CGameEventManager: unkown type %i for key '%s'.\n", type,
+        DevMsg(1, "Game Event Manager: Unknown type %i for key '%s'.\n", type,
                key->GetName());
         break;
     }
@@ -481,7 +480,7 @@ IGameEvent *CGameEventManager::UnserializeEvent(bf_read *buf) {
   CGameEventDescriptor *descriptor = GetEventDescriptor(eventid);
 
   if (descriptor == NULL) {
-    DevMsg("CGameEventManager::UnserializeEvent:: unknown event id %i.\n",
+    DevMsg("Game Event Manager::UnserializeEvent: Unknown event id %i.\n",
            eventid);
     return NULL;
   }
@@ -490,7 +489,7 @@ IGameEvent *CGameEventManager::UnserializeEvent(bf_read *buf) {
   IGameEvent *event = CreateEvent(descriptor);
 
   if (!event) {
-    DevMsg("CGameEventManager::UnserializeEvent:: failed to create event %s.\n",
+    DevMsg("Game Event Manager::UnserializeEvent: Failed to create event %s.\n",
            descriptor->name);
     return NULL;
   }
@@ -525,7 +524,7 @@ IGameEvent *CGameEventManager::UnserializeEvent(bf_read *buf) {
         event->SetInt(keyName, buf->ReadOneBit());
         break;
       default:
-        DevMsg(1, "CGameEventManager: unknown type %i for key '%s'.\n", type,
+        DevMsg(1, "Game Event Manager: Unknown type %i for key '%s'.\n", type,
                key->GetName());
         break;
     }
@@ -640,7 +639,7 @@ bool CGameEventManager::AddListener(IGameEventListener2 *listener,
   CGameEventDescriptor *descriptor = GetEventDescriptor(event);
 
   if (!descriptor) {
-    DevMsg("CGameEventManager::AddListener: event '%s' unknown.\n", event);
+    DevMsg("Game Event Manager::AddListener: Event '%s' unknown.\n", event);
     return false;  // that should not happen
   }
 
@@ -686,7 +685,7 @@ bool CGameEventManager::RegisterEvent(KeyValues *event) {
 
   if (m_GameEvents.Count() == MAX_EVENT_NUMBER) {
     DevMsg(
-        "CGameEventManager: couldn't register event '%s', limit reached "
+        "Game Event Manager: Couldn't register event '%s', limit reached "
         "(%i).\n",
         event->GetName(), MAX_EVENT_NUMBER);
     return false;
@@ -735,7 +734,7 @@ bool CGameEventManager::RegisterEvent(KeyValues *event) {
 
       if (i > TYPE_BOOL) {
         descriptor->keys->SetInt(keyName, 0);  // unknown
-        DevMsg("CGameEventManager:: unknown type '%s' for key '%s'.\n", type,
+        DevMsg("Game Event Manager: Unknown type '%s' for key '%s'.\n", type,
                subkey->GetName());
       }
     }

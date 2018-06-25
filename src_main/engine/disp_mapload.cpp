@@ -440,7 +440,7 @@ bool DispInfo_CreateFromMapDisp(model_t *pWorld, int iDisp,
   pDisp->m_iPointStart = pCoreDisp->GetSurface()->GetPointStartIndex();
 
   // Now setup the CDispInfo.
-  pDisp->m_Index = static_cast<unsigned short>(iDisp);
+  pDisp->m_Index = static_cast<u16>(iDisp);
 
   // Store ddispinfo_t data.
   pDisp->CopyMapDispData(pMapDisp);
@@ -756,7 +756,7 @@ CDispInfo::CDispInfo() {
 
   m_pPowerInfo = NULL;
 
-  m_ViewerSphereCenter.Init(1e24, 1e24, 1e24);
+  m_ViewerSphereCenter.Init(1e24f, 1e24f, 1e24f);
 
   m_bInUse = false;
 
@@ -891,8 +891,8 @@ void BuildTagData(CCoreDispInfo *pCoreDisp, CDispInfo *pDisp) {
   nWalkTest *= 3;
   nBuildTest *= 3;
 
-  pDisp->m_pWalkIndices = new unsigned short[nWalkTest];
-  pDisp->m_pBuildIndices = new unsigned short[nBuildTest];
+  pDisp->m_pWalkIndices = new u16[nWalkTest];
+  pDisp->m_pBuildIndices = new u16[nBuildTest];
 
   int nWalkCount = 0;
   int nBuildCount = 0;
@@ -931,7 +931,7 @@ int FindNeighborCornerVert(CCoreDispInfo *pDisp, const Vector &vecPoint) {
   CDispUtilsHelper *pDispHelper = pDisp;
 
   int iClosest = 0;
-  float flClosest = 1e24;
+  float flClosest = 1e24f;
   for (int iCorner = 0; iCorner < 4; ++iCorner) {
     // Has it been touched?
     CVertIndex viCornerVert =
@@ -1051,7 +1051,7 @@ int GetAllNeighbors(const CCoreDispInfo *pDisp,
     const CDispCornerNeighbors *pCorner = pDisp->GetCornerNeighbors(iCorner);
 
     for (int i = 0; i < pCorner->m_nNeighbors; i++) {
-      if (nNeighbors < SOURCE_ARRAYSIZE(iNeighbors))
+      if (nNeighbors < std::size(iNeighbors))
         iNeighbors[nNeighbors++] = pCorner->m_Neighbors[i];
     }
   }

@@ -173,14 +173,14 @@ class CDispInfo : public IDispInfo, public CDispUtilsHelper {
 
   // This little beastie generate decal fragments
   void GenerateDecalFragments(CVertIndex const &nodeIndex, int iNodeBitIndex,
-                              unsigned short decalHandle,
+                              u16 decalHandle,
                               CDispDecalBase *pDispDecal);
 
  private:
   // Two functions for adding decals
-  void TestAddDecalTri(int iIndexStart, unsigned short decalHandle,
+  void TestAddDecalTri(int iIndexStart, u16 decalHandle,
                        CDispDecal *pDispDecal);
-  void TestAddDecalTri(int iIndexStart, unsigned short decalHandle,
+  void TestAddDecalTri(int iIndexStart, u16 decalHandle,
                        CDispShadowDecal *pDispDecal);
 
   // Allocates fragments...
@@ -201,7 +201,7 @@ class CDispInfo : public IDispInfo, public CDispUtilsHelper {
 
   // Used by GenerateDecalFragments
   void GenerateDecalFragments_R(CVertIndex const &nodeIndex, int iNodeBitIndex,
-                                unsigned short decalHandle,
+                                u16 decalHandle,
                                 CDispDecalBase *pDispDecal, int iLevel);
 
   // Used to create a bitfield to help cull decal tests
@@ -238,7 +238,7 @@ class CDispInfo : public IDispInfo, public CDispUtilsHelper {
   // List of all indices in the displacement in the current tesselation.
   // These indices are straight into the static buffer (ie: they're not relative
   // to m_iVertOffset).
-  CUtlVector<unsigned short> m_Indices;
+  CUtlVector<u16> m_Indices;
 
   CUtlVector<CDispRenderVert, CHunkMemory<CDispRenderVert> >
       m_Verts;  // vectors that define the surface (size is NumVerts()).
@@ -269,7 +269,7 @@ class CDispInfo : public IDispInfo, public CDispUtilsHelper {
 
   int m_Power;  // surface size (sides are 2^n+1).
 
-  unsigned short *m_pTags;  // property tags
+  u16 *m_pTags;  // property tags
 
   // Position and texcoordinates at the four corner points
   Vector m_BaseSurfacePositions[4];
@@ -289,10 +289,10 @@ class CDispInfo : public IDispInfo, public CDispUtilsHelper {
 
   // The current triangulation for visualizing tag data.
   int m_nWalkIndexCount;
-  unsigned short *m_pWalkIndices;
+  u16 *m_pWalkIndices;
 
   int m_nBuildIndexCount;
-  unsigned short *m_pBuildIndices;
+  u16 *m_pBuildIndices;
 
   // This here's a bunch of per-node information
   DispNodeInfo_t *m_pNodeInfo;
@@ -308,10 +308,10 @@ class CDispInfo : public IDispInfo, public CDispUtilsHelper {
   DispDecalHandle_t m_FirstDecal;
   DispShadowHandle_t m_FirstShadowDecal;
 
-  unsigned short m_Index;  // helps in debugging
+  u16 m_Index;  // helps in debugging
 
   // Current tag value.
-  unsigned short m_Tag;
+  u16 m_Tag;
   CDispArray *m_pDispArray;
 };
 
@@ -348,7 +348,7 @@ inline void CDispInfo::SetTouched(bool bTouched) { m_bTouched = bTouched; }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-inline bool CDispInfo::IsTouched(void) { return m_bTouched; }
+inline bool CDispInfo::IsTouched() { return m_bTouched; }
 
 inline int CDispInfo::VertIndex(int x, int y) const {
   Assert(x >= 0 && x < GetSideLength() && y >= 0 && y < GetSideLength());

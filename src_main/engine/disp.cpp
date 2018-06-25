@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -25,7 +25,6 @@
 #include "tier0/include/dbg.h"
 #include "zone.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -84,8 +83,8 @@ inline CVertIndex CDispInfo::IndexToVert(int index) const {
 }
 
 void CDispInfo::UpdateBoundingBox() {
-  m_BBoxMin.Init(1e24, 1e24, 1e24);
-  m_BBoxMax.Init(-1e24, -1e24, -1e24);
+  m_BBoxMin.Init(1e24f, 1e24f, 1e24f);
+  m_BBoxMax.Init(-1e24f, -1e24f, -1e24f);
 
   for (int i = 0; i < NumVerts(); i++) {
     const Vector &pos = m_MeshReader.Position(i);
@@ -114,12 +113,12 @@ inline void CDispInfo::DecalProjectVert(Vector const &vPos,
 // // This version works for normal decals
 // -----------------------------------------------------------------------------
 // //
-void CDispInfo::TestAddDecalTri(int iIndexStart, unsigned short decalHandle,
+void CDispInfo::TestAddDecalTri(int iIndexStart, u16 decalHandle,
                                 CDispDecal *pDispDecal) {
   decal_t *pDecal = pDispDecal->m_pDecal;
 
   // If the decal is too far away from the plane of this triangle, reject it.
-  unsigned short tempIndices[3] = {
+  u16 tempIndices[3] = {
       m_MeshReader.Index(iIndexStart + 0) - m_iVertOffset,
       m_MeshReader.Index(iIndexStart + 1) - m_iVertOffset,
       m_MeshReader.Index(iIndexStart + 2) - m_iVertOffset};
@@ -192,7 +191,7 @@ void CDispInfo::TestAddDecalTri(int iIndexStart, unsigned short decalHandle,
 
                     //if( )
                     {
-                            char buffer[256];
+                            ch buffer[256];
                             sprintf(buffer, "Verts: 3:%i 4+:%i (%i)\n",three,
        total, sizeof(CDecalVert)); Msg(buffer);
                     }
@@ -208,9 +207,9 @@ void CDispInfo::TestAddDecalTri(int iIndexStart, unsigned short decalHandle,
 // // This version works for shadow decals
 // -----------------------------------------------------------------------------
 // //
-void CDispInfo::TestAddDecalTri(int iIndexStart, unsigned short decalHandle,
+void CDispInfo::TestAddDecalTri(int iIndexStart, u16 decalHandle,
                                 CDispShadowDecal *pDecal) {
-  unsigned short tempIndices[3] = {
+  u16 tempIndices[3] = {
       m_MeshReader.Index(iIndexStart + 0) - m_iVertOffset,
       m_MeshReader.Index(iIndexStart + 1) - m_iVertOffset,
       m_MeshReader.Index(iIndexStart + 2) - m_iVertOffset};
@@ -333,7 +332,7 @@ void CDispInfo::SpecifyDynamicMesh() {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CDispInfo::SpecifyWalkableDynamicMesh(void) {
+void CDispInfo::SpecifyWalkableDynamicMesh() {
   // Specify the vertices and indices.
   CMatRenderContextPtr pRenderContext(materials);
 
@@ -364,7 +363,7 @@ void CDispInfo::SpecifyWalkableDynamicMesh(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CDispInfo::SpecifyBuildableDynamicMesh(void) {
+void CDispInfo::SpecifyBuildableDynamicMesh() {
   // Specify the vertices and indices.
   CMatRenderContextPtr pRenderContext(materials);
 
@@ -497,7 +496,7 @@ bool CDispInfo::Render(CGroupMesh *pGroup, bool bAllowDebugModes) {
                      ? (int)m_ParentSurfID
                      : (msurface2_t *)m_ParentSurfID -
                            host_state.worldbrush->surfaces2;
-      char buf[32];
+      ch buf[32];
       Q_snprintf(buf, sizeof(buf), "%d", nInt);
       CDebugOverlay::AddTextOverlay(vecCenter, 0, buf);
     }
@@ -510,10 +509,10 @@ bool CDispInfo::Render(CGroupMesh *pGroup, bool bAllowDebugModes) {
 
       mtexinfo_t *pTexInfo = MSurf_TexInfo(m_ParentSurfID);
 
-      const char *pFullMaterialName =
+      const ch *pFullMaterialName =
           pTexInfo->material ? pTexInfo->material->GetName() : "no material";
-      const char *pSlash = strrchr(pFullMaterialName, '/');
-      const char *pMaterialName = strrchr(pFullMaterialName, '\\');
+      const ch *pSlash = strrchr(pFullMaterialName, '/');
+      const ch *pMaterialName = strrchr(pFullMaterialName, '\\');
       if (pSlash > pMaterialName) pMaterialName = pSlash;
       if (pMaterialName)
         ++pMaterialName;
@@ -1038,12 +1037,12 @@ bool CDispInfo::TestRay(Ray_t const &ray, float start, float end, float &dist,
 const CPowerInfo *CDispInfo::GetPowerInfo() const { return m_pPowerInfo; }
 
 CDispNeighbor *CDispInfo::GetEdgeNeighbor(int index) {
-  Assert(index >= 0 && index < SOURCE_ARRAYSIZE(m_EdgeNeighbors));
+  Assert(index >= 0 && index < std::size(m_EdgeNeighbors));
   return &m_EdgeNeighbors[index];
 }
 
 CDispCornerNeighbors *CDispInfo::GetCornerNeighbors(int index) {
-  Assert(index >= 0 && index < SOURCE_ARRAYSIZE(m_CornerNeighbors));
+  Assert(index >= 0 && index < std::size(m_CornerNeighbors));
   return &m_CornerNeighbors[index];
 }
 

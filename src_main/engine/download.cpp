@@ -831,10 +831,10 @@ bool DownloadManager::Update() {
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-bool CL_DownloadUpdate(void) { return TheDownloadManager.Update(); }
+bool CL_DownloadUpdate() { return TheDownloadManager.Update(); }
 
 //--------------------------------------------------------------------------------------------------------------
-void CL_HTTPStop_f(void) { TheDownloadManager.Stop(); }
+void CL_HTTPStop_f() { TheDownloadManager.Stop(); }
 
 bool CL_FileReceived(const char *filename, unsigned int requestID) {
   return TheDownloadManager.FileReceived(filename, requestID);
@@ -851,10 +851,10 @@ void CL_QueueDownload(const char *filename) {
 }
 
 //--------------------------------------------------------------------------------------------------------------
-int CL_GetDownloadQueueSize(void) { return TheDownloadManager.GetQueueSize(); }
+int CL_GetDownloadQueueSize() { return TheDownloadManager.GetQueueSize(); }
 
 //--------------------------------------------------------------------------------------------------------------
-int CL_CanUseHTTPDownload(void) {
+int CL_CanUseHTTPDownload() {
   if (sv_downloadurl.GetString()[0]) {
     const char *serverMapName =
         va("%s:%s", sv_downloadurl.GetString(), cl.m_szLevelName);
@@ -864,7 +864,7 @@ int CL_CanUseHTTPDownload(void) {
 }
 
 //--------------------------------------------------------------------------------------------------------------
-void CL_MarkMapAsUsingHTTPDownload(void) {
+void CL_MarkMapAsUsingHTTPDownload() {
   const char *serverMapName =
       va("%s:%s", sv_downloadurl.GetString(), cl.m_szLevelName);
   TheDownloadManager.MarkMapAsDownloadedFromServer(serverMapName);
@@ -875,21 +875,21 @@ void CL_MarkMapAsUsingHTTPDownload(void) {
 #else  // !_WIN32
 
 //--------------------------------------------------------------------------------------------------------------
-void CL_HTTPUpdate(void) {}
+void CL_HTTPUpdate() {}
 
 //--------------------------------------------------------------------------------------------------------------
-void CL_HTTPStop_f(void) {}
+void CL_HTTPStop_f() {}
 
 //--------------------------------------------------------------------------------------------------------------
 void CL_QueueHTTPDownload(const char *filename) {}
 
 //--------------------------------------------------------------------------------------------------------------
-int CL_GetDownloadQueueSize(void) { return 0; }
+int CL_GetDownloadQueueSize() { return 0; }
 
 //--------------------------------------------------------------------------------------------------------------
-int CL_CanUseHTTPDownload(void) { return 0; }
+int CL_CanUseHTTPDownload() { return 0; }
 
 //--------------------------------------------------------------------------------------------------------------
-void CL_MarkMapAsUsingHTTPDownload(void) {}
+void CL_MarkMapAsUsingHTTPDownload() {}
 
 #endif  // _WIN32

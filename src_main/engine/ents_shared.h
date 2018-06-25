@@ -29,7 +29,7 @@ class CEntityInfo {
   int m_nHeaderBase;
   int m_nHeaderCount;
 
-  inline void NextOldEntity(void) {
+  inline void NextOldEntity() {
     if (m_pFrom) {
       m_nOldEntity = m_pFrom->transmit_entity.FindNextSetBit(m_nOldEntity + 1);
 
@@ -42,7 +42,7 @@ class CEntityInfo {
     }
   }
 
-  inline void NextNewEntity(void) {
+  inline void NextNewEntity() {
     m_nNewEntity = m_pTo->transmit_entity.FindNextSetBit(m_nNewEntity + 1);
 
     if (m_nNewEntity < 0) {

@@ -14,8 +14,8 @@
 
 #include "tier0/include/memdbgon.h"
 
-extern CUtlLinkedList<CClientSendTable *, unsigned short> g_ClientSendTables;
-extern CUtlLinkedList<CRecvDecoder *, unsigned short> g_RecvDecoders;
+extern CUtlLinkedList<CClientSendTable *, u16> g_ClientSendTables;
+extern CUtlLinkedList<CRecvDecoder *, u16> g_RecvDecoders;
 
 RecvTable *FindRecvTable(const char *pName);
 
