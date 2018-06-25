@@ -1554,7 +1554,7 @@ CPolyhedron *ClipLinkedGeometry(
                 pGapLines[1]->pNext;
 
             while (pDebugLineWalk != pGapLines[0]) {
-              Assert_DumpPolyhedron(pDebugLineWalk->pLine->bCut == false);
+              Assert_DumpPolyhedron(!pDebugLineWalk->pLine->bCut);
               pDebugLineWalk = pDebugLineWalk->pNext;
             }
           }
@@ -1701,7 +1701,7 @@ CPolyhedron *ClipLinkedGeometry(
         } else {
           // line is on the plane, meaning the polygon isn't broken and doesn't
           // need patching
-          Assert_DumpPolyhedron(pTestLine->pLine->bCut == false);
+          Assert_DumpPolyhedron(!pTestLine->pLine->bCut);
           Assert_DumpPolyhedron(
               (pTestLine->pLine->pPoints[0]->planarity == POINT_ONPLANE) &&
               (pTestLine->pLine->pPoints[1]->planarity == POINT_ONPLANE));

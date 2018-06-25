@@ -21,6 +21,7 @@
 #endif
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
+#include "tier0/include/system_info.h"
 #include "tier0/include/vprof.h"
 
 #include "tier0/include/memdbgon.h"
@@ -102,8 +103,8 @@ f32 (*pfFastCos)(f32 x) = cosf;
 
 f32 SinCosTable[SIN_TABLE_SIZE];
 void InitSinCosTable() {
-  for (int i = 0; i < SIN_TABLE_SIZE; i++) {
-    SinCosTable[i] = sin(i * 2.0 * M_PI / SIN_TABLE_SIZE);
+  for (usize i = 0; i < SIN_TABLE_SIZE; i++) {
+    SinCosTable[i] = sinf(i * 2.0f * M_PI_F / SIN_TABLE_SIZE);
   }
 }
 
@@ -131,8 +132,7 @@ void MatrixAngles(const matrix3x4_t &matrix, Quaternion &q, Vector &pos) {
 #ifdef _VPROF_MATHLIB
   VPROF_BUDGET("MatrixQuaternion", "Mathlib");
 #endif
-  f32 trace;
-  trace = matrix[0][0] + matrix[1][1] + matrix[2][2] + 1.0f;
+  f32 trace = matrix[0][0] + matrix[1][1] + matrix[2][2] + 1.0f;
   if (trace > 1.0f + FLT_EPSILON) {
     // VPROF_INCREMENT_COUNTER("MatrixQuaternion A",1);
     q.x = (matrix[2][1] - matrix[1][2]);
@@ -231,11 +231,7 @@ void VectorTransform(const f32 *in1, const matrix3x4_t &in2, f32 *out) {
 // inverse in this case) of in2.
 void VectorITransform(const f32 *in1, const matrix3x4_t &in2, f32 *out) {
   Assert(s_bMathlibInitialized);
-  f32 in1t[3];
-
-  in1t[0] = in1[0] - in2[0][3];
-  in1t[1] = in1[1] - in2[1][3];
-  in1t[2] = in1[2] - in2[2][3];
+  f32 in1t[3]{in1[0] - in2[0][3], in1[1] - in2[1][3], in1[2] - in2[2][3]};
 
   out[0] = in1t[0] * in2[0][0] + in1t[1] * in2[1][0] + in1t[2] * in2[2][0];
   out[1] = in1t[0] * in2[0][1] + in1t[1] * in2[1][1] + in1t[2] * in2[2][1];
@@ -2809,7 +2805,7 @@ void MathLib_Init(f32 gamma, f32 texGamma, f32 brightness, int overbright,
   // TODO(d.rattman): Hook SSE into VectorAligned + Vector4DAligned
 
   // Grab the processor information:
-  const CPUInformation &pi = GetCPUInformation();
+  auto[cpu_info, error_code] = source::QueryCpuInfo(sizeof(source::CpuInfo));
 
   // Select the default generic routines.
   pfSqrt = _sqrtf;
@@ -2823,13 +2819,13 @@ void MathLib_Init(f32 gamma, f32 texGamma, f32 brightness, int overbright,
 
   // Select the MMX specific routines if available
   // (MMX routines were used by SW span fillers - not currently used for HW)
-  s_bMMXEnabled = bAllowMMX && pi.m_bMMX;
+  s_bMMXEnabled = bAllowMMX && cpu_info.is_info.has_mmx;
 
   // 3DNow instructions are being deprecated by AMD, so do not support it at
   // all. All modern x86-64 CPU's have SSE.
   s_b3DNowEnabled = false;
 
-  if (bAllowSSE && pi.m_bSSE) {
+  if (bAllowSSE && cpu_info.is_info.has_sse) {
     s_bSSEEnabled = true;
 
 #ifndef ARCH_CPU_X86_64
@@ -2850,7 +2846,7 @@ void MathLib_Init(f32 gamma, f32 texGamma, f32 brightness, int overbright,
     s_bSSEEnabled = false;
   }
 
-  if (bAllowSSE2 && pi.m_bSSE2) {
+  if (bAllowSSE2 && cpu_info.is_info.has_sse2) {
     s_bSSE2Enabled = true;
 #if defined _WIN32 && !defined ARCH_CPU_X86_64
     pfFastSinCos = _SSE2_SinCos;
