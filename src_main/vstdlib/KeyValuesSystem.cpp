@@ -172,14 +172,17 @@ void CKeyValuesSystem::FreeKeyValuesMemory(void *pMem) {
 // Symbol table access (used for key names).
 HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
                                                 bool bCreate) {
-  if (!name) return (-1);
+  if (!name) return -1;
+
+  size_t size{strlen(name) + 1};
 
   AUTO_LOCK(m_mutex);
 
   int hash = CaseInsensitiveHash(name, m_HashTable.Count());
   int i = 0;
   hash_item_t *item = &m_HashTable[hash];
-  while (1) {
+
+  while (true) {
     if (!_stricmp(name, (char *)m_Strings.GetBase() + item->stringIndex)) {
       return (HKeySymbol)item->stringIndex;
     }
@@ -187,10 +190,8 @@ HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
     i++;
 
     if (item->next == nullptr) {
-      if (!bCreate) {
-        // not found
-        return -1;
-      }
+      // not found
+      if (!bCreate) return -1;
 
       // we're not in the table
       if (item->stringIndex != 0) {
@@ -203,7 +204,6 @@ HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
       // build up the new item
       item->next = nullptr;
 
-      size_t size{strlen(name) + 1};
       char *the_string = (char *)m_Strings.Alloc(size);  //-V814
       if (!the_string) {
         Error("Out of keyvalue string space");
@@ -221,7 +221,7 @@ HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
 
   // shouldn't be able to get here
   Assert(0);
-  return (-1);
+  return -1;
 }
 
 // Symbol table access.

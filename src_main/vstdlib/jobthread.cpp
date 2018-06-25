@@ -838,8 +838,8 @@ class CCountJob : public CJob {
         pMemory[i] = rand();
       }
       for (i = 0; i < 50; i++) {
-        (void)sqrt((float)HashBlock(pMemory, 1024) +
-                   HashBlock(pMemory, 1024) +  //-V530
+        (void)sqrt((float)HashBlock(pMemory, 1024) + //-V530
+                   HashBlock(pMemory, 1024) +  
                    10.0);
       }
       bDoWork = false;
