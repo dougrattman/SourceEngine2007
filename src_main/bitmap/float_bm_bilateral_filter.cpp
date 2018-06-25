@@ -37,13 +37,12 @@ static unsigned TBFCalculationThreadFN(void *ctx1) {
             f32 this_p = ctx->orig_bm->PixelWrapped(x + ix, y + iy, c);
 
             // caluclate the g() term. We use a gaussian
-            f32 exp1 = (ix * ix + iy * iy) *
-                       (1.0 / (2.0 * ctx->radius_in_pixels * .033));
+            f32 exp1 = ((f32)ix * (f32)ix + (f32)iy * (f32)iy) *
+                       (1.0f / (2.0f * ctx->radius_in_pixels * .033f));
             f32 g = exp(-exp1);
             // calculate the "similarity" term. We use a triangle filter
-            f32 s = 1.0;
             f32 cdiff = fabs(centerp - this_p);
-            s = (cdiff > ctx->edge_threshold_value)
+            f32 s = (cdiff > ctx->edge_threshold_value)
                     ? 0
                     : FLerp(1, 0, 0, ctx->edge_threshold_value, cdiff);
             sum_weights += s * g;

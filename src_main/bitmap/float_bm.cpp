@@ -252,7 +252,7 @@ FloatBitMap_t::FloatBitMap_t(char const *tgafilename) {
 }
 
 FloatBitMap_t::~FloatBitMap_t() {
-  if (RGBAData) delete[] RGBAData;
+  delete[] RGBAData;
 }
 
 FloatBitMap_t *FloatBitMap_t::QuarterSize() const {

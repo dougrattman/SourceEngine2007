@@ -340,8 +340,8 @@ class KernelWrapper {
                                 ? 255.0f * info.m_flAlphaHiFreqThreshhold
                                 : 255.0f * 0.4f;
 
-    f32 flInvFactor = (dratio == 0) ? 1.0f / (hratio * wratio)
-                                    : 1.0f / (hratio * wratio * dratio);
+    f32 flInvFactor = (dratio == 0) ? 1.0f / ((f32)hratio * wratio)
+                                    : 1.0f / ((f32)hratio * wratio * dratio);
 
     for (int h = 0; h < info.m_nDestDepth; ++h) {
       int startZ = dratio * h + nInitialZ;
@@ -616,9 +616,7 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
   if (info.m_nFlags & RESAMPLE_NICE_FILTER) {
     g_KernelFuncNice[static_cast<std::underlying_type_t<decltype(type)>>(type)](
         kernel, info, wratio, hratio, dratio, gammaToLinear, pAlphaResult);
-    if (pTempMemory) {
-      delete[] pTempMemory;
-    }
+    delete[] pTempMemory;
   } else {
     g_KernelFunc[static_cast<std::underlying_type_t<decltype(type)>>(type)](
         kernel, info, wratio, hratio, dratio, gammaToLinear, pAlphaResult);
@@ -731,7 +729,7 @@ bool ResampleRGB323232F(const ResampleInfo_t &info) {
       }
 
       for (u32 i = 0; i < 3; i++) {
-        accum[i] /= (nSampleWidth * nSampleHeight);
+        accum[i] /= ((f32)nSampleWidth * nSampleHeight);
         pDst[(x + y * info.m_nDestWidth) * 3 + i] = accum[i];
       }
     }

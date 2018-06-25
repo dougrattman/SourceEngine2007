@@ -62,7 +62,8 @@ FloatImagePyramid_t::FloatImagePyramid_t(FloatBitMap_t const &src,
 void FloatImagePyramid_t::ReconstructLowerResolutionLevels(int start_level) {
   while ((m_pLevels[start_level]->Width > 1) &&
          (m_pLevels[start_level]->Height > 1)) {
-    if (m_pLevels[start_level + 1]) delete m_pLevels[start_level + 1];
+    delete m_pLevels[start_level + 1];
+
     m_pLevels[start_level + 1] =
         m_pLevels[start_level]->QuarterSizeWithGaussian();
     start_level++;
@@ -80,12 +81,13 @@ f32 &FloatImagePyramid_t::Pixel(int x, int y, int component, int level) const {
 void FloatImagePyramid_t::WriteTGAs(ch const *basename) const {
   for (int l = 0; l < m_nLevels; l++) {
     ch bname_out[1024];
-    Q_snprintf(bname_out, sizeof(bname_out), "%s_%02d.tga", basename, l);
+    sprintf_s(bname_out, "%s_%02d.tga", basename, l);
     m_pLevels[l]->WriteTGAFile(bname_out);
   }
 }
 
 FloatImagePyramid_t::~FloatImagePyramid_t() {
-  for (int l = 0; l < m_nLevels; l++)
-    if (m_pLevels[l]) delete m_pLevels[l];
+  for (int l = 0; l < m_nLevels; l++) {
+    delete m_pLevels[l];
+  }
 }

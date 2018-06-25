@@ -174,11 +174,9 @@ void GetMipMapLevelDimensions(int *width, int *height, int skipMipLevels) {
 }
 
 int GetNumMipMapLevels(int width, int height, int depth) {
-  if (depth <= 0) {
-    depth = 1;
-  }
+  if (depth <= 0) depth = 1;  
 
-  if (width < 1 || height < 1 || depth < 1) return 0;
+  if (width < 1 || height < 1) return 0;
 
   int numMipLevels = 1;
   while (1) {
