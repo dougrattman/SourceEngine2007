@@ -6,7 +6,6 @@
 #define SOURCE_APPFRAMEWORK_IAPPSYSTEM_H_
 
 #include "base/include/base_types.h"
-
 #include "tier1/interface.h"
 
 // Client systems are singleton objects in the client code base responsible for
@@ -71,23 +70,6 @@ class CTier0AppSystem : public CBaseAppSystem<IInterface> {
 
  private:
   const bool m_bIsPrimaryAppSystem;
-};
-
-// This is the version of IAppSystem shipped 10/15/04
-// NOTE: Never change this!!!
-the_interface IAppSystemV0 {
- public:
-  // Here's where the app systems get to learn about each other.
-  virtual bool Connect(CreateInterfaceFn factory) = 0;
-  virtual void Disconnect() = 0;
-
-  // Here's where systems can access other interfaces implemented by this object
-  // Returns nullptr if it doesn't implement the requested interface.
-  virtual void *QueryInterface(const ch *interface_name) = 0;
-
-  // Init, shutdown.
-  virtual InitReturnVal_t Init() = 0;
-  virtual void Shutdown() = 0;
 };
 
 #endif  // SOURCE_APPFRAMEWORK_IAPPSYSTEM_H_

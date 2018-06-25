@@ -6,10 +6,9 @@
 #ifndef SOURCE_APPFRAMEWORK_IAPPSYSTEMGROUP_H_
 #define SOURCE_APPFRAMEWORK_IAPPSYSTEMGROUP_H_
 
-#include "base/include/base_types.h"
-
 #include <type_traits>
 #include "appframework/iappsystem.h"
+#include "base/include/base_types.h"
 #include "tier0/include/basetypes.h"
 #include "tier1/interface.h"
 #include "tier1/utldict.h"

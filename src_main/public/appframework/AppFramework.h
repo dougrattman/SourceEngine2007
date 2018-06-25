@@ -5,9 +5,8 @@
 #ifndef SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
 #define SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
 
-#include "base/include/base_types.h"
-
 #include "appframework/iappsystemgroup.h"
+#include "base/include/base_types.h"
 
 // Gets the application instance.
 void *GetAppInstance();
@@ -28,11 +27,11 @@ i32 AppStartup(i32 argc, ch **argv, CAppSystemGroup *app_system_group);
 void AppShutdown(CAppSystemGroup *app_system_group);
 
 // Macros to create singleton application objects for windowed + console apps.
-#define DEFINE_WINDOWED_APPLICATION_OBJECT_GLOBALVAR(_globalVarName) \
+#define DEFINE_WINDOWED_APPLICATION_OBJECT_GLOBALVAR(_globalVarName)      \
   i32 SOURCE_STDCALL WinMain(HINSTANCE instance, HINSTANCE prev_instance, \
-                        LPSTR cmd_line, i32 cmd_show) {              \
-    return AppMain(instance, prev_instance, cmd_line, cmd_show,      \
-                   &_globalVarName);                                 \
+                             LPSTR cmd_line, i32 cmd_show) {              \
+    return AppMain(instance, prev_instance, cmd_line, cmd_show,           \
+                   &_globalVarName);                                      \
   }
 
 #define DEFINE_CONSOLE_APPLICATION_OBJECT_GLOBALVAR(_globalVarName) \

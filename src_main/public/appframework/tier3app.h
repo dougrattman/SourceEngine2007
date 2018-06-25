@@ -18,11 +18,13 @@ class CTier3SteamApp : public CTier2SteamApp {
  public:
   // Methods of IApplication.
   bool PreInit() override {
-    if (!BaseClass::PreInit()) return false;
+    if (BaseClass::PreInit()) {
+      CreateInterfaceFn factory = GetFactory();
+      ConnectTier3Libraries(&factory, 1);
+      return true;
+    }
 
-    CreateInterfaceFn factory = GetFactory();
-    ConnectTier3Libraries(&factory, 1);
-    return true;
+    return false;
   }
 
   void PostShutdown() override {
@@ -38,11 +40,13 @@ class CTier3DmSteamApp : public CTier2DmSteamApp {
  public:
   // Methods of IApplication.
   bool PreInit() override {
-    if (!BaseClass::PreInit()) return false;
+    if (BaseClass::PreInit()) {
+      CreateInterfaceFn factory = GetFactory();
+      ConnectTier3Libraries(&factory, 1);
+      return true;
+    }
 
-    CreateInterfaceFn factory = GetFactory();
-    ConnectTier3Libraries(&factory, 1);
-    return true;
+    return false;
   }
 
   void PostShutdown() override {
@@ -58,10 +62,12 @@ class CVguiSteamApp : public CTier3SteamApp {
  public:
   // Methods of IApplication.
   bool PreInit() override {
-    if (!BaseClass::PreInit()) return false;
+    if (BaseClass::PreInit()) {
+      CreateInterfaceFn factory = GetFactory();
+      return vgui::VGui_InitInterfacesList("CVguiSteamApp", &factory, 1);
+    }
 
-    CreateInterfaceFn factory = GetFactory();
-    return vgui::VGui_InitInterfacesList("CVguiSteamApp", &factory, 1);
+    return false;
   }
 };
 
@@ -72,10 +78,12 @@ class CVguiDmSteamApp : public CTier3DmSteamApp {
  public:
   // Methods of IApplication.
   bool PreInit() override {
-    if (!BaseClass::PreInit()) return false;
+    if (BaseClass::PreInit()) {
+      CreateInterfaceFn factory = GetFactory();
+      return vgui::VGui_InitInterfacesList("CVguiSteamApp", &factory, 1);
+    }
 
-    CreateInterfaceFn factory = GetFactory();
-    return vgui::VGui_InitInterfacesList("CVguiSteamApp", &factory, 1);
+    return false;
   }
 };
 
