@@ -11,6 +11,8 @@ class CBaseFileSystem;
 class CFileHandle;
 
 enum EFileFlags {
+  k_eFileFlagsNone = 0x0000,
+
   k_eFileFlagsLoadedFromSteam = 0x0001,
 
   k_eFileFlagsHasCRC = 0x0002,  // m_CRC represents the most recently-loaded

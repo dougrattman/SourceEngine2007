@@ -842,6 +842,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   virtual int FS_fflush(FILE * fp) = 0;
   virtual char *FS_fgets(char *dest, int destSize, FILE *fp) = 0;
   virtual int FS_stat(const char *path, struct _stat *buf) = 0;
+  virtual int FS_fexists(const char *path) = 0;
   virtual int FS_chmod(const char *path, int pmode) = 0;
   virtual HANDLE FS_FindFirstFile(const char *findname,
                                   WIN32_FIND_DATA *dat) = 0;

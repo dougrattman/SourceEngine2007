@@ -95,6 +95,7 @@ class CFileSystem_Steam : public CBaseFileSystem {
   int FS_fflush(FILE *fp) override;
   char *FS_fgets(char *dest, int destSize, FILE *fp) override;
   int FS_stat(const char *path, struct _stat *buf) override;
+  int FS_fexists(const char *path) override;
   int FS_chmod(const char *path, int pmode) override;
   HANDLE FS_FindFirstFile(const char *findname, WIN32_FIND_DATA *dat) override;
   bool FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) override;
@@ -734,6 +735,11 @@ int CFileSystem_Steam::FS_stat(const char *path, struct _stat *buf) {
   return returnVal;
 }
 
+int CFileSystem_Steam::FS_fexists(const char *path) {
+  struct _stat buf;
+  return FS_stat(path, &buf);
+}
+
 #include <io.h>
 //-----------------------------------------------------------------------------
 // Purpose: low-level filesystem wrapper
@@ -836,9 +842,8 @@ bool CFileSystem_Steam::IsFileImmediatelyAvailable(const char *pFileName) {
 //-----------------------------------------------------------------------------
 void CFileSystem_Steam::GetLocalCopy(const char *pFileName) {
   // Now try to find the dll under Steam so we can do a GetLocalCopy() on it
-  struct _stat StatBuf;
   TSteamError steamError;
-  if (FS_stat(pFileName, &StatBuf) == -1) {
+  if (FS_fexists(pFileName) == -1) {
     // Use the .EXE name to determine the root directory
     char srchPath[SOURCE_MAX_PATH];
     HINSTANCE hInstance = (HINSTANCE)GetModuleHandle(0);
@@ -878,7 +883,7 @@ void CFileSystem_Steam::GetLocalCopy(const char *pFileName) {
         memcpy(srchPath, pStart + nBaseLen + 1, nSize);
         memcpy(srchPath + nSize, pFileName, strlen(pFileName) + 1);
 
-        if (FS_stat(srchPath, &StatBuf) == 0) {
+        if (FS_fexists(srchPath) == 0) {
           steam->GetLocalFileCopy(srchPath, &steamError);
           break;
         }

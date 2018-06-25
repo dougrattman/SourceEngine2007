@@ -31,7 +31,7 @@ void CFileTracker::NoteFileLoadedFromDisk(const char *pFilename,
     pInfo->m_Flags &= ~k_eFileFlagsFailedToLoadLastTime;
   } else {
     pInfo = pPath->AddFileInfo(pFilename);
-    pInfo->m_Flags = (EFileFlags)0;
+    pInfo->m_Flags = k_eFileFlagsNone;
   }
 
   if (!fp) {

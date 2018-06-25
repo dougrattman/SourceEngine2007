@@ -269,7 +269,7 @@ CBaseFileSystem::~CBaseFileSystem() {
 void *CBaseFileSystem::QueryInterface(const char *pInterfaceName) {
   // We also implement the IMatSystemSurface interface
   if (!strncmp(pInterfaceName, BASEFILESYSTEM_INTERFACE_VERSION,
-               strlen(BASEFILESYSTEM_INTERFACE_VERSION) + 1))
+               std::size(BASEFILESYSTEM_INTERFACE_VERSION)))
     return implicit_cast<IBaseFileSystem *>(this);
 
   return nullptr;
@@ -594,10 +594,9 @@ bool CBaseFileSystem::AddPackFileFromPath(const char *pPath,
   sprintf_s(fullpath, "%s%s", pPath, pakfile);
   Q_FixSlashes(fullpath);
 
-  struct _stat buf;
-  if (FS_stat(fullpath, &buf) == -1) return false;
+  if (FS_fexists(fullpath) == -1) return false;
 
-  CPackFile *pf = new CZipPackFile(this);
+  CPackFile *pf = new CZipPackFile{this};
   pf->m_hPackFileHandle = Trace_FOpen(fullpath, "rb", 0, nullptr);
 
   // Get the length of the pack file:
@@ -2396,7 +2395,6 @@ unsigned int CBaseFileSystem::Size(FileHandle_t file) {
 
 unsigned int CBaseFileSystem::Size(const char *pFileName, const char *pPathID) {
   VPROF_BUDGET("CBaseFileSystem::Size", VPROF_BUDGETGROUP_OTHER_FILESYSTEM);
-  CHECK_DOUBLE_SLASHES(pFileName);
 
   // handle the case where no name passed...
   if (!pFileName || !pFileName[0]) {
@@ -2404,25 +2402,25 @@ unsigned int CBaseFileSystem::Size(const char *pFileName, const char *pPathID) {
     return 0;
   }
 
-  if (IsPC()) {
-    // If we have a whitelist and it's forcing the file to load from Steam
-    // instead of from disk, then do this the slow way, otherwise we'll get the
-    // wrong file size (i.e. the size of the file on disk).
-    CWhitelistSpecs *pWhitelist = m_FileWhitelist.AddRef();
-    if (pWhitelist) {
-      bool bAllowFromDisk =
-          pWhitelist->m_pAllowFromDiskList->IsFileInList(pFileName);
-      m_FileWhitelist.ReleaseRef(pWhitelist);
+  CHECK_DOUBLE_SLASHES(pFileName);
 
-      if (!bAllowFromDisk) {
-        FileHandle_t fh = Open(pFileName, "rb", pPathID);
-        if (fh) {
-          unsigned int ret = Size(fh);
-          Close(fh);
-          return ret;
-        } else {
-          return 0;
-        }
+  // If we have a whitelist and it's forcing the file to load from Steam
+  // instead of from disk, then do this the slow way, otherwise we'll get the
+  // wrong file size (i.e. the size of the file on disk).
+  CWhitelistSpecs *pWhitelist = m_FileWhitelist.AddRef();
+  if (pWhitelist) {
+    bool bAllowFromDisk =
+        pWhitelist->m_pAllowFromDiskList->IsFileInList(pFileName);
+    m_FileWhitelist.ReleaseRef(pWhitelist);
+
+    if (!bAllowFromDisk) {
+      FileHandle_t fh = Open(pFileName, "rb", pPathID);
+      if (fh) {
+        unsigned int ret = Size(fh);
+        Close(fh);
+        return ret;
+      } else {
+        return 0;
       }
     }
   }
@@ -2440,33 +2438,33 @@ unsigned int CBaseFileSystem::Size(const char *pFileName, const char *pPathID) {
   return iSize;
 }
 
-long CBaseFileSystem::FastFileTime(const CSearchPath *path,
-                                   const char *pFileName) {
+long CBaseFileSystem::FastFileTime(const CSearchPath *search_path,
+                                   const char *file_path) {
   struct _stat buf;
 
-  if (path->GetPackFile()) {
+  if (search_path->GetPackFile()) {
     int nIndex, nLength;
     int64_t nPosition;
 
     // If we found the file:
-    if (path->GetPackFile()->FindFile(pFileName, nIndex, nPosition, nLength)) {
-      return (path->GetPackFile()->m_lPackFileTime);
+    if (search_path->GetPackFile()->FindFile(file_path, nIndex, nPosition,
+                                             nLength)) {
+      return search_path->GetPackFile()->m_lPackFileTime;
     }
   } else {
     // Is it an absolute path?
-    char pTmpFileName[MAX_FILEPATH];
+    char tmp_file_path[AlignValue(MAX_FILEPATH, 256)];
 
-    if (Q_IsAbsolutePath(pFileName)) {
-      strcpy_s(pTmpFileName, pFileName);
+    if (!Q_IsAbsolutePath(file_path)) {
+      sprintf_s(tmp_file_path, "%s%s", search_path->GetPathString(), file_path);
     } else {
-      sprintf_s(pTmpFileName, "%s%s", path->GetPathString(), pFileName);
+      strcpy_s(tmp_file_path, file_path);
     }
 
-    Q_FixSlashes(pTmpFileName);
+    Q_FixSlashes(tmp_file_path);
 
-    if (FS_stat(pTmpFileName, &buf) != -1) {
-      return buf.st_mtime;
-    }
+    if (FS_stat(tmp_file_path, &buf) != -1) return buf.st_mtime;
+
 #ifdef OS_POSIX
     const char *realName = findFileInDirCaseInsensitive(pTmpFileName);
     if (realName && FS_stat(realName, &buf) != -1) {
@@ -2932,36 +2930,40 @@ long CBaseFileSystem::GetFileTime(const char *pFileName, const char *pPathID) {
 
   CHECK_DOUBLE_SLASHES(pFileName);
 
-  CSearchPathsIterator iter(this, &pFileName, pPathID);
+  char tmp_file_name[AlignValue(SOURCE_MAX_PATH, 256)];
+  strcpy_s(tmp_file_name, pFileName);
+  Q_FixSlashes(tmp_file_name);
 
-  char tempFileName[SOURCE_MAX_PATH];
-  strcpy_s(tempFileName, pFileName);
-  Q_FixSlashes(tempFileName);
-#ifdef _WIN32
-  Q_strlower(tempFileName);
+#ifdef OS_WIN
+  Q_strlower(tmp_file_name);
 #endif
 
-  for (CSearchPath *pSearchPath = iter.GetFirst(); pSearchPath != nullptr;
-       pSearchPath = iter.GetNext()) {
-    long ft = FastFileTime(pSearchPath, tempFileName);
+  CSearchPathsIterator iter{this, &pFileName, pPathID};
+
+  for (CSearchPath *search_path = iter.GetFirst(); search_path != nullptr;
+       search_path = iter.GetNext()) {
+    const long ft{FastFileTime(search_path, tmp_file_name)};
+
     if (ft != 0L) {
-      if (!pSearchPath->GetPackFile() && m_LogFuncs.Count()) {
-        char pTmpFileName[MAX_FILEPATH];
-        if (strchr(tempFileName, ':')) {
-          strcpy_s(pTmpFileName, tempFileName);
+      if (!search_path->GetPackFile() && m_LogFuncs.Count()) {
+        char log_access_file_path[MAX_FILEPATH];
+
+        if (strchr(tmp_file_name, ':')) {
+          strcpy_s(log_access_file_path, tmp_file_name);
         } else {
-          sprintf_s(pTmpFileName, "%s%s", pSearchPath->GetPathString(),
-                    tempFileName);
+          sprintf_s(log_access_file_path, "%s%s", search_path->GetPathString(),
+                    tmp_file_name);
         }
 
-        Q_FixSlashes(tempFileName);
+        Q_FixSlashes(tmp_file_name);
 
-        LogAccessToFile("filetime", pTmpFileName, "");
+        LogAccessToFile("filetime", log_access_file_path, "");
       }
 
       return ft;
     }
   }
+
   return 0L;
 }
 
@@ -3678,68 +3680,61 @@ void CBaseFileSystem::GetLocalCopy(const char *pFileName) {
 // the file will be properly detected as pack based and mounted inside the pack.
 //-----------------------------------------------------------------------------
 const char *CBaseFileSystem::RelativePathToFullPath(
-    const char *pFileName, const char *pPathID, char *pFullPath,
-    int fullPathBufferSize, PathTypeFilter_t pathFilter,
-    PathTypeQuery_t *pPathType) {
-  CHECK_DOUBLE_SLASHES(pFileName);
-
-  struct _stat buf;
-
-  if (pPathType) {
-    *pPathType = PATH_IS_NORMAL;
-  }
+    const char *file_name, const char *path_id, char *full_path,
+    int full_path_size, PathTypeFilter_t path_filter,
+    PathTypeQuery_t *path_type) {
+  CHECK_DOUBLE_SLASHES(file_name);
 
   // Fill in the default in case it's not found...
-  strcpy_s(pFullPath, fullPathBufferSize, pFileName);
+  strcpy_s(full_path, full_path_size, file_name);
 
-  if (pathFilter == FILTER_NONE) {
-    // X360TBD: PC legacy behavior never returned pack paths
-    // do legacy behavior to ensure naive callers don't break
-    pathFilter = FILTER_CULLPACK;
-  }
+  if (path_filter == FILTER_NONE) path_filter = FILTER_CULLPACK;
+  if (path_type) *path_type = PATH_IS_NORMAL;
 
-  CSearchPathsIterator iter(this, &pFileName, pPathID, pathFilter);
-  for (CSearchPath *pSearchPath = iter.GetFirst(); pSearchPath != nullptr;
-       pSearchPath = iter.GetNext()) {
+  CSearchPathsIterator iter{this, &file_name, path_id, path_filter};
+  for (CSearchPath *search_path{iter.GetFirst()}; search_path != nullptr;
+       search_path = iter.GetNext()) {
     int dummy;
     int64_t dummy64;
 
-    CPackFile *pPack = pSearchPath->GetPackFile();
-    if (pPack) {
-      if (pPack->FindFile(pFileName, dummy, dummy64, dummy)) {
-        if (pPathType) {
-          if (pPack->m_bIsMapPath) {
-            *pPathType |= PATH_IS_MAPPACKFILE;
-          } else {
-            *pPathType |= PATH_IS_PACKFILE;
-          }
-          if (pSearchPath->m_bIsRemotePath) {
-            *pPathType |= PATH_IS_REMOTE;
+    CPackFile *pack_file = search_path->GetPackFile();
+    if (pack_file) {
+      if (pack_file->FindFile(file_name, dummy, dummy64, dummy)) {
+        if (path_type) {
+          *path_type |=
+              pack_file->m_bIsMapPath ? PATH_IS_MAPPACKFILE : PATH_IS_PACKFILE;
+
+          if (search_path->m_bIsRemotePath) {
+            *path_type |= PATH_IS_REMOTE;
           }
         }
 
         // form an encoded absolute path that can be decoded by our FS as pak
         // based
-        strcpy_s(pFullPath, fullPathBufferSize, pPack->m_ZipName.String());
-        V_AppendSlash(pFullPath, fullPathBufferSize - strlen(pFullPath));
-        usize len = strlen(pFullPath);
-        strcpy_s(pFullPath + len, fullPathBufferSize - len, pFileName);
+        strcpy_s(full_path, full_path_size, pack_file->m_ZipName.String());
+        V_AppendSlash(full_path, full_path_size - strlen(full_path));
 
-        return pFullPath;
+        usize len = strlen(full_path);
+        strcpy_s(full_path + len, full_path_size - len, file_name);
+
+        return full_path;
       }
 
       continue;
     }
 
-    char pTmpFileName[MAX_FILEPATH];
-    sprintf_s(pTmpFileName, "%s%s", pSearchPath->GetPathString(), pFileName);
-    Q_FixSlashes(pTmpFileName);
-    if (FS_stat(pTmpFileName, &buf) != -1) {
-      strcpy_s(pFullPath, fullPathBufferSize, pTmpFileName);
-      if (pPathType && pSearchPath->m_bIsRemotePath) {
-        *pPathType |= PATH_IS_REMOTE;
+    char tmp[MAX_FILEPATH];
+    sprintf_s(tmp, "%s%s", search_path->GetPathString(), file_name);
+    Q_FixSlashes(tmp);
+
+    if (FS_fexists(tmp) != -1) {
+      strcpy_s(full_path, full_path_size, tmp);
+
+      if (path_type && search_path->m_bIsRemotePath) {
+        *path_type |= PATH_IS_REMOTE;
       }
-      return pFullPath;
+
+      return full_path;
     }
   }
 
@@ -3801,7 +3796,7 @@ bool CBaseFileSystem::FullPathToRelativePathEx(const char *pFullPath,
 #endif
     Q_FixSlashes(pSearchBase);
     usize nSearchLen = strlen(pSearchBase);
-    if (_strnicmp(pSearchBase, pInPath, nSearchLen)) continue;
+    if (_strnicmp(pSearchBase, pInPath, nSearchLen) != 0) continue;
 
     strcpy_s(pRelative, nMaxLen, &pInPath[nSearchLen]);
     return true;

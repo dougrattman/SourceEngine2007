@@ -73,6 +73,7 @@ class CFileSystem_Stdio : public CBaseFileSystem {
   int FS_fflush(FILE *fp) override;
   char *FS_fgets(char *dest, int destSize, FILE *fp) override;
   int FS_stat(const char *path, struct _stat *buf) override;
+  int FS_fexists(const char *path) override;
   int FS_chmod(const char *path, int pmode) override;
   HANDLE FS_FindFirstFile(const char *findname, WIN32_FIND_DATA *dat) override;
   bool FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) override;
@@ -670,6 +671,19 @@ int CFileSystem_Stdio::FS_stat(const char *path, struct _stat *buf) {
   return rt;
 }
 
+int CFileSystem_Stdio::FS_fexists(const char *path) {
+#ifdef OS_WIN
+  const DWORD file_attributes{GetFileAttributes(path)};
+  // Can be directory, too.
+  return file_attributes != INVALID_FILE_ATTRIBUTES ? 0 : -1;
+#elif defined(OS_POSIX)
+  struct _stat buf;
+  return FS_stat(path, &buf);
+#else
+#error Please, define FS_fexists at filessytem/filesystem_stdio.cpp
+#endif
+}
+
 HANDLE CFileSystem_Stdio::FS_FindFirstFile(const char *findname,
                                            WIN32_FIND_DATA *dat) {
   return ::FindFirstFile(findname, dat);
@@ -872,7 +886,7 @@ size_t Win32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
     result = std::min((size_t)nBytesRead, size);
   }
 
-  if (is_overlapped_) {
+  if (is_overlapped_ && pEvent) {
     pEvent->Reset();
     g_ThreadIOEvents.ReleaseEvent(pEvent);
   }
