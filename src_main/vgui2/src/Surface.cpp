@@ -585,9 +585,9 @@ static void staticGenerateIconForTexture(Texture *texture, HDC hdc) {
 //-----------------------------------------------------------------------------
 CWin32Surface::CWin32Surface()
     : m_VGuiSurfaceTextures(0, 128, TextureLessFunc),
-      scoped_com_initializer_{static_cast<COINIT>(COINIT_APARTMENTTHREADED |
-                                                  COINIT_SPEED_OVER_MEMORY |
-                                                  COINIT_DISABLE_OLE1DDE)} {
+      scoped_com_initializer_{COINIT_APARTMENTTHREADED |
+                              COINIT_SPEED_OVER_MEMORY |
+                              COINIT_DISABLE_OLE1DDE} {
   _currentCursor = NULL;
   m_pCurrentTexture = NULL;
 
