@@ -24,6 +24,8 @@ enum { MDLHANDLE_INVALID = (MDLHandle_t)~0 };
 
 // Cache data types
 enum MDLCacheDataType_t {
+  MDLCACHE_NONE = -1,
+
   // Callbacks to get called when data is loaded or unloaded for these:
   MDLCACHE_STUDIOHDR = 0,
   MDLCACHE_STUDIOHWDATA,

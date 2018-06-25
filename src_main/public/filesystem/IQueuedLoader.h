@@ -15,8 +15,8 @@ enum LoaderError_t {
 enum LoaderPriority_t {
   LOADERPRIORITY_ANYTIME = 0,  // low priority, job can finish during gameplay
   LOADERPRIORITY_BEFOREPLAY = 1,  // job must complete before load ends
-  LOADERPRIORITY_DURINGPRELOAD =
-      2,  // job must be complete during preload phase
+  // job must be complete during preload phase
+  LOADERPRIORITY_DURINGPRELOAD = 2,
 };
 
 using QueuedLoaderCallback_t = void (*)(void *pContext, void *pContext2,
@@ -93,7 +93,8 @@ the_interface ILoaderProgress {
 #define LOADER_DETAIL_LATECOMPLETIONS (1 << 2)
 #define LOADER_DETAIL_PURGES (1 << 3)
 
-#define QUEUEDLOADER_INTERFACE_VERSION "QueuedLoaderVersion001"
+#define QUEUEDLOADER_INTERFACE_VERSION "QueuedLoader002"
+
 the_interface IQueuedLoader : public IAppSystem {
  public:
   virtual void InstallLoader(ResourcePreload_t type,

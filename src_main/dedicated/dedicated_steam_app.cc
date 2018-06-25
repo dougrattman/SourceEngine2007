@@ -29,8 +29,8 @@ SpewRetval_t DedicatedSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
 #endif
 
   if (spewType == SPEW_ERROR) {
-    // In Windows vgui mode, make a message box or they won't ever see the
-    // error.
+  // In Windows vgui mode, make a message box or they won't ever see the
+  // error.
 #ifdef _WIN32
     if (g_bVGui) {
       MessageBox(nullptr, pMsg, "Awesome Dedicated Server - Error",
@@ -187,7 +187,8 @@ int DedicatedSteamApp::Main() {
   info.m_pBaseDirectory = GetBaseDirectory();
   info.m_pInitialMod = CommandLine()->ParmValue(
       source::tier0::command_line_switches::kGamePath, "hl2");
-  info.m_pInitialGame = CommandLine()->ParmValue("-defaultgamedir", "hl2");
+  info.m_pInitialGame = CommandLine()->ParmValue(
+      source::tier0::command_line_switches::kDefaultGamePath, "hl2");
   info.m_pParentAppSystemGroup = this;
   info.m_bTextMode =
       CommandLine()->CheckParm(source::tier0::command_line_switches::textMode);

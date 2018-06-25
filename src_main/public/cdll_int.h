@@ -19,7 +19,7 @@
 class ClientClass;
 struct model_t;
 class CSentence;
-struct vrect_t;
+struct Rect_t;
 struct cmodel_t;
 class IMaterial;
 class CAudioSource;
@@ -613,7 +613,7 @@ the_interface IBaseClientDLL {
 
   // Set up and render one or more views (e.g., rear view window, etc.).  This
   // called into RenderView below
-  virtual void View_Render(vrect_t * rect) = 0;
+  virtual void View_Render(Rect_t * rect) = 0;
 
   // Allow engine to expressly render a view (e.g., during timerefresh)
   // See IVRenderView.h, PushViewFlags_t for nFlags values
@@ -711,7 +711,7 @@ the_interface IBaseClientDLL {
   virtual void IN_SetSampleTime(float frametime) = 0;
 };
 
-#define CLIENT_DLL_INTERFACE_VERSION "VClient015"
+#define CLIENT_DLL_INTERFACE_VERSION "VClient016"
 
 //-----------------------------------------------------------------------------
 // Purpose: Interface exposed from the client .dll back to the engine for

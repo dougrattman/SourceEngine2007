@@ -58,10 +58,11 @@ only used during filesystem initialization.
 
 The "game directory" is the first tree on the search path and directory
 that all generated files (savegames, screenshots, demos, config files) will
-be saved to.  This can be overridden with the "-game" command line parameter.
-The game directory can never be changed while quake is executing.
-This is a precacution against having a malicious server instruct clients
-to write files over areas they shouldn't.
+be saved to.  This can be overridden with the
+"source::tier0::command_line_switches::kGamePath" command line parameter. The
+game directory can never be changed while quake is executing. This is a
+precacution against having a malicious server instruct clients to write files
+over areas they shouldn't.
 
 The "cache directory" is only used during development to save network bandwidth,
 especially over ISDN / T1 lines.  If there is a cache directory
@@ -533,7 +534,8 @@ const ch *COM_GetModDirectory() {
   if (modDir[0] == '\0') {
     const ch *gamedir = CommandLine()->ParmValue(
         source::tier0::command_line_switches::kGamePath,
-        CommandLine()->ParmValue("-defaultgamedir", "hl2"));
+        CommandLine()->ParmValue(
+            source::tier0::command_line_switches::kDefaultGamePath, "hl2"));
 
     strcpy_s(modDir, gamedir);
 

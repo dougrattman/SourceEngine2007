@@ -128,7 +128,8 @@ struct ShaderRasterState_t {
 // Used for occlusion queries
 //-----------------------------------------------------------------------------
 SOURCE_DECLARE_POINTER_HANDLE(ShaderAPIOcclusionQuery_t);
-#define INVALID_SHADERAPI_OCCLUSION_QUERY_HANDLE ((ShaderAPIOcclusionQuery_t)0)
+#define INVALID_SHADERAPI_OCCLUSION_QUERY_HANDLE \
+  ((ShaderAPIOcclusionQuery_t) nullptr)
 
 enum ShaderAPIOcclusionQueryResult_t {
   OCCLUSION_QUERY_RESULT_PENDING = -1,

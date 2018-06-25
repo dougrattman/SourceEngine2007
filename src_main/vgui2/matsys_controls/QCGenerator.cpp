@@ -1,12 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
-#if !defined(_X360)
 #include "base/include/windows/windows_light.h"
-#endif
+
 #include "appframework/appframework.h"
 #include "appframework/iappsystem.h"
 #include "appframework/iappsystemgroup.h"
@@ -15,6 +10,7 @@
 #include "filesystem_init.h"
 
 #include "matsys_controls/QCGenerator.h"
+#include "tier0/include/command_line_switches.h"
 #include "tier1/KeyValues.h"
 #include "tier2/vconfig.h"
 #include "vgui/cursor.h"
@@ -29,10 +25,6 @@
 #include "vgui_controls/ListPanel.h"
 #include "vgui_controls/MessageBox.h"
 #include "vgui_controls/TextEntry.h"
-
-#if defined(_X360)
-#include "xbox/xbox_win32stubs.h"
-#endif
 
 using namespace vgui;
 
@@ -320,8 +312,7 @@ CQCGenerator::CQCGenerator(vgui::Panel *pParent, const char *pszPath,
     // search the entire drive or prompt for the location
     char *pszEndGamePath = Q_strrchr(szGamePath, '\\');
     Q_strcpy(pszEndGamePath,
-             std::size(szGamePath) - (pszEndGamePath - szGamePath),
-             "\\hl2");
+             std::size(szGamePath) - (pszEndGamePath - szGamePath), "\\hl2");
     sprintf_s(szSearchPath, "%s%s", szGamePath, pSurfacePropFilename);
     fp = g_pFullFileSystem->Open(szSearchPath, "rb");
   }
@@ -342,8 +333,8 @@ CQCGenerator::CQCGenerator(vgui::Panel *pParent, const char *pszPath,
         ParseKeyvalue(szSurfacePropContents, key, std::size(key), value);
     ((ComboBox *)pSurfacePropDropDown)->AddItem(key, NULL);
     while (szSurfacePropContents) {
-      szSurfacePropContents = ParseKeyvalue(szSurfacePropContents, key,
-                                            std::size(key), value);
+      szSurfacePropContents =
+          ParseKeyvalue(szSurfacePropContents, key, std::size(key), value);
       if (!_stricmp(key, "}")) break;
     }
   }
@@ -546,7 +537,9 @@ bool CQCGenerator::GenerateQCFile() {
   memset(&startup, 0, sizeof(startup));
   startup.cb = sizeof(startup);
 
-  sprintf_s(szCommand, "%s -game %s %s", studiomdlPath, szGamePath, szName);
+  sprintf_s(szCommand, "%s %s %s %s", studiomdlPath,
+            source::tier0::command_line_switches::kGamePath, szGamePath,
+            szName);
   bool bReturn =
       CreateProcess(NULL, szCommand, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL,
                     NULL, &startup, &process);

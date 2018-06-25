@@ -85,8 +85,8 @@ void COM_LogString(ch const *pchFile, ch const *pchString);
 // Returns seconds as hh:mm:ss string.
 const ch *COM_FormatSeconds(int seconds);
 
-// Return the mod dir (rather than the complete -game param, which can be a
-// path).
+// Return the mod dir (rather than the complete
+// source::tier0::command_line_switches::kGamePath param, which can be a path).
 const ch *COM_GetModDirectory();
 
 #endif  // COMMON_H
