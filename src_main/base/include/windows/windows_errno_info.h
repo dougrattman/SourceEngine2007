@@ -35,10 +35,10 @@ using windows_errno_code = HRESULT;
 // Converts win32 code to Windows error code.
 [[nodiscard]] constexpr inline windows_errno_code win32_to_windows_errno_code(
     const unsigned long win32_code) noexcept {
-  return win32_code <= 0
-             ? (windows_errno_code)win32_code
-             : (windows_errno_code)((win32_code & 0x0000FFFF) |
-                                    (FACILITY_WIN32 << 16) | 0x80000000);
+  return win32_code <= 0 ? (windows_errno_code)win32_code
+                         : (windows_errno_code)((win32_code & 0x0000FFFF) |
+                                                (FACILITY_WIN32 << 16) |
+                                                0x80000000);  //-V112
 }
 
 // Windows errno info.

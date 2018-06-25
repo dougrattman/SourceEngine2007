@@ -16,7 +16,7 @@ namespace source::windows {
 class ScopedComInitializer {
  public:
   // Initializes COM with |coinit| flags for scope.
-  explicit ScopedComInitializer(const COINIT coinit) noexcept
+  explicit ScopedComInitializer(const DWORD coinit) noexcept
       : errno_code_{CoInitializeEx(nullptr, coinit)},
         thread_id_{GetCurrentThreadId()} {}
   // Free COM at the end of scope lifetime.

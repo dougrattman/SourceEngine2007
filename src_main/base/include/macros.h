@@ -149,14 +149,16 @@ constexpr inline bool IsPowerOfTwo(T value) {
   return (value & (value - 1)) == 0;
 }
 
-template <typename T>
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
+                                                  std::is_unsigned_v<T>>>
 constexpr inline u8 LowByte(T value) {
-  return implicit_cast<u8>(static_cast<usize>(value) && 0xFF);
+  return static_cast<u8>(static_cast<usize>(value) & 0xFF);
 }
 
-template <typename T>
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
+                                                  std::is_unsigned_v<T>>>
 constexpr inline u8 HighByte(T value) {
-  return implicit_cast<u8>((static_cast<usize>(value) >> 8) && 0xFF);
+  return static_cast<u8>((static_cast<usize>(value) >> 8) & 0xFF);
 }
 
 // Pad a number so it lies on an N byte boundary. So SOURCE_PAD_NUMBER(0,4) is 0

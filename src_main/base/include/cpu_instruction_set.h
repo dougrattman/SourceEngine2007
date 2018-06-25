@@ -296,7 +296,7 @@ class CpuInstructionSet {
       ch vendor[0x20];
       std::memset(vendor, 0, sizeof(vendor));
       *reinterpret_cast<i32*>(vendor) = data_[0][1];
-      *reinterpret_cast<i32*>(vendor + 4) = data_[0][3];
+      *reinterpret_cast<i32*>(vendor + 4) = data_[0][3];  //-V112
       *reinterpret_cast<i32*>(vendor + 8) = data_[0][2];
       vendor_ = vendor;
       if (vendor_ == "GenuineIntel") {
@@ -320,13 +320,13 @@ class CpuInstructionSet {
 
       // Calling cpuid with 0x80000000 as the function_id argument gets the
       // number of the highest valid extended ID.
-      cpui = cpuid(0x80000000);
+      cpui = cpuid(0x80000000);  //-V112
       ext_func_ids_count_ = cpui[0];
 
       ch brand[sizeof(cpui) * 3];
       std::memset(brand, 0, sizeof(brand));
 
-      for (i32 i = 0x80000000; i <= ext_func_ids_count_; ++i) {
+      for (i32 i = 0x80000000; i <= ext_func_ids_count_; ++i) {  //-V112
         ext_data_.emplace_back(cpuidex(i, 0));
       }
 
@@ -350,7 +350,7 @@ class CpuInstructionSet {
     str vendor_, brand_;
     bool is_intel_, is_amd_;
 
-    std::bitset<32> f_1_ecx_;
+    std::bitset<32> f_1_ecx_;  //-V112
     std::bitset<32> f_1_edx_;
     std::bitset<32> f_7_ebx_;
     std::bitset<32> f_7_ecx_;
