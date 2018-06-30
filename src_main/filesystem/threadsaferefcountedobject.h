@@ -1,7 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef THREADSAFEREFCOUNTEDOBJECT_H
-#define THREADSAFEREFCOUNTEDOBJECT_H
+#ifndef SOURCE_FILESYSTEM_THREADSAFEREFCOUNTEDOBJECT_H_
+#define SOURCE_FILESYSTEM_THREADSAFEREFCOUNTEDOBJECT_H_
+
+#ifdef _WIN32
+#pragma once
+#endif
 
 #include "tier0/include/dbg.h"
 #include "tier0/include/threadtools.h"
@@ -65,4 +69,4 @@ class CThreadSafeRefCountedObject {
   T m_pObject;
 };
 
-#endif  // THREADSAFEREFCOUNTEDOBJECT_H
+#endif  // SOURCE_FILESYSTEM_THREADSAFEREFCOUNTEDOBJECT_H_

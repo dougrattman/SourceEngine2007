@@ -351,29 +351,12 @@
     <ClCompile Include="QueuedLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\public\appframework\IAppSystem.h" />
-    <ClInclude Include="..\public\bspfile.h" />
-    <ClInclude Include="..\public\bspflags.h" />
-    <ClInclude Include="..\public\bumpvects.h" />
     <ClInclude Include="..\public\filesystem.h" />
     <ClInclude Include="..\public\filesystem\IQueuedLoader.h" />
+    <ClInclude Include="..\public\filesystem_helpers.h" />
+    <ClInclude Include="..\public\filesystem_init.h" />
+    <ClInclude Include="..\public\filesystem_passthru.h" />
     <ClInclude Include="..\public\ifilelist.h" />
-    <ClInclude Include="..\public\keyvaluescompiler.h" />
-    <ClInclude Include="..\public\tier0\basetypes.h" />
-    <ClInclude Include="..\public\tier0\dbg.h" />
-    <ClInclude Include="..\public\tier0\fasttimer.h" />
-    <ClInclude Include="..\public\tier0\platform.h" />
-    <ClInclude Include="..\public\tier1\characterset.h" />
-    <ClInclude Include="..\public\tier1\interface.h" />
-    <ClInclude Include="..\public\tier1\utlmemory.h" />
-    <ClInclude Include="..\public\tier1\utlrbtree.h" />
-    <ClInclude Include="..\public\tier1\utlsymbol.h" />
-    <ClInclude Include="..\public\tier1\utlvector.h" />
-    <ClInclude Include="..\public\vector.h" />
-    <ClInclude Include="..\public\vector2d.h" />
-    <ClInclude Include="..\public\vector4d.h" />
-    <ClInclude Include="..\public\vstdlib\strtools.h" />
-    <ClInclude Include="..\public\vstdlib\vstdlib.h" />
     <ClInclude Include="basefilesystem.h" />
     <ClInclude Include="filesystem_stdio\resource.h" />
     <ClInclude Include="filetracker.h" />

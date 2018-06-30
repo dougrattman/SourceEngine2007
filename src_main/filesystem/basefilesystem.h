@@ -1,7 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef BASEFILESYSTEM_H
-#define BASEFILESYSTEM_H
+#ifndef SOURCE_FILESYSTEM_BASEFILESYSTEM_H_
+#define SOURCE_FILESYSTEM_BASEFILESYSTEM_H_
+
+#ifdef _WIN32
+#pragma once
+#endif
 
 #include "build/include/build_config.h"
 
@@ -1176,4 +1180,4 @@ CBaseFileSystem *BaseFileSystem();
 
 #include "tier0/include/memdbgoff.h"
 
-#endif  // BASEFILESYSTEM_H
+#endif  // SOURCE_FILESYSTEM_BASEFILESYSTEM_H_

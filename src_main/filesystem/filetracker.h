@@ -1,7 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef FILETRACKER_H
-#define FILETRACKER_H
+#ifndef SOURCE_FILESYSTEM_FILETRACKER_H_
+#define SOURCE_FILESYSTEM_FILETRACKER_H_
+
+#ifdef _WIN32
+#pragma once
+#endif
 
 #include "ifilelist.h"
 #include "tier1/utldict.h"
@@ -163,4 +167,4 @@ inline const char *FileInfo::GetPathIDString() {
   return m_pPathIDFileList->m_PathID.String();
 }
 
-#endif  // FILETRACKER_H
+#endif  // SOURCE_FILESYSTEM_FILETRACKER_H_

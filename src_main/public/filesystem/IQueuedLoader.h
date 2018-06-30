@@ -3,6 +3,10 @@
 #ifndef QUEUEDLOADER_H
 #define QUEUEDLOADER_H
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "appframework/IAppSystem.h"
 #include "tier0/include/platform.h"
 
