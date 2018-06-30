@@ -8,54 +8,46 @@
 #include "../game/shared/choreoscene.h"
 #include "tier1/characterset.h"
 
-
 // Purpose: Helper for parsing scene data file
-
 class CSceneTokenProcessor : public ISceneTokenProcessor {
  public:
   CSceneTokenProcessor();
 
-  const char *CurrentToken(void);
+  const char *CurrentToken();
   bool GetToken(bool crossline);
-  bool TokenAvailable(void);
+  bool TokenAvailable();
   void Error(const char *fmt, ...);
   void SetBuffer(char *buffer);
 
  private:
   const char *ParseNextToken(const char *data);
 
-  const char *m_pBuffer;
-  char m_szToken[1024];
+  const char *buffer_;
+  char the_token_[1024];
 
   characterset_t m_BreakSetIncludingColons;
 };
 
-CSceneTokenProcessor::CSceneTokenProcessor() {
+CSceneTokenProcessor::CSceneTokenProcessor() : buffer_{nullptr} {
   CharacterSetBuild(&m_BreakSetIncludingColons, "{}()':");
 }
 
-
-// Purpose:
-// Output : const char
-
-const char *CSceneTokenProcessor::CurrentToken(void) { return m_szToken; }
+const char *CSceneTokenProcessor::CurrentToken() { return the_token_; }
 
 const char *CSceneTokenProcessor::ParseNextToken(const char *data) {
   unsigned char c;
-  int len;
-  characterset_t *breaks;
+  characterset_t *breaks = &m_BreakSetIncludingColons;
 
-  breaks = &m_BreakSetIncludingColons;
+  the_token_[0] = '\0';
 
-  len = 0;
-  m_szToken[0] = 0;
+  if (!data) return nullptr;
 
-  if (!data) return NULL;
+  usize len = 0;
 
 // skip whitespace
 skipwhite:
   while ((c = *data) <= ' ') {
-    if (c == 0) return NULL;  // end of file;
+    if (c == 0) return nullptr;  // end of file;
     data++;
   }
 
@@ -68,56 +60,50 @@ skipwhite:
   // handle quoted strings specially
   if (c == '\"') {
     data++;
-    while (1) {
+
+    while (true) {
       c = *data++;
+
       if (c == '\"' || !c) {
-        m_szToken[len] = 0;
+        the_token_[len] = '\0';
         return data;
       }
-      m_szToken[len] = c;
+
+      the_token_[len] = c;
       len++;
     }
   }
 
   // parse single characters
   if (IN_CHARACTERSET(*breaks, c)) {
-    m_szToken[len] = c;
+    the_token_[len] = c;
     len++;
-    m_szToken[len] = 0;
+    the_token_[len] = '\0';
     return data + 1;
   }
 
   // parse a regular word
   do {
-    m_szToken[len] = c;
+    the_token_[len] = c;
     data++;
     len++;
     c = *data;
+
     if (IN_CHARACTERSET(*breaks, c)) break;
   } while (c > 32);
 
-  m_szToken[len] = 0;
+  the_token_[len] = '\0';
   return data;
 }
 
-
-// Purpose:
-// Input  : crossline -
-// Output : Returns true on success, false on failure.
-
 bool CSceneTokenProcessor::GetToken(bool crossline) {
   // NOTE: crossline is ignored here, may need to implement if needed
-  m_pBuffer = ParseNextToken(m_pBuffer);
-  if (Q_strlen(m_szToken) >= 0) return true;
-  return false;
+  buffer_ = ParseNextToken(buffer_);
+  return the_token_[0] != '\0';
 }
 
-
-// Purpose:
-// Output : Returns true on success, false on failure.
-
-bool CSceneTokenProcessor::TokenAvailable(void) {
-  const char *search_p = m_pBuffer;
+bool CSceneTokenProcessor::TokenAvailable() {
+  const char *search_p = buffer_;
 
   while (*search_p <= 32) {
     if (*search_p == '\n') return false;
@@ -134,27 +120,19 @@ bool CSceneTokenProcessor::TokenAvailable(void) {
   return true;
 }
 
-
-// Purpose:
-// Input  : *fmt -
-//			... -
-
 void CSceneTokenProcessor::Error(const char *fmt, ...) {
   char string[2048];
+
   va_list argptr;
   va_start(argptr, fmt);
-  Q_vsnprintf(string, sizeof(string), fmt, argptr);
+  vsprintf_s(string, fmt, argptr);
   va_end(argptr);
 
   Warning("%s", string);
   Assert(0);
 }
 
-
-// Purpose:
-// Input  : *buffer -
-
-void CSceneTokenProcessor::SetBuffer(char *buffer) { m_pBuffer = buffer; }
+void CSceneTokenProcessor::SetBuffer(char *buffer) { buffer_ = buffer; }
 
 CSceneTokenProcessor g_TokenProcessor;
 

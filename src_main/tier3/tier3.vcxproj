@@ -270,6 +270,7 @@
     <ClInclude Include="..\public\tier3\choreoutils.h" />
     <ClInclude Include="..\public\tier3\scenetokenprocessor.h" />
     <ClInclude Include="..\public\tier3\tier3.h" />
+    <ClInclude Include="..\public\tier3\tier3dm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

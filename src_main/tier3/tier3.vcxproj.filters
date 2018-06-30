@@ -4,7 +4,7 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{ae84c621-43a3-4bf9-bd5d-4aad0fd8711a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="Includes">
       <UniqueIdentifier>{a3a03241-e716-4f73-85f9-a5f98bfb65f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -24,13 +24,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\tier3\choreoutils.h">
-      <Filter>Header Files</Filter>
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\tier3\scenetokenprocessor.h">
-      <Filter>Header Files</Filter>
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\tier3\tier3.h">
-      <Filter>Header Files</Filter>
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier3\tier3dm.h">
+      <Filter>Includes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

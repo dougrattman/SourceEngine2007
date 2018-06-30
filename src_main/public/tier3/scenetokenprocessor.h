@@ -3,6 +3,10 @@
 #ifndef SOURCE_TIER3_SCENETOKENPROCESSOR_H_
 #define SOURCE_TIER3_SCENETOKENPROCESSOR_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 class ISceneTokenProcessor;
 
 ISceneTokenProcessor *GetTokenProcessor();

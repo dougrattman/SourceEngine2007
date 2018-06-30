@@ -2,38 +2,43 @@
 //
 // Purpose: A higher level link library for general use in the game and tools.
 
-#ifndef TIER3DM_H
-#define TIER3DM_H
+#ifndef SOURCE_TIER3_TIER3DM_H_
+#define SOURCE_TIER3_TIER3DM_H_
+
+#ifdef _WIN32
+#pragma once
+#endif
 
 #include "tier2/tier2dm.h"
 #include "tier3/tier3.h"
 
-//-----------------------------------------------------------------------------
 // Helper empty implementation of an IAppSystem for tier2 libraries
-//-----------------------------------------------------------------------------
-template <class IInterface, int ConVarFlag = 0>
+template <template IInterface, int ConVarFlag = 0>
 class CTier3DmAppSystem : public CTier2DmAppSystem<IInterface, ConVarFlag> {
-  typedef CTier2DmAppSystem<IInterface, ConVarFlag> BaseClass;
+  using BaseClass = CTier2DmAppSystem<IInterface, ConVarFlag>;
 
  public:
   CTier3DmAppSystem(bool bIsPrimaryAppSystem = true)
-      : BaseClass(bIsPrimaryAppSystem) {}
+      : BaseClass{bIsPrimaryAppSystem} {}
 
-  virtual bool Connect(CreateInterfaceFn factory) {
-    if (!BaseClass::Connect(factory)) return false;
-
-    if (this->IsPrimaryAppSystem()) {
-      ConnectTier3Libraries(&factory, 1);
+  bool Connect(CreateInterfaceFn factory) override {
+    if (BaseClass::Connect(factory)) {
+      if (this->IsPrimaryAppSystem()) {
+        ConnectTier3Libraries(&factory, 1);
+      }
+      return true;
     }
-    return true;
+
+    return false;
   }
 
-  virtual void Disconnect() {
+  void Disconnect() override {
     if (this->IsPrimaryAppSystem()) {
       DisconnectTier3Libraries();
     }
+
     BaseClass::Disconnect();
   }
 };
 
-#endif  // TIER3DM_H
+#endif  // SOURCE_TIER3_TIER3DM_H_

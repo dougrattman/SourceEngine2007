@@ -2,19 +2,17 @@
 
 #include "studio.h"
 
+#include "base/include/compiler_specific.h"
 #include "bone_setup.h"
 #include "datacache/imdlcache.h"
 #include "datamodel/dmelementfactoryhelper.h"
 #include "istudiorender.h"
-#include "base/include/compiler_specific.h"
 #include "tier3/tier3.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-
-// TODO(d.rattman): This trashy glue code is really not acceptable. Figure out a way of
-// making it unnecessary.
+// TODO(d.rattman): This trashy glue code is really not acceptable. Figure out a
+// way of making it unnecessary.
 
 const studiohdr_t *studiohdr_t::FindModel(void **cache,
                                           char const *pModelName) const {
@@ -38,7 +36,7 @@ uint8_t *studiohdr_t::GetAnimBlock(int i) const {
   // clang-format on
 }
 
-int studiohdr_t::GetAutoplayList(unsigned short **pOut) const {
+int studiohdr_t::GetAutoplayList(u16 **pOut) const {
   // clang-format off
   return g_pMDLCache->GetAutoplayList(
     MSVC_SCOPED_DISABLE_WARNING(4302, reinterpret_cast<MDLHandle_t>(virtualModel)),

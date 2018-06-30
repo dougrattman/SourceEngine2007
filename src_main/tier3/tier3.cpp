@@ -22,37 +22,36 @@
 #include "vgui/IVGui.h"
 #include "vphysics_interface.h"
 
-
 // These tier3 libraries must be set by any users of this library.
 // They can be set by calling ConnectTier3Libraries.
 // It is hoped that setting this, and using this library will be the common
 // mechanism for allowing link libraries to access tier3 library interfaces
 
-IStudioRender *g_pStudioRender = 0;
-IStudioRender *studiorender = 0;
-IMatSystemSurface *g_pMatSystemSurface = 0;
-vgui::IInput *g_pVGuiInput = 0;
-vgui::ISurface *g_pVGuiSurface = 0;
-vgui::IPanel *g_pVGuiPanel = 0;
-vgui::IVGui *g_pVGui = 0;
-vgui::ILocalize *g_pVGuiLocalize = 0;
-vgui::ISchemeManager *g_pVGuiSchemeManager = 0;
-vgui::ISystem *g_pVGuiSystem = 0;
-IDataCache *g_pDataCache = 0;
-IMDLCache *g_pMDLCache = 0;
-IMDLCache *mdlcache = 0;
-IAvi *g_pAVI = 0;
-IBik *g_pBIK = 0;
-IDmeMakefileUtils *g_pDmeMakefileUtils = 0;
-IPhysicsCollision *g_pPhysicsCollision = 0;
-ISoundEmitterSystemBase *g_pSoundEmitterSystem = 0;
-
+IStudioRender *g_pStudioRender{nullptr};
+IStudioRender *studiorender{nullptr};
+IMatSystemSurface *g_pMatSystemSurface{nullptr};
+vgui::IInput *g_pVGuiInput{nullptr};
+vgui::ISurface *g_pVGuiSurface{nullptr};
+vgui::IPanel *g_pVGuiPanel{nullptr};
+vgui::IVGui *g_pVGui{nullptr};
+vgui::ILocalize *g_pVGuiLocalize{nullptr};
+vgui::ISchemeManager *g_pVGuiSchemeManager{nullptr};
+vgui::ISystem *g_pVGuiSystem{nullptr};
+IDataCache *g_pDataCache{nullptr};
+IMDLCache *g_pMDLCache{nullptr};
+IMDLCache *mdlcache{nullptr};
+IAvi *g_pAVI{nullptr};
+IBik *g_pBIK{nullptr};
+IDmeMakefileUtils *g_pDmeMakefileUtils{nullptr};
+IPhysicsCollision *g_pPhysicsCollision{nullptr};
+ISoundEmitterSystemBase *g_pSoundEmitterSystem{nullptr};
 
 // Call this to connect to all tier 3 libraries.
 // It's up to the caller to check the globals it cares about to see if ones are
 // missing
 
-void ConnectTier3Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount) {
+void ConnectTier3Libraries(CreateInterfaceFn *pFactoryList,
+                           usize nFactoryCount) {
   // Don't connect twice..
   Assert(!g_pStudioRender && !studiorender && !g_pMatSystemSurface &&
          !g_pVGui && !g_pVGuiPanel && !g_pVGuiInput && !g_pVGuiSurface &&
@@ -60,89 +59,89 @@ void ConnectTier3Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount) {
          !g_pDmeMakefileUtils && !g_pPhysicsCollision && !g_pVGuiLocalize &&
          !g_pSoundEmitterSystem && !g_pVGuiSchemeManager && !g_pVGuiSystem);
 
-  for (int i = 0; i < nFactoryCount; ++i) {
+  for (usize i = 0; i < nFactoryCount; ++i) {
     if (!g_pStudioRender) {
       g_pStudioRender = studiorender = (IStudioRender *)pFactoryList[i](
-          STUDIO_RENDER_INTERFACE_VERSION, NULL);
+          STUDIO_RENDER_INTERFACE_VERSION, nullptr);
     }
     if (!g_pVGui) {
       g_pVGui =
-          (vgui::IVGui *)pFactoryList[i](VGUI_IVGUI_INTERFACE_VERSION, NULL);
+          (vgui::IVGui *)pFactoryList[i](VGUI_IVGUI_INTERFACE_VERSION, nullptr);
     }
     if (!g_pVGuiInput) {
-      g_pVGuiInput =
-          (vgui::IInput *)pFactoryList[i](VGUI_INPUT_INTERFACE_VERSION, NULL);
+      g_pVGuiInput = (vgui::IInput *)pFactoryList[i](
+          VGUI_INPUT_INTERFACE_VERSION, nullptr);
     }
     if (!g_pVGuiPanel) {
-      g_pVGuiPanel =
-          (vgui::IPanel *)pFactoryList[i](VGUI_PANEL_INTERFACE_VERSION, NULL);
+      g_pVGuiPanel = (vgui::IPanel *)pFactoryList[i](
+          VGUI_PANEL_INTERFACE_VERSION, nullptr);
     }
     if (!g_pVGuiSurface) {
       g_pVGuiSurface = (vgui::ISurface *)pFactoryList[i](
-          VGUI_SURFACE_INTERFACE_VERSION, NULL);
+          VGUI_SURFACE_INTERFACE_VERSION, nullptr);
     }
     if (!g_pVGuiSchemeManager) {
       g_pVGuiSchemeManager = (vgui::ISchemeManager *)pFactoryList[i](
-          VGUI_SCHEME_INTERFACE_VERSION, NULL);
+          VGUI_SCHEME_INTERFACE_VERSION, nullptr);
     }
     if (!g_pVGuiSystem) {
-      g_pVGuiSystem =
-          (vgui::ISystem *)pFactoryList[i](VGUI_SYSTEM_INTERFACE_VERSION, NULL);
+      g_pVGuiSystem = (vgui::ISystem *)pFactoryList[i](
+          VGUI_SYSTEM_INTERFACE_VERSION, nullptr);
     }
     if (!g_pVGuiLocalize) {
       g_pVGuiLocalize = (vgui::ILocalize *)pFactoryList[i](
-          VGUI_LOCALIZE_INTERFACE_VERSION, NULL);
+          VGUI_LOCALIZE_INTERFACE_VERSION, nullptr);
     }
     if (!g_pMatSystemSurface) {
       g_pMatSystemSurface = (IMatSystemSurface *)pFactoryList[i](
-          MAT_SYSTEM_SURFACE_INTERFACE_VERSION, NULL);
+          MAT_SYSTEM_SURFACE_INTERFACE_VERSION, nullptr);
     }
     if (!g_pDataCache) {
       g_pDataCache =
-          (IDataCache *)pFactoryList[i](DATACACHE_INTERFACE_VERSION, NULL);
+          (IDataCache *)pFactoryList[i](DATACACHE_INTERFACE_VERSION, nullptr);
     }
     if (!g_pMDLCache) {
       g_pMDLCache = mdlcache =
-          (IMDLCache *)pFactoryList[i](MDLCACHE_INTERFACE_VERSION, NULL);
+          (IMDLCache *)pFactoryList[i](MDLCACHE_INTERFACE_VERSION, nullptr);
     }
     if (!g_pAVI) {
-      g_pAVI = (IAvi *)pFactoryList[i](AVI_INTERFACE_VERSION, NULL);
+      g_pAVI = (IAvi *)pFactoryList[i](AVI_INTERFACE_VERSION, nullptr);
     }
     if (!g_pBIK) {
-      g_pBIK = (IBik *)pFactoryList[i](BIK_INTERFACE_VERSION, NULL);
+      g_pBIK = (IBik *)pFactoryList[i](BIK_INTERFACE_VERSION, nullptr);
     }
     if (!g_pDmeMakefileUtils) {
       g_pDmeMakefileUtils = (IDmeMakefileUtils *)pFactoryList[i](
-          DMEMAKEFILE_UTILS_INTERFACE_VERSION, NULL);
+          DMEMAKEFILE_UTILS_INTERFACE_VERSION, nullptr);
     }
     if (!g_pPhysicsCollision) {
       g_pPhysicsCollision = (IPhysicsCollision *)pFactoryList[i](
-          VPHYSICS_COLLISION_INTERFACE_VERSION, NULL);
+          VPHYSICS_COLLISION_INTERFACE_VERSION, nullptr);
     }
     if (!g_pSoundEmitterSystem) {
       g_pSoundEmitterSystem = (ISoundEmitterSystemBase *)pFactoryList[i](
-          SOUNDEMITTERSYSTEM_INTERFACE_VERSION, NULL);
+          SOUNDEMITTERSYSTEM_INTERFACE_VERSION, nullptr);
     }
   }
 }
 
 void DisconnectTier3Libraries() {
-  g_pStudioRender = 0;
-  studiorender = 0;
-  g_pVGui = 0;
-  g_pVGuiInput = 0;
-  g_pVGuiPanel = 0;
-  g_pVGuiSurface = 0;
-  g_pVGuiLocalize = 0;
-  g_pVGuiSchemeManager = 0;
-  g_pVGuiSystem = 0;
-  g_pMatSystemSurface = 0;
-  g_pDataCache = 0;
-  g_pMDLCache = 0;
-  mdlcache = 0;
-  g_pAVI = 0;
-  g_pBIK = 0;
-  g_pPhysicsCollision = 0;
-  g_pDmeMakefileUtils = NULL;
-  g_pSoundEmitterSystem = 0;
+  g_pStudioRender = nullptr;
+  studiorender = nullptr;
+  g_pVGui = nullptr;
+  g_pVGuiInput = nullptr;
+  g_pVGuiPanel = nullptr;
+  g_pVGuiSurface = nullptr;
+  g_pVGuiLocalize = nullptr;
+  g_pVGuiSchemeManager = nullptr;
+  g_pVGuiSystem = nullptr;
+  g_pMatSystemSurface = nullptr;
+  g_pDataCache = nullptr;
+  g_pMDLCache = nullptr;
+  mdlcache = nullptr;
+  g_pAVI = nullptr;
+  g_pBIK = nullptr;
+  g_pPhysicsCollision = nullptr;
+  g_pDmeMakefileUtils = nullptr;
+  g_pSoundEmitterSystem = nullptr;
 }
