@@ -4,42 +4,38 @@
 
 #include "filesystem_init.h"
 
+#include "base/include/check.h"
 #include "tier0/include/platform.h"
 #include "tier2/tier2.h"
 
-static CSysModule *g_pFullFileSystemModule = NULL;
+static CSysModule *g_pFullFileSystemModule{nullptr};
 
 void *DefaultCreateInterfaceFn(const char *pName, int *pReturnCode) {
-  if (pReturnCode) {
-    *pReturnCode = 0;
-  }
-  return NULL;
+  if (pReturnCode) *pReturnCode = 0;
+
+  return nullptr;
 }
 
-void InitDefaultFileSystem(void) {
+void InitDefaultFileSystem() {
   AssertMsg(!g_pFullFileSystem, "Already set up the file system");
 
-  if (!Sys_LoadInterface("filesystem_stdio", FILESYSTEM_INTERFACE_VERSION,
-                         &g_pFullFileSystemModule,
-                         (void **)&g_pFullFileSystem)) {
-    exit(0);
-  }
-
-  if (!g_pFullFileSystem->Connect(DefaultCreateInterfaceFn)) {
-    exit(0);
-  }
-
-  if (g_pFullFileSystem->Init() != INIT_OK) {
-    exit(0);
-  }
+  CHECK(
+      Sys_LoadInterface("filesystem_stdio", FILESYSTEM_INTERFACE_VERSION,
+                        &g_pFullFileSystemModule, (void **)&g_pFullFileSystem),
+      -1);
+  CHECK(g_pFullFileSystem->Connect(DefaultCreateInterfaceFn), -1);
+  CHECK(g_pFullFileSystem->Init() == INIT_OK, -1);
 
   g_pFullFileSystem->RemoveAllSearchPaths();
   g_pFullFileSystem->AddSearchPath("", "LOCAL", PATH_ADD_TO_HEAD);
 }
 
-void ShutdownDefaultFileSystem(void) {
+void ShutdownDefaultFileSystem() {
   AssertMsg(g_pFullFileSystem, "File system not set up");
+
   g_pFullFileSystem->Shutdown();
   g_pFullFileSystem->Disconnect();
+
   Sys_UnloadModule(g_pFullFileSystemModule);
+  g_pFullFileSystemModule = nullptr;
 }

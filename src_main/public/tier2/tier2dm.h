@@ -5,8 +5,11 @@
 #ifndef SOURCE_TIER2_TIER2DM_H_
 #define SOURCE_TIER2_TIER2DM_H_
 
-#include "tier2/tier2.h"
+#ifdef _WIN32
+#pragma once
+#endif
 
+#include "tier2/tier2.h"
 
 // Set up methods related to datamodel interfaces
 
@@ -15,41 +18,41 @@ InitReturnVal_t InitDataModel();
 void ShutdownDataModel();
 void DisconnectDataModel();
 
-
-// Helper empty implementation of an IAppSystem for tier2 libraries
-
-template <class IInterface, int ConVarFlag = 0>
+// Helper empty implementation of an IAppSystem for tier2 libraries.
+template <typename IInterface, int ConVarFlag = 0>
 class CTier2DmAppSystem : public CTier2AppSystem<IInterface, ConVarFlag> {
-  typedef CTier2AppSystem<IInterface, ConVarFlag> BaseClass;
+  using BaseClass = CTier2AppSystem<IInterface, ConVarFlag>;
 
  public:
   CTier2DmAppSystem(bool bIsPrimaryAppSystem = true)
       : BaseClass(bIsPrimaryAppSystem) {}
 
-  virtual bool Connect(CreateInterfaceFn factory) {
-    if (!BaseClass::Connect(factory)) return false;
+  bool Connect(CreateInterfaceFn factory) override {
+    if (BaseClass::Connect(factory)) {
+      ConnectDataModel(factory);
 
-    ConnectDataModel(factory);
+      return true;
+    }
 
-    return true;
+    return false;
   }
 
-  virtual InitReturnVal_t Init() {
-    InitReturnVal_t nRetVal = BaseClass::Init();
-    if (nRetVal != INIT_OK) return nRetVal;
+  InitReturnVal_t Init() override {
+    InitReturnVal_t return_val{BaseClass::Init()};
 
-    nRetVal = InitDataModel();
-    if (nRetVal != INIT_OK) return nRetVal;
+    if (return_val == INIT_OK) {
+      return_val = InitDataModel();
+    }
 
-    return INIT_OK;
+    return return_val;
   }
 
-  virtual void Shutdown() {
+  void Shutdown() override {
     ShutdownDataModel();
     BaseClass::Shutdown();
   }
 
-  virtual void Disconnect() {
+  void Disconnect() override {
     DisconnectDataModel();
     BaseClass::Disconnect();
   }

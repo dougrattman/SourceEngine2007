@@ -5,10 +5,11 @@
 #ifndef SOURCE_TIER2_TIER2_H_
 #define SOURCE_TIER2_TIER2_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier1/tier1.h"
-
-
-// Forward declarations
 
 class IFileSystem;
 class IMaterialSystem;
@@ -21,7 +22,6 @@ class INetworkSystem;
 class IP4;
 class IMdlLib;
 class IQueuedLoader;
-
 
 // These tier2 libraries must be set by any users of this library.
 // They can be set by calling ConnectTier2Libraries or InitDefaultFileSystem.
@@ -41,20 +41,18 @@ extern IP4 *p4;  //-V707
 extern IMdlLib *mdllib;
 extern IQueuedLoader *g_pQueuedLoader;
 
-
 // Call this to connect to/disconnect from all tier 2 libraries.
 // It's up to the caller to check the globals it cares about to see if ones are
 // missing
 
-void ConnectTier2Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount);
+void ConnectTier2Libraries(CreateInterfaceFn *factory_list,
+                           usize factories_count);
 void DisconnectTier2Libraries();
-
 
 // Call this to get the file system set up to stdio for utilities, etc:
 
 void InitDefaultFileSystem();
 void ShutdownDefaultFileSystem();
-
 
 // for simple utilities using valve libraries, call the entry point below in
 // main(). It will init a filesystem for you, init mathlib, and create the
@@ -62,33 +60,29 @@ void ShutdownDefaultFileSystem();
 
 void InitCommandLineProgram(int argc, char **argv);
 
-
 // Helper empty implementation of an IAppSystem for tier2 libraries
 
-template <class IInterface, int ConVarFlag = 0>
+template <typename IInterface, int ConVarFlag = 0>
 class CTier2AppSystem : public CTier1AppSystem<IInterface, ConVarFlag> {
-  typedef CTier1AppSystem<IInterface, ConVarFlag> BaseClass;
+  using BaseClass = CTier1AppSystem<IInterface, ConVarFlag>;
 
  public:
   CTier2AppSystem(bool bIsPrimaryAppSystem = true)
-      : BaseClass(bIsPrimaryAppSystem) {}
+      : BaseClass{bIsPrimaryAppSystem} {}
 
   bool Connect(CreateInterfaceFn factory) override {
-    if (!BaseClass::Connect(factory)) return false;
+    if (BaseClass::Connect(factory)) {
+      if (this->IsPrimaryAppSystem()) {
+        ConnectTier2Libraries(&factory, 1);
+      }
 
-    if (this->IsPrimaryAppSystem()) {
-      ConnectTier2Libraries(&factory, 1);
+      return true;
     }
 
-    return true;
+    return false;
   }
 
-  InitReturnVal_t Init() override {
-    InitReturnVal_t nRetVal = BaseClass::Init();
-    if (nRetVal != INIT_OK) return nRetVal;
-
-    return INIT_OK;
-  }
+  InitReturnVal_t Init() override { return BaseClass::Init(); }
 
   void Shutdown() override { BaseClass::Shutdown(); }
 

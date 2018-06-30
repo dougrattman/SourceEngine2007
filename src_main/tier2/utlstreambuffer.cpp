@@ -8,45 +8,43 @@
 #include "tier2/tier2.h"
 
 // default stream chunk size
-
-enum { DEFAULT_STREAM_CHUNK_SIZE = 16 * 1024 };
-
-// Constructor, destructor
+constexpr int kDefaultStreamChunkSize{16 * 1024};
 
 CUtlStreamBuffer::CUtlStreamBuffer()
-    : BaseClass(DEFAULT_STREAM_CHUNK_SIZE, DEFAULT_STREAM_CHUNK_SIZE, 0) {
+    : BaseClass{kDefaultStreamChunkSize, kDefaultStreamChunkSize, 0},
+      m_hFileHandle{FILESYSTEM_INVALID_HANDLE},
+      m_pFileName{nullptr},
+      m_pPath{nullptr} {
   SetUtlBufferOverflowFuncs(&CUtlStreamBuffer::StreamGetOverflow,
                             &CUtlStreamBuffer::StreamPutOverflow);
-  m_hFileHandle = FILESYSTEM_INVALID_HANDLE;
-  m_pFileName = NULL;
-  m_pPath = NULL;
 }
 
 CUtlStreamBuffer::CUtlStreamBuffer(const char *pFileName, const char *pPath,
                                    int nFlags, bool bDelayOpen)
-    : BaseClass(DEFAULT_STREAM_CHUNK_SIZE, DEFAULT_STREAM_CHUNK_SIZE, nFlags) {
+    : BaseClass(kDefaultStreamChunkSize, kDefaultStreamChunkSize, nFlags) {
   SetUtlBufferOverflowFuncs(&CUtlStreamBuffer::StreamGetOverflow,
                             &CUtlStreamBuffer::StreamPutOverflow);
 
   if (bDelayOpen) {
-    int nFileNameLen = Q_strlen(pFileName);
+    usize nFileNameLen = strlen(pFileName);
     m_pFileName = new char[nFileNameLen + 1];
-    Q_strcpy(m_pFileName, nFileNameLen + 1, pFileName);
+    strcpy_s(m_pFileName, nFileNameLen + 1, pFileName);
 
     if (pPath) {
-      size_t nPathLen = Q_strlen(pPath) + 1;
+      size_t nPathLen = strlen(pPath) + 1;
       m_pPath = new char[nPathLen];
-      Q_strcpy(m_pPath, nPathLen, pPath);
+      strcpy_s(m_pPath, nPathLen, pPath);
     } else {
       m_pPath = new char[1];
-      m_pPath[0] = 0;
+      m_pPath[0] = '\0';
     }
 
     m_hFileHandle = FILESYSTEM_INVALID_HANDLE;
   } else {
-    m_pFileName = NULL;
-    m_pPath = NULL;
+    m_pFileName = nullptr;
+    m_pPath = nullptr;
     m_hFileHandle = OpenFile(pFileName, pPath);
+
     if (m_hFileHandle == FILESYSTEM_INVALID_HANDLE) {
       m_Error |= FILE_OPEN_ERROR;
       return;
@@ -87,12 +85,12 @@ void CUtlStreamBuffer::Close() {
 
   if (m_pFileName) {
     delete[] m_pFileName;
-    m_pFileName = NULL;
+    m_pFileName = nullptr;
   }
 
   if (m_pPath) {
     delete[] m_pPath;
-    m_pPath = NULL;
+    m_pPath = nullptr;
   }
 
   m_Error = 0;
@@ -101,12 +99,9 @@ void CUtlStreamBuffer::Close() {
 CUtlStreamBuffer::~CUtlStreamBuffer() { Close(); }
 
 // Open the file. normally done in constructor
-
 void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
                             int nFlags) {
-  if (IsOpen()) {
-    Close();
-  }
+  if (IsOpen()) Close();
 
   m_Get = 0;
   m_Put = 0;
@@ -114,6 +109,7 @@ void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
   m_nOffset = 0;
   m_Flags = nFlags;
   m_hFileHandle = OpenFile(pFileName, pPath);
+
   if (m_hFileHandle == FILESYSTEM_INVALID_HANDLE) {
     m_Error |= FILE_OPEN_ERROR;
     return;
@@ -140,28 +136,23 @@ void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
 }
 
 // Is the file open?
-
 bool CUtlStreamBuffer::IsOpen() const {
-  if (m_hFileHandle != FILESYSTEM_INVALID_HANDLE) return true;
-
   // Delayed open case
-  return (m_pFileName != 0);
+  return m_hFileHandle != FILESYSTEM_INVALID_HANDLE || m_pFileName != nullptr;
 }
 
 // Grow allocation size to fit requested size
-
 void CUtlStreamBuffer::GrowAllocatedSize(int nSize) {
   int nNewSize = Size();
   if (nNewSize < nSize + 1) {
     while (nNewSize < nSize + 1) {
-      nNewSize += DEFAULT_STREAM_CHUNK_SIZE;
+      nNewSize += kDefaultStreamChunkSize;
     }
     m_Memory.Grow(nNewSize - Size());
   }
 }
 
 // Load up more of the stream when we overflow
-
 bool CUtlStreamBuffer::StreamPutOverflow(int nSize) {
   if (!IsValid() || IsReadOnly()) return false;
 
@@ -170,7 +161,7 @@ bool CUtlStreamBuffer::StreamPutOverflow(int nSize) {
     GrowAllocatedSize(nSize + 2);
   }
 
-  // Don't write the last byte (for NULL termination logic to work)
+  // Don't write the last byte (for nullptr termination logic to work)
   int nBytesToWrite = TellPut() - m_nOffset - 1;
   if ((nBytesToWrite > 0) || (nSize < 0)) {
     if (m_hFileHandle == FILESYSTEM_INVALID_HANDLE) {
@@ -183,7 +174,7 @@ bool CUtlStreamBuffer::StreamPutOverflow(int nSize) {
         g_pFullFileSystem->Write(Base(), nBytesToWrite, m_hFileHandle);
     if (nBytesWritten != nBytesToWrite) return false;
 
-    // This is necessary to deal with auto-NULL terminiation
+    // This is necessary to deal with auto-nullptr terminiation
     m_Memory[0] = *(unsigned char *)PeekPut(-1);
     if (TellPut() < Size()) {
       m_Memory[1] = *(unsigned char *)PeekPut();
@@ -200,7 +191,6 @@ bool CUtlStreamBuffer::StreamPutOverflow(int nSize) {
 }
 
 // Reads bytes from the file; fixes up maxput if necessary and 0 terminates
-
 int CUtlStreamBuffer::ReadBytesFromFile(int nBytesToRead, int nReadOffset) {
   if (m_hFileHandle == FILESYSTEM_INVALID_HANDLE) {
     if (!m_pFileName) {
@@ -231,7 +221,7 @@ int CUtlStreamBuffer::ReadBytesFromFile(int nBytesToRead, int nReadOffset) {
   }
 
   if (nReadOffset + nBytesRead < Size()) {
-    // This is necessary to deal with auto-NULL terminiation
+    // This is necessary to deal with auto-nullptr terminiation
     pReadPoint[nBytesRead] = 0;
   }
 
@@ -239,7 +229,6 @@ int CUtlStreamBuffer::ReadBytesFromFile(int nBytesToRead, int nReadOffset) {
 }
 
 // Load up more of the stream when we overflow
-
 bool CUtlStreamBuffer::StreamGetOverflow(int nSize) {
   if (!IsValid() || !IsReadOnly()) return false;
 
@@ -275,12 +264,11 @@ bool CUtlStreamBuffer::StreamGetOverflow(int nSize) {
 }
 
 // open file unless already failed to open
-
 FileHandle_t CUtlStreamBuffer::OpenFile(const char *pFileName,
                                         const char *pPath) {
   if (m_Error & FILE_OPEN_ERROR) return FILESYSTEM_INVALID_HANDLE;
 
-  char openflags[3] = "xx";
+  char openflags[3]{"xx"};
   openflags[0] = IsReadOnly() ? 'r' : 'w';
   openflags[1] = IsText() && !ContainsCRLF() ? 't' : 'b';
 

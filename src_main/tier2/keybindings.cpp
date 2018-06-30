@@ -2,105 +2,96 @@
 
 #include "tier2/keybindings.h"
 
+#include <algorithm>
+
 #include "inputsystem/iinputsystem.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/tier2.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-
 // Set a key binding
-
-void CKeyBindings::SetBinding(ButtonCode_t code, const char *pBinding) {
-  if (code == BUTTON_CODE_INVALID || code == KEY_NONE) return;
+bool CKeyBindings::SetBinding(ButtonCode_t code, const ch *binding) {
+  if (code == BUTTON_CODE_INVALID || code == KEY_NONE) return false;
 
   // free old bindings
-  if (!m_KeyInfo[code].IsEmpty()) {
-    // Exactly the same, don't re-bind and fragment memory
-    if (!Q_stricmp(m_KeyInfo[code], pBinding)) return;
+  // Exactly the same, don't re-bind and fragment memory
+  if (!key_infos_[code].IsEmpty() && !_stricmp(key_infos_[code], binding)) {
+    return true;
   }
 
   // allocate memory for new binding
-  m_KeyInfo[code] = pBinding;
+  key_infos_[code] = binding;
+
+  return true;
 }
 
-void CKeyBindings::SetBinding(const char *pButtonName, const char *pBinding) {
-  ButtonCode_t code = g_pInputSystem->StringToButtonCode(pButtonName);
-  SetBinding(code, pBinding);
+bool CKeyBindings::SetBinding(const ch *button_name, const ch *binding) {
+  const ButtonCode_t code{g_pInputSystem->StringToButtonCode(button_name)};
+
+  return SetBinding(code, binding);
 }
 
-void CKeyBindings::Unbind(ButtonCode_t code) {
-  if (code != KEY_NONE && code != BUTTON_CODE_INVALID) {
-    m_KeyInfo[code] = "";
-  }
+bool CKeyBindings::Unbind(ButtonCode_t code) {
+  const bool was_unbind{code != KEY_NONE && code != BUTTON_CODE_INVALID};
+
+  if (was_unbind) key_infos_[code] = "";
+
+  return was_unbind;
 }
 
-void CKeyBindings::Unbind(const char *pButtonName) {
-  ButtonCode_t code = g_pInputSystem->StringToButtonCode(pButtonName);
-  Unbind(code);
+bool CKeyBindings::Unbind(const ch *button_name) {
+  const ButtonCode_t code{g_pInputSystem->StringToButtonCode(button_name)};
+
+  return Unbind(code);
 }
 
 void CKeyBindings::UnbindAll() {
-  for (int i = 0; i < BUTTON_CODE_LAST; i++) {
-    m_KeyInfo[i] = "";
-  }
+  for (auto &ki : key_infos_) ki = "";
 }
-
 
 // Count number of lines of bindings we'll be writing
-
-int CKeyBindings::GetBindingCount() const {
-  int nCount = 0;
-  for (int i = 0; i < BUTTON_CODE_LAST; i++) {
-    if (m_KeyInfo[i].Length()) {
-      nCount++;
-    }
-  }
-
-  return nCount;
+usize CKeyBindings::GetBindingCount() const {
+  return static_cast<usize>(
+      std::count_if(std::begin(key_infos_), std::end(key_infos_),
+                    [](const CUtlString &ki) { return ki.Length() > 0; }));
 }
 
-
-// Writes lines containing "bind key value"
-
-void CKeyBindings::WriteBindings(CUtlBuffer &buf) {
+// Writes lines containing "bind key value".
+void CKeyBindings::WriteBindings(CUtlBuffer &buffer) {
   for (int i = 0; i < BUTTON_CODE_LAST; i++) {
-    if (m_KeyInfo[i].Length()) {
-      const char *pButtonCode =
-          g_pInputSystem->ButtonCodeToString((ButtonCode_t)i);
-      buf.Printf("bind \"%s\" \"%s\"\n", pButtonCode, m_KeyInfo[i].Get());
+    if (key_infos_[i].Length()) {
+      const ch *button_code{
+          g_pInputSystem->ButtonCodeToString((ButtonCode_t)i)};
+
+      buffer.Printf("bind \"%s\" \"%s\"\n", button_code, key_infos_[i].Get());
     }
   }
 }
-
 
 // Returns the keyname to which a binding string is bound.  E.g., if
 // TAB is bound to +use then searching for +use will return "TAB"
+const ch *CKeyBindings::ButtonNameForBinding(const ch *binding) {
+  Assert(binding[0] != '\0');
 
-const char *CKeyBindings::ButtonNameForBinding(const char *pBinding) {
-  const char *pBind = pBinding;
-  if (pBinding[0] == '+') {
-    ++pBind;
-  }
+  const ch *the_bind = binding;
+  if (binding[0] == '+') ++the_bind;
 
   for (int i = 0; i < BUTTON_CODE_LAST; i++) {
-    if (!m_KeyInfo[i].Length()) continue;
+    if (!key_infos_[i].Length()) continue;
 
-    if (m_KeyInfo[i][0] == '+') {
-      if (!Q_stricmp(&m_KeyInfo[i][1], pBind))
+    if (key_infos_[i][0] == '+') {
+      if (!_stricmp(&key_infos_[i][1], the_bind))
         return g_pInputSystem->ButtonCodeToString((ButtonCode_t)i);
     } else {
-      if (!Q_stricmp(m_KeyInfo[i], pBind))
+      if (!_stricmp(key_infos_[i], the_bind))
         return g_pInputSystem->ButtonCodeToString((ButtonCode_t)i);
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
-const char *CKeyBindings::GetBindingForButton(ButtonCode_t code) {
-  if (m_KeyInfo[code].IsEmpty()) return NULL;
-
-  return m_KeyInfo[code];
+const ch *CKeyBindings::GetBindingForButton(ButtonCode_t code) {
+  return key_infos_[code].IsEmpty() ? nullptr : key_infos_[code];
 }

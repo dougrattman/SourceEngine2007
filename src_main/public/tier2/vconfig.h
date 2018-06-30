@@ -5,19 +5,27 @@
 #ifndef SOURCE_TIER2_VCONFIG_H_
 #define SOURCE_TIER2_VCONFIG_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "base/include/base_types.h"
+
 // The registry keys that vconfig uses to store the current vproject directory.
 #define VPROJECT_REG_KEY \
   "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"
 
 // For accessing the environment variables we store the current vproject in.
-void SetVConfigRegistrySetting(const char *pName, const char *pValue,
+void SetVConfigRegistrySetting(const ch *pName, const ch *pValue,
                                bool bNotify = true);
-bool GetVConfigRegistrySetting(const char *pName, char *pReturn, int size);
-#ifdef _WIN32
-bool RemoveObsoleteVConfigRegistrySetting(const char *pValueName,
-                                          char *pOldValue = nullptr,
+bool GetVConfigRegistrySetting(const ch *pName, char *pReturn, int size);
+
+#ifdef OS_WIN
+bool RemoveObsoleteVConfigRegistrySetting(const ch *pValueName,
+                                          ch *pOldValue = nullptr,
                                           int size = 0);
 #endif
-bool ConvertObsoleteVConfigRegistrySetting(const char *pValueName);
+
+bool ConvertObsoleteVConfigRegistrySetting(const ch *pValueName);
 
 #endif  // SOURCE_TIER2_VCONFIG_H_

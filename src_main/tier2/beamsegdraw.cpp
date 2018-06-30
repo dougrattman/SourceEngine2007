@@ -4,13 +4,7 @@
 
 #include "materialsystem/imaterialvar.h"
 
- 
 #include "tier0/include/memdbgon.h"
-
-
-//
-// CBeamSegDraw implementation.
-//
 
 void CBeamSegDraw::Start(IMatRenderContext *pRenderContext, int nSegs,
                          IMaterial *pMaterial, CMeshBuilder *pMeshBuilder,
@@ -25,12 +19,12 @@ void CBeamSegDraw::Start(IMatRenderContext *pRenderContext, int nSegs,
     m_pMeshBuilder = pMeshBuilder;
     m_nMeshVertCount = nMeshVertCount;
   } else {
-    m_pMeshBuilder = NULL;
+    m_pMeshBuilder = nullptr;
     m_nMeshVertCount = 0;
 
-    IMesh *pMesh =
-        m_pRenderContext->GetDynamicMesh(true, NULL, NULL, pMaterial);
-    m_Mesh.Begin(pMesh, MATERIAL_TRIANGLE_STRIP, (nSegs - 1) * 2);
+    IMesh *mesh{
+        m_pRenderContext->GetDynamicMesh(true, nullptr, nullptr, pMaterial)};
+    m_Mesh.Begin(mesh, MATERIAL_TRIANGLE_STRIP, (nSegs - 1) * 2);
   }
 }
 
@@ -147,22 +141,16 @@ void CBeamSegDraw::NextSeg(BeamSeg_t *pSeg) {
 
 void CBeamSegDraw::End() {
   if (m_pMeshBuilder) {
-    m_pMeshBuilder = NULL;
+    m_pMeshBuilder = nullptr;
     return;
   }
 
   m_Mesh.End(false, true);
 }
 
-
-// Purpose:
-
 void CBeamSegDrawArbitrary::SetNormal(const Vector &normal) {
   m_vNormalLast = normal;
 }
-
-
-// Purpose:
 
 void CBeamSegDrawArbitrary::NextSeg(BeamSeg_t *pSeg) {
   if (m_nSegsDrawn > 0) {
@@ -177,10 +165,6 @@ void CBeamSegDrawArbitrary::NextSeg(BeamSeg_t *pSeg) {
   m_Seg = *pSeg;
   ++m_nSegsDrawn;
 }
-
-
-// Purpose:
-// Input  : &vNextPos -
 
 void CBeamSegDrawArbitrary::SpecifySeg(const Vector &vNormal) {
   // Build the endpoints.
@@ -198,10 +182,11 @@ void CBeamSegDrawArbitrary::SpecifySeg(const Vector &vNormal) {
   Assert((m_Seg.m_vColor.x <= 1.0) && (m_Seg.m_vColor.y <= 1.0) &&
          (m_Seg.m_vColor.z <= 1.0) && (m_Seg.m_flAlpha <= 1.0));
 
-  unsigned char r = FastFToC(m_Seg.m_vColor.x);
-  unsigned char g = FastFToC(m_Seg.m_vColor.y);
-  unsigned char b = FastFToC(m_Seg.m_vColor.z);
-  unsigned char a = FastFToC(m_Seg.m_flAlpha);
+  u8 r = FastFToC(m_Seg.m_vColor.x);
+  u8 g = FastFToC(m_Seg.m_vColor.y);
+  u8 b = FastFToC(m_Seg.m_vColor.z);
+  u8 a = FastFToC(m_Seg.m_flAlpha);
+
   m_Mesh.Position3fv(vPoint1.Base());
   m_Mesh.Color4ub(r, g, b, a);
   m_Mesh.TexCoord2f(0, 0, m_Seg.m_flTexCoord);

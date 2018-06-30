@@ -4,7 +4,7 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{04cefe76-7b9d-4f89-ba7b-40c74e879e14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public Header Files">
+    <Filter Include="Includes">
       <UniqueIdentifier>{d044397e-c03a-456d-a61b-efc860ef6c91}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -60,40 +60,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\tier2\beamsegdraw.h">
-      <Filter>Public Header Files</Filter>
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\tier2\fileutils.h">
-      <Filter>Public Header Files</Filter>
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\tier2\keybindings.h">
-      <Filter>Public Header Files</Filter>
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\tier2\meshutils.h">
-      <Filter>Public Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier2\renderutils.h">
-      <Filter>Public Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier2\riff.h">
-      <Filter>Public Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier2\soundutils.h">
-      <Filter>Public Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier2\tier2.h">
-      <Filter>Public Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier2\utlstreambuffer.h">
-      <Filter>Public Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier2\vconfig.h">
-      <Filter>Public Header Files</Filter>
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\tier2\p4helpers.h">
-      <Filter>Public Header Files</Filter>
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier2\renderutils.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier2\riff.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier2\soundutils.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier2\tier2.h">
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\tier2\tier2dm.h">
-      <Filter>Public Header Files</Filter>
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier2\utlstreambuffer.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier2\vconfig.h">
+      <Filter>Includes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

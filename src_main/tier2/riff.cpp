@@ -10,9 +10,6 @@
 #include "tier0/include/memdbgon.h"
 
 // Purpose: Opens a RIFF file using the given I/O mechanism
-// Input  : *pFileName
-//			&io - I/O interface
-
 InFileRIFF::InFileRIFF(const char *pFileName, IFileReadBinary &io) : m_io(io) {
   m_file = m_io.open(pFileName);
 
@@ -41,12 +38,10 @@ InFileRIFF::InFileRIFF(const char *pFileName, IFileReadBinary &io) : m_io(io) {
 }
 
 // Purpose: Close the file
-
 InFileRIFF::~InFileRIFF() { m_io.close(m_file); }
 
 // Purpose: read a 4-byte int out of the stream
 // Output : int = read value, default is zero
-
 int InFileRIFF::ReadInt() {
   int tmp = 0;
   m_io.read(&tmp, sizeof(int), m_file);
@@ -56,10 +51,6 @@ int InFileRIFF::ReadInt() {
 }
 
 // Purpose: Read a block of binary data
-// Input  : *pOutput - pointer to destination memory
-//			dataSize - size of block to read
-// Output : int - number of bytes read
-
 int InFileRIFF::ReadData(void *pOutput, int dataSize) {
   int count = m_io.read(pOutput, dataSize, m_file);
 
@@ -68,16 +59,13 @@ int InFileRIFF::ReadData(void *pOutput, int dataSize) {
 
 // Purpose: Gets the file position
 // Output : int (bytes from start of file)
-
 int InFileRIFF::PositionGet() { return m_io.tell(m_file); }
 
 // Purpose: Seek to file position
 // Input  : position - bytes from start of file
-
 void InFileRIFF::PositionSet(int position) { m_io.seek(m_file, position); }
 
 // Purpose: Used to write a RIFF format file
-
 OutFileRIFF::OutFileRIFF(const char *pFileName, IFileWriteBinary &io)
     : m_io(io) {
   m_file = m_io.create(pFileName);
@@ -148,7 +136,6 @@ void OutFileRIFF::PositionSet(int position) {
 // Purpose: Create an iterator for the given file
 // Input  : &riff - riff file
 //			size - size of file or sub-chunk
-
 IterateRIFF::IterateRIFF(InFileRIFF &riff, int size)
     : m_riff(riff), m_size(size) {
   if (!m_riff.RIFFSize()) {
@@ -164,7 +151,6 @@ IterateRIFF::IterateRIFF(InFileRIFF &riff, int size)
 
 // Purpose: Set up a sub-chunk iterator
 // Input  : &parent - parent iterator
-
 IterateRIFF::IterateRIFF(IterateRIFF &parent)
     : m_riff(parent.m_riff), m_size(parent.ChunkSize()) {
   m_start = parent.ChunkFilePosition();
@@ -174,7 +160,6 @@ IterateRIFF::IterateRIFF(IterateRIFF &parent)
 // Purpose: Parse the chunk at the current file position
 //			This object will iterate over the sub-chunks of this
 // chunk. 			This makes for easy hierarchical parsing
-
 void IterateRIFF::ChunkSetup() {
   m_chunkPosition = m_riff.PositionGet();
 
@@ -183,11 +168,9 @@ void IterateRIFF::ChunkSetup() {
 }
 
 // Purpose: clear chunk setup, ChunkAvailable will return false
-
 void IterateRIFF::ChunkClear() { m_chunkSize = -1; }
 
 // Purpose: If there are chunks left to read beyond this one, return true
-
 bool IterateRIFF::ChunkAvailable() {
   if (m_chunkSize != -1 && m_chunkSize < 0x10000000) return true;
 
@@ -195,7 +178,6 @@ bool IterateRIFF::ChunkAvailable() {
 }
 
 // Purpose: Go to the next chunk in the file, return true if there is one.
-
 bool IterateRIFF::ChunkNext() {
   if (!ChunkAvailable()) return false;
 
@@ -216,19 +198,14 @@ bool IterateRIFF::ChunkNext() {
 }
 
 // Purpose: get the chunk FOURCC as an int
-// Output : unsigned int
-
 unsigned int IterateRIFF::ChunkName() { return m_chunkName; }
 
 // Purpose: get the size of this chunk
-// Output : unsigned int
-
 unsigned int IterateRIFF::ChunkSize() { return m_chunkSize; }
 
 // Purpose: Read the entire chunk into a buffer
 // Input  : *pOutput - dest buffer
 // Output : int bytes read
-
 int IterateRIFF::ChunkRead(void *pOutput) {
   return m_riff.ReadData(pOutput, ChunkSize());
 }
@@ -237,22 +214,21 @@ int IterateRIFF::ChunkRead(void *pOutput) {
 // reads). Input  : *pOutput - dest buffer
 //			dataSize - partial size
 // Output : int - bytes read
-
 int IterateRIFF::ChunkReadPartial(void *pOutput, int dataSize) {
   return m_riff.ReadData(pOutput, dataSize);
 }
 
 // Purpose: Read a 4-byte int
 // Output : int - read int
-
 int IterateRIFF::ChunkReadInt() { return m_riff.ReadInt(); }
 
 // Purpose: Used to iterate over an InFileRIFF
-
 IterateOutputRIFF::IterateOutputRIFF(OutFileRIFF &riff) : m_riff(riff) {
   if (!m_riff.IsValid()) return;
 
   m_start = m_riff.PositionGet();
+  m_chunkName = 0;
+  m_chunkSize = 0;
   m_chunkPosition = m_start;
   m_chunkStart = -1;
 }
@@ -260,6 +236,8 @@ IterateOutputRIFF::IterateOutputRIFF(OutFileRIFF &riff) : m_riff(riff) {
 IterateOutputRIFF::IterateOutputRIFF(IterateOutputRIFF &parent)
     : m_riff(parent.m_riff) {
   m_start = parent.ChunkFilePosition();
+  m_chunkName = 0;
+  m_chunkSize = 0;
   m_chunkPosition = m_start;
   m_chunkStart = -1;
 }

@@ -3,36 +3,38 @@
 #ifndef SOURCE_TIER2_RIFF_H_
 #define SOURCE_TIER2_RIFF_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
 #include "base/include/macros.h"
 
-
-// Purpose: This is a simple abstraction that the RIFF classes use to read from
-// files/memory
-
-class IFileReadBinary {
+// This is a simple abstraction that the RIFF classes use to read from
+// files/memory.
+the_interface IFileReadBinary {
  public:
-  virtual int open(const char *pFileName) = 0;
-  virtual int read(void *pOutput, int size, int file) = 0;
-  virtual void close(int file) = 0;
-  virtual void seek(int file, int pos) = 0;
-  virtual unsigned int tell(int file) = 0;
-  virtual unsigned int size(int file) = 0;
+  virtual intptr_t open(const ch *pFileName) = 0;
+  virtual int read(void *pOutput, int size, intptr_t file) = 0;
+  virtual void close(intptr_t file) = 0;
+  virtual void seek(intptr_t file, int pos) = 0;
+  virtual u32 tell(intptr_t file) = 0;
+  virtual u32 size(intptr_t file) = 0;
 };
 
-
-// Purpose: Used to read/parse a RIFF format file
-
+// Used to read/parse a RIFF format file.
 class InFileRIFF {
  public:
-  InFileRIFF(const char *pFileName, IFileReadBinary &io);
-  ~InFileRIFF(void);
+  InFileRIFF(const ch *pFileName, IFileReadBinary &io);
+  ~InFileRIFF();
 
-  unsigned int RIFFName() { return m_riffName; }
-  unsigned int RIFFSize() { return m_riffSize; }
+  u32 RIFFName() const { return m_riffName; }
+  u32 RIFFSize() const { return m_riffSize; }
 
-  int ReadInt(void);
+  int ReadInt();
   int ReadData(void *pOutput, int dataSize);
-  int PositionGet(void);
+  int PositionGet();
   void PositionSet(int position);
   bool IsValid() { return m_file != 0; }
 
@@ -40,63 +42,60 @@ class InFileRIFF {
   const InFileRIFF &operator=(const InFileRIFF &);
 
   IFileReadBinary &m_io;
-  int m_file;
-  unsigned int m_riffName;
-  unsigned int m_riffSize;
+  intptr_t m_file;
+  u32 m_riffName;
+  u32 m_riffSize;
 };
 
-
-// Purpose: Used to iterate over an InFileRIFF
-
+// Used to iterate over an InFileRIFF.
 class IterateRIFF {
  public:
   IterateRIFF(InFileRIFF &riff, int size);
   IterateRIFF(IterateRIFF &parent);
 
-  bool ChunkAvailable(void);
-  bool ChunkNext(void);
+  bool ChunkAvailable();
+  bool ChunkNext();
 
-  unsigned int ChunkName(void);
-  unsigned int ChunkSize(void);
+  u32 ChunkName();
+  u32 ChunkSize();
   int ChunkRead(void *pOutput);
   int ChunkReadPartial(void *pOutput, int dataSize);
-  int ChunkReadInt(void);
+  int ChunkReadInt();
   int ChunkFilePosition() { return m_chunkPosition; }
 
  private:
   const IterateRIFF &operator=(const IterateRIFF &);
 
-  void ChunkSetup(void);
-  void ChunkClear(void);
+  void ChunkSetup();
+  void ChunkClear();
 
   InFileRIFF &m_riff;
   int m_start;
   int m_size;
 
-  unsigned int m_chunkName;
+  u32 m_chunkName;
   int m_chunkSize;
   int m_chunkPosition;
 };
 
-class IFileWriteBinary {
+the_interface IFileWriteBinary {
  public:
-  virtual int create(const char *pFileName) = 0;
-  virtual int write(void *pData, int size, int file) = 0;
-  virtual void close(int file) = 0;
-  virtual void seek(int file, int pos) = 0;
-  virtual unsigned int tell(int file) = 0;
+  virtual intptr_t create(const char *pFileName) = 0;
+  virtual int write(void *pData, int size, intptr_t file) = 0;
+  virtual void close(intptr_t file) = 0;
+  virtual void seek(intptr_t file, int pos) = 0;
+  virtual u32 tell(intptr_t file) = 0;
 };
 
-// Purpose: Used to write a RIFF format file
-
+// Used to write a RIFF format file
 class OutFileRIFF {
  public:
   OutFileRIFF(const char *pFileName, IFileWriteBinary &io);
-  ~OutFileRIFF(void);
+  ~OutFileRIFF();
 
   bool WriteInt(int number);
   bool WriteData(void *pOutput, int dataSize);
-  int PositionGet(void);
+  int PositionGet();
   void PositionSet(int position);
   bool IsValid() { return m_file != 0; }
 
@@ -106,34 +105,31 @@ class OutFileRIFF {
   const OutFileRIFF &operator=(const OutFileRIFF &);
 
   IFileWriteBinary &m_io;
-  int m_file;
-  unsigned int m_riffName;
-  unsigned int m_riffSize;
-  unsigned int m_nNamePos;
+  intptr_t m_file;
+  u32 m_riffSize;
+  u32 m_nNamePos;
 
   // hack to make liset work correctly
   bool m_bUseIncorrectLISETLength;
   int m_nLISETSize;
 };
 
-
-// Purpose: Used to iterate over an InFileRIFF
-
+// Used to iterate over an InFileRIFF
 class IterateOutputRIFF {
  public:
   IterateOutputRIFF(OutFileRIFF &riff);
   IterateOutputRIFF(IterateOutputRIFF &parent);
 
-  void ChunkStart(unsigned int chunkname);
-  void ChunkFinish(void);
+  void ChunkStart(u32 chunkname);
+  void ChunkFinish();
 
-  void ChunkWrite(unsigned int chunkname, void *pOutput, int size);
+  void ChunkWrite(u32 chunkname, void *pOutput, int size);
   void ChunkWriteInt(int number);
   void ChunkWriteData(void *pOutput, int size);
 
   int ChunkFilePosition() { return m_chunkPosition; }
 
-  unsigned int ChunkGetPosition(void);
+  u32 ChunkGetPosition();
   void ChunkSetPosition(int position);
 
   void CopyChunkData(IterateRIFF &input);
@@ -147,7 +143,7 @@ class IterateOutputRIFF {
   int m_start;
   int m_size;
 
-  unsigned int m_chunkName;
+  u32 m_chunkName;
   int m_chunkSize;
   int m_chunkPosition;
   int m_chunkStart;

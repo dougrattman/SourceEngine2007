@@ -10,15 +10,11 @@
 #include "tier1/KeyValues.h"
 #include "tier2/tier2.h"
 
-
-// Globals
-
-static bool s_bMaterialsInitialized = false;
+static bool s_bMaterialsInitialized{false};
 static IMaterial *s_pWireframe;
 static IMaterial *s_pWireframeIgnoreZ;
 static IMaterial *s_pVertexColor;
 static IMaterial *s_pVertexColorIgnoreZ;
-
 
 // Initializes standard materials
 
@@ -27,33 +23,31 @@ void InitializeStandardMaterials() {
 
   s_bMaterialsInitialized = true;
 
-  KeyValues *pVMTKeyValues = new KeyValues("wireframe");
-  pVMTKeyValues->SetInt("$vertexcolor", 1);
-  s_pWireframe =
-      g_pMaterialSystem->CreateMaterial("__utilWireframe", pVMTKeyValues);
+  KeyValues *vmt = new KeyValues("wireframe");
+  vmt->SetInt("$vertexcolor", 1);
+  s_pWireframe = g_pMaterialSystem->CreateMaterial("__utilWireframe", vmt);
   s_pWireframe->IncrementReferenceCount();
 
-  pVMTKeyValues = new KeyValues("wireframe");
-  pVMTKeyValues->SetInt("$vertexcolor", 1);
-  pVMTKeyValues->SetInt("$vertexalpha", 1);
-  pVMTKeyValues->SetInt("$ignorez", 1);
-  s_pWireframeIgnoreZ = g_pMaterialSystem->CreateMaterial(
-      "__utilWireframeIgnoreZ", pVMTKeyValues);
+  vmt = new KeyValues("wireframe");
+  vmt->SetInt("$vertexcolor", 1);
+  vmt->SetInt("$vertexalpha", 1);
+  vmt->SetInt("$ignorez", 1);
+  s_pWireframeIgnoreZ =
+      g_pMaterialSystem->CreateMaterial("__utilWireframeIgnoreZ", vmt);
   s_pWireframeIgnoreZ->IncrementReferenceCount();
 
-  pVMTKeyValues = new KeyValues("unlitgeneric");
-  pVMTKeyValues->SetInt("$vertexcolor", 1);
-  pVMTKeyValues->SetInt("$vertexalpha", 1);
-  s_pVertexColor =
-      g_pMaterialSystem->CreateMaterial("__utilVertexColor", pVMTKeyValues);
+  vmt = new KeyValues("unlitgeneric");
+  vmt->SetInt("$vertexcolor", 1);
+  vmt->SetInt("$vertexalpha", 1);
+  s_pVertexColor = g_pMaterialSystem->CreateMaterial("__utilVertexColor", vmt);
   s_pVertexColor->IncrementReferenceCount();
 
-  pVMTKeyValues = new KeyValues("unlitgeneric");
-  pVMTKeyValues->SetInt("$vertexcolor", 1);
-  pVMTKeyValues->SetInt("$vertexalpha", 1);
-  pVMTKeyValues->SetInt("$ignorez", 1);
-  s_pVertexColorIgnoreZ = g_pMaterialSystem->CreateMaterial(
-      "__utilVertexColorIgnoreZ", pVMTKeyValues);
+  vmt = new KeyValues("unlitgeneric");
+  vmt->SetInt("$vertexcolor", 1);
+  vmt->SetInt("$vertexalpha", 1);
+  vmt->SetInt("$ignorez", 1);
+  s_pVertexColorIgnoreZ =
+      g_pMaterialSystem->CreateMaterial("__utilVertexColorIgnoreZ", vmt);
   s_pVertexColorIgnoreZ->IncrementReferenceCount();
 }
 
@@ -63,22 +57,20 @@ void ShutdownStandardMaterials() {
   s_bMaterialsInitialized = false;
 
   s_pWireframe->DecrementReferenceCount();
-  s_pWireframe = NULL;
+  s_pWireframe = nullptr;
 
   s_pWireframeIgnoreZ->DecrementReferenceCount();
-  s_pWireframeIgnoreZ = NULL;
+  s_pWireframeIgnoreZ = nullptr;
 
   s_pVertexColor->DecrementReferenceCount();
-  s_pVertexColor = NULL;
+  s_pVertexColor = nullptr;
 
   s_pVertexColorIgnoreZ->DecrementReferenceCount();
-  s_pVertexColorIgnoreZ = NULL;
+  s_pVertexColorIgnoreZ = nullptr;
 }
 
-
 // Renders a wireframe sphere
-
-void RenderWireframeSphere(const Vector &vCenter, float flRadius, int nTheta,
+void RenderWireframeSphere(const Vector &vCenter, f32 flRadius, int nTheta,
                            int nPhi, Color c, bool bZBuffer) {
   InitializeStandardMaterials();
 
@@ -96,29 +88,29 @@ void RenderWireframeSphere(const Vector &vCenter, float flRadius, int nTheta,
 
   meshBuilder.Begin(pMesh, MATERIAL_LINES, nVertices, nIndices);
 
-  unsigned char chRed = c.r();
-  unsigned char chGreen = c.g();
-  unsigned char chBlue = c.b();
-  unsigned char chAlpha = c.a();
+  u8 chRed = c.r();
+  u8 chGreen = c.g();
+  u8 chBlue = c.b();
+  u8 chAlpha = c.a();
 
-  int i, j;
-  for (i = 0; i < nPhi; ++i) {
-    for (j = 0; j < nTheta; ++j) {
-      float u = j / (float)(nTheta - 1);
-      float v = i / (float)(nPhi - 1);
-      float theta = 2.0f * M_PI * u;
-      float phi = M_PI * v;
+  for (int i = 0; i < nPhi; ++i) {
+    for (int j = 0; j < nTheta; ++j) {
+      f32 u = j / (f32)(nTheta - 1);
+      f32 v = i / (f32)(nPhi - 1);
+      f32 theta = 2.0f * M_PI_F * u;
+      f32 phi = M_PI_F * v;
+      f32 sin_phi{sin(phi)};
 
-      meshBuilder.Position3f(vCenter.x + (flRadius * sin(phi) * cos(theta)),
-                             vCenter.y + (flRadius * sin(phi) * sin(theta)),
+      meshBuilder.Position3f(vCenter.x + (flRadius * sin_phi * cos(theta)),
+                             vCenter.y + (flRadius * sin_phi * sin(theta)),
                              vCenter.z + (flRadius * cos(phi)));
       meshBuilder.Color4ub(chRed, chGreen, chBlue, chAlpha);
       meshBuilder.AdvanceVertex();
     }
   }
 
-  for (i = 0; i < nPhi - 1; ++i) {
-    for (j = 0; j < nTheta - 1; ++j) {
+  for (int i = 0; i < nPhi - 1; ++i) {
+    for (int j = 0; j < nTheta - 1; ++j) {
       int idx = nTheta * i + j;
 
       meshBuilder.Index(idx);
@@ -139,48 +131,42 @@ void RenderWireframeSphere(const Vector &vCenter, float flRadius, int nTheta,
   pMesh->Draw();
 }
 
-
 // Draws a sphere
-
-void RenderSphere(const Vector &vCenter, float flRadius, int nTheta, int nPhi,
+void RenderSphere(const Vector &vCenter, f32 flRadius, int nTheta, int nPhi,
                   Color c, IMaterial *pMaterial) {
   InitializeStandardMaterials();
 
-  CMatRenderContextPtr pRenderContext(materials);
-
-  unsigned char chRed = c.r();
-  unsigned char chGreen = c.g();
-  unsigned char chBlue = c.b();
-  unsigned char chAlpha = c.a();
+  u8 chRed = c.r();
+  u8 chGreen = c.g();
+  u8 chBlue = c.b();
+  u8 chAlpha = c.a();
 
   // Two extra degenerate triangles per row (except the last one)
   int nTriangles = 2 * nTheta * (nPhi - 1);
   int nIndices = 2 * (nTheta + 1) * (nPhi - 1);
   if (nTriangles == 0) return;
 
+  CMatRenderContextPtr pRenderContext(materials);
   pRenderContext->Bind(pMaterial);
+
   IMesh *pMesh = pRenderContext->GetDynamicMesh();
   CMeshBuilder meshBuilder;
 
   meshBuilder.Begin(pMesh, MATERIAL_TRIANGLE_STRIP, nTriangles, nIndices);
 
   // Build the index buffer.
-  float flOONPhi = 1.0f / (nPhi - 1);
-  float flOONTheta = 1.0f / (nTheta - 1);
+  f32 flOONPhi = 1.0f / (nPhi - 1);
+  f32 flOONTheta = 1.0f / (nTheta - 1);
 
-  int i, j;
-  for (i = 0; i < nPhi; ++i) {
-    for (j = 0; j < nTheta; ++j) {
-      float u = j / (float)(nTheta - 1);
-      float v = i / (float)(nPhi - 1);
-      float theta = 2.0f * M_PI * u;
-      float phi = M_PI * v;
+  for (int i = 0; i < nPhi; ++i) {
+    for (int j = 0; j < nTheta; ++j) {
+      f32 u = j / (f32)(nTheta - 1);
+      f32 v = i / (f32)(nPhi - 1);
+      f32 theta = 2.0f * M_PI_F * u;
+      f32 phi = M_PI_F * v;
 
-      Vector vecPos;
-      vecPos.x = flRadius * sin(phi) * cos(theta);
-      vecPos.y = flRadius * sin(phi) * sin(theta);
-      vecPos.z = flRadius * cos(phi);
-
+      Vector vecPos{flRadius * sin(phi) * cos(theta),
+                    flRadius * sin(phi) * sin(theta), flRadius * cos(phi)};
       Vector vecNormal = vecPos;
       VectorNormalize(vecNormal);
 
@@ -196,8 +182,8 @@ void RenderSphere(const Vector &vCenter, float flRadius, int nTheta, int nPhi,
 
   // Emit the triangle strips.
   int idx = 0;
-  for (i = 0; i < nPhi - 1; ++i) {
-    for (j = 0; j < nTheta; ++j) {
+  for (int i = 0; i < nPhi - 1; ++i) {
+    for (int j = 0; j < nTheta; ++j) {
       idx = nTheta * i + j;
 
       meshBuilder.Index(idx + nTheta);
@@ -222,16 +208,15 @@ void RenderSphere(const Vector &vCenter, float flRadius, int nTheta, int nPhi,
   pMesh->Draw();
 }
 
-void RenderSphere(const Vector &vCenter, float flRadius, int nTheta, int nPhi,
+void RenderSphere(const Vector &vCenter, f32 flRadius, int nTheta, int nPhi,
                   Color c, bool bZBuffer) {
   IMaterial *pMaterial = bZBuffer ? s_pVertexColor : s_pVertexColorIgnoreZ;
   Color cActual(c.r(), c.g(), c.b(), c.a());
+
   RenderSphere(vCenter, flRadius, nTheta, nPhi, cActual, pMaterial);
 }
 
-
 // Box vertices
-
 static int s_pBoxFaceIndices[6][4] = {
     {0, 4, 6, 2},  // -x
     {5, 1, 3, 7},  // +x
@@ -268,9 +253,7 @@ static void GenerateBoxVertices(const Vector &vOrigin, const QAngle &angles,
   }
 }
 
-
 // Renders a wireframe box relative to an origin
-
 void RenderWireframeBox(const Vector &vOrigin, const QAngle &angles,
                         const Vector &vMins, const Vector &vMaxs, Color c,
                         bool bZBuffer) {
@@ -282,10 +265,10 @@ void RenderWireframeBox(const Vector &vOrigin, const QAngle &angles,
   Vector p[8];
   GenerateBoxVertices(vOrigin, angles, vMins, vMaxs, p);
 
-  unsigned char chRed = c.r();
-  unsigned char chGreen = c.g();
-  unsigned char chBlue = c.b();
-  unsigned char chAlpha = c.a();
+  u8 chRed = c.r();
+  u8 chGreen = c.g();
+  u8 chBlue = c.b();
+  u8 chAlpha = c.a();
 
   IMesh *pMesh = pRenderContext->GetDynamicMesh();
   CMeshBuilder meshBuilder;
@@ -310,7 +293,6 @@ void RenderWireframeBox(const Vector &vOrigin, const QAngle &angles,
   pMesh->Draw();
 }
 
-
 // Renders a solid box
 
 void RenderBox(const Vector &vOrigin, const QAngle &angles, const Vector &vMins,
@@ -324,10 +306,10 @@ void RenderBox(const Vector &vOrigin, const QAngle &angles, const Vector &vMins,
   Vector p[8];
   GenerateBoxVertices(vOrigin, angles, vMins, vMaxs, p);
 
-  unsigned char chRed = c.r();
-  unsigned char chGreen = c.g();
-  unsigned char chBlue = c.b();
-  unsigned char chAlpha = c.a();
+  u8 chRed = c.r();
+  u8 chGreen = c.g();
+  u8 chBlue = c.b();
+  u8 chAlpha = c.a();
 
   IMesh *pMesh = pRenderContext->GetDynamicMesh();
   CMeshBuilder meshBuilder;
@@ -377,10 +359,8 @@ void RenderBox(const Vector &vOrigin, const QAngle &angles, const Vector &vMins,
   RenderBox(vOrigin, angles, vMins, vMaxs, cActual, pMaterial, bInsideOut);
 }
 
-
 // Renders axes, red->x, green->y, blue->z
-
-void RenderAxes(const Vector &vOrigin, float flScale, bool bZBuffer) {
+void RenderAxes(const Vector &vOrigin, f32 flScale, bool bZBuffer) {
   InitializeStandardMaterials();
 
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
@@ -418,7 +398,7 @@ void RenderAxes(const Vector &vOrigin, float flScale, bool bZBuffer) {
   pMesh->Draw();
 }
 
-void RenderAxes(const matrix3x4_t &transform, float flScale, bool bZBuffer) {
+void RenderAxes(const matrix3x4_t &transform, f32 flScale, bool bZBuffer) {
   InitializeStandardMaterials();
 
   Vector xAxis, yAxis, zAxis, vOrigin, temp;
@@ -465,19 +445,17 @@ void RenderAxes(const matrix3x4_t &transform, float flScale, bool bZBuffer) {
   pMesh->Draw();
 }
 
-
 // Render a line
-
 void RenderLine(const Vector &v1, const Vector &v2, Color c, bool bZBuffer) {
   InitializeStandardMaterials();
 
   CMatRenderContextPtr pRenderContext(materials);
   pRenderContext->Bind(bZBuffer ? s_pWireframe : s_pWireframeIgnoreZ);
 
-  unsigned char chRed = c.r();
-  unsigned char chGreen = c.g();
-  unsigned char chBlue = c.b();
-  unsigned char chAlpha = c.a();
+  u8 chRed = c.r();
+  u8 chGreen = c.g();
+  u8 chBlue = c.b();
+  u8 chAlpha = c.a();
 
   IMesh *pMesh = pRenderContext->GetDynamicMesh();
   CMeshBuilder meshBuilder;
@@ -495,9 +473,7 @@ void RenderLine(const Vector &v1, const Vector &v2, Color c, bool bZBuffer) {
   pMesh->Draw();
 }
 
-
 // Draws a triangle
-
 void RenderTriangle(const Vector &p1, const Vector &p2, const Vector &p3,
                     Color c, IMaterial *pMaterial) {
   InitializeStandardMaterials();
@@ -505,10 +481,10 @@ void RenderTriangle(const Vector &p1, const Vector &p2, const Vector &p3,
   CMatRenderContextPtr pRenderContext(materials);
   pRenderContext->Bind(pMaterial);
 
-  unsigned char chRed = c.r();
-  unsigned char chGreen = c.g();
-  unsigned char chBlue = c.b();
-  unsigned char chAlpha = c.a();
+  u8 chRed = c.r();
+  u8 chGreen = c.g();
+  u8 chBlue = c.b();
+  u8 chAlpha = c.a();
 
   Vector vecNormal;
   Vector vecDelta1, vecDelta2;
@@ -547,12 +523,11 @@ void RenderTriangle(const Vector &p1, const Vector &p2, const Vector &p3,
                     Color c, bool bZBuffer) {
   IMaterial *pMaterial = bZBuffer ? s_pVertexColor : s_pVertexColorIgnoreZ;
   Color cActual(c.r(), c.g(), c.b(), c.a());
+
   RenderTriangle(p1, p2, p3, cActual, pMaterial);
 }
 
-
 // Renders an extruded box
-
 static void DrawAxes(const Vector &origin, Vector *pts, int idx, Color c,
                      CMeshBuilder &meshBuilder) {
   Vector start, temp;
@@ -652,7 +627,7 @@ void RenderWireframeSweptBox(const Vector &vStart, const Vector &vEnd,
   // Compute the box points, rotated but without the origin added
   Vector temp;
   Vector pts[8];
-  float dot[8];
+  f32 dot[8];
   int minidx = 0;
   for (int i = 0; i < 8; ++i) {
     temp.x = (i & 0x1) ? vMaxs[0] : vMins[0];
@@ -693,14 +668,12 @@ void RenderWireframeSweptBox(const Vector &vStart, const Vector &vEnd,
   pMesh->Draw();
 }
 
-
 // Draws a axis-aligned quad
-
-void RenderQuad(IMaterial *pMaterial, float x, float y, float w, float h,
-                float z, float s0, float t0, float s1, float t1,
-                const Color &clr) {
+void RenderQuad(IMaterial *pMaterial, f32 x, f32 y, f32 w, f32 h, f32 z, f32 s0,
+                f32 t0, f32 s1, f32 t1, const Color &clr) {
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
-  IMesh *pMesh = pRenderContext->GetDynamicMesh(true, NULL, NULL, pMaterial);
+  IMesh *pMesh =
+      pRenderContext->GetDynamicMesh(true, nullptr, nullptr, pMaterial);
 
   CMeshBuilder meshBuilder;
   meshBuilder.Begin(pMesh, MATERIAL_QUADS, 1);
@@ -730,15 +703,13 @@ void RenderQuad(IMaterial *pMaterial, float x, float y, float w, float h,
   pMesh->Draw();
 }
 
-
 // Renders a screen space quad
-
 void DrawScreenSpaceRectangle(
     IMaterial *pMaterial, int nDestX, int nDestY, int nWidth,
     int nHeight,  // Rect to draw into in screen space
-    float flSrcTextureX0,
-    float flSrcTextureY0,  // which texel you want to appear at destx/y
-    float flSrcTextureX1, float flSrcTextureY1,   // which texel you want to
+    f32 flSrcTextureX0,
+    f32 flSrcTextureY0,  // which texel you want to appear at destx/y
+    f32 flSrcTextureX1, f32 flSrcTextureY1,       // which texel you want to
                                                   // appear at destx+width-1,
                                                   // desty+height-1
     int nSrcTextureWidth, int nSrcTextureHeight,  // needed for fixup
@@ -768,26 +739,26 @@ void DrawScreenSpaceRectangle(
 
   int nScreenWidth, nScreenHeight;
   pRenderContext->GetRenderTargetDimensions(nScreenWidth, nScreenHeight);
-  float flLeftX = nDestX - 0.5f;
-  float flRightX = nDestX + nWidth - 0.5f;
+  f32 flLeftX = nDestX - 0.5f;
+  f32 flRightX = nDestX + nWidth - 0.5f;
 
-  float flTopY = nDestY - 0.5f;
-  float flBottomY = nDestY + nHeight - 0.5f;
+  f32 flTopY = nDestY - 0.5f;
+  f32 flBottomY = nDestY + nHeight - 0.5f;
 
-  float flSubrectWidth = flSrcTextureX1 - flSrcTextureX0;
-  float flSubrectHeight = flSrcTextureY1 - flSrcTextureY0;
+  f32 flSubrectWidth = flSrcTextureX1 - flSrcTextureX0;
+  f32 flSubrectHeight = flSrcTextureY1 - flSrcTextureY0;
 
-  float flTexelsPerPixelX = (nWidth > 1) ? flSubrectWidth / (nWidth - 1) : 0.0f;
-  float flTexelsPerPixelY =
+  f32 flTexelsPerPixelX = (nWidth > 1) ? flSubrectWidth / (nWidth - 1) : 0.0f;
+  f32 flTexelsPerPixelY =
       (nHeight > 1) ? flSubrectHeight / (nHeight - 1) : 0.0f;
 
-  float flLeftU = flSrcTextureX0 + 0.5f - (0.5f * flTexelsPerPixelX);
-  float flRightU = flSrcTextureX1 + 0.5f + (0.5f * flTexelsPerPixelX);
-  float flTopV = flSrcTextureY0 + 0.5f - (0.5f * flTexelsPerPixelY);
-  float flBottomV = flSrcTextureY1 + 0.5f + (0.5f * flTexelsPerPixelY);
+  f32 flLeftU = flSrcTextureX0 + 0.5f - (0.5f * flTexelsPerPixelX);
+  f32 flRightU = flSrcTextureX1 + 0.5f + (0.5f * flTexelsPerPixelX);
+  f32 flTopV = flSrcTextureY0 + 0.5f - (0.5f * flTexelsPerPixelY);
+  f32 flBottomV = flSrcTextureY1 + 0.5f + (0.5f * flTexelsPerPixelY);
 
-  float flOOTexWidth = 1.0f / nSrcTextureWidth;
-  float flOOTexHeight = 1.0f / nSrcTextureHeight;
+  f32 flOOTexWidth = 1.0f / nSrcTextureWidth;
+  f32 flOOTexHeight = 1.0f / nSrcTextureHeight;
   flLeftU *= flOOTexWidth;
   flRightU *= flOOTexWidth;
   flTopV *= flOOTexHeight;
@@ -806,58 +777,58 @@ void DrawScreenSpaceRectangle(
   // Dice the quad up...
   if (xSegments > 1 || ySegments > 1) {
     // Screen height and width of a subrect
-    float flWidth = (flRightX - flLeftX) / (float)xSegments;
-    float flHeight = (flTopY - flBottomY) / (float)ySegments;
+    f32 flWidth = (flRightX - flLeftX) / (f32)xSegments;
+    f32 flHeight = (flTopY - flBottomY) / (f32)ySegments;
 
     // UV height and width of a subrect
-    float flUWidth = (flRightU - flLeftU) / (float)xSegments;
-    float flVHeight = (flBottomV - flTopV) / (float)ySegments;
+    f32 flUWidth = (flRightU - flLeftU) / (f32)xSegments;
+    f32 flVHeight = (flBottomV - flTopV) / (f32)ySegments;
 
     for (int x = 0; x < xSegments; x++) {
       for (int y = 0; y < ySegments; y++) {
         // Top left
-        meshBuilder.Position3f(flLeftX + (float)x * flWidth,
-                               flTopY - (float)y * flHeight, 0.0f);
+        meshBuilder.Position3f(flLeftX + (f32)x * flWidth,
+                               flTopY - (f32)y * flHeight, 0.0f);
         meshBuilder.Normal3f(0.0f, 0.0f, 1.0f);
-        meshBuilder.TexCoord2f(0, flLeftU + (float)x * flUWidth,
-                               flTopV + (float)y * flVHeight);
+        meshBuilder.TexCoord2f(0, flLeftU + (f32)x * flUWidth,
+                               flTopV + (f32)y * flVHeight);
         meshBuilder.TangentS3f(0.0f, 1.0f, 0.0f);
         meshBuilder.TangentT3f(1.0f, 0.0f, 0.0f);
         meshBuilder.AdvanceVertex();
 
         // Top right (x+1)
-        meshBuilder.Position3f(flLeftX + (float)(x + 1) * flWidth,
-                               flTopY - (float)y * flHeight, 0.0f);
+        meshBuilder.Position3f(flLeftX + (f32)(x + 1) * flWidth,
+                               flTopY - (f32)y * flHeight, 0.0f);
         meshBuilder.Normal3f(0.0f, 0.0f, 1.0f);
-        meshBuilder.TexCoord2f(0, flLeftU + (float)(x + 1) * flUWidth,
-                               flTopV + (float)y * flVHeight);
+        meshBuilder.TexCoord2f(0, flLeftU + (f32)(x + 1) * flUWidth,
+                               flTopV + (f32)y * flVHeight);
         meshBuilder.TangentS3f(0.0f, 1.0f, 0.0f);
         meshBuilder.TangentT3f(1.0f, 0.0f, 0.0f);
         meshBuilder.AdvanceVertex();
 
         // Bottom right (x+1), (y+1)
-        meshBuilder.Position3f(flLeftX + (float)(x + 1) * flWidth,
-                               flTopY - (float)(y + 1) * flHeight, 0.0f);
+        meshBuilder.Position3f(flLeftX + (f32)(x + 1) * flWidth,
+                               flTopY - (f32)(y + 1) * flHeight, 0.0f);
         meshBuilder.Normal3f(0.0f, 0.0f, 1.0f);
-        meshBuilder.TexCoord2f(0, flLeftU + (float)(x + 1) * flUWidth,
-                               flTopV + (float)(y + 1) * flVHeight);
+        meshBuilder.TexCoord2f(0, flLeftU + (f32)(x + 1) * flUWidth,
+                               flTopV + (f32)(y + 1) * flVHeight);
         meshBuilder.TangentS3f(0.0f, 1.0f, 0.0f);
         meshBuilder.TangentT3f(1.0f, 0.0f, 0.0f);
         meshBuilder.AdvanceVertex();
 
         // Bottom left (y+1)
-        meshBuilder.Position3f(flLeftX + (float)x * flWidth,
-                               flTopY - (float)(y + 1) * flHeight, 0.0f);
+        meshBuilder.Position3f(flLeftX + (f32)x * flWidth,
+                               flTopY - (f32)(y + 1) * flHeight, 0.0f);
         meshBuilder.Normal3f(0.0f, 0.0f, 1.0f);
-        meshBuilder.TexCoord2f(0, flLeftU + (float)x * flUWidth,
-                               flTopV + (float)(y + 1) * flVHeight);
+        meshBuilder.TexCoord2f(0, flLeftU + (f32)x * flUWidth,
+                               flTopV + (f32)(y + 1) * flVHeight);
         meshBuilder.TangentS3f(0.0f, 1.0f, 0.0f);
         meshBuilder.TangentT3f(1.0f, 0.0f, 0.0f);
         meshBuilder.AdvanceVertex();
       }
     }
-  } else  // just one quad
-  {
+  } else {
+    // just one quad
     for (int corner = 0; corner < 4; corner++) {
       bool bLeft = (corner == 0) || (corner == 3);
       meshBuilder.Position3f((bLeft) ? flLeftX : flRightX,

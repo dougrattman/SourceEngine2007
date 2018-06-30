@@ -8,32 +8,26 @@
 #include "dmserializers/idmserializers.h"
 #include "tier2/tier2.h"
 
-
 // Set up methods related to datamodel interfaces
 
 bool ConnectDataModel(CreateInterfaceFn factory) {
-  if (!g_pDataModel->Connect(factory)) return false;
-
-  if (!g_pDmElementFramework->Connect(factory)) return false;
-
-  if (!g_pDmSerializers->Connect(factory)) return false;
-
-  return true;
+  return g_pDataModel->Connect(factory) &&
+         g_pDmElementFramework->Connect(factory) &&
+         g_pDmSerializers->Connect(factory);
 }
 
 InitReturnVal_t InitDataModel() {
-  InitReturnVal_t nRetVal;
+  InitReturnVal_t nRetVal = g_pDataModel->Init();
 
-  nRetVal = g_pDataModel->Init();
-  if (nRetVal != INIT_OK) return nRetVal;
+  if (nRetVal == INIT_OK) {
+    nRetVal = g_pDmElementFramework->Init();
+  }
 
-  nRetVal = g_pDmElementFramework->Init();
-  if (nRetVal != INIT_OK) return nRetVal;
+  if (nRetVal == INIT_OK) {
+    nRetVal = g_pDmSerializers->Init();
+  }
 
-  nRetVal = g_pDmSerializers->Init();
-  if (nRetVal != INIT_OK) return nRetVal;
-
-  return INIT_OK;
+  return nRetVal;
 }
 
 void ShutdownDataModel() {

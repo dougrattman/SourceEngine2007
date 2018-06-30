@@ -14,29 +14,26 @@
 #include "tier2/riff.h"
 #include "tier2/tier2.h"
 
-
 // RIFF reader/writers that use the file system
-
 class CFSIOReadBinary : public IFileReadBinary {
  public:
   // inherited from IFileReadBinary
-  virtual int open(const char *pFileName);
-  virtual int read(void *pOutput, int size, int file);
-  virtual void seek(int file, int pos);
-  virtual unsigned int tell(int file);
-  virtual unsigned int size(int file);
-  virtual void close(int file);
+  virtual intptr_t open(const char *pFileName);
+  virtual int read(void *pOutput, int size, intptr_t file);
+  virtual void seek(intptr_t file, int pos);
+  virtual unsigned int tell(intptr_t file);
+  virtual unsigned int size(intptr_t file);
+  virtual void close(intptr_t file);
 };
 
 class CFSIOWriteBinary : public IFileWriteBinary {
  public:
-  virtual int create(const char *pFileName);
-  virtual int write(void *pData, int size, int file);
-  virtual void close(int file);
-  virtual void seek(int file, int pos);
-  virtual unsigned int tell(int file);
+  virtual intptr_t create(const char *pFileName);
+  virtual int write(void *pData, int size, intptr_t file);
+  virtual void close(intptr_t file);
+  virtual void seek(intptr_t file, int pos);
+  virtual unsigned int tell(intptr_t file);
 };
-
 
 // Singletons
 
@@ -46,64 +43,62 @@ static CFSIOWriteBinary s_FSIoOut;
 IFileReadBinary *g_pFSIOReadBinary = &s_FSIoIn;
 IFileWriteBinary *g_pFSIOWriteBinary = &s_FSIoOut;
 
-
 // RIFF reader that use the file system
 
-int CFSIOReadBinary::open(const char *pFileName) {
-  return (int)g_pFullFileSystem->Open(pFileName, "rb");
+intptr_t CFSIOReadBinary::open(const char *pFileName) {
+  return (intptr_t)g_pFullFileSystem->Open(pFileName, "rb");
 }
 
-int CFSIOReadBinary::read(void *pOutput, int size, int file) {
+int CFSIOReadBinary::read(void *pOutput, int size, intptr_t file) {
   if (!file) return 0;
 
   return g_pFullFileSystem->Read(pOutput, size, (FileHandle_t)file);
 }
 
-void CFSIOReadBinary::seek(int file, int pos) {
+void CFSIOReadBinary::seek(intptr_t file, int pos) {
   if (!file) return;
 
   g_pFullFileSystem->Seek((FileHandle_t)file, pos, FILESYSTEM_SEEK_HEAD);
 }
 
-unsigned int CFSIOReadBinary::tell(int file) {
+unsigned int CFSIOReadBinary::tell(intptr_t file) {
   if (!file) return 0;
 
   return g_pFullFileSystem->Tell((FileHandle_t)file);
 }
 
-unsigned int CFSIOReadBinary::size(int file) {
+unsigned int CFSIOReadBinary::size(intptr_t file) {
   if (!file) return 0;
 
   return g_pFullFileSystem->Size((FileHandle_t)file);
 }
 
-void CFSIOReadBinary::close(int file) {
+void CFSIOReadBinary::close(intptr_t file) {
   if (!file) return;
 
   g_pFullFileSystem->Close((FileHandle_t)file);
 }
 
-
 // RIFF writer that use the file system
 
-int CFSIOWriteBinary::create(const char *pFileName) {
+intptr_t CFSIOWriteBinary::create(const char *pFileName) {
   g_pFullFileSystem->SetFileWritable(pFileName, true);
-  return (int)g_pFullFileSystem->Open(pFileName, "wb");
+  return (intptr_t)g_pFullFileSystem->Open(pFileName, "wb");
 }
 
-int CFSIOWriteBinary::write(void *pData, int size, int file) {
+int CFSIOWriteBinary::write(void *pData, int size, intptr_t file) {
   return g_pFullFileSystem->Write(pData, size, (FileHandle_t)file);
 }
 
-void CFSIOWriteBinary::close(int file) {
+void CFSIOWriteBinary::close(intptr_t file) {
   g_pFullFileSystem->Close((FileHandle_t)file);
 }
 
-void CFSIOWriteBinary::seek(int file, int pos) {
+void CFSIOWriteBinary::seek(intptr_t file, int pos) {
   g_pFullFileSystem->Seek((FileHandle_t)file, pos, FILESYSTEM_SEEK_HEAD);
 }
 
-unsigned int CFSIOWriteBinary::tell(int file) {
+unsigned int CFSIOWriteBinary::tell(intptr_t file) {
   return g_pFullFileSystem->Tell((FileHandle_t)file);
 }
 
@@ -124,7 +119,7 @@ float GetWavSoundDuration(const char *pWavFile) {
 
   // This chunk must be first as it contains the wave's format
   // break out when we've parsed it
-  char pFormatBuffer[1024];
+  char pFormatBuffer[sizeof(WAVEFORMATEX) * 64];
   int nFormatSize;
   bool bFound = false;
   for (; walk.ChunkAvailable(); walk.ChunkNext()) {
@@ -132,7 +127,7 @@ float GetWavSoundDuration(const char *pWavFile) {
       case WAVE_FMT:
         bFound = true;
         if (walk.ChunkSize() > sizeof(pFormatBuffer)) {
-          Warning("oops, format tag too big!!!");
+          Warning("Oops, format tag too big!!!");
           return 0.0f;
         }
 
@@ -159,9 +154,7 @@ float GetWavSoundDuration(const char *pWavFile) {
 
   // this can never be zero -- other functions divide by this.
   // This should never happen, but avoid crashing
-  if (nSampleSize <= 0) {
-    nSampleSize = 1;
-  }
+  if (nSampleSize <= 0) nSampleSize = 1;
 
   int nSampleCount = 0;
   float flTrueSampleSize = nSampleSize;

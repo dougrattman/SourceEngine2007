@@ -5,63 +5,67 @@
 #ifndef SOURCE_TIER2_FILEUTILS_H_
 #define SOURCE_TIER2_FILEUTILS_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "base/include/base_types.h"
 #include "filesystem.h"
 #include "tier0/include/platform.h"
 #include "tier2/tier2.h"
 
-// Builds a directory which is a subdirectory of the current mod
-void GetModSubdirectory(const char *pSubDir, char *pBuf, int nBufLen);
+// Builds a directory which is a subdirectory of the current mod.
+void GetModSubdirectory(const ch *subdir, ch *buffer, usize buffer_size);
 
-// Builds a directory which is a subdirectory of the current mod's *content*
-void GetModContentSubdirectory(const char *pSubDir, char *pBuf, int nBufLen);
+// Builds a directory which is a subdirectory of the current mod's *content*.
+void GetModContentSubdirectory(const ch *subdir, ch *buffer, usize buffer_size);
 
-// Builds a list of all files under a directory with a particular extension
-void AddFilesToList(CUtlVector<CUtlString> &list, const char *pDirectory,
-                    const char *pPath, const char *pExtension);
+// Builds a list of all files under a directory with a particular extension.
+void AddFilesToList(CUtlVector<CUtlString> &list, const ch *dir, const ch *path,
+                    const ch *ext);
 
 // Returns the search path as a list of paths
-void GetSearchPath(CUtlVector<CUtlString> &path, const char *pPathID);
+void GetSearchPath(CUtlVector<CUtlString> &path, const ch *path_id);
 
 // Generates a .360 file if it doesn't exist or is out of sync with the pc
-// source file
+// source file.
 #define UOC_FAIL -1
 #define UOC_NOT_CREATED 0
 #define UOC_CREATED 1
-typedef bool (*CreateCallback_t)(const char *pSourceName,
-                                 const char *pTargetName, const char *pPathID,
-                                 void *pExtraData);
-int UpdateOrCreate(const char *pSourceName, char *pTargetName, int targetLen,
-                   const char *pPathID, CreateCallback_t pfnCreate,
-                   bool bForce = false, void *pExtraData = NULL);
 
-char *CreateX360Filename(const char *pSourceName, char *pTargetName,
-                         int targetLen);
+using CreateCallback_t = bool (*)(const ch *source_name, const ch *target_name,
+                                  const ch *path_id, void *extra);
+int UpdateOrCreate(const ch *source_name, ch *target_name, usize targetLen,
+                   const ch *path_id, CreateCallback_t create_callback,
+                   bool is_force = false, void *extra = nullptr);
+char *CreateX360Filename(const ch *source_name, ch *target_name,
+                         usize target_size);
 
-// simple file classes. File I/O mode (text/binary, read/write) is based upon
-// the subclass chosen. classes with the word Required on them abort with a
-// message if the file can't be opened. destructores close the file handle, or
+// Simple file classes.  File I/O mode (text/binary, read/write) is based upon
+// the subclass chosen.  classes with the word Required on them abort with a
+// message if the file can't be opened.  Destructores close the file handle, or
 // it can be explicitly closed with the Close() method.
 
 class CBaseFile {
  public:
   FileHandle_t m_FileHandle;
 
-  CBaseFile() { m_FileHandle = FILESYSTEM_INVALID_HANDLE; }
-
+  CBaseFile() : m_FileHandle{FILESYSTEM_INVALID_HANDLE} {}
   ~CBaseFile() { Close(); }
 
   void Close() {
     if (m_FileHandle != FILESYSTEM_INVALID_HANDLE)
       g_pFullFileSystem->Close(m_FileHandle);
+
     m_FileHandle = FILESYSTEM_INVALID_HANDLE;
   }
 
-  void Open(char const *fname, char const *modes) {
+  void Open(ch const *fname, ch const *modes) {
     Close();
     m_FileHandle = g_pFullFileSystem->Open(fname, modes);
   }
 
-  char *ReadLine(char *pOutput, int maxChars) {
+  char *ReadLine(ch *pOutput, int maxChars) {
     return g_pFullFileSystem->ReadLine(pOutput, maxChars, m_FileHandle);
   }
 
@@ -80,92 +84,84 @@ class CBaseFile {
 
   // {Get|Put}{Int|Float} read and write ints and floats from a file in x86
   // order, swapping on input for big-endian systems.
-  void PutInt(int n) {
-    int n1 = LittleDWord(n);
-    Write(&n1, sizeof(n1));
-  }
+  void PutInt(int n) { Write(&n, sizeof(n)); }
 
   int GetInt() {
     int ret;
     MustRead(&ret, sizeof(ret));
-    return LittleDWord(ret);
-  }
-
-  float GetFloat() {
-    float ret;
-    MustRead(&ret, sizeof(ret));
-    LittleFloat(&ret, &ret);
     return ret;
   }
-  void PutFloat(float f) {
-    LittleFloat(&f, &f);
-    Write(&f, sizeof(f));
-  }
 
-  bool IsOk() {
-    return (m_FileHandle != FILESYSTEM_INVALID_HANDLE) &&
-           (g_pFullFileSystem->IsOk(m_FileHandle));
+  f32 GetFloat() {
+    f32 ret;
+    MustRead(&ret, sizeof(ret));
+    return ret;
+  }
+  void PutFloat(f32 f) { Write(&f, sizeof(f)); }
+
+  bool IsOk() const {
+    return m_FileHandle != FILESYSTEM_INVALID_HANDLE &&
+           g_pFullFileSystem->IsOk(m_FileHandle);
   }
 };
 
 class COutputFile : public CBaseFile {
  public:
-  void Open(char const *pFname) { CBaseFile::Open(pFname, "wb"); }
+  void Open(ch const *pFname) { CBaseFile::Open(pFname, "wb"); }
 
-  COutputFile(char const *pFname) : CBaseFile() { Open(pFname); }
-
-  COutputFile(void) : CBaseFile() {}
+  COutputFile(ch const *pFname) : CBaseFile() { Open(pFname); }
+  COutputFile() : CBaseFile() {}
 };
 
 class COutputTextFile : public CBaseFile {
  public:
-  void Open(char const *pFname) { CBaseFile::Open(pFname, "w"); }
+  void Open(ch const *pFname) { CBaseFile::Open(pFname, "w"); }
 
-  COutputTextFile(char const *pFname) : CBaseFile() { Open(pFname); }
-
-  COutputTextFile(void) : CBaseFile() {}
+  COutputTextFile(ch const *pFname) : CBaseFile{} { Open(pFname); }
+  COutputTextFile() : CBaseFile{} {}
 };
 
 class CInputFile : public CBaseFile {
  public:
-  void Open(char const *pFname) { CBaseFile::Open(pFname, "rb"); }
+  void Open(ch const *pFname) { CBaseFile::Open(pFname, "rb"); }
 
-  CInputFile(char const *pFname) : CBaseFile() { Open(pFname); }
-  CInputFile(void) : CBaseFile() {}
+  CInputFile(ch const *pFname) : CBaseFile{} { Open(pFname); }
+  CInputFile() : CBaseFile{} {}
 };
 
 class CInputTextFile : public CBaseFile {
  public:
-  void Open(char const *pFname) { CBaseFile::Open(pFname, "r"); }
+  void Open(ch const *pFname) { CBaseFile::Open(pFname, "r"); }
 
-  CInputTextFile(char const *pFname) : CBaseFile() { Open(pFname); }
-  CInputTextFile(void) : CBaseFile() {}
+  CInputTextFile(ch const *pFname) : CBaseFile{} { Open(pFname); }
+  CInputTextFile() : CBaseFile{} {}
 };
 
 class CRequiredInputTextFile : public CBaseFile {
  public:
-  void Open(char const *pFname) {
+  void Open(ch const *pFname) {
     CBaseFile::Open(pFname, "r");
+
     if (!IsOk()) {
       Error("error opening required file %s\n", pFname);
     }
   }
 
-  CRequiredInputTextFile(char const *pFname) : CBaseFile() { Open(pFname); }
-  CRequiredInputTextFile(void) : CBaseFile() {}
+  CRequiredInputTextFile(ch const *pFname) : CBaseFile() { Open(pFname); }
+  CRequiredInputTextFile() : CBaseFile{} {}
 };
 
 class CRequiredInputFile : public CBaseFile {
  public:
-  void Open(char const *pFname) {
+  void Open(ch const *pFname) {
     CBaseFile::Open(pFname, "rb");
     if (!IsOk()) {
       Error("error opening required file %s\n", pFname);
     }
   }
 
-  CRequiredInputFile(char const *pFname) : CBaseFile() { Open(pFname); }
-  CRequiredInputFile(void) : CBaseFile() {}
+  CRequiredInputFile(ch const *pFname) : CBaseFile{} { Open(pFname); }
+  CRequiredInputFile() : CBaseFile{} {}
 };
 
 #endif  // SOURCE_TIER2_FILEUTILS_H_

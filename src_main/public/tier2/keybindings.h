@@ -3,6 +3,11 @@
 #ifndef SOURCE_TIER2_KEYBINDINGS_H_
 #define SOURCE_TIER2_KEYBINDINGS_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "base/include/base_types.h"
 #include "inputsystem/ButtonCode.h"
 #include "tier1/utlstring.h"
 
@@ -10,20 +15,20 @@ class CUtlBuffer;
 
 class CKeyBindings {
  public:
-  void SetBinding(ButtonCode_t code, const char *pBinding);
-  void SetBinding(const char *pButtonName, const char *pBinding);
+  bool SetBinding(ButtonCode_t code, const ch *binding);
+  bool SetBinding(const ch *button_name, const ch *binding);
 
-  void Unbind(ButtonCode_t code);
-  void Unbind(const char *pButtonName);
+  bool Unbind(ButtonCode_t code);
+  bool Unbind(const ch *button_name);
   void UnbindAll();
 
-  int GetBindingCount() const;
+  usize GetBindingCount() const;
   void WriteBindings(CUtlBuffer &buf);
-  const char *ButtonNameForBinding(const char *pBinding);
-  const char *GetBindingForButton(ButtonCode_t code);
+  const ch *ButtonNameForBinding(const ch *binding);
+  const ch *GetBindingForButton(ButtonCode_t code);
 
  private:
-  CUtlString m_KeyInfo[BUTTON_CODE_LAST];
+  CUtlString key_infos_[BUTTON_CODE_LAST];
 };
 
 #endif  // SOURCE_TIER2_KEYBINDINGS_H_
