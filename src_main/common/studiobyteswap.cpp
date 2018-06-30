@@ -1455,7 +1455,7 @@ int ByteswapMDLFile(void *pDestBase, void *pSrcBase, const int fileSize) {
   SET_OBJECT_POINTERS(pAnimDesc, pData, mstudioanimdesc_t)
   ITERATE_BLOCK(pAnimDesc, pHdr->numlocalanim) {
     if (pAnimDesc->pZeroFrameData() != NULL) {
-      int offset = pAnimDesc->pZeroFrameData() - (u8 *)pAnimDesc;
+      isize offset = pAnimDesc->pZeroFrameData() - (u8 *)pAnimDesc;
 
       // Base address of the animation in the animblock
       u8 *pZeroFrameSrc = (u8 *)pAnimDescSrc + offset;

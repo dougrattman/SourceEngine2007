@@ -5,6 +5,10 @@
 #ifndef STUDIOBYTESWAP_H
 #define STUDIOBYTESWAP_H
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "tier1/byteswap.h"
 

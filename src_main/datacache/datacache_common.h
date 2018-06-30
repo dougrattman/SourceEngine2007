@@ -3,6 +3,10 @@
 #ifndef DATACACHE_COMMON_H
 #define DATACACHE_COMMON_H
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/macros.h"
 #include "tier3/tier3.h"
 

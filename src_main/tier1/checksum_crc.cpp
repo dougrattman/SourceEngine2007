@@ -4,11 +4,10 @@
 
 #include "tier1/checksum_crc.h"
 
-#include "tier0/include/basetypes.h"
 #include "base/include/macros.h"
+#include "tier0/include/basetypes.h"
 #include "tier0/include/platform.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define CRC32_INIT_VALUE 0xFFFFFFFFUL
@@ -64,45 +63,43 @@ void CRC32_Init(CRC32_t *pulCRC) { *pulCRC = CRC32_INIT_VALUE; }
 
 void CRC32_Final(CRC32_t *pulCRC) { *pulCRC ^= CRC32_XOR_VALUE; }
 
-CRC32_t CRC32_GetTableEntry(unsigned int slot) {
-  return pulCRCTable[(unsigned char)slot];
-}
+CRC32_t CRC32_GetTableEntry(u32 slot) { return pulCRCTable[(u8)slot]; }
 
 void CRC32_ProcessBuffer(CRC32_t *pulCRC, const void *pBuffer, int nBuffer) {
   CRC32_t ulCrc = *pulCRC;
-  unsigned char *pb = (unsigned char *)pBuffer;
-  unsigned int nFront;
+  u8 *pb = (u8 *)pBuffer;
+  u32 nFront;
   int nMain;
 
 JustAfew:
 
   switch (nBuffer) {
     case 7:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
 
     case 6:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
 
     case 5:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
 
     case 4:
       ulCrc ^= LittleLong(*(CRC32_t *)pb);
-      ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-      ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-      ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-      ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
       *pulCRC = ulCrc;
       return;
 
     case 3:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
 
     case 2:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
 
     case 1:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
 
     case 0:
       *pulCRC = ulCrc;
@@ -115,29 +112,29 @@ JustAfew:
   // The low-order two bits of pb and nBuffer in total control the
   // upfront work.
   //
-  nFront = ((unsigned int)pb) & 3;
+  nFront = ((uintptr_t)pb) & 3;
   nBuffer -= nFront;
   switch (nFront) {
     case 3:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
     case 2:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
     case 1:
-      ulCrc = pulCRCTable[*pb++ ^ (unsigned char)ulCrc] ^ (ulCrc >> 8);
+      ulCrc = pulCRCTable[*pb++ ^ (u8)ulCrc] ^ (ulCrc >> 8);
   }
 
   nMain = nBuffer >> 3;
   while (nMain--) {
     ulCrc ^= LittleLong(*(CRC32_t *)pb);
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
     ulCrc ^= LittleLong(*(CRC32_t *)(pb + 4));
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
-    ulCrc = pulCRCTable[(unsigned char)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
+    ulCrc = pulCRCTable[(u8)ulCrc] ^ (ulCrc >> 8);
     pb += 8;
   }
 

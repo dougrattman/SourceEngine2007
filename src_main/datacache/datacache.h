@@ -3,6 +3,10 @@
 #ifndef DATACACHE_H
 #define DATACACHE_H
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "datacache_common.h"
 #include "tier0/include/tslist.h"
 #include "tier1/datamanager.h"

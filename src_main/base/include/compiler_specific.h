@@ -93,6 +93,10 @@
 // classes aka interfaces in Java/C#.
 #define the_interface class MSVC_NOVTABLE
 
+// Defines struct with (potentially) no virtual table.  Useful for pure virtual
+// classes aka interfaces in Java/C#.
+#define src_interface struct MSVC_NOVTABLE
+
 #ifdef COMPILER_MSVC
 // For functions declared with the naked attribute, the compiler generates code
 // without prolog and epilog code. You can use this feature to write your own

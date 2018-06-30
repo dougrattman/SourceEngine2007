@@ -347,9 +347,7 @@
     <ClInclude Include="..\public\datacache\imdlcache.h" />
     <ClInclude Include="datacache.h" />
     <ClInclude Include="datacache_common.h" />
-    <ClInclude Include="datacache_cvar.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="studio.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tier0\tier0.vcxproj">

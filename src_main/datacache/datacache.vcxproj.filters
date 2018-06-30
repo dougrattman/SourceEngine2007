@@ -41,12 +41,6 @@
     <ClInclude Include="datacache_common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="datacache_cvar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="studio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\studiobyteswap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
