@@ -15,9 +15,6 @@
     <ClCompile Include="..\public\filesystem_init.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="reslistgenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="launcher_main_windows.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,15 +30,15 @@
     <ClCompile Include="..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="resource_listing_writer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scoped_memory_leak_dumper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vcr_helpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ireslistgenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="file_system_access_logger.h">
@@ -51,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iresource_listing_writer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,7 +4,7 @@
 
 #include "base/include/windows/windows_light.h"
 #include "filesystem.h"
-#include "ireslistgenerator.h"
+#include "iresource_listing_writer.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/memalloc.h"

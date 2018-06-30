@@ -317,7 +317,7 @@
     <ClCompile Include="..\tier0\include\memoverride.cc" />
     <ClCompile Include="file_system_access_logger.cc" />
     <ClCompile Include="launcher_main_windows.cc" />
-    <ClCompile Include="reslistgenerator.cpp" />
+    <ClCompile Include="resource_listing_writer.cc" />
     <ClCompile Include="source_app_system_group.cc" />
     <ClCompile Include="vcr_helpers.cc" />
   </ItemGroup>
@@ -347,7 +347,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file_system_access_logger.h" />
-    <ClInclude Include="ireslistgenerator.h" />
+    <ClInclude Include="iresource_listing_writer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="scoped_memory_leak_dumper.h" />
     <ClInclude Include="source_app_system_group.h" />

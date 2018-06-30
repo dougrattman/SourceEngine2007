@@ -25,7 +25,7 @@
 #include "tier1/strtools.h"
 
 #include "file_system_access_logger.h"
-#include "ireslistgenerator.h"
+#include "iresource_listing_writer.h"
 #include "scoped_memory_leak_dumper.h"
 #include "source_app_system_group.h"
 #include "vcr_helpers.h"
@@ -203,13 +203,15 @@ std::tuple<bool, source::windows::windows_errno_code> InitTextModeIfNeeded(
   return {source::windows::succeeded(errno_code), errno_code};
 }
 
-// Remove all but the last -game parameter. This is for mods based off something
-// other than Half-Life 2 (like HL2MP mods). The Steam UI does 'steam -applaunch
-// 320 -game c:\steam\steamapps\sourcemods\modname', but applaunch inserts its
-// own -game parameter, which would supersede the one we really want if we
-// didn't intercede here.
+// Remove all but the last source::tier0::command_line_switches::kGamePath
+// parameter.  This is for mods based off something other than Half-Life 2 (like
+// HL2MP mods).  The Steam UI does 'steam -applaunch 320
+// source::tier0::command_line_switches::kGamePath
+// c:\steam\steamapps\sourcemods\modname', but applaunch inserts its own
+// source::tier0::command_line_switches::kGamePath parameter, which would
+// supersede the one we really want if we didn't intercede here.
 void RemoveSpuriousGameParameters(ICommandLine *const command_line) {
-  // Find the last -game parameter.
+  // Find the last source::tier0::command_line_switches::kGamePath parameter.
   usize count_game_args = 0;
   ch last_game_arg[SOURCE_MAX_PATH];
 
@@ -372,7 +374,7 @@ source::windows::windows_errno_code Run(_In_ ICommandLine *command_line,
 
     bool should_continue_generate_reslists{false};
     if (!need_restart) {
-      should_continue_generate_reslists = reslistgenerator->ShouldContinue();
+      should_continue_generate_reslists = ResourceListing()->ShouldContinue();
       need_restart = should_continue_generate_reslists;
     }
 

@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "ireslistgenerator.h"
+#include "iresource_listing_writer.h"
 
 #include "filesystem.h"
 #include "tier0/include/icommandline.h"
@@ -92,29 +92,30 @@ void MergeResLists(CUtlVector<CUtlString> &fileNames, ch const *pchOutputFile,
   SaveResList(sorted, pchOutputFile, pchSearchPath);
 }
 
-struct CWorkItem {
-  CWorkItem() {}
+struct WorkItem {
+  WorkItem() {}
 
-  CUtlString m_sSubDir;
-  CUtlString m_sAddCommands;
+  CUtlString SubDir;
+  CUtlString AddCommands;
 };
 
-class CResListGenerator : public IResListGenerator {
+class ResourceListingWriter : public IResourceListingWriter {
  public:
   enum {
     STATE_BUILDINGRESLISTS = 0,
     STATE_GENERATINGCACHES,
   };
 
-  CResListGenerator();
+  ResourceListingWriter();
 
-  virtual void Init(ch const *pchBaseDir, ch const *pchGameDir);
-  virtual bool IsActive();
-  virtual void Shutdown();
+  void Init(ch const *pchBaseDir, ch const *pchGameDir) override;
+  bool IsActive() override;
+  void Shutdown() override;
+
+  void SetupCommandLine() override;
+  bool ShouldContinue() override;
+
   virtual void Collate();
-
-  virtual void SetupCommandLine();
-  virtual bool ShouldContinue();
 
  private:
   bool InitCommandFile(ch const *pchGameDir, ch const *pchCommandFile);
@@ -135,16 +136,18 @@ class CResListGenerator : public IResListGenerator {
   CUtlString m_sInitialStartMap;
 
   int m_nCurrentWorkItem;
-  CUtlVector<CWorkItem> m_WorkItems;
+  CUtlVector<WorkItem> m_WorkItems;
 
   CUtlVector<CUtlString> m_MapList;
   int m_nCurrentState;
 };
 
-static CResListGenerator g_ResListGenerator;
-IResListGenerator *reslistgenerator = &g_ResListGenerator;
+IResourceListingWriter *ResourceListing() {
+  static ResourceListingWriter resource_listing_writer;
+  return &resource_listing_writer;
+}
 
-CResListGenerator::CResListGenerator()
+ResourceListingWriter::ResourceListingWriter()
     : m_bInitialized(false),
       m_bActive(false),
       m_nCurrentWorkItem(0),
@@ -155,13 +158,13 @@ CResListGenerator::CResListGenerator()
   m_sWorkingDir = "reslists_work";
 }
 
-void CResListGenerator::CollateFiles(ch const *pchResListFilename) {
+void ResourceListingWriter::CollateFiles(ch const *pchResListFilename) {
   CUtlVector<CUtlString> vecReslists;
 
   for (int i = 0; i < m_WorkItems.Count(); ++i) {
     ch fn[SOURCE_MAX_PATH];
     sprintf_s(fn, "%s\\%s\\%s\\%s", m_sFullGamePath.String(),
-              m_sWorkingDir.String(), m_WorkItems[i].m_sSubDir.String(),
+              m_sWorkingDir.String(), m_WorkItems[i].SubDir.String(),
               pchResListFilename);
     vecReslists.AddToTail(fn);
   }
@@ -172,7 +175,7 @@ void CResListGenerator::CollateFiles(ch const *pchResListFilename) {
                 "GAME");
 }
 
-void CResListGenerator::Init(ch const *pchBaseDir, ch const *pchGameDir) {
+void ResourceListingWriter::Init(ch const *pchBaseDir, ch const *pchGameDir) {
   // Because we have to call this inside the first Apps "PreInit", we need only
   // Init on the very first call
   if (m_bInitialized) {
@@ -198,13 +201,13 @@ void CResListGenerator::Init(ch const *pchBaseDir, ch const *pchGameDir) {
   }
 }
 
-void CResListGenerator::Shutdown() {
+void ResourceListingWriter::Shutdown() {
   if (!m_bActive) return;
 }
 
-bool CResListGenerator::IsActive() { return m_bInitialized && m_bActive; }
+bool ResourceListingWriter::IsActive() { return m_bInitialized && m_bActive; }
 
-void CResListGenerator::Collate() {
+void ResourceListingWriter::Collate() {
   ch szDir[SOURCE_MAX_PATH];
   sprintf_s(szDir, "%s\\%s", m_sFullGamePath.String(), m_sFinalDir.String());
   g_pFullFileSystem->CreateDirHierarchy(szDir, "GAME");
@@ -217,19 +220,19 @@ void CResListGenerator::Collate() {
   }
 }
 
-void CResListGenerator::SetupCommandLine() {
+void ResourceListingWriter::SetupCommandLine() {
   if (!m_bActive) return;
 
   switch (m_nCurrentState) {
     case STATE_BUILDINGRESLISTS: {
       Assert(m_nCurrentWorkItem < m_WorkItems.Count());
 
-      const CWorkItem &work = m_WorkItems[m_nCurrentWorkItem];
+      const WorkItem &work = m_WorkItems[m_nCurrentWorkItem];
 
       // Clean the working dir
       ch szWorkingDir[SOURCE_MAX_PATH];
       sprintf_s(szWorkingDir, "%s\\%s", m_sWorkingDir.String(),
-                work.m_sSubDir.String());
+                work.SubDir.String());
 
       ch szFullWorkingDir[SOURCE_MAX_PATH];
       sprintf_s(szFullWorkingDir, "%s\\%s", m_sFullGamePath.String(),
@@ -249,7 +252,7 @@ void CResListGenerator::SetupCommandLine() {
       ch szCmd[512];
       sprintf_s(szCmd, "%s %s %s -reslistdir %s",
                 m_sOriginalCommandLine.String(), m_sBaseCommandLine.String(),
-                work.m_sAddCommands.String(), szWorkingDir);
+                work.AddCommands.String(), szWorkingDir);
 
       Warning("Reslists:  Setting command line:\n'%s'\n", szCmd);
 
@@ -281,7 +284,7 @@ void CResListGenerator::SetupCommandLine() {
   }
 }
 
-bool CResListGenerator::ShouldContinue() {
+bool ResourceListingWriter::ShouldContinue() {
   if (!m_bActive) return false;
 
   bool bContinueAdvancing = false;
@@ -312,9 +315,9 @@ bool CResListGenerator::ShouldContinue() {
   return false;
 }
 
-void CResListGenerator::LoadMapList(ch const *pchGameDir,
-                                    CUtlVector<CUtlString> &vecMaps,
-                                    ch const *pchMapFile) {
+void ResourceListingWriter::LoadMapList(ch const *pchGameDir,
+                                        CUtlVector<CUtlString> &vecMaps,
+                                        ch const *pchMapFile) {
   ch fullpath[SOURCE_MAX_PATH];
   sprintf_s(fullpath, "%s/%s", pchGameDir, pchMapFile);
 
@@ -342,8 +345,8 @@ void CResListGenerator::LoadMapList(ch const *pchGameDir,
   }
 }
 
-bool CResListGenerator::InitCommandFile(ch const *pchGameDir,
-                                        ch const *pchCommandFile) {
+bool ResourceListingWriter::InitCommandFile(ch const *pchGameDir,
+                                            ch const *pchCommandFile) {
   if (*pchCommandFile == '+' || *pchCommandFile == '-') {
     Msg("falling back to legacy reslists system\n");
     return false;
@@ -414,12 +417,12 @@ bool CResListGenerator::InitCommandFile(ch const *pchGameDir,
     KeyValues *subKey = kv->FindKey(sz, false);
     if (!subKey) break;
 
-    CWorkItem work;
+    WorkItem work;
 
-    work.m_sSubDir = subKey->GetString("subdir", "");
-    work.m_sAddCommands = subKey->GetString("addcommands", "");
+    work.SubDir = subKey->GetString("subdir", "");
+    work.AddCommands = subKey->GetString("addcommands", "");
 
-    if (work.m_sSubDir.Length() > 0) {
+    if (work.SubDir.Length() > 0) {
       m_WorkItems.AddToTail(work);
     } else {
       Error("%s: failed to specify 'subdir' for item %s\n", fullpath, sz);
