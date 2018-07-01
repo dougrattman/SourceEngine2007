@@ -58,7 +58,7 @@ using windows_errno_info =
     _com_error error{errno_code};
     const TCHAR* description{error.ErrorMessage()};
 
-    sprintf_code = _stprintf_s(
+    sprintf_code = _stprintf_s(  //-V111
         info.description, _T("%s (hr 0x%.8x)"),
         (description != nullptr ? description : _T("Unknown error")),
         errno_code);

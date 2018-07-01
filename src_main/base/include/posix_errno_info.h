@@ -45,7 +45,7 @@ using posix_errno_info = errno_info<posix_errno_code, char, 92, succeeded>;
 
   char description[std::size(info.description)];
   const int strerror_code{strerror_s(description, errno_code)};
-  const int sprintf_code{sprintf_s(
+  const int sprintf_code{sprintf_s(  //-V111
       info.description, "%s (%d)",
       strerror_code == 0 ? description : "Unknown error", errno_code)};
 
