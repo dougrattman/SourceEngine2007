@@ -5,6 +5,10 @@
 #ifndef SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
 #define SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 
 #include "appframework/tier3app.h"

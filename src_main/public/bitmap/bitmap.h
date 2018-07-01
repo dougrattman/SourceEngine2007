@@ -3,6 +3,10 @@
 #ifndef BITMAP_BITMAP_H_
 #define BITMAP_BITMAP_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "bitmap/imageformat.h"
 

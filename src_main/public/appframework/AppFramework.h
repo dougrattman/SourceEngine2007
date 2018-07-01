@@ -5,6 +5,10 @@
 #ifndef SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
 #define SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "appframework/iappsystemgroup.h"
 #include "base/include/base_types.h"
 

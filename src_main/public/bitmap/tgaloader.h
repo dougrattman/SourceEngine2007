@@ -3,6 +3,10 @@
 #ifndef TGALOADER_H
 #define TGALOADER_H
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "bitmap/imageformat.h"  // ImageFormat.
 #include "tier1/utlmemory.h"

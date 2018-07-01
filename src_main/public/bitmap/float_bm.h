@@ -3,6 +3,10 @@
 #ifndef FLOAT_BM_H
 #define FLOAT_BM_H
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "mathlib/mathlib.h"
 #include "tier0/include/dbg.h"

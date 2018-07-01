@@ -3,6 +3,10 @@
 #ifndef IMAGEFORMAT_H
 #define IMAGEFORMAT_H
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <type_traits>
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
@@ -75,6 +79,9 @@ struct BGRA8888_t {
   u8 g;  //  order of the output ARGB or BGRA, etc...
   u8 r;  //  Last one is MSB, 1st is LSB.
   u8 a;
+  constexpr inline BGRA8888_t() : b{0}, g{0}, r{0}, a{0} {}
+  constexpr inline BGRA8888_t(const BGRA8888_t &in)
+      : b{in.b}, g{in.g}, r{in.r}, a{in.a} {}
   constexpr inline BGRA8888_t &operator=(const BGRA8888_t &in) {
     static_assert(std::is_standard_layout_v<BGRA8888_t>,
                   "Verify BGRA8888_t has standart layout.");

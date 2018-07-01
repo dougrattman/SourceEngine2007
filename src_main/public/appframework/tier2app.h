@@ -5,6 +5,10 @@
 #ifndef SOURCE_APPFRAMEWORK_TIER2APP_H_
 #define SOURCE_APPFRAMEWORK_TIER2APP_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "appframework/AppFramework.h"
 #include "base/include/base_types.h"
 #include "tier1/convar.h"
