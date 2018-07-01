@@ -146,7 +146,7 @@ void CircularProgressBar::Paint() {
                     (m_iProgressDirection == PROGRESS_CW));
 }
 
-typedef struct {
+struct circular_progress_segment_t {
   float minProgressRadians;
 
   float vert1x;
@@ -156,7 +156,7 @@ typedef struct {
 
   int swipe_dir_x;
   int swipe_dir_y;
-} circular_progress_segment_t;
+};
 
 // This defines the properties of the 8 circle segments
 // in the circular progress bar.

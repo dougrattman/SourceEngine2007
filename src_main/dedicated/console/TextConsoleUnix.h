@@ -11,11 +11,11 @@
 #include <termios.h>
 #include "textconsole.h"
 
-typedef enum {
+enum escape_sequence_t {
   ESCAPE_CLEAR = 0,
   ESCAPE_RECEIVED,
   ESCAPE_BRACKET_RECEIVED
-} escape_sequence_t;
+};
 
 class CTextConsoleUnix : public CTextConsole {
  public:

@@ -1402,13 +1402,13 @@ void CWin32Surface::DrawGetTextureSize(int id, int &wide, int &tall) {
 }
 
 #pragma pack(1)
-typedef struct {
+struct tga_header_t {
   unsigned char id_length, colormap_type, image_type;
   u16 colormap_index, colormap_length;
   unsigned char colormap_size;
   u16 x_origin, y_origin, width, height;
   unsigned char pixel_size, attributes;
-} tga_header_t;
+};
 #pragma pack()
 
 HBITMAP staticCreateBitmapHandle(int wide, int tall, HDC hdc, int bpp,
