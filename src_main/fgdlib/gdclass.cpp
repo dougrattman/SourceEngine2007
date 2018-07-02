@@ -10,8 +10,6 @@ GDclass::GDclass() {
   m_nVariables = 0;
   m_bBase = false;
   m_bSolid = false;
-  m_bBase = false;
-  m_bSolid = false;
   m_bModel = false;
   m_bMove = false;
   m_bKeyFrame = false;

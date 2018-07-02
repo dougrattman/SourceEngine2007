@@ -43,6 +43,7 @@ CClassInputOutputBase::CClassInputOutputBase() {
 //-----------------------------------------------------------------------------
 CClassInputOutputBase::CClassInputOutputBase(const char *pszName,
                                              InputOutputType_t eType) {
+  m_eType = iotInvalid;
   m_pszDescription = NULL;
 }
 

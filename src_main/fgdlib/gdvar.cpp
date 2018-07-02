@@ -63,6 +63,7 @@ GDinputvariable::GDinputvariable() {
   m_bReportable = FALSE;
   m_bReadOnly = false;
   m_pszDescription = NULL;
+  m_eType = ivBadType;
 }
 
 //-----------------------------------------------------------------------------
@@ -71,8 +72,9 @@ GDinputvariable::GDinputvariable() {
 //			szName - the name description of this variable
 //-----------------------------------------------------------------------------
 GDinputvariable::GDinputvariable(const char *szType, const char *szName) {
-  m_szDefault[0] = 0;
   m_nDefault = 0;
+  m_szDefault[0] = 0;
+  m_nValue = 0;
   m_szValue[0] = 0;
   m_bReportable = FALSE;
   m_bReadOnly = false;
