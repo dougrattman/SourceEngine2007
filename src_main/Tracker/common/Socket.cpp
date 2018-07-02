@@ -82,7 +82,7 @@ static CSocketThread *GetSocketThread() {
 // Input  : threadobject -
 // Output : static DWORD WINAPI
 //-----------------------------------------------------------------------------
-static DWORD WINAPI SocketThreadFunc(LPVOID threadobject) {
+static u32 WINAPI SocketThreadFunc(void *threadobject) {
   // Get pointer to CSocketThread object
   CSocketThread *socketthread = (CSocketThread *)threadobject;
   assert(socketthread);

@@ -39,7 +39,7 @@ class CGraphPanel : public vgui::PropertyPage, public IServerDataResponse {
  private:
   virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
 
-  typedef enum { SECONDS, MINUTES, HOURS } intervals;
+  enum intervals { SECONDS, MINUTES, HOURS };
   struct Points_t {
     float cpu;      // the percent CPU usage
     float in;       // the ingoing bandwidth in kB/sec
