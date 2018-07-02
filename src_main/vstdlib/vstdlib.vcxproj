@@ -359,12 +359,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="cvar.cpp" />
-    <ClCompile Include="jobthread.cpp" />
-    <ClCompile Include="KeyValuesSystem.cpp" />
-    <ClCompile Include="processutils.cpp" />
-    <ClCompile Include="random.cpp" />
-    <ClCompile Include="vcover.cpp" />
+    <ClCompile Include="cvar.cc" />
+    <ClCompile Include="job_thread.cc" />
+    <ClCompile Include="key_values_system.cc" />
+    <ClCompile Include="process_utils.cc" />
+    <ClCompile Include="random.cc" />
+    <ClCompile Include="vcover.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\vstdlib\cvar.h" />

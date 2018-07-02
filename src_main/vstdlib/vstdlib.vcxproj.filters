@@ -15,25 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cvar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="jobthread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyValuesSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="processutils.cpp">
+    <ClCompile Include="cvar.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="random.cpp">
+    <ClCompile Include="job_thread.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vcover.cpp">
+    <ClCompile Include="key_values_system.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="process_utils.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="random.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vcover.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include "vstdlib/cvar.h"
 
 #include <ctype.h>
+#include "build/include/build_config.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
@@ -23,8 +24,9 @@
 class CDefaultCvarQuery : public CBaseAppSystem<ICvarQuery> {
  public:
   void *QueryInterface(const char *pInterfaceName) override {
-    if (!Q_stricmp(pInterfaceName, CVAR_QUERY_INTERFACE_VERSION))
-      return (ICvarQuery *)this;
+    if (!_stricmp(pInterfaceName, CVAR_QUERY_INTERFACE_VERSION))
+      return implicit_cast<ICvarQuery *>(this);
+
     return nullptr;
   }
 
@@ -185,8 +187,8 @@ void CCvar::RegisterConCommand(ConCommandBase *variable) {
         if (pChildVar->m_pszDefaultValue && pParentVar->m_pszDefaultValue &&
             pChildVar->IsFlagSet(FCVAR_REPLICATED) &&
             pParentVar->IsFlagSet(FCVAR_REPLICATED)) {
-          if (Q_stricmp(pChildVar->m_pszDefaultValue,
-                        pParentVar->m_pszDefaultValue) != 0) {
+          if (_stricmp(pChildVar->m_pszDefaultValue,
+                       pParentVar->m_pszDefaultValue) != 0) {
             Warning(
                 "Parent and child ConVars with different default values! %s "
                 "child: %s parent: %s (parent wins)\n",
@@ -212,11 +214,11 @@ void CCvar::RegisterConCommand(ConCommandBase *variable) {
 
         // make sure we don't have conflicting help strings.
         if (pChildVar->m_pszHelpString &&
-            Q_strlen(pChildVar->m_pszHelpString) != 0) {
+            strlen(pChildVar->m_pszHelpString) != 0) {
           if (pParentVar->m_pszHelpString &&
-              Q_strlen(pParentVar->m_pszHelpString) != 0) {
-            if (Q_stricmp(pParentVar->m_pszHelpString,
-                          pChildVar->m_pszHelpString) != 0) {
+              strlen(pParentVar->m_pszHelpString) != 0) {
+            if (_stricmp(pParentVar->m_pszHelpString,
+                         pChildVar->m_pszHelpString) != 0) {
               Warning(
                   "Convar %s has multiple help strings:\n\tparent (wins): "
                   "\"%s\"\n\tchild: \"%s\"\n",
@@ -332,7 +334,7 @@ void CCvar::UnregisterConCommands(CVarDLLIdentifier_t id) {
 const ConCommandBase *CCvar::FindCommandBase(const char *name) const {
   const ConCommandBase *cmd = GetCommands();
   for (; cmd; cmd = cmd->GetNext()) {
-    if (!Q_stricmp(name, cmd->GetName())) return cmd;
+    if (!_stricmp(name, cmd->GetName())) return cmd;
   }
   return nullptr;
 }
@@ -340,7 +342,7 @@ const ConCommandBase *CCvar::FindCommandBase(const char *name) const {
 ConCommandBase *CCvar::FindCommandBase(const char *name) {
   ConCommandBase *cmd = GetCommands();
   for (; cmd; cmd = cmd->GetNext()) {
-    if (!Q_stricmp(name, cmd->GetName())) return cmd;
+    if (!_stricmp(name, cmd->GetName())) return cmd;
   }
   return nullptr;
 }
@@ -349,6 +351,7 @@ ConCommandBase *CCvar::FindCommandBase(const char *name) {
 const ConVar *CCvar::FindVar(const char *var_name) const {
   VPROF_INCREMENT_COUNTER("CCvar::FindVar", 1);
   VPROF("CCvar::FindVar");
+
   const ConCommandBase *var = FindCommandBase(var_name);
   if (!var || var->IsCommand()) return nullptr;
 
@@ -358,6 +361,7 @@ const ConVar *CCvar::FindVar(const char *var_name) const {
 ConVar *CCvar::FindVar(const char *var_name) {
   VPROF_INCREMENT_COUNTER("CCvar::FindVar", 1);
   VPROF("CCvar::FindVar");
+
   ConCommandBase *var = FindCommandBase(var_name);
   if (!var || var->IsCommand()) return nullptr;
 
@@ -382,8 +386,10 @@ ConCommand *CCvar::FindCommand(const char *pCommandName) {
 const char *CCvar::GetCommandLineValue(const char *pVariableName) {
   usize nLen = strlen(pVariableName);
   char *pSearch = stack_alloc<char>(nLen + 2);
+
   pSearch[0] = '+';
   memcpy(&pSearch[1], pVariableName, nLen + 1);
+
   return CommandLine()->ParmValue(pSearch);
 }
 
@@ -412,7 +418,7 @@ void CCvar::CallGlobalChangeCallbacks(ConVar *var, const char *pOldString,
 
 // Sets convars containing the flags to their default value
 void CCvar::RevertFlaggedConVars(int nFlag) {
-  for (const ConCommandBase *var = GetCommands(); var; var = var->GetNext()) {
+  for (auto *var = GetCommands(); var; var = var->GetNext()) {
     if (var->IsCommand()) continue;
 
     ConVar *c = (ConVar *)var;
@@ -420,11 +426,9 @@ void CCvar::RevertFlaggedConVars(int nFlag) {
     if (!c->IsFlagSet(nFlag)) continue;
 
     // It's == to the default value, don't count
-    if (!Q_stricmp(c->GetDefault(), c->GetString())) continue;
+    if (!_stricmp(c->GetDefault(), c->GetString())) continue;
 
     c->Revert();
-
-    // DevMsg( "%s = \"%s\" (reverted)\n", cvar->GetName(), cvar->GetString() );
   }
 }
 
@@ -478,9 +482,8 @@ void CCvar::ConsoleColorPrintf(const Color &clr, const char *pFormat,
   char temp[8192];
   va_list argptr;
   va_start(argptr, pFormat);
-  _vsnprintf_s(temp, sizeof(temp) - 1, pFormat, argptr);
+  vsprintf_s(temp, pFormat, argptr);
   va_end(argptr);
-  temp[sizeof(temp) - 1] = 0;
 
   int c = m_DisplayFuncs.Count();
   if (c == 0) {
@@ -499,9 +502,8 @@ void CCvar::ConsolePrintf(const char *pFormat, ...) const {
   char temp[8192];
   va_list argptr;
   va_start(argptr, pFormat);
-  _vsnprintf_s(temp, sizeof(temp) - 1, pFormat, argptr);
+  vsprintf_s(temp, pFormat, argptr);
   va_end(argptr);
-  temp[sizeof(temp) - 1] = 0;
 
   int c = m_DisplayFuncs.Count();
   if (c == 0) {
@@ -519,9 +521,8 @@ void CCvar::ConsoleDPrintf(const char *pFormat, ...) const {
   char temp[8192];
   va_list argptr;
   va_start(argptr, pFormat);
-  _vsnprintf_s(temp, sizeof(temp) - 1, pFormat, argptr);
+  vsprintf_s(temp, pFormat, argptr);
   va_end(argptr);
-  temp[sizeof(temp) - 1] = 0;
 
   int c = m_DisplayFuncs.Count();
   if (c == 0) {
@@ -537,19 +538,16 @@ void CCvar::ConsoleDPrintf(const char *pFormat, ...) const {
 
 // Console commands
 void CCvar::Find(const CCommand &args) {
-  const char *search;
-  const ConCommandBase *var;
-
   if (args.ArgC() != 2) {
     ConMsg("Usage:  find <string>\n");
     return;
   }
 
   // Get substring to find
-  search = args[1];
+  const char *search = args[1];
 
   // Loop through vars and print out findings
-  for (var = GetCommands(); var; var = var->GetNext()) {
+  for (auto *var = GetCommands(); var; var = var->GetNext()) {
     if (var->IsFlagSet(FCVAR_DEVELOPMENTONLY) || var->IsFlagSet(FCVAR_HIDDEN))
       continue;
 

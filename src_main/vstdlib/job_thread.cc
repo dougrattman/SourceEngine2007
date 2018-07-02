@@ -2,7 +2,9 @@
 
 #include "vstdlib/jobthread.h"
 
-#if defined(_WIN32)
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
 #include "base/include/windows/windows_light.h"
 #endif
 
@@ -19,18 +21,19 @@
 
 #include "tier0/include/memdbgon.h"
 
-#ifdef _WIN32
+#ifdef OS_WIN
 
-inline void ServiceJobAndRelease(CJob *pJob, int iThread = -1) {
-  // TryLock() would only fail if another thread has entered
-  // Execute() or Abort()
-  if (!pJob->IsFinished() && pJob->TryLock()) {
+inline void ServiceJobAndRelease(CJob *the_job, int iThread = -1) {
+  // TryLock() would only fail if another thread has entered Execute() or
+  // Abort()
+  if (!the_job->IsFinished() && the_job->TryLock()) {
     // ...service the request
-    pJob->SetServiceThread(iThread);
-    pJob->Execute();
-    pJob->Unlock();
+    the_job->SetServiceThread(iThread);
+    the_job->Execute();
+    the_job->Unlock();
   }
-  pJob->Release();
+
+  the_job->Release();
 }
 
 #pragma pack(push)
@@ -44,7 +47,7 @@ class alignas(16) CJobQueue {
 
   int Count() { return m_nItems; }
 
-  int Count(JobPriority_t priority) { return m_queues[priority].Count(); }
+  int Count(JobPriority_t priority) { return ts_queues_[priority].Count(); }
 
   CJob *PrePush() {
     if (m_nItems >= m_nMaxItems) {
@@ -66,7 +69,7 @@ class alignas(16) CJobQueue {
       nOverflow++;
     }
 
-    m_queues[pJob->GetPriority()].PushItem(pJob);
+    ts_queues_[pJob->GetPriority()].PushItem(pJob);
 
     m_mutex.Lock();
     if (++m_nItems == 1) {
@@ -90,7 +93,7 @@ class alignas(16) CJobQueue {
     m_mutex.Unlock();
 
     for (int i = JP_HIGH; i >= 0; --i) {
-      if (m_queues[i].PopItem(ppJob)) {
+      if (ts_queues_[i].PopItem(ppJob)) {
         return true;
       }
     }
@@ -107,18 +110,20 @@ class alignas(16) CJobQueue {
     m_mutex.Lock();
     m_nItems = 0;
     m_JobAvailableEvent.Reset();
-    CJob *pJob;
+
     for (int i = JP_HIGH; i >= 0; --i) {
-      while (m_queues[i].PopItem(&pJob)) {
+      CJob *pJob;
+      while (ts_queues_[i].PopItem(&pJob)) {
         pJob->Abort();
         pJob->Release();
       }
     }
+
     m_mutex.Unlock();
   }
 
  private:
-  CTSQueue<CJob *> m_queues[JP_HIGH + 1];
+  CTSQueue<CJob *> ts_queues_[JP_HIGH + 1];
   int m_nItems;
   int m_nMaxItems;
   CThreadFastMutex m_mutex;
@@ -220,17 +225,16 @@ JOB_INTERFACE void DestroyThreadPool(IThreadPool *pPool) {
 
 class CGlobalThreadPool : public CThreadPool {
  public:
-  virtual bool Start(const ThreadPoolStartParams_t &startParamsIn) {
-    int nThreads = (CommandLine()->ParmValue("-threads", -1) - 1);
-    ThreadPoolStartParams_t startParams = startParamsIn;
+  bool Start(const ThreadPoolStartParams_t &start_prms) override {
+    int nThreads = CommandLine()->ParmValue("-threads", -1) - 1;
+    ThreadPoolStartParams_t real_start_prms = start_prms;
 
-    if (nThreads >= 0) {
-      startParams.nThreads = nThreads;
-    }
-    return CThreadPool::Start(startParams);
+    if (nThreads >= 0) real_start_prms.nThreads = nThreads;
+
+    return CThreadPool::Start(real_start_prms);
   }
 
-  virtual bool OnFinalRelease() {
+  bool OnFinalRelease() override {
     AssertMsg(0, "Releasing global thread pool object!");
     return false;
   }
@@ -247,13 +251,12 @@ class CJobThread : public CWorkerThread {
         m_iThread(iThread) {}
 
   CThreadEvent &GetIdleEvent() { return m_IdleEvent; }
-
   CJobQueue &AccessDirectQueue() { return m_DirectQueue; }
 
  private:
-  unsigned Wait(int nHandles, HANDLE *pHandles) {
-    [[maybe_unused]] unsigned waitResult;
-#ifdef _DEBUG
+  u32 Wait(int nHandles, HANDLE *pHandles) {
+    [[maybe_unused]] u32 waitResult;
+#ifndef NDEBUG
     while ((waitResult = WaitForMultipleObjects(nHandles, pHandles, FALSE,
                                                 10)) == WAIT_TIMEOUT) {
       ;  // break here
@@ -285,6 +288,7 @@ class CJobThread : public CWorkerThread {
 
     ++m_pOwner->m_nIdleThreads;
     m_IdleEvent.Set();
+
     while (!bExit && (waitResult = Wait(std::size(waitHandles), waitHandles)) !=
                          WAIT_FAILED) {
       if (PeekCall()) {
@@ -361,7 +365,7 @@ int CThreadPool::SuspendExecution() {
 
   // If not already suspended
   if (m_nSuspend == 0) {
-    // Make sure state is correct
+  // Make sure state is correct
 #ifdef _DEBUG
     int curCount = m_Threads[0]->Suspend();
     m_Threads[0]->Resume();
@@ -813,12 +817,12 @@ JOB_INTERFACE void DestroyThreadPool(IThreadPool *pPool) {}
 
 #else
 
-#error( "No threadpool implementation for platform" )
+#error "No threadpool implementation for platform"
 
 #endif
 
-#if !defined(OS_POSIX)
-namespace ThreadPoolTest {
+#ifndef OS_POSIX
+namespace source::vstdlib::threadpool_test {
 int g_iSleep;
 
 CThreadEvent g_done;
@@ -829,28 +833,34 @@ class CCountJob : public CJob {
  public:
   virtual JobStatus_t DoExecute() {
     ++m_nCount;
+
     ThreadPause();
+
     if (g_iSleep >= 0) ThreadSleep(g_iSleep);
+
     if (bDoWork) {
-      uint8_t pMemory[1024];
-      int i;
-      for (i = 0; i < 1024; i++) {
+      u8 pMemory[1024];
+
+      for (usize i = 0; i < 1024; i++) {
         pMemory[i] = rand();
       }
-      for (i = 0; i < 50; i++) {
-        (void)sqrt((float)HashBlock(pMemory, 1024) + //-V530
-                   HashBlock(pMemory, 1024) +  
-                   10.0);
+
+      for (usize i = 0; i < 50; i++) {
+        sqrt((f32)HashBlock(pMemory, 1024) + HashBlock(pMemory, 1024) + 10.0);
       }
+
       bDoWork = false;
     }
+
     if (m_nCount == g_nTotalToComplete) g_done.Set();
+
     return 0;
   }
 
   static CInterlockedInt m_nCount;
   bool bDoWork;
 };
+
 CInterlockedInt CCountJob::m_nCount;
 int g_nTotalAtFinish;
 
@@ -859,17 +869,18 @@ void Test(bool bDistribute, bool bSleep = true, bool bFinishExecute = false,
   for (int bInterleavePushPop = 0; bInterleavePushPop < 2;
        bInterleavePushPop++) {
     for (g_iSleep = -10; g_iSleep <= 10; g_iSleep += 10) {
-      Msg("ThreadPoolTest:         Testing! Sleep %d, interleave %d.\n",
-          g_iSleep, bInterleavePushPop);
-      int nMaxThreads = (IsX360()) ? 6 : 8;
-      int nIncrement = (IsX360()) ? 1 : 2;
-      for (int i = 1; i <= nMaxThreads; i += nIncrement) {
+      Msg("ThreadPoolTest: Testing! Sleep %d, interleave %s.\n", g_iSleep,
+          bInterleavePushPop ? "true" : "false");
+
+      for (int i = 1; i <= 8; i += 2) {
         CCountJob::m_nCount = 0;
         g_nTotalAtFinish = 0;
+
         ThreadPoolStartParams_t params;
         params.nThreads = i;
         params.fDistribute = (bDistribute) ? TRS_TRUE : TRS_FALSE;
         g_pTestThreadPool->Start(params, "Tst");
+
         if (!bInterleavePushPop) {
           g_pTestThreadPool->SuspendExecution();
         }
@@ -938,17 +949,15 @@ CInterlockedInt g_nReady;
 class CExecuteTestJob : public CJob {
  public:
   virtual JobStatus_t DoExecute() {
-    uint8_t memory[1024];
+    u8 memory[1024];
 
-    for (auto &v : memory) {
-      v = rand();
-    }
+    for (auto &v : memory) v = rand();
 
     for (size_t i = 0; i < 50; ++i) {
-      const unsigned int hash1{HashBlock(memory, std::size(memory))},
+      const u32 hash1{HashBlock(memory, std::size(memory))},
           hash2{HashBlock(memory, std::size(memory))};  //-V656
 
-      (void)sqrt((float)hash1 + (float)hash2 + 10.0f);  //-V530
+      sqrt((f32)hash1 + (f32)hash2 + 10.0f);  //-V530
     }
 
     if (AccessEvent()->Check() || IsFinished()) {
@@ -1028,17 +1037,17 @@ void TestForcedExecute() {
 
   Msg("TestForcedExecute DONE.\n");
 }
-}  // namespace ThreadPoolTest
+}  // namespace source::vstdlib::threadpool_test
 
 void RunThreadPoolTests() {
   CThreadPool pool;
-  ThreadPoolTest::g_pTestThreadPool = &pool;
+  source::vstdlib::threadpool_test::g_pTestThreadPool = &pool;
 
   RunTSQueueTests(10000);
   RunTSListTests(10000);
 
   DWORD_PTR mask1, mask2;
-#ifdef _WIN32
+#ifdef OS_WIN
   const BOOL was_got_affinity_mask{
       GetProcessAffinityMask(GetCurrentProcess(), &mask1, &mask2)};
   if (!was_got_affinity_mask) {
@@ -1047,67 +1056,64 @@ void RunThreadPoolTests() {
     mask2 = static_cast<decltype(mask2)>(THREAD_PRIORITY_BELOW_NORMAL);
   }
 #endif
-  Msg("ThreadPoolTest: Job distribution speed.\n");
+  Msg("ThreadPoolTest: Test jobs distribution speed.\n");
 
   for (int i = 0; i < 2; i++) {
     bool bToCompletion = (i % 2 != 0);
-    if (!IsX360()) {
-      Msg("ThreadPoolTest:     Non-distribute\n");
-      ThreadPoolTest::Test(false, true, bToCompletion);
-    }
+    Msg("ThreadPoolTest: Non-distribute\n");
+    source::vstdlib::threadpool_test::Test(false, true, bToCompletion);
 
-    Msg("ThreadPoolTest:     Distribute\n");
-    ThreadPoolTest::Test(true, true, bToCompletion);
+    Msg("ThreadPoolTest: Distribute\n");
+    source::vstdlib::threadpool_test::Test(true, true, bToCompletion);
 
-    Msg("ThreadPoolTest:     One core\n");
+    Msg("ThreadPoolTest: One core\n");
     ThreadSetAffinity(0, 1);
-    ThreadPoolTest::Test(false, true, bToCompletion);
+    source::vstdlib::threadpool_test::Test(false, true, bToCompletion);
     ThreadSetAffinity(0, mask1);
 
-    Msg("ThreadPoolTest:     NO Sleep\n");
-    ThreadPoolTest::Test(false, false, bToCompletion);
+    Msg("ThreadPoolTest: No Sleep\n");
+    source::vstdlib::threadpool_test::Test(false, false, bToCompletion);
 
-    Msg("ThreadPoolTest:     Distribute\n");
-    ThreadPoolTest::Test(true, false, bToCompletion);
+    Msg("ThreadPoolTest: Distribute\n");
+    source::vstdlib::threadpool_test::Test(true, false, bToCompletion);
 
-    Msg("ThreadPoolTest:     One core\n");
+    Msg("ThreadPoolTest: One core\n");
     ThreadSetAffinity(0, 1);
-    ThreadPoolTest::Test(false, false, bToCompletion);
+    source::vstdlib::threadpool_test::Test(false, false, bToCompletion);
     ThreadSetAffinity(0, mask1);
   }
 
-  Msg("ThreadPoolTest: Jobs doing work\n");
+  Msg("ThreadPoolTest: Test jobs doing work.\n");
   for (int i = 0; i < 2; i++) {
     bool bToCompletion = true;  // = ( i % 2 != 0 );
-    if (!IsX360()) {
-      Msg("ThreadPoolTest:     Non-distribute\n");
-      ThreadPoolTest::Test(false, true, bToCompletion, true);
-    }
+    Msg("ThreadPoolTest: Non-distribute\n");
+    source::vstdlib::threadpool_test::Test(false, true, bToCompletion, true);
 
-    Msg("ThreadPoolTest:     Distribute\n");
-    ThreadPoolTest::Test(true, true, bToCompletion, true);
+    Msg("ThreadPoolTest: Distribute\n");
+    source::vstdlib::threadpool_test::Test(true, true, bToCompletion, true);
 
-    Msg("ThreadPoolTest:     One core\n");
+    Msg("ThreadPoolTest: One core\n");
     ThreadSetAffinity(0, 1);
-    ThreadPoolTest::Test(false, true, bToCompletion, true);
+    source::vstdlib::threadpool_test::Test(false, true, bToCompletion, true);
     ThreadSetAffinity(0, mask1);
 
-    Msg("ThreadPoolTest:     NO Sleep\n");
-    ThreadPoolTest::Test(false, false, bToCompletion, true);
+    Msg("ThreadPoolTest: No Sleep\n");
+    source::vstdlib::threadpool_test::Test(false, false, bToCompletion, true);
 
-    Msg("ThreadPoolTest:     Distribute\n");
-    ThreadPoolTest::Test(true, false, bToCompletion, true);
+    Msg("ThreadPoolTest: Distribute\n");
+    source::vstdlib::threadpool_test::Test(true, false, bToCompletion, true);
 
-    Msg("ThreadPoolTest:     One core\n");
+    Msg("ThreadPoolTest: One core\n");
     ThreadSetAffinity(0, 1);
-    ThreadPoolTest::Test(false, false, bToCompletion, true);
+    source::vstdlib::threadpool_test::Test(false, false, bToCompletion, true);
     ThreadSetAffinity(0, mask1);
   }
-#ifdef _WIN32
+
+#ifdef OS_WIN
   GetProcessAffinityMask(GetCurrentProcess(), &mask1, &mask2);
 #endif
 
-  ThreadPoolTest::TestForcedExecute();
+  source::vstdlib::threadpool_test::TestForcedExecute();
 }
 
 #endif  // OS_POSIX
