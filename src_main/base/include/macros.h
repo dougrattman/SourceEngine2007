@@ -129,18 +129,18 @@ constexpr inline R MAKEID(ch d, ch c, ch b, ch a) {
          (static_cast<R>(c) << 8) | (static_cast<R>(d));
 }
 
-template <typename T>
-constexpr inline T SETBITS(T bit_vector, T bits) {
+template <typename T, typename Y>
+constexpr inline auto SETBITS(T& bit_vector, Y bits) {
   return bit_vector |= bits;
 }
 
-template <typename T>
-constexpr inline T CLEARBITS(T bit_vector, T bits) {
+template <typename T, typename Y>
+constexpr inline auto CLEARBITS(T& bit_vector, Y bits) {
   return bit_vector &= ~bits;
 }
 
-template <typename T>
-constexpr inline T FBitSet(T bit_vector, T bit) {
+template <typename T, typename Y>
+constexpr inline auto FBitSet(const T &bit_vector, Y bit) {
   return bit_vector & bit;
 }
 
