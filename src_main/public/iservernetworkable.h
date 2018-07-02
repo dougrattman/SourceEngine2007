@@ -61,7 +61,7 @@ struct PVSInfo_t {
   short m_nClusterCount;
 
   // cluster indices
-  unsigned short *m_pClusters;
+  u16 *m_pClusters;
 
   // For dynamic "area portals"
   short m_nAreaNum;
@@ -71,7 +71,7 @@ struct PVSInfo_t {
   float m_vCenter[3];
 
  private:
-  unsigned short m_pClustersInline[MAX_FAST_ENT_CLUSTERS];
+  u16 m_pClustersInline[MAX_FAST_ENT_CLUSTERS];
 
   friend class CVEngineServer;
 };

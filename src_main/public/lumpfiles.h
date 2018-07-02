@@ -3,10 +3,19 @@
 #ifndef LUMPFILES_H
 #define LUMPFILES_H
 
-#define MAX_LUMPFILES 128
+#include "base/include/base_types.h"
 
-// Lump files
-void GenerateLumpFileName(const char *bspfilename, char *lumpfilename,
-                          int iBufferSize, int iIndex);
+constexpr inline i32 kMaxLumpFilesCount{128};
+
+void GenerateLumpFileName(const ch *bsp_file_name, ch *lump_file_name,
+                          usize lump_file_name_size, i32 lump_index);
+
+template <usize lump_file_name_size>
+void GenerateLumpFileName(const ch *bsp_file_name,
+                          ch (&lump_file_name)[lump_file_name_size],
+                          i32 lump_index) {
+  GenerateLumpFileName(bsp_file_name, lump_file_name, lump_file_name_size,
+                       lump_index);
+}
 
 #endif  // LUMPFILES_H

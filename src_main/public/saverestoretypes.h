@@ -255,7 +255,7 @@ class CGameSaveRestoreInfo {
 
     CHashElement(const CBaseEntity *pEntity, int index)
         : pEntity(pEntity), index(index) {}
-    CHashElement(const CBaseEntity *pEntity) : pEntity(pEntity) {}
+    CHashElement(const CBaseEntity *pEntity) : pEntity(pEntity), index{-1} {}
     CHashElement() {}
   };
 
@@ -396,10 +396,8 @@ inline bool CSaveRestoreSegment::DefineSymbol(const char *pszToken, int token) {
   return false;
 }
 
-inline u16 CSaveRestoreSegment::FindCreateSymbol(
-    const char *pszToken) {
-  u16 hash =
-      (u16)(HashString(pszToken) % (unsigned)tokenCount);
+inline u16 CSaveRestoreSegment::FindCreateSymbol(const char *pszToken) {
+  u16 hash = (u16)(HashString(pszToken) % (unsigned)tokenCount);
 
 #if _DEBUG
   static int tokensparsed = 0;
@@ -467,6 +465,6 @@ inline unsigned int CSaveRestoreSegment::HashString(const char *pszToken) {
   return hash;
 }
 
-//=============================================================================
+  //=============================================================================
 
 #endif  // SAVERESTORETYPES_H

@@ -63,7 +63,7 @@ enum IterationRetval_t {
   ITERATION_STOP,
 };
 
-typedef unsigned short SpatialPartitionHandle_t;
+typedef u16 SpatialPartitionHandle_t;
 
 // A combination of the PARTITION_ flags above.
 typedef int SpatialPartitionListMask_t;

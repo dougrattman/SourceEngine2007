@@ -104,7 +104,7 @@ int Interpolator_CurveTypeForName(const char *name) {
 
     *second = save;
 
-    p = second + strlen("_to_curve_");
+    p = second + std::size("_to_curve_") - 1;
 
     rightcurve = Interpolator_InterpolatorForName(p);
   }

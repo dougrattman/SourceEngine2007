@@ -5,7 +5,7 @@
 
 #include "tier0/include/platform.h"
 
-enum LocalFlexController_t {
+enum LocalFlexController_t : int {
   // this isn't really an enum - its just a typed int. gcc will not accept it as
   // a fwd decl, so we'll define one value
   DUMMY_FLEX_CONTROLLER = 0x7fffffff  // make take 32 bits

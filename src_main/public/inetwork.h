@@ -39,10 +39,10 @@ public:
 	virtual bool StringToAdr ( const char *s, netadr_t *a) = 0;
 
 	// Convert from host to network uint8_t ordering
-	virtual unsigned short HostToNetShort( unsigned short us_in );
+	virtual u16 HostToNetShort( u16 us_in );
 
 	// and vice versa
-	virtual unsigned short NetToHostShort( unsigned short us_in );
+	virtual u16 NetToHostShort( u16 us_in );
 	
 
 	

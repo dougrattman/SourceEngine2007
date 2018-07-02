@@ -21,7 +21,7 @@
 // work.
 // ------------------------------------------------------------------------------------
 // //
-float GetRealTime();  // Get the clock's time.
+f32 GetRealTime();  // Get the clock's time.
 
 extern ConVar game_speeds;
 extern ConVar measure_resort;

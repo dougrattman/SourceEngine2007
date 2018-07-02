@@ -50,7 +50,7 @@ const int SIZE_BLOCK_NAME_BUF = 31 + 1;
 
 the_interface ISaveRestoreBlockHandler {
  public:
-  virtual const char *GetBlockName() = 0;
+  virtual const char *GetBlockName() const = 0;
 
   virtual void PreSave(
       CSaveRestoreData *) = 0;  // Called immediately prior to save, generally
@@ -83,7 +83,7 @@ extern ISaveRestoreBlockSet *g_pGameSaveRestoreBlockSet;
 //-------------------------------------
 
 the_interface CDefSaveRestoreBlockHandler : public ISaveRestoreBlockHandler {
-  virtual const char *GetBlockName() = 0;
+  virtual const char *GetBlockName() const = 0;
 
   virtual void PreSave(CSaveRestoreData *) {}
   virtual void Save(ISave *) {}

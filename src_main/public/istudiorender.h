@@ -39,11 +39,11 @@ class IPooledVBAllocator;
 typedef void (*StudioRender_Printf_t)(const char *fmt, ...);
 
 struct StudioRenderConfig_t {
-  float fEyeShiftX;  // eye X position
-  float fEyeShiftY;  // eye Y position
-  float fEyeShiftZ;  // eye Z position
-  float fEyeSize;    // adjustment to iris textures
-  float fEyeGlintPixelWidthLODThreshold;
+  f32 fEyeShiftX;  // eye X position
+  f32 fEyeShiftY;  // eye Y position
+  f32 fEyeShiftZ;  // eye Z position
+  f32 fEyeSize;    // adjustment to iris textures
+  f32 fEyeGlintPixelWidthLODThreshold;
 
   int maxDecalsPerModel;
   int drawEntities;
@@ -257,7 +257,7 @@ the_interface IStudioRender : public IAppSystem {
                                 const Vector &worldPosition) = 0;
 
   // Methods related to lighting state
-  // NOTE: SetAmbientLightColors assumes that the SOURCE_ARRAYSIZE is the same
+  // NOTE: SetAmbientLightColors assumes that the std::size is the same
   // as returned from GetNumAmbientLightSamples
   virtual int GetNumAmbientLightSamples() = 0;
   virtual const Vector *GetAmbientLightDirections() = 0;
@@ -272,8 +272,8 @@ the_interface IStudioRender : public IAppSystem {
 
   // Allocates flex weights for use in rendering
   // NOTE: Pass in a non-0 second parameter to lock delayed flex weights
-  virtual void LockFlexWeights(int nWeightCount, float **ppFlexWeights,
-                               float **ppFlexDelayedWeights = NULL) = 0;
+  virtual void LockFlexWeights(int nWeightCount, f32 **ppFlexWeights,
+                               f32 **ppFlexDelayedWeights = nullptr) = 0;
   virtual void UnlockFlexWeights() = 0;
 
   // Used to allocate bone matrices to be used to pass into DrawModel
@@ -282,19 +282,19 @@ the_interface IStudioRender : public IAppSystem {
 
   // LOD stuff
   virtual int GetNumLODs(const studiohwdata_t &hardwareData) const = 0;
-  virtual float GetLODSwitchValue(const studiohwdata_t &hardwareData, int lod)
+  virtual f32 GetLODSwitchValue(const studiohwdata_t &hardwareData, int lod)
       const = 0;
   virtual void SetLODSwitchValue(studiohwdata_t & hardwareData, int lod,
-                                 float switchValue) = 0;
+                                 f32 switchValue) = 0;
 
   // Sets the color/alpha modulation
-  virtual void SetColorModulation(float const *pColor) = 0;
-  virtual void SetAlphaModulation(float flAlpha) = 0;
+  virtual void SetColorModulation(f32 const *pColor) = 0;
+  virtual void SetAlphaModulation(f32 flAlpha) = 0;
 
   // Draws the model
   virtual void DrawModel(DrawModelResults_t * pResults,
                          const DrawModelInfo_t &info, matrix3x4_t *pBoneToWorld,
-                         float *pFlexWeights, float *pFlexDelayedWeights,
+                         f32 *pFlexWeights, f32 *pFlexDelayedWeights,
                          const Vector &modelOrigin,
                          int flags = STUDIORENDER_DRAW_ENTIRE_MODEL) = 0;
 
@@ -324,7 +324,7 @@ the_interface IStudioRender : public IAppSystem {
   virtual void AddDecal(StudioDecalHandle_t handle, studiohdr_t * pStudioHdr,
                         matrix3x4_t * pBoneToWorld, const Ray_t &ray,
                         const Vector &decalUp, IMaterial *pDecalMaterial,
-                        float radius, int body, bool noPokethru = false,
+                        f32 radius, int body, bool noPokethru = false,
                         int maxLODToDecal = ADDDECAL_TO_ALL_LODS) = 0;
 
   // Compute the lighting at a point and normal
@@ -337,19 +337,19 @@ the_interface IStudioRender : public IAppSystem {
   virtual void ComputeLightingConstDirectional(
       const Vector *pAmbient, int lightCount, LightDesc_t *pLights,
       const Vector &pt, const Vector &normal, Vector &lighting,
-      float flDirectionalAmount) = 0;
+      f32 flDirectionalAmount) = 0;
 
   // Shadow state (affects the models as they are rendered)
   virtual void AddShadow(IMaterial * pMaterial, void *pProxyData,
-                         FlashlightState_t *m_pFlashlightState = NULL,
-                         VMatrix *pWorldToTexture = NULL,
-                         ITexture *pFlashlightDepthTexture = NULL) = 0;
+                         FlashlightState_t *m_pFlashlightState = nullptr,
+                         VMatrix *pWorldToTexture = nullptr,
+                         ITexture *pFlashlightDepthTexture = nullptr) = 0;
   virtual void ClearAllShadows() = 0;
 
   // Gets the model LOD; pass in the screen size in pixels of a sphere
   // of radius 1 that has the same origin as the model to get the LOD out...
   virtual int ComputeModelLod(studiohwdata_t * pHardwareData,
-                              float unitSphereSize, float *pMetric = NULL) = 0;
+                              f32 unitSphereSize, f32 *pMetric = nullptr) = 0;
 
   // Return a number that is usable for budgets, etc.
   // Things that we care about:
@@ -358,7 +358,7 @@ the_interface IStudioRender : public IAppSystem {
   // Get Triangles returns the LOD used
   virtual void GetPerfStats(DrawModelResults_t * pResults,
                             const DrawModelInfo_t &info,
-                            CUtlBuffer *pSpewBuf = NULL) const = 0;
+                            CUtlBuffer *pSpewBuf = nullptr) const = 0;
   virtual void GetTriangles(const DrawModelInfo_t &info,
                             matrix3x4_t *pBoneToWorld,
                             GetTriangles_Output_t &out) = 0;

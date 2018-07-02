@@ -49,7 +49,7 @@ typedef VPlane Frustum[FRUSTUM_NUMPLANES];
 //-----------------------------------------------------------------------------
 // Leaf index
 //-----------------------------------------------------------------------------
-typedef unsigned short LeafIndex_t;
+typedef u16 LeafIndex_t;
 typedef short LeafFogVolume_t;
 enum { INVALID_LEAF_INDEX = (LeafIndex_t)~0 };
 

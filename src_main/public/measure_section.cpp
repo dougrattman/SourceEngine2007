@@ -39,7 +39,7 @@ CMeasureSection::CMeasureSection(const char *name) {
 //-----------------------------------------------------------------------------
 // Purpose: Destroys the object
 //-----------------------------------------------------------------------------
-CMeasureSection::~CMeasureSection(void) {
+CMeasureSection::~CMeasureSection() {
   m_pNext = NULL;
   s_nCount--;
 }
@@ -47,7 +47,7 @@ CMeasureSection::~CMeasureSection(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMeasureSection::UpdateMax(void) {
+void CMeasureSection::UpdateMax() {
   if (m_dMaxTime.IsLessThan(m_dAccumulatedTime)) {
     m_dMaxTime.Init();
     CCycleCount::Add(m_dMaxTime, m_dAccumulatedTime, m_dMaxTime);
@@ -57,36 +57,36 @@ void CMeasureSection::UpdateMax(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMeasureSection::Reset(void) { m_dAccumulatedTime.Init(); }
+void CMeasureSection::Reset() { m_dAccumulatedTime.Init(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMeasureSection::SortReset(void) { m_dTotalTime.Init(); }
+void CMeasureSection::SortReset() { m_dTotalTime.Init(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 // Output : const char
 //-----------------------------------------------------------------------------
-const char *CMeasureSection::GetName(void) { return m_pszName; }
+const char *CMeasureSection::GetName() { return m_pszName; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 // Output :
 //-----------------------------------------------------------------------------
-CCycleCount const &CMeasureSection::GetTotalTime(void) { return m_dTotalTime; }
+CCycleCount const &CMeasureSection::GetTotalTime() { return m_dTotalTime; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 // Output :
 //-----------------------------------------------------------------------------
-CCycleCount const &CMeasureSection::GetTime(void) { return m_dAccumulatedTime; }
+CCycleCount const &CMeasureSection::GetTime() { return m_dAccumulatedTime; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 // Output :
 //-----------------------------------------------------------------------------
-CCycleCount const &CMeasureSection::GetMaxTime(void) { return m_dMaxTime; }
+CCycleCount const &CMeasureSection::GetMaxTime() { return m_dMaxTime; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Accumulates a timeslice
@@ -101,13 +101,13 @@ void CMeasureSection::AddTime(CCycleCount const &rCount) {
 // Purpose:
 // Output : CMeasureSection
 //-----------------------------------------------------------------------------
-CMeasureSection *CMeasureSection::GetNext(void) { return m_pNext; }
+CMeasureSection *CMeasureSection::GetNext() { return m_pNext; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 // Output : CMeasureSection
 //-----------------------------------------------------------------------------
-CMeasureSection *CMeasureSection::GetList(void) { return s_pSections; }
+CMeasureSection *CMeasureSection::GetList() { return s_pSections; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Compares accumulated time for two sections
@@ -128,7 +128,7 @@ static int SectionCompare(const void *ppms1, const void *ppms2) {
 //-----------------------------------------------------------------------------
 // Purpose: Sorts sections by time usage
 //-----------------------------------------------------------------------------
-void CMeasureSection::SortSections(void) {
+void CMeasureSection::SortSections() {
   // Not enough to be sortable
   if (s_nCount <= 1) return;
 
@@ -175,7 +175,7 @@ CMeasureSectionInstance::CMeasureSectionInstance(CMeasureSection *ms) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CMeasureSectionInstance::~CMeasureSectionInstance(void) {
+CMeasureSectionInstance::~CMeasureSectionInstance() {
   if (host_speeds.GetInt() < 3 && !game_speeds.GetInt()) return;
 
   // Get final timestamp
@@ -190,7 +190,7 @@ CMeasureSectionInstance::~CMeasureSectionInstance(void) {
 // ( after
 //  re-doing sort if needed ).
 //-----------------------------------------------------------------------------
-void ResetTimeMeasurements(void) {
+void ResetTimeMeasurements() {
 #if defined(_DEBUG) || defined(FORCE_MEASURE)
   bool sort_reset = false;
 
