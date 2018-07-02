@@ -1,4 +1,4 @@
-# Defines the Chromium style for automatic reformatting.
+# Defines the Google style for automatic reformatting.
 # https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 BasedOnStyle: Google
 
