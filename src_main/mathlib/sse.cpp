@@ -4,9 +4,10 @@
 
 #include "sse.h"
 
-#include <cfloat>  // Needed for FLT_EPSILON
 #include <memory.h>
+#include <cfloat>  // Needed for FLT_EPSILON
 #include <cmath>
+#include "build/include/build_config.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "tier0/include/basetypes.h"
@@ -64,7 +65,7 @@ void __cdecl _SSE_VectorMA(const f32 *start, f32 scale, const f32 *direction,
 f32 _SSE_Sqrt(f32 x) {
   Assert(s_bMathlibInitialized);
   f32 root = 0.f;
-#ifdef _WIN32
+#ifdef OS_WIN
   __asm
   {
 		sqrtss		xmm0, x
@@ -87,7 +88,7 @@ f32 _SSE_RSqrtAccurate(f32 a) {
   f32 half = 0.5f;
   f32 three = 3.f;
 
-#ifdef _WIN32
+#ifdef OS_WIN
   __asm
   {
 		movss   xmm3, a;
@@ -130,7 +131,7 @@ f32 _SSE_RSqrtFast(f32 x) {
   Assert(s_bMathlibInitialized);
 
   f32 rroot;
-#ifdef _WIN32
+#ifdef OS_WIN
   __asm
   {
 		rsqrtss	xmm0, x
@@ -165,7 +166,7 @@ f32 SOURCE_FASTCALL _SSE_VectorNormalize(Vector &vec) {
   // zero, it shouldn't be much of a performance win, considering you will very
   // likely miss 3 branch predicts in a row.
   if (v[0] || v[1] || v[2]) {
-#ifdef _WIN32
+#ifdef OS_WIN
     __asm
     {
 			mov			eax, v
@@ -235,7 +236,7 @@ void SOURCE_FASTCALL _SSE_VectorNormalizeFast(Vector &vec) {
 
 f32 _SSE_InvRSquared(const f32 *v) {
   f32 inv_r2 = 1.f;
-#ifdef _WIN32
+#ifdef OS_WIN
   __asm {  // Intel SSE only routine
 		mov			eax, v
 		movss		xmm5, inv_r2  // x5 = 1.0, 0, 0, 0
@@ -282,7 +283,7 @@ f32 _SSE_InvRSquared(const f32 *v) {
 }
 
 void _SSE_SinCos(f32 x, f32 *s, f32 *c) {
-#ifdef _WIN32
+#ifdef OS_WIN
   f32 t4, t8, t12;
 
   __asm
@@ -375,7 +376,7 @@ void _SSE_SinCos(f32 x, f32 *s, f32 *c) {
 }
 
 f32 _SSE_cos(f32 x) {
-#ifdef _WIN32
+#ifdef OS_WIN
   f32 temp;
   __asm
   {
@@ -436,7 +437,7 @@ f32 _SSE_cos(f32 x) {
 // SSE2 implementations of optimized routines:// any x
 
 void _SSE2_SinCos(f32 x, f32 *s, f32 *c){
-#ifdef _WIN32
+#ifdef OS_WIN
     // clang-format off
   __asm
   {
@@ -522,7 +523,7 @@ void _SSE2_SinCos(f32 x, f32 *s, f32 *c){
 }
 
 f32 _SSE2_cos(f32 x) {
-#ifdef _WIN32
+#ifdef OS_WIN
   __asm
   {
 		movss	xmm0, x
@@ -582,7 +583,7 @@ void VectorTransformSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out1);
 
-#ifdef _WIN32
+#ifdef OS_WIN
   __asm
   {
 		mov eax, in1;
@@ -638,7 +639,7 @@ void VectorRotateSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out1);
 
-#ifdef _WIN32
+#ifdef OS_WIN
   __asm
   {
 		mov eax, in1;
@@ -687,7 +688,7 @@ void VectorRotateSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
 #endif
 }
 
-#ifdef _WIN32
+#ifdef OS_WIN
 void _declspec(naked) _SSE_VectorMA(const f32 *start, f32 scale,
                                     const f32 *direction, f32 *dest) {
   // TODO(d.rattman): This don't work!! It will overwrite memory in the write to
@@ -719,7 +720,7 @@ void _declspec(naked) _SSE_VectorMA(const f32 *start, f32 scale,
 }
 #endif
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #ifdef PFN_VECTORMA
 void _declspec(naked) __cdecl _SSE_VectorMA(const Vector &start, f32 scale,
                                             const Vector &direction,

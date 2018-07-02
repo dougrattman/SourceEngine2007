@@ -21,7 +21,7 @@
     <ClCompile Include="..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\public\materialsystem\MaterialSystemUtil.cpp">
+    <ClCompile Include="..\public\materialsystem\material_system_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

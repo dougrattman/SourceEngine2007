@@ -23,6 +23,7 @@
 #include "tier0/include/dbg.h"
 #include "tier0/include/system_info.h"
 #include "tier0/include/vprof.h"
+#include "build/include/build_config.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -2838,7 +2839,7 @@ void MathLib_Init(f32 gamma, f32 texGamma, f32 brightness, int overbright,
     pfRSqrtFast = _SSE_RSqrtFast;
 #endif
 
-#if defined _WIN32 && !defined ARCH_CPU_X86_64
+#if defined OS_WIN && !defined ARCH_CPU_X86_64
     pfFastSinCos = _SSE_SinCos;
     pfFastCos = _SSE_cos;
 #endif
@@ -2848,7 +2849,7 @@ void MathLib_Init(f32 gamma, f32 texGamma, f32 brightness, int overbright,
 
   if (bAllowSSE2 && cpu_info.is_info.has_sse2) {
     s_bSSE2Enabled = true;
-#if defined _WIN32 && !defined ARCH_CPU_X86_64
+#if defined OS_WIN && !defined ARCH_CPU_X86_64
     pfFastSinCos = _SSE2_SinCos;
     pfFastCos = _SSE2_cos;
 #endif

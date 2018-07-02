@@ -261,22 +261,21 @@
     <Bscmake />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\public\map_utils.cpp" />
-    <ClCompile Include="..\public\materialsystem\MaterialSystemUtil.cpp" />
-    <ClCompile Include="beamsegdraw.cpp" />
-    <ClCompile Include="defaultfilesystem.cpp" />
-    <ClCompile Include="tier2dm.cpp" />
-    <ClCompile Include="fileutils.cpp" />
-    <ClCompile Include="keybindings.cpp" />
-    <ClCompile Include="meshutils.cpp" />
-    <ClCompile Include="p4helpers.cpp" />
-    <ClCompile Include="renderutils.cpp" />
-    <ClCompile Include="riff.cpp" />
-    <ClCompile Include="soundutils.cpp" />
-    <ClCompile Include="tier2.cpp" />
-    <ClCompile Include="util_init.cpp" />
-    <ClCompile Include="utlstreambuffer.cpp" />
-    <ClCompile Include="vconfig.cpp" />
+    <ClCompile Include="..\public\map_utils.cc" />
+    <ClCompile Include="..\public\materialsystem\material_system_util.cc" />
+    <ClCompile Include="beam_segment_draw.cc" />
+    <ClCompile Include="default_file_system.cc" />
+    <ClCompile Include="file_utils.cc" />
+    <ClCompile Include="key_bindings.cc" />
+    <ClCompile Include="tier2dm.cc" />
+    <ClCompile Include="mesh_utils.cc" />
+    <ClCompile Include="p4_helpers.cc" />
+    <ClCompile Include="render_utils.cc" />
+    <ClCompile Include="riff.cc" />
+    <ClCompile Include="sound_utils.cc" />
+    <ClCompile Include="tier2.cc" />
+    <ClCompile Include="utl_stream_buffer.cc" />
+    <ClCompile Include="vconfig.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\tier2\beamsegdraw.h" />

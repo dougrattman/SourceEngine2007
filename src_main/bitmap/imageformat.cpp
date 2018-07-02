@@ -1,6 +1,8 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#if defined(_WIN32)
+#include "build/include/build_config.h"
+
+#if defined(OS_WIN)
 #include "base/include/windows/windows_light.h"
 
 #include <d3d9types.h>

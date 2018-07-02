@@ -13,7 +13,9 @@
 #include "basefilesystem.h"
 
 #include <climits>
-#if defined(_WIN32) && !defined(_X360)
+#include "build/include/build_config.h"
+
+#if defined(OS_WIN)
 #include "base/include/windows/windows_light.h"
 #endif
 
@@ -563,7 +565,7 @@ void CBaseFileSystem::InitAsync() {
 //-----------------------------------------------------------------------------
 void CBaseFileSystem::ShutdownAsync() {
   if (m_pThreadPool) {
-#ifdef _WIN32
+#ifdef OS_WIN
     AsyncFlush();
     m_pThreadPool->Stop();
     SafeRelease(m_pThreadPool);
@@ -776,7 +778,7 @@ bool CBaseFileSystem::AsyncResume() {
 //-----------------------------------------------------------------------------
 FSAsyncStatus_t CBaseFileSystem::AsyncBeginRead(const char *pszFile,
                                                 FSAsyncFile_t *phFile) {
-#if defined(_WIN32) && !(defined(FILESYSTEM_STEAM) || defined(DEDICATED))
+#if defined(OS_WIN) && !(defined(FILESYSTEM_STEAM) || defined(DEDICATED))
   if (AsyncAllowHeldFiles()) {
     *phFile = g_AsyncOpenedFiles.FindOrAdd(pszFile);
     return FSASYNC_OK;
@@ -790,7 +792,7 @@ FSAsyncStatus_t CBaseFileSystem::AsyncBeginRead(const char *pszFile,
 //
 //-----------------------------------------------------------------------------
 FSAsyncStatus_t CBaseFileSystem::AsyncEndRead(FSAsyncFile_t hFile) {
-#if defined(_WIN32) && !(defined(FILESYSTEM_STEAM) || defined(DEDICATED))
+#if defined(OS_WIN) && !(defined(FILESYSTEM_STEAM) || defined(DEDICATED))
   if (hFile != FS_INVALID_ASYNC_FILE) g_AsyncOpenedFiles.Release(hFile);
 #endif
 

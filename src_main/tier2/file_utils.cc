@@ -59,14 +59,14 @@ char *CreateX360Filename(const char *pSourceName, char *pTargetName,
   return pTargetName;
 }
 
-// Purpose: Generates a PC filename from a possible 360 name.
-// Strips the .360. from filename.360.extension.
-// Filenames might have multiple '.', need to be careful and only consider the
-// last true extension. Complex filenames do occur:
+// Purpose: Generates a PC filename from a possible 360 name.  Strips the .360.
+// from filename.360.extension.  Filenames might have multiple '.', need to be
+// careful and only consider the last true extension.  Complex filenames do
+// occur:
 // d:\foo\.\foo.dat
 // d:\zip0.360.zip\foo.360.dat
-// Returns source if no change needs to occur, othwerwise generates and
-// returns target.
+// Returns source if no change needs to occur, othwerwise generates and returns
+// target.
 char *RestoreFilename(const char *pSourceName, char *pTargetName,
                       usize targetLen) {
   // find extension

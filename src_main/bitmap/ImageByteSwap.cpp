@@ -3,7 +3,9 @@
 // Purpose: Image Byte Swapping. Isolate routines to own module to allow
 // librarian to ignore xbox 360 dependenices in non-applicable win32 projects.
 
-#if defined(_WIN32)
+#include "build/include/build_config.h"
+
+#if defined(OS_WIN)
 #include "base/include/windows/windows_light.h"
 #endif
 

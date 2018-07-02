@@ -261,10 +261,10 @@
     <Bscmake />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="choreoutils.cpp" />
-    <ClCompile Include="scenetokenprocessor.cpp" />
-    <ClCompile Include="studiohdrstub.cpp" />
-    <ClCompile Include="tier3.cpp" />
+    <ClCompile Include="choreo_utils.cc" />
+    <ClCompile Include="scene_token_processor.cc" />
+    <ClCompile Include="studio_hdr_stub.cc" />
+    <ClCompile Include="tier3.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\tier3\choreoutils.h" />

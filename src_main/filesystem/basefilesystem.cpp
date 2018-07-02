@@ -9,6 +9,7 @@
 #include "basefilesystem.h"
 
 #include "base/include/posix_errno_info.h"
+#include "build/include/build_config.h"
 #include "filesystem/IQueuedLoader.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vprof.h"
@@ -71,7 +72,7 @@ inline bool V_CheckDoubleSlashes(const char *pStr) {
 // Win32 dedicated.dll contains both filesystem_steam.cpp and
 // filesystem_stdio.cpp, so it has two CBaseFileSystem objects.  We'll let it
 // manage BaseFileSystem() itself.
-#if !(defined(_WIN32) && defined(DEDICATED))
+#if !(defined(OS_WIN) && defined(DEDICATED))
 static CBaseFileSystem *g_pBaseFileSystem;
 CBaseFileSystem *BaseFileSystem() { return g_pBaseFileSystem; }
 #endif
@@ -220,7 +221,7 @@ static StoreIDEntry *FindPrevFileByStoreID(
 
 CBaseFileSystem::CBaseFileSystem()
     : m_FileTracker(this), m_FileWhitelist(nullptr) {
-#if !(defined(_WIN32) && defined(DEDICATED))
+#if !(defined(OS_WIN) && defined(DEDICATED))
   g_pBaseFileSystem = this;
 #endif
   g_pFullFileSystem = this;
@@ -847,7 +848,7 @@ bool CZipPackFile::FindFile(const char *pFilename, int &nIndex,
                             int64_t &nOffset, int &nLength) {
   char szCleanName[MAX_FILEPATH];
   strcpy_s(szCleanName, pFilename);
-#ifdef _WIN32
+#ifdef OS_WIN
   Q_strlower(szCleanName);
 #endif
   Q_FixSlashes(szCleanName);
@@ -1185,7 +1186,7 @@ void CBaseFileSystem::AddMapPackFile(const char *pPath, const char *pPathID,
   char newPath[MAX_FILEPATH];
   // +2 for '\0' and potential slash added at end.
   strcpy_s(newPath, pPath);
-#ifdef _WIN32  // don't do this on linux!
+#ifdef OS_WIN  // don't do this on linux!
   Q_strlower(newPath);
 #endif
   Q_FixSlashes(newPath);
@@ -1385,7 +1386,7 @@ void CBaseFileSystem::AddSearchPathInternal(const char *pPath,
     } else {
       Q_MakeAbsolutePath(newPath, sizeof(newPath), pPath);
     }
-#ifdef _WIN32
+#ifdef OS_WIN
     Q_strlower(newPath);
 #endif
     AddSeperatorAndFixPath(newPath);
@@ -1529,7 +1530,7 @@ bool CBaseFileSystem::RemoveSearchPath(const char *pPath, const char *pathID) {
   if (pPath) {
     // +2 for '\0' and potential slash added at end.
     strcpy_s(newPath, pPath);
-#ifdef _WIN32  // don't do this on linux!
+#ifdef OS_WIN  // don't do this on linux!
     Q_strlower(newPath);
 #endif
 
@@ -2133,7 +2134,7 @@ void CBaseFileSystem::HandleOpenRegularFile(CFileOpenInfo &openInfo,
     }
 
     if (m_bOutputDebugString) {
-#ifdef _WIN32
+#ifdef OS_WIN
       Plat_DebugString("fs_debug: ");
       Plat_DebugString(openInfo.m_AbsolutePath);
       Plat_DebugString("\n");
@@ -2334,7 +2335,7 @@ FileHandle_t CBaseFileSystem::OpenEx(const char *pFileName,
   char tempFileName[SOURCE_MAX_PATH];
   strcpy_s(tempFileName, pFileName);
   Q_FixSlashes(tempFileName);
-#ifdef _WIN32
+#ifdef OS_WIN
   Q_strlower(tempFileName);
 #endif
 
@@ -2976,7 +2977,7 @@ long CBaseFileSystem::GetPathTime(const char *pFileName, const char *pPathID) {
   char tempFileName[SOURCE_MAX_PATH];
   strcpy_s(tempFileName, pFileName);
   Q_FixSlashes(tempFileName);
-#ifdef _WIN32
+#ifdef OS_WIN
   Q_strlower(tempFileName);
 #endif
 
@@ -3365,7 +3366,7 @@ bool CBaseFileSystem::SetFileWritable(char const *pFileName, bool writable,
                                       const char *pPathID /*= 0*/) {
   CHECK_DOUBLE_SLASHES(pFileName);
 
-#ifdef _WIN32
+#ifdef OS_WIN
   int pmode = writable ? (_S_IWRITE | _S_IREAD) : (_S_IREAD);
 #else
   int pmode = writable ? (S_IWRITE | S_IREAD) : (S_IREAD);
@@ -3460,7 +3461,7 @@ void CBaseFileSystem::CreateDirHierarchy(const char *pRelativePath,
     if (*s == CORRECT_PATH_SEPARATOR && s != szScratchFileName &&
         (IsLinux() || *(s - 1) != ':')) {
       *s = '\0';
-#if defined(_WIN32)
+#if defined(OS_WIN)
       _mkdir(szScratchFileName);
 #elif defined(OS_POSIX)
       mkdir(szScratchFileName,
@@ -3471,7 +3472,7 @@ void CBaseFileSystem::CreateDirHierarchy(const char *pRelativePath,
     s++;
   }
 
-#if defined(_WIN32)
+#if defined(OS_WIN)
   _mkdir(szScratchFileName);
 #elif defined(OS_POSIX)
   mkdir(szScratchFileName, S_IRWXU | S_IRGRP | S_IROTH);
@@ -3769,7 +3770,7 @@ bool CBaseFileSystem::FullPathToRelativePathEx(const char *pFullPath,
 
   char pInPath[MAX_FILEPATH];
   strcpy_s(pInPath, pFullPath);
-#ifdef _WIN32
+#ifdef OS_WIN
   Q_strlower(pInPath);
 #endif
   Q_FixSlashes(pInPath);
@@ -3791,7 +3792,7 @@ bool CBaseFileSystem::FullPathToRelativePathEx(const char *pFullPath,
 
     char pSearchBase[MAX_FILEPATH];
     strcpy_s(pSearchBase, m_SearchPaths[i].GetPathString());
-#ifdef _WIN32
+#ifdef OS_WIN
     Q_strlower(pSearchBase);
 #endif
     Q_FixSlashes(pSearchBase);
@@ -3904,7 +3905,7 @@ bool CBaseFileSystem::RenameFile(char const *pOldPath, char const *pNewPath,
 // Input  : **ppdir -
 //-----------------------------------------------------------------------------
 bool CBaseFileSystem::GetCurrentDirectory(char *pDirectory, int maxlen) {
-#if defined(_WIN32) && !defined(_X360)
+#if defined(OS_WIN) && !defined(_X360)
   if (!::GetCurrentDirectoryA(maxlen, pDirectory))
 #elif defined(OS_POSIX) || defined(_X360)
   if (!getcwd(pDirectory, maxlen))
@@ -3967,7 +3968,7 @@ void CBaseFileSystem::Warning(FileWarningLevel_t level, const char *fmt, ...) {
   if (m_pfnWarning) {
     (*m_pfnWarning)(warningtext);
   } else {
-#ifdef _WIN32
+#ifdef OS_WIN
     Plat_DebugString(warningtext);
 #endif
   }

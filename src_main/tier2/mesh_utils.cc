@@ -44,7 +44,6 @@ void GeneratePolygonIndexBuffer(u16* pIndices, usize nIndexCount,
   if (!pIndices) return;
 
   usize numPolygons = nIndexCount / 3;
-  int baseVertex = nFirstVertex;
   for (usize i = 0; i < numPolygons; ++i) {
     // Triangle 1
     pIndices[0] = (u16)(nFirstVertex);
@@ -60,7 +59,6 @@ void GenerateLineStripIndexBuffer(u16* pIndices, usize nIndexCount,
   if (!pIndices) return;
 
   usize numLines = nIndexCount / 2;
-  int baseVertex = nFirstVertex;
   for (usize i = 0; i < numLines; ++i) {
     pIndices[0] = (u16)(nFirstVertex + i);
     pIndices[1] = (u16)(nFirstVertex + i + 1);
@@ -74,7 +72,6 @@ void GenerateLineLoopIndexBuffer(u16* pIndices, usize nIndexCount,
   if (!pIndices) return;
 
   usize numLines = nIndexCount / 2;
-  int baseVertex = nFirstVertex;
 
   pIndices[0] = (u16)(nFirstVertex + numLines - 1);
   pIndices[1] = (u16)(nFirstVertex);

@@ -9,16 +9,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="choreoutils.cpp">
+    <ClCompile Include="choreo_utils.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scenetokenprocessor.cpp">
+    <ClCompile Include="scene_token_processor.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="studiohdrstub.cpp">
+    <ClCompile Include="studio_hdr_stub.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tier3.cpp">
+    <ClCompile Include="tier3.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

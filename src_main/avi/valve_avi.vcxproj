@@ -314,7 +314,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\public\materialsystem\MaterialSystemUtil.cpp" />
+    <ClCompile Include="..\public\materialsystem\material_system_util.cc" />
     <ClCompile Include="..\tier0\include\memoverride.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>

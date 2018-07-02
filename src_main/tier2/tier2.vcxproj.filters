@@ -9,52 +9,49 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="beamsegdraw.cpp">
+    <ClCompile Include="..\public\map_utils.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="defaultfilesystem.cpp">
+    <ClCompile Include="..\public\materialsystem\material_system_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fileutils.cpp">
+    <ClCompile Include="mesh_utils.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="keybindings.cpp">
+    <ClCompile Include="p4_helpers.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\public\map_utils.cpp">
+    <ClCompile Include="render_utils.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\public\materialsystem\MaterialSystemUtil.cpp">
+    <ClCompile Include="riff.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="meshutils.cpp">
+    <ClCompile Include="sound_utils.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="p4helpers.cpp">
+    <ClCompile Include="tier2.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderutils.cpp">
+    <ClCompile Include="tier2dm.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="riff.cpp">
+    <ClCompile Include="utl_stream_buffer.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="soundutils.cpp">
+    <ClCompile Include="vconfig.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tier2.cpp">
+    <ClCompile Include="beam_segment_draw.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="util_init.cpp">
+    <ClCompile Include="default_file_system.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utlstreambuffer.cpp">
+    <ClCompile Include="file_utils.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vconfig.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tier2dm.cpp">
+    <ClCompile Include="key_bindings.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
