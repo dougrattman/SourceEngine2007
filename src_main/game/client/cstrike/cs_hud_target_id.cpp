@@ -210,8 +210,8 @@ void CTargetID::Paint()
 
 				if ( bShowHealth )
 				{
-					_snwprintf( wszHealthText, SOURCE_ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pPlayer->GetHealth() / (float)pPlayer->GetMaxHealth() ) * 100 );
-					wszHealthText[ SOURCE_ARRAYSIZE(wszHealthText)-1 ] = '\0';
+					_snwprintf( wszHealthText, std::size(wszHealthText) - 1, L"%.0f%%",  ((float)pPlayer->GetHealth() / (float)pPlayer->GetMaxHealth() ) * 100 );
+					wszHealthText[ std::size(wszHealthText)-1 ] = '\0';
 				}
 			}
 		}
@@ -262,8 +262,8 @@ void CTargetID::Paint()
 			{
 				c = m_cHostageColor;
 				printFormatString = "#Cstrike_playerid_hostage";
-				_snwprintf( wszHealthText, SOURCE_ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pHostage->GetHealth() / (float)pHostage->GetMaxHealth() ) * 100 );
-				wszHealthText[ SOURCE_ARRAYSIZE(wszHealthText)-1 ] = '\0';
+				_snwprintf( wszHealthText, std::size(wszHealthText) - 1, L"%.0f%%",  ((float)pHostage->GetHealth() / (float)pHostage->GetMaxHealth() ) * 100 );
+				wszHealthText[ std::size(wszHealthText)-1 ] = '\0';
 				bShowHealth = true;
 			}
 			else if ( !pEnt || !pEnt->InSameTeam(pLocalPlayer) )
