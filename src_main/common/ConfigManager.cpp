@@ -403,8 +403,10 @@ bool CGameConfigManager::AddDefaultConfig(const defaultConfigInfo_t &info,
                                           const char *gameExeDir) {
   // NOTE: Freed by head keyvalue
   KeyValues *newConfig = new KeyValues(info.gameName);
-  if (newConfig->LoadFromBuffer("defaultcfg.txt", szDefaultConfigText) == false)
-    return false;
+  if (!newConfig->LoadFromBuffer("defaultcfg.txt", szDefaultConfigText)) {
+    newConfig->deleteThis();
+    return false;  //-V773
+  }
 
   newConfig->SetName(info.gameName);
 
@@ -518,8 +520,7 @@ bool CGameConfigManager::CreateAllDefaultConfigs() {
 
   // Make a full path name
   char szPath[SOURCE_MAX_PATH];
-  Q_snprintf(szPath, sizeof(szPath), "%s\\%s", GetBaseDirectory(),
-             GAME_CONFIG_FILENAME);
+  sprintf_s(szPath, "%s\\%s", GetBaseDirectory(), GAME_CONFIG_FILENAME);
 
   CUtlBuffer buffer;
   configBlock->RecursiveSaveToFile(buffer, 0);
@@ -529,7 +530,7 @@ bool CGameConfigManager::CreateAllDefaultConfigs() {
 
   m_LoadStatus = LOADSTATUS_CREATED;
 
-  return true;
+  return true;  //-V773
 }
 
 //-----------------------------------------------------------------------------
@@ -684,6 +685,7 @@ bool CGameConfigManager::ConvertGameConfigsINI() {
 
   CUtlBuffer buffer;
   headBlock->RecursiveSaveToFile(buffer, 0);
+  headBlock->deleteThis();
   SaveUtlBufferToFile(buffer, szPath);
 
   // Rename the old INI file
@@ -695,7 +697,7 @@ bool CGameConfigManager::ConvertGameConfigsINI() {
   // Notify that we were converted
   m_LoadStatus = LOADSTATUS_CONVERTED;
 
-  return true;
+  return true;  //-V773
 }
 
 //-----------------------------------------------------------------------------
@@ -725,9 +727,7 @@ bool CGameConfigManager::SaveConfigs(const char *baseDir) {
 //-----------------------------------------------------------------------------
 // Purpose: Find the directory our .exe is based out of
 //-----------------------------------------------------------------------------
-const char *CGameConfigManager::GetBaseDirectory() {
-  return m_szBaseDirectory;
-}
+const char *CGameConfigManager::GetBaseDirectory() { return m_szBaseDirectory; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Find the root directory
