@@ -13,7 +13,7 @@
 #include "tier3/tier3.h"
 
 // Helper empty implementation of an IAppSystem for tier2 libraries
-template <template IInterface, int ConVarFlag = 0>
+template <typename IInterface, int ConVarFlag = 0>
 class CTier3DmAppSystem : public CTier2DmAppSystem<IInterface, ConVarFlag> {
   using BaseClass = CTier2DmAppSystem<IInterface, ConVarFlag>;
 
