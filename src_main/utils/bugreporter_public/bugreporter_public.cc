@@ -132,7 +132,7 @@ class BugReporter : public IBugReporter {
   }
 
   virtual int GetDisplayNameCount() { return 1; }
-  virtual char const *GetDisplayName(int index) {
+  virtual char const *GetDisplayName(int index) {  //-V524
     if (index < 0 || index >= 1) return "<<Invalid>>";
 
     return GetUserName();

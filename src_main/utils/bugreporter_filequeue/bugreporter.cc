@@ -162,6 +162,7 @@ bool CUtlSymbol_LessThan(const CUtlSymbol &sym1, const CUtlSymbol &sym2) {
 BugReporter::BugReporter() {
   bug_ = NULL;
   m_CurrentBugID = 0;
+  m_OptionsFile = nullptr;
   m_LevelMap.SetLessFunc(&CUtlSymbol_LessThan);
   g_bugreporter = this;
 }
@@ -197,6 +198,7 @@ bool BugReporter::Init(CreateInterfaceFn engineFactory) {
   FILE *fp;
   if (fopen_s(&fp, BUGSUB_CONFIG, "rb")) {
     AssertMsg(0, "failed to open bugreporter options file");
+    delete[] buf;
     return false;
   }
 
@@ -206,10 +208,10 @@ bool BugReporter::Init(CreateInterfaceFn engineFactory) {
 
   if (!m_OptionsFile->LoadFromBuffer(BUGSUB_CONFIG, buf)) {
     AssertMsg(0, "Failed to load bugreporter_text options file.");
-    delete buf;
+    delete[] buf;
     return false;
   }
-  delete buf;
+  delete[] buf;
 
   strcpy_s(m_BugRootDirectory, m_OptionsFile->GetString("bug_directory", "."));
 
@@ -339,9 +341,7 @@ char const *BugReporter::GetReportType(int index) {
 char const *BugReporter::GetRepositoryURL() { return m_BugRootDirectory; }
 
 // only valid after calling CBugReporter::StartNewBugReport()
-char const *BugReporter::GetSubmissionURL() {
-  return m_CurrentBugDirectory;
-}
+char const *BugReporter::GetSubmissionURL() { return m_CurrentBugDirectory; }
 
 int BugReporter::GetLevelCount(int area) {
   CUtlSymbol area_sym = area_maps_[area - 1];
@@ -454,7 +454,7 @@ bool BugReporter::CommitBugReport(int &bugSubmissionId) {
   // Write it out to the file
   // Need to use native calls to bypass steam filesystem
   char szBugFileName[SOURCE_MAX_PATH];
-  sprintf_s(szBugFileName, "%s\\bug.txt", m_CurrentBugDirectory);
+  sprintf_s(szBugFileName, "%s\\bug.txt", m_CurrentBugDirectory);  //-V512
   FILE *fp;
   if (fopen_s(&fp, szBugFileName, "wb")) return false;
 

@@ -128,7 +128,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Windows</SubSystem>
@@ -140,6 +140,7 @@
       <LargeAddressAware>true</LargeAddressAware>
       <ShowProgress />
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>ws2_32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -182,7 +183,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Windows</SubSystem>
@@ -193,6 +194,7 @@
       <LargeAddressAware>true</LargeAddressAware>
       <ShowProgress />
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>ws2_32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -238,7 +240,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Windows</SubSystem>
@@ -252,6 +254,7 @@
       <LargeAddressAware>true</LargeAddressAware>
       <ShowProgress />
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>ws2_32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -297,7 +300,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Windows</SubSystem>
@@ -310,6 +313,7 @@
       <LargeAddressAware>true</LargeAddressAware>
       <ShowProgress />
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <DelayLoadDLLs>ws2_32.dll</DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />

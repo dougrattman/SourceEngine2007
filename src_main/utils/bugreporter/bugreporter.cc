@@ -21,7 +21,10 @@
 class BugReporter : public IBugReporter {
  public:
   BugReporter()
-      : bug_{nullptr}, trk_handle_{nullptr}, trk_record_handle_{nullptr} {}
+      : bug_{nullptr},
+        trk_handle_{nullptr},
+        trk_record_handle_{nullptr},
+        file_system_{nullptr} {}
 
   virtual ~BugReporter() {
     bug_strings_.RemoveAll();
