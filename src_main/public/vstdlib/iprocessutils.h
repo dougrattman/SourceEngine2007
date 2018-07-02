@@ -3,6 +3,10 @@
 #ifndef SOURCE_VSTDLIB_IPROCESSUTILS_H_
 #define SOURCE_VSTDLIB_IPROCESSUTILS_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "appframework/IAppSystem.h"
 #include "base/include/base_types.h"
 #include "tier1/interface.h"

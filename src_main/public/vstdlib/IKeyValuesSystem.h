@@ -3,6 +3,10 @@
 #ifndef SOURCE_VSTDLIB_IKEYVALUESSYSTEM_H_
 #define SOURCE_VSTDLIB_IKEYVALUESSYSTEM_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "tier1/interface.h"
 #include "vstdlib/vstdlib.h"

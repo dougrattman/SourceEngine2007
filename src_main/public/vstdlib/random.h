@@ -5,6 +5,10 @@
 #ifndef SOURCE_VSTDLIB_RANDOM_H_
 #define SOURCE_VSTDLIB_RANDOM_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier0/include/basetypes.h"
 #include "tier0/include/threadtools.h"
 #include "tier1/interface.h"

@@ -3,6 +3,10 @@
 #ifndef SOURCE_VSTDLIB_VSTDLIB_H_
 #define SOURCE_VSTDLIB_VSTDLIB_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier0/include/platform.h"
 
 #ifdef VSTDLIB_DLL_EXPORT

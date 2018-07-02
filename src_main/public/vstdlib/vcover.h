@@ -5,6 +5,10 @@
 #ifndef SOURCE_VSTDLIB_VCOVER_H_
 #define SOURCE_VSTDLIB_VCOVER_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier1/utlrbtree.h"
 #include "vstdlib/vstdlib.h"
 

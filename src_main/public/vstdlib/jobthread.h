@@ -28,6 +28,10 @@
 #ifndef SOURCE_VSTDLIB_JOBTHREAD_H_
 #define SOURCE_VSTDLIB_JOBTHREAD_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <climits>
 
 #include "base/include/macros.h"
@@ -456,11 +460,9 @@ class CJob : public CRefCounted1<IRefCounted, CRefCountServiceMT> {
 
   // Thread event support (safe for nullptr this to simplify code )
   bool WaitForFinish(uint32_t dwTimeout = TT_INFINITE) {
-    AssertMsg(this, "Call with null this");
     return (!IsFinished()) ? g_pThreadPool->YieldWait(this, dwTimeout) : true;
   }
   bool WaitForFinishAndRelease(uint32_t dwTimeout = TT_INFINITE) {
-    AssertMsg(this, "Call with null this");
     bool bResult = WaitForFinish(dwTimeout);
     Release();
     return bResult;

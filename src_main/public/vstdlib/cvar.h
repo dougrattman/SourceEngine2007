@@ -3,6 +3,10 @@
 #ifndef SOURCE_VSTDLIB_CVAR_H_
 #define SOURCE_VSTDLIB_CVAR_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "icvar.h"
 #include "vstdlib/vstdlib.h"
 
