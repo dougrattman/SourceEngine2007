@@ -1,45 +1,35 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//===========================================================================//
 
 #include "toolutils/ConsolePage.h"
-#include "toolutils/enginetools_int.h"
-#include "toolframework/ienginetool.h"
 
- 
+#include "toolframework/ienginetool.h"
+#include "toolutils/enginetools_int.h"
+
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 
-
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CConsolePage::CConsolePage( Panel *parent, bool bStatusVersion ) : BaseClass( parent, "ToolsConsole", bStatusVersion )
-{
-	AddActionSignalTarget( this );
+CConsolePage::CConsolePage(Panel *parent, bool bStatusVersion)
+    : BaseClass(parent, "ToolsConsole", bStatusVersion) {
+  AddActionSignalTarget(this);
 }
-
 
 //-----------------------------------------------------------------------------
 // Submits a command
 //-----------------------------------------------------------------------------
-void CConsolePage::OnCommandSubmitted( const char *pCommand )
-{
-	enginetools->Command( pCommand );
+void CConsolePage::OnCommandSubmitted(const char *pCommand) {
+  enginetools->Command(pCommand);
 }
-
 
 //-----------------------------------------------------------------------------
 // Purpose: sets up colors
 //-----------------------------------------------------------------------------
-void CConsolePage::ApplySchemeSettings(IScheme *pScheme)
-{
-	BaseClass::ApplySchemeSettings(pScheme);
+void CConsolePage::ApplySchemeSettings(IScheme *pScheme) {
+  BaseClass::ApplySchemeSettings(pScheme);
 
-	m_PrintColor = GetSchemeColor("IFMConsole.TextColor", pScheme);
-	m_DPrintColor = GetSchemeColor("IFMConsole.DevTextColor", pScheme);
+  m_PrintColor = GetSchemeColor("IFMConsole.TextColor", pScheme);
+  m_DPrintColor = GetSchemeColor("IFMConsole.DevTextColor", pScheme);
 }

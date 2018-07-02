@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{6bb0f95e-2c1c-4c5a-a3ee-2f29aebd7e84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{587526da-0fe4-472a-a861-e7b406020b36}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{e29eaaf4-4235-4174-b4db-1be2cda7f4ad}</UniqueIdentifier>
     </Filter>
@@ -63,11 +60,6 @@
     <ClCompile Include="vgui_tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="toolutils.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\public\toolutils\AttributeElementChoiceList.h">

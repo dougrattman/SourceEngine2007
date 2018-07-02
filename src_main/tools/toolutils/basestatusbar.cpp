@@ -1,6 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "toolutils/basestatusbar.h"
+
 #include "movieobjects/dmeclip.h"
 #include "tier1/KeyValues.h"
 #include "toolframework/ienginetool.h"
@@ -9,7 +10,6 @@
 #include "vgui/IVGui.h"
 #include "vgui_controls/Label.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

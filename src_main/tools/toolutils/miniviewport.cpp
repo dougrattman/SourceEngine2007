@@ -22,7 +22,6 @@
 #include "base/include/windows/windows_light.h"  // for MultiByteToWideChar
 #include "cdll_int.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CMiniViewportEngineRenderArea;
