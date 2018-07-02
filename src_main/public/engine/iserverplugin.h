@@ -14,14 +14,14 @@ class CCommand;
 // IGameEventManager::AddListener()
 //
 
-typedef enum {
+enum PLUGIN_RESULT {
   PLUGIN_CONTINUE = 0,  // keep going
   PLUGIN_OVERRIDE,      // run the game dll function but use our return value
                         // instead
   PLUGIN_STOP,          // don't run the game dll function at all
-} PLUGIN_RESULT;
+};
 
-typedef enum {
+enum EQueryCvarValueStatus {
   eQueryCvarValueStatus_ValueIntact = 0,  // It got the value fine.
   eQueryCvarValueStatus_CvarNotFound = 1,
   eQueryCvarValueStatus_NotACvar =
@@ -29,7 +29,7 @@ typedef enum {
   eQueryCvarValueStatus_CvarProtected =
       3  // The cvar was marked with FCVAR_SERVER_CAN_NOT_QUERY, so the server
          // is not allowed to have its value.
-} EQueryCvarValueStatus;
+};
 
 typedef int QueryCvarCookie_t;
 #define InvalidQueryCvarCookie -1
@@ -49,17 +49,17 @@ the_interface IServerPluginCallbacks {
                     CreateInterfaceFn gameServerFactory) = 0;
 
   // Called when the plugin should be shutdown
-  virtual void Unload(void) = 0;
+  virtual void Unload() = 0;
 
   // called when a plugins execution is stopped but the plugin is not unloaded
-  virtual void Pause(void) = 0;
+  virtual void Pause() = 0;
 
   // called when a plugin should start executing again (sometime after a Pause()
   // call)
-  virtual void UnPause(void) = 0;
+  virtual void UnPause() = 0;
 
   // Returns string describing current plugin.  e.g., Admin-Mod.
-  virtual const char *GetPluginDescription(void) = 0;
+  virtual const char *GetPluginDescription() = 0;
 
   // Called any time a new level is started (after GameInit() also on level
   // transitions within a game)
@@ -118,14 +118,14 @@ the_interface IServerPluginCallbacks {
 
 #define INTERFACEVERSION_ISERVERPLUGINHELPERS "ISERVERPLUGINHELPERS001"
 
-typedef enum {
+enum DIALOG_TYPE {
   DIALOG_MSG = 0,    // just an on screen message
   DIALOG_MENU,       // an options menu
   DIALOG_TEXT,       // a richtext dialog
   DIALOG_ENTRY,      // an entry box
   DIALOG_ASKCONNECT  // Ask the client to connect to a specified IP address.
                      // Only the "time" and "title" keys are used.
-} DIALOG_TYPE;
+};
 
 //-----------------------------------------------------------------------------
 // Purpose: functions that only 3rd party plugins need
@@ -139,9 +139,9 @@ the_interface IServerPluginHelpers {
   //  "color" - (color) the color to display the message in the hud (white by
   //  default)
   //	"level" - (int) the priority of this message (closer to 0 is higher),
-  //only 1 message can be outstanding at a time 	"time" - (int) the time in
-  //seconds this message should stay active in the GameUI (min 10 sec, max 200
-  //sec)
+  // only 1 message can be outstanding at a time 	"time" - (int) the time
+  // in  seconds this message should stay active in the GameUI (min 10 sec, max
+  // 200  sec)
   //
   // For DIALOG_MENU add sub keys for each option with these fields:
   //  "command" - (string) client command to run if selected

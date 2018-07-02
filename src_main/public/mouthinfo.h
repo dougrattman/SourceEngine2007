@@ -7,7 +7,7 @@ class CAudioSource;
 
 class CVoiceData {
  public:
-  CVoiceData(void) {
+  CVoiceData() {
     m_flElapsed = 0.0f;
     m_pAudioSource = NULL;
     m_bIgnorePhonemes = false;
@@ -47,11 +47,11 @@ class CMouthInfo {
   int sndavg;
 
  public:
-  CMouthInfo(void) {
+  CMouthInfo() {
     m_nVoiceSources = 0;
     m_needsEnvelope = false;
   }
-  virtual ~CMouthInfo(void) { ClearVoiceSources(); }
+  virtual ~CMouthInfo() { ClearVoiceSources(); }
 
   int GetNumVoiceSources(void);
   CVoiceData *GetVoiceSource(int number);
@@ -77,11 +77,11 @@ class CMouthInfo {
   short m_needsEnvelope;
 };
 
-inline bool CMouthInfo::IsActive(void) {
+inline bool CMouthInfo::IsActive() {
   return (GetNumVoiceSources() > 0) ? true : false;
 }
 
-inline int CMouthInfo::GetNumVoiceSources(void) { return m_nVoiceSources; }
+inline int CMouthInfo::GetNumVoiceSources() { return m_nVoiceSources; }
 
 inline CVoiceData *CMouthInfo::GetVoiceSource(int number) {
   if (number < 0 || number >= m_nVoiceSources) return NULL;
@@ -89,7 +89,7 @@ inline CVoiceData *CMouthInfo::GetVoiceSource(int number) {
   return &m_VoiceSources[number];
 }
 
-inline void CMouthInfo::ClearVoiceSources(void) { m_nVoiceSources = 0; }
+inline void CMouthInfo::ClearVoiceSources() { m_nVoiceSources = 0; }
 
 inline int CMouthInfo::GetIndexForSource(CAudioSource *source) {
   for (int i = 0; i < m_nVoiceSources; i++) {

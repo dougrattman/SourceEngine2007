@@ -49,11 +49,10 @@ bool Motion_SetKeyAngles(int keyNum, Quaternion &quatAngles) {
 //-----------------------------------------------------------------------------
 typedef float (*TimeModifierFunc_t)(float);
 
-typedef struct {
+struct TimeModifier_t {
   const char *szName;
   TimeModifierFunc_t pFunc;
-
-} TimeModifier_t;
+};
 
 float TimeModifierFunc_Linear(float time) { return time; }
 
@@ -69,9 +68,7 @@ TimeModifier_t g_TimeModifiers[] = {
     {"Accel (time*time)", TimeModifierFunc_TimeSquared},
 };
 
-int Motion_GetNumberOfTimeModifiers() {
-  return std::size(g_TimeModifiers);
-}
+int Motion_GetNumberOfTimeModifiers() { return std::size(g_TimeModifiers); }
 
 bool Motion_GetTimeModifierDetails(int timeInterpNum, const char **outName) {
   if (timeInterpNum < 0 || timeInterpNum >= Motion_GetNumberOfTimeModifiers()) {
@@ -255,8 +252,8 @@ CPositionInterpolator_Rope::CPositionInterpolator_Rope() {
   m_bChange = false;
   m_nSegments = 5;
 
-  for (int i = 0; i < 2; i++)
-    m_Delegate.m_CurEndPoints[i] = Vector(1e24f, 1e24f, 1e24f);
+  m_Delegate.m_CurEndPoints[0] = Vector(1e24f, 1e24f, 1e24f);
+  m_Delegate.m_CurEndPoints[1] = Vector(1e24f, 1e24f, 1e24f);
 }
 
 void CPositionInterpolator_Rope::Release() { delete this; }
@@ -266,7 +263,7 @@ void CPositionInterpolator_Rope::GetDetails(const char **outName,
                                             int *outMaxKeyReq) {
   *outName = "Rope";
   *outMinKeyReq = 0;
-  *outMinKeyReq = 1;
+  *outMaxKeyReq = 1;
 }
 
 void CPositionInterpolator_Rope::SetKeyPosition(int keyNum,
@@ -361,15 +358,14 @@ IPositionInterpolator *Motion_GetPositionInterpolator(int interpNum) {
 //-----------------------------------------------------------------------------
 typedef void (*RotationInterpolatorFunc_t)(float time, Quaternion &outRot);
 
-typedef struct {
+struct RotationInterpolator_t {
   const char *szName;
   RotationInterpolatorFunc_t pFunc;
 
   // defines the range of keys this interpolator needs to function
   int iMinReqKeyFrame;
   int iMaxReqKeyFrame;
-
-} RotationInterpolator_t;
+};
 
 void RotationInterpolatorFunc_Linear(float time, Quaternion &outRot) {
   // basic 4D spherical linear interpolation

@@ -93,7 +93,7 @@ enum soundlevel_t : int {
 #define MAX_SNDLVL_VALUE ((1 << MAX_SNDLVL_BITS) - 1)
 
 #define ATTN_TO_SNDLVL(a) (soundlevel_t)(int)((a) ? (50 + 20 / ((f32)a)) : 0)
-#define SNDLVL_TO_ATTN(a) ((a > 50) ? (20.0f / (f32)(a - 50)) : 4.0)
+#define SNDLVL_TO_ATTN(a) (((a) > 50) ? (20.0f / (f32)((a) - 50)) : 4.0)
 
 // This is a limit due to network encoding. It encodes attenuation * 64 in 8
 // bits, so the maximum is (255 / 64).

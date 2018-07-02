@@ -3,31 +3,29 @@
 #ifndef VCOLLIDE_PARSE_H
 #define VCOLLIDE_PARSE_H
 
+#include "base/include/base_types.h"
 #include "vphysics_interface.h"
 
 struct solid_t {
   int index;
-  char name[512];
-  char parent[512];
-  char surfaceprop[512];
+  ch name[512];
+  ch parent[512];
+  ch surfaceprop[512];
   Vector massCenterOverride;
   objectparams_t params;
 };
 
 struct fluid_t {
   int index;
-  char surfaceprop[512];
-
+  ch surfaceprop[512];
   fluidparams_t params;
 
   fluid_t() {}
-  fluid_t(fluid_t const &src) : params(src.params) { index = src.index; }
+  fluid_t(fluid_t const &src) : params{src.params} { index = src.index; }
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: Pass this into the parser to handle the keys that vphysics does not
 // parse.
-//-----------------------------------------------------------------------------
 class IVPhysicsKeyHandler {
  public:
   virtual void ParseKeyValue(void *pData, const char *pKey,
@@ -39,8 +37,8 @@ class IVPhysicsKeyParser {
  public:
   virtual ~IVPhysicsKeyParser() {}
 
-  virtual const char *GetCurrentBlockName(void) = 0;
-  virtual bool Finished(void) = 0;
+  virtual const char *GetCurrentBlockName() = 0;
+  virtual bool Finished() = 0;
   virtual void ParseSolid(solid_t *pSolid,
                           IVPhysicsKeyHandler *unknownKeyHandler) = 0;
   virtual void ParseFluid(fluid_t *pFluid,
@@ -54,7 +52,7 @@ class IVPhysicsKeyParser {
                            IVPhysicsKeyHandler *unknownKeyHandler) = 0;
   virtual void ParseVehicle(vehicleparams_t *pVehicle,
                             IVPhysicsKeyHandler *unknownKeyHandler) = 0;
-  virtual void SkipBlock(void) = 0;
+  virtual void SkipBlock() = 0;
 };
 
 #endif  // VCOLLIDE_PARSE_H

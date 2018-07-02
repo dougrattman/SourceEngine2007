@@ -823,11 +823,11 @@ class CNotifyScopeGuard {
   }
 
  private:
-  CNotifyScopeGuard(const CNotifyScopeGuard &g);
-
- private:
   IDmNotify *m_pNotify;
   bool m_bReleased;
+
+  CNotifyScopeGuard(const CNotifyScopeGuard &g) = delete;
+  CNotifyScopeGuard &operator=(const CNotifyScopeGuard &g) = delete;
 };
 
 #define DEFINE_SOURCE_NOTIFY_SCOPE_GUARD(_classnameprefix, _source)        \

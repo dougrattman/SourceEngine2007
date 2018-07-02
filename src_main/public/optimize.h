@@ -28,10 +28,10 @@ struct BoneStateChangeHeader_t {
 struct Vertex_t {
   DECLARE_BYTESWAP_DATADESC();
   // these index into the mesh's vert[origMeshVertID]'s bones
-  unsigned char boneWeightIndex[MAX_NUM_BONES_PER_VERT];
-  unsigned char numBones;
+  u8 boneWeightIndex[MAX_NUM_BONES_PER_VERT];
+  u8 numBones;
 
-  unsigned short origMeshVertID;
+  u16 origMeshVertID;
 
   // for sw skinned verts, these are indices into the global list of bones
   // for hw skinned verts, these are hardware bone indices
@@ -57,12 +57,12 @@ struct StripHeader_t {
   // than those that need skinning.
   short numBones;
 
-  unsigned char flags;
+  u8 flags;
 
   int numBoneStateChanges;
   int boneStateChangeOffset;
   inline BoneStateChangeHeader_t *pBoneStateChange(int i) const {
-    return (BoneStateChangeHeader_t *)(((uint8_t *)this) +
+    return (BoneStateChangeHeader_t *)(((u8 *)this) +
                                        boneStateChangeOffset) +
            i;
   };
@@ -86,22 +86,22 @@ struct StripGroupHeader_t {
   int numVerts;
   int vertOffset;
   inline Vertex_t *pVertex(int i) const {
-    return (Vertex_t *)(((uint8_t *)this) + vertOffset) + i;
+    return (Vertex_t *)(((u8 *)this) + vertOffset) + i;
   };
 
   int numIndices;
   int indexOffset;
-  inline unsigned short *pIndex(int i) const {
-    return (unsigned short *)(((uint8_t *)this) + indexOffset) + i;
+  inline u16 *pIndex(int i) const {
+    return (u16 *)(((u8 *)this) + indexOffset) + i;
   };
 
   int numStrips;
   int stripOffset;
   inline StripHeader_t *pStrip(int i) const {
-    return (StripHeader_t *)(((uint8_t *)this) + stripOffset) + i;
+    return (StripHeader_t *)(((u8 *)this) + stripOffset) + i;
   };
 
-  unsigned char flags;
+  u8 flags;
 };
 
 enum MeshFlags_t {
@@ -124,19 +124,19 @@ struct MeshHeader_t {
   int stripGroupHeaderOffset;
   inline StripGroupHeader_t *pStripGroup(int i) const {
     StripGroupHeader_t *pDebug =
-        (StripGroupHeader_t *)(((uint8_t *)this) + stripGroupHeaderOffset) + i;
+        (StripGroupHeader_t *)(((u8 *)this) + stripGroupHeaderOffset) + i;
     return pDebug;
   };
-  unsigned char flags;
+  u8 flags;
 };
 
 struct ModelLODHeader_t {
   DECLARE_BYTESWAP_DATADESC();
   int numMeshes;
   int meshOffset;
-  float switchPoint;
+  f32 switchPoint;
   inline MeshHeader_t *pMesh(int i) const {
-    MeshHeader_t *pDebug = (MeshHeader_t *)(((uint8_t *)this) + meshOffset) + i;
+    MeshHeader_t *pDebug = (MeshHeader_t *)(((u8 *)this) + meshOffset) + i;
     return pDebug;
   };
 };
@@ -150,7 +150,7 @@ struct ModelHeader_t {
   int lodOffset;
   inline ModelLODHeader_t *pLOD(int i) const {
     ModelLODHeader_t *pDebug =
-        (ModelLODHeader_t *)(((uint8_t *)this) + lodOffset) + i;
+        (ModelLODHeader_t *)(((u8 *)this) + lodOffset) + i;
     return pDebug;
   };
 };
@@ -161,7 +161,7 @@ struct BodyPartHeader_t {
   int modelOffset;
   inline ModelHeader_t *pModel(int i) const {
     ModelHeader_t *pDebug =
-        (ModelHeader_t *)(((uint8_t *)this) + modelOffset) + i;
+        (ModelHeader_t *)(((u8 *)this) + modelOffset) + i;
     return pDebug;
   };
 };
@@ -170,9 +170,9 @@ struct MaterialReplacementHeader_t {
   DECLARE_BYTESWAP_DATADESC();
   short materialID;
   int replacementMaterialNameOffset;
-  inline const char *pMaterialReplacementName(void) {
+  inline const char *pMaterialReplacementName() {
     const char *pDebug =
-        (const char *)(((uint8_t *)this) + replacementMaterialNameOffset);
+        (const char *)(((u8 *)this) + replacementMaterialNameOffset);
     return pDebug;
   }
 };
@@ -183,7 +183,7 @@ struct MaterialReplacementListHeader_t {
   int replacementOffset;
   inline MaterialReplacementHeader_t *pMaterialReplacement(int i) const {
     MaterialReplacementHeader_t *pDebug =
-        (MaterialReplacementHeader_t *)(((uint8_t *)this) + replacementOffset) +
+        (MaterialReplacementHeader_t *)(((u8 *)this) + replacementOffset) +
         i;
     return pDebug;
   }
@@ -196,8 +196,8 @@ struct FileHeader_t {
 
   // hardware params that affect how the model is to be optimized.
   int vertCacheSize;
-  unsigned short maxBonesPerStrip;
-  unsigned short maxBonesPerTri;
+  u16 maxBonesPerStrip;
+  u16 maxBonesPerTri;
   int maxBonesPerVert;
 
   // must match checkSum in the .mdl
@@ -210,7 +210,7 @@ struct FileHeader_t {
   int materialReplacementListOffset;
   MaterialReplacementListHeader_t *pMaterialReplacementList(int lodID) const {
     MaterialReplacementListHeader_t *pDebug =
-        (MaterialReplacementListHeader_t *)(((uint8_t *)this) +
+        (MaterialReplacementListHeader_t *)(((u8 *)this) +
                                             materialReplacementListOffset) +
         lodID;
     return pDebug;
@@ -220,7 +220,7 @@ struct FileHeader_t {
   int bodyPartOffset;
   inline BodyPartHeader_t *pBodyPart(int i) const {
     BodyPartHeader_t *pDebug =
-        (BodyPartHeader_t *)(((uint8_t *)this) + bodyPartOffset) + i;
+        (BodyPartHeader_t *)(((u8 *)this) + bodyPartOffset) + i;
     return pDebug;
   };
 };

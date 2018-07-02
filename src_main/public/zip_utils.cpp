@@ -880,7 +880,7 @@ u16 ZipFile::MakeXZipCommentString(char *comment, size_t max_length) {
   char tmp[XZIP_COMMENT_LENGTH];
   memset(tmp, 0, sizeof(tmp));
 
-  sprintf_s(tmp, "XZP%c %d", m_bCompatibleFormat ? '1' : '2', m_AlignmentSize);
+  sprintf_s(tmp, "XZP%c %u", m_bCompatibleFormat ? '1' : '2', m_AlignmentSize);
   if (comment && max_length <= XZIP_COMMENT_LENGTH) {
     memcpy(comment, tmp, sizeof(tmp));
   }

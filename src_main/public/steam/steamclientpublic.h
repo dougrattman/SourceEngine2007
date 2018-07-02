@@ -74,7 +74,7 @@ enum EResult {
 };
 
 // Result codes to GSHandleClientDeny/Kick
-typedef enum {
+enum EDenyReason {
   k_EDenyInvalidVersion = 1,
   k_EDenyGeneric = 2,
   k_EDenyNotLoggedOn = 3,
@@ -89,7 +89,7 @@ typedef enum {
   k_EDenySteamConnectionError = 12,
   k_EDenySteamResponseTimedOut = 13,
   k_EDenySteamValidationStalled = 14,
-} EDenyReason;
+};
 
 // Steam universes.  Each universe is a self-contained Steam instance.
 enum EUniverse {
@@ -191,7 +191,8 @@ class CSteamID {
   // eUniverse -		Universe this account belongs to
   // eAccountType -	Type of account
   //-----------------------------------------------------------------------------
-  CSteamID(uint32_t unAccountID, EUniverse eUniverse, EAccountType eAccountType) {
+  CSteamID(uint32_t unAccountID, EUniverse eUniverse,
+           EAccountType eAccountType) {
     Set(unAccountID, eUniverse, eAccountType);
   }
 
@@ -215,9 +216,9 @@ class CSteamID {
   //-----------------------------------------------------------------------------
   // Purpose: Constructor
   // Input  : ulSteamID -		64-bit representation of a Steam ID
-  // Note:	Will not accept a uint32_t or int32_t as input, as that is a probable
-  // mistake. See the stubbed out overloads in the private: section for more
-  // info.
+  // Note:	Will not accept a uint32_t or int32_t as input, as that is a
+  // probable mistake. See the stubbed out overloads in the private: section for
+  // more info.
   //-----------------------------------------------------------------------------
   CSteamID(uint64_t ulSteamID) { SetFromUint64(ulSteamID); }
 
@@ -227,7 +228,8 @@ class CSteamID {
   // eUniverse -		Universe this account belongs to
   // eAccountType -	Type of account
   //-----------------------------------------------------------------------------
-  void Set(uint32_t unAccountID, EUniverse eUniverse, EAccountType eAccountType) {
+  void Set(uint32_t unAccountID, EUniverse eUniverse,
+           EAccountType eAccountType) {
     m_unAccountID = unAccountID;
     m_EUniverse = eUniverse;
     m_EAccountType = eAccountType;
@@ -240,8 +242,8 @@ class CSteamID {
   // eUniverse -		Universe this account belongs to
   // eAccountType -	Type of account
   //-----------------------------------------------------------------------------
-  void InstancedSet(uint32_t unAccountID, uint32_t unInstance, EUniverse eUniverse,
-                    EAccountType eAccountType) {
+  void InstancedSet(uint32_t unAccountID, uint32_t unInstance,
+                    EUniverse eUniverse, EAccountType eAccountType) {
     m_unAccountID = unAccountID;
     m_EUniverse = eUniverse;
     m_EAccountType = eAccountType;
@@ -315,8 +317,8 @@ class CSteamID {
   //-----------------------------------------------------------------------------
   uint64_t ConvertToUint64() const {
     return (uint64_t)((((uint64_t)m_EUniverse) << 56) +
-                    (((uint64_t)m_EAccountType) << 52) +
-                    (((uint64_t)m_unAccountInstance) << 32) + m_unAccountID);
+                      (((uint64_t)m_EAccountType) << 52) +
+                      (((uint64_t)m_unAccountInstance) << 32) + m_unAccountID);
   }
 
   //-----------------------------------------------------------------------------
@@ -329,7 +331,7 @@ class CSteamID {
     // note we do NOT include the account instance (which is a dynamic property)
     // in the static account key
     return (uint64_t)((((uint64_t)m_EUniverse) << 56) +
-                    ((uint64_t)m_EAccountType << 52) + m_unAccountID);
+                      ((uint64_t)m_EAccountType << 52) + m_unAccountID);
   }
 
   //-----------------------------------------------------------------------------
@@ -398,10 +400,10 @@ class CSteamID {
   // this set of functions is hidden, will be moved out of class
   explicit CSteamID(const char *pchSteamID,
                     EUniverse eDefaultUniverse = k_EUniverseInvalid);
-  char *Render() const;                   // renders this steam ID to string
+  char *Render() const;                     // renders this steam ID to string
   static char *Render(uint64_t ulSteamID);  // static method to render a uint64
-                                          // representation of a steam ID to a
-                                          // string
+                                            // representation of a steam ID to a
+                                            // string
 
   void SetFromString(const char *pchSteamID, EUniverse eDefaultUniverse);
   bool SetFromSteam2String(const char *pchSteam2ID, EUniverse eUniverse);
@@ -437,7 +439,7 @@ class CSteamID {
   union {
     struct {
 #endif
-      uint32_t m_unAccountID : 32;              // unique account identifier
+      uint32_t m_unAccountID : 32;            // unique account identifier
       unsigned int m_unAccountInstance : 20;  // dynamic instance ID (used for
                                               // multiseat type accounts only)
       unsigned int m_EAccountType : 4;        // type of account - can't show as
@@ -528,10 +530,10 @@ class CGameID {
 
   // Hidden functions used only by Steam
   explicit CGameID(const char *pchGameID);
-  char *Render() const;                  // renders this Game ID to string
+  char *Render() const;                    // renders this Game ID to string
   static char *Render(uint64_t ulGameID);  // static method to render a uint64
-                                         // representation of a Game ID to a
-                                         // string
+                                           // representation of a Game ID to a
+                                           // string
 
   // must include checksum_crc.h first to get this functionality
 #if defined(CHECKSUM_CRC_H)

@@ -15,7 +15,7 @@ struct ImageFormatInfo_t;
 enum Sampler_t : int;
 enum VertexTextureSampler_t : int;
 enum StandardTextureId_t : int;
-class CPrimList;
+struct CPrimList;
 struct ShaderColorCorrectionInfo_t;
 
 #define SHADER_UTIL_INTERFACE_VERSION "VShaderUtil001"

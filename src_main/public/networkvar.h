@@ -51,8 +51,8 @@ inline int CheckDeclareClass_Access(T *, const char *pShouldBe) {
 #ifdef VALIDATE_DECLARE_CLASS
 
 #define DECLARE_CLASS(className, baseClassName)                            \
-  typedef baseClassName BaseClass;                                         \
-  typedef className ThisClass;                                             \
+  using BaseClass = baseClassName;                                         \
+  using ThisClass = className;                                             \
   template <typename T>                                                    \
   friend int CheckDeclareClass_Access(T *, const char *pShouldBe);         \
   static int CheckDeclareClass(const char *pShouldBe) {                    \
@@ -65,8 +65,8 @@ inline int CheckDeclareClass_Access(T *, const char *pShouldBe) {
 // doesn't use network vars or any of the things that use ThisClass or
 // BaseClass.
 #define DECLARE_CLASS_GAMEROOT(className, baseClassName)                 \
-  typedef baseClassName BaseClass;                                       \
-  typedef className ThisClass;                                           \
+  using BaseClass = baseClassName;                                       \
+  using ThisClass = className;                                           \
   template <typename T>                                                  \
   friend int CheckDeclareClass_Access(T *, const char *pShouldBe);       \
   static int CheckDeclareClass(const char *pShouldBe) {                  \
@@ -80,7 +80,7 @@ inline int CheckDeclareClass_Access(T *, const char *pShouldBe) {
   DECLARE_CLASS(className, baseClassName)
 
 #define DECLARE_CLASS_NOBASE(className)                            \
-  typedef className ThisClass;                                     \
+  using ThisClass = className;                                     \
   template <typename T>                                            \
   friend int CheckDeclareClass_Access(T *, const char *pShouldBe); \
   static int CheckDeclareClass(const char *pShouldBe) {            \
@@ -89,15 +89,15 @@ inline int CheckDeclareClass_Access(T *, const char *pShouldBe) {
 
 #else
 #define DECLARE_CLASS(className, baseClassName) \
-  typedef baseClassName BaseClass;              \
-  typedef className ThisClass;
+  using BaseClass = baseClassName;              \
+  using ThisClass = className;
 
 #define DECLARE_CLASS_GAMEROOT(className, baseClassName) \
   DECLARE_CLASS(className, baseClassName)
 #define DECLARE_CLASS_NOFRIEND(className, baseClassName) \
   DECLARE_CLASS(className, baseClassName)
 
-#define DECLARE_CLASS_NOBASE(className) typedef className ThisClass;
+#define DECLARE_CLASS_NOBASE(className) using ThisClass = className;
 #endif
 
 // All classes that contain CNetworkVars need a NetworkStateChanged() function.
@@ -321,7 +321,7 @@ class CNetworkColor32Base : public CNetworkVarBase<Type, Changer> {
  protected:
   inline void SetVal(uint8_t &out, const uint8_t &in) {
     if (out != in) {
-      NetworkStateChanged();
+      this->NetworkStateChanged();
       out = in;
     }
   }
@@ -407,7 +407,7 @@ class CNetworkVectorBase : public CNetworkVarBase<Type, Changer> {
  private:
   inline void DetectChange(float &out, float in) {
     if (out != in) {
-      NetworkStateChanged();
+      this->NetworkStateChanged();
       out = in;
     }
   }
@@ -500,7 +500,7 @@ class CNetworkQuaternionBase : public CNetworkVarBase<Type, Changer> {
  private:
   inline void DetectChange(float &out, float in) {
     if (out != in) {
-      NetworkStateChanged();
+      this->NetworkStateChanged();
       out = in;
     }
   }
@@ -530,7 +530,7 @@ class CNetworkHandleBase : public CNetworkVarBase<CBaseHandle, Changer> {
 
   const Type *Set(const Type *val) {
     if (CNetworkHandleBase<Type, Changer>::m_Value != val) {
-      NetworkStateChanged();
+      this->NetworkStateChanged();
       CNetworkHandleBase<Type, Changer>::m_Value = val;
     }
     return val;
@@ -702,10 +702,10 @@ class CNetworkHandleBase : public CNetworkVarBase<CBaseHandle, Changer> {
     int Count() const { return count; }                                \
                                                                        \
    protected:                                                          \
-    inline void NetworkStateChanged(int index) {                       \
+    inline void NetworkStateChanged(int i) {                           \
       CHECK_USENETWORKVARS(                                            \
           (ThisClass *)(((char *)this) - MyOffsetOf(ThisClass, name))) \
-          ->stateChangedFn(&m_Value[index]);                           \
+          ->stateChangedFn(&m_Value[i]);                               \
     }                                                                  \
     type m_Value[count];                                               \
   };                                                                   \

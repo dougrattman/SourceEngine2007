@@ -3,6 +3,7 @@
 #ifndef SOURCE_VTF_VTF_H_
 #define SOURCE_VTF_VTF_H_
 
+#include "base/include/base_types.h"
 #include "base/include/compiler_specific.h"
 #include "bitmap/imageformat.h"
 #include "tier0/include/platform.h"
@@ -16,9 +17,9 @@ class Vector;
 struct Rect_t;
 class IFileSystem;
 
-// Texture flags
+// Texture flags.
 enum CompiledVtfFlags {
-  // flags from the *.txt config file
+  // flags from the *.txt config file.
   TEXTUREFLAGS_POINTSAMPLE = 0x00000001,
   TEXTUREFLAGS_TRILINEAR = 0x00000002,
   TEXTUREFLAGS_CLAMPS = 0x00000004,
@@ -36,7 +37,7 @@ enum CompiledVtfFlags {
   TEXTUREFLAGS_ONEBITALPHA = 0x00001000,
   TEXTUREFLAGS_EIGHTBITALPHA = 0x00002000,
 
-  // newer flags from the *.txt config file
+  // newer flags from the *.txt config file.
   TEXTUREFLAGS_ENVMAP = 0x00004000,
   TEXTUREFLAGS_RENDERTARGET = 0x00008000,
   TEXTUREFLAGS_DEPTHRENDERTARGET = 0x00010000,
@@ -73,7 +74,7 @@ enum VersionedVtfFlags {
 };
 
 struct VtfProcessingOptions {
-  uint32_t cbSize;  // Set to sizeof( VtfProcessingOptions )
+  u32 cbSize;  // Set to sizeof( VtfProcessingOptions )
 
   enum Flags0 {
     // Have a channel decaying to a given decay goal for the given last number
@@ -101,18 +102,18 @@ struct VtfProcessingOptions {
     OPT_MIP_ALPHATEST = 0x00004000,             // Alpha-tested mip generation
   };
 
-  uint32_t flags0;  // A combination of "Flags0"
+  u32 flags0;  // A combination of "Flags0"
 
   // Decay settings
 
-  uint8_t clrDecayGoal[4];      // Goal colors for R G B A
-  uint8_t numNotDecayMips[4];   // Number of first mips unaffected by decay (0
-                                // means all below mip0)
-  float fDecayExponentBase[4];  // For exponential decay the base number (e.g.
-                                // 0.75)
+  u8 clrDecayGoal[4];         // Goal colors for R G B A
+  u8 numNotDecayMips[4];      // Number of first mips unaffected by decay (0
+                              // means all below mip0)
+  f32 fDecayExponentBase[4];  // For exponential decay the base number (e.g.
+                              // 0.75)
 };
 
-// Cubemap face indices
+// Cubemap face indices.
 enum CubeMapFaceIndex_t {
   CUBEMAP_FACE_RIGHT = 0,
   CUBEMAP_FACE_LEFT,
@@ -121,10 +122,10 @@ enum CubeMapFaceIndex_t {
   CUBEMAP_FACE_UP,
   CUBEMAP_FACE_DOWN,
 
-  // This is the fallback for low-end
+  // This is the fallback for low-end.
   CUBEMAP_FACE_SPHEREMAP,
 
-  // NOTE: Cubemaps have *7* faces; the 7th is the fallback spheremap
+  // NOTE: Cubemaps have *7* faces; the 7th is the fallback spheremap.
   CUBEMAP_FACE_COUNT
 };
 
@@ -149,26 +150,26 @@ the_interface IVTFTexture {
   virtual bool Init(int nWidth, int nHeight, int nDepth, ImageFormat fmt,
                     int nFlags, int iFrameCount, int nForceMipCount = -1) = 0;
 
-  // Methods to set other texture fields
-  virtual void SetBumpScale(float flScale) = 0;
+  // Methods to set other texture fields.
+  virtual void SetBumpScale(f32 flScale) = 0;
   virtual void SetReflectivity(const Vector &vecReflectivity) = 0;
 
-  // Methods to initialize the low-res image
+  // Methods to initialize the low-res image.
   virtual void InitLowResImage(int nWidth, int nHeight, ImageFormat fmt) = 0;
 
   // set the resource data (for writers). pass size=0 to delete data. if pdata
-  // is not 0, the resource data will be copied from *pData
-  virtual void *SetResourceData(uint32_t eType, void const *pData,
-                                size_t nDataSize) = 0;
+  // is not 0, the resource data will be copied from *pData.
+  virtual void *SetResourceData(u32 eType, void const *pData,
+                                usize nDataSize) = 0;
 
   // find the resource data and return a pointer to it. The data pointed to by
   // this pointer will go away when the ivtftexture does. retruns 0 if
-  // resource not present
-  virtual void *GetResourceData(uint32_t eType, size_t * pDataSize) const = 0;
+  // resource not present.
+  virtual void *GetResourceData(u32 eType, usize * pDataSize) const = 0;
 
   // Locates the resource entry info if it's present, easier than crawling array
-  // types
-  virtual bool HasResourceEntry(uint32_t eType) const = 0;
+  // types.
+  virtual bool HasResourceEntry(u32 eType) const = 0;
 
   // Retrieve available resource types of this IVTFTextures
   //		arrTypesBuffer buffer to be filled with resource types
@@ -178,16 +179,16 @@ the_interface IVTFTexture {
   // Returns:
   //		number of resource types available (can be greater than
   //"numTypesBufferElems" 		in which case only first
-  //"numTypesBufferElems" are copied to "arrTypesBuffer")
-  virtual unsigned int GetResourceTypes(uint32_t * arrTypesBuffer,
-                                        int numTypesBufferElems) const = 0;
+  //"numTypesBufferElems" are copied to "arrTypesBuffer").
+  virtual u32 GetResourceTypes(u32 * arrTypesBuffer, int numTypesBufferElems)
+      const = 0;
 
   // When unserializing, we can skip a certain number of mip levels,
   // and we also can just load everything but the image data
   // NOTE: If you load only the buffer header, you'll need to use the
   // VTFBufferHeaderSize() method below to only read that much from the file
   // NOTE: If you skip mip levels, the height + width of the texture will
-  // change to reflect the size of the largest read in mip level
+  // change to reflect the size of the largest read in mip level.
   virtual bool Unserialize(CUtlBuffer & buf, bool bHeaderOnly = false,
                            int nSkipMipLevels = 0) = 0;
   virtual bool Serialize(CUtlBuffer & buf) = 0;
@@ -206,10 +207,10 @@ the_interface IVTFTexture {
   virtual int Depth() const = 0;
   virtual int MipCount() const = 0;
 
-  // returns the size of one row of a particular mip level
+  // returns the size of one row of a particular mip level.
   virtual int RowSizeInBytes(int nMipLevel) const = 0;
 
-  // returns the size of one face of a particular mip level
+  // returns the size of one face of a particular mip level.
   virtual int FaceSizeInBytes(int nMipLevel) const = 0;
 
   virtual ImageFormat Format() const = 0;
@@ -217,56 +218,56 @@ the_interface IVTFTexture {
   virtual int FrameCount() const = 0;
   virtual int Flags() const = 0;
 
-  virtual float BumpScale() const = 0;
+  virtual f32 BumpScale() const = 0;
 
   virtual int LowResWidth() const = 0;
   virtual int LowResHeight() const = 0;
   virtual ImageFormat LowResFormat() const = 0;
 
-  // NOTE: reflectivity[0] = blue, [1] = greem, [2] = red
+  // NOTE: reflectivity[0] = blue, [1] = greem, [2] = red.
   virtual const Vector &Reflectivity() const = 0;
 
   virtual bool IsCubeMap() const = 0;
   virtual bool IsNormalMap() const = 0;
   virtual bool IsVolumeTexture() const = 0;
 
-  // Computes the dimensions of a particular mip level
+  // Computes the dimensions of a particular mip level.
   virtual void ComputeMipLevelDimensions(
       int iMipLevel, int *pMipWidth, int *pMipHeight, int *pMipDepth) const = 0;
 
   // Computes the size (in bytes) of a single mipmap of a single face of a
-  // single frame
+  // single frame.
   virtual int ComputeMipSize(int iMipLevel) const = 0;
 
   // Computes the size of a subrect (specified at the top mip level) at a
-  // particular lower mip level
+  // particular lower mip level.
   virtual void ComputeMipLevelSubRect(Rect_t * pSrcRect, int nMipLevel,
                                       Rect_t *pSubRect) const = 0;
 
   // Computes the size (in bytes) of a single face of a single frame
-  // All mip levels starting at the specified mip level are included
+  // All mip levels starting at the specified mip level are included.
   virtual int ComputeFaceSize(int iStartingMipLevel = 0) const = 0;
 
-  // Computes the total size (in bytes) of all faces, all frames
+  // Computes the total size (in bytes) of all faces, all frames.
   virtual int ComputeTotalSize() const = 0;
 
-  // Returns the base address of the image data
-  virtual unsigned char *ImageData() = 0;
+  // Returns the base address of the image data.
+  virtual u8 *ImageData() = 0;
 
   // Returns a pointer to the data associated with a particular frame, face, and
-  // mip level
-  virtual unsigned char *ImageData(int iFrame, int iFace, int iMipLevel) = 0;
+  // mip level.
+  virtual u8 *ImageData(int iFrame, int iFace, int iMipLevel) = 0;
 
   // Returns a pointer to the data associated with a particular frame, face, mip
-  // level, and offset
-  virtual unsigned char *ImageData(int iFrame, int iFace, int iMipLevel, int x,
-                                   int y, int z = 0) = 0;
+  // level, and offset.
+  virtual u8 *ImageData(int iFrame, int iFace, int iMipLevel, int x, int y,
+                        int z = 0) = 0;
 
-  // Returns the base address of the low-res image data
-  virtual unsigned char *LowResImageData() = 0;
+  // Returns the base address of the low-res image data.
+  virtual u8 *LowResImageData() = 0;
 
   // Converts the textures image format. Use IMAGE_FORMAT_DEFAULT
-  // if you want to be able to use various tool functions below
+  // if you want to be able to use various tool functions below.
   virtual void ConvertImageFormat(ImageFormat fmt, bool bNormalToDUDV) = 0;
 
   // NOTE: The following methods only work on textures using the
@@ -275,38 +276,38 @@ the_interface IVTFTexture {
   // Generate spheremap based on the current cube faces (only works for
   // cubemaps) The look dir indicates the direction of the center of the sphere
   // NOTE: Only call this *after* cube faces have been correctly
-  // oriented (using FixCubemapFaceOrientation)
+  // oriented (using FixCubemapFaceOrientation).
   virtual void GenerateSpheremap(LookDir_t lookDir = LOOK_DOWN_Z) = 0;
 
   // Generate spheremap based on the current cube faces (only works for
   // cubemaps) The look dir indicates the direction of the center of the sphere
   // NOTE: Only call this *after* cube faces have been correctly
-  // oriented (using FixCubemapFaceOrientation)
-  virtual void GenerateHemisphereMap(unsigned char *pSphereMapBitsRGBA,
-                                     int targetWidth, int targetHeight,
-                                     LookDir_t lookDir, int iFrame) = 0;
+  // oriented (using FixCubemapFaceOrientation).
+  virtual void GenerateHemisphereMap(u8 * pSphereMapBitsRGBA, int targetWidth,
+                                     int targetHeight, LookDir_t lookDir,
+                                     int iFrame) = 0;
 
-  // Fixes the cubemap faces orientation from our standard to the
-  // standard the material system needs.
+  // Fixes the cubemap faces orientation from our standard to the standard the
+  // material system needs.
   virtual void FixCubemapFaceOrientation() = 0;
 
-  // Generates mipmaps from the base mip levels
+  // Generates mipmaps from the base mip levels.
   virtual void GenerateMipmaps() = 0;
 
   // Put 1/miplevel (1..n) into alpha.
   virtual void PutOneOverMipLevelInAlpha() = 0;
 
-  // Computes the reflectivity
+  // Computes the reflectivity.
   virtual void ComputeReflectivity() = 0;
 
-  // Computes the alpha flags
+  // Computes the alpha flags.
   virtual void ComputeAlphaFlags() = 0;
 
-  // Generate the low-res image bits
+  // Generate the low-res image bits.
   virtual bool ConstructLowResImage() = 0;
 
   // Gets the texture all internally consistent assuming you've loaded
-  // mip 0 of all faces of all frames
+  // mip 0 of all faces of all frames.
   virtual void PostProcess(bool bGenerateSpheremap,
                            LookDir_t lookDir = LOOK_DOWN_Z,
                            bool bAllowFixCubemapOrientation = true) = 0;
@@ -321,32 +322,32 @@ the_interface IVTFTexture {
   virtual void MatchCubeMapBorders(int iStage, ImageFormat finalFormat,
                                    bool bSkybox) = 0;
 
-  // Sets threshhold values for alphatest mipmapping
-  virtual void SetAlphaTestThreshholds(float flBase, float flHighFreq) = 0;
+  // Sets threshhold values for alphatest mipmapping.
+  virtual void SetAlphaTestThreshholds(f32 flBase, f32 flHighFreq) = 0;
 
   // Sets post-processing flags (settings are copied, pointer passed to
-  // distinguish between structure versions)
+  // distinguish between structure versions).
   virtual void SetPostProcessingSettings(
       VtfProcessingOptions const *pOptions) = 0;
 };
 
-// Class factory
+// Class factory.
 IVTFTexture *CreateVTFTexture();
-void DestroyVTFTexture(IVTFTexture *pTexture);
+void DestroyVTFTexture(IVTFTexture *&pTexture);
 
 // Allows us to only load in the first little bit of the VTF file to get info
 // Clients should read this much into a UtlBuffer and then pass it in to
-// Unserialize
+// Unserialize.
 int VTFFileHeaderSize(int nMajorVersion = -1, int nMinorVersion = -1);
 
-// 360 Conversion
-typedef bool (*CompressFunc_t)(CUtlBuffer &inputBuffer,
-                               CUtlBuffer &outputBuffer);
-bool ConvertVTFTo360Format(const char *pDebugName, CUtlBuffer &sourceBuf,
+// 360 Conversion.
+using CompressFunc_t = bool (*)(CUtlBuffer &inputBuffer,
+                                CUtlBuffer &outputBuffer);
+bool ConvertVTFTo360Format(const ch *pDebugName, CUtlBuffer &sourceBuf,
                            CUtlBuffer &targetBuf, CompressFunc_t pCompressFunc);
 
-// 360 Preload
-bool GetVTFPreload360Data(const char *pDebugName, CUtlBuffer &fileBufferIn,
+// 360 Preload.
+bool GetVTFPreload360Data(const ch *pDebugName, CUtlBuffer &fileBufferIn,
                           CUtlBuffer &preloadBufferOut);
 
 #include "mathlib/vector.h"
@@ -396,7 +397,7 @@ bool GetVTFPreload360Data(const char *pDebugName, CUtlBuffer &fileBufferIn,
 
 #pragma pack(1)
 
-// version number for the disk texture cache
+// Version number for the disk texture cache.
 #define VTF_MAJOR_VERSION 7
 #define VTF_MINOR_VERSION 4
 
@@ -412,9 +413,10 @@ bool GetVTFPreload360Data(const char *pDebugName, CUtlBuffer &fileBufferIn,
 // compiler pads, the 360 compiler does NOT.
 struct VTFFileBaseHeader_t {
   DECLARE_BYTESWAP_DATADESC();
-  char fileTypeString[4];  // "VTF" Valve texture file
-  int version[2];          // version[0].version[1]
-  int headerSize;
+
+  ch fileTypeString[4];  // "VTF" Valve texture file
+  i32 version[2];        // version[0].version[1]
+  i32 headerSize;
 };
 
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
@@ -422,18 +424,18 @@ MSVC_DISABLE_WARNING(4324)
 
 struct VTFFileHeaderV7_1_t : public VTFFileBaseHeader_t {
   DECLARE_BYTESWAP_DATADESC();
-  unsigned short width;
-  unsigned short height;
-  unsigned int flags;
-  unsigned short numFrames;
-  unsigned short startFrame;
+  u16 width;
+  u16 height;
+  u32 flags;
+  u16 numFrames;
+  u16 startFrame;
   VectorAligned reflectivity;
-  float bumpScale;
+  f32 bumpScale;
   ImageFormat imageFormat;
-  unsigned char numMipLevels;
+  u8 numMipLevels;
   ImageFormat lowResImageFormat;
-  unsigned char lowResImageWidth;
-  unsigned char lowResImageHeight;
+  u8 lowResImageWidth;
+  u8 lowResImageHeight;
 };
 
 MSVC_END_WARNING_OVERRIDE_SCOPE()
@@ -441,56 +443,58 @@ MSVC_END_WARNING_OVERRIDE_SCOPE()
 struct VTFFileHeaderV7_2_t : public VTFFileHeaderV7_1_t {
   DECLARE_BYTESWAP_DATADESC();
 
-  unsigned short depth;
+  u16 depth;
 };
 
-#define BYTE_POS(byteVal, shft) \
-  uint32_t(uint32_t(uint8_t(byteVal)) << uint8_t((shft)*8))
+#define BYTE_POS(byteVal, shft) u32(u32(u8(byteVal)) << u8((shft)*8))
 #define MK_VTF_RSRC_ID(a, b, c) \
-  uint32_t(BYTE_POS(a, 0) | BYTE_POS(b, 1) | BYTE_POS(c, 2))
+  u32(BYTE_POS(a, 0) | BYTE_POS(b, 1) | BYTE_POS(c, 2))
 #define MK_VTF_RSRCF(d) BYTE_POS(d, 3)
 
-// Special section for stock resources types
+// Special section for stock resources types.
 enum ResourceEntryType {
   // Legacy stock resources, readin/writing are handled differently (i.e. they
-  // do not have the length tag word!)
-  VTF_LEGACY_RSRC_LOW_RES_IMAGE =
-      MK_VTF_RSRC_ID(0x01, 0, 0),                      // Low-res image data
-  VTF_LEGACY_RSRC_IMAGE = MK_VTF_RSRC_ID(0x30, 0, 0),  // Image data
+  // do not have the length tag word!).
 
-  // New extended resource
-  VTF_RSRC_SHEET = MK_VTF_RSRC_ID(0x10, 0, 0),  // Sheet data
+  // Low-res image data.
+  VTF_LEGACY_RSRC_LOW_RES_IMAGE = MK_VTF_RSRC_ID(0x01, 0, 0),
+  // Image data.
+  VTF_LEGACY_RSRC_IMAGE = MK_VTF_RSRC_ID(0x30, 0, 0),
+
+  // New extended resource. Sheet data.
+  VTF_RSRC_SHEET = MK_VTF_RSRC_ID(0x10, 0, 0),
 };
 
-// Bytes with special meaning when set in a resource type
+// Bytes with special meaning when set in a resource type.
 enum ResourceEntryTypeFlag {
-  RSRCF_HAS_NO_DATA_CHUNK =
-      MK_VTF_RSRCF(0x02),  // Resource doesn't have a corresponding data chunk
-  RSRCF_MASK = MK_VTF_RSRCF(0xFF)  // Mask for all the flags
+  // Resource doesn't have a corresponding data chunk.
+  RSRCF_HAS_NO_DATA_CHUNK = MK_VTF_RSRCF(0x02),
+  // Mask for all the flags.
+  RSRCF_MASK = MK_VTF_RSRCF(0xFF)
 };
 
-// Header details constants
+// Header details constants.
 enum HeaderDetails {
-  MAX_RSRC_DICTIONARY_ENTRIES = 32,  // Max number of resources in dictionary
-  MAX_X360_RSRC_DICTIONARY_ENTRIES =
-      4,  // 360 needs this to be slim, otherwise preload size suffers
+  // Max number of resources in dictionary.
+  MAX_RSRC_DICTIONARY_ENTRIES = 32,
+  // 360 needs this to be slim, otherwise preload size suffers.
+  MAX_X360_RSRC_DICTIONARY_ENTRIES = 4,
 };
 
 struct ResourceEntryInfo {
   union {
-    unsigned int
-        eType;  // Use MK_VTF_??? macros to be endian compliant with the type
-    unsigned char chTypeBytes[4];
+    u32 eType;  // Use MK_VTF_??? macros to be endian compliant with the type.
+    u8 chTypeBytes[4];
   };
-  unsigned int
-      resData;  // Resource data or offset from the beginning of the file
+
+  u32 resData;  // Resource data or offset from the beginning of the file.
 };
 
 struct VTFFileHeaderV7_3_t : public VTFFileHeaderV7_2_t {
   DECLARE_BYTESWAP_DATADESC();
 
-  char pad4[3];
-  unsigned int numResources;
+  ch pad4[3];
+  u32 numResources;
 
   // AFTER THE IMPLICIT PADDING CAUSED BY THE COMPILER....
   // *** followed by *** ResourceEntryInfo resources[0];
@@ -506,50 +510,52 @@ struct VTFFileHeader_t : public VTFFileHeaderV7_3_t {
 
 struct VTFFileHeaderX360_t : public VTFFileBaseHeader_t {
   DECLARE_BYTESWAP_DATADESC();
-  unsigned int flags;
-  unsigned short width;   // actual width of data in file
-  unsigned short height;  // actual height of data in file
-  unsigned short depth;   // actual depth of data in file
-  unsigned short numFrames;
-  unsigned short
-      preloadDataSize;  // exact size of preload data (may extend into image!)
-  unsigned char mipSkipCount;  // used to resconstruct mapping dimensions
-  unsigned char numResources;
-  Vector reflectivity;  // Resides on 16 uint8_t boundary!
-  float bumpScale;
+  u32 flags;
+  u16 width;   // Actual width of data in file.
+  u16 height;  // Actual height of data in file.
+  u16 depth;   // Actual depth of data in file.
+  u16 numFrames;
+  u16 preloadDataSize;  // Exact size of preload data (may extend into image!)
+  u8 mipSkipCount;      // Used to resconstruct mapping dimensions.
+  u8 numResources;
+  Vector reflectivity;  // Resides on 16 u8 boundary!
+  f32 bumpScale;
   ImageFormat imageFormat;
-  unsigned char lowResImageSample[4];
-  unsigned int compressedSize;
+  u8 lowResImageSample[4];
+  u32 compressedSize;
 
   // *** followed by *** ResourceEntryInfo resources[0];
 };
 
-//  Resource Extensions  //
+// Resource Extensions.
 
-// extended texture lod control:
+// Extended texture LOD control:
 #define VTF_RSRC_TEXTURE_LOD_SETTINGS (MK_VTF_RSRC_ID('L', 'O', 'D'))
+
 struct TextureLODControlSettings_t {
   // What to clamp the dimenstions to, mip-map wise, when at picmip 0. keeps
   // texture from exceeding (1<<m_ResolutionClamp) at picmip 0.  at picmip 1, it
   // won't exceed (1<<(m_ResolutionClamp-1)), etc.
-  uint8_t m_ResolutionClampX;
-  uint8_t m_ResolutionClampY;
+  u8 m_ResolutionClampX;
+  u8 m_ResolutionClampY;
 
-  uint8_t m_ResolutionClampX_360;
-  uint8_t m_ResolutionClampY_360;
+  u8 m_ResolutionClampX_360;
+  u8 m_ResolutionClampY_360;
 };
 
 // Extended flags and settings:
 #define VTF_RSRC_TEXTURE_SETTINGS_EX (MK_VTF_RSRC_ID('T', 'S', '0'))
+
 struct TextureSettingsEx_t {
-  enum Flags0  // flags0 uint8_t mask
-  { UNUSED = 0x01,
+  // flags0 u8 mask.
+  enum Flags0 : u8 {
+    UNUSED = 0x01,
   };
 
-  uint8_t m_flags0;  // a bitwise combination of Flags0
-  uint8_t m_flags1;  // set to zero. for future expansion.
-  uint8_t m_flags2;  // set to zero. for future expansion.
-  uint8_t m_flags3;  // set to zero. for future expansion.
+  u8 m_flags0;  // A bitwise combination of Flags0
+  u8 m_flags1;  // Set to zero. for future expansion.
+  u8 m_flags2;  // Set to zero. for future expansion.
+  u8 m_flags3;  // Set to zero. for future expansion.
 };
 
 #define VTF_RSRC_TEXTURE_CRC (MK_VTF_RSRC_ID('C', 'R', 'C'))

@@ -206,7 +206,7 @@ struct SoundInfo_t {
         int iDelay = fDelay * 1000.0f;
 
         iDelay = std::clamp(iDelay, (int)(-10 * MAX_SOUND_DELAY_MSEC),
-                       (int)(MAX_SOUND_DELAY_MSEC));
+                            (int)(MAX_SOUND_DELAY_MSEC));
 
         if (iDelay < 0) {
           iDelay /= 10;
@@ -299,7 +299,7 @@ struct SoundInfo_t {
 };
 
 struct SpatializationInfo_t {
-  typedef enum { SI_INCREATION = 0, SI_INSPATIALIZATION } SPATIALIZATIONTYPE;
+  enum SPATIALIZATIONTYPE { SI_INCREATION = 0, SI_INSPATIALIZATION };
 
   // Inputs
   SPATIALIZATIONTYPE type;

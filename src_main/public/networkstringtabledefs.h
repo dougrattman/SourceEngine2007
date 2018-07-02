@@ -3,10 +3,12 @@
 #ifndef NETWORKSTRINGTABLEDEFS_H
 #define NETWORKSTRINGTABLEDEFS_H
 
+#include "base/include/base_types.h"
+
 typedef int TABLEID;
 
 #define INVALID_STRING_TABLE -1
-const unsigned short INVALID_STRING_INDEX = (unsigned short)-1;
+const u16 INVALID_STRING_INDEX = (u16)-1;
 
 // table index is sent in log2(MAX_TABLES) bits
 #define MAX_TABLES 32  // Table id is 4 bits

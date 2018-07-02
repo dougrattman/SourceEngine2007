@@ -390,11 +390,7 @@ class CPixelWriter {
     Assert(IsUsingFloatFormat());
 
     if (PIXELWRITER_USING_16BIT_FLOAT_FORMAT & flags_) {
-      float16 fp16[4];
-      fp16[0].SetFloat(r);
-      fp16[1].SetFloat(g);
-      fp16[2].SetFloat(b);
-      fp16[3].SetFloat(a);
+      float16 fp16[4]{r, g, b, a};
       // fp16
       u16 pBuf[4] = {0, 0, 0, 0};
       pBuf[r_shift_ >> 4] |= (fp16[0].GetBits() & r_mask_) << (r_shift_ & 0xF);
@@ -441,6 +437,7 @@ class CPixelWriter {
   u16 bytes_per_row_;
   u8 size_;
   u8 flags_;
+  u8 padding_[4];
 
   i16 r_shift_, g_shift_, b_shift_, a_shift_;
   u32 r_mask_, g_mask_, b_mask_, a_mask_;

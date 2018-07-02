@@ -422,7 +422,7 @@ void CSentence::ParseWords(CUtlBuffer &buf) {
       buf.GetString(token);
 
       char phonemename[256];
-      Q_strncpy(phonemename, token, std::size(phonemename));
+      strcpy_s(phonemename, token);
 
       buf.GetString(token);
       float tagstart = atof(token);
@@ -1043,7 +1043,6 @@ CSentence &CSentence::operator=(const CSentence &src) {
   // Copy everything
   for (i = 0; i < src.m_Words.Size(); i++) {
     CWordTag *word = src.m_Words[i];
-
     CWordTag *newWord = new CWordTag(*word);
 
     AddWordTag(newWord);

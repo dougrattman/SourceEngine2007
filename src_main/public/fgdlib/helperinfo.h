@@ -44,9 +44,7 @@ inline CHelperInfo::~CHelperInfo() {
   for (int i = 0; i < nCount; i++) {
     char *pszParam = m_Parameters.Element(i);
     Assert(pszParam != NULL);
-    if (pszParam != NULL) {
-      delete[] pszParam;
-    }
+    delete[] pszParam;
   }
 
   m_Parameters.RemoveAll();

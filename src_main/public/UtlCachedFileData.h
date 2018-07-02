@@ -28,10 +28,10 @@ the_interface IBaseCacheInfo {
 
 typedef unsigned int (*PFNCOMPUTECACHEMETACHECKSUM)(void);
 
-typedef enum {
+enum UtlCachedFileDataType_t {
   UTL_CACHED_FILE_USE_TIMESTAMP = 0,
   UTL_CACHED_FILE_USE_FILESIZE,
-} UtlCachedFileDataType_t;
+};
 
 template <class T>
 class CUtlCachedFileData {

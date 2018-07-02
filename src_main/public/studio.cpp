@@ -1,11 +1,10 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "studio.h"
 #include "datacache/idatacache.h"
 #include "datacache/imdlcache.h"
+#include "studio.h"
 #include "tier1/convar.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -196,7 +195,7 @@ bool studiohdr_t::SequencesAvailable() const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int studiohdr_t::GetNumSeq(void) const {
+int studiohdr_t::GetNumSeq() const {
   if (numincludemodels == 0) {
     return numlocalseq;
   }
@@ -267,7 +266,7 @@ int studiohdr_t::iRelativeSeq(int baseseq, int relseq) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int studiohdr_t::GetNumPoseParameters(void) const {
+int studiohdr_t::GetNumPoseParameters() const {
   if (numincludemodels == 0) {
     return numlocalposeparameters;
   }
@@ -362,7 +361,7 @@ int studiohdr_t::ExitNode(int iSequence) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int studiohdr_t::GetNumAttachments(void) const {
+int studiohdr_t::GetNumAttachments() const {
   if (numincludemodels == 0) {
     return numlocalattachments;
   }
@@ -466,7 +465,7 @@ int studiohdr_t::GetTransition(int iFrom, int iTo) const {
   */
 }
 
-int studiohdr_t::GetActivityListVersion(void) const {
+int studiohdr_t::GetActivityListVersion() const {
   if (numincludemodels == 0) {
     return activitylistversion;
   }
@@ -515,7 +514,7 @@ void studiohdr_t::SetActivityListVersion(int activity_list_version) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int studiohdr_t::GetNumIKAutoplayLocks(void) const {
+int studiohdr_t::GetNumIKAutoplayLocks() const {
   if (numincludemodels == 0) {
     return numlocalikautoplaylocks;
   }
@@ -552,8 +551,7 @@ int studiohdr_t::CountAutoplaySequences() const {
   return count;
 }
 
-int studiohdr_t::CopyAutoplaySequences(unsigned short *pOut,
-                                       int outCount) const {
+int studiohdr_t::CopyAutoplaySequences(u16 *pOut, int outCount) const {
   int outIndex = 0;
   for (int i = 0; i < GetNumSeq() && outIndex < outCount; i++) {
     mstudioseqdesc_t &seqdesc = pSeqdesc(i);
@@ -593,7 +591,7 @@ int studiohdr_t::RemapAnimBone(int iAnim, int iLocalBone) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-CStudioHdr::CStudioHdr(void) {
+CStudioHdr::CStudioHdr() {
   // set pointer to bogus value
   m_nFrameUnlockCounter = 0;
   m_pFrameUnlockCounter = &m_nFrameUnlockCounter;
@@ -699,9 +697,10 @@ const studiohdr_t *CStudioHdr::GroupStudioHdr(int i) const {
 
   if (!m_pStudioHdrCache.IsValidIndex(i)) {
     const char *pszName = (m_pStudioHdr) ? m_pStudioHdr->pszName() : "<<0>>";
-    Warning("Invalid index passed to CStudioHdr(%s)::GroupStudioHdr(): "
-                   "%d, but max is %d [%d]\n",
-                   pszName, i, m_pStudioHdrCache.Count());
+    Warning(
+        "Invalid index passed to CStudioHdr(%s)::GroupStudioHdr(): "
+        "%d, but max is %d [%d]\n",
+        pszName, i, m_pStudioHdrCache.Count());
     DebuggerBreakIfDebugging();
     return m_pStudioHdr;  // return something known to probably exist, certainly
                           // things will be messed up, but hopefully not crash
@@ -757,7 +756,7 @@ mstudioanimdesc_t &CStudioHdr::pAnimdesc(int i) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int CStudioHdr::GetNumSeq(void) const {
+int CStudioHdr::GetNumSeq() const {
   if (m_pVModel == NULL) {
     return m_pStudioHdr->numlocalseq;
   }
@@ -819,7 +818,7 @@ int CStudioHdr::iRelativeSeq(int baseseq, int relseq) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int CStudioHdr::GetNumPoseParameters(void) const {
+int CStudioHdr::GetNumPoseParameters() const {
   if (m_pVModel == NULL) {
     return m_pStudioHdr->numlocalposeparameters;
   }
@@ -907,7 +906,7 @@ int CStudioHdr::ExitNode(int iSequence) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int CStudioHdr::GetNumAttachments(void) const {
+int CStudioHdr::GetNumAttachments() const {
   if (m_pVModel == NULL) {
     return m_pStudioHdr->numlocalattachments;
   }
@@ -1009,7 +1008,7 @@ int CStudioHdr::GetTransition(int iFrom, int iTo) const {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int CStudioHdr::GetActivityListVersion(void) const {
+int CStudioHdr::GetActivityListVersion() const {
   if (m_pVModel == NULL) {
     return m_pStudioHdr->activitylistversion;
   }
@@ -1045,7 +1044,7 @@ void CStudioHdr::SetActivityListVersion(int version) {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int CStudioHdr::GetEventListVersion(void) const {
+int CStudioHdr::GetEventListVersion() const {
   if (m_pVModel == NULL) {
     return m_pStudioHdr->eventsindexed;
   }
@@ -1081,7 +1080,7 @@ void CStudioHdr::SetEventListVersion(int version) {
 // Purpose:
 //-----------------------------------------------------------------------------
 
-int CStudioHdr::GetNumIKAutoplayLocks(void) const {
+int CStudioHdr::GetNumIKAutoplayLocks() const {
   if (m_pVModel == NULL) {
     return m_pStudioHdr->numlocalikautoplaylocks;
   }
@@ -1131,8 +1130,8 @@ int CStudioHdr::RemapAnimBone(int iAnim, int iLocalBone) const {
 void CStudioHdr::RunFlexRules(const float *src, float *dest) {
   int i, j;
 
-  // TODO(d.rattman): this shouldn't be needed, flex without rules should be stripped in
-  // studiomdl
+  // TODO(d.rattman): this shouldn't be needed, flex without rules should be
+  // stripped in studiomdl
   for (i = 0; i < numflexdesc(); i++) {
     dest[i] = 0;
   }
@@ -1465,10 +1464,9 @@ void CStudioHdr::CActivityToSequenceMapping::Initialize(
   // written so far for each activity. (This is basically a very simple way of
   // doing a map.) This stack may potentially grow very large; so if you have
   // problems with it, go to a utlmap or similar structure.
-  unsigned int allocsize = (topActivity + 1) * sizeof(int);
-  allocsize = AlignValue(allocsize, 16);
-  int *__restrict seqsPerAct = static_cast<int *>(stackalloc(allocsize));
-  memset(seqsPerAct, 0, allocsize);
+  unsigned int allocsize = topActivity + 1;
+  int *__restrict seqsPerAct = stack_alloc<int>(allocsize);
+  memset(seqsPerAct, 0, allocsize * sizeof(int));
 
   // okay, walk through all the sequences again, and write the relevant data
   // into our little table.
