@@ -1,52 +1,42 @@
-//====== Copyright c 1996-2007, Valve Corporation, All rights reserved. =======//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef DXINCLUDEIMPL_H
-#define DXINCLUDEIMPL_H
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_DX_PROXY_DXINCLUDEIMPL_H_
+#define SOURCE_DX_PROXY_DXINCLUDEIMPL_H_
+
+#include "filememcache.h"
 
 FileCache s_incFileCache;
 
-struct DxIncludeImpl : public ID3DXInclude
-{
-	STDMETHOD(Open)(THIS_ D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)
-	{
-		CachedFileData *pFileData = s_incFileCache.Get( pFileName );
-		if ( !pFileData || !pFileData->IsValid() )
-			return E_FAIL;
-		
-		*ppData = pFileData->GetDataPtr();
-		*pBytes = pFileData->GetDataLen();
+struct D3DXIncludeImpl : public ID3DXInclude {
+  STDMETHOD(Open)
+  (D3DXINCLUDE_TYPE, LPCSTR pFileName, LPCVOID, LPCVOID *ppData, UINT *pBytes) {
+    CachedFileData *pFileData = s_incFileCache.Get(pFileName);
+    if (!pFileData || !pFileData->IsValid()) return E_FAIL;
 
-		pFileData->UpdateRefCount( +1 );
+    *ppData = pFileData->GetDataPtr();
+    *pBytes = pFileData->GetDataLen();
 
-		return S_OK;
-	}
+    pFileData->AddRef();
 
-	STDMETHOD(Open)(THIS_ D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData,
-		LPCVOID *ppData, UINT *pBytes,
-		/* OUT */ LPSTR pFullPath, DWORD cbFullPath)
-	{
-		if ( pFullPath && cbFullPath ) strncpy( pFullPath, pFileName, cbFullPath );
-		return Open( IncludeType, pFileName, pParentData, ppData, pBytes );
-	}
-	
-	STDMETHOD(Close)(THIS_ LPCVOID pData)
-	{
-		if ( CachedFileData *pFileData = CachedFileData::GetByDataPtr( pData ) )
-			pFileData->UpdateRefCount( -1 );
+    return S_OK;
+  }
 
-		return S_OK;
-	}
+  STDMETHOD(Open)
+  (D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData,
+   LPCVOID *ppData, UINT *pBytes,
+   /* OUT */ LPSTR pFullPath, DWORD cbFullPath) {
+    if (pFullPath && cbFullPath) strcpy_s(pFullPath, cbFullPath, pFileName);
+    return Open(IncludeType, pFileName, pParentData, ppData, pBytes);
+  }
+
+  STDMETHOD(Close)(LPCVOID pData) {
+    if (CachedFileData *pFileData = CachedFileData::GetByDataPtr(pData))
+      pFileData->Release();
+
+    return S_OK;
+  }
 };
 
-DxIncludeImpl s_incDxImpl;
+D3DXIncludeImpl s_incDxImpl;
 
-#endif // #ifndef DXINCLUDEIMPL_H
+#endif  // SOURCE_DX_PROXY_DXINCLUDEIMPL_H_
