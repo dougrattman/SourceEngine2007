@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_NOISE_H_
 #define SOURCE_MATHLIB_NOISE_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <cmath>
 #include "base/include/base_types.h"
 #include "mathlib/vector.h"

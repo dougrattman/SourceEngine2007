@@ -15,6 +15,10 @@
 #ifndef SOURCE_MATHLIB_VMATRIX_H_
 #define SOURCE_MATHLIB_VMATRIX_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <cstring>
 #include "base/include/base_types.h"
 #include "mathlib/mathlib.h"
@@ -130,6 +134,7 @@ class VMatrix {
 
   // Matrix->matrix operations.
  public:
+  VMatrix(const VMatrix &mOther);
   VMatrix &operator=(const VMatrix &mOther);
 
   // Multiply two matrices (out = this * vm).
@@ -200,9 +205,7 @@ class VMatrix {
   f32 m[4][4];
 };
 
-
 // Helper functions.
-
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -241,13 +244,11 @@ VMatrix SetupMatrixOrgAngles(const Vector &origin, const QAngle &vAngles);
               mat.m[3][3])))  // ** Note: this generates a temporary, don't hold
                               // reference!
 
-
 // Returns the point at the intersection on the 3 planes.
 // Returns false if it can't be solved (2 or more planes are parallel).
 
 bool PlaneIntersection(const VPlane &vp1, const VPlane &vp2, const VPlane &vp3,
                        Vector &vOut);
-
 
 // These methods are faster. Use them if you want faster code
 
@@ -340,13 +341,11 @@ void MatrixBuildScale(VMatrix &dst, const Vector &scale);
 void MatrixBuildPerspective(VMatrix &dst, f32 fovX, f32 fovY, f32 zNear,
                             f32 zFar);
 
-
 // Given a projection matrix, take the extremes of the space in transformed into
 // world space and get a bounding box.
 
 void CalculateAABBFromProjectionMatrix(const VMatrix &worldToVolume,
                                        Vector *pMins, Vector *pMaxs);
-
 
 // Given a projection matrix, take the extremes of the space in transformed into
 // world space and get a bounding sphere.
@@ -354,13 +353,11 @@ void CalculateAABBFromProjectionMatrix(const VMatrix &worldToVolume,
 void CalculateSphereFromProjectionMatrix(const VMatrix &worldToVolume,
                                          Vector *pCenter, f32 *pflRadius);
 
-
 // Given an inverse projection matrix, take the extremes of the space in
 // transformed into world space and get a bounding box.
 
 void CalculateAABBFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                               Vector *pMins, Vector *pMaxs);
-
 
 // Given an inverse projection matrix, take the extremes of the space in
 // transformed into world space and get a bounding sphere.
@@ -369,37 +366,30 @@ void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                                 Vector *pCenter,
                                                 f32 *pflRadius);
 
-
 // Calculate frustum planes given a clip->world space transform.
 
 void FrustumPlanesFromMatrix(const VMatrix &clipToWorld, Frustum_t &frustum);
-
 
 // Setup a matrix from euler angles.
 
 void MatrixFromAngles(const QAngle &vAngles, VMatrix &dst);
 
-
 // Creates euler angles from a matrix
 
 void MatrixToAngles(const VMatrix &src, QAngle &vAngles);
-
 
 // Does a fast inverse, assuming the matrix only contains translation and
 // rotation.
 
 void MatrixInverseTR(const VMatrix &src, VMatrix &dst);
 
-
 // Inverts any matrix at all
 
 bool MatrixInverseGeneral(const VMatrix &src, VMatrix &dst);
 
-
 // Computes the inverse transpose
 
 void MatrixInverseTranspose(const VMatrix &src, VMatrix &dst);
-
 
 // VMatrix inlines.
 
@@ -413,7 +403,6 @@ inline VMatrix::VMatrix(f32 m00, f32 m01, f32 m02, f32 m03, f32 m10, f32 m11,
 }
 
 inline VMatrix::VMatrix(const matrix3x4_t &matrix3x4) { Init(matrix3x4); }
-
 
 // Creates a matrix where the X axis = forward
 // the Y axis = left, and the Z axis = up
@@ -448,7 +437,6 @@ inline void VMatrix::Init(f32 m00, f32 m01, f32 m02, f32 m03, f32 m10, f32 m11,
   m[3][3] = m33;
 }
 
-
 // Initialize from a 3x4
 
 inline void VMatrix::Init(const matrix3x4_t &matrix3x4) {
@@ -460,9 +448,7 @@ inline void VMatrix::Init(const matrix3x4_t &matrix3x4) {
   m[3][3] = 1.0f;
 }
 
-
-// Methods related to the basis vectors of the matrix
-
+  // Methods related to the basis vectors of the matrix
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -512,8 +498,7 @@ inline void VMatrix::SetBasisVectors(const Vector &vForward,
   SetUp(vUp);
 }
 
-
-// Methods related to the translation component of the matrix
+  // Methods related to the translation component of the matrix
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -536,7 +521,6 @@ inline void VMatrix::SetTranslation(const Vector &vTrans) {
   m[2][3] = vTrans.z;
 }
 
-
 // appply translation to this matrix in the input space
 
 inline void VMatrix::PreTranslate(const Vector &vTrans) {
@@ -546,7 +530,6 @@ inline void VMatrix::PreTranslate(const Vector &vTrans) {
   m[1][3] = tmp.y;
   m[2][3] = tmp.z;
 }
-
 
 // appply translation to this matrix in the output space
 
@@ -571,7 +554,6 @@ inline void VMatrix::CopyFrom3x4(const matrix3x4_t &m3x4) {
 inline void VMatrix::Set3x4(matrix3x4_t &matrix3x4) const {
   memcpy(matrix3x4.Base(), m, sizeof(matrix3x4_t));  //-V512
 }
-
 
 // Matrix math operations
 
@@ -617,9 +599,7 @@ inline VMatrix VMatrix::operator-() const {
 
 #endif  // VECTOR_NO_SLOW_OPERATIONS
 
-
-// Vector transformation
-
+  // Vector transformation
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -683,7 +663,6 @@ inline void VMatrix::V4Mul(const Vector4D &vIn, Vector4D &vOut) const {
       m[3][0] * vIn[0] + m[3][1] * vIn[1] + m[3][2] * vIn[2] + m[3][3] * vIn[3];
 }
 
-
 // Plane transformation
 
 inline void VMatrix::TransformPlane(const VPlane &inPlane,
@@ -694,7 +673,6 @@ inline void VMatrix::TransformPlane(const VPlane &inPlane,
       inPlane.m_Dist * DotProduct(outPlane.m_Normal, outPlane.m_Normal);
   outPlane.m_Dist += DotProduct(outPlane.m_Normal, GetTranslation(vTrans));
 }
-
 
 // Other random stuff
 
@@ -722,7 +700,6 @@ inline VMatrix VMatrix::operator~() const {
 }
 
 #endif
-
 
 // Accessors
 
@@ -752,7 +729,6 @@ inline void MatrixSetRow(VMatrix &dst, int nRow, const Vector &row) {
   *(Vector *)dst[nRow] = row;
 }
 
-
 // Vector3DMultiplyPosition treats src2 as if it's a point (adds the
 // translation)
 
@@ -769,7 +745,6 @@ inline void Vector3DMultiplyPosition(const VMatrix &src1,
   dst[2] = src1[2][0] * src2.x + src1[2][1] * src2.y + src1[2][2] * src2.z +
            src1[2][3];
 }
-
 
 // Transform a plane that has an axis-aligned normal
 
@@ -790,7 +765,6 @@ inline void MatrixTransformAxisAlignedPlane(const VMatrix &src, int nDim,
                    outPlane.normal.z * src.m[2][3];
 }
 
-
 // Matrix equality test
 
 inline bool MatricesAreEqual(const VMatrix &src1, const VMatrix &src2,
@@ -802,7 +776,6 @@ inline bool MatricesAreEqual(const VMatrix &src1, const VMatrix &src2,
   }
   return true;
 }
-
 
 //
 

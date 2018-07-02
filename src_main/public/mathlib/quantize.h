@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_QUANTIZE_H_
 #define SOURCE_MATHLIB_QUANTIZE_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <cstring>
 #include "base/include/base_types.h"
 #include "tier0/include/platform.h"

@@ -5,6 +5,10 @@
 #ifndef SOURCE_MATHLIB_SSEQUATMATH_H_
 #define SOURCE_MATHLIB_SSEQUATMATH_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "mathlib/ssemath.h"
 
 #include "base/include/base_types.h"

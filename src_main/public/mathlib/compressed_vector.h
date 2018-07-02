@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_COMPRESSED_VECTOR_H_
 #define SOURCE_MATHLIB_COMPRESSED_VECTOR_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <cfloat>
 #include <cmath>
 #include <cstdlib>  // std::rand

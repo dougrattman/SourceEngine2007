@@ -6,6 +6,10 @@
 #ifndef SOURCE_MATHLIB_SIMDVECTORMATRIX_H_
 #define SOURCE_MATHLIB_SIMDVECTORMATRIX_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <cstring>
 #include "base/include/base_types.h"
 #include "mathlib/ssemath.h"

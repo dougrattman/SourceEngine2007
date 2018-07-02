@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_MATHLIB_H_
 #define SOURCE_MATHLIB_MATHLIB_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <algorithm>
 
 #define _USE_MATH_DEFINES  // M_PI

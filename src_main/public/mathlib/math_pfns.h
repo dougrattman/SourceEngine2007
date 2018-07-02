@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_MATH_PFNS_H_
 #define SOURCE_MATHLIB_MATH_PFNS_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 
 // These globals are initialized by mathlib and redirected based on available

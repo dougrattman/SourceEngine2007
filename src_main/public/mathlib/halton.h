@@ -18,6 +18,10 @@
 #ifndef SOURCE_MATHLIB_HALTON_H_
 #define SOURCE_MATHLIB_HALTON_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"

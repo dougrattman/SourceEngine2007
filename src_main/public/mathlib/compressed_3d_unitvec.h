@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_COMPRESSED_3D_UNITVEC_H_
 #define SOURCE_MATHLIB_COMPRESSED_3D_UNITVEC_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "mathlib/vector.h"
 #include "tier0/include/dbg.h"

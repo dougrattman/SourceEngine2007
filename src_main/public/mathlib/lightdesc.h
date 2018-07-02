@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_LIGHTDESC_H_
 #define SOURCE_MATHLIB_LIGHTDESC_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/base_types.h"
 #include "mathlib/ssemath.h"
 #include "mathlib/vector.h"

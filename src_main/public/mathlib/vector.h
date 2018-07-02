@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_VECTOR_H_
 #define SOURCE_MATHLIB_VECTOR_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include <algorithm>
 #include <cfloat>
 #include <cmath>

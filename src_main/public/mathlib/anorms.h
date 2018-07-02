@@ -3,6 +3,10 @@
 #ifndef SOURCE_MATHLIB_ANORMS_H_
 #define SOURCE_MATHLIB_ANORMS_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 

@@ -5,6 +5,10 @@
 #ifndef SOURCE_MATHLIB_SSEMATH_H_
 #define SOURCE_MATHLIB_SSEMATH_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "build/include/build_config.h"
 
 #if defined(COMPILER_MSVC) && defined(ARCH_CPU_X86)
@@ -29,10 +33,10 @@
 
 #if USE_STDC_FOR_SIMD
 
-typedef union {
+union fltx4 {
   f32 m128_f32[4];
   u32 m128_u32[4];
-} fltx4;
+};
 
 using i32x4 = fltx4;
 using u32x4 = fltx4;
@@ -1195,7 +1199,7 @@ SOURCE_FORCEINLINE fltx4 SqrtEstSIMD(const fltx4 &a)  // sqrt(a), more or less
   return _mm_sqrt_ps(a);
 }
 
-SOURCE_FORCEINLINE fltx4 SqrtSIMD(const fltx4 &a)  // sqrt(a)
+SOURCE_FORCEINLINE fltx4 SqrtSIMD(const fltx4 &a)  // sqrt(a) //-V524
 {
   return _mm_sqrt_ps(a);
 }
@@ -1474,8 +1478,8 @@ class alignas(16) FourVectors {
     return dot;
   }
 
-  SOURCE_FORCEINLINE void VProduct(
-      FourVectors const &b)  //< component by component mul
+  SOURCE_FORCEINLINE void VProduct(  //-V524
+      FourVectors const &b)          //< component by component mul
   {
     x = MulSIMD(x, b.x);
     y = MulSIMD(y, b.y);
