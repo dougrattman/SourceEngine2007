@@ -78,7 +78,7 @@ ConVar sk_mp_dmg_multiplier("sk_mp_dmg_multiplier", "2.0");
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int CHalfLife1::Damage_GetShowOnHud(void) {
+int CHalfLife1::Damage_GetShowOnHud() {
   int iDamage =
       (DMG_POISON | DMG_ACID | DMG_DISSOLVE /*DMG_FREEZE | DMG_SLOWFREEZE*/ |
        DMG_DROWN | DMG_BURN | DMG_SLOWBURN | DMG_NERVEGAS | DMG_RADIATION |
@@ -90,7 +90,7 @@ int CHalfLife1::Damage_GetShowOnHud(void) {
 
 extern bool g_fGameOver;
 
-const char *CHalfLife1::GetGameDescription(void) {
+const char *CHalfLife1::GetGameDescription() {
   if (IsMultiplayer()) {
     return "Half-Life 1: Deathmatch";
   } else {
@@ -149,7 +149,7 @@ class CCorpse : public CBaseAnimating {
  public:
   DECLARE_SERVERCLASS();
 
-  virtual int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+  virtual int ObjectCaps() { return FCAP_DONT_SAVE; }
 
  public:
   CNetworkVar(int, m_nReferencePlayer);
@@ -163,7 +163,7 @@ LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
 
 CCorpse *g_pBodyQueueHead;
 
-void InitBodyQue(void) {
+void InitBodyQue() {
   CCorpse *pEntity = (CCorpse *)CreateEntityByName("bodyque");
   pEntity->AddEFlags(EFL_KEEP_ON_RECREATE_ENTITIES);
   g_pBodyQueueHead = pEntity;
@@ -208,7 +208,7 @@ void CopyToBodyQue(CBaseAnimating *pCorpse) {
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
-void CHalfLife1::InitDefaultAIRelationships(void) {
+void CHalfLife1::InitDefaultAIRelationships() {
   int i, j;
 
   //  Allocate memory for default relationships

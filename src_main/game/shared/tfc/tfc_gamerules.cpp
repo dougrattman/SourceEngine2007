@@ -91,7 +91,7 @@ CTFCGameRules::CTFCGameRules()
 
 #ifdef GAME_DLL
 	// Create the team managers
-	for ( int i = 0; i < SOURCE_ARRAYSIZE( teamnames ); i++ )
+	for ( int i = 0; i < std::size( teamnames ); i++ )
 	{
 		CTeam *pTeam = static_cast<CTeam*>(CreateEntityByName( "tfc_team_manager" ));
 		pTeam->Init( teamnames[i], i );

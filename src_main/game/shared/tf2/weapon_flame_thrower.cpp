@@ -238,7 +238,7 @@ void CWeaponFlameThrower::PrimaryAttack()
 						if ( FindInArray( pTestEnt, pHitEnts, nHitEnts ) == -1 )
 						{
 							pHitEnts[nHitEnts++] = pTestEnt;
-							if ( nHitEnts >= SOURCE_ARRAYSIZE( pHitEnts ) )
+							if ( nHitEnts >= std::size( pHitEnts ) )
 								break;
 						}
 					}
@@ -414,7 +414,7 @@ void CWeaponFlameThrower::PrimaryAttack()
 		int nEnts = FindBurnableEntsInSphere(
 			ents,
 			dists,
-			SOURCE_ARRAYSIZE( dists ),
+			std::size( dists ),
 			vOrigin,
 			50,
 			pOwner );

@@ -118,7 +118,7 @@ END_DATADESC()
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CWeaponGauss::CWeaponGauss(void) {
+CWeaponGauss::CWeaponGauss() {
   m_bReloadsSingly = false;
   m_bFiresUnderwater = false;
 
@@ -130,7 +130,7 @@ CWeaponGauss::CWeaponGauss(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CWeaponGauss::Precache(void) {
+void CWeaponGauss::Precache() {
   PrecacheModel(GAUSS_GLOW_SPRITE);
   PrecacheModel(GAUSS_BEAM_SPRITE);
 
@@ -143,7 +143,7 @@ void CWeaponGauss::Precache(void) {
   BaseClass::Precache();
 }
 
-float CWeaponGauss::GetFullChargeTime(void) {
+float CWeaponGauss::GetFullChargeTime() {
   if (g_pGameRules->IsMultiplayer()) {
     return 1.5;
   } else {
@@ -154,7 +154,7 @@ float CWeaponGauss::GetFullChargeTime(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CWeaponGauss::PrimaryAttack(void) {
+void CWeaponGauss::PrimaryAttack() {
   CBasePlayer *pPlayer = ToBasePlayer(GetOwner());
   if (!pPlayer) {
     return;
@@ -180,7 +180,7 @@ void CWeaponGauss::PrimaryAttack(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CWeaponGauss::SecondaryAttack(void) {
+void CWeaponGauss::SecondaryAttack() {
   CHL1_Player *pPlayer = ToHL1Player(GetOwner());
   if (!pPlayer) {
     return;
@@ -318,7 +318,7 @@ void CWeaponGauss::SecondaryAttack(void) {
 // of weaponidle() and make its own function then to try to
 // merge this into Fire(), which has some identical variable names
 //=========================================================
-void CWeaponGauss::StartFire(void) {
+void CWeaponGauss::StartFire() {
   float flDamage;
 
   CHL1_Player *pPlayer = ToHL1Player(GetOwner());
@@ -580,7 +580,7 @@ void CWeaponGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage) {
   }
 }
 
-void CWeaponGauss::WeaponIdle(void) {
+void CWeaponGauss::WeaponIdle() {
   CHL1_Player *pPlayer = ToHL1Player(GetOwner());
   if (!pPlayer) {
     return;
@@ -617,9 +617,9 @@ AddViewKick
 ==================================================
 */
 
-void CWeaponGauss::AddViewKick(void) {}
+void CWeaponGauss::AddViewKick() {}
 
-bool CWeaponGauss::Deploy(void) {
+bool CWeaponGauss::Deploy() {
   if (DefaultDeploy((char *)GetViewModel(), (char *)GetWorldModel(),
                     ACT_VM_DRAW, (char *)GetAnimPrefix())) {
     CHL1_Player *pPlayer = ToHL1Player(GetOwner());
@@ -640,7 +640,7 @@ bool CWeaponGauss::Holster(CBaseCombatWeapon *pSwitchingTo) {
   return BaseClass::Holster(pSwitchingTo);
 }
 
-void CWeaponGauss::StopSpinSound(void) {
+void CWeaponGauss::StopSpinSound() {
   if (m_sndCharge != NULL) {
     (CSoundEnvelopeController::GetController()).SoundDestroy(m_sndCharge);
     m_sndCharge = NULL;

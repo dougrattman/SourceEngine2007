@@ -22,7 +22,7 @@ class CAchievementEp1KillAntlionsWithCar : public CBaseAchievement {
     // is a physics car
     const char *pszName = GetModelName(pInflictor);
     const char szPrefix[] = "props_vehicles";
-    if (0 == Q_strncmp(pszName, szPrefix, SOURCE_ARRAYSIZE(szPrefix) - 1)) {
+    if (0 == Q_strncmp(pszName, szPrefix, std::size(szPrefix) - 1)) {
       IncrementCount();
     }
   }

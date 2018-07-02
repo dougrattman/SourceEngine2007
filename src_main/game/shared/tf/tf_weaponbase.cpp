@@ -1778,19 +1778,19 @@ int CTFWeaponBase::ActivityListCount( void )
 	{
 	case TF_WPN_TYPE_PRIMARY:
 	default:
-		iSize = SOURCE_ARRAYSIZE(m_acttablePrimary);
+		iSize = std::size(m_acttablePrimary);
 		break;
 	case TF_WPN_TYPE_SECONDARY:
-		iSize = SOURCE_ARRAYSIZE(m_acttableSecondary);
+		iSize = std::size(m_acttableSecondary);
 		break;
 	case TF_WPN_TYPE_MELEE:
-		iSize = SOURCE_ARRAYSIZE(m_acttableMelee);
+		iSize = std::size(m_acttableMelee);
 		break;
 	case TF_WPN_TYPE_BUILDING:
-		iSize = SOURCE_ARRAYSIZE(m_acttableBuilding);
+		iSize = std::size(m_acttableBuilding);
 		break;
 	case TF_WPN_TYPE_PDA:
-		iSize = SOURCE_ARRAYSIZE(m_acttablePDA);
+		iSize = std::size(m_acttablePDA);
 		break;
 	}
 

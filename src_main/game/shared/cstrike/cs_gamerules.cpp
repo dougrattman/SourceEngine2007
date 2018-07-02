@@ -603,7 +603,7 @@ ConVar cl_autohelp(
 		m_bDontUploadStats = false;
 
 		// Create the team managers
-		for ( int i = 0; i < SOURCE_ARRAYSIZE( sTeamNames ); i++ )
+		for ( int i = 0; i < std::size( sTeamNames ); i++ )
 		{
 			CTeam *pTeam = static_cast<CTeam*>(CreateEntityByName( "cs_team_manager" ));
 			pTeam->Init( sTeamNames[i], i );

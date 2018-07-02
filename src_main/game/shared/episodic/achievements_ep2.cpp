@@ -92,7 +92,7 @@ class CAchievementEp2FindAllWebCaches : public CBaseAchievement {
     SetFlags(ACH_HAS_COMPONENTS | ACH_LISTEN_COMPONENT_EVENTS |
              ACH_SAVE_GLOBAL);
     m_pszComponentNames = szComponents;
-    m_iNumComponents = SOURCE_ARRAYSIZE(szComponents);
+    m_iNumComponents = std::size(szComponents);
     SetComponentPrefix("EP2_WEBCACHE");
     SetGameDirFilter("ep2");
     SetGoal(m_iNumComponents);
@@ -143,7 +143,7 @@ class CAchievementEp2FindAllRadarCaches : public CBaseAchievement {
     SetFlags(ACH_HAS_COMPONENTS | ACH_LISTEN_COMPONENT_EVENTS |
              ACH_SAVE_GLOBAL);
     m_pszComponentNames = szComponents;
-    m_iNumComponents = SOURCE_ARRAYSIZE(szComponents);
+    m_iNumComponents = std::size(szComponents);
     SetComponentPrefix("EP2_RADARCACHE");
     SetGameDirFilter("ep2");
     SetGoal(m_iNumComponents);

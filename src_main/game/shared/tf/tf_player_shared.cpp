@@ -289,7 +289,7 @@ float CTFPlayerShared::GetConditionDuration(int nCond) {
   return 0.0f;
 }
 
-void CTFPlayerShared::DebugPrintConditions(void) {
+void CTFPlayerShared::DebugPrintConditions() {
 #ifndef CLIENT_DLL
   const char *szDll = "Server";
 #else
@@ -323,7 +323,7 @@ void CTFPlayerShared::DebugPrintConditions(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnPreDataChanged(void) {
+void CTFPlayerShared::OnPreDataChanged() {
   m_nOldConditions = m_nPlayerCond;
   m_nOldDisguiseClass = GetDisguiseClass();
   m_iOldDisguiseWeaponModelIndex = m_iDisguiseWeaponModelIndex;
@@ -332,7 +332,7 @@ void CTFPlayerShared::OnPreDataChanged(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnDataChanged(void) {
+void CTFPlayerShared::OnDataChanged() {
   // Update conditions from last network change
   if (m_nOldConditions != m_nPlayerCond) {
     UpdateConditions();
@@ -356,7 +356,7 @@ void CTFPlayerShared::OnDataChanged(void) {
 //-----------------------------------------------------------------------------
 // Purpose: check the newly networked conditions for changes
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::UpdateConditions(void) {
+void CTFPlayerShared::UpdateConditions() {
   int nCondChanged = m_nPlayerCond ^ m_nOldConditions;
   int nCondAdded = nCondChanged & m_nPlayerCond;
   int nCondRemoved = nCondChanged & m_nOldConditions;
@@ -484,7 +484,7 @@ void CTFPlayerShared::OnConditionRemoved(int nCond) {
   }
 }
 
-int CTFPlayerShared::GetMaxBuffedHealth(void) {
+int CTFPlayerShared::GetMaxBuffedHealth() {
   float flBoostMax = m_pOuter->GetMaxHealth() * tf_max_health_boost.GetFloat();
 
   int iRoundDown = floor(flBoostMax / 5);
@@ -498,7 +498,7 @@ int CTFPlayerShared::GetMaxBuffedHealth(void) {
 // If a player needs something to be updated no matter what do it here (invul,
 // etc).
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::ConditionGameRulesThink(void) {
+void CTFPlayerShared::ConditionGameRulesThink() {
 #ifdef GAME_DLL
   if (m_flNextCritUpdate < gpGlobals->curtime) {
     UpdateCritMult();
@@ -727,7 +727,7 @@ void CTFPlayerShared::ConditionGameRulesThink(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Do CLIENT/SERVER SHARED condition thinks.
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::ConditionThink(void) {
+void CTFPlayerShared::ConditionThink() {
   bool bIsLocalPlayer = false;
 #ifdef CLIENT_DLL
   bIsLocalPlayer = m_pOuter->IsLocalPlayer();
@@ -757,7 +757,7 @@ void CTFPlayerShared::ConditionThink(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnRemoveZoomed(void) {
+void CTFPlayerShared::OnRemoveZoomed() {
 #ifdef GAME_DLL
   m_pOuter->SetFOV(m_pOuter, 0, 0.1f);
 #endif
@@ -766,7 +766,7 @@ void CTFPlayerShared::OnRemoveZoomed(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnAddDisguising(void) {
+void CTFPlayerShared::OnAddDisguising() {
 #ifdef CLIENT_DLL
   if (m_pOuter->m_pDisguisingEffect) {
     //		m_pOuter->ParticleProp()->StopEmission( m_pOuter->m_pDisguisingEffect
@@ -791,7 +791,7 @@ void CTFPlayerShared::OnAddDisguising(void) {
 //-----------------------------------------------------------------------------
 // Purpose: set up effects for when player finished disguising
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnAddDisguised(void) {
+void CTFPlayerShared::OnAddDisguised() {
 #ifdef CLIENT_DLL
   if (m_pOuter->m_pDisguisingEffect) {
     // turn off disguising particles
@@ -807,7 +807,7 @@ void CTFPlayerShared::OnAddDisguised(void) {
 //-----------------------------------------------------------------------------
 // Purpose: start, end, and changing disguise classes
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnDisguiseChanged(void) {
+void CTFPlayerShared::OnDisguiseChanged() {
   // recalc disguise model index
   RecalcDisguiseWeapon();
 }
@@ -816,7 +816,7 @@ void CTFPlayerShared::OnDisguiseChanged(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnAddInvulnerable(void) {
+void CTFPlayerShared::OnAddInvulnerable() {
 #ifdef CLIENT_DLL
 
   if (m_pOuter->IsLocalPlayer()) {
@@ -846,7 +846,7 @@ void CTFPlayerShared::OnAddInvulnerable(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnRemoveInvulnerable(void) {
+void CTFPlayerShared::OnRemoveInvulnerable() {
 #ifdef CLIENT_DLL
   if (m_pOuter->IsLocalPlayer()) {
     view->SetScreenOverlayMaterial(NULL);
@@ -857,7 +857,7 @@ void CTFPlayerShared::OnRemoveInvulnerable(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnAddTeleported(void) {
+void CTFPlayerShared::OnAddTeleported() {
 #ifdef CLIENT_DLL
   m_pOuter->OnAddTeleported();
 #endif
@@ -866,7 +866,7 @@ void CTFPlayerShared::OnAddTeleported(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnRemoveTeleported(void) {
+void CTFPlayerShared::OnRemoveTeleported() {
 #ifdef CLIENT_DLL
   m_pOuter->OnRemoveTeleported();
 #endif
@@ -908,7 +908,7 @@ void CTFPlayerShared::Burn(CTFPlayer *pAttacker) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnRemoveBurning(void) {
+void CTFPlayerShared::OnRemoveBurning() {
 #ifdef CLIENT_DLL
   m_pOuter->StopBurningSound();
 
@@ -931,7 +931,7 @@ void CTFPlayerShared::OnRemoveBurning(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnAddStealthed(void) {
+void CTFPlayerShared::OnAddStealthed() {
 #ifdef CLIENT_DLL
   m_pOuter->EmitSound("Player.Spy_Cloak");
   m_pOuter->RemoveAllDecals();
@@ -960,7 +960,7 @@ void CTFPlayerShared::OnAddStealthed(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnRemoveStealthed(void) {
+void CTFPlayerShared::OnRemoveStealthed() {
 #ifdef CLIENT_DLL
   m_pOuter->EmitSound("Player.Spy_UnCloak");
 #endif
@@ -973,7 +973,7 @@ void CTFPlayerShared::OnRemoveStealthed(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnRemoveDisguising(void) {
+void CTFPlayerShared::OnRemoveDisguising() {
 #ifdef CLIENT_DLL
   if (m_pOuter->m_pDisguisingEffect) {
     //		m_pOuter->ParticleProp()->StopEmission( m_pOuter->m_pDisguisingEffect
@@ -993,7 +993,7 @@ void CTFPlayerShared::OnRemoveDisguising(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnRemoveDisguised(void) {
+void CTFPlayerShared::OnRemoveDisguised() {
 #ifdef CLIENT_DLL
 
   // if local player is on the other team, reset the model of this player
@@ -1031,7 +1031,7 @@ void CTFPlayerShared::OnRemoveDisguised(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnAddBurning(void) {
+void CTFPlayerShared::OnAddBurning() {
 #ifdef CLIENT_DLL
   // Start the burning effect
   if (!m_pOuter->m_pBurningEffect) {
@@ -1075,7 +1075,7 @@ void CTFPlayerShared::OnAddBurning(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-float CTFPlayerShared::GetStealthNoAttackExpireTime(void) {
+float CTFPlayerShared::GetStealthNoAttackExpireTime() {
   return m_flStealthNoAttackExpire;
 }
 
@@ -1140,7 +1140,7 @@ void CTFPlayerShared::NoteLastDamageTime(int nDamage) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::OnSpyTouchedByEnemy(void) {
+void CTFPlayerShared::OnSpyTouchedByEnemy() {
   m_flLastStealthExposeTime = gpGlobals->curtime;
   AddCond(TF_COND_STEALTHED_BLINK);
 }
@@ -1165,7 +1165,7 @@ void CTFPlayerShared::FadeInvis(float flInvisFadeTime) {
 //-----------------------------------------------------------------------------
 // Purpose: Approach our desired level of invisibility
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::InvisibilityThink(void) {
+void CTFPlayerShared::InvisibilityThink() {
   float flTargetInvis = 0.0f;
   float flTargetInvisScale = 1.0f;
   if (InCond(TF_COND_STEALTHED_BLINK)) {
@@ -1198,7 +1198,7 @@ void CTFPlayerShared::InvisibilityThink(void) {
 //-----------------------------------------------------------------------------
 // Purpose: How invisible is the player [0..1]
 //-----------------------------------------------------------------------------
-float CTFPlayerShared::GetPercentInvisible(void) { return m_flInvisibility; }
+float CTFPlayerShared::GetPercentInvisible() { return m_flInvisibility; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Start the process of disguising
@@ -1250,7 +1250,7 @@ void CTFPlayerShared::Disguise(int nTeam, int nClass) {
 // Purpose: Set our target with a player we've found to emulate
 //-----------------------------------------------------------------------------
 #ifndef CLIENT_DLL
-void CTFPlayerShared::FindDisguiseTarget(void) {
+void CTFPlayerShared::FindDisguiseTarget() {
   m_hDisguiseTarget = m_pOuter->TeamFortress_GetDisguiseTarget(
       m_nDisguiseTeam, m_nDisguiseClass);
   if (m_hDisguiseTarget) {
@@ -1266,7 +1266,7 @@ void CTFPlayerShared::FindDisguiseTarget(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Complete our disguise
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::CompleteDisguise(void) {
+void CTFPlayerShared::CompleteDisguise() {
 #ifndef CLIENT_DLL
   AddCond(TF_COND_DISGUISED);
 
@@ -1299,7 +1299,7 @@ void CTFPlayerShared::SetDisguiseHealth(int iDisguiseHealth) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::RemoveDisguise(void) {
+void CTFPlayerShared::RemoveDisguise() {
 #ifdef CLIENT_DLL
 
 #else
@@ -1312,7 +1312,7 @@ void CTFPlayerShared::RemoveDisguise(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::RecalcDisguiseWeapon(void) {
+void CTFPlayerShared::RecalcDisguiseWeapon() {
   if (!InCond(TF_COND_DISGUISED)) {
     m_iDisguiseWeaponModelIndex = -1;
     m_pDisguiseWeaponInfo = NULL;
@@ -1358,7 +1358,7 @@ void CTFPlayerShared::RecalcDisguiseWeapon(void) {
   }
 }
 
-CTFWeaponInfo *CTFPlayerShared::GetDisguiseWeaponInfo(void) {
+CTFWeaponInfo *CTFPlayerShared::GetDisguiseWeaponInfo() {
   if (InCond(TF_COND_DISGUISED) && m_pDisguiseWeaponInfo == NULL) {
     RecalcDisguiseWeapon();
   }
@@ -1551,7 +1551,7 @@ bool CTFPlayerShared::IsAlly(CBaseEntity *pEntity) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-int CTFPlayerShared::GetDesiredPlayerClassIndex(void) {
+int CTFPlayerShared::GetDesiredPlayerClassIndex() {
   return m_iDesiredPlayerClass;
 }
 
@@ -1565,7 +1565,7 @@ void CTFPlayerShared::SetAirDash(bool bAirDash) { m_bAirDash = bAirDash; }
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-float CTFPlayerShared::GetCritMult(void) {
+float CTFPlayerShared::GetCritMult() {
   float flRemapCritMul = RemapValClamped(m_iCritMult, 0, 255, 1.0, 4.0);
   /*#ifdef CLIENT_DLL
           Msg("CLIENT: Crit mult %.2f - %d\n",flRemapCritMul, m_iCritMult);
@@ -1580,7 +1580,7 @@ float CTFPlayerShared::GetCritMult(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFPlayerShared::UpdateCritMult(void) {
+void CTFPlayerShared::UpdateCritMult() {
   const float flMinMult = 1.0;
   const float flMaxMult = TF_DAMAGE_CRITMOD_MAXMULT;
 
@@ -1886,7 +1886,7 @@ CTFWeaponBase *CTFPlayer::GetActiveTFWeapon(void) const {
 //-----------------------------------------------------------------------------
 // Purpose: How much build resource ( metal ) does this player have
 //-----------------------------------------------------------------------------
-int CTFPlayer::GetBuildResources(void) { return GetAmmoCount(TF_AMMO_METAL); }
+int CTFPlayer::GetBuildResources() { return GetAmmoCount(TF_AMMO_METAL); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -1971,7 +1971,7 @@ void CTFPlayer::TeamFortress_SetSpeed() {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-bool CTFPlayer::HasItem(void) { return (m_hItem != NULL); }
+bool CTFPlayer::HasItem() { return (m_hItem != NULL); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -1989,12 +1989,12 @@ void CTFPlayer::SetItem(CTFItem *pItem) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CTFItem *CTFPlayer::GetItem(void) { return m_hItem; }
+CTFItem *CTFPlayer::GetItem() { return m_hItem; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Is the player allowed to use a teleporter ?
 //-----------------------------------------------------------------------------
-bool CTFPlayer::HasTheFlag(void) {
+bool CTFPlayer::HasTheFlag() {
   if (HasItem() && GetItem()->GetItemID() == TF_ITEM_CAPTURE_FLAG) {
     return true;
   }
@@ -2081,7 +2081,7 @@ void CTFPlayer::SetOffHandWeapon(CTFWeaponBase *pWeapon) {
 }
 
 // Set to NULL at the end of the holster?
-void CTFPlayer::HolsterOffHandWeapon(void) {
+void CTFPlayer::HolsterOffHandWeapon() {
   if (m_hOffHandWeapon.Get()) {
     m_hOffHandWeapon->Holster();
   }
@@ -2163,7 +2163,7 @@ void CTFPlayer::SetStepSoundTime(stepsoundtimes_t iStepSoundTime,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-bool CTFPlayer::CanAttack(void) {
+bool CTFPlayer::CanAttack() {
   CTFGameRules *pRules = TFGameRules();
 
   Assert(pRules);
@@ -2188,7 +2188,7 @@ bool CTFPlayer::CanAttack(void) {
 // Purpose: Weapons can call this on secondary attack and it will link to the
 // class ability
 //-----------------------------------------------------------------------------
-bool CTFPlayer::DoClassSpecialSkill(void) {
+bool CTFPlayer::DoClassSpecialSkill() {
   bool bDoSkill = false;
 
   switch (GetPlayerClass()->GetClassIndex()) {
@@ -2233,7 +2233,7 @@ bool CTFPlayer::DoClassSpecialSkill(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-bool CTFPlayer::CanGoInvisible(void) {
+bool CTFPlayer::CanGoInvisible() {
   if (HasItem() && GetItem()->GetItemID() == TF_ITEM_CAPTURE_FLAG) {
     HintMessage(HINT_CANNOT_CLOAK_WITH_FLAG);
     return false;
@@ -2257,7 +2257,7 @@ bool CTFPlayer::CanGoInvisible(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Return class-specific standing eye height
 //-----------------------------------------------------------------------------
-const Vector &CTFPlayer::GetClassEyeHeight(void) {
+const Vector &CTFPlayer::GetClassEyeHeight() {
   CTFPlayerClass *pClass = GetPlayerClass();
 
   if (!pClass) return VEC_VIEW;

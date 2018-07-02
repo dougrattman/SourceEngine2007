@@ -74,10 +74,10 @@ class CBasePlasmaProjectile : public CBaseParticleEntity
   // Purpose: Returns the type of damage that this entity inflicts.
   int GetDamageType() const { return m_DamageType; }
 
-  virtual float GetSize(void) { return 6.0; };
+  virtual float GetSize() { return 6.0; };
 
   // TODO(d.rattman): Override the think of the baseparticle Think functions
-  virtual void Think(void) { CBaseEntity::Think(); }
+  virtual void Think() { CBaseEntity::Think(); }
 
   void SetupProjectile(const Vector &vecOrigin, const Vector &vecForward,
                        int damageType, CBaseEntity *pOwner = NULL);
@@ -98,7 +98,7 @@ class CBasePlasmaProjectile : public CBaseParticleEntity
   // Return the entity that should receive the score
   virtual CBasePlayer *GetScorer(void);
   // Return the entity that should get assistance credit
-  virtual CBasePlayer *GetAssistant(void) { return NULL; };
+  virtual CBasePlayer *GetAssistant() { return NULL; };
 
  protected:
   void Detonate(void);
@@ -108,7 +108,7 @@ class CBasePlasmaProjectile : public CBaseParticleEntity
   virtual bool IsPredicted(void) const { return true; }
 
 #if defined(CLIENT_DLL)
-  virtual bool ShouldPredict(void) {
+  virtual bool ShouldPredict() {
     if (GetOwnerEntity() && GetOwnerEntity() == C_BasePlayer::GetLocalPlayer())
       return true;
 
@@ -223,7 +223,7 @@ class CPowerPlasmaProjectile : public CBasePlasmaProjectile {
   virtual bool IsPredicted(void) const { return true; }
 
 #if defined(CLIENT_DLL)
-  virtual bool ShouldPredict(void) {
+  virtual bool ShouldPredict() {
     if (GetOwnerEntity() && GetOwnerEntity() == C_BasePlayer::GetLocalPlayer())
       return true;
 

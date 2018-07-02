@@ -408,7 +408,7 @@ const WeaponProficiencyInfo_t *CBaseHL2MPCombatWeapon::GetDefaultProficiencyValu
 		{ 1.00, 1.0	},
 	};
 
-	static_assert( SOURCE_ARRAYSIZE(g_BaseWeaponProficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
+	static_assert( std::size(g_BaseWeaponProficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
 
 	return g_BaseWeaponProficiencyTable;
 }

@@ -147,7 +147,7 @@ int GetRifleCount( void )
 		}
 	}
 
-	return iNumRifle + SOURCE_ARRAYSIZE( blackmarket_items );
+	return iNumRifle + std::size( blackmarket_items );
 }
 
 #endif

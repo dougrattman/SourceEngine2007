@@ -34,7 +34,7 @@ const char *CHL2MP_Player::GetPlayerModelSoundPrefix( void )
 
 void CHL2MP_Player::PrecacheFootStepSounds( void )
 {
-	int iFootstepSounds = SOURCE_ARRAYSIZE( g_ppszPlayerSoundPrefixNames );
+	int iFootstepSounds = std::size( g_ppszPlayerSoundPrefixNames );
 	int i;
 
 	for ( i = 0; i < iFootstepSounds; ++i )

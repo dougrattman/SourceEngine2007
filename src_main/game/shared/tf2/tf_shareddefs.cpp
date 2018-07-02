@@ -435,7 +435,7 @@ void LoadObjectInfos( IBaseFileSystem *pFileSystem )
 	}
 
 	// Now read each class's information in.
-	for ( int iObj=0; iObj < SOURCE_ARRAYSIZE( g_ObjectInfos ); iObj++ )
+	for ( int iObj=0; iObj < std::size( g_ObjectInfos ); iObj++ )
 	{
 		CObjectInfo *pInfo = &g_ObjectInfos[iObj];
 		KeyValues *pSub = pValues->FindKey( pInfo->m_pObjectName );

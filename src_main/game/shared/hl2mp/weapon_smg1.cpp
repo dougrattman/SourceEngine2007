@@ -258,7 +258,7 @@ const WeaponProficiencyInfo_t *CWeaponSMG1::GetProficiencyValues()
 		{ 1.00,		1.0		},
 	};
 
-	static_assert( SOURCE_ARRAYSIZE(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
+	static_assert( std::size(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
 
 	return proficiencyTable;
 }
