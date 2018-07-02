@@ -55,14 +55,14 @@ inline bool AreBotsAllowed() {
 }
 
 //--------------------------------------------------------------------------------------------------------------
-void InstallBotControl(void) {
+void InstallBotControl() {
   if (TheBots != NULL) delete TheBots;
 
   TheBots = new CCSBotManager;
 }
 
 //--------------------------------------------------------------------------------------------------------------
-void RemoveBotControl(void) {
+void RemoveBotControl() {
   if (TheBots != NULL) delete TheBots;
 
   TheBots = NULL;
@@ -115,7 +115,7 @@ CCSBotManager::CCSBotManager() {
 /**
  * Invoked when a new round begins
  */
-void CCSBotManager::RestartRound(void) {
+void CCSBotManager::RestartRound() {
   // extend
   CBotManager::RestartRound();
 
@@ -226,7 +226,7 @@ void CCSBotManager::EnableEventListeners(bool enable) {
 /**
  * Called each frame
  */
-void CCSBotManager::StartFrame(void) {
+void CCSBotManager::StartFrame() {
   if (!AreBotsAllowed()) {
     EnableEventListeners(false);
     return;
@@ -326,7 +326,7 @@ bool CCSBotManager::IsOnOffense(const CCSPlayer *player) const {
 /**
  * Invoked when a map has just been loaded
  */
-void CCSBotManager::ServerActivate(void) {
+void CCSBotManager::ServerActivate() {
   m_isMapDataLoaded = false;
 
   // load the database of bot radio chatter
@@ -390,7 +390,7 @@ void CCSBotManager::ServerActivate(void) {
   m_serverActive = true;
 }
 
-void CCSBotManager::ServerDeactivate(void) { m_serverActive = false; }
+void CCSBotManager::ServerDeactivate() { m_serverActive = false; }
 
 void CCSBotManager::ClientDisconnect(CBaseEntity *entity) {
   /*
@@ -996,7 +996,7 @@ bool UTIL_CSSKickBotFromTeam(int kickTeam) {
 /**
  * Keep a minimum quota of bots in the game
  */
-void CCSBotManager::MaintainBotQuota(void) {
+void CCSBotManager::MaintainBotQuota() {
   if (!AreBotsAllowed()) return;
 
   if (TheNavMesh->IsGenerating()) return;
@@ -1174,7 +1174,7 @@ class CollectOverlappingAreas {
  * Search the map entities to determine the game scenario and define important
  * zones.
  */
-void CCSBotManager::ExtractScenarioData(void) {
+void CCSBotManager::ExtractScenarioData() {
   if (!TheNavMesh->IsLoaded()) return;
 
   m_zoneCount = 0;
@@ -1582,7 +1582,7 @@ static CBaseEntity *SelectSpawnSpot(const char *pEntClassName) {
  * Pathfind from each zone to a spawn point to ensure it is valid.  Assumes that
  * every spawn can pathfind to every other spawn.
  */
-void CCSBotManager::CheckForBlockedZones(void) {
+void CCSBotManager::CheckForBlockedZones() {
   CBaseEntity *pSpot = SelectSpawnSpot("info_player_counterterrorist");
   if (!pSpot) pSpot = SelectSpawnSpot("info_player_terrorist");
 
@@ -1937,7 +1937,7 @@ void CCSBotManager::SetRadioMessageTimestamp(RadioType event, int teamID) {
 /**
  * Reset all radio message timestamps
  */
-void CCSBotManager::ResetRadioMessageTimestamps(void) {
+void CCSBotManager::ResetRadioMessageTimestamps() {
   for (int t = 0; t < 2; ++t) {
     for (int m = 0; m < (RADIO_END - RADIO_START_1); ++m)
       m_radioMsgTimestamp[m][t] = 0.0f;
@@ -1948,7 +1948,7 @@ void CCSBotManager::ResetRadioMessageTimestamps(void) {
 /**
  * Display nav areas as they become reachable by each team
  */
-void DrawOccupyTime(void) {
+void DrawOccupyTime() {
   FOR_EACH_LL(TheNavAreaList, it) {
     CNavArea *area = TheNavAreaList[it];
 
@@ -1991,7 +1991,7 @@ void DrawOccupyTime(void) {
 /**
  * Display areas where players will likely have initial battles
  */
-void DrawBattlefront(void) {
+void DrawBattlefront() {
   const float epsilon = 1.0f;
   int r = 255, g = 50, b = 0;
 

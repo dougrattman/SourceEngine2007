@@ -108,7 +108,7 @@ bool IsTempBot(CBaseEntity *pEnt) {
 //-----------------------------------------------------------------------------
 // Purpose: Run through all the Bots in the game and let them think.
 //-----------------------------------------------------------------------------
-void Bot_RunAll(void) {
+void Bot_RunAll() {
   for (int i = 1; i <= gpGlobals->maxClients; i++) {
     CCSPlayer *pPlayer = ToCSPlayer(UTIL_PlayerByIndex(i));
 

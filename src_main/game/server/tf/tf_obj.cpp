@@ -1063,7 +1063,7 @@ bool CBaseObject::StartBuilding( CBaseEntity *pBuilder )
 	Vector vecMins = m_vecBuildOrigin + m_vecBuildMins;
 	Vector vecMaxs = m_vecBuildOrigin + m_vecBuildMaxs;
 
-	int count = UTIL_EntitiesInBox( pList, SOURCE_ARRAYSIZE(pList), vecMins, vecMaxs, 0 );
+	int count = UTIL_EntitiesInBox( pList, std::size(pList), vecMins, vecMaxs, 0 );
 	for ( int i = 0; i < count; i++ )
 	{
 		if ( pList[i] == this )

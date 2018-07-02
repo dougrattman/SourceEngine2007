@@ -1,27 +1,24 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-//=============================================================================
 
 #include "cbase.h"
-#include "tf_player.h"
+
 #include "tf_item.h"
+#include "tf_player.h"
 #include "tf_turret.h"
 
 #if 0
 
 extern Vector VecBModelOrigin( entvars_t* pevBModel );
 
-#define TURRET_SHOTS	2
-#define TURRET_RANGE	(100 * 12)
-#define TURRET_SPREAD	Vector( 0, 0, 0 )
-#define TURRET_TURNRATE	30		//angles per 0.1 second
-#define TURRET_MAXWAIT	15		// seconds turret will stay active w/o a target
-#define TURRET_MAXSPIN	5		// seconds turret barrel will spin w/o a target
-#define TURRET_MACHINE_VOLUME	0.5
+#define TURRET_SHOTS 2
+#define TURRET_RANGE (100 * 12)
+#define TURRET_SPREAD Vector(0, 0, 0)
+#define TURRET_TURNRATE 30  // angles per 0.1 second
+#define TURRET_MAXWAIT 15   // seconds turret will stay active w/o a target
+#define TURRET_MAXSPIN 5    // seconds turret barrel will spin w/o a target
+#define TURRET_MACHINE_VOLUME 0.5
 
-typedef enum
+enum TURRET_ANIM
 {
 	TURRET_ANIM_NONE = 0,
 	TURRET_ANIM_FIRE,
@@ -29,7 +26,7 @@ typedef enum
 	TURRET_ANIM_DEPLOY,
 	TURRET_ANIM_RETIRE,
 	TURRET_ANIM_DIE,
-} TURRET_ANIM;
+} ;
 
 class CBaseTurret : public CBaseMonster
 {

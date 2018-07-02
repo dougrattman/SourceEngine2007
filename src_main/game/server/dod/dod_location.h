@@ -1,14 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
 
 #ifndef DOD_LOCATION_H
 #define DOD_LOCATION_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "baseentity.h"
 
@@ -22,7 +15,7 @@ class CDODLocation : public CBaseEntity {
   virtual void Spawn(void);
   virtual bool KeyValue(const char *szKeyName, const char *szValue);
 
-  inline const char *GetName(void) { return m_szLocationName; }
+  inline const char *GetName() { return m_szLocationName; }
 
  private:
   char m_szLocationName[64];

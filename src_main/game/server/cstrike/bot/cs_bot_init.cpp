@@ -129,7 +129,7 @@ extern void FinishClientPutInServer(CCSPlayer *pPlayer);
 
 //--------------------------------------------------------------------------------------------------------------
 // Engine callback for custom server commands
-void Bot_ServerCommand(void) {}
+void Bot_ServerCommand() {}
 
 //--------------------------------------------------------------------------------------------------------------
 /**
@@ -186,7 +186,7 @@ bool CCSBot::Initialize(const BotProfile *profile, int team) {
 /**
  * Reset internal data to initial state
  */
-void CCSBot::ResetValues(void) {
+void CCSBot::ResetValues() {
   m_chatter.Reset();
   m_gameState.Reset();
 
@@ -366,7 +366,7 @@ void CCSBot::ResetValues(void) {
  * Called when bot is placed in map, and when bots are reset after a round ends.
  * NOTE: For some reason, this can be called twice when a bot is added.
  */
-void CCSBot::Spawn(void) {
+void CCSBot::Spawn() {
   // do the normal player spawn process
   BaseClass::Spawn();
 

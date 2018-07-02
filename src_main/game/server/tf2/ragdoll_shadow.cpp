@@ -23,7 +23,7 @@ END_SEND_TABLE()
 LINK_ENTITY_TO_CLASS(ragdoll_shadow, CRagdollShadow);
 PRECACHE_REGISTER(ragdoll_shadow);
 
-CRagdollShadow::CRagdollShadow(void) {
+CRagdollShadow::CRagdollShadow() {
   m_pPlayer = NULL;
   m_nPlayer = 0;
 }
@@ -71,7 +71,7 @@ int CRagdollShadow::ShouldTransmit(const CCheckTransmitInfo *pInfo) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CRagdollShadow::Precache(void) { PrecacheModel(sRagdollShadowModel); }
+void CRagdollShadow::Precache() { PrecacheModel(sRagdollShadowModel); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Create a resource chunk

@@ -78,7 +78,7 @@ END_DATADESC()
 //
 //
 //-----------------------------------------------------------------------------
-void CNPC_Scientist::Precache(void) {
+void CNPC_Scientist::Precache() {
   PrecacheModel("models/scientist.mdl");
 
   PrecacheScriptSound("Scientist.Pain");
@@ -130,7 +130,7 @@ void CNPC_Scientist::TalkInit() {
 //
 //
 //-----------------------------------------------------------------------------
-void CNPC_Scientist::Spawn(void) {
+void CNPC_Scientist::Spawn() {
   // Select the body first if it's going to be random cause we set his voice
   // pitch in Precache.
   if (m_nBody == -1)
@@ -184,9 +184,9 @@ void CNPC_Scientist::Activate() {
 //
 // Output :
 //-----------------------------------------------------------------------------
-Class_T CNPC_Scientist::Classify(void) { return CLASS_HUMAN_PASSIVE; }
+Class_T CNPC_Scientist::Classify() { return CLASS_HUMAN_PASSIVE; }
 
-int CNPC_Scientist::GetSoundInterests(void) {
+int CNPC_Scientist::GetSoundInterests() {
   return SOUND_WORLD | SOUND_COMBAT | SOUND_DANGER | SOUND_PLAYER;
 }
 
@@ -214,13 +214,13 @@ void CNPC_Scientist::HandleAnimEvent(animevent_t *pEvent) {
   }
 }
 
-void CNPC_Scientist::DeclineFollowing(void) {
+void CNPC_Scientist::DeclineFollowing() {
   if (CanSpeakAfterMyself()) {
     Speak(SC_POK);
   }
 }
 
-bool CNPC_Scientist::CanBecomeRagdoll(void) {
+bool CNPC_Scientist::CanBecomeRagdoll() {
   if (UTIL_IsLowViolence()) {
     return false;
   }
@@ -248,7 +248,7 @@ void CNPC_Scientist::SUB_StartLVFadeOut(float delay, bool notSolid) {
   }
 }
 
-void CNPC_Scientist::SUB_LVFadeOut(void) {
+void CNPC_Scientist::SUB_LVFadeOut() {
   if (VPhysicsGetObject()) {
     if (VPhysicsGetObject()->GetGameFlags() & FVPHYSICS_PLAYER_HELD ||
         GetEFlags() & EFL_IS_BEING_LIFTED_BY_BARNACLE) {
@@ -275,7 +275,7 @@ void CNPC_Scientist::SUB_LVFadeOut(void) {
   }
 }
 
-void CNPC_Scientist::Scream(void) {
+void CNPC_Scientist::Scream() {
   if (IsOkToSpeak()) {
     GetExpresser()->BlockSpeechUntil(gpGlobals->curtime + 10);
     SetSpeechTarget(GetEnemy());
@@ -283,13 +283,13 @@ void CNPC_Scientist::Scream(void) {
   }
 }
 
-Activity CNPC_Scientist::GetStoppedActivity(void) {
+Activity CNPC_Scientist::GetStoppedActivity() {
   if (GetEnemy() != NULL) return (Activity)ACT_EXCITED;
 
   return BaseClass::GetStoppedActivity();
 }
 
-float CNPC_Scientist::MaxYawSpeed(void) {
+float CNPC_Scientist::MaxYawSpeed() {
   switch (GetActivity()) {
     case ACT_TURN_LEFT:
     case ACT_TURN_RIGHT:
@@ -447,7 +447,7 @@ void CNPC_Scientist::Event_Killed(const CTakeDamageInfo &info) {
   }
 }
 
-bool CNPC_Scientist::CanHeal(void) {
+bool CNPC_Scientist::CanHeal() {
   CBaseEntity *pTarget = GetFollowTarget();
 
   if (pTarget == NULL) return false;
@@ -487,7 +487,7 @@ void CNPC_Scientist::DeathSound(const CTakeDamageInfo &info) {
   PainSound(info);
 }
 
-void CNPC_Scientist::Heal(void) {
+void CNPC_Scientist::Heal() {
   if (!CanHeal()) return;
 
   Vector target = GetFollowTarget()->GetAbsOrigin() - GetAbsOrigin();
@@ -555,7 +555,7 @@ Activity CNPC_Scientist::NPC_TranslateActivity(Activity newActivity) {
   return BaseClass::NPC_TranslateActivity(newActivity);
 }
 
-int CNPC_Scientist::SelectSchedule(void) {
+int CNPC_Scientist::SelectSchedule() {
   if (m_NPCState == NPC_STATE_PRONE) {
     // Immediately call up to the talker code. Barnacle death is priority
     // schedule.
@@ -685,7 +685,7 @@ int CNPC_Scientist::SelectSchedule(void) {
   return BaseClass::SelectSchedule();
 }
 
-NPC_STATE CNPC_Scientist::SelectIdealState(void) {
+NPC_STATE CNPC_Scientist::SelectIdealState() {
   switch (m_NPCState) {
     case NPC_STATE_ALERT:
     case NPC_STATE_IDLE:
@@ -739,7 +739,7 @@ int CNPC_Scientist::FriendNumber(int arrayNumber) {
   return arrayNumber;
 }
 
-float CNPC_Scientist::TargetDistance(void) {
+float CNPC_Scientist::TargetDistance() {
   CBaseEntity *pFollowTarget = GetFollowTarget();
 
   // If we lose the player, or he dies, return a really large distance
@@ -765,10 +765,10 @@ class CNPC_DeadScientist : public CAI_BaseNPC {
 
  public:
   void Spawn(void);
-  Class_T Classify(void) { return CLASS_NONE; }
+  Class_T Classify() { return CLASS_NONE; }
 
   bool KeyValue(const char *szKeyName, const char *szValue);
-  float MaxYawSpeed(void) { return 8.0f; }
+  float MaxYawSpeed() { return 8.0f; }
 
   int m_iPose;  // which sequence to display	-- temporary, don't need to save
   int m_iDesiredSequence;
@@ -793,7 +793,7 @@ LINK_ENTITY_TO_CLASS(monster_scientist_dead, CNPC_DeadScientist);
 //
 // ********** DeadScientist SPAWN **********
 //
-void CNPC_DeadScientist::Spawn(void) {
+void CNPC_DeadScientist::Spawn() {
   PrecacheModel("models/scientist.mdl");
   SetModel("models/scientist.mdl");
 
@@ -847,13 +847,13 @@ BEGIN_DATADESC(CNPC_SittingScientist)
 END_DATADESC()
 
 // animation sequence aliases
-typedef enum {
+enum SITTING_ANIM {
   SITTING_ANIM_sitlookleft,
   SITTING_ANIM_sitlookright,
   SITTING_ANIM_sitscared,
   SITTING_ANIM_sitting2,
   SITTING_ANIM_sitting3
-} SITTING_ANIM;
+};
 
 //
 // ********** Scientist SPAWN **********
@@ -904,7 +904,7 @@ void CNPC_SittingScientist::Spawn() {
   ResetSequenceInfo();
 }
 
-void CNPC_SittingScientist::Precache(void) {
+void CNPC_SittingScientist::Precache() {
   m_baseSequence = LookupSequence("sitlookleft");
   TalkInit();
 }
@@ -918,7 +918,7 @@ int CNPC_SittingScientist::FriendNumber(int arrayNumber) {
 //=========================================================
 // sit, do stuff
 //=========================================================
-void CNPC_SittingScientist::SittingThink(void) {
+void CNPC_SittingScientist::SittingThink() {
   CBaseEntity *pent;
 
   StudioFrameAdvance();
@@ -1016,7 +1016,7 @@ void CNPC_SittingScientist::SetAnswerQuestion(CNPCSimpleTalker *pSpeaker) {
 // FIdleSpeak
 // ask question of nearby friend, or make statement
 //=========================================================
-int CNPC_SittingScientist::FIdleSpeak(void) {
+int CNPC_SittingScientist::FIdleSpeak() {
   // try to start a conversation, or make statement
   int pitch;
 

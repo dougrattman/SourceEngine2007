@@ -44,7 +44,7 @@ static bool FindDescendingLadderApproachPoint(const CNavLadder *ladder,
 /**
  * Determine actual path positions bot will move between along the path
  */
-bool CCSBot::ComputePathPositions(void) {
+bool CCSBot::ComputePathPositions() {
   if (m_pathLength == 0) return false;
 
   // start in first area's center
@@ -161,7 +161,7 @@ bool CCSBot::ComputePathPositions(void) {
 /**
  * If next step of path uses a ladder, prepare to traverse it
  */
-void CCSBot::SetupLadderMovement(void) {
+void CCSBot::SetupLadderMovement() {
   if (m_pathIndex < 1 || m_pathLength == 0) return;
 
   const ConnectInfo *to = &m_path[m_pathIndex];
@@ -240,7 +240,7 @@ void CCSBot::ComputeLadderEndpoint(bool isAscending) {
  * @todo Need Push() and Pop() for run/walk context to keep ladder speed
  * contained.
  */
-bool CCSBot::UpdateLadderMovement(void) {
+bool CCSBot::UpdateLadderMovement() {
   if (m_pathLadder == NULL) return false;
 
   bool giveUp = false;
@@ -1879,7 +1879,7 @@ float CCSBot::GetPathDistanceRemaining(void) const {
 /**
  * Draw a portion of our current path for debugging.
  */
-void CCSBot::DrawPath(void) {
+void CCSBot::DrawPath() {
   if (!HasPath()) return;
 
   for (int i = 1; i < m_pathLength; ++i) {

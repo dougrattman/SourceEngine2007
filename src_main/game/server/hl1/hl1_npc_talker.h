@@ -41,7 +41,7 @@ class CHL1NPCTalker : public CNPCSimpleTalker {
   DECLARE_CLASS(CHL1NPCTalker, CNPCSimpleTalker);
 
  public:
-  CHL1NPCTalker(void) {}
+  CHL1NPCTalker() {}
 
   virtual void Precache();
 
@@ -80,14 +80,14 @@ class CHL1NPCTalker : public CNPCSimpleTalker {
   // Hacks! HL2 has a system for avoiding the player, we don't
   // This ensures that we fall back to the real player avoidance
   // Essentially does the opposite of what it says
-  virtual bool ShouldPlayerAvoid(void) { return false; }
+  virtual bool ShouldPlayerAvoid() { return false; }
 
  protected:
   virtual void FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller,
                            USE_TYPE useType, float value);
 
  private:
-  virtual void DeclineFollowing(void) {}
+  virtual void DeclineFollowing() {}
 
   virtual int SelectDeadSchedule(void);
 

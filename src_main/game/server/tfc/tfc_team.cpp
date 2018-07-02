@@ -254,7 +254,7 @@ void CTFCTeam::Init( const char *pName, int iNumber )
 color32 CTFCTeam::GetTeamColor()
 {
 	int i = GetTeamNumber();
-	if ( i >= 0 && i < SOURCE_ARRAYSIZE( rgbcolors ) )
+	if ( i >= 0 && i < std::size( rgbcolors ) )
 	{
 		return Vector255ToRGBColor( rgbcolors[i] );
 	}

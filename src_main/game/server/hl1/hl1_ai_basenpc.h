@@ -1,12 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
 //
 // Purpose:		Base combat character with no AI
-//
-// $Workfile:     $
-// $Date:         $
-// $NoKeywords: $
-//=============================================================================//
 
 #ifndef HL1_AI_BASENPC_H
 #define HL1_AI_BASENPC_H
@@ -22,7 +16,7 @@ class CHL1BaseNPC : public CAI_BaseNPC {
   DECLARE_CLASS(CHL1BaseNPC, CAI_BaseNPC);
 
  public:
-  CHL1BaseNPC(void) {}
+  CHL1BaseNPC() {}
 
   void TraceAttack(const CTakeDamageInfo &info, const Vector &vecDir,
                    trace_t *ptr);

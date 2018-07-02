@@ -333,7 +333,7 @@ CPlayerStateInfo* CTFCPlayer::State_LookupInfo( TFCPlayerState state )
 		{ STATE_DYING,			"STATE_DYING",			&CTFCPlayer::State_Enter_DYING,			NULL,	NULL }
 	};
 
-	for ( int i=0; i < SOURCE_ARRAYSIZE( playerStateInfos ); i++ )
+	for ( int i=0; i < std::size( playerStateInfos ); i++ )
 	{
 		if ( playerStateInfos[i].m_iPlayerState == state )
 			return &playerStateInfos[i];

@@ -121,7 +121,7 @@ class CCSRagdoll : public CBaseAnimatingOverlay {
     return SetTransmitState(FL_EDICT_ALWAYS);
   }
 
-  void Init(void) {
+  void Init() {
     SetSolid(SOLID_BBOX);
     SetMoveType(MOVETYPE_STEP);
     SetFriction(1.0f);
@@ -595,7 +595,7 @@ void CCSPlayer::RunPlayerMove(const QAngle &viewangles, float forwardmove,
   MoveHelperServer()->SetHost(NULL);
 }
 
-void CCSPlayer::InitialSpawn(void) {
+void CCSPlayer::InitialSpawn() {
   BaseClass::InitialSpawn();
 
   // we're going to give the bots money here instead of
@@ -615,7 +615,7 @@ void CCSPlayer::InitialSpawn(void) {
   State_Enter(STATE_WELCOME);
 }
 
-void CCSPlayer::SetModelFromClass(void) {
+void CCSPlayer::SetModelFromClass() {
   if (GetTeamNumber() == TEAM_TERRORIST) {
     int index = m_iClass - FIRST_T_CLASS;
     if (index < 0 || index >= TerroristPlayerModels.Count()) {
@@ -750,7 +750,7 @@ void CCSPlayer::ShowViewPortPanel(const char *name, bool bShow,
   BaseClass::ShowViewPortPanel(name, bShow, data);
 }
 
-void CCSPlayer::ClearFlashbangScreenFade(void) {
+void CCSPlayer::ClearFlashbangScreenFade() {
   if (IsBlind()) {
     color32 clr = {0, 0, 0, 0};
     UTIL_ScreenFade(this, clr, 0.01, 0.0, FFADE_OUT | FFADE_PURGE);
@@ -1807,7 +1807,7 @@ void CCSPlayer::Deafen(float flDistance) {
   }
 }
 
-void CCSPlayer::GiveShield(void) {
+void CCSPlayer::GiveShield() {
 #ifdef CS_SHIELD_ENABLED
   m_bHasShield = true;
   m_bShieldDrawn = false;
@@ -1829,7 +1829,7 @@ void CCSPlayer::GiveShield(void) {
 #endif
 }
 
-void CCSPlayer::RemoveShield(void) {
+void CCSPlayer::RemoveShield() {
 #ifdef CS_SHIELD_ENABLED
   m_bHasShield = false;
 
@@ -1895,7 +1895,7 @@ void CCSPlayer::RoundRespawn() {
   ResetDamageCounters();
 }
 
-void CCSPlayer::CheckTKPunishment(void) {
+void CCSPlayer::CheckTKPunishment() {
   // teamkill punishment..
   if ((m_bJustKilledTeammate == true) && mp_tkpunish.GetInt()) {
     m_bJustKilledTeammate = false;
@@ -2079,7 +2079,7 @@ void CCSPlayer::MakeVIP(bool isVIP) {
 
 bool CCSPlayer::IsVIP() const { return m_isVIP; }
 
-void CCSPlayer::DropShield(void) {
+void CCSPlayer::DropShield() {
 #ifdef CS_SHIELD_ENABLED
   // Drop an item_defuser
   Vector vForward, vRight;
@@ -2266,7 +2266,7 @@ bool CCSPlayer::DropPistol() {
   return bSuccess;
 }
 
-bool CCSPlayer::HasPrimaryWeapon(void) {
+bool CCSPlayer::HasPrimaryWeapon() {
   bool bSuccess = false;
 
   CBaseCombatWeapon *pWeapon = Weapon_GetSlot(WEAPON_SLOT_RIFLE);
@@ -2278,7 +2278,7 @@ bool CCSPlayer::HasPrimaryWeapon(void) {
   return bSuccess;
 }
 
-bool CCSPlayer::HasSecondaryWeapon(void) {
+bool CCSPlayer::HasSecondaryWeapon() {
   bool bSuccess = false;
 
   CBaseCombatWeapon *pWeapon = Weapon_GetSlot(WEAPON_SLOT_PISTOL);
@@ -2338,7 +2338,7 @@ bool CCSPlayer::CanPlayerBuy(bool display) {
   return true;
 }
 
-BuyResult_e CCSPlayer::AttemptToBuyVest(void) {
+BuyResult_e CCSPlayer::AttemptToBuyVest() {
   int iKevlarPrice = KEVLAR_PRICE;
 
   if (CSGameRules()->IsBlackMarket()) {
@@ -2374,7 +2374,7 @@ BuyResult_e CCSPlayer::AttemptToBuyVest(void) {
   }
 }
 
-BuyResult_e CCSPlayer::AttemptToBuyAssaultSuit(void) {
+BuyResult_e CCSPlayer::AttemptToBuyAssaultSuit() {
   int fullArmor = ArmorValue() >= 100 ? 1 : 0;
 
   int price = 0, enoughMoney = 0;
@@ -2430,7 +2430,7 @@ BuyResult_e CCSPlayer::AttemptToBuyAssaultSuit(void) {
   }
 }
 
-BuyResult_e CCSPlayer::AttemptToBuyShield(void) {
+BuyResult_e CCSPlayer::AttemptToBuyShield() {
 #ifdef CS_SHIELD_ENABLED
   if (HasShield())  // prevent this guy from buying more than 1 Defuse Kit
   {
@@ -2467,7 +2467,7 @@ BuyResult_e CCSPlayer::AttemptToBuyShield(void) {
 #endif
 }
 
-BuyResult_e CCSPlayer::AttemptToBuyDefuser(void) {
+BuyResult_e CCSPlayer::AttemptToBuyDefuser() {
   CCSGameRules *MPRules = CSGameRules();
 
   if ((GetTeamNumber() == TEAM_CT) && MPRules->IsBombDefuseMap()) {
@@ -2494,7 +2494,7 @@ BuyResult_e CCSPlayer::AttemptToBuyDefuser(void) {
   return BUY_NOT_ALLOWED;
 }
 
-BuyResult_e CCSPlayer::AttemptToBuyNightVision(void) {
+BuyResult_e CCSPlayer::AttemptToBuyNightVision() {
   int iNVGPrice = NVG_PRICE;
 
   if (CSGameRules()->IsBlackMarket()) {
@@ -4044,7 +4044,7 @@ CCSPlayerStateInfo *CCSPlayer::State_LookupInfo(CSPlayerState state) {
        &CCSPlayer::State_Enter_OBSERVER_MODE, NULL,
        &CCSPlayer::State_PreThink_OBSERVER_MODE}};
 
-  for (int i = 0; i < SOURCE_ARRAYSIZE(playerStateInfos); i++) {
+  for (int i = 0; i < std::size(playerStateInfos); i++) {
     if (playerStateInfos[i].m_iPlayerState == state)
       return &playerStateInfos[i];
   }
@@ -4447,7 +4447,7 @@ bool CCSPlayer::BumpWeapon(CBaseCombatWeapon *pBaseWeapon) {
   return false;
 }
 
-void CCSPlayer::ResetStamina(void) { m_flStamina = 0.0f; }
+void CCSPlayer::ResetStamina() { m_flStamina = 0.0f; }
 
 void CCSPlayer::RescueZoneTouch(inputdata_t &inputdata) {
   m_bInHostageRescueZone = true;
@@ -4517,7 +4517,7 @@ void CCSPlayer::EmitPrivateSound(const char *soundName) {
 //=====================
 // Autobuy
 //=====================
-static void AutoBuy(void) {
+static void AutoBuy() {
   CCSPlayer *player = ToCSPlayer(UTIL_GetCommandClient());
 
   if (player) player->AutoBuy();
@@ -4790,7 +4790,7 @@ void CCSPlayer::PrioritizeAutoBuyString(char *autobuyString,
 // ReBuy
 // system for attempting to buy the weapons you had last round
 //==============================================================
-static void Rebuy(void) {
+static void Rebuy() {
   CCSPlayer *player = ToCSPlayer(UTIL_GetCommandClient());
 
   if (player) player->Rebuy();
@@ -4891,7 +4891,7 @@ void CCSPlayer::BuildRebuyStruct() {
   m_rebuyStruct.m_armor = (m_bHasHelmet ? 2 : (ArmorValue() > 0 ? 1 : 0));
 }
 
-void CCSPlayer::Rebuy(void) {
+void CCSPlayer::Rebuy() {
   if (!IsInBuyZone()) {
     EmitPrivateSound("BuyPreset.CantBuy");
     return;
@@ -5292,13 +5292,13 @@ void CCSPlayer::DoAnimationEvent(PlayerAnimEvent_t event, int nData) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-int CCSPlayer::FlashlightIsOn(void) { return IsEffectActive(EF_DIMLIGHT); }
+int CCSPlayer::FlashlightIsOn() { return IsEffectActive(EF_DIMLIGHT); }
 
 extern ConVar flashlight;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCSPlayer::FlashlightTurnOn(void) {
+void CCSPlayer::FlashlightTurnOn() {
   if (flashlight.GetInt() > 0 && IsAlive()) {
     AddEffects(EF_DIMLIGHT);
     EmitSound("Player.FlashlightOn");
@@ -5307,7 +5307,7 @@ void CCSPlayer::FlashlightTurnOn(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CCSPlayer::FlashlightTurnOff(void) {
+void CCSPlayer::FlashlightTurnOff() {
   RemoveEffects(EF_DIMLIGHT);
 
   if (IsAlive()) {
@@ -5321,7 +5321,7 @@ void CCSPlayer::FlashlightTurnOff(void) {
 // The best weapon we have, first check primary,
 // then secondary and drop the best one
 
-void CCSPlayer::DropWeapons(void) {
+void CCSPlayer::DropWeapons() {
   CBaseCombatWeapon *pC4 = Weapon_OwnsThisType("weapon_c4");
   if (pC4) {
     CSWeaponDrop(pC4, false, true);
@@ -5587,7 +5587,7 @@ void CCSPlayer::ResetDamageCounters() {
 //=======================================================
 // Output the damage that we dealt to other players
 //=======================================================
-void CCSPlayer::OutputDamageTaken(void) {
+void CCSPlayer::OutputDamageTaken() {
   bool bPrintHeader = true;
   CDamageRecord *pRecord;
   char buf[64];
@@ -5619,7 +5619,7 @@ void CCSPlayer::OutputDamageTaken(void) {
 //=======================================================
 // Output the damage that we took from other players
 //=======================================================
-void CCSPlayer::OutputDamageGiven(void) {
+void CCSPlayer::OutputDamageGiven() {
   bool bPrintHeader = true;
   CDamageRecord *pRecord;
   char buf[64];
@@ -5729,7 +5729,7 @@ void CCSPlayer::HandleAnimEvent(animevent_t *pEvent) {
   }
 }
 
-bool CCSPlayer::CanChangeName(void) {
+bool CCSPlayer::CanChangeName() {
   if (IsBot()) return true;
 
   // enforce the minimum interval

@@ -75,7 +75,7 @@ bool COrderAssist::CreateOrder( CPlayerClass *pClass )
 	int sorted[512];
 	int nSorted = BuildSortedActiveList(
 		sorted,
-		SOURCE_ARRAYSIZE( sorted ),
+		std::size( sorted ),
 		SortFn_TeamPlayersByDistance,
 		IsValidFn_PlayersWantingAssist,
 		&info,
@@ -103,7 +103,7 @@ bool COrderAssist::CreateOrder( CPlayerClass *pClass )
 		int sortedEnemies[256];
 		int nSortedEnemies = BuildSortedActiveList(	
 			sortedEnemies,
-			SOURCE_ARRAYSIZE( sortedEnemies ),
+			std::size( sortedEnemies ),
 			SortFn_PlayerEntitiesByDistance,
 			IsValidFn_OnEnemyTeam,
 			&info,

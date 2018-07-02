@@ -673,7 +673,7 @@ void CTFPlayer::PrecachePlayerModels( void )
 	
 	if ( TFGameRules() && TFGameRules()->IsBirthday() )
 	{
-		for ( i = 1; i < SOURCE_ARRAYSIZE(g_pszBDayGibs); i++ )
+		for ( i = 1; i < std::size(g_pszBDayGibs); i++ )
 		{
 			PrecacheModel( g_pszBDayGibs[i] );
 		}
@@ -2967,7 +2967,7 @@ void CTFPlayer::AddDamagerToHistory( EHANDLE hDamager )
 	// other damagers from history.)
 	if ( m_DamagerHistory[0].hDamager != hDamager )
 	{
-		for ( int i = 1; i < SOURCE_ARRAYSIZE( m_DamagerHistory ); i++ )
+		for ( int i = 1; i < std::size( m_DamagerHistory ); i++ )
 		{
 			m_DamagerHistory[i] = m_DamagerHistory[i-1];
 		}		
@@ -2982,7 +2982,7 @@ void CTFPlayer::AddDamagerToHistory( EHANDLE hDamager )
 //-----------------------------------------------------------------------------
 void CTFPlayer::ClearDamagerHistory()
 {
-	for ( int i = 0; i < SOURCE_ARRAYSIZE( m_DamagerHistory ); i++ )
+	for ( int i = 0; i < std::size( m_DamagerHistory ); i++ )
 	{
 		m_DamagerHistory[i].Reset();
 	}
@@ -3687,7 +3687,7 @@ CPlayerStateInfo *CTFPlayer::StateLookupInfo( int nState )
 		{ TF_STATE_DYING,				"TF_STATE_DYING",				&CTFPlayer::StateEnterDYING,				NULL,	&CTFPlayer::StateThinkDYING },
 	};
 
-	for ( int iState = 0; iState < SOURCE_ARRAYSIZE( playerStateInfos ); ++iState )
+	for ( int iState = 0; iState < std::size( playerStateInfos ); ++iState )
 	{
 		if ( playerStateInfos[iState].m_nPlayerState == nState )
 			return &playerStateInfos[iState];
@@ -6072,7 +6072,7 @@ bool CTFPlayer::PlayerHasPowerplay( void )
 	if ( engine->GetPlayerInfo( entindex(), &pi ) && ( pi.friendsID ) )
 	{
 		CSteamID steamIDForPlayer( pi.friendsID, 1, k_EUniversePublic, k_EAccountTypeIndividual );
-		for ( int i = 0; i < SOURCE_ARRAYSIZE(powerplay_ids); i++ )
+		for ( int i = 0; i < std::size(powerplay_ids); i++ )
 		{
 			if ( steamIDForPlayer.ConvertToUint64() == (powerplay_ids[i] ^ powerplaymask) )
 				return true;

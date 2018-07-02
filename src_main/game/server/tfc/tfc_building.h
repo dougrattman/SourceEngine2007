@@ -32,7 +32,7 @@ public:
 	void EXPORT TeleporterThink( void );
 	void EXPORT TeleporterTouch( CBaseEntity *pOther );
 
-	Class_T Classify(void) { return CLASS_MACHINE; };
+	Class_T Classify() { return CLASS_MACHINE; };
 	int BloodColor( void ) { return DONT_BLEED; }
 
 	void Remove( void );

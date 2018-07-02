@@ -110,9 +110,9 @@ CHL2MP_Player::CHL2MP_Player() : m_PlayerAnimState(this) {
   //	UseClientSideAnimation();
 }
 
-CHL2MP_Player::~CHL2MP_Player(void) {}
+CHL2MP_Player::~CHL2MP_Player() {}
 
-void CHL2MP_Player::UpdateOnRemove(void) {
+void CHL2MP_Player::UpdateOnRemove() {
   if (m_hRagdoll) {
     UTIL_RemoveImmediate(m_hRagdoll);
     m_hRagdoll = NULL;
@@ -121,19 +121,19 @@ void CHL2MP_Player::UpdateOnRemove(void) {
   BaseClass::UpdateOnRemove();
 }
 
-void CHL2MP_Player::Precache(void) {
+void CHL2MP_Player::Precache() {
   BaseClass::Precache();
 
   PrecacheModel("sprites/glow01.vmt");
 
   // Precache Citizen models
-  int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
+  int nHeads = std::size(g_ppszRandomCitizenModels);
   int i;
 
   for (i = 0; i < nHeads; ++i) PrecacheModel(g_ppszRandomCitizenModels[i]);
 
   // Precache Combine Models
-  nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
+  nHeads = std::size(g_ppszRandomCombineModels);
 
   for (i = 0; i < nHeads; ++i) PrecacheModel(g_ppszRandomCombineModels[i]);
 
@@ -144,7 +144,7 @@ void CHL2MP_Player::Precache(void) {
   PrecacheScriptSound("NPC_Citizen.die");
 }
 
-void CHL2MP_Player::GiveAllItems(void) {
+void CHL2MP_Player::GiveAllItems() {
   EquipSuit();
 
   CBasePlayer::GiveAmmo(255, "Pistol");
@@ -179,7 +179,7 @@ void CHL2MP_Player::GiveAllItems(void) {
   GiveNamedItem("weapon_physcannon");
 }
 
-void CHL2MP_Player::GiveDefaultItems(void) {
+void CHL2MP_Player::GiveDefaultItems() {
   EquipSuit();
 
   CBasePlayer::GiveAmmo(255, "Pistol");
@@ -212,7 +212,7 @@ void CHL2MP_Player::GiveDefaultItems(void) {
   }
 }
 
-void CHL2MP_Player::PickDefaultSpawnTeam(void) {
+void CHL2MP_Player::PickDefaultSpawnTeam() {
   if (GetTeamNumber() == 0) {
     if (HL2MPRules()->IsTeamplay() == false) {
       if (GetModelPtr() == NULL) {
@@ -252,7 +252,7 @@ void CHL2MP_Player::PickDefaultSpawnTeam(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Sets HL2 specific defaults.
 //-----------------------------------------------------------------------------
-void CHL2MP_Player::Spawn(void) {
+void CHL2MP_Player::Spawn() {
   m_flNextModelChangeTime = 0.0f;
   m_flNextTeamChangeTime = 0.0f;
 
@@ -303,7 +303,7 @@ void CHL2MP_Player::PickupObject(CBaseEntity *pObject, bool bLimitMassAndSize) {
 }
 
 bool CHL2MP_Player::ValidatePlayerModel(const char *pModel) {
-  int iModels = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
+  int iModels = std::size(g_ppszRandomCitizenModels);
   int i;
 
   for (i = 0; i < iModels; ++i) {
@@ -312,7 +312,7 @@ bool CHL2MP_Player::ValidatePlayerModel(const char *pModel) {
     }
   }
 
-  iModels = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
+  iModels = std::size(g_ppszRandomCombineModels);
 
   for (i = 0; i < iModels; ++i) {
     if (!Q_stricmp(g_ppszRandomCombineModels[i], pModel)) {
@@ -323,7 +323,7 @@ bool CHL2MP_Player::ValidatePlayerModel(const char *pModel) {
   return false;
 }
 
-void CHL2MP_Player::SetPlayerTeamModel(void) {
+void CHL2MP_Player::SetPlayerTeamModel() {
   const char *szModelName = NULL;
   szModelName = engine->GetClientConVarValue(engine->IndexOfEdict(edict()),
                                              "cl_playermodel");
@@ -343,7 +343,7 @@ void CHL2MP_Player::SetPlayerTeamModel(void) {
 
   if (GetTeamNumber() == TEAM_COMBINE) {
     if (Q_stristr(szModelName, "models/human")) {
-      int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
+      int nHeads = std::size(g_ppszRandomCombineModels);
 
       g_iLastCombineModel = (g_iLastCombineModel + 1) % nHeads;
       szModelName = g_ppszRandomCombineModels[g_iLastCombineModel];
@@ -352,7 +352,7 @@ void CHL2MP_Player::SetPlayerTeamModel(void) {
     m_iModelType = TEAM_COMBINE;
   } else if (GetTeamNumber() == TEAM_REBELS) {
     if (!Q_stristr(szModelName, "models/human")) {
-      int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
+      int nHeads = std::size(g_ppszRandomCitizenModels);
 
       g_iLastCitizenModel = (g_iLastCitizenModel + 1) % nHeads;
       szModelName = g_ppszRandomCitizenModels[g_iLastCitizenModel];
@@ -367,7 +367,7 @@ void CHL2MP_Player::SetPlayerTeamModel(void) {
   m_flNextModelChangeTime = gpGlobals->curtime + MODEL_CHANGE_INTERVAL;
 }
 
-void CHL2MP_Player::SetPlayerModel(void) {
+void CHL2MP_Player::SetPlayerModel() {
   const char *szModelName = NULL;
   const char *pszCurrentModelName = modelinfo->GetModelName(GetModel());
 
@@ -389,14 +389,14 @@ void CHL2MP_Player::SetPlayerModel(void) {
   }
 
   if (GetTeamNumber() == TEAM_COMBINE) {
-    int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
+    int nHeads = std::size(g_ppszRandomCombineModels);
 
     g_iLastCombineModel = (g_iLastCombineModel + 1) % nHeads;
     szModelName = g_ppszRandomCombineModels[g_iLastCombineModel];
 
     m_iModelType = TEAM_COMBINE;
   } else if (GetTeamNumber() == TEAM_REBELS) {
-    int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
+    int nHeads = std::size(g_ppszRandomCitizenModels);
 
     g_iLastCitizenModel = (g_iLastCitizenModel + 1) % nHeads;
     szModelName = g_ppszRandomCitizenModels[g_iLastCitizenModel];
@@ -443,7 +443,7 @@ void CHL2MP_Player::SetupPlayerSoundsByModel(const char *pModelName) {
   }
 }
 
-void CHL2MP_Player::ResetAnimation(void) {
+void CHL2MP_Player::ResetAnimation() {
   if (IsAlive()) {
     SetSequence(-1);
     SetActivity(ACT_INVALID);
@@ -469,7 +469,7 @@ bool CHL2MP_Player::Weapon_Switch(CBaseCombatWeapon *pWeapon,
   return bRet;
 }
 
-void CHL2MP_Player::PreThink(void) {
+void CHL2MP_Player::PreThink() {
   QAngle vOldAngles = GetLocalAngles();
   QAngle vTempAngles = GetLocalAngles();
 
@@ -489,7 +489,7 @@ void CHL2MP_Player::PreThink(void) {
   SetLocalAngles(vOldAngles);
 }
 
-void CHL2MP_Player::PostThink(void) {
+void CHL2MP_Player::PostThink() {
   BaseClass::PostThink();
 
   if (GetFlags() & FL_DUCKING) {
@@ -535,7 +535,7 @@ void CHL2MP_Player::FireBullets(const FireBulletsInfo_t &info) {
   lagcompensation->FinishLagCompensation(this);
 }
 
-void CHL2MP_Player::NoteWeaponFired(void) {
+void CHL2MP_Player::NoteWeaponFired() {
   Assert(m_pCurrentCommand);
   if (m_pCurrentCommand) {
     m_iLastWeaponFireUsercmd = m_pCurrentCommand->command_number;
@@ -961,7 +961,7 @@ SendPropVector(SENDINFO(m_vecRagdollOrigin), -1, SPROP_COORD),
     SendPropVector(SENDINFO(m_vecForce), -1, SPROP_NOSCALE),
     SendPropVector(SENDINFO(m_vecRagdollVelocity)) END_SEND_TABLE()
 
-        void CHL2MP_Player::CreateRagdollEntity(void) {
+        void CHL2MP_Player::CreateRagdollEntity() {
   if (m_hRagdoll) {
     UTIL_RemoveImmediate(m_hRagdoll);
     m_hRagdoll = NULL;
@@ -992,13 +992,13 @@ SendPropVector(SENDINFO(m_vecRagdollOrigin), -1, SPROP_COORD),
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-int CHL2MP_Player::FlashlightIsOn(void) { return IsEffectActive(EF_DIMLIGHT); }
+int CHL2MP_Player::FlashlightIsOn() { return IsEffectActive(EF_DIMLIGHT); }
 
 extern ConVar flashlight;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CHL2MP_Player::FlashlightTurnOn(void) {
+void CHL2MP_Player::FlashlightTurnOn() {
   if (flashlight.GetInt() > 0 && IsAlive()) {
     AddEffects(EF_DIMLIGHT);
     EmitSound("HL2Player.FlashlightOn");
@@ -1007,7 +1007,7 @@ void CHL2MP_Player::FlashlightTurnOn(void) {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CHL2MP_Player::FlashlightTurnOff(void) {
+void CHL2MP_Player::FlashlightTurnOff() {
   RemoveEffects(EF_DIMLIGHT);
 
   if (IsAlive()) {
@@ -1033,7 +1033,7 @@ void CHL2MP_Player::Weapon_Drop(CBaseCombatWeapon *pWeapon,
   BaseClass::Weapon_Drop(pWeapon, pvecTarget, pVelocity);
 }
 
-void CHL2MP_Player::DetonateTripmines(void) {
+void CHL2MP_Player::DetonateTripmines() {
   CBaseEntity *pEntity = NULL;
 
   while ((pEntity = gEntList.FindEntityByClassname(pEntity, "npc_satchel")) !=
@@ -1133,7 +1133,7 @@ void CHL2MP_Player::DeathSound(const CTakeDamageInfo &info) {
   EmitSound(filter, entindex(), ep);
 }
 
-CBaseEntity *CHL2MP_Player::EntSelectSpawnPoint(void) {
+CBaseEntity *CHL2MP_Player::EntSelectSpawnPoint() {
   CBaseEntity *pSpot = NULL;
   CBaseEntity *pLastSpawnPoint = g_pLastSpawn;
   edict_t *player = edict();
@@ -1319,7 +1319,7 @@ CHL2MPPlayerStateInfo *CHL2MP_Player::State_LookupInfo(HL2MPPlayerState state) {
        &CHL2MP_Player::State_Enter_OBSERVER_MODE, NULL,
        &CHL2MP_Player::State_PreThink_OBSERVER_MODE}};
 
-  for (int i = 0; i < SOURCE_ARRAYSIZE(playerStateInfos); i++) {
+  for (int i = 0; i < std::size(playerStateInfos); i++) {
     if (playerStateInfos[i].m_iPlayerState == state)
       return &playerStateInfos[i];
   }
