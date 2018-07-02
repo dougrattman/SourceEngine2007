@@ -487,7 +487,17 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   EmitAmbientSound
-  
+  
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -675,6 +685,7 @@ class CVEngineServer : public IVEngineServer {
   virtual void ServerCommand(const char *str) {
     if (!str) {
       Sys_Error("ServerCommand with NULL string\n");
+      return;
     }
     if (ValidCmd(str)) {
       Cbuf_AddText(str);
@@ -688,7 +699,16 @@ class CVEngineServer : public IVEngineServer {
   ServerExecute
 
     Executes all commands in server buffer
-    
+    
+
+
+
+
+
+
+
+
+
           localcmd (string)
           =================
   */
@@ -697,9 +717,25 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   ClientCommand
-  
+  
+
+
+
+
+
+
+
+
     Sends text over to the client's execution buffer
-    
+    
+
+
+
+
+
+
+
+
           stuffcmd (clientent, value)
           =================
   */
@@ -982,7 +1018,7 @@ class CVEngineServer : public IVEngineServer {
 
     crossHairMsg.m_Angle.x = pitch;
     crossHairMsg.m_Angle.y = yaw;
-    crossHairMsg.m_Angle.y = 0;
+    crossHairMsg.m_Angle.z = 0;
 
     client->SendNetMsg(crossHairMsg);
   }
@@ -1162,7 +1198,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   InsertServerCommand
-  
+  
+
+
     Sends text to servers execution buffer
                localcmd (string)
           =================
@@ -1170,6 +1208,7 @@ class CVEngineServer : public IVEngineServer {
   virtual void InsertServerCommand(const char *str) {
     if (!str) {
       Sys_Error("InsertServerCommand with NULL string\n");
+      return;
     }
     if (ValidCmd(str)) {
       Cbuf_InsertText(str);

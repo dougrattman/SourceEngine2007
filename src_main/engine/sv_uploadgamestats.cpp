@@ -165,7 +165,7 @@ const uint32_t cuNumCommandResponses = 5;
 //		Handles uploading game stats data blobs to the CSERServer
 //		(Client Stats & Error Reporting Server)
 
-typedef enum {
+enum EGameStatsUploadStatus {
   // General status
   eGameStatsUploadSucceeded = 0,
   eGameStatsUploadFailed,
@@ -181,7 +181,7 @@ typedef enum {
   eGameStatsConnectToCSERServerFailed,
   eGameStatsUploadingGameStatsSucceeded,
   eGameStatsUploadingGameStatsFailed
-} EGameStatsUploadStatus;
+};
 
 struct TGameStatsProgress {
   // A text string describing the current progress

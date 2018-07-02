@@ -158,7 +158,7 @@ void V_RenderView() {
   } else if (!g_LostVideoMemory) {
     // We can get into situations where some other material system app
     // is trying to start up; in those cases, we shouldn't render...
-    vrect_t scr_vrect = videomode->GetClientViewRect();
+    Rect_t scr_vrect = videomode->GetClientViewRect();
     g_ClientDLL->View_Render(&scr_vrect);
   }
 }

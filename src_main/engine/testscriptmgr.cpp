@@ -289,6 +289,7 @@ void CTestScriptMgr::LoopCount(const char *pLoopName, int nTimes) {
   if (!pLoop) {
     Error("CTestScriptMgr::LoopCount( %s ): no loop with this name exists.",
           pLoopName);
+    return;
   }
 
   ++pLoop->m_nCount;
@@ -310,6 +311,7 @@ void CTestScriptMgr::LoopForNumSeconds(const char *pLoopName, double nSeconds) {
         "CTestScriptMgr::LoopForNumSeconds( %s ): no loop with this name "
         "exists.",
         pLoopName);
+    return;
   }
 
   if (Plat_FloatTime() - pLoop->m_flStartTime < nSeconds) {

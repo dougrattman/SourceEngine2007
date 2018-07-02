@@ -778,8 +778,6 @@ void CEngineVGui::CreateVProfPanels(vgui::Panel *pParent) {
 }
 
 void CEngineVGui::DestroyVProfPanels() {
-  if (IsX360()) return;
-
 #ifdef VPROF_ENABLED
   if (m_pVProfPanel) {
     delete m_pVProfPanel;

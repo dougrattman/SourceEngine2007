@@ -32,7 +32,6 @@
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vcrmode.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sv_lan;
@@ -71,7 +70,7 @@ CSteam3::CSteam3()
 {
   m_bHasActivePlayers = false;
   m_bLogOnResult = false;
-  m_eServerMode = (EServerMode)0;
+  m_eServerMode = eServerModeNone;
   m_bWantsSecure = false;  // default to insecure currently, this may change
   m_bInitialized = false;
   m_bLogOnFinished = false;
@@ -87,11 +86,12 @@ CSteam3::CSteam3()
 EServerMode CSteam3::GetCurrentServerMode() {
   if (sv_lan.GetBool()) {
     return eServerModeNoAuthentication;
-  } else if (CommandLine()->FindParm("-insecure")) {
-    return eServerModeAuthentication;
-  } else {
-    return eServerModeAuthenticationAndSecure;
   }
+
+  if (CommandLine()->FindParm("-insecure")) {
+    return eServerModeAuthentication;
+  }
+  return eServerModeAuthenticationAndSecure;
 }
 
 //-----------------------------------------------------------------------------

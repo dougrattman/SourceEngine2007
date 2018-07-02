@@ -58,12 +58,11 @@ class CVProfGraphPanel : public vgui::Panel {
     byte color[4];
   };
 
-  inline void DrawLine(vrect_t *rect, unsigned char *color,
-                       unsigned char alpha);
+  inline void DrawLine(Rect_t *rect, unsigned char *color, unsigned char alpha);
 
   void DrawLineSegments();
 
-  void GraphGetXY(vrect_t *rect, int width, int *x, int *y);
+  void GraphGetXY(Rect_t *rect, int width, int *x, int *y);
 
  private:
   void PaintLineArt(int x, int y, int w);
@@ -172,7 +171,7 @@ void CVProfGraphPanel::ApplySchemeSettings(vgui::IScheme *pScheme) {
 //			*x -
 //			*y -
 //-----------------------------------------------------------------------------
-void CVProfGraphPanel::GraphGetXY(vrect_t *rect, int width, int *x, int *y) {
+void CVProfGraphPanel::GraphGetXY(Rect_t *rect, int width, int *x, int *y) {
   *x = rect->x + rect->width - 5 - width;
   *y = rect->y + rect->height - LERP_HEIGHT - 5;
 }
@@ -189,7 +188,7 @@ bool CVProfGraphPanel::ShouldDraw() { return vprof_graph.GetBool(); }
 //-----------------------------------------------------------------------------
 void CVProfGraphPanel::Paint() {
   int x, y, w;
-  vrect_t vrect;
+  Rect_t vrect;
 
   if ((ShouldDraw()) == false) return;
 

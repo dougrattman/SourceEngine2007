@@ -898,7 +898,7 @@ void CMaster::HandleUnknown(netpacket_t *packet, CBaseServer *pServer,
     case A2S_INFO: {
       char nugget[64];
       nugget[0] = 0;
-      if (msg.GetNumBytesLeft() >= strlen(A2S_KEY_STRING)) {
+      if (msg.GetNumBytesLeft() >= std::size(A2S_KEY_STRING) - 1) {
         msg.ReadString(nugget, sizeof(nugget) - 2);
         nugget[sizeof(nugget) - 1] = 0;
       }
@@ -1016,13 +1016,13 @@ void CMaster::ReplyInfo(netadr_t &adr, CBaseServer *pServer) {
   // Write a uint8_t with some flags that describe what is to follow.
   uint8_t nNewFlags = 0;
 
-  if (!hltv || (hltv && (!hltv->IsActive() || !hltv->IsTVRelay())))
+  if (!hltv || (!hltv->IsActive() || !hltv->IsTVRelay()))
     nNewFlags |= S2A_EXTRA_DATA_HAS_GAME_PORT;
 
   if (hltv && hltv->IsActive()) nNewFlags |= S2A_EXTRA_DATA_HAS_SPECTATOR_DATA;
 
   const char *pchGameType = sv_tags.GetString();
-  if (pchGameType && Q_strlen(pchGameType) > 0)
+  if (pchGameType && strlen(pchGameType) > 0)
     nNewFlags |= S2A_EXTRA_DATA_HAS_GAMETAG_DATA;
 
   buf.WriteByte(nNewFlags);

@@ -31,7 +31,6 @@
 IClientEntityList *entitylist = NULL;
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 ConVar sv_debugmanualmode("sv_debugmanualmode", "0", 0,
@@ -215,7 +214,7 @@ static inline void SV_PackEntity(int edictIdx, edict_t *edict,
     }
 
     ErrorIfNot(pChangeFrame, ("SV_PackEntity: SnagChangeFrameList returned 0"));
-    ErrorIfNot(pChangeFrame->GetNumProps() == nFlatProps,
+    ErrorIfNot(pChangeFrame->GetNumProps() == nFlatProps,  //-V1004
                ("SV_PackEntity: SnagChangeFrameList mismatched number of "
                 "props[%d vs %d]",
                 nFlatProps, pChangeFrame->GetNumProps()));
@@ -412,8 +411,8 @@ void SV_ComputeClientPacks(int clientCount, CGameClient **clients,
                      BUDGETFLAG_SERVER);
 
   if (g_pLocalNetworkBackdoor) {
-    // This will force network string table updates for local client to go
-    // through the backdoor if it's active
+  // This will force network string table updates for local client to go
+  // through the backdoor if it's active
 #ifdef SHARED_NET_STRING_TABLES
     sv.m_StringTables->TriggerCallbacks(clients[0]->m_nDeltaTick);
 #else

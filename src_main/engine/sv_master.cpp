@@ -25,9 +25,6 @@ void SetMaster_f(const CCommand &args) {
   }
 #ifndef NO_STEAM
   ISteamMasterServerUpdater *s = SteamMasterServerUpdater();
-#else
-  ISteamMasterServerUpdater *s = NULL;
-#endif
   if (!s) return;
 
   char szMasterAddress[128];  // IP:Port string of master
@@ -92,6 +89,7 @@ void SetMaster_f(const CCommand &args) {
 
   // Resend the rules just in case we added a new server.
   sv.SetMasterServerRulesDirty();
+#endif
 }
 
 //-----------------------------------------------------------------------------
