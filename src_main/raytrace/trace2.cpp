@@ -1,17 +1,24 @@
-// $Id$
-#include <mathlib/halton.h>
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+
 #include "raytrace.h"
+
+#include "mathlib/halton.h"
 
 #define IGAMMA (1.0f / 2.2f)
 #define MAGIC_NUMBER (1 << 23)
 
+template <typename T>
+constexpr inline T SQ(T x) {
+  return x * x;
+}
+
 static fltx4 Four_MagicNumbers = {MAGIC_NUMBER, MAGIC_NUMBER, MAGIC_NUMBER,
                                   MAGIC_NUMBER};
-static alignas(16) int32_t Four_255s[4] = {0xff, 0xff, 0xff, 0xff};
+static alignas(16) i32 Four_255s[4] = {0xff, 0xff, 0xff, 0xff};
 #define PIXMASK (*(reinterpret_cast<fltx4 *>(&Four_255s)))
 
-void MapLinearIntensities(FourVectors const &intens, uint32_t *p1, uint32_t *p2,
-                          uint32_t *p3, uint32_t *p4) {
+void MapLinearIntensities(FourVectors const &intens, u32 *p1, u32 *p2, u32 *p3,
+                          u32 *p4) {
   // convert four pixels worth of sse-style rgb into argb lwords
   // NOTE the _mm_empty macro is voodoo. do not mess with this routine casually
   // - simply throwing anything that ends up generating a fpu stack references
@@ -32,22 +39,22 @@ void MapLinearIntensities(FourVectors const &intens, uint32_t *p1, uint32_t *p2,
   *(p4) = (SubInt(r, 3)) | (SubInt(g, 3) << 8) | (SubInt(b, 3) << 16);
 }
 
-static alignas(16) int32_t signmask[4] = {0x80000000i32, 0x80000000i32,
-                                          0x80000000i32, 0x80000000i32};
-static alignas(16) int32_t all_ones[4] = {-1, -1, -1, -1};
+static alignas(16) i32 signmask[4] = {0x80000000i32, 0x80000000i32,
+                                      0x80000000i32, 0x80000000i32};
+static alignas(16) i32 all_ones[4] = {-1, -1, -1, -1};
 static fltx4 all_zeros = {0, 0, 0, 0};
 static fltx4 TraceLimit = {1.0e20f, 1.0e20f, 1.0e20f, 1.0e20f};
 
 void RayTracingEnvironment::RenderScene(
-    int width, int height,    // width and height of desired rendering
-    int stride,               // actual width in pixels of target buffer
-    uint32_t *output_buffer,  // pointer to destination
-    Vector CameraOrigin,      // eye position
-    Vector ULCorner,          // word space coordinates of upper left
-                              // monitor corner
-    Vector URCorner,          // top right corner
-    Vector LLCorner,          // lower left
-    Vector LRCorner,          // lower right
+    int width, int height,  // width and height of desired rendering
+    int stride,             // actual width in pixels of target buffer
+    u32 *output_buffer,     // pointer to destination
+    Vector CameraOrigin,    // eye position
+    Vector ULCorner,        // word space coordinates of upper left
+                            // monitor corner
+    Vector URCorner,        // top right corner
+    Vector LLCorner,        // lower left
+    Vector LRCorner,        // lower right
     RayTraceLightingMode_t lmode) {
   // first, compute deltas
   Vector dxvector = URCorner;
@@ -76,9 +83,9 @@ void RayTracingEnvironment::RenderScene(
   // now, we will ray trace pixels. we will do the rays in a 2x2 pattern
   for (int y = 0; y < height; y += 2) {
     Vector SLoc = dyvector;
-    SLoc *= ((float)y);
+    SLoc *= ((f32)y);
     SLoc += ULCorner;
-    uint32_t *dest = output_buffer + y * stride;
+    u32 *dest = output_buffer + y * stride;
     for (int x = 0; x < width; x += 2) {
       myrays.direction.DuplicateVector(SLoc);
       myrays.direction += block_offsets;
@@ -94,7 +101,7 @@ void RayTracingEnvironment::RenderScene(
         // make sure normal points back towards ray origin
         fltx4 ndoti = rslt.surface_normal * myrays.direction;
         fltx4 bad_dirs = AndSIMD(CmpGtSIMD(ndoti, Four_Zeros),
-                                 LoadAlignedSIMD((float *)signmask));
+                                 LoadAlignedSIMD((f32 *)signmask));
 
         // flip signs of all "wrong" normals
         rslt.surface_normal.x = XorSIMD(bad_dirs, rslt.surface_normal.x);
@@ -176,9 +183,7 @@ void RayTracingEnvironment::RenderScene(
   }
 }
 
-#define SQ(x) ((x) * (x))
-
-void RayTracingEnvironment::ComputeVirtualLightSources(void) {
+void RayTracingEnvironment::ComputeVirtualLightSources() {
   int start_pos = 0;
   for (int b = 0; b < 3; b++) {
     int nl = LightList.Count();
@@ -202,7 +207,7 @@ void RayTracingEnvironment::ComputeVirtualLightSources(void) {
             // make sure normal points back towards ray origin
             fltx4 ndoti = rslt.surface_normal * myrays.direction;
             fltx4 bad_dirs = AndSIMD(CmpGtSIMD(ndoti, Four_Zeros),
-                                     LoadAlignedSIMD((float *)signmask));
+                                     LoadAlignedSIMD((f32 *)signmask));
 
             // flip signs of all "wrong" normals
             rslt.surface_normal.x = XorSIMD(bad_dirs, rslt.surface_normal.x);
@@ -214,9 +219,9 @@ void RayTracingEnvironment::ComputeVirtualLightSources(void) {
             // treat the virtual light as a disk with its center at the hit
             // position and its radius scaled by the amount of the solid angle
             // this probe represents.
-            float area_of_virtual_light = 4.0 * M_PI *
-                                          SQ(SubFloat(rslt.HitDistance, 0)) *
-                                          (1.0 / n_desired);
+            f32 area_of_virtual_light = 4.0f * M_PI_F *
+                                        SQ(SubFloat(rslt.HitDistance, 0)) *
+                                        (1.0f / n_desired);
 
             FourVectors intens;
             intens.DuplicateVector(Vector(0, 0, 0));
@@ -242,14 +247,14 @@ void RayTracingEnvironment::ComputeVirtualLightSources(void) {
                        rslt.surface_normal.Z(0));
             l1.m_Color = Vector(intens.X(0), intens.Y(0), intens.Z(0));
             if (l1.m_Color.Length() > 0) {
-              l1.m_Color *= area_of_virtual_light / M_PI;
+              l1.m_Color *= area_of_virtual_light / M_PI_F;
               l1.m_Range = 0.0;
               l1.m_Falloff = 1.0;
               l1.m_Attenuation0 = 1.0;
               l1.m_Attenuation1 = 0.0;
               l1.m_Attenuation2 = 1.0;  // intens falls off as 1/r^2
               l1.m_Theta = 0;
-              l1.m_Phi = M_PI;
+              l1.m_Phi = M_PI_F;
               l1.RecalculateDerivedValues();
               LightList.AddToTail(l1);
             }

@@ -1,32 +1,34 @@
-// $Id$
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "raytrace.h"
-#include <cmdlib.h>
-#include <filesystem_tools.h>
-#include <cstdio>
 
-static bool SameSign(float a, float b) {
-  int32_t aa = *((int *)&a);
-  int32_t bb = *((int *)&b);
+#include <cstdio>
+#include "cmdlib.h"
+#include "filesystem_tools.h"
+
+static bool SameSign(f32 a, f32 b) {
+  const i32 aa{bit_cast<i32>(a)};
+  const i32 bb{bit_cast<i32>(b)};
+
   return ((aa ^ bb) & 0x80000000) == 0;
 }
 
-int FourRays::CalculateDirectionSignMask(void) const {
-  // this code treats the floats as integers since all it cares about is the
+int FourRays::CalculateDirectionSignMask() const {
+  // This code treats the floats as integers since all it cares about is the
   // sign bit and floating point compares suck.
 
-  int ret;
-  int ormask;
-  int andmask;
-  int32_t const *treat_as_int = ((int32_t const *)(&direction));
+  i32 const *treat_as_int = bit_cast<i32 const *>(&direction);
 
-  ormask = andmask = *(treat_as_int++);
+  int ormask = *(treat_as_int++);
+  int andmask = ormask;
   ormask |= *treat_as_int;
   andmask &= *(treat_as_int++);
   ormask |= *(treat_as_int);
   andmask &= *(treat_as_int++);
   ormask |= *(treat_as_int);
   andmask &= *(treat_as_int++);
+
+  int ret;
   if (ormask >= 0)
     ret = 0;
   else {
@@ -35,6 +37,7 @@ int FourRays::CalculateDirectionSignMask(void) const {
     else
       return -1;
   }
+
   ormask = andmask = *(treat_as_int++);
   ormask |= *treat_as_int;
   andmask &= *(treat_as_int++);
@@ -42,12 +45,14 @@ int FourRays::CalculateDirectionSignMask(void) const {
   andmask &= *(treat_as_int++);
   ormask |= *(treat_as_int);
   andmask &= *(treat_as_int++);
+
   if (ormask < 0) {
     if (andmask < 0)
       ret |= 2;
     else
       return -1;
   }
+
   ormask = andmask = *(treat_as_int++);
   ormask |= *treat_as_int;
   andmask &= *(treat_as_int++);
@@ -55,12 +60,14 @@ int FourRays::CalculateDirectionSignMask(void) const {
   andmask &= *(treat_as_int++);
   ormask |= *(treat_as_int);
   andmask &= *(treat_as_int++);
+
   if (ormask < 0) {
     if (andmask < 0)
       ret |= 4;
     else
       return -1;
   }
+
   return ret;
 }
 
@@ -70,16 +77,16 @@ void RayTracingEnvironment::MakeRoomForTriangles(int ntris) {
     TriangleColors.EnsureCapacity(ntris);
 }
 
-void RayTracingEnvironment::AddTriangle(int32_t id, const Vector &v1,
+void RayTracingEnvironment::AddTriangle(i32 id, const Vector &v1,
                                         const Vector &v2, const Vector &v3,
                                         const Vector &color) {
   AddTriangle(id, v1, v2, v3, color, 0, 0);
 }
 
-void RayTracingEnvironment::AddTriangle(int32_t id, const Vector &v1,
+void RayTracingEnvironment::AddTriangle(i32 id, const Vector &v1,
                                         const Vector &v2, const Vector &v3,
                                         const Vector &color, uint16_t flags,
-                                        int32_t materialIndex) {
+                                        i32 materialIndex) {
   CacheOptimizedTriangle tmptri;
   tmptri.m_Data.m_GeometryData.m_nTriangleID = id;
   tmptri.Vertex(0) = v1;
@@ -87,16 +94,16 @@ void RayTracingEnvironment::AddTriangle(int32_t id, const Vector &v1,
   tmptri.Vertex(2) = v3;
   tmptri.m_Data.m_GeometryData.m_nFlags = flags;
   OptimizedTriangleList.AddToTail(tmptri);
+
   if (!(Flags & RTE_FLAGS_DONT_STORE_TRIANGLE_COLORS))
     TriangleColors.AddToTail(color);
+
   if (!(Flags & RTE_FLAGS_DONT_STORE_TRIANGLE_MATERIALS))
     TriangleMaterials.AddToTail(materialIndex);
-  // 	printf("add triange from (%f %f %f),(%f %f %f),(%f %f %f) id %d\n",
-  // 		   XYZ(v1),XYZ(v2),XYZ(v3),id);
 }
 
 void RayTracingEnvironment::AddQuad(
-    int32_t id, const Vector &v1, const Vector &v2, const Vector &v3,
+    i32 id, const Vector &v1, const Vector &v2, const Vector &v3,
     const Vector &v4,  // specify vertices in cw or ccw order
     const Vector &color) {
   AddTriangle(id, v1, v2, v3, color);
@@ -135,14 +142,14 @@ void RayTracingEnvironment::AddAxisAlignedRectangularSolid(
 
 static Vector GetEdgeEquation(Vector p1, Vector p2, int c1, int c2,
                               Vector InsidePoint) {
-  float nx = p1[c2] - p2[c2];
-  float ny = p2[c1] - p1[c1];
-  float d = -(nx * p1[c1] + ny * p1[c2]);
-  // 	assert(fabs(nx*p1[c1]+ny*p1[c2]+d)<0.01);
-  // 	assert(fabs(nx*p2[c1]+ny*p2[c2]+d)<0.01);
+  f32 nx = p1[c2] - p2[c2];
+  f32 ny = p2[c1] - p1[c1];
+  f32 d = -(nx * p1[c1] + ny * p1[c2]);
+  assert(fabs(nx * p1[c1] + ny * p1[c2] + d) < 0.01);
+  assert(fabs(nx * p2[c1] + ny * p2[c2] + d) < 0.01);
 
   // use the convention that negative is "outside"
-  float trial_dist = InsidePoint[c1] * nx + InsidePoint[c2] * ny + d;
+  f32 trial_dist = InsidePoint[c1] * nx + InsidePoint[c2] * ny + d;
   if (trial_dist < 0) {
     nx = -nx;
     ny = -ny;
@@ -156,7 +163,7 @@ static Vector GetEdgeEquation(Vector p1, Vector p2, int c1, int c2,
   return Vector(nx, ny, d);
 }
 
-void CacheOptimizedTriangle::ChangeIntoIntersectionFormat(void) {
+void CacheOptimizedTriangle::ChangeIntoIntersectionFormat() {
   // lose the vertices and use edge equations instead
 
   // grab the whole original triangle to we don't overwrite it
@@ -205,10 +212,10 @@ void CacheOptimizedTriangle::ChangeIntoIntersectionFormat(void) {
 int n_intersection_calculations = 0;
 
 int CacheOptimizedTriangle::ClassifyAgainstAxisSplit(int split_plane,
-                                                     float split_value) {
+                                                     f32 split_value) {
   // classify a triangle against an axis-aligned plane
-  float minc = Vertex(0)[split_plane];
-  float maxc = minc;
+  f32 minc = Vertex(0)[split_plane];
+  f32 maxc = minc;
   for (int v = 1; v < 3; v++) {
     minc = std::min(minc, Vertex(v)[split_plane]);
     maxc = std::max(maxc, Vertex(v)[split_plane]);
@@ -235,15 +242,15 @@ static fltx4 FourZeros = {1.0e-10f, 1.0e-10f, 1.0e-10f, 1.0e-10f};
 static fltx4 FourNegativeEpsilons = {-1.0e-10f, -1.0e-10f, -1.0e-10f,
                                      -1.0e-10f};
 
-static float BoxSurfaceArea(Vector const &boxmin, Vector const &boxmax) {
+static f32 BoxSurfaceArea(Vector const &boxmin, Vector const &boxmax) {
   Vector boxdim = boxmax - boxmin;
-  return 2.0 * ((boxdim[0] * boxdim[2]) + (boxdim[0] * boxdim[1]) +
-                (boxdim[1] * boxdim[2]));
+  return 2.0f * ((boxdim[0] * boxdim[2]) + (boxdim[0] * boxdim[1]) +
+                 (boxdim[1] * boxdim[2]));
 }
 
 void RayTracingEnvironment::Trace4Rays(
     const FourRays &rays, fltx4 TMin, fltx4 TMax, RayTracingResult *rslt_out,
-    int32_t skip_id, ITransparentTriangleCallback *pCallback) {
+    i32 skip_id, ITransparentTriangleCallback *pCallback) {
   int msk = rays.CalculateDirectionSignMask();
   if (msk != -1)
     Trace4Rays(rays, TMin, TMax, msk, rslt_out, skip_id, pCallback);
@@ -257,7 +264,7 @@ void RayTracingEnvironment::Trace4Rays(
     FourRays tmprays;
     tmprays.origin = rays.origin;
 
-    uint8_t need_trace[4] = {1, 1, 1, 1};
+    u8 need_trace[4] = {1, 1, 1, 1};
     for (int try_trace = 0; try_trace < 4; try_trace++) {
       if (need_trace[try_trace]) {
         need_trace[try_trace] = 2;  // going to trace it
@@ -301,7 +308,7 @@ void RayTracingEnvironment::Trace4Rays(
 
 void RayTracingEnvironment::Trace4Rays(
     const FourRays &rays, fltx4 TMin, fltx4 TMax, int DirectionSignMask,
-    RayTracingResult *rslt_out, int32_t skip_id,
+    RayTracingResult *rslt_out, i32 skip_id,
     ITransparentTriangleCallback *pCallback) {
   rays.Check();
 
@@ -325,8 +332,7 @@ void RayTracingEnvironment::Trace4Rays(
   fltx4 active_rays = CmpLeSIMD(TMin, TMax);  // mask of which rays are active
   if (!IsAnyNegative(active_rays)) return;    // missed bounding box
 
-  int32_t
-      mailboxids[MAILBOX_HASH_SIZE];  // used to avoid redundant triangle tests
+  i32 mailboxids[MAILBOX_HASH_SIZE];  // used to avoid redundant triangle tests
   memset(mailboxids, 0xff, sizeof(mailboxids));  // !!speed!! keep around?
 
   int front_idx[3], back_idx[3];  // based on ray direction, whether to
@@ -357,7 +363,7 @@ void RayTracingEnvironment::Trace4Rays(
   NodeToVisit NodeQueue[MAX_NODE_STACK_LEN];
   CacheOptimizedKDNode const *CurNode = &(OptimizedKDTree[0]);
   NodeToVisit *stack_ptr = &NodeQueue[MAX_NODE_STACK_LEN];
-  while (1) {
+  while (true) {
     while (CurNode->NodeType() !=
            KDNODE_STATE_LEAF)  // traverse until next leaf
     {
@@ -408,8 +414,7 @@ void RayTracingEnvironment::Trace4Rays(
     // hit a leaf! must do intersection check
     int ntris = CurNode->NumberOfTrianglesInLeaf();
     if (ntris) {
-      int32_t const *tlist =
-          &(TriangleIndexList[CurNode->TriangleIndexStart()]);
+      i32 const *tlist = &(TriangleIndexList[CurNode->TriangleIndexStart()]);
       do {
         int tnum = *(tlist++);
         // printf("try tri %d\n",tnum);
@@ -497,10 +502,10 @@ void RayTracingEnvironment::Trace4Rays(
           // now, set the hit_id and closest_hit fields for any enabled rays
           fltx4 replicated_n = ReplicateIX4(tnum);
           StoreAlignedSIMD(
-              (float *)rslt_out->HitIds,
+              (f32 *)rslt_out->HitIds,
               OrSIMD(AndSIMD(replicated_n, did_hit),
                      AndNotSIMD(did_hit,
-                                LoadAlignedSIMD((float *)rslt_out->HitIds))));
+                                LoadAlignedSIMD((f32 *)rslt_out->HitIds))));
           rslt_out->HitDistance =
               OrSIMD(AndSIMD(isect_t, did_hit),
                      AndNotSIMD(did_hit, rslt_out->HitDistance));
@@ -544,7 +549,7 @@ int RayTracingEnvironment::MakeLeafNode(int first_tri, int last_tri) {
   return OptimizedKDTree.Count() - 1;
 }
 
-void RayTracingEnvironment::CalculateTriangleListBounds(int32_t const *tris,
+void RayTracingEnvironment::CalculateTriangleListBounds(i32 const *tris,
                                                         int ntris,
                                                         Vector &minout,
                                                         Vector &maxout) {
@@ -560,38 +565,37 @@ void RayTracingEnvironment::CalculateTriangleListBounds(int32_t const *tris,
   }
 }
 
-// Both the "quick" and regular kd tree building algorithms here use the
-// "surface area heuristic": the relative probability of hitting the "left"
-// subvolume (Vl) from a split is equal to that subvolume's surface area divided
-// by its parent's surface area (Vp) : P(Vl | V)=SA(Vl)/SA(Vp). The same holds
-// for the right subvolume, Vp. Nl is the number of triangles in the left
-// volume, and Nr in the right volume. if Ct is the cost of traversing one tree
-// node, and Ci is the cost of intersection with the primitive, than the cost of
-// splitting is estimated as:
-//
-//    Ct+Ci*((SA(Vl)/SA(V))*Nl+(SA(Vr)/SA(V)*Nr)).
-// and the cost of not splitting is
-//    Ci*N
-//
-//  This both provides a metric to minimize when computing how and where to
-//  split, and also a termination criterion.
-//
-// the "quick" method just splits down the middle, while the slow method splits
-// at the best discontinuity of the cost formula. The quick method splits along
-// the longest axis ; the regular algorithm tries all 3 to find which one
-// results in the minimum cost
-//
-// both methods use the additional optimization of "growing" empty nodes - if
-// the split results in one side being devoid of triangles, the empty side is
-// "grown" as much as possible.
-//
+  // Both the "quick" and regular kd tree building algorithms here use the
+  // "surface area heuristic": the relative probability of hitting the "left"
+  // subvolume (Vl) from a split is equal to that subvolume's surface area
+  // divided by its parent's surface area (Vp) : P(Vl | V)=SA(Vl)/SA(Vp). The
+  // same holds for the right subvolume, Vp. Nl is the number of triangles in
+  // the left volume, and Nr in the right volume. if Ct is the cost of
+  // traversing one tree node, and Ci is the cost of intersection with the
+  // primitive, than the cost of splitting is estimated as:
+  //
+  //    Ct+Ci*((SA(Vl)/SA(V))*Nl+(SA(Vr)/SA(V)*Nr)).
+  // and the cost of not splitting is
+  //    Ci*N
+  //
+  //  This both provides a metric to minimize when computing how and where to
+  //  split, and also a termination criterion.
+  //
+  // the "quick" method just splits down the middle, while the slow method
+  // splits at the best discontinuity of the cost formula. The quick method
+  // splits along the longest axis ; the regular algorithm tries all 3 to find
+  // which one results in the minimum cost
+  //
+  // both methods use the additional optimization of "growing" empty nodes - if
+  // the split results in one side being devoid of triangles, the empty side is
+  // "grown" as much as possible.
 
 #define COST_OF_TRAVERSAL 75      // approximate #operations
 #define COST_OF_INTERSECTION 167  // approximate #operations
 
-float RayTracingEnvironment::CalculateCostsOfSplit(
-    int split_plane, int32_t const *tri_list, int ntris, Vector MinBound,
-    Vector MaxBound, float &split_value, int &nleft, int &nright, int &nboth) {
+f32 RayTracingEnvironment::CalculateCostsOfSplit(
+    int split_plane, i32 const *tri_list, int ntris, Vector MinBound,
+    Vector MaxBound, f32 &split_value, int &nleft, int &nright, int &nboth) {
   // determine the costs of splitting on a given axis, and label triangles with
   // respect to that axis by storing the value in coordselect0. It will also
   // return the number of tris in the left, right, and nboth groups, in order to
@@ -604,7 +608,7 @@ float RayTracingEnvironment::CalculateCostsOfSplit(
   nleft = 0;
   nright = 0;
   nboth = 0;
-  float min_coord = 1.0e23f, max_coord = -1.0e23f;
+  f32 min_coord = 1.0e23f, max_coord = -1.0e23f;
 
   for (int t = 0; t < ntris; t++) {
     CacheOptimizedTriangle &tri = OptimizedTriangleList[tri_list[t]];
@@ -642,18 +646,18 @@ float RayTracingEnvironment::CalculateCostsOfSplit(
   Vector RightMaxes = MaxBound;
   LeftMaxes[split_plane] = split_value;
   RightMins[split_plane] = split_value;
-  float SA_L = BoxSurfaceArea(LeftMins, LeftMaxes);
-  float SA_R = BoxSurfaceArea(RightMins, RightMaxes);
-  float ISA = 1.0 / BoxSurfaceArea(MinBound, MaxBound);
-  float cost_of_split = COST_OF_TRAVERSAL +
-                        COST_OF_INTERSECTION * (nboth + (SA_L * ISA * (nleft)) +
-                                                (SA_R * ISA * (nright)));
+  f32 SA_L = BoxSurfaceArea(LeftMins, LeftMaxes);
+  f32 SA_R = BoxSurfaceArea(RightMins, RightMaxes);
+  f32 ISA = 1.0 / BoxSurfaceArea(MinBound, MaxBound);
+  f32 cost_of_split = COST_OF_TRAVERSAL +
+                      COST_OF_INTERSECTION * (nboth + (SA_L * ISA * (nleft)) +
+                                              (SA_R * ISA * (nright)));
   return cost_of_split;
 }
 
 #define NEVER_SPLIT 0
 
-void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
+void RayTracingEnvironment::RefineNode(int node_number, i32 const *tri_list,
                                        int ntris, Vector MinBound,
                                        Vector MaxBound, int depth) {
   if (ntris < 3)  // never split empty lists
@@ -672,9 +676,9 @@ void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
     return;
   }
 
-  float best_cost = 1.0e23f;
+  f32 best_cost = 1.0e23f;
   int best_nleft = 0, best_nright = 0, best_nboth = 0;
-  float best_splitvalue = 0;
+  f32 best_splitvalue = 0;
   int split_plane = 0;
 
   int tri_skip = 1 + (ntris / 10);  // don't try all trinagles as split
@@ -683,7 +687,7 @@ void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
     for (int ts = -1; ts < ntris; ts += tri_skip) {
       for (int tv = 0; tv < 3; tv++) {
         int trial_nleft, trial_nright, trial_nboth;
-        float trial_splitvalue;
+        f32 trial_splitvalue;
         if (ts == -1)
           trial_splitvalue = 0.5 * (MinBound[axis] + MaxBound[axis]);
         else {
@@ -696,7 +700,7 @@ void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
         }
         //				printf("ts=%d tv=%d
         // tp=%f\n",ts,tv,trial_splitvalue);
-        float trial_cost = CalculateCostsOfSplit(
+        f32 trial_cost = CalculateCostsOfSplit(
             axis, tri_list, ntris, MinBound, MaxBound, trial_splitvalue,
             trial_nleft, trial_nright, trial_nboth);
         // 				printf("try %d cost=%f nl=%d nr=%d nb=%d
@@ -720,7 +724,7 @@ void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
       }
     }
   }
-  float cost_of_no_split = COST_OF_INTERSECTION * ntris;
+  f32 cost_of_no_split = COST_OF_INTERSECTION * ntris;
   if ((cost_of_no_split <= best_cost) || NEVER_SPLIT ||
       (depth > MAX_TREE_DEPTH)) {
     // no benefit to splitting. just make this a leaf node
@@ -739,8 +743,8 @@ void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
     // its worth splitting!
     // we will achieve the splitting without sorting by using a selection
     // algorithm.
-    int32_t *new_triangle_list;
-    new_triangle_list = new int32_t[ntris];
+    i32 *new_triangle_list;
+    new_triangle_list = new i32[ntris];
 
     // now, perform surface area/cost check to determine whether this split was
     // worth it
@@ -798,10 +802,10 @@ void RayTracingEnvironment::RefineNode(int node_number, int32_t const *tri_list,
   }
 }
 
-void RayTracingEnvironment::SetupAccelerationStructure(void) {
+void RayTracingEnvironment::SetupAccelerationStructure() {
   CacheOptimizedKDNode root;
   OptimizedKDTree.AddToTail(root);
-  int32_t *root_triangle_list = new int32_t[OptimizedTriangleList.Count()];
+  i32 *root_triangle_list = new i32[OptimizedTriangleList.Count()];
   for (int t = 0; t < OptimizedTriangleList.Count(); t++)
     root_triangle_list[t] = t;
   CalculateTriangleListBounds(root_triangle_list, OptimizedTriangleList.Count(),

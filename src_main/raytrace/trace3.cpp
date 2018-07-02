@@ -1,16 +1,14 @@
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include <bspfile.h>
-#include "bsplib.h"
 #include "raytrace.h"
+
+#include "bspfile.h"
+#include "bsplib.h"
 
 static Vector VertCoord(dface_t const &f, int vnum) {
   int eIndex = dsurfedges[f.firstedge + vnum];
-  int point;
-  if (eIndex < 0) {
-    point = dedges[-eIndex].v[1];
-  } else {
-    point = dedges[eIndex].v[0];
-  }
+  int point = eIndex < 0 ? dedges[-eIndex].v[1] : dedges[eIndex].v[0];
+
   dvertex_t *v = dvertexes + point;
   return Vector(v->point[0], v->point[1], v->point[2]);
 }
@@ -39,72 +37,8 @@ void RayTracingEnvironment::AddBSPFace(int id, dface_t const &face) {
   }
 }
 
-void RayTracingEnvironment::InitializeFromLoadedBSP(void) {
-  // 	CUtlVector<uint8> PlanesToSkip;
-  // 	SidesToSkip.EnsureCapacity(numplanes);
-  // 	for(int s=0;s<numplanes;s++)
-  // 		SidesToSkip.AddToTail(0);
-  // 	for(int b=0;b<numbrushes;b++)
-  // 		if ((dbrushes[b].contents & MASK_OPAQUE)==0)
-  // 		{
-  // 			// transparent brush - mark all its sides as "do not
-  // process" 			for(int s=0;s<dbrushes[b].numsides;s++)
-  // 			{
-  // 				PlanesToSkip[s+dbrushes[b].firstside]=1;
-  // 			}
-
-  // 		}
-  // 	// now, add all origfaces, omitting those whose sides are the ones we
-  // marked previously 	for(int c=0;c<numorigfaces;c++)
-  // 	{
-  // 		dface_t const &f=dorigfaces[c];
-  // 		if (SidesToSkip[f.AddBSPFace(c,dorigfaces[c]);
-  // 	}
-
-  // 	// ugly - I want to traverse all the faces. but there is no way to get
-  // from a face back to it's
-  // 	// original brush, and I need to get back to the face to the contents
-  // field of the brush.  So I
-  // 	// will create a temporary mapping from a "side" to its brush. I can get
-  // from the face to it
-  // 	// side, which can get me back to its brush.
-
-  // 	CUtlVector<uint8> OrigFaceVisited;
-  // 	OrigFaceVisited.EnsureCapacity(numorigfaces);
-  // 	int n_added=0;
-
-  // 	for(int i=0;i<numorigfaces;i++)
-  // 		OrigFaceVisited.AddToTail(0);
-
-  // 	for(int l=0;l<numleafs;l++)
-  // 	{
-  // 		dleaf_t const &lf=dleafs[l];
-  // //		if (lf.contents & MASK_OPAQUE)
-  // 		{
-  // 			for(int f=0;f<lf.numleaffaces;f++);
-  // 			{
-  // 				dface_t const &face=dfaces[f+lf.firstleafface];
-  // 				if (OrigFaceVisited[face.origFace]==0)
-  // 				{
-  // 					dface_t const
-  // &oface=dorigfaces[face.origFace];
-  // 					OrigFaceVisited[face.origFace]=1;
-  // 					n_added++;
-  // 					AddBSPFace(face.origFace,oface);
-  // 				}
-  // 			}
-  // 		}
-  // 	}
-  // 	printf("added %d of %d\n",n_added,numorigfaces);
-  // 	for(int c=0;c<numorigfaces;c++)
-  // 	{
-  // 		dface_t const &f=dorigfaces[c];
-  // 		AddBSPFace(c,dorigfaces[c]);
-  // 	}
+void RayTracingEnvironment::InitializeFromLoadedBSP() {
   for (int c = 0; c < numfaces; c++) {
-    //		dface_t const &f=dfaces[c];
     AddBSPFace(c, dorigfaces[c]);
   }
-
-  //	AddTriangle(1234,Vector(51,145,-700),Vector(71,165,-700),Vector(51,165,-700),colors[5]);
 }
