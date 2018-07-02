@@ -406,6 +406,9 @@
     <ClInclude Include="VPanel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\mathlib\mathlib.vcxproj">
+      <Project>{8be8d44d-b656-40c7-83d2-d51309021093}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\tier0\tier0.vcxproj">
       <Project>{c503fc17-bc81-4434-abf9-e5b00d39365c}</Project>
     </ProjectReference>

@@ -76,7 +76,7 @@ const ch *ComputeBaseDirectoryFromCommandLine(
 
   if (cmd_base_directory) {
     strcpy_s(base_directory, cmd_base_directory);
-    Q_strlower(base_directory);
+    _strlwr_s(base_directory);
     Q_FixSlashes(base_directory);
 
     return base_directory;
@@ -118,7 +118,7 @@ ComputeBaseDirectoryFromExePath() {
       }
     }
 
-    Q_strlower(base_directory);
+    _strlwr_s(base_directory);
     Q_FixSlashes(base_directory);
   }
 
@@ -162,7 +162,7 @@ BOOL WINAPI ConsoleCtrlHandler(_In_ DWORD ctrl_type) {
   ExitProcess(NO_ERROR);
 }
 
-std::tuple<bool, source::windows::windows_errno_code> InitTextModeIfNeeded(
+source::windows::windows_errno_result<bool> InitTextModeIfNeeded(
     _In_ const ICommandLine *command_line) {
   if (!command_line->CheckParm(
           source::tier0::command_line_switches::textMode)) {
