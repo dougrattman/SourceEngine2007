@@ -2692,7 +2692,7 @@ void C_TFPlayer::InitPlayerGibs( void )
 		{
 			if ( RandomFloat(0,1) < 0.75 )
 			{
-				Q_strncpy( m_aGibs[i].modelName, g_pszBDayGibs[ RandomInt(0,SOURCE_ARRAYSIZE(g_pszBDayGibs)-1) ] , sizeof(m_aGibs[i].modelName) );
+				Q_strncpy( m_aGibs[i].modelName, g_pszBDayGibs[ RandomInt(0,std::size(g_pszBDayGibs)-1) ] , sizeof(m_aGibs[i].modelName) );
 			}
 		}
 	}

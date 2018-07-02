@@ -560,7 +560,7 @@ const char *GetMapDisplayName( const char *mapName )
 	Q_strncpy( szTempName, mapName, sizeof( szTempName ) );
 	Q_strlower( szTempName );
 
-	for ( int i = 0; i < SOURCE_ARRAYSIZE( s_Maps ); ++i )
+	for ( int i = 0; i < std::size( s_Maps ); ++i )
 	{
 		if ( !Q_stricmp( s_Maps[i].pDiskName, szTempName ) )
 		{
@@ -597,7 +597,7 @@ const char *CTFMapInfoMenu::GetMapType( const char *mapName )
 {
 	if ( IsX360() && mapName )
 	{
-		for ( int i = 0; i < SOURCE_ARRAYSIZE( s_Maps ); ++i )
+		for ( int i = 0; i < std::size( s_Maps ); ++i )
 		{
 			if ( !Q_stricmp( s_Maps[i].pDiskName, mapName ) )
 			{

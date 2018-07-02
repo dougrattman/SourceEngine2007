@@ -1306,7 +1306,7 @@ CHintData g_HintDatas[] =
 
 int GetNumHintDatas()
 {
-	return SOURCE_ARRAYSIZE( g_HintDatas );
+	return std::size( g_HintDatas );
 }
 
 

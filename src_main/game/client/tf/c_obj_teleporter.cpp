@@ -360,8 +360,8 @@ void C_ObjectTeleporter::GetTargetIDDataString( wchar_t *sDataString, int iMaxLe
 		float flPercent = std::clamp( ( m_flRechargeTime - gpGlobals->curtime ) / TELEPORTER_RECHARGE_TIME, 0.0f, 1.0f );
 
 		wchar_t wszRecharging[ 32 ];
-		_snwprintf( wszRecharging, SOURCE_ARRAYSIZE(wszRecharging) - 1, L"%.0f", 100 - (flPercent * 100) );
-		wszRecharging[ SOURCE_ARRAYSIZE(wszRecharging)-1 ] = '\0';
+		_snwprintf( wszRecharging, std::size(wszRecharging) - 1, L"%.0f", 100 - (flPercent * 100) );
+		wszRecharging[ std::size(wszRecharging)-1 ] = '\0';
 
 		const char *printFormatString = "#TF_playerid_object_recharging";
 

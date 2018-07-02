@@ -358,7 +358,7 @@ void CDODWinPanel::SetFinalCaptureLabel(const char *szCappers,
   m_pLastCapperLabel_Avatar->SetVisible(bShowAvatar);
 }
 
-void CDODWinPanel::Hide(void) { SetAlpha(0); }
+void CDODWinPanel::Hide() { SetAlpha(0); }
 
 void CDODWinPanel::ApplySchemeSettings(vgui::IScheme *pScheme) {
   BaseClass::ApplySchemeSettings(pScheme);
@@ -366,7 +366,7 @@ void CDODWinPanel::ApplySchemeSettings(vgui::IScheme *pScheme) {
   SetBgColor(GetSchemeColor("TransparentLightBlack", pScheme));
 }
 
-bool CDODWinPanel::ShouldDraw(void) { return (GetAlpha() > 0); }
+bool CDODWinPanel::ShouldDraw() { return (GetAlpha() > 0); }
 
 CHudTexture *CDODWinPanel::GetIconForCategory(int category) {
   CHudTexture *pTex = NULL;
@@ -391,7 +391,7 @@ CHudTexture *CDODWinPanel::GetIconForCategory(int category) {
   return pTex;
 }
 
-void CDODWinPanel::Paint(void) {
+void CDODWinPanel::Paint() {
   if (m_pIcon) {
     Color c(255, 255, 255, 255);
     m_pIcon->DrawSelf(m_iIconX_left, m_iIconY, m_iIconW, m_iIconH, c);

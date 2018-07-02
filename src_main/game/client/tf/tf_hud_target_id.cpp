@@ -331,8 +331,8 @@ void CTargetID::UpdateID( void )
 			if ( pPlayer->IsPlayerClass( TF_CLASS_MEDIC ) )
 			{
 				wchar_t wszChargeLevel[ 10 ];
-				_snwprintf( wszChargeLevel, SOURCE_ARRAYSIZE(wszChargeLevel) - 1, L"%.0f", pPlayer->MedicGetChargeLevel() * 100 );
-				wszChargeLevel[ SOURCE_ARRAYSIZE(wszChargeLevel)-1 ] = '\0';
+				_snwprintf( wszChargeLevel, std::size(wszChargeLevel) - 1, L"%.0f", pPlayer->MedicGetChargeLevel() * 100 );
+				wszChargeLevel[ std::size(wszChargeLevel)-1 ] = '\0';
 				g_pVGuiLocalize->ConstructString( sDataString, sizeof(sDataString), g_pVGuiLocalize->Find( "#TF_playerid_mediccharge" ), 1, wszChargeLevel );
 			}
 			
@@ -413,7 +413,7 @@ void CTargetID::UpdateID( void )
 		// Target name
 		if ( sIDString[0] )
 		{
-			sIDString[ SOURCE_ARRAYSIZE(sIDString)-1 ] = '\0';
+			sIDString[ std::size(sIDString)-1 ] = '\0';
 			m_pTargetNameLabel->SetVisible(true);
 
 			// TODO: Support	if( hud_centerid.GetInt() == 0 )
@@ -428,7 +428,7 @@ void CTargetID::UpdateID( void )
 		// Extra target data
 		if ( sDataString[0] )
 		{
-			sDataString[ SOURCE_ARRAYSIZE(sDataString)-1 ] = '\0';
+			sDataString[ std::size(sDataString)-1 ] = '\0';
 			m_pTargetDataLabel->SetVisible(true);
 			SetDialogVariable( "targetdata", sDataString );
 		}

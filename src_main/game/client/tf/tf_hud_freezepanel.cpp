@@ -791,7 +791,7 @@ void CTFFreezePanelCallout::UpdateForGib( int iGib, int iCount )
 	if ( !m_pGibLabel )
 		return;
 
-	if ( iGib < SOURCE_ARRAYSIZE(pszCalloutGibNames) )
+	if ( iGib < std::size(pszCalloutGibNames) )
 	{
 		if ( pszCalloutGibNames[iGib] )
 		{
@@ -799,7 +799,7 @@ void CTFFreezePanelCallout::UpdateForGib( int iGib, int iCount )
 		}
 		else
 		{
-			m_pGibLabel->SetText( pszCalloutRandomGibNames[ RandomInt(0,SOURCE_ARRAYSIZE(pszCalloutRandomGibNames)-1) ] );
+			m_pGibLabel->SetText( pszCalloutRandomGibNames[ RandomInt(0,std::size(pszCalloutRandomGibNames)-1) ] );
 		}
 	}
 	else

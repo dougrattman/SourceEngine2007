@@ -230,7 +230,7 @@ IViewPortPanel *TFViewport::CreatePanelByName(const char *szPanelName) {
   return newpanel;
 }
 
-void TFViewport::CreateDefaultPanels(void) {
+void TFViewport::CreateDefaultPanels() {
   AddNewPanel(CreatePanelByName(PANEL_MAPINFO), "PANEL_MAPINFO");
   AddNewPanel(CreatePanelByName(PANEL_TEAM), "PANEL_TEAM");
   AddNewPanel(CreatePanelByName(PANEL_CLASS_RED), "PANEL_CLASS_RED");
@@ -241,7 +241,7 @@ void TFViewport::CreateDefaultPanels(void) {
   BaseClass::CreateDefaultPanels();
 }
 
-int TFViewport::GetDeathMessageStartHeight(void) {
+int TFViewport::GetDeathMessageStartHeight() {
   int y = YRES(2);
 
   if (IsX360()) {

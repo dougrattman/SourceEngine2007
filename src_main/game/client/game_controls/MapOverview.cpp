@@ -156,7 +156,7 @@ CMapOverview::CMapOverview(const char *pElementName)
   g_pMapOverview = this;  // for cvars access etc
 }
 
-void CMapOverview::Init(void) {
+void CMapOverview::Init() {
   // register for events as client listener
   ListenForGameEvent("game_newmap");
   ListenForGameEvent("round_start");
@@ -383,18 +383,18 @@ void CMapOverview::SetPlayerPositions(int index, const Vector &position,
 //-----------------------------------------------------------------------------
 void CMapOverview::ShowPanel(bool bShow) { SetVisible(bShow); }
 
-void CMapOverview::OnThink(void) {
+void CMapOverview::OnThink() {
   if (NeedsUpdate()) {
     Update();
     m_fNextUpdateTime = gpGlobals->curtime + 0.2f;  // update 5 times a second
   }
 }
 
-bool CMapOverview::NeedsUpdate(void) {
+bool CMapOverview::NeedsUpdate() {
   return m_fNextUpdateTime < gpGlobals->curtime;
 }
 
-void CMapOverview::Update(void) {
+void CMapOverview::Update() {
   // update settings
   m_bShowNames = overview_names.GetBool() && (GetMode() != MAP_MODE_RADAR);
   m_bShowHealth = overview_health.GetBool() && (GetMode() != MAP_MODE_RADAR);
@@ -421,7 +421,7 @@ void CMapOverview::Update(void) {
   }
 }
 
-void CMapOverview::Reset(void) { m_fNextUpdateTime = 0; }
+void CMapOverview::Reset() { m_fNextUpdateTime = 0; }
 
 void CMapOverview::SetData(KeyValues *data) {
   m_fZoom = data->GetFloat("zoom", m_fZoom);
@@ -687,7 +687,7 @@ Vector2D CMapOverview::WorldToMap(const Vector &worldpos) {
   return offset;
 }
 
-float CMapOverview::GetViewAngle(void) {
+float CMapOverview::GetViewAngle() {
   float viewAngle = m_fViewAngle - 90.0f;
 
   if (!m_bFollowAngle) {
@@ -948,7 +948,7 @@ void CMapOverview::SetMode(int mode) {
   UpdateSizeAndPosition();
 }
 
-bool CMapOverview::ShouldDraw(void) {
+bool CMapOverview::ShouldDraw() {
   return (m_nMode != MAP_MODE_OFF) && CHudElement::ShouldDraw();
 }
 
@@ -1006,9 +1006,9 @@ void CMapOverview::SetFollowAngle(bool state) { m_bFollowAngle = state; }
 
 void CMapOverview::SetFollowEntity(int entindex) { m_nFollowEntity = entindex; }
 
-float CMapOverview::GetZoom(void) { return m_fZoom; }
+float CMapOverview::GetZoom() { return m_fZoom; }
 
-int CMapOverview::GetMode(void) { return m_nMode; }
+int CMapOverview::GetMode() { return m_nMode; }
 
 void CMapOverview::SetAngle(float angle) { m_fViewAngle = angle; }
 

@@ -259,7 +259,7 @@ void CTFClientScoreBoardDialog::UpdateTeamInfo()
 			wchar_t name[64];
 			wchar_t string1[1024];
 			wchar_t wNumPlayers[6];
-			_snwprintf( wNumPlayers, SOURCE_ARRAYSIZE( wNumPlayers ), L"%i", team->Get_Number_Players() );
+			_snwprintf( wNumPlayers, std::size( wNumPlayers ), L"%i", team->Get_Number_Players() );
 			if ( !teamName && team )
 			{
 				g_pVGuiLocalize->ConvertANSIToUnicode( team->Get_Name(), name, sizeof( name ) );
@@ -478,10 +478,10 @@ void CTFClientScoreBoardDialog::UpdateSpectatorList()
 		{
 			if ( nSpectators > 0 )
 			{
-				Q_strncat( szSpectatorList, ", ", SOURCE_ARRAYSIZE( szSpectatorList ) );
+				Q_strncat( szSpectatorList, ", ", std::size( szSpectatorList ) );
 			}
 
-			Q_strncat( szSpectatorList, g_PR->GetPlayerName( playerIndex ), SOURCE_ARRAYSIZE( szSpectatorList ) );
+			Q_strncat( szSpectatorList, g_PR->GetPlayerName( playerIndex ), std::size( szSpectatorList ) );
 			nSpectators++;
 		}
 	}
@@ -493,7 +493,7 @@ void CTFClientScoreBoardDialog::UpdateSpectatorList()
 
 		wchar_t wzSpectatorCount[16];
 		wchar_t wzSpectatorList[1024];
-		_snwprintf( wzSpectatorCount, SOURCE_ARRAYSIZE( wzSpectatorCount ), L"%i", nSpectators );
+		_snwprintf( wzSpectatorCount, std::size( wzSpectatorCount ), L"%i", nSpectators );
 		g_pVGuiLocalize->ConvertANSIToUnicode( szSpectatorList, wzSpectatorList, sizeof( wzSpectatorList ) );
 		g_pVGuiLocalize->ConstructString( wzSpectators, sizeof(wzSpectators), g_pVGuiLocalize->Find( pchFormat), 2, wzSpectatorCount, wzSpectatorList );
 	}
@@ -646,7 +646,7 @@ const wchar_t *GetPointsString( int iPoints )
 {
 	wchar_t wzScoreVal[128];
 	static wchar_t wzScore[128];
-	_snwprintf( wzScoreVal, SOURCE_ARRAYSIZE( wzScoreVal ), L"%i", iPoints );
+	_snwprintf( wzScoreVal, std::size( wzScoreVal ), L"%i", iPoints );
 	if ( 1 == iPoints ) 
 	{
 		g_pVGuiLocalize->ConstructString( wzScore, sizeof(wzScore), g_pVGuiLocalize->Find( "#TF_ScoreBoard_Point" ), 1, wzScoreVal );

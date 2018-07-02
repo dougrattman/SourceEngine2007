@@ -104,7 +104,7 @@ void CHudDeathNotice::ApplySchemeSettings(IScheme *scheme) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CHudDeathNotice::Init(void) {
+void CHudDeathNotice::Init() {
   // TODO(d.rattman):
   // HOOK_MESSAGE( DeathMsg );
 }
@@ -112,7 +112,7 @@ void CHudDeathNotice::Init(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CHudDeathNotice::VidInit(void) {
+void CHudDeathNotice::VidInit() {
   m_iconD_skull = gHUD.GetIcon("d_skull");
   m_DeathNotices.Purge();
 }
@@ -120,7 +120,7 @@ void CHudDeathNotice::VidInit(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Draw if we've got at least one death notice in the queue
 //-----------------------------------------------------------------------------
-bool CHudDeathNotice::ShouldDraw(void) {
+bool CHudDeathNotice::ShouldDraw() {
   return (CHudElement::ShouldDraw() && (m_DeathNotices.Count()));
 }
 
@@ -237,7 +237,7 @@ void CHudDeathNotice::Paint() {
 //-----------------------------------------------------------------------------
 // Purpose: This message handler may be better off elsewhere
 //-----------------------------------------------------------------------------
-void CHudDeathNotice::RetireExpiredDeathNotices(void) {
+void CHudDeathNotice::RetireExpiredDeathNotices() {
   // Loop backwards because we might remove one
   int iSize = m_DeathNotices.Size();
   for (int i = iSize - 1; i >= 0; i--) {

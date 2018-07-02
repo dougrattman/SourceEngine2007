@@ -423,7 +423,7 @@ void CHudChat::MsgFunc_VoiceSubtitle( bf_read &msg )
 	int iTeam = msg.ReadByte();
 	int iVoiceCommand = msg.ReadByte();
 
-	//Assert( iVoiceCommand <= SOURCE_ARRAYSIZE(g_VoiceCommands) );
+	//Assert( iVoiceCommand <= std::size(g_VoiceCommands) );
 	Assert( iTeam == TEAM_ALLIES || iTeam == TEAM_AXIS );
 
 	const char *pszSubtitle = g_VoiceCommands[iVoiceCommand].pszAlliedSubtitle;

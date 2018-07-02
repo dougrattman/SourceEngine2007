@@ -264,14 +264,14 @@ void C_ObjectSentrygun::GetTargetIDString( wchar_t *sIDString, int iMaxLenInByte
 		}
 
 		// building or live, show health
-		_snwprintf( wszHealthText, SOURCE_ARRAYSIZE(wszHealthText) - 1, L"%.0f%%", ( (float)GetHealth() / (float)GetMaxHealth() ) * 100 );
-		wszHealthText[ SOURCE_ARRAYSIZE(wszHealthText)-1 ] = '\0';
+		_snwprintf( wszHealthText, std::size(wszHealthText) - 1, L"%.0f%%", ( (float)GetHealth() / (float)GetMaxHealth() ) * 100 );
+		wszHealthText[ std::size(wszHealthText)-1 ] = '\0';
 
 		if ( m_iUpgradeLevel < 3 )
 		{
 			// level 1 and 2 show upgrade progress
-			_snwprintf( wszUpgradeProgress, SOURCE_ARRAYSIZE(wszUpgradeProgress) - 1, L"%d / %d", m_iUpgradeMetal, SENTRYGUN_UPGRADE_METAL );
-			wszUpgradeProgress[ SOURCE_ARRAYSIZE(wszUpgradeProgress)-1 ] = '\0';
+			_snwprintf( wszUpgradeProgress, std::size(wszUpgradeProgress) - 1, L"%d / %d", m_iUpgradeMetal, SENTRYGUN_UPGRADE_METAL );
+			wszUpgradeProgress[ std::size(wszUpgradeProgress)-1 ] = '\0';
 
 			const char *printFormatString = "#TF_playerid_object_upgrading";
 
@@ -327,8 +327,8 @@ void C_ObjectSentrygun::GetTargetIDDataString( wchar_t *sDataString, int iMaxLen
 	}
 
 	// level 1 and 2 show upgrade progress
-	_snwprintf( wszUpgradeProgress, SOURCE_ARRAYSIZE(wszUpgradeProgress) - 1, L"%d / %d", m_iUpgradeMetal, SENTRYGUN_UPGRADE_METAL );
-	wszUpgradeProgress[ SOURCE_ARRAYSIZE(wszUpgradeProgress)-1 ] = '\0';
+	_snwprintf( wszUpgradeProgress, std::size(wszUpgradeProgress) - 1, L"%d / %d", m_iUpgradeMetal, SENTRYGUN_UPGRADE_METAL );
+	wszUpgradeProgress[ std::size(wszUpgradeProgress)-1 ] = '\0';
 
 	const char *printFormatString = "#TF_playerid_object_upgrading";
 

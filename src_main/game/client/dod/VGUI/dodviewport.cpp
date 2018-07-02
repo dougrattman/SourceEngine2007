@@ -132,7 +132,7 @@ IViewPortPanel *DODViewport::CreatePanelByName(const char *szPanelName) {
   return newpanel;
 }
 
-void DODViewport::CreateDefaultPanels(void) {
+void DODViewport::CreateDefaultPanels() {
   AddNewPanel(CreatePanelByName(PANEL_TEAM), "PANEL_TEAM");
   AddNewPanel(CreatePanelByName(PANEL_CLASS_ALLIES), "PANEL_CLASS_ALLIES");
   AddNewPanel(CreatePanelByName(PANEL_CLASS_AXIS), "PANEL_CLASS_AXIS");
@@ -140,7 +140,7 @@ void DODViewport::CreateDefaultPanels(void) {
   BaseClass::CreateDefaultPanels();
 }
 
-int DODViewport::GetDeathMessageStartHeight(void) {
+int DODViewport::GetDeathMessageStartHeight() {
   int y = YRES(5);
 
   if (g_pSpectatorGUI && g_pSpectatorGUI->IsVisible()) {

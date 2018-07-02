@@ -18,7 +18,7 @@
 
 #define STUN_TEXTURE "_rt_WaterRefraction"
 
-void CStunEffect::Init(void) {
+void CStunEffect::Init() {
   m_flDuration = 0.0f;
   m_flFinishTime = 0.0f;
   m_bUpdateView = true;
@@ -30,7 +30,7 @@ void CStunEffect::Init(void) {
   m_StunTexture.Init(STUN_TEXTURE, TEXTURE_GROUP_CLIENT_EFFECTS);
 }
 
-void CStunEffect::Shutdown(void) {
+void CStunEffect::Shutdown() {
   m_EffectMaterial.Shutdown();
   m_StunTexture.Shutdown();
 }
@@ -134,7 +134,7 @@ void CStunEffect::Render(int x, int y, int w, int h) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CEP1IntroEffect::Init(void) {
+void CEP1IntroEffect::Init() {
   m_flDuration = 0.0f;
   m_flFinishTime = 0.0f;
   m_bUpdateView = true;
@@ -147,7 +147,7 @@ void CEP1IntroEffect::Init(void) {
   m_StunTexture.Init(STUN_TEXTURE, TEXTURE_GROUP_CLIENT_EFFECTS);
 }
 
-void CEP1IntroEffect::Shutdown(void) {
+void CEP1IntroEffect::Shutdown() {
   m_EffectMaterial.Shutdown();
   m_StunTexture.Shutdown();
 }
@@ -169,7 +169,7 @@ void CEP1IntroEffect::SetParameters(KeyValues *params) {
 //-----------------------------------------------------------------------------
 // Purpose: Get the alpha value depending on various factors and time
 //-----------------------------------------------------------------------------
-inline unsigned char CEP1IntroEffect::GetFadeAlpha(void) {
+inline unsigned char CEP1IntroEffect::GetFadeAlpha() {
   // Find our percentage between fully "on" and "off" in the pulse range
   float flEffectPerc =
       (m_flDuration == 0.0f)
@@ -290,7 +290,7 @@ void CEP1IntroEffect::Render(int x, int y, int w, int h) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CEP2StunEffect::Init(void) {
+void CEP2StunEffect::Init() {
   m_flDuration = 0.0f;
   m_flFinishTime = 0.0f;
   m_bUpdateView = true;
@@ -303,7 +303,7 @@ void CEP2StunEffect::Init(void) {
   m_StunTexture.Init(STUN_TEXTURE, TEXTURE_GROUP_CLIENT_EFFECTS);
 }
 
-void CEP2StunEffect::Shutdown(void) {
+void CEP2StunEffect::Shutdown() {
   m_EffectMaterial.Shutdown();
   m_StunTexture.Shutdown();
 }
@@ -325,7 +325,7 @@ void CEP2StunEffect::SetParameters(KeyValues *params) {
 //-----------------------------------------------------------------------------
 // Purpose: Get the alpha value depending on various factors and time
 //-----------------------------------------------------------------------------
-inline unsigned char CEP2StunEffect::GetFadeAlpha(void) {
+inline unsigned char CEP2StunEffect::GetFadeAlpha() {
   // Find our percentage between fully "on" and "off" in the pulse range
   float flEffectPerc =
       (m_flDuration == 0.0f)

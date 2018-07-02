@@ -121,7 +121,7 @@ CTFStatPanel::CTFStatPanel( const char *pElementName )
 	: EditablePanel( NULL, "StatPanel" ), CHudElement( pElementName )
 {
 	// Assert that all defined stats are in our prioritized list or explicitly unused
-	Assert( SOURCE_ARRAYSIZE( g_statPriority ) + SOURCE_ARRAYSIZE( g_statUnused ) == TFSTAT_MAX );
+	Assert( std::size( g_statPriority ) + std::size( g_statUnused ) == TFSTAT_MAX );
 
 	ResetDisplayedStat();
 	m_bStatsChanged = false;
@@ -279,7 +279,7 @@ void CTFStatPanel::CalcMaxsAndRecords()
 		
 	// run through all stats we keep records for, update the max value, and if a record is set,
 	// remember the highest priority record
-	for ( int i= SOURCE_ARRAYSIZE( g_statPriority )-1; i >= 0; i-- )
+	for ( int i= std::size( g_statPriority )-1; i >= 0; i-- )
 	{
 		TFStatType_t statType = g_statPriority[i];
 		int iCur = m_RoundStatsCurrentLife.m_iStat[statType];
@@ -553,8 +553,8 @@ void CTFStatPanel::ShowStatPanel( int iClass, int iTeam, int iCurStatValue, TFSt
 		// if we are displaying that the player got close to a record, show current & best values
 		char szCur[32],szBest[32];
 		wchar_t wzCur[32],wzBest[32];
-		GetStatValueAsString( iCurStatValue, statType, szCur, SOURCE_ARRAYSIZE( szCur ) );
-		GetStatValueAsString( classStats.max.m_iStat[statType], statType, szBest, SOURCE_ARRAYSIZE( szBest ) );
+		GetStatValueAsString( iCurStatValue, statType, szCur, std::size( szCur ) );
+		GetStatValueAsString( classStats.max.m_iStat[statType], statType, szBest, std::size( szBest ) );
 		g_pVGuiLocalize->ConvertANSIToUnicode( szCur, wzCur, sizeof( wzCur ) );
 		g_pVGuiLocalize->ConvertANSIToUnicode( szBest, wzBest, sizeof( wzBest ) );
 		wchar_t *wzFormat = g_pVGuiLocalize->Find( "#StatPanel_Format_Close" );
@@ -566,7 +566,7 @@ void CTFStatPanel::ShowStatPanel( int iClass, int iTeam, int iCurStatValue, TFSt
 	{
 		// player broke or tied a record, just show current value
 		char szValue[32];
-		GetStatValueAsString( iCurStatValue, statType, szValue, SOURCE_ARRAYSIZE( szValue ) );
+		GetStatValueAsString( iCurStatValue, statType, szValue, std::size( szValue ) );
 		SetDialogVariable( "stattextlarge", szValue );
 	}
 

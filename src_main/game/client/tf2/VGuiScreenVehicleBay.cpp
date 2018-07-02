@@ -29,7 +29,7 @@ int g_ValidVehicles[] =
 	// Then add the build%d command to OnCommand at the bottom of this file.
 };
 
-#define NUM_VEHICLES	SOURCE_ARRAYSIZE(g_ValidVehicles)
+#define NUM_VEHICLES	std::size(g_ValidVehicles)
 
 //-----------------------------------------------------------------------------
 // Vgui screen handling vehicle selection in vehicle bays

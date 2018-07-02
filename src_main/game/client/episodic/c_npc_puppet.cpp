@@ -74,7 +74,7 @@ void C_NPC_Puppet::BuildTransformations(CStudioHdr *pStudioHdr, Vector *pos,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void C_NPC_Puppet::ClientThink(void) {
+void C_NPC_Puppet::ClientThink() {
   if (m_hAnimationTarget == NULL) return;
 
   C_BaseAnimating *pTarget = m_hAnimationTarget->GetBaseAnimating();
