@@ -238,11 +238,8 @@ void PanelListPanel::RemoveItem(int itemID)
 void PanelListPanel::DeleteAllItems()
 {
 	FOR_EACH_LL( m_DataItems, i )
-	{
-		if ( m_DataItems[i].panel )
-		{
-			delete m_DataItems[i].panel;
-		}
+	{ 
+    delete m_DataItems[i].panel;
 	}
 
 	m_DataItems.RemoveAll();

@@ -3,14 +3,19 @@
 #ifndef SOURCE_VGUI_IHTML_H_
 #define SOURCE_VGUI_IHTML_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "vgui/IImage.h"
 #include "vgui/KeyCode.h"
 #include "vgui/MouseCode.h"
 #include "vgui/VGUI.h"
+#include "base/include/compiler_specific.h"
 
 namespace vgui {
 // Purpose: basic interface for a HTML window
-class IHTML {
+the_interface IHTML {
  public:
   // open a new page
   virtual void OpenURL(const char *) = 0;
@@ -51,7 +56,7 @@ class IHTML {
 };
 
 // Purpose: basic callback interface for a HTML window
-class IHTMLEvents {
+the_interface IHTMLEvents {
  public:
   // call backs for events
   virtual bool OnStartURL(const char *url, const char *target, bool first) = 0;

@@ -1,61 +1,40 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
 
-#ifndef POINT_H
-#define POINT_H
+#ifndef SOURCE_VGUI_POINT_H_
+#define SOURCE_VGUI_POINT_H_
 
 #ifdef _WIN32
 #pragma once
 #endif
 
-#include <vgui/VGUI.h>
+#include "vgui/VGUI.h"
 
-namespace vgui
-{
+namespace vgui {
+// Purpose: Basic handler for a Points in 2 dimensions.
+class Point {
+ public:
+  // constructors
+  constexpr Point() : x_{0}, y_{0} {}
+  constexpr Point(int x, int y) : x_{x}, y_{y} {}
 
-//-----------------------------------------------------------------------------
-// Purpose: Basic handler for a Points in 2 dimensions
-//			This class is fully inline
-//-----------------------------------------------------------------------------
-class Point
-{
-public:
-	// constructors
-	Point()
-	{
-		SetPoint(0, 0);
-	}
-	Point(int x,int y)
-	{
-		SetPoint(x,y);
-	}
+  constexpr void SetPoint(int x, int y) {
+    x_ = x;
+    y_ = y;
+  }
 
-	void SetPoint(int x1, int y1)
-	{
-		x=x1;
-		y=y1;	
-	}
+  constexpr void GetPoint(int &x, int &y) const {
+    x = x_;
+    y = y_;
+  }
 
-	void GetPoint(int &x1, int &y1) const
-	{
-		x1 = x;
-		y1 = y;
-	
-	}
+  constexpr bool operator==(Point &rhs) const {
+    return x_ == rhs.x_ && y_ == rhs.y_;
+  }
+  constexpr bool operator!=(Point &rhs) const { return !(*this == rhs); }
 
-	bool operator == (Point &rhs) const
-	{
-		return (x == rhs.x && y == rhs.y);
-	}
-
-private:
-	int x, y;
+ private:
+  int x_, y_;
 };
+}  // namespace vgui
 
-} // namespace vgui
-
-#endif // POINT_H
+#endif  // SOURCE_VGUI_POINT_H_

@@ -5,10 +5,13 @@
 #ifndef SOURCE_VGUI_INTERNAL_H_
 #define SOURCE_VGUI_INTERNAL_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier1/interface.h"
 #include "tier3/tier3.h"
 #include "vgui/VGUI.h"
-#include "xbox/xboxstubs.h"
 
 namespace vgui {
 bool VGui_InternalLoadInterfaces(CreateInterfaceFn *factoryList,

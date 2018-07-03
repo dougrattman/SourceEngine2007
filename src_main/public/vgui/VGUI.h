@@ -5,6 +5,10 @@
 #ifndef SOURCE_VGUI_VGUI_H_
 #define SOURCE_VGUI_VGUI_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "base/include/macros.h"
 
 using uchar = unsigned char;
@@ -30,7 +34,7 @@ using HPanel = unsigned long;
 const HPanel INVALID_PANEL = 0xffffffff;
 
 using HFont = unsigned long;
-const HFont INVALID_FONT = 0;  // the value of an invalid font handle
+const HFont INVALID_FONT{0};  // the value of an invalid font handle
 }  // namespace vgui
 
 #include "tier1/strtools.h"

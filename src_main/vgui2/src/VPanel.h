@@ -3,6 +3,10 @@
 #ifndef SOURCE_VGUI_VPANEL_H_
 #define SOURCE_VGUI_VPANEL_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier1/KeyValues.h"
 #include "vgui/Dar.h"
 #include "vgui/IPanel.h"
@@ -109,7 +113,6 @@ class VPanel {
   bool _kbInput : 1;
   bool _isTopmostPopup : 1;
 };
-
 }  // namespace vgui
 
 #endif  // SOURCE_VGUI_VPANEL_H_

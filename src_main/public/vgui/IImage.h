@@ -3,6 +3,10 @@
 #ifndef SOURCE_VGUI_IIMAGE_H_
 #define SOURCE_VGUI_IIMAGE_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "vgui/VGUI.h"
 
 class Color;

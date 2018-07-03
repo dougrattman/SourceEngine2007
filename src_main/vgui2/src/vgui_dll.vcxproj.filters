@@ -158,9 +158,6 @@
     <ClInclude Include="..\..\common\vgui_surfacelib\Win32Font.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\appframework\IAppSystem.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\public\vgui\IBorder.h">
       <Filter>Interfaces</Filter>
     </ClInclude>

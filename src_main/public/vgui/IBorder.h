@@ -3,7 +3,12 @@
 #ifndef SOURCE_VGUI_IBORDER_H_
 #define SOURCE_VGUI_IBORDER_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "vgui/VGUI.h"
+#include "base/include/compiler_specific.h"
 
 class KeyValues;
 
@@ -13,7 +18,7 @@ class IScheme;
 // Purpose: Interface to panel borders
 // Borders have a close relationship with panels
 // They are the edges of the panel.
-class IBorder {
+the_interface IBorder {
  public:
   virtual void Paint(VPANEL panel) = 0;
   virtual void Paint(int x0, int y0, int x1, int y1) = 0;

@@ -29,9 +29,8 @@ URLLabel::URLLabel(Panel *parent, const char *panelName, const char *text,
   m_pszURL = NULL;
   m_bUnderline = false;
   m_iURLSize = 0;
-  if (pszURL && strlen(pszURL) > 0) {
-    SetURL(pszURL);
-  }
+
+  if (pszURL && pszURL[0] != '\0') SetURL(pszURL);
 }
 
 //-----------------------------------------------------------------------------
@@ -43,17 +42,14 @@ URLLabel::URLLabel(Panel *parent, const char *panelName, const wchar_t *wszText,
   m_pszURL = NULL;
   m_bUnderline = false;
   m_iURLSize = 0;
-  if (pszURL && strlen(pszURL) > 0) {
-    SetURL(pszURL);
-  }
+
+  if (pszURL && pszURL[0] != '\0') SetURL(pszURL);
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: destructor
 //-----------------------------------------------------------------------------
-URLLabel::~URLLabel() {
-  if (m_pszURL) delete[] m_pszURL;
-}
+URLLabel::~URLLabel() { delete[] m_pszURL; }
 
 //-----------------------------------------------------------------------------
 // Purpose: sets the URL

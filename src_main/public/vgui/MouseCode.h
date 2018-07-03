@@ -2,12 +2,9 @@
 //
 // Purpose: names mouse button inputs
 // NOTE: Button codes also contain key codes, but we won't worry about that
-//
-// $NoKeywords: $
-//===========================================================================//
 
-#ifndef MOUSECODE_H
-#define MOUSECODE_H
+#ifndef SOURCE_VGUI_MOUSECODE_H_
+#define SOURCE_VGUI_MOUSECODE_H_
 
 #ifdef _WIN32
 #pragma once
@@ -15,9 +12,8 @@
 
 #include "inputsystem/ButtonCode.h"
 
-namespace vgui
-{
+namespace vgui {
 typedef ButtonCode_t MouseCode;
 }
 
-#endif // MOUSECODE_H
+#endif  // SOURCE_VGUI_MOUSECODE_H_

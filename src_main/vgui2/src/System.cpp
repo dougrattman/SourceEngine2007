@@ -710,10 +710,8 @@ double CSystem::GetFreeDiskSpace(const char *path) {
   char buf[SOURCE_MAX_PATH];
   strcpy_s(buf, path);
   // strip of to first slash (to make it look like 'x:\')
-  char *slash = strstr(buf, "\\");
-  if (slash) {
-    slash[1] = 0;
-  }
+  char *slash = strchr(buf, '\\');
+  if (slash) slash[1] = 0;
 
   ULARGE_INTEGER userFreeBytes, totalBytes, totalFreeBytes;
   if (::GetDiskFreeSpaceEx(buf, &userFreeBytes, &totalBytes, &totalFreeBytes)) {

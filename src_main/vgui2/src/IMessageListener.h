@@ -3,6 +3,11 @@
 #ifndef SOURCE_VGUI_IMESSAGELISTENER_H_
 #define SOURCE_VGUI_IMESSAGELISTENER_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "base/include/compiler_specific.h"
 #include "vgui/VGUI.h"
 
 class KeyValues;
@@ -12,7 +17,7 @@ enum MessageSendType_t { MESSAGE_SENT = 0, MESSAGE_POSTED, MESSAGE_RECEIVED };
 
 class VPanel;
 
-class IMessageListener {
+the_interface IMessageListener {
  public:
   virtual void Message(VPanel* pSender, VPanel* pReceiver,
                        KeyValues* pKeyValues, MessageSendType_t type) = 0;

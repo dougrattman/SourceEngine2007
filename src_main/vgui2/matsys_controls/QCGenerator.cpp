@@ -71,7 +71,7 @@ void VGUIMessageBox(vgui::Panel *pParent, const char *pTitle, const char *pMsg,
   char msg[4096];
   va_list marker;
   va_start(marker, pMsg);
-  Q_vsnprintf(msg, sizeof(msg), pMsg, marker);
+  vsprintf_s(msg, pMsg, marker);
   va_end(marker);
 
   vgui::MessageBox *dlg = new CModalPreserveMessageBox(pTitle, msg, pParent);
@@ -435,8 +435,8 @@ bool CQCGenerator::GenerateQCFile() {
   FileHandle_t pSaveFile = g_pFullFileSystem->Open(szName, "wt");
   if (!pSaveFile) {
     char szSaveError[1024] = "";
-    Q_snprintf(
-        szSaveError, 1024,
+    sprintf_s(
+        szSaveError,
         "Save failed: invalid file name '%s'\n\nDirectory '%s' must exist.",
         szName, szPath);
     VGUIMessageBox(this, "QC Generator error", szSaveError);
@@ -564,7 +564,7 @@ void CQCGenerator::InitializeSMDPaths(const char *pszPath,
   // iterate through .smd files
   const char *startName = pszScene;
 
-  int nSearchLength = Q_strlen(pszScene);
+  usize nSearchLength = strlen(pszScene);
 
   int currentLOD = 1;
 
@@ -589,7 +589,7 @@ void CQCGenerator::InitializeSMDPaths(const char *pszPath,
         bFoundLOD = true;
         // we found an LOD smd.
         char lodName[255];
-        Q_snprintf(lodName, Q_strlen(lodName), "lod%d", currentLOD);
+        sprintf_s(lodName, "lod%d", currentLOD);
         // we found an LOD
         KeyValues *newKv = new KeyValues(lodName, "SMD", filename, "LOD", "10");
         m_pLODPanel->AddItem(newKv, currentLOD, false, false);
@@ -598,30 +598,31 @@ void CQCGenerator::InitializeSMDPaths(const char *pszPath,
     }
     filename = g_pFullFileSystem->FindNext(*pFileHandle);
   }
-  char pszMessage[2048] = "";
   char pszRefMessage[1024] = "";
   char pszColMessage[1024] = "";
   if (!bFoundReference) {
     strcat_s(m_QCInfo_t.pszSMDPath, pszPath);
     strcat_s(m_QCInfo_t.pszSMDPath, pszScene);
     strcat_s(m_QCInfo_t.pszSMDPath, ".smd");
-    Q_snprintf(pszRefMessage, 1024,
-               "Reference SMD not found.\n\nValid default reference SMDs are "
-               "%s%s_ref*.smd and %s%s.smd\nUsing default of %s. Model will "
-               "not compile.\n\n",
-               pszPath, pszScene, pszPath, pszScene, m_QCInfo_t.pszSMDPath);
+    sprintf_s(pszRefMessage,
+              "Reference SMD not found.\n\nValid default reference SMDs are "
+              "%s%s_ref*.smd and %s%s.smd\nUsing default of %s. Model will "
+              "not compile.\n\n",
+              pszPath, pszScene, pszPath, pszScene, m_QCInfo_t.pszSMDPath);
   }
   if (!bFoundCollision) {
-    Q_snprintf(pszColMessage, 1024,
-               "Collision SMD not found.\n\nThe valid default collision SMD is "
-               "%s%s_phy*.smd.\nUsing reference SMD as default.\n",
-               pszPath, pszScene);
+    sprintf_s(pszColMessage,
+              "Collision SMD not found.\n\nThe valid default collision SMD is "
+              "%s%s_phy*.smd.\nUsing reference SMD as default.\n",
+              pszPath, pszScene);
     strcpy_s(m_QCInfo_t.pszCollisionPath, m_QCInfo_t.pszSMDPath);
     m_QCInfo_t.bReferenceAsPhys = true;
   }
   if (!bFoundReference || !bFoundCollision) {
-    Q_strcpy(pszMessage, pszRefMessage);
-    Q_strcat(pszMessage, pszColMessage, 1024);
+    char pszMessage[2048] = "";
+    strcpy_s(pszMessage, pszRefMessage);
+    strcat_s(pszMessage, pszColMessage);
+
     VGUIMessageBox(this, "Error Initializing Paths", pszMessage);
   }
 }

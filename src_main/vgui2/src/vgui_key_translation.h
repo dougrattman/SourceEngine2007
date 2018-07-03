@@ -3,6 +3,10 @@
 #ifndef SOURCE_VGUI_KEY_TRANSLATION_H_
 #define SOURCE_VGUI_KEY_TRANSLATION_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "vgui/keycode.h"
 
 // Convert from Windows scan codes to VGUI key codes.

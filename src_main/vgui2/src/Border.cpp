@@ -228,13 +228,11 @@ const char *Border::GetName() {
 // Purpose: data accessor
 //-----------------------------------------------------------------------------
 void Border::SetName(const char *name) {
-  if (_name) {
-    delete[] _name;
-  }
+  delete[] _name;
 
-  int len = Q_strlen(name) + 1;
+  usize len = strlen(name) + 1;
   _name = new char[len];
-  Q_strncpy(_name, name, len);
+  strcpy_s(_name, len, name);
 }
 
 //-----------------------------------------------------------------------------

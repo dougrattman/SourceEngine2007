@@ -627,7 +627,8 @@ void TextEntry::PaintBackground() {
   int nCompEnd = -1;
 
   // TODO(d.rattman): Should insert at cursor pos instead
-  bool composing = m_bAllowNonAsciiCharacters && wcslen(m_szComposition) > 0;
+  bool composing =
+      m_bAllowNonAsciiCharacters && m_szComposition[0] != L'\0';
   bool invertcomposition = input()->GetShouldInvertCompositionString();
 
   if (composing) {
@@ -1097,7 +1098,7 @@ Menu *TextEntry::GetEditMenu() { return m_pEditMenu; }
 //-----------------------------------------------------------------------------
 void TextEntry::CreateEditMenu() {
   // create a drop down cut/copy/paste menu appropriate for this object's states
-  if (m_pEditMenu) delete m_pEditMenu;
+  delete m_pEditMenu;
   m_pEditMenu = new Menu(this, "EditMenu");
 
   // add cut/copy/paste drop down options if its editable, just copy if it is

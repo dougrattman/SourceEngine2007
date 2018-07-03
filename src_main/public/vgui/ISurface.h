@@ -3,8 +3,13 @@
 #ifndef SOURCE_VGUI_ISURFACE_H_
 #define SOURCE_VGUI_ISURFACE_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "IVguiMatInfo.h"
 #include "appframework/IAppSystem.h"
+#include "base/include/compiler_specific.h"
 #include "bitmap/imageformat.h"
 #include "mathlib/vector2d.h"  // must be before the namespace line
 #include "tier1/interface.h"
@@ -27,9 +32,9 @@ class Image;
 class Point;
 
 // handles
-typedef unsigned long HCursor;
-typedef unsigned long HTexture;
-typedef unsigned long HFont;
+using HCursor = unsigned long;
+using HTexture = unsigned long;
+using HFont = unsigned long;
 
 // SRC only defines
 
@@ -87,10 +92,8 @@ struct IntRect {
   int y1;
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: Wraps contextless windows system functions
-//-----------------------------------------------------------------------------
-class ISurface : public IAppSystem {
+the_interface ISurface : public IAppSystem {
  public:
   // call to Shutdown surface; surface can no longer be used after this is
   // called
@@ -343,7 +346,7 @@ class ISurface : public IAppSystem {
                                  const char *pFontFilename) = 0;
   // gets the bitmap font filename
   virtual const char *GetBitmapFontName(const char *pName) = 0;
-  virtual void ClearTemporaryFontCache(void) = 0;
+  virtual void ClearTemporaryFontCache() = 0;
 
   virtual IImage *GetIconImageForFullPath(char const *pFullPath) = 0;
   virtual void DrawUnicodeString(
@@ -351,7 +354,7 @@ class ISurface : public IAppSystem {
   virtual void PrecacheFontCharacters(HFont font, wchar_t *pCharacters) = 0;
   // Console-only.  Get the string to use for the current video mode for layout
   // files.
-  virtual const char *GetResolutionKey(void) const = 0;
+  virtual const char *GetResolutionKey() const = 0;
 };
 }  // namespace vgui
 

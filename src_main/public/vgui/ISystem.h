@@ -3,6 +3,11 @@
 #ifndef SOURCE_VGUI_ISYSTEM_H_
 #define SOURCE_VGUI_ISYSTEM_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "base/include/compiler_specific.h"
 #include "tier1/interface.h"
 #include "vgui/KeyCode.h"
 #include "vgui/VGUI.h"
@@ -19,7 +24,7 @@ class KeyValues;
 
 namespace vgui {
 // Purpose: Wraps contextless windows system functions
-class ISystem : public IBaseInterface {
+the_interface ISystem : public IBaseInterface {
  public:
   // call when done with ISystem to clean up any memory allocation
   virtual void Shutdown() = 0;

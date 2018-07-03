@@ -3,7 +3,12 @@
 #ifndef SOURCE_VGUI_IPANEL_H_
 #define SOURCE_VGUI_IPANEL_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier1/interface.h"
+#include "base/include/compiler_specific.h"
 #include "vgui/VGUI.h"
 
 #ifdef SendMessage
@@ -19,10 +24,8 @@ class IClientPanel;
 //!! must be removed
 class Panel;
 
-//-----------------------------------------------------------------------------
 // Purpose: interface from Client panels -> vgui panels
-//-----------------------------------------------------------------------------
-class IPanel : public IBaseInterface {
+the_interface IPanel : public IBaseInterface {
  public:
   virtual void Init(VPANEL vguiPanel, IClientPanel *panel) = 0;
 

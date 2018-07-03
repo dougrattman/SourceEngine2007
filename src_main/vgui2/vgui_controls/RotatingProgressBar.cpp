@@ -94,7 +94,7 @@ void RotatingProgressBar::ApplySchemeSettings(IScheme *pScheme)
 {
 	BaseClass::ApplySchemeSettings(pScheme);
 
-	if ( m_pszImageName && strlen( m_pszImageName ) > 0 )
+	if (m_pszImageName && m_pszImageName[0] != '\0')
 	{
 		if ( m_nTextureId == -1 )
 		{

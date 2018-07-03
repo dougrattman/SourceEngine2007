@@ -3,14 +3,19 @@
 #ifndef SOURCE_VGUI_IINPUT_H_
 #define SOURCE_VGUI_IINPUT_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier1/interface.h"
 #include "vgui/KeyCode.h"
 #include "vgui/MouseCode.h"
 #include "vgui/VGUI.h"
+#include "base/include/compiler_specific.h"
 
 namespace vgui {
 class Cursor;
-typedef unsigned long HCursor;
+using HCursor = unsigned long;
 
 #define VGUI_GCS_COMPREADSTR 0x0001
 #define VGUI_GCS_COMPREADATTR 0x0002
@@ -28,7 +33,7 @@ typedef unsigned long HCursor;
 #define VGUI_CS_INSERTCHAR 0x2000
 #define VGUI_CS_NOMOVECARET 0x4000
 
-class IInput : public IBaseInterface {
+the_interface IInput : public IBaseInterface {
  public:
   virtual void SetMouseFocus(VPANEL newMouseFocus) = 0;
   virtual void SetMouseCapture(VPANEL panel) = 0;

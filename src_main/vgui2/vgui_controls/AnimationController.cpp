@@ -113,7 +113,7 @@ void AnimationController::ReloadScriptFile() {
   // Reload each file we've loaded
   for (int i = 0; i < m_ScriptFileNames.Count(); i++) {
     const char *lpszFilename = g_ScriptSymbols.String(m_ScriptFileNames[i]);
-    if (strlen(lpszFilename) > 0) {
+    if (lpszFilename[0] != '\0') {
       if (LoadScriptFile(lpszFilename) == false) {
         Assert(0);
       }

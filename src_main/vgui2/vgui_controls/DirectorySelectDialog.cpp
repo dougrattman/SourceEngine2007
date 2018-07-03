@@ -279,10 +279,8 @@ void DirectorySelectDialog::SetStartDirectory(const char *path) {
   strcpy_s(m_szCurrentDir, path);
   strcpy_s(m_szCurrentDrive, path);
 
-  char *firstSlash = strstr(m_szCurrentDrive, "\\");
-  if (firstSlash) {
-    firstSlash[1] = 0;
-  }
+  char *firstSlash = strchr(m_szCurrentDrive, '\\');
+  if (firstSlash) firstSlash[1] = 0;
 
   BuildDirTree();
   BuildDriveChoices();

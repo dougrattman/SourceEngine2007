@@ -5,6 +5,10 @@
 #ifndef SOURCE_VGUI_CURSOR_H_
 #define SOURCE_VGUI_CURSOR_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "vgui/VGUI.h"
 
 namespace vgui {
@@ -28,7 +32,7 @@ enum CursorCode {
              // (for HTML widget)
   dc_last,
 };
-typedef unsigned long HCursor;
+using HCursor = unsigned long;
 }  // namespace vgui
 
 #endif  // SOURCE_VGUI_CURSOR_H_

@@ -76,7 +76,7 @@ void CircularProgressBar::ApplySchemeSettings(IScheme *pScheme) {
   SetBorder(NULL);
 
   for (int i = 0; i < NUM_PROGRESS_TEXTURES; i++) {
-    if (m_pszImageName[i] && strlen(m_pszImageName[i]) > 0) {
+    if (m_pszImageName[i] && m_pszImageName[i][0] != '\0') {
       if (m_nTextureId[i] == -1) {
         m_nTextureId[i] = surface()->CreateNewTextureID();
       }

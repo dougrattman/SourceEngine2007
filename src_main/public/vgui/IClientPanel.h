@@ -3,7 +3,12 @@
 #ifndef SOURCE_VGUI_ICLIENTPANEL_H_
 #define SOURCE_VGUI_ICLIENTPANEL_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "vgui/VGUI.h"
+#include "base/include/compiler_specific.h"
 
 #ifdef GetClassName
 #undef GetClassName
@@ -25,7 +30,7 @@ enum EInterfaceID {
 // controls The additional functions are all their for debugging or optimization
 // reasons To add to this later, use QueryInterface() to see if they support new
 // interfaces
-class IClientPanel {
+the_interface IClientPanel {
  public:
   virtual VPANEL GetVPanel() = 0;
 

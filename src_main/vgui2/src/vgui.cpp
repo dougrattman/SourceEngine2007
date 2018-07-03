@@ -551,7 +551,7 @@ void CVGui::AddTickSignal(VPANEL panel, int intervalMilliseconds /*=0*/) {
   t->interval = intervalMilliseconds;
   t->nexttick = g_pSystem->GetTimeMillis() + t->interval;
 
-  if (strlen(((VPanel *)panel)->Client()->GetName()) > 0) {
+  if ((((VPanel *)panel)->Client()->GetName())[0] != '\0') {
     strcpy_s(t->panelname, ((VPanel *)panel)->Client()->GetName());
   } else {
     strcpy_s(t->panelname, ((VPanel *)panel)->Client()->GetClassName());
@@ -810,50 +810,12 @@ void CVGui::ClearMessageQueues() {
   }
 }
 
-/*
-static void*(*staticMalloc)(size_t size)=malloc;
-static void(*staticFree)(void* memblock)=free;
-
-static int g_iMemoryBlocksAllocated = 0;
-
-void *operator new(size_t size)
-{
-        g_iMemoryBlocksAllocated += 1;
-        return staticMalloc(size);
-}
-
-void operator delete(void* memblock)
-{
-        if (!memblock)
-                return;
-
-        g_iMemoryBlocksAllocated -= 1;
-
-        if (g_iMemoryBlocksAllocated < 0)
-        {
-                int x = 3;
-        }
-
-        staticFree(memblock);
-}
-
-void *operator new [] (size_t size)
-{
-        return staticMalloc(size);
-}
-
-void operator delete [] (void *pMem)
-{
-        staticFree(pMem);
-}
-*/
-
 void CVGui::DPrintf(const char *format, ...) {
   char buf[2048];
   va_list argList;
 
   va_start(argList, format);
-  Q_vsnprintf(buf, sizeof(buf), format, argList);
+  vsprintf_s(buf, format, argList);
   va_end(argList);
 
   Plat_DebugString(buf);
@@ -864,7 +826,7 @@ void CVGui::DPrintf2(const char *format, ...) {
   va_list argList;
   static int ctr = 0;
 
-  Q_snprintf(buf, sizeof(buf), "%d:", ctr++);
+  sprintf_s(buf, "%d:", ctr++);
 
   va_start(argList, format);
   Q_vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), format, argList);

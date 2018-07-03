@@ -3,11 +3,16 @@
 #ifndef SOURCE_VGUI_FILEIMAGE_H_
 #define SOURCE_VGUI_FILEIMAGE_H_
 
-#include <cstdio>
+#ifdef _WIN32
+#pragma once
+#endif
 
-typedef void *FileHandle_t;
+#include "base/include/compiler_specific.h"
+#include "base/include/base_types.h"
 
-class FileImageStream {
+using FileHandle_t = void *;
+
+the_interface FileImageStream {
  public:
   virtual void Read(void *pOut, int len) = 0;
 
@@ -25,7 +30,7 @@ class FileImageStream_Memory : public FileImageStream {
   virtual bool ErrorStatus();
 
  private:
-  unsigned char *m_pData;
+  u8 *m_pData;
   int m_DataLen;
   int m_CurPos;
   bool m_bError;
@@ -35,11 +40,10 @@ class FileImageStream_Memory : public FileImageStream {
 class FileImage {
  public:
   FileImage() { Clear(); }
-
   ~FileImage() { Term(); }
 
   void Term() {
-    if (m_pData) delete[] m_pData;
+    delete[] m_pData;
 
     Clear();
   }
@@ -47,11 +51,11 @@ class FileImage {
   // Clear the structure without deallocating.
   void Clear() {
     m_Width = m_Height = 0;
-    m_pData = NULL;
+    m_pData = nullptr;
   }
 
   int m_Width, m_Height;
-  unsigned char *m_pData;
+  u8 *m_pData;
 };
 
 // Functions to load/save FileImages.

@@ -365,7 +365,6 @@
     <ClInclude Include="..\..\common\vgui_surfacelib\FontAmalgam.h" />
     <ClInclude Include="..\..\common\vgui_surfacelib\FontManager.h" />
     <ClInclude Include="..\..\common\vgui_surfacelib\Win32Font.h" />
-    <ClInclude Include="..\..\public\appframework\IAppSystem.h" />
     <ClInclude Include="..\..\public\Color.h" />
     <ClInclude Include="..\..\public\filesystem.h" />
     <ClInclude Include="..\..\public\mathlib\vector2d.h" />

@@ -3,21 +3,26 @@
 #ifndef SOURCE_VGUI_ISCHEME_H_
 #define SOURCE_VGUI_ISCHEME_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "tier1/interface.h"
+#include "base/include/compiler_specific.h"
 #include "vgui/VGUI.h"
 
 class Color;
 
 namespace vgui {
-typedef unsigned long HScheme;
-typedef unsigned long HTexture;
+using HScheme = unsigned long;
+using HTexture = unsigned long;
 
 class IBorder;
 class IImage;
 
 // Purpose: Holds all panel rendering data
 // This functionality is all wrapped in the Panel::GetScheme*() functions
-class IScheme : public IBaseInterface {
+the_interface IScheme : public IBaseInterface {
  public:
   // gets a string from the default settings section
   virtual const char *GetResourceString(const char *stringName) = 0;
@@ -35,7 +40,7 @@ class IScheme : public IBaseInterface {
   virtual Color GetColor(const char *colorName, Color defaultColor) = 0;
 };
 
-class ISchemeManager : public IBaseInterface {
+the_interface ISchemeManager : public IBaseInterface {
  public:
   // loads a scheme from a file
   // first scheme loaded becomes the default scheme, and all subsequent loaded

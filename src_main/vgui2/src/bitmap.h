@@ -3,11 +3,15 @@
 #ifndef SOURCE_VGUI_BITMAP_H_
 #define SOURCE_VGUI_BITMAP_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "Color.h"
 #include "vgui/IImage.h"
 
 namespace vgui {
-typedef unsigned long HTexture;
+using HTexture = unsigned long;
 
 // Purpose: Holds a single image, internal to vgui only
 class Bitmap : public IImage {
@@ -16,18 +20,18 @@ class Bitmap : public IImage {
   ~Bitmap();
 
   // IImage implementation
-  virtual void Paint();
-  virtual void GetSize(int &wide, int &tall);
-  virtual void GetContentSize(int &wide, int &tall);
-  virtual void SetSize(int x, int y);
-  virtual void SetPos(int x, int y);
-  virtual void SetColor(Color col);
+  void Paint() override;
+  void GetSize(int &wide, int &tall) override;
+  void GetContentSize(int &wide, int &tall) override;
+  void SetSize(int x, int y) override;
+  void SetPos(int x, int y) override;
+  void SetColor(Color col) override;
 
   // methods
   void ForceUpload();  // ensures the bitmap has been uploaded
   HTexture GetID();    // returns the texture id
   const char *GetName();
-  bool IsValid() { return _valid; }
+  bool IsValid() const { return _valid; }
 
  private:
   HTexture _id;

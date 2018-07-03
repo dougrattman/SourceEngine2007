@@ -93,11 +93,12 @@ class CAssetTreeView : public vgui::TreeView {
 CAssetTreeView::CAssetTreeView(Panel *pParent, const char *pName,
                                const char *pRootFolderName,
                                const char *pRootDir)
-    : BaseClass(pParent, pName), m_Images(false) {
+    : BaseClass(pParent, pName),
+      m_Images(false),
+      m_RootFolderName{pRootFolderName},
+      m_RootDirectory{pRootDir} {
   SetSortFunc(AssetTreeViewSortFunc);
 
-  m_RootFolderName = pRootFolderName;
-  m_RootDirectory = pRootDir;
   AllocateRootNode();
 
   // build our list of images

@@ -183,7 +183,7 @@ void ImagePanel::ApplySettings(KeyValues *inResourceData) {
 //-----------------------------------------------------------------------------
 void ImagePanel::ApplySchemeSettings(IScheme *pScheme) {
   BaseClass::ApplySchemeSettings(pScheme);
-  if (m_pszImageName && strlen(m_pszImageName) > 0) {
+  if (m_pszImageName && m_pszImageName[0] != '\0') {
     SetImage(scheme()->GetImage(m_pszImageName, m_bScaleImage));
   }
 }

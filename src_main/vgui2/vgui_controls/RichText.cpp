@@ -611,20 +611,13 @@ void RichText::FinishingURL(int x, int y) {
 void RichText::CalculateFade(TRenderState &renderState) {
   if (m_FormatStream.IsValidIndex(renderState.formatStreamIndex)) {
     if (m_bResetFades == false) {
-      if (m_FormatStream[renderState.formatStreamIndex].fade.flFadeLength !=
-          -1.0f) {
-        float frac =
-            (m_FormatStream[renderState.formatStreamIndex]
-                 .fade.flFadeStartTime -
-             system()->GetCurrentTime()) /
-            m_FormatStream[renderState.formatStreamIndex].fade.flFadeLength;
+      const TFade &fade = m_FormatStream[renderState.formatStreamIndex].fade;
+      if (fade.flFadeLength != -1.0f) {
+        float frac = (fade.flFadeStartTime - system()->GetCurrentTime()) /
+                     fade.flFadeLength;
 
-        int alpha =
-            frac *
-            m_FormatStream[renderState.formatStreamIndex].fade.iOriginalAlpha;
-        alpha = std::clamp(
-            alpha, 0,
-            m_FormatStream[renderState.formatStreamIndex].fade.iOriginalAlpha);
+        int alpha = frac * fade.iOriginalAlpha;
+        alpha = std::clamp(alpha, 0, fade.iOriginalAlpha);
 
         renderState.textColor.SetColor(renderState.textColor.r(),
                                        renderState.textColor.g(),
@@ -1301,7 +1294,7 @@ void RichText::SetVerticalScrollbar(bool state) {
 //-----------------------------------------------------------------------------
 void RichText::CreateEditMenu() {
   // create a drop down cut/copy/paste menu appropriate for this object's states
-  if (m_pEditMenu) delete m_pEditMenu;
+  delete m_pEditMenu;
   m_pEditMenu = new Menu(this, "EditMenu");
 
   // add cut/copy/paste drop down options if its editable, just copy if it is

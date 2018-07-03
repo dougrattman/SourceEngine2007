@@ -1279,18 +1279,16 @@ void HtmlWindow::Clear() {
 void HtmlWindow::AddText(const char *text) {
   IDispatch *html_document;
   HRESULT hr = m_webBrowser->get_Document(&html_document);
-  if (FAILED(hr)) {
-    return;
-  }
+  if (FAILED(hr)) return;
 
   IHTMLDocument2 *html_document2;
   hr = html_document->QueryInterface(IID_PPV_ARGS(&html_document2));
   if (SUCCEEDED(hr)) {
-    wchar_t *tmp = new wchar_t[strlen(text) + 1];
+    usize len{strlen(text)};
+    wchar_t *tmp = new wchar_t[len + 1];
     // Creates a new one-dimensional array
     if (tmp) {
-      ::MultiByteToWideChar(CP_ACP, 0, text, strlen(text) + 1, tmp,
-                            strlen(text) + 1);
+      ::MultiByteToWideChar(CP_ACP, 0, text, len + 1, tmp, len + 1);
       BSTR t = SysAllocString(tmp);
 
       IHTMLElement *pElement;

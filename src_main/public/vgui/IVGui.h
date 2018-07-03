@@ -3,7 +3,12 @@
 #ifndef SOURCE_VGUI_IVGUI_H_
 #define SOURCE_VGUI_IVGUI_H_
 
+#ifdef _WIN32
+#pragma once
+#endif
+
 #include "appframework/IAppSystem.h"
+#include "base/include/compiler_specific.h"
 #include "tier1/interface.h"
 #include "vgui/VGUI.h"
 
@@ -11,18 +16,13 @@ class KeyValues;
 
 namespace vgui {
 // safe handle to a panel - can be converted to and from a VPANEL
-typedef unsigned long HPanel;
-typedef int HContext;
+using HPanel = unsigned long;
+using HContext = int;
 
 enum { DEFAULT_VGUI_CONTEXT = ((vgui::HContext)~0) };
 
-// safe handle to a panel - can be converted to and from a VPANEL
-typedef unsigned long HPanel;
-
-//-----------------------------------------------------------------------------
 // Purpose: Interface to core vgui components
-//-----------------------------------------------------------------------------
-class IVGui : public IAppSystem {
+the_interface IVGui : public IAppSystem {
  public:
   // activates vgui message pump
   virtual void Start() = 0;
