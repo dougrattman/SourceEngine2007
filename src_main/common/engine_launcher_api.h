@@ -9,8 +9,10 @@
 
 class CAppSystemGroup;
 
+SOURCE_FORWARD_DECLARE_HANDLE(HINSTANCE);
+
 struct StartupInfo_t {
-  void *m_pInstance;
+  HINSTANCE m_pInstance;
   const ch *m_pBaseDirectory;  // Executable directory ("c:/program
                                // files/half-life 2", for example)
   const ch *m_pInitialMod;     // Mod name ("cstrike", for example)

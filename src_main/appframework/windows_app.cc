@@ -53,11 +53,11 @@ SpewRetval_t ConsoleAppDefaultSpewFunc(SpewType_t spewType, ch const *pMsg) {
 SpewOutputFunc_t g_DefaultSpewFunc = WinAppDefaultSpewFunc;
 
 // HACK: Since I don't want to refit vgui yet...
-void *GetAppInstance() { return s_HInstance; }
+HINSTANCE GetAppInstance() { return s_HInstance; }
 
 // Sets the application instance, should only be used if you're not calling
 // AppMain.
-void SetAppInstance(void *hInstance) { s_HInstance = (HINSTANCE)hInstance; }
+void SetAppInstance(HINSTANCE hInstance) { s_HInstance = hInstance; }
 
 // Version of AppMain used by windows applications
 i32 AppMain(void *hInstance, void *, const ch *, i32,
