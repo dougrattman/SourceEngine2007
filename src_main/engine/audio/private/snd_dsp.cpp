@@ -789,11 +789,11 @@ struct prc_t {
 // processor parameter ranges - for validating parameters during allocation of
 // new processor
 
-typedef struct prm_rng_t {
+struct prm_rng_t {
   int iprm;  // parameter index
   float lo;  // min value of parameter
   float hi;  // max value of parameter
-} prm_rng_s;
+};
 
 void PRC_CheckParams(prc_t *pprc, prm_rng_t *prng);
 
@@ -937,7 +937,7 @@ void FLT_Design_3db_IIR(float cutoff, float ftype, int *pM, int *pL, int *a,
 
 // filter parameter order
 
-typedef enum {
+enum flt_e {
   flt_iftype,
   flt_icutoff,
   flt_iqwidth,
@@ -945,7 +945,7 @@ typedef enum {
   flt_igain,
 
   flt_cparam  // # of params
-} flt_e;
+};
 
 // filter parameter ranges
 
@@ -1541,8 +1541,7 @@ dly_t *DLY_Alloc(int D, int a, int b, int type) {
 
 // delay parameter order
 
-typedef enum {
-
+enum dly_e {
   dly_idtype,  // NOTE: first 8 params must match those in mdy_e
   dly_idelay,
   dly_ifeedback,
@@ -1558,8 +1557,7 @@ typedef enum {
   dly_itap3,
 
   dly_cparam
-
-} dly_e;
+};
 
 // delay parameter ranges
 
@@ -9342,6 +9340,4 @@ void DSP_DEBUGReloadPresetFile() {
 // compress input value - smoothly limit output y to -32767 <= y <= 32767
 // UNDONE: not tested or used
 
-inline int S_Compress(int xin) {
-  return CLIP(xin >> 2);
-}
+inline int S_Compress(int xin) { return CLIP(xin >> 2); }

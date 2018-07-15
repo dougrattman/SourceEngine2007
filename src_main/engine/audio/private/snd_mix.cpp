@@ -394,7 +394,6 @@ void S_FreeChannel(channel_t *ch) {
                                    ch->sfx->getname());
 
   ch->flags.isSentence = false;
-  //	Msg("End sound %s\n", ch->sfx->getname() );
 
   delete ch->pMixer;
   ch->pMixer = NULL;
@@ -402,7 +401,7 @@ void S_FreeChannel(channel_t *ch) {
 
   // zero all data in channel
   g_ActiveChannels.Remove(ch);
-  Q_memset(ch, 0, sizeof(channel_t));
+  memset(ch, 0, sizeof(*ch));
 }
 
 // Mix all channels into active paintbuffers until paintbuffer is full or

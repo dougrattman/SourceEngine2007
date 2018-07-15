@@ -6,10 +6,9 @@
 
 // static variables
 const ch* CMPAHeader::m_szLayers[] = {"Layer I", "Layer II", "Layer III"};
-const ch* CMPAHeader::m_szMPEGVersions[] = {"MPEG 2.5", "", "MPEG 2",
-                                              "MPEG 1"};
+const ch* CMPAHeader::m_szMPEGVersions[] = {"MPEG 2.5", "", "MPEG 2", "MPEG 1"};
 const ch* CMPAHeader::m_szChannelModes[] = {"Stereo", "Joint Stereo",
-                                              "Dual Channel", "Single Channel"};
+                                            "Dual Channel", "Single Channel"};
 const ch* CMPAHeader::m_szEmphasis[] = {"None", "50/15ms", "", "CCIT J.17"};
 
 // tolerance range, look at expected offset +/- m_dwTolerance for subsequent
@@ -336,7 +335,7 @@ CMPAHeader::HeaderError CMPAHeader::DecodeHeader(DWORD dwHeader,
     m_bCopyright = (dwHeader >> 3) & 0x01;
 
     // original bit
-    m_bCopyright = (dwHeader >> 2) & 0x01;
+    m_bOriginal = (dwHeader >> 2) & 0x01;
 
     // emphasis
     m_Emphasis = (Emphasis)(dwHeader & 0x03);
