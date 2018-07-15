@@ -507,7 +507,7 @@ void ComboBox::OnSetText(const wchar_t *newtext)
 	wchar_t wbuf[255];
 	GetText(wbuf, 254);
 	
-	if ( wcscmp(wbuf, text) )
+	if ( wcscmp(wbuf, text) != 0 )
 	{
 		// text has changed
 		SetText(text);

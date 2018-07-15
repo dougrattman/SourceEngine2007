@@ -470,7 +470,7 @@ bool CPerforceFileListFrame::PerformOperation() {
       // Ensure a description was added
       const char *pDescription = GetDescription();
       if (!pDescription[0] ||
-          !Q_stricmp(pDescription, "<enter description here>")) {
+          !_stricmp(pDescription, "<enter description here>")) {
         vgui::MessageBox *pError = new vgui::MessageBox(
             "Submission Error!", "Description required for submission.",
             GetParent());

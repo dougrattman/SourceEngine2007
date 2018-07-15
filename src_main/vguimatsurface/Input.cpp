@@ -136,7 +136,7 @@ static LRESULT CALLBACK MatSurfaceWindowProc(HWND hwnd, UINT uMsg,
       int nRetVal = 0;
       if (s_ChainedWindowProc) {
         nRetVal =
-            CallWindowProc(s_ChainedWindowProc, hwnd, uMsg, wParam, lParam);
+            CallWindowProcW(s_ChainedWindowProc, hwnd, uMsg, wParam, lParam);
       }
 
       int nKeyRepeat = LOWORD(lParam);
@@ -182,10 +182,7 @@ static LRESULT CALLBACK MatSurfaceWindowProc(HWND hwnd, UINT uMsg,
       return TRUE;
 
     case WM_IME_NOTIFY: {
-      switch (wParam) {
-        default:
-          break;
-
+      switch (wParam) { 
         case 14:  // Chinese Traditional IMN_PRIVATE...
           break;
 
@@ -221,7 +218,11 @@ static LRESULT CALLBACK MatSurfaceWindowProc(HWND hwnd, UINT uMsg,
         case IMN_SETCOMPOSITIONWINDOW:
         case IMN_SETSTATUSWINDOWPOS:
           break;
+
+        default:
+          break;
       }
+      break;
     }
 
     case WM_IME_SETCONTEXT:
@@ -240,7 +241,7 @@ static LRESULT CALLBACK MatSurfaceWindowProc(HWND hwnd, UINT uMsg,
 
 chainWndProc:
   if (s_ChainedWindowProc)
-    return CallWindowProc(s_ChainedWindowProc, hwnd, uMsg, wParam, lParam);
+    return CallWindowProcW(s_ChainedWindowProc, hwnd, uMsg, wParam, lParam);
 
   // This means the application is driving the messages (calling our window
   // procedure manually) rather than us hooking their window procedure. The
@@ -258,13 +259,13 @@ void EnableInput(bool bEnable) { s_bInputEnabled = bEnable; }
 //-----------------------------------------------------------------------------
 void InputAttachToWindow(void *hwnd) {
   s_ChainedWindowProc = (WNDPROC)GetWindowLongPtr((HWND)hwnd, GWLP_WNDPROC);
-  SetWindowLongPtrW((HWND)hwnd, GWLP_WNDPROC, (LONG)MatSurfaceWindowProc);
+  SetWindowLongPtr((HWND)hwnd, GWLP_WNDPROC, (LONG)MatSurfaceWindowProc);
 }
 
 void InputDetachFromWindow(void *hwnd) {
   if (!hwnd) return;
   if (s_ChainedWindowProc) {
-    SetWindowLongPtrW((HWND)hwnd, GWLP_WNDPROC, (LONG)s_ChainedWindowProc);
+    SetWindowLongPtr((HWND)hwnd, GWLP_WNDPROC, (LONG)s_ChainedWindowProc);
     s_ChainedWindowProc = NULL;
   }
 }

@@ -329,11 +329,9 @@ HScheme CSchemeManager::LoadSchemeFromFileEx(VPANEL sizingPanel,
     return 0;
   }
 
-  if (IsPC()) {
-    ConVarRef cl_hud_minmode("cl_hud_minmode", true);
-    if (cl_hud_minmode.IsValid() && cl_hud_minmode.GetBool()) {
-      data->ProcessResolutionKeys("_minmode");
-    }
+  ConVarRef cl_hud_minmode("cl_hud_minmode", true);
+  if (cl_hud_minmode.IsValid() && cl_hud_minmode.GetBool()) {
+    data->ProcessResolutionKeys("_minmode");
   }
 
   CScheme *newScheme = new CScheme();
@@ -936,12 +934,12 @@ IImage *CSchemeManager::GetImage(const char *imageName, bool hardwareFiltered) {
   // Prepend 'vgui/'. Resource files try to load images assuming they live in
   // the vgui directory. Used to do this in Bitmap::Bitmap, moved so that the
   // s_pszSearchString is searching for the filename with 'vgui/' already added.
-  char szFileName[256];
+  static char szFileName[256];
 
   if (Q_stristr(imageName, ".pic")) {
-    Q_snprintf(szFileName, sizeof(szFileName), "%s", imageName);
+    sprintf_s(szFileName, "%s", imageName);
   } else {
-    Q_snprintf(szFileName, sizeof(szFileName), "vgui/%s", imageName);
+    sprintf_s(szFileName, "vgui/%s", imageName);
   }
 
   s_pszSearchString = szFileName;

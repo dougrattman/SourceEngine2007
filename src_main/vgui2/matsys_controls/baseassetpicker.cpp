@@ -423,7 +423,7 @@ static CAssetCache s_AssetCache;
 bool CAssetCache::CachedAssetLessFunc(
     const CAssetCache::CachedAssetList_t &src1,
     const CAssetCache::CachedAssetList_t &src2) {
-  int nRetVal = Q_stricmp(src1.m_pSubDir, src2.m_pSubDir) > 0;
+  int nRetVal = _stricmp(src1.m_pSubDir, src2.m_pSubDir);
   if (nRetVal != 0) return nRetVal > 0;
 
   int nCount = src1.m_Ext.Count();
@@ -431,7 +431,7 @@ bool CAssetCache::CachedAssetLessFunc(
   if (nDiff != 0) return nDiff > 0;
 
   for (int i = 0; i < nCount; ++i) {
-    nRetVal = Q_stricmp(src1.m_Ext[i], src2.m_Ext[i]);
+    nRetVal = _stricmp(src1.m_Ext[i], src2.m_Ext[i]);
     if (nRetVal != 0) return nRetVal > 0;
   }
 

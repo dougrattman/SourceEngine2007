@@ -454,7 +454,7 @@ void DirectorySelectDialog::OnTextChanged() {
   KeyValues *kv = m_pDriveCombo->GetActiveItemUserData();
   if (!kv) return;
   const char *newDrive = kv->GetString("drive");
-  if (_stricmp(newDrive, m_szCurrentDrive)) {
+  if (_stricmp(newDrive, m_szCurrentDrive) != 0) {
     // drive changed, reset
     SetStartDirectory(newDrive);
   }

@@ -334,7 +334,7 @@ bool CFontTextureCache::AllocatePageForChar(int charWide, int charTall,
                                             int &ttall) {
   // see if there is room in the last page for this character
   int nPageType = ComputePageType(charTall);
-  pageIndex = m_pCurrPage[nPageType];
+  pageIndex = nPageType != -1 ? m_pCurrPage[nPageType] : -1;
 
   int nNextX = 0;
   bool bNeedsNewPage = true;

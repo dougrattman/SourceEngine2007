@@ -270,7 +270,7 @@ bool AnimationController::ParseScriptFile(char *pMem, int length) {
     bool bAccepted = true;
 
     // should be 'event'
-    if (_stricmp(token, "event")) {
+    if (_stricmp(token, "event") != 0) {
       Warning("Couldn't parse script file: expected 'event', found '%s'\n",
               token);
       return false;
@@ -302,7 +302,7 @@ bool AnimationController::ParseScriptFile(char *pMem, int length) {
       pMem = ParseFile(pMem, token, NULL);
     }
 
-    if (_stricmp(token, "{")) {
+    if (_stricmp(token, "{") != 0) {
       Warning("Couldn't parse script sequence '%s': expected '{', found '%s'\n",
               g_ScriptSymbols.String(seq.name), token);
       return false;

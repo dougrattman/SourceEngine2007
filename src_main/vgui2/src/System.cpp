@@ -731,7 +731,7 @@ KeyValues *CSystem::GetUserConfigFileData(const char *dialogName,
 
   if (dialogID) {
     char buf[256];
-    Q_snprintf(buf, sizeof(buf), "%s_%d", dialogName, dialogID);
+    sprintf_s(buf, "%s_%d", dialogName, dialogID);
     dialogName = buf;
   }
 

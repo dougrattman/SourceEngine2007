@@ -810,7 +810,7 @@ void Menu::PerformLayout() {
   if (!m_iFixedWidth) {
     _recalculateWidth = true;
     CalculateWidth();
-  } else if (m_iFixedWidth) {
+  } else {
     _menuWide = m_iFixedWidth;
     // fixed width menus include the scroll bar in their width.
     if (_sizedForScrollBar) {
@@ -1503,7 +1503,7 @@ void Menu::SetVisible(bool state) {
     SetCurrentlySelectedItem(-1);
 
     g_MenuMgr.RemoveMenu(this);
-  } else if (state == true) {
+  } else {
     MoveToFront();
     RequestFocus();
 

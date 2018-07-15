@@ -579,9 +579,7 @@ void CInputWin32::RunFrame() {
         pContext->_keyFocus->SendMessage(pMessage, 0);
       }
 
-      if (pContext->_keyFocus) {
-        pContext->_keyFocus->Client()->Repaint();
-      }
+      pContext->_keyFocus->Client()->Repaint();
 
       // repaint the nearest popup as well, since it will need to redraw after
       // losing focus

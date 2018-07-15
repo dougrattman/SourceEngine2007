@@ -55,7 +55,7 @@ BuildGroup::BuildGroup(Panel *parentPanel, Panel *contextPanel) {
   SetContextPanel(contextPanel);
   _controlGroup = NULL;
   _groupDeltaX = 0;
-  _groupDeltaX = 0;
+  _groupDeltaY = 0;
   _showRulers = false;
 }
 
@@ -984,7 +984,7 @@ void BuildGroup::ApplySettings(KeyValues *resourceData) {
       // make the control name match CASE INSENSITIVE!
       char const *panelName = panel->GetName();
 
-      if (!Q_stricmp(panelName, keyName)) {
+      if (!_stricmp(panelName, keyName)) {
         // apply the settings
         panel->ApplySettings(controlKeys);
         bFound = true;

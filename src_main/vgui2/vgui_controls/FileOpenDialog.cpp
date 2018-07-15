@@ -287,7 +287,7 @@ void FileCompletionEdit::OnSetText(const wchar_t *newtext) {
   wchar_t wbuf[255];
   GetText(wbuf, 254);
 
-  if (wcscmp(wbuf, newtext)) {
+  if (wcscmp(wbuf, newtext) != 0) {
     // text has changed
     SetText(newtext);
 

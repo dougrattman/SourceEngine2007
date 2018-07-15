@@ -844,7 +844,6 @@ void CConsolePanel::AddToHistory(const char *commandText,
   CHistoryItem *item = NULL;
   for (int i = m_CommandHistory.Count() - 1; i >= 0; i--) {
     item = &m_CommandHistory[i];
-    if (!item) continue;
 
     if (_stricmp(item->GetText(), command)) continue;
 

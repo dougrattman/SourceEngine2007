@@ -1126,9 +1126,8 @@ void Frame::PerformLayout() {
 // Purpose: Set the text in the title bar.
 //-----------------------------------------------------------------------------
 void Frame::SetTitle(const char *title, bool surfaceTitle) {
-  if (!_title) {
-    _title = new TextImage("");
-  }
+  if (!_title) _title = new TextImage("");
+  
 
   Assert(title);
   _title->SetText(title);

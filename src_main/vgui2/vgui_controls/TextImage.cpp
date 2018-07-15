@@ -33,12 +33,11 @@ using namespace vgui;
 TextImage::TextImage(const char *text) : Image() {
   _utext = NULL;
   _textBufferLen = 0;
+  _textLen = 0;
   _font = INVALID_FONT;
   _fallbackFont = INVALID_FONT;
-  _unlocalizedTextSymbol = INVALID_STRING_INDEX;
   _drawWidth = 0;
-  _textBufferLen = 0;
-  _textLen = 0;
+  _unlocalizedTextSymbol = INVALID_STRING_INDEX;
   m_bWrap = false;
   m_LineBreaks.RemoveAll();
   m_pwszEllipsesPosition = NULL;
@@ -54,12 +53,11 @@ TextImage::TextImage(const char *text) : Image() {
 TextImage::TextImage(const wchar_t *wszText) : Image() {
   _utext = NULL;
   _textBufferLen = 0;
+  _textLen = 0;
   _font = INVALID_FONT;
   _fallbackFont = INVALID_FONT;
-  _unlocalizedTextSymbol = INVALID_STRING_INDEX;
   _drawWidth = 0;
-  _textBufferLen = 0;
-  _textLen = 0;
+  _unlocalizedTextSymbol = INVALID_STRING_INDEX;
   m_bWrap = false;
   m_LineBreaks.RemoveAll();
   m_bUseFallbackFont = false;

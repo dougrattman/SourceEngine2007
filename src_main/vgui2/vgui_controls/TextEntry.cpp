@@ -1188,9 +1188,9 @@ void TextEntry::CreateEditMenu() {
         int id = subMenu->AddCheckableMenuItem(
             "SentenceMode", UnlocalizeUnicode(sentencemodes[i].menuname),
             new KeyValues("DoConversionModeChanged", "handle",
-                          modes[i].handleValue),
+                          sentencemodes[i].handleValue),
             this);
-        if (modes[i].active) {
+        if (sentencemodes[i].active) {
           subMenu->SetMenuItemChecked(id, true);
         }
       }
@@ -1763,16 +1763,16 @@ Panel *TextEntry::GetDragPanel() {
 void TextEntry::OnCreateDragData(KeyValues *msg) {
   BaseClass::OnCreateDragData(msg);
 
-  char txt[256];
+  char txt[1024];
   GetText(txt, sizeof(txt));
 
   int r0, r1;
   if (GetSelectedRange(r0, r1) && r0 != r1) {
     int len = r1 - r0;
-    if (len > 0 && r0 < 1024) {
-      char selection[512];
-      Q_strncpy(selection, &txt[r0], len + 1);
-      selection[len] = 0;
+    if (len > 0 && r0 < std::size(txt) && r1 < std::size(txt)) {
+      char selection[1024];
+      strncpy_s(selection, &txt[r0], len + 1);
+
       msg->SetString("text", selection);
     }
   }

@@ -9,6 +9,7 @@
 #include "vgui/HtmlWindow.h"  // in common/vgui/
 
 #define USE_WINDOWS_POSTMESSAGE
+#include "base/include/windows/windows_errno_info.h"
 #include "base/include/windows/windows_light.h"
 
 #include <comdef.h>
@@ -594,13 +595,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd,      // handle to window
 LRESULT CALLBACK GetMsgProc(int code, WPARAM wParam, LPARAM lParam) {
   // CWPSTRUCT *msg = reinterpret_cast<CWPSTRUCT *>(lParam);
   MSG *msg = reinterpret_cast<MSG *>(lParam);
-  HtmlWindow *win = NULL;
+  HtmlWindow *win = nullptr;
 
-  // find the winwodw that triggered the hook
-  for (int i = 0; i < html_windows.Count(); i++) {
-    if (html_windows[i] && html_windows[i]->GetIEHWND() == msg->hwnd) {
-      win = html_windows[i];
-      break;
+  if (msg) {
+    // find the winwodw that triggered the hook
+    for (int i = 0; i < html_windows.Count(); i++) {
+      if (html_windows[i] && html_windows[i]->GetIEHWND() == msg->hwnd) {
+        win = html_windows[i];
+        break;
+      }
     }
   }
 
@@ -977,7 +980,7 @@ void HtmlWindow::OnSize(int x, int y, int w_in, int h_in) {
 //-----------------------------------------------------------------------------
 bool HtmlWindow::Show(bool shown) {
   if (m_webBrowser) {
-    m_webBrowser->put_Visible(shown);
+    m_webBrowser->put_Visible(shown ? VARIANT_TRUE : VARIANT_FALSE);
   }
   return true;
 }
@@ -987,7 +990,7 @@ bool HtmlWindow::Show(bool shown) {
 //-----------------------------------------------------------------------------
 void HtmlWindow::SetVisible(bool state) {
   if (m_webBrowser) {
-    m_webBrowser->put_Visible(state);
+    m_webBrowser->put_Visible(state ? VARIANT_TRUE : VARIANT_FALSE);
   }
   m_bVisible = state;
 
@@ -1308,15 +1311,11 @@ void HtmlWindow::AddText(const char *text) {
 // Purpose: passes a character though to the browser
 //-----------------------------------------------------------------------------
 void HtmlWindow::OnChar(wchar_t unichar) {
-  UINT msg = 0;
-  WPARAM wParam = 1;
+  WPARAM wParam = unichar;
   LPARAM lParam = 0;
-  // LRESULT lResult = 0;
-
-  wParam = unichar;
 
   // pass the character to the window
-  msg = WM_CHAR;
+  UINT msg = WM_CHAR;
 
   if (m_oleInPlaceObject == NULL) {
     DEBUG("no oleInPlaceObject");
@@ -1335,15 +1334,11 @@ void HtmlWindow::OnChar(wchar_t unichar) {
 // arrows in text displays
 //-----------------------------------------------------------------------------
 void HtmlWindow::OnKeyDown(vgui::KeyCode code) {
-  UINT msg = 0;
-  WPARAM wParam = 1;
+  WPARAM wParam = KeyCode_VGUIToVirtualKey(code);
   LPARAM lParam = 0;
-  // LRESULT lResult = 0;
-
-  wParam = KeyCode_VGUIToVirtualKey(code);
 
   // pass the character to the window
-  msg = WM_KEYDOWN;
+  UINT msg = WM_KEYDOWN;
 
   if (m_oleInPlaceObject == NULL) {
     DEBUG("no oleInPlaceObject");
@@ -1723,7 +1718,7 @@ void HtmlWindow::OnFinishURL(const char *url) {
 
   if (m_bVisible) {
     if (m_bDirectToHWND) {
-      ::ShowWindow(m_oleObjectHWND, m_bVisible ? SW_SHOWNA : SW_HIDE);
+      ::ShowWindow(m_oleObjectHWND, SW_SHOWNA);
     } else {
       ::ShowWindow(m_oleObjectHWND, SW_HIDE);
     }
@@ -1744,19 +1739,18 @@ void HtmlWindow::OpenURL(const char *url) {
 
   m_specificallyOpened = true;
 
-  HRESULT hret;
-  hret = m_webBrowser->Navigate2(&vUrl, &navFlag, &targetFrame, &postData,
+  HRESULT hr = m_webBrowser->Navigate2(&vUrl, &navFlag, &targetFrame, &postData,
                                  &headers);
+
+  if (FAILED(hr)) {
+    Warning("Can't open url '%s': ",
+            source::windows::make_windows_errno_info(hr).description);
+  }
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
-//		Implemenetation of the various OLE (ActiveX) containers for the
-// IE  widget.
-//
-//
-//
-//
+//		Implemenetation of the various OLE (ActiveX) containers for the IE  widget.
 //-----------------------------------------------------------------------------
 
 FrameSite::FrameSite(HtmlWindow *win, bool AllowJavaScript) {
@@ -1892,7 +1886,8 @@ HRESULT FS_IDispatch::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
     switch (dispIdMember) {
       case DISPID_AMBIENT_APPEARANCE:
         pVarResult->vt = VT_BOOL;
-        pVarResult->boolVal = m_fs->m_bAmbientAppearance;
+        pVarResult->boolVal =
+            m_fs->m_bAmbientAppearance ? VARIANT_TRUE : VARIANT_FALSE;
         break;
 
       case DISPID_AMBIENT_FORECOLOR:
@@ -1912,17 +1907,20 @@ HRESULT FS_IDispatch::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 
       case DISPID_AMBIENT_USERMODE:
         pVarResult->vt = VT_BOOL;
-        pVarResult->boolVal = m_fs->m_bAmbientUserMode;
+        pVarResult->boolVal =
+            m_fs->m_bAmbientUserMode ? VARIANT_TRUE : VARIANT_FALSE;
         break;
 
       case DISPID_AMBIENT_SHOWGRABHANDLES:
         pVarResult->vt = VT_BOOL;
-        pVarResult->boolVal = m_fs->m_bAmbientShowGrabHandles;
+        pVarResult->boolVal =
+            m_fs->m_bAmbientShowGrabHandles ? VARIANT_TRUE : VARIANT_FALSE;
         break;
 
       case DISPID_AMBIENT_SHOWHATCHING:
         pVarResult->vt = VT_BOOL;
-        pVarResult->boolVal = m_fs->m_bAmbientShowHatching;
+        pVarResult->boolVal =
+            m_fs->m_bAmbientShowHatching ? VARIANT_TRUE : VARIANT_FALSE;
         break;
 
       case DISPID_AMBIENT_DLCONTROL:  // turn off javascript

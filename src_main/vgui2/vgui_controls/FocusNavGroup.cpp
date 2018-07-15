@@ -52,11 +52,7 @@ bool FocusNavGroup::RequestFocusPrev(VPANEL panel)
 		return false;
 
 	_currentFocus = NULL;
-	int newPosition = 9999999;
-	if (panel)
-	{
-		newPosition = ipanel()->GetTabPosition(panel);
-	}
+  int newPosition = ipanel()->GetTabPosition(panel);
 
 	bool bFound = false;
 	bool bRepeat = true;

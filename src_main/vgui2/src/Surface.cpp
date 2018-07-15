@@ -14,6 +14,7 @@
 #include <shellapi.h>
 #include <zmouse.h>
 #include <cstdio>
+#include <atomic>
 #include "FileSystem.h"
 #include "VPanel.h"
 #include "base/include/chrono.h"
@@ -410,14 +411,14 @@ class CSurfaceDragDropTarget : public IDropTarget {
   }
 
  private:
-  unsigned int _refCount;
+  std::atomic_ulong _refCount;
   KeyValues *_dragData;
 
   virtual HRESULT STDMETHODCALLTYPE QueryInterface(
       /* [in] */ REFIID riid,
       /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) {
     if (riid == IID_IDropTarget) {
-      *ppvObject = (IDropTarget *)this;
+      *ppvObject = implicit_cast<IDropTarget *>(this);
       return S_OK;
     }
 
@@ -473,9 +474,9 @@ class CSurfaceDragDropTarget : public IDropTarget {
       _dragData = NULL;
     }
 
-    if (_dragData) {
+    if (_dragData) 
       _dragData->deleteThis();
-    }
+    
     _dragData = NULL;
 
     return S_OK;
@@ -1556,6 +1557,7 @@ bool CWin32Surface::LoadTGA(Texture *texture, const char *filename) {
 
   // allocate memory for the destination
   uchar *rgba = (unsigned char *)malloc(tgaHeader.width * tgaHeader.height * 4);
+  if (!rgba) return false;
 
   int column, row;
   uchar *ptr;
@@ -1603,7 +1605,7 @@ bool CWin32Surface::LoadTGA(Texture *texture, const char *filename) {
       }
     }
   } else {
-    uchar packetHeader, packetSize, j, color[4];
+    uchar packetHeader, packetSize, j, color[4]{0, 0, 0, 0};
 
     for (row = tgaHeader.height - 1; row >= 0; row--) {
       ptr = ((uchar *)rgba) + row * tgaHeader.width * 4;
@@ -1739,7 +1741,6 @@ bool CWin32Surface::LoadTGA(Texture *texture, const char *filename) {
         if (src[3]) {
           // mask will be & with background, so it needs to be 0xFF
           maskDst[0] = maskDst[1] = maskDst[2] = maskDst[3] = -1;
-          ;
 
           // clear the art in the bitmap because it's not going to display and
           // will be | with background
@@ -1907,11 +1908,11 @@ void CWin32Surface::SetAsToolBar(VPANEL panel, bool state) {
   panel = GetContextPanelForChildPanel(panel);
   if (panel && PLAT(panel)) {
     if (state) {
-      ::SetWindowLongPtrW(
+      ::SetWindowLongPtr(
           PLAT(panel)->hwnd, GWL_EXSTYLE,
           ::GetWindowLongPtr(PLAT(panel)->hwnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
     } else {
-      ::SetWindowLongPtrW(
+      ::SetWindowLongPtr(
           PLAT(panel)->hwnd, GWL_EXSTYLE,
                       ::GetWindowLongPtr(PLAT(panel)->hwnd, GWL_EXSTYLE) &
                           ~WS_EX_TOOLWINDOW);
@@ -2006,7 +2007,7 @@ void CWin32Surface::CreatePopup(VPANEL panel, bool minimised,
   plat->textureDC = NULL;
 
   ::SetBkMode(plat->hdc, TRANSPARENT);
-  ::SetWindowLongPtrW(plat->hwnd, GWL_USERDATA,
+  ::SetWindowLongPtr(plat->hwnd, GWL_USERDATA,
                   (LONG)g_pIVgui->PanelToHandle(panel));
   ::SetTextAlign(plat->hdc, TA_LEFT | TA_TOP | TA_UPDATECP);
 
@@ -2077,7 +2078,7 @@ void CWin32Surface::ReleasePanel(VPANEL panel) {
     SetPanelVisible(panel, false);
 
     // free all the windows/bitmap/DC handles we are using
-    ::SetWindowLongPtrW(plat->hwnd, GWL_USERDATA, (LONG)-1);
+    ::SetWindowLongPtr(plat->hwnd, GWL_USERDATA, (LONG)-1);
     ::SetWindowPos(plat->hwnd, HWND_BOTTOM, 0, 0, 1, 1,
                    SWP_NOREDRAW | SWP_HIDEWINDOW);
 
