@@ -26,7 +26,7 @@ struct newChar_t {
 class CWin32Font {
  public:
   CWin32Font();
-  ~CWin32Font();
+  virtual ~CWin32Font();
 
   // creates the font from windows.  returns false if font does not exist in the
   // OS.
