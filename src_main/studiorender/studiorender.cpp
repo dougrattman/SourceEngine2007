@@ -42,14 +42,14 @@ static ConVar r_flexstats("r_flexstats", "0", FCVAR_CHEAT);
 // Constructor
 //-----------------------------------------------------------------------------
 CStudioRender::CStudioRender() {
-  m_pRC = NULL;
-  m_pBoneToWorld = NULL;
-  m_pFlexWeights = NULL;
-  m_pFlexDelayedWeights = NULL;
-  m_pStudioHdr = NULL;
-  m_pStudioMeshes = NULL;
-  m_pSubModel = NULL;
-  m_pGlintTexture = NULL;
+  m_pRC = nullptr;
+  m_pBoneToWorld = nullptr;
+  m_pFlexWeights = nullptr;
+  m_pFlexDelayedWeights = nullptr;
+  m_pStudioHdr = nullptr;
+  m_pStudioMeshes = nullptr;
+  m_pSubModel = nullptr;
+  m_pGlintTexture = nullptr;
   m_GlintWidth = 0;
   m_GlintHeight = 0;
 
@@ -70,7 +70,7 @@ CStudioRender::~CStudioRender() {
   MemAlloc_FreeAligned(m_PoseToDecal);
 }
 
-void CStudioRender::InitDebugMaterials(void) {
+void CStudioRender::InitDebugMaterials() {
 #ifdef _WIN32
   m_pMaterialMRMWireframe = g_pMaterialSystem->FindMaterial(
       "//platform/materials/debug/debugmrmwireframe", TEXTURE_GROUP_OTHER,
@@ -156,56 +156,56 @@ void CStudioRender::InitDebugMaterials(void) {
 #endif  // _WIN32
 }
 
-void CStudioRender::ShutdownDebugMaterials(void) {
+void CStudioRender::ShutdownDebugMaterials() {
 #ifdef _WIN32
   if (m_pMaterialMRMWireframe) {
     m_pMaterialMRMWireframe->DecrementReferenceCount();
-    m_pMaterialMRMWireframe = NULL;
+    m_pMaterialMRMWireframe = nullptr;
   }
 
   if (m_pMaterialMRMWireframeZBuffer) {
     m_pMaterialMRMWireframeZBuffer->DecrementReferenceCount();
-    m_pMaterialMRMWireframeZBuffer = NULL;
+    m_pMaterialMRMWireframeZBuffer = nullptr;
   }
 
   if (m_pMaterialMRMNormals) {
     m_pMaterialMRMNormals->DecrementReferenceCount();
-    m_pMaterialMRMNormals = NULL;
+    m_pMaterialMRMNormals = nullptr;
   }
 
   if (m_pMaterialTangentFrame) {
     m_pMaterialTangentFrame->DecrementReferenceCount();
-    m_pMaterialTangentFrame = NULL;
+    m_pMaterialTangentFrame = nullptr;
   }
 
   if (m_pMaterialTranslucentModelHulls) {
     m_pMaterialTranslucentModelHulls->DecrementReferenceCount();
-    m_pMaterialTranslucentModelHulls = NULL;
+    m_pMaterialTranslucentModelHulls = nullptr;
   }
 
   if (m_pMaterialSolidModelHulls) {
     m_pMaterialSolidModelHulls->DecrementReferenceCount();
-    m_pMaterialSolidModelHulls = NULL;
+    m_pMaterialSolidModelHulls = nullptr;
   }
 
   if (m_pMaterialAdditiveVertexColorVertexAlpha) {
     m_pMaterialAdditiveVertexColorVertexAlpha->DecrementReferenceCount();
-    m_pMaterialAdditiveVertexColorVertexAlpha = NULL;
+    m_pMaterialAdditiveVertexColorVertexAlpha = nullptr;
   }
 
   if (m_pMaterialModelBones) {
     m_pMaterialModelBones->DecrementReferenceCount();
-    m_pMaterialModelBones = NULL;
+    m_pMaterialModelBones = nullptr;
   }
 
   if (m_pMaterialModelEnvCubemap) {
     m_pMaterialModelEnvCubemap->DecrementReferenceCount();
-    m_pMaterialModelEnvCubemap = NULL;
+    m_pMaterialModelEnvCubemap = nullptr;
   }
 
   if (m_pMaterialWorldWireframe) {
     m_pMaterialWorldWireframe->DecrementReferenceCount();
-    m_pMaterialWorldWireframe = NULL;
+    m_pMaterialWorldWireframe = nullptr;
   }
 
   // DepthWrite materials
@@ -227,7 +227,7 @@ void CStudioRender::ShutdownDebugMaterials(void) {
 
   if (m_pGlintBuildMaterial) {
     m_pGlintBuildMaterial->DecrementReferenceCount();
-    m_pGlintBuildMaterial = NULL;
+    m_pGlintBuildMaterial = nullptr;
   }
 #endif
 }
@@ -256,7 +256,7 @@ InitReturnVal_t CStudioRender::Init() {
   return INIT_FAILED;
 }
 
-void CStudioRender::Shutdown(void) {
+void CStudioRender::Shutdown() {
   UncacheGlint();
   ShutdownDebugMaterials();
 
@@ -439,10 +439,10 @@ void CStudioRender::DrawModel(const DrawModelInfo_t &info,
 #endif
 
   pRenderContext->SetNumBoneWeights(0);
-  m_pRC = NULL;
-  m_pBoneToWorld = NULL;
-  m_pFlexWeights = NULL;
-  m_pFlexDelayedWeights = NULL;
+  m_pRC = nullptr;
+  m_pBoneToWorld = nullptr;
+  m_pFlexWeights = nullptr;
+  m_pFlexDelayedWeights = nullptr;
 }
 
 void CStudioRender::DrawModelStaticProp(const DrawModelInfo_t &info,
@@ -502,6 +502,6 @@ void CStudioRender::DrawModelStaticProp(const DrawModelInfo_t &info,
   m_pRC->m_Config.bWireframe = bWireframe;
 
   pRenderContext->SetNumBoneWeights(0);
-  m_pBoneToWorld = NULL;
-  m_pRC = NULL;
+  m_pBoneToWorld = nullptr;
+  m_pRC = nullptr;
 }

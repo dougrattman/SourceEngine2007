@@ -2,18 +2,13 @@
 
 #include "flexrenderdata.h"
 
- 
 #include "tier0/include/memdbgon.h"
-
-//-----------------------------------------------------------------------------
-// Constructor
-//-----------------------------------------------------------------------------
 
 CCachedRenderData::CCachedRenderData()
     : m_CurrentTag(0), m_pFirstFlexIndex(0), m_pFirstWorldIndex(0) {
-#ifdef _DEBUG
+#ifndef NDEBUG
   int i;
-  float val = FLOAT32_NAN;
+  f32 val = FLOAT32_NAN;
   for (i = 0; i < MAXSTUDIOFLEXVERTS; i++) {
     m_pFlexVerts[i].m_Position[0] = val;
     m_pFlexVerts[i].m_Position[1] = val;
@@ -37,10 +32,7 @@ CCachedRenderData::CCachedRenderData()
 #endif
 }
 
-//-----------------------------------------------------------------------------
 // Call this before rendering the model
-//-----------------------------------------------------------------------------
-
 void CCachedRenderData::StartModel() {
   ++m_CurrentTag;
   m_IndexCount = 0;
@@ -52,10 +44,7 @@ void CCachedRenderData::StartModel() {
   m_pFirstWorldIndex = 0;
 }
 
-//-----------------------------------------------------------------------------
 // Used to hook ourselves into a particular body part, model, and mesh
-//-----------------------------------------------------------------------------
-
 void CCachedRenderData::SetBodyPart(int bodypart) {
   m_Body = bodypart;
   m_CacheDict.EnsureCount(m_Body + 1);
@@ -95,10 +84,7 @@ void CCachedRenderData::SetMesh(int mesh) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Used to set up a flex computation
-//-----------------------------------------------------------------------------
-
 bool CCachedRenderData::IsFlexComputationDone() const {
   Assert((m_Model >= 0) && (m_Body >= 0) && (m_Mesh >= 0));
 
@@ -108,10 +94,7 @@ bool CCachedRenderData::IsFlexComputationDone() const {
   return (dict.m_FlexTag == m_CurrentTag);
 }
 
-//-----------------------------------------------------------------------------
 // Used to set up a computation	(modifies vertex data)
-//-----------------------------------------------------------------------------
-
 void CCachedRenderData::SetupComputation(mstudiomesh_t* pMesh,
                                          bool flexComputation) {
   Assert((m_Model >= 0) && (m_Body >= 0) && (m_Mesh >= 0));
@@ -134,16 +117,13 @@ void CCachedRenderData::SetupComputation(mstudiomesh_t* pMesh,
   m_pFirstWorldIndex = &m_pWorldIndex[dict.m_FirstIndex];
 }
 
-//-----------------------------------------------------------------------------
 // Creates a new flexed vertex to be associated with a vertex
-//-----------------------------------------------------------------------------
-
 CachedPosNormTan_t* CCachedRenderData::CreateFlexVertex(int vertex) {
   Assert(m_pFirstFlexIndex);
   Assert(m_pFirstFlexIndex[vertex].m_Tag != m_CurrentTag);
 
   Assert(m_FlexVertexCount < MAXSTUDIOFLEXVERTS);
-  if (m_FlexVertexCount >= MAXSTUDIOFLEXVERTS) return NULL;
+  if (m_FlexVertexCount >= MAXSTUDIOFLEXVERTS) return nullptr;
 
   // Point the flex list to the new flexed vertex
   m_pFirstFlexIndex[vertex].m_Tag = m_CurrentTag;
@@ -155,16 +135,13 @@ CachedPosNormTan_t* CCachedRenderData::CreateFlexVertex(int vertex) {
   return GetFlexVertex(vertex);
 }
 
-//-----------------------------------------------------------------------------
 // Creates a new flexed vertex to be associated with a vertex
-//-----------------------------------------------------------------------------
-
 CachedPosNorm_t* CCachedRenderData::CreateThinFlexVertex(int vertex) {
   Assert(m_pFirstThinFlexIndex);
   Assert(m_pFirstThinFlexIndex[vertex].m_Tag != m_CurrentTag);
 
   Assert(m_ThinFlexVertexCount < MAXSTUDIOFLEXVERTS);
-  if (m_ThinFlexVertexCount >= MAXSTUDIOFLEXVERTS) return NULL;
+  if (m_ThinFlexVertexCount >= MAXSTUDIOFLEXVERTS) return nullptr;
 
   // Point the flex list to the new flexed vertex
   m_pFirstThinFlexIndex[vertex].m_Tag = m_CurrentTag;
@@ -176,14 +153,10 @@ CachedPosNorm_t* CCachedRenderData::CreateThinFlexVertex(int vertex) {
   return GetThinFlexVertex(vertex);
 }
 
-//-----------------------------------------------------------------------------
 // Re-normalize the surface normals and tangents of the flexed vertices
 // No thin ones since they're intended to be deltas, not unit vectors
-//-----------------------------------------------------------------------------
 void CCachedRenderData::RenormalizeFlexVertices(bool bHasTangentData) {
-  int i;
-
-  for (i = 0; i < m_FlexVertexCount; i++) {
+  for (int i = 0; i < m_FlexVertexCount; i++) {
     m_pFlexVerts[i].m_Normal.NormalizeInPlace();
     if (bHasTangentData) {
       m_pFlexVerts[i].m_TangentS.AsVector3D().NormalizeInPlace();
@@ -191,10 +164,7 @@ void CCachedRenderData::RenormalizeFlexVertices(bool bHasTangentData) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Creates a new flexed vertex to be associated with a vertex
-//-----------------------------------------------------------------------------
-
 CachedPosNorm_t* CCachedRenderData::CreateWorldVertex(int vertex) {
   Assert(m_pFirstWorldIndex);
   if (m_pFirstWorldIndex[vertex].m_Tag != m_CurrentTag) {
@@ -206,5 +176,6 @@ CachedPosNorm_t* CCachedRenderData::CreateWorldVertex(int vertex) {
     // Add a new world vert to the world vertex list
     ++m_WorldVertexCount;
   }
+
   return GetWorldVertex(vertex);
 }

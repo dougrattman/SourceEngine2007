@@ -29,7 +29,7 @@ void R_LightAmbient_4D(const Vector& normal, Vector4D* pLightBoxColor,
                        Vector& lv);
 void R_LightStrengthWorld(const Vector& vert, int lightcount,
                           LightDesc_t* pLightDesc, lightpos_t* light);
-float SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
+f32 SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
                                            const Vector& delta);
 
 // Copies lighting state into a buffer, returns number of lights copied

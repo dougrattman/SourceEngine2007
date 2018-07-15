@@ -7,16 +7,9 @@
 #include "studio.h"
 #include "tier1/utlvector.h"
 
-//-----------------------------------------------------------------------------
-// forward declarations
-//-----------------------------------------------------------------------------
-
 struct mstudiomesh_t;
 
-//-----------------------------------------------------------------------------
 // Used by flex vertex data cache
-//-----------------------------------------------------------------------------
-
 struct CachedPosNormTan_t {
   Vector m_Position;
   Vector m_Normal;
@@ -32,10 +25,7 @@ struct CachedPosNormTan_t {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Used by world (decal) vertex data cache
-//-----------------------------------------------------------------------------
-
 struct CachedPosNorm_t {
   Vector4DAligned m_Position;
   Vector4DAligned m_Normal;
@@ -48,11 +38,8 @@ struct CachedPosNorm_t {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Stores flex vertex data and world (decal) vertex data for the lifetime of the
 // model rendering
-//-----------------------------------------------------------------------------
-
 class CCachedRenderData {
  public:
   // Constructor
@@ -67,7 +54,25 @@ class CCachedRenderData {
   void SetMesh(int mesh);
 
   // For faster setup in the decal code
-  void SetBodyModelMesh(int body, int model, int mesh);
+  // For faster setup in the decal code
+  void SetBodyModelMesh(int body, int model, int mesh) {
+    m_Body = body;
+    m_Model = model;
+    m_Mesh = mesh;
+
+    // At this point, we should have all 3 defined.
+    CacheDict_t& dict = m_CacheDict[m_Body][m_Model][m_Mesh];
+
+    if (dict.m_Tag == m_CurrentTag) {
+      m_pFirstFlexIndex = &m_pFlexIndex[dict.m_FirstIndex];
+      m_pFirstThinFlexIndex = &m_pThinFlexIndex[dict.m_FirstIndex];
+      m_pFirstWorldIndex = &m_pWorldIndex[dict.m_FirstIndex];
+    } else {
+      m_pFirstFlexIndex = 0;
+      m_pFirstThinFlexIndex = 0;
+      m_pFirstWorldIndex = 0;
+    }
+  }
 
   // Used to set up a flex computation
   bool IsFlexComputationDone() const;
@@ -76,17 +81,37 @@ class CCachedRenderData {
   void SetupComputation(mstudiomesh_t* pMesh, bool flexComputation = false);
 
   // Is a particular vertex flexed?
-  bool IsVertexFlexed(int vertex) const;
-  bool IsThinVertexFlexed(int vertex) const;
+  // Checks to see if the vertex is defined
+  bool IsVertexFlexed(int vertex) const {
+    return (m_pFirstFlexIndex &&
+            (m_pFirstFlexIndex[vertex].m_Tag == m_CurrentTag));
+  }
+  bool IsThinVertexFlexed(int vertex) const {
+    return (m_pFirstThinFlexIndex &&
+            (m_pFirstThinFlexIndex[vertex].m_Tag == m_CurrentTag));
+  }
 
   // Checks to see if the vertex is defined
-  bool IsVertexPositionCached(int vertex) const;
+  // Checks to see if the vertex is defined
+  bool IsVertexPositionCached(int vertex) const {
+    return (m_pFirstWorldIndex &&
+            (m_pFirstWorldIndex[vertex].m_Tag == m_CurrentTag));
+  }
 
   // Gets a flexed vertex
-  CachedPosNormTan_t* GetFlexVertex(int vertex);
+  // Gets an existing flexed vertex associated with a vertex
+  CachedPosNormTan_t* GetFlexVertex(int vertex) {
+    Assert(m_pFirstFlexIndex);
+    Assert(m_pFirstFlexIndex[vertex].m_Tag == m_CurrentTag);
+    return &m_pFlexVerts[m_pFirstFlexIndex[vertex].m_VertexIndex];
+  }
 
   // Gets a flexed vertex
-  CachedPosNorm_t* GetThinFlexVertex(int vertex);
+  CachedPosNorm_t* GetThinFlexVertex(int vertex) {
+    Assert(m_pFirstThinFlexIndex);
+    Assert(m_pFirstThinFlexIndex[vertex].m_Tag == m_CurrentTag);
+    return &m_pThinFlexVerts[m_pFirstThinFlexIndex[vertex].m_VertexIndex];
+  }
 
   // Creates a new flexed vertex to be associated with a vertex
   CachedPosNormTan_t* CreateFlexVertex(int vertex);
@@ -98,7 +123,12 @@ class CCachedRenderData {
   void RenormalizeFlexVertices(bool bHasTangentData);
 
   // Gets a decal vertex
-  CachedPosNorm_t* GetWorldVertex(int vertex);
+  // Gets an existing world vertex associated with a vertex
+  CachedPosNorm_t* GetWorldVertex(int vertex) {
+    Assert(m_pFirstWorldIndex);
+    Assert(m_pFirstWorldIndex[vertex].m_Tag == m_CurrentTag);
+    return &m_pWorldVerts[m_pFirstWorldIndex[vertex].m_VertexIndex];
+  }
 
   // Creates a new decal vertex to be associated with a vertex
   CachedPosNorm_t* CreateWorldVertex(int vertex);
@@ -106,18 +136,18 @@ class CCachedRenderData {
  private:
   // Used to create the flex render data. maps
   struct CacheIndex_t {
-    unsigned short m_Tag;
-    unsigned short m_VertexIndex;
+    u16 m_Tag;
+    u16 m_VertexIndex;
   };
 
   // A dictionary for the cached data
   struct CacheDict_t {
-    unsigned short m_FirstIndex;
-    unsigned short m_IndexCount;
-    unsigned short m_Tag;
-    unsigned short m_FlexTag;
+    u16 m_FirstIndex;
+    u16 m_IndexCount;
+    u16 m_Tag;
+    u16 m_FlexTag;
 
-    CacheDict_t() : m_Tag(0), m_FlexTag(0) {}
+    CacheDict_t() : m_FirstIndex{0}, m_IndexCount{0}, m_Tag{0}, m_FlexTag{0} {}
   };
 
   typedef CUtlVector<CacheDict_t> CacheMeshDict_t;
@@ -148,7 +178,7 @@ class CCachedRenderData {
   CacheBodyPartDict_t m_CacheDict;
 
   // The flex tag
-  unsigned short m_CurrentTag;
+  u16 m_CurrentTag;
 
   // the current body, model, and mesh
   int m_Body;
@@ -160,77 +190,5 @@ class CCachedRenderData {
   CacheIndex_t* m_pFirstThinFlexIndex;
   CacheIndex_t* m_pFirstWorldIndex;
 };
-
-//-----------------------------------------------------------------------------
-// Checks to see if the vertex is defined
-//-----------------------------------------------------------------------------
-
-inline bool CCachedRenderData::IsVertexFlexed(int vertex) const {
-  return (m_pFirstFlexIndex &&
-          (m_pFirstFlexIndex[vertex].m_Tag == m_CurrentTag));
-}
-
-inline bool CCachedRenderData::IsThinVertexFlexed(int vertex) const {
-  return (m_pFirstThinFlexIndex &&
-          (m_pFirstThinFlexIndex[vertex].m_Tag == m_CurrentTag));
-}
-
-//-----------------------------------------------------------------------------
-// Gets an existing flexed vertex associated with a vertex
-//-----------------------------------------------------------------------------
-
-inline CachedPosNormTan_t* CCachedRenderData::GetFlexVertex(int vertex) {
-  Assert(m_pFirstFlexIndex);
-  Assert(m_pFirstFlexIndex[vertex].m_Tag == m_CurrentTag);
-  return &m_pFlexVerts[m_pFirstFlexIndex[vertex].m_VertexIndex];
-}
-
-inline CachedPosNorm_t* CCachedRenderData::GetThinFlexVertex(int vertex) {
-  Assert(m_pFirstThinFlexIndex);
-  Assert(m_pFirstThinFlexIndex[vertex].m_Tag == m_CurrentTag);
-  return &m_pThinFlexVerts[m_pFirstThinFlexIndex[vertex].m_VertexIndex];
-}
-
-//-----------------------------------------------------------------------------
-// Checks to see if the vertex is defined
-//-----------------------------------------------------------------------------
-
-inline bool CCachedRenderData::IsVertexPositionCached(int vertex) const {
-  return (m_pFirstWorldIndex &&
-          (m_pFirstWorldIndex[vertex].m_Tag == m_CurrentTag));
-}
-
-//-----------------------------------------------------------------------------
-// Gets an existing world vertex associated with a vertex
-//-----------------------------------------------------------------------------
-
-inline CachedPosNorm_t* CCachedRenderData::GetWorldVertex(int vertex) {
-  Assert(m_pFirstWorldIndex);
-  Assert(m_pFirstWorldIndex[vertex].m_Tag == m_CurrentTag);
-  return &m_pWorldVerts[m_pFirstWorldIndex[vertex].m_VertexIndex];
-}
-
-//-----------------------------------------------------------------------------
-// For faster setup in the decal code
-//-----------------------------------------------------------------------------
-
-inline void CCachedRenderData::SetBodyModelMesh(int body, int model, int mesh) {
-  m_Body = body;
-  m_Model = model;
-  m_Mesh = mesh;
-
-  // At this point, we should have all 3 defined.
-  CacheDict_t& dict = m_CacheDict[m_Body][m_Model][m_Mesh];
-
-  if (dict.m_Tag == m_CurrentTag) {
-    m_pFirstFlexIndex = &m_pFlexIndex[dict.m_FirstIndex];
-    m_pFirstThinFlexIndex = &m_pThinFlexIndex[dict.m_FirstIndex];
-    m_pFirstWorldIndex = &m_pWorldIndex[dict.m_FirstIndex];
-  } else {
-    m_pFirstFlexIndex = 0;
-    m_pFirstThinFlexIndex = 0;
-    m_pFirstWorldIndex = 0;
-  }
-}
 
 #endif  // FLEXRENDERDATA_H

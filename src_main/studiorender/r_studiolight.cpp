@@ -2,16 +2,15 @@
 
 #include "r_studiolight.h"
 
-#include <float.h>
+#include <cfloat>
+#include "base/include/compiler_specific.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "studio.h"
 #include "studiorender.h"
 #include "studiorendercontext.h"
-#include "base/include/compiler_specific.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 void R_WorldLightDelta(const LightDesc_t* wl, const Vector& org, Vector& delta);
@@ -62,7 +61,7 @@ void R_LightAmbient_4D(const Vector& normal, Vector4D* pLightBoxColor,
            lv);
 }
 
-#if defined(_WIN32) && !defined(_X360)
+#if defined(_WIN32)
 void R_LightAmbient_4D(const FourVectors& normal, Vector4D* pLightBoxColor,
                        FourVectors& lv) {
   //	VPROF( "R_LightAmbient" );
@@ -205,12 +204,12 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTable,
   // TODO(d.rattman): lighting effects for normal and position are independent!
   // TODO(d.rattman): these can be pre-calculated per normal
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType1 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[0].falloff *
         CWorldLightAngleWrapper<LightType1>::WorldLightAngle(
             &pLightDesc[0], pLightDesc[0].m_Direction, normal, light[0].delta);
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[0].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[0].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -218,12 +217,12 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTable,
   }
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType2 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[1].falloff *
         CWorldLightAngleWrapper<LightType2>::WorldLightAngle(
             &pLightDesc[1], pLightDesc[1].m_Direction, normal, light[1].delta);
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[1].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[1].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -231,12 +230,12 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTable,
   }
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType3 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[2].falloff *
         CWorldLightAngleWrapper<LightType3>::WorldLightAngle(
             &pLightDesc[2], pLightDesc[2].m_Direction, normal, light[2].delta);
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[2].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[2].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -244,12 +243,12 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTable,
   }
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType4 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[3].falloff *
         CWorldLightAngleWrapper<LightType4>::WorldLightAngle(
             &pLightDesc[3], pLightDesc[3].m_Direction, normal, light[3].delta);
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[3].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[3].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -260,7 +259,7 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTable,
 TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTableConstDirectional,
                         (const LightDesc_t* pLightDesc, const lightpos_t* light,
                          const Vector& normal, Vector& dest,
-                         float flDirectionalConstant),
+                         f32 flDirectionalConstant),
                         256) {
   enum {
     LightType1 = (nArgument & 0xC0) >> 6,
@@ -278,13 +277,13 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTableConstDirectional,
   // TODO(d.rattman): lighting effects for normal and position are independent!
   // TODO(d.rattman): these can be pre-calculated per normal
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType1 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[0].falloff *
         CWorldLightAngleWrapperConstDirectional<LightType1>::WorldLightAngle(
             &pLightDesc[0], pLightDesc[0].m_Direction, normal, light[0].delta,
             flDirectionalConstant);
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[0].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[0].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -292,14 +291,14 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTableConstDirectional,
   }
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType2 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[1].falloff *
         CWorldLightAngleWrapperConstDirectional<LightType2>::WorldLightAngle(
             &pLightDesc[1], pLightDesc[1].m_Direction, normal, light[1].delta,
             flDirectionalConstant);
 
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[1].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[1].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -307,14 +306,14 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTableConstDirectional,
   }
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType3 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[2].falloff *
         CWorldLightAngleWrapperConstDirectional<LightType3>::WorldLightAngle(
             &pLightDesc[2], pLightDesc[2].m_Direction, normal, light[2].delta,
             flDirectionalConstant);
 
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[2].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[2].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -322,14 +321,14 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTableConstDirectional,
   }
 
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType4 != MATERIAL_LIGHT_DISABLE)) {
-    float ratio =
+    f32 ratio =
         light[3].falloff *
         CWorldLightAngleWrapperConstDirectional<LightType4>::WorldLightAngle(
             &pLightDesc[3], pLightDesc[3].m_Direction, normal, light[3].delta,
             flDirectionalConstant);
 
     if (ratio > 0) {
-      const float* pColor = (float*)&pLightDesc[3].m_Color;
+      const f32* pColor = (f32*)&pLightDesc[3].m_Color;
       dest[0] += pColor[0] * ratio;
       dest[1] += pColor[1] * ratio;
       dest[2] += pColor[2] * ratio;
@@ -370,11 +369,11 @@ inline int R_LightEffectsWorldIndex(const LightDesc_t* pLightDesc,
 // TODO: move cone calcs to position
 // TODO: cone clipping calc's wont work for boxlight since the player asks for a
 // single point.  Not sure what the volume is.
-TEMPLATE_FUNCTION_TABLE(float, R_WorldLightDistanceFalloffFunctionTable,
+TEMPLATE_FUNCTION_TABLE(f32, R_WorldLightDistanceFalloffFunctionTable,
                         (const LightDesc_t* wl, const Vector& delta), 8) {
   Assert(nArgument != 0);
 
-  float dist2 = DotProduct(delta, delta);
+  f32 dist2 = DotProduct(delta, delta);
 
   // Cull out light beyond this radius
   if (wl->m_Range != 0.f) {
@@ -382,7 +381,7 @@ TEMPLATE_FUNCTION_TABLE(float, R_WorldLightDistanceFalloffFunctionTable,
   }
 
   // The general purpose equation:
-  float fTotal = FLT_EPSILON;
+  f32 fTotal = FLT_EPSILON;
 
   MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
   MSVC_DISABLE_WARNING(4127)
@@ -407,8 +406,8 @@ TEMPLATE_FUNCTION_TABLE(float, R_WorldLightDistanceFalloffFunctionTable,
 //-----------------------------------------------------------------------------
 // Calculate the falloff from the world lights
 //-----------------------------------------------------------------------------
-float SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
-                                           const Vector& delta) {
+f32 SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
+                                                const Vector& delta) {
   // Ensure no invalid flags are set
   Assert(!(wl->m_Flags & ~(LIGHTTYPE_OPTIMIZATIONFLAGS_HAS_ATTENUATION0 |
                            LIGHTTYPE_OPTIMIZATIONFLAGS_HAS_ATTENUATION1 |
@@ -423,7 +422,7 @@ float SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
 
 #if defined(_WIN32) && !defined(_X360)
 fltx4 SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
-                                           const FourVectors& delta) {
+                                                  const FourVectors& delta) {
   // !!speed!!: lights could store m_Attenuation2,m_Attenuation1, and m_Range^2
   // copies in replicated SSE format.
 
@@ -467,7 +466,7 @@ int CStudioRender::R_LightGlintPosition(int index, const Vector& org,
   if (index >= m_pRC->m_NumLocalLights) return false;
 
   R_WorldLightDelta(&m_pRC->m_LocalLights[index], org, delta);
-  float falloff =
+  f32 falloff =
       R_WorldLightDistanceFalloff(&m_pRC->m_LocalLights[index], delta);
 
   VectorMultiply(m_pRC->m_LocalLights[index].m_Color, falloff, intensity);
@@ -517,9 +516,9 @@ void CStudioRenderContext::ComputeLighting(const Vector* pAmbient,
     return;
   }
 
-  if (lightCount > SOURCE_ARRAYSIZE(m_pLightPos)) {
+  if (lightCount > std::size(m_pLightPos)) {
     AssertMsg(0, "Light count out of range in ComputeLighting\n");
-    lightCount = SOURCE_ARRAYSIZE(m_pLightPos);
+    lightCount = std::size(m_pLightPos);
   }
 
   // Calculate color given lightpos_t lightpos, a normal, and the ambient
@@ -538,15 +537,15 @@ void CStudioRenderContext::ComputeLighting(const Vector* pAmbient,
 void CStudioRenderContext::ComputeLightingConstDirectional(
     const Vector* pAmbient, int lightCount, LightDesc_t* pLights,
     const Vector& pt, const Vector& normal, Vector& lighting,
-    float flDirectionalAmount) {
+    f32 flDirectionalAmount) {
   if (m_RC.m_Config.fullbright) {
     lighting.Init(1.0f, 1.0f, 1.0f);
     return;
   }
 
-  if (lightCount > SOURCE_ARRAYSIZE(m_pLightPos)) {
+  if (lightCount > std::size(m_pLightPos)) {
     AssertMsg(0, "Light count out of range in ComputeLighting\n");
-    lightCount = SOURCE_ARRAYSIZE(m_pLightPos);
+    lightCount = std::size(m_pLightPos);
   }
 
   // Calculate color given lightpos_t lightpos, a normal, and the ambient

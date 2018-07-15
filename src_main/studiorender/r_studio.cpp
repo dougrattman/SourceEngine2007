@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// r_studio.cpp: routines for setting up to draw 3DStudio models.
+// Routines for setting up to draw 3DStudio models.
 
 #include "studiorender.h"
 
@@ -12,12 +12,9 @@
 #include "tier0/include/vprof.h"
 #include "tier3/tier3.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
 // Figures out what kind of lighting we're gonna want
-//-----------------------------------------------------------------------------
 SOURCE_FORCEINLINE StudioModelLighting_t CStudioRender::R_StudioComputeLighting(
     IMaterial *pMaterial, int materialFlags, ColorMeshInfo_t *pColorMeshes) {
   // Here, we only do software lighting when the following conditions are met.
@@ -25,12 +22,11 @@ SOURCE_FORCEINLINE StudioModelLighting_t CStudioRender::R_StudioComputeLighting(
   // 2) We're drawing an eyeball
   // 3) We're drawing mouth-lit stuff
 
-  // TODO(d.rattman): When we move software lighting into the material system, only need
-  // to test if it's vertex lit
+  // TODO(d.rattman): When we move software lighting into the material system,
+  // only need to test if it's vertex lit
 
   Assert(pMaterial);
   bool doMouthLighting = materialFlags && (m_pStudioHdr->nummouths >= 1);
-
   bool doSoftwareLighting =
       doMouthLighting ||
       (pMaterial->IsVertexLit() && pMaterial->NeedsSoftwareLighting());
@@ -58,7 +54,7 @@ IMaterial *CStudioRender::R_StudioSetupSkinAndLighting(
     int materialFlags, void /*IClientRenderable*/ *pClientRenderable,
     ColorMeshInfo_t *pColorMeshes, StudioModelLighting_t &lighting) {
   VPROF("R_StudioSetupSkin");
-  IMaterial *pMaterial = NULL;
+  IMaterial *pMaterial = nullptr;
   bool bCheckForConVarDrawTranslucentSubModels = false;
   if (m_pRC->m_Config.bWireframe && !m_pRC->m_pForcedMaterial) {
     if (m_pRC->m_Config.bDrawZBufferedWireframe)
@@ -96,10 +92,10 @@ IMaterial *CStudioRender::R_StudioSetupSkinAndLighting(
               pOriginalMaterial->IsAlphaTested()) {
             pOriginalMaterialVar->SetMaterialValue(pOriginalMaterial);
           } else {
-            pOriginalMaterialVar->SetMaterialValue(NULL);
+            pOriginalMaterialVar->SetMaterialValue(nullptr);
           }
         } else {
-          pOriginalMaterialVar->SetMaterialValue(NULL);
+          pOriginalMaterialVar->SetMaterialValue(nullptr);
         }
       } else if (m_pRC->m_nForcedMaterialType == OVERRIDE_DEPTH_WRITE) {
         // Disable any alpha modulation on the original material that was left
@@ -109,7 +105,7 @@ IMaterial *CStudioRender::R_StudioSetupSkinAndLighting(
         // Bail if the material is still considered translucent after setting
         // the AlphaModulate to 1.0
         if (ppMaterials[index]->IsTranslucent()) {
-          return NULL;
+          return nullptr;
         }
 
         static unsigned int originalTextureVarCache = 0;
@@ -180,7 +176,7 @@ IMaterial *CStudioRender::R_StudioSetupSkinAndLighting(
 
   lighting = R_StudioComputeLighting(pMaterial, materialFlags, pColorMeshes);
   if (lighting == LIGHTING_MOUTH) {
-    if (!m_pRC->m_Config.bTeeth || !R_TeethAreVisible()) return NULL;
+    if (!m_pRC->m_Config.bTeeth || !R_TeethAreVisible()) return nullptr;
     // skin it and light it, but only if we need to.
     if (m_pRC->m_Config.m_bSupportsVertexAndPixelShaders) {
       R_MouthSetupVertexShader(pMaterial);
@@ -195,49 +191,34 @@ IMaterial *CStudioRender::R_StudioSetupSkinAndLighting(
     if ((m_bDrawTranslucentSubModels && !translucent) ||
         (!m_bDrawTranslucentSubModels && translucent)) {
       m_bSkippedMeshes = true;
-      return NULL;
+      return nullptr;
     }
   }
 
   return pMaterial;
 }
 
-//=============================================================================
-
-/*
-=================
-R_StudioSetupModel
-        based on the body part, figure out which mesh it should be using.
-inputs:
-outputs:
-        pstudiomesh
-        pmdl
-=================
-*/
+/* Based on the body part, figure out which mesh it should be using. */
 int R_StudioSetupModel(int bodypart, int entity_body,
                        mstudiomodel_t **ppSubModel,
                        const studiohdr_t *pStudioHdr) {
-  int index;
-  mstudiobodyparts_t *pbodypart;
-
   if (bodypart > pStudioHdr->numbodyparts) {
     ConDMsg("R_StudioSetupModel: no such bodypart %d\n", bodypart);
     bodypart = 0;
   }
 
-  pbodypart = pStudioHdr->pBodypart(bodypart);
+  mstudiobodyparts_t *pbodypart = pStudioHdr->pBodypart(bodypart);
 
-  index = entity_body / pbodypart->base;
+  int index = entity_body / pbodypart->base;
   index = index % pbodypart->nummodels;
 
   Assert(ppSubModel);
   *ppSubModel = pbodypart->pModel(index);
+
   return index;
 }
 
-//-----------------------------------------------------------------------------
 // Computes PoseToWorld from BoneToWorld
-//-----------------------------------------------------------------------------
 void ComputePoseToWorld(matrix3x4_t *pPoseToWorld, studiohdr_t *pStudioHdr,
                         int boneMask, const Vector &vecViewOrigin,
                         const matrix3x4_t *pBoneToWorld) {

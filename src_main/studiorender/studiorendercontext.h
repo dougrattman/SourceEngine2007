@@ -35,8 +35,8 @@ struct StudioRenderConfigInternal_t : public StudioRenderConfig_t {
 // All the data needed to render a studiomodel
 //-----------------------------------------------------------------------------
 struct FlexWeights_t {
-  float *m_pFlexWeights;
-  float *m_pFlexDelayedWeights;
+  f32 *m_pFlexWeights;
+  f32 *m_pFlexDelayedWeights;
 };
 
 struct StudioRenderContext_t {
@@ -49,8 +49,8 @@ struct StudioRenderContext_t {
   Vector4D m_LightBoxColors[6];
   LightDesc_t m_LocalLights[MAXLOCALLIGHTS];
   int m_NumLocalLights;
-  float m_ColorMod[3];
-  float m_AlphaMod;
+  f32 m_ColorMod[3];
+  f32 m_AlphaMod;
   IMaterial *m_pForcedMaterial;
   OverrideType_t m_nForcedMaterialType;
 };
@@ -104,16 +104,16 @@ class CStudioRenderContext : public CTier3AppSystem<IStudioRender> {
                             const Vector &viewUp,
                             const Vector &viewPlaneNormal);
   virtual int GetNumLODs(const studiohwdata_t &hardwareData) const;
-  virtual float GetLODSwitchValue(const studiohwdata_t &hardwareData,
+  virtual f32 GetLODSwitchValue(const studiohwdata_t &hardwareData,
                                   int lod) const;
   virtual void SetLODSwitchValue(studiohwdata_t &hardwareData, int lod,
-                                 float switchValue);
-  virtual void SetColorModulation(const float *pColor);
-  virtual void SetAlphaModulation(float alpha);
+                                 f32 switchValue);
+  virtual void SetColorModulation(const f32 *pColor);
+  virtual void SetAlphaModulation(f32 alpha);
   virtual void DrawModel(DrawModelResults_t *pResults,
                          const DrawModelInfo_t &info,
-                         matrix3x4_t *pCustomBoneToWorld, float *pFlexWeights,
-                         float *pFlexDelayedWeights, const Vector &origin,
+                         matrix3x4_t *pCustomBoneToWorld, f32 *pFlexWeights,
+                         f32 *pFlexDelayedWeights, const Vector &origin,
                          int flags = STUDIORENDER_DRAW_ENTIRE_MODEL);
   virtual void DrawModelStaticProp(const DrawModelInfo_t &info,
                                    const matrix3x4_t &modelToWorld,
@@ -131,7 +131,7 @@ class CStudioRenderContext : public CTier3AppSystem<IStudioRender> {
   virtual void AddDecal(StudioDecalHandle_t handle, studiohdr_t *pStudioHdr,
                         matrix3x4_t *pBoneToWorld, const Ray_t &ray,
                         const Vector &decalUp, IMaterial *pDecalMaterial,
-                        float radius, int body, bool noPokethru,
+                        f32 radius, int body, bool noPokethru,
                         int maxLODToDecal = ADDDECAL_TO_ALL_LODS);
   virtual void ComputeLighting(const Vector *pAmbient, int lightCount,
                                LightDesc_t *pLights, const Vector &pt,
@@ -139,17 +139,17 @@ class CStudioRenderContext : public CTier3AppSystem<IStudioRender> {
   virtual void ComputeLightingConstDirectional(
       const Vector *pAmbient, int lightCount, LightDesc_t *pLights,
       const Vector &pt, const Vector &normal, Vector &lighting,
-      float flDirectionalAmount);
+      f32 flDirectionalAmount);
   virtual void AddShadow(IMaterial *pMaterial, void *pProxyData,
                          FlashlightState_t *pFlashlightState,
                          VMatrix *pWorldToTexture,
                          ITexture *pFlashlightDepthTexture);
   virtual void ClearAllShadows();
   virtual int ComputeModelLod(studiohwdata_t *pHardwareData,
-                              float flUnitSphereSize, float *pMetric = NULL);
+                              f32 flUnitSphereSize, f32 *pMetric = nullptr);
   virtual void GetPerfStats(DrawModelResults_t *pResults,
                             const DrawModelInfo_t &info,
-                            CUtlBuffer *pSpewBuf = NULL) const;
+                            CUtlBuffer *pSpewBuf = nullptr) const;
   virtual void GetTriangles(const DrawModelInfo_t &info,
                             matrix3x4_t *pBoneToWorld,
                             GetTriangles_Output_t &out);
@@ -161,8 +161,8 @@ class CStudioRenderContext : public CTier3AppSystem<IStudioRender> {
                                              IMaterial **ppOutputMaterials);
   virtual matrix3x4_t *LockBoneMatrices(int nCount);
   virtual void UnlockBoneMatrices();
-  virtual void LockFlexWeights(int nWeightCount, float **ppFlexWeights,
-                               float **ppFlexDelayedWeights = NULL);
+  virtual void LockFlexWeights(int nWeightCount, f32 **ppFlexWeights,
+                               f32 **ppFlexDelayedWeights = nullptr);
   virtual void UnlockFlexWeights();
 
   // Other public methods
@@ -244,20 +244,20 @@ class CStudioRenderContext : public CTier3AppSystem<IStudioRender> {
 
   // This will generate random flex data that has a specified # of non-zero
   // values
-  void GenerateRandomFlexWeights(int nWeightCount, float *pWeights,
-                                 float *pDelayedWeights);
+  void GenerateRandomFlexWeights(int nWeightCount, f32 *pWeights,
+                                 f32 *pDelayedWeights);
 
   // Computes LOD
   int ComputeRenderLOD(IMatRenderContext *pRenderContext,
                        const DrawModelInfo_t &info, const Vector &origin,
-                       float *pMetric);
+                       f32 *pMetric);
 
   // Allocates matrices for use in queueing
   matrix3x4_t *CreateQueuedMatrices(int nMatrixCount,
                                     const matrix3x4_t *pBoneToWorld);
 
   // Allocates flex weights for use in queueing
-  float *CreateQueuedFlexWeights(int nWeightCount, float *pWeights);
+  f32 *CreateQueuedFlexWeights(int nWeightCount, f32 *pWeights);
 
   // Allocates shadow data for use in queueing
   void *CreateQueuedShadowData(int nSizeInBytes, void *pSrc);
@@ -273,7 +273,7 @@ class CStudioRenderContext : public CTier3AppSystem<IStudioRender> {
   bool IsInternallyAllocated(const matrix3x4_t *pBoneToWorld);
 
   // Did this flex weights come from our allocator?
-  bool IsInternallyAllocated(const float *pFlexWeights);
+  bool IsInternallyAllocated(const f32 *pFlexWeights);
 
  private:
   StudioRenderContext_t m_RC;
@@ -295,8 +295,8 @@ class CStudioRenderContext : public CTier3AppSystem<IStudioRender> {
 // Inline methods
 //-----------------------------------------------------------------------------
 inline int CStudioRenderContext::ComputeModelLod(studiohwdata_t *pHardwareData,
-                                                 float flUnitSphereSize,
-                                                 float *pMetric) {
+                                                 f32 flUnitSphereSize,
+                                                 f32 *pMetric) {
   return ComputeModelLODAndMetric(pHardwareData, flUnitSphereSize, pMetric);
 }
 

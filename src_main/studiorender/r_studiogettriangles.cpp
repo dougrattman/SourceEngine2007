@@ -5,7 +5,6 @@
 #include "optimize.h"
 #include "tier0/include/vprof.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 void CStudioRenderContext::GetTriangles(const DrawModelInfo_t &info,
@@ -51,7 +50,7 @@ void CStudioRenderContext::GetTriangles(const DrawModelInfo_t &info,
                      m_RC.m_ViewOrigin, pBoneToWorld);
 
   for (int i = 0; i < info.m_pStudioHdr->numbodyparts; i++) {
-    mstudiomodel_t *pModel = NULL;
+    mstudiomodel_t *pModel = nullptr;
     R_StudioSetupModel(i, info.m_Body, &pModel, info.m_pStudioHdr);
 
     // Iterate over all the meshes.... each mesh is a new material
@@ -66,7 +65,7 @@ void CStudioRenderContext::GetTriangles(const DrawModelInfo_t &info,
       }
       const mstudio_meshvertexdata_t *vertData =
           pMesh->GetVertexData(info.m_pStudioHdr);
-      Assert(vertData);  // This can only return NULL on X360 for now
+      Assert(vertData);  // This can only return nullptr on X360 for now
 
       // add the verts from this mesh to the materialBatch
       materialBatch.m_Verts.SetCount(pMesh->numvertices);
@@ -80,10 +79,11 @@ void CStudioRenderContext::GetTriangles(const DrawModelInfo_t &info,
         if (vertData->HasTangentData()) {
           vert.m_TangentS = *vertData->TangentS(vertID);
         }
-#if _DEBUG
+#ifndef NDEBUG
         else {
           // ensure any unintended access faults
-          vert.m_TangentS.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
+          vert.m_TangentS.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN,
+                               FLOAT32_NAN);
         }
 #endif
         vert.m_NumBones = vertData->BoneWeights(vertID)->numbones;
