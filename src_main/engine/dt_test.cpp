@@ -96,47 +96,48 @@ void SendProxy_DTTestServerSubString(const SendProp *pProp, const void *pStruct,
 }
 
 BEGIN_SEND_TABLE_NOBASE(CTestStruct, DT_TestStruct)
-SendPropInt(SENDINFO_NOCHECK(a)), SendPropInt(SENDINFO_NOCHECK(b)),
-    SendPropFloat(SENDINFO_NOCHECK(f)) END_SEND_TABLE()
+  SendPropInt(SENDINFO_NOCHECK(a)), SendPropInt(SENDINFO_NOCHECK(b)),
+      SendPropFloat(SENDINFO_NOCHECK(f))
+END_SEND_TABLE()
 
-        BEGIN_SEND_TABLE_NOBASE(DTTestServerSub, DT_DTTestSub)
-    // - Auto type conversions (receiving an array of floats into an array of
-    // ints).
-    SendPropArray(SendPropFloat(SENDINFO_NOCHECK(m_FloatArray[0]), 0,
-                                SPROP_NOSCALE),
-                  m_FloatArray),
+BEGIN_SEND_TABLE_NOBASE(DTTestServerSub, DT_DTTestSub)
+  // - Auto type conversions (receiving an array of floats into an array of
+  // ints).
+  SendPropArray(
+      SendPropFloat(SENDINFO_NOCHECK(m_FloatArray[0]), 0, SPROP_NOSCALE),
+      m_FloatArray),
 
-    SendPropUtlVectorDataTable(m_UtlVectorStruct, MAX_STRUCTARRAY_ELEMENTS,
-                               DT_TestStruct),
+      SendPropUtlVectorDataTable(m_UtlVectorStruct, MAX_STRUCTARRAY_ELEMENTS,
+                                 DT_TestStruct),
 
-    SendPropArray(SendPropString(SENDINFO_NOCHECK(m_Strings[0]), 0,
-                                 SendProxy_DTTestServerSubString),
-                  m_Strings),
+      SendPropArray(SendPropString(SENDINFO_NOCHECK(m_Strings[0]), 0,
+                                   SendProxy_DTTestServerSubString),
+                    m_Strings),
 
-    SendPropUtlVector(SENDINFO_UTLVECTOR(m_UtlVectorChar),
-                      MAX_CHARARRAY_ELEMENTS,
-                      SendPropInt(NULL, 0, sizeof(char), 0)),
+      SendPropUtlVector(SENDINFO_UTLVECTOR(m_UtlVectorChar),
+                        MAX_CHARARRAY_ELEMENTS,
+                        SendPropInt(NULL, 0, sizeof(char), 0)),
 
-    SendPropUtlVector(SENDINFO_UTLVECTOR(m_UtlVectorFloat),
-                      MAX_FLOATARRAY_ELEMENTS,  // max elements
-                      SendPropFloat(NULL, 0, 0, 0, SPROP_NOSCALE))
-        END_SEND_TABLE()
+      SendPropUtlVector(SENDINFO_UTLVECTOR(m_UtlVectorFloat),
+                        MAX_FLOATARRAY_ELEMENTS,  // max elements
+                        SendPropFloat(NULL, 0, 0, 0, SPROP_NOSCALE))
+END_SEND_TABLE()
 
-            BEGIN_SEND_TABLE_NOBASE(DTTestSub2Sub, DT_DTTestSub2Sub)
-                SendPropInt(SENDINFO_NOCHECK(m_Int2), 32),
-    END_SEND_TABLE()
+BEGIN_SEND_TABLE_NOBASE(DTTestSub2Sub, DT_DTTestSub2Sub)
+  SendPropInt(SENDINFO_NOCHECK(m_Int2), 32),
+END_SEND_TABLE()
 
-        BEGIN_SEND_TABLE_NOBASE(DTTestSub2, DT_DTTestSub2)
-            SendPropDataTable(SENDINFO_DT(m_Sub),
-                              &REFERENCE_SEND_TABLE(DT_DTTestSub2Sub)),
-    SendPropInt(SENDINFO_NOCHECK(m_Int), 32),
-    END_SEND_TABLE()
+BEGIN_SEND_TABLE_NOBASE(DTTestSub2, DT_DTTestSub2)
+  SendPropDataTable(SENDINFO_DT(m_Sub),
+                    &REFERENCE_SEND_TABLE(DT_DTTestSub2Sub)),
+      SendPropInt(SENDINFO_NOCHECK(m_Int), 32),
+END_SEND_TABLE()
 
-    // -------------------------------------------------------------------------------------------
-    // // DTTestServer and its DataTable.
-    // -------------------------------------------------------------------------------------------
-    // //
-    class DTTestServer {
+// -------------------------------------------------------------------------------------------
+// // DTTestServer and its DataTable.
+// -------------------------------------------------------------------------------------------
+// //
+class DTTestServer {
  public:
   DTTestServerSub m_Sub;
   DTTestSub2 m_Sub2;
@@ -200,46 +201,46 @@ int ArrayLengthSendProxy_VLALength(const void *pStruct, int objectID) {
 }
 
 BEGIN_SEND_TABLE_NOBASE(DTTestServer, DT_DTTest)
-SendPropVariableLengthArray(ArrayLengthSendProxy_VLALength,
-                            SendPropInt(SENDINFO_NOCHECK(m_VLA[0])), m_VLA),
+  SendPropVariableLengthArray(ArrayLengthSendProxy_VLALength,
+                              SendPropInt(SENDINFO_NOCHECK(m_VLA[0])), m_VLA),
 
-    // Test exclude props.
-    SendPropExclude("DT_DTTest", "m_Int"),
-    SendPropDataTable(SENDINFO_DT(m_Sub), &REFERENCE_SEND_TABLE(DT_DTTestSub),
-                      SendProxy_DTTestServerSub),
+      // Test exclude props.
+      SendPropExclude("DT_DTTest", "m_Int"),
+      SendPropDataTable(SENDINFO_DT(m_Sub), &REFERENCE_SEND_TABLE(DT_DTTestSub),
+                        SendProxy_DTTestServerSub),
 
-    SendPropFloat(SENDINFO_NOCHECK(m_Float), 32, SPROP_NOSCALE),
+      SendPropFloat(SENDINFO_NOCHECK(m_Float), 32, SPROP_NOSCALE),
 
-    SendPropDataTable(SENDINFO_DT(m_Sub2),
-                      &REFERENCE_SEND_TABLE(DT_DTTestSub2)),
+      SendPropDataTable(SENDINFO_DT(m_Sub2),
+                        &REFERENCE_SEND_TABLE(DT_DTTestSub2)),
 
-    SendPropInt(SENDINFO_NOCHECK(m_Int), 23, SPROP_UNSIGNED),
+      SendPropInt(SENDINFO_NOCHECK(m_Int), 23, SPROP_UNSIGNED),
 
-    SendPropExclude("DT_DTTestSub", "m_FloatArray"),
+      SendPropExclude("DT_DTTestSub", "m_FloatArray"),
 
-    SendPropString(SENDINFO_NOCHECK(m_String)),
+      SendPropString(SENDINFO_NOCHECK(m_String)),
 
-    SendPropArray(SendPropInt(SENDINFO_NOCHECK(m_CharArray[0]), 8),
-                  m_CharArray),
+      SendPropArray(SendPropInt(SENDINFO_NOCHECK(m_CharArray[0]), 8),
+                    m_CharArray),
 
-    SendPropArray(SendPropInt(SENDINFO_NOCHECK(m_IntArray[0]), 23,
-                              SPROP_UNSIGNED),
-                  m_IntArray),
+      SendPropArray(
+          SendPropInt(SENDINFO_NOCHECK(m_IntArray[0]), 23, SPROP_UNSIGNED),
+          m_IntArray),
 #if defined(SUPPORT_ARRAYS_OF_DATATABLES)
-    SendPropArray(SendPropDataTable(SENDINFO_DT(m_SubArray[0]),
-                                    &REFERENCE_SEND_TABLE(DT_DTTestSub),
-                                    SendProxy_DTTestServerSub),
-                  m_SubArray),
+      SendPropArray(SendPropDataTable(SENDINFO_DT(m_SubArray[0]),
+                                      &REFERENCE_SEND_TABLE(DT_DTTestSub),
+                                      SendProxy_DTTestServerSub),
+                    m_SubArray),
 #endif
 
-    SendPropVector(SENDINFO_NOCHECK(m_Vector), 32, SPROP_NOSCALE)
-        END_SEND_TABLE()
+      SendPropVector(SENDINFO_NOCHECK(m_Vector), 32, SPROP_NOSCALE)
+END_SEND_TABLE()
 
-    // -------------------------------------------------------------------------------------------
-    // // DTTestClientSub and its DataTable.
-    // -------------------------------------------------------------------------------------------
-    // //
-    class DTTestClientSub {
+// -------------------------------------------------------------------------------------------
+// // DTTestClientSub and its DataTable.
+// -------------------------------------------------------------------------------------------
+// //
+class DTTestClientSub {
  public:
   char m_Strings[2][64];
   float m_FloatArray[3];
@@ -256,9 +257,9 @@ void RecvProxy_DTTestClientSubString(const CRecvProxyData *pData, void *pStruct,
 
 BEGIN_RECV_TABLE_NOBASE(CTestStruct, DT_TestStruct)
 RecvPropInt(RECVINFO(a)), RecvPropInt(RECVINFO(b)), RecvPropFloat(RECVINFO(f)),
-    END_RECV_TABLE()
+END_RECV_TABLE()
 
-        BEGIN_RECV_TABLE_NOBASE(DTTestClientSub, DT_DTTestSub)
+    BEGIN_RECV_TABLE_NOBASE(DTTestClientSub, DT_DTTestSub)
     // - Auto type conversions (receiving an array of floats into an array of
     // ints).
     RecvPropArray(RecvPropFloat(RECVINFO(m_FloatArray[0])), m_FloatArray),
@@ -275,17 +276,17 @@ RecvPropInt(RECVINFO(a)), RecvPropInt(RECVINFO(b)), RecvPropFloat(RECVINFO(f)),
     RecvPropArray(RecvPropString(RECVINFO(m_Strings[0]), 0,
                                  RecvProxy_DTTestClientSubString),
                   m_Strings),
-    END_RECV_TABLE()
+END_RECV_TABLE()
 
-        BEGIN_RECV_TABLE_NOBASE(DTTestSub2Sub, DT_DTTestSub2Sub)
-            RecvPropInt(RECVINFO(m_Int2), 32),
-    END_RECV_TABLE()
+    BEGIN_RECV_TABLE_NOBASE(DTTestSub2Sub, DT_DTTestSub2Sub)
+        RecvPropInt(RECVINFO(m_Int2), 32),
+END_RECV_TABLE()
 
-        BEGIN_RECV_TABLE_NOBASE(DTTestSub2, DT_DTTestSub2)
-            RecvPropDataTable(RECVINFO_DT(m_Sub), 0,
-                              &REFERENCE_RECV_TABLE(DT_DTTestSub2Sub)),
+    BEGIN_RECV_TABLE_NOBASE(DTTestSub2, DT_DTTestSub2)
+        RecvPropDataTable(RECVINFO_DT(m_Sub), 0,
+                          &REFERENCE_RECV_TABLE(DT_DTTestSub2Sub)),
     RecvPropInt(RECVINFO(m_Int)),
-    END_RECV_TABLE()
+END_RECV_TABLE()
 
     // -------------------------------------------------------------------------------------------
     // // DTTestClient and DataTable.
@@ -366,7 +367,7 @@ RecvPropArray(RecvPropDataTable(RECVINFO_DT(m_SubArray[0]), 0,
 
     RecvPropVariableLengthArray(RecvProxyArrayLength_VLA,
                                 RecvPropInt(RECVINFO(m_VLA[0])), m_VLA)
-        END_RECV_TABLE()
+END_RECV_TABLE()
 
     // -------------------------------------------------------------------------------------------
     // // Functions that act on the data.
@@ -656,10 +657,10 @@ void RandomlyChangeUtlVectorFloat(DTTestServer *pServer) {
     pServer->m_Sub.m_UtlVectorFloat[i] = rand() / 0.93;
 }
 
-typedef struct {
+struct VarTestInfo {
   CompareElementFn m_CompareFn;
   RandomlyChangeElementFn m_ChangeFn;
-} VarTestInfo;
+};
 
 VarTestInfo g_VarTestInfos[] = {
     {CompareVLA, RandomlyChangeVLA},

@@ -29,6 +29,7 @@
 #include "view.h"
 #include "vmodes.h"
 #include "vtf/vtf.h"
+#include "initmathlib.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -48,14 +49,12 @@ R_TimeRefresh_f
 For program optimization
 ====================
 */
-void R_TimeRefresh_f(void) {
-  int i;
-  float start, stop, time;
+void R_TimeRefresh_f() {
   CViewSetup view;
 
   materials->Flush(true);
 
-  Q_memset(&view, 0, sizeof(view));
+  memset(&view, 0, sizeof(view));
   view.origin = MainViewOrigin();
   view.angles[0] = 0;
   view.angles[1] = 0;
@@ -75,8 +74,8 @@ void R_TimeRefresh_f(void) {
   int savedeveloper = developer.GetInt();
   developer.SetValue(0);
 
-  start = Plat_FloatTime();
-  for (i = 0; i < 128; i++) {
+  float start = Plat_FloatTime();
+  for (int i = 0; i < 128; i++) {
     view.angles[1] = i / 128.0 * 360.0;
     g_ClientDLL->RenderView(view, VIEW_CLEAR_COLOR,
                             RENDERVIEW_DRAWVIEWMODEL | RENDERVIEW_DRAWHUD);
@@ -85,8 +84,8 @@ void R_TimeRefresh_f(void) {
 
   materials->Flush(true);
   Shader_SwapBuffers();
-  stop = Plat_FloatTime();
-  time = stop - start;
+  float stop = Plat_FloatTime();
+  float time = stop - start;
 
   developer.SetValue(savedeveloper);
 
@@ -98,28 +97,17 @@ ConCommand timerefresh("timerefresh", R_TimeRefresh_f, "Profile the renderer.",
 ConCommand linefile("linefile", Linefile_Read_f,
                     "Parses map leak data from .lin file", FCVAR_CHEAT);
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void R_Init(void) {
+void R_Init() {
   extern uint8_t *hunk_base;
-
-  extern void InitMathlib(void);
 
   InitMathlib();
 
   UpdateMaterialSystemConfig();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void R_Shutdown(void) {}
+void R_Shutdown() {}
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void R_ResetLightStyles(void) {
+void R_ResetLightStyles() {
   for (int i = 0; i < 256; i++) {
     // normal light value
     if (d_lightstylevalue[i] != 264) {
@@ -131,9 +119,6 @@ void R_ResetLightStyles(void) {
 
 void R_RemoveAllDecalsFromAllModels();
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND_F(r_cleardecals, "Usage r_cleardecals <permanent>.",
               FCVAR_CLIENTCMD_CAN_EXECUTE) {
   if (host_state.worldmodel) {
@@ -150,9 +135,7 @@ CON_COMMAND_F(r_cleardecals, "Usage r_cleardecals <permanent>.",
   R_RemoveAllDecalsFromAllModels();
 }
 
-//-----------------------------------------------------------------------------
 // Loads world geometry. Called when map changes or dx level changes
-//-----------------------------------------------------------------------------
 void R_LoadWorldGeometry(bool bDXChange) {
   // Recreate the sortinfo arrays ( ack, uses new/delete right now ) because
   // doing it with Hunk_AllocName will leak through every connect that doesn't
@@ -204,12 +187,7 @@ void R_LoadWorldGeometry(bool bDXChange) {
   }
 }
 
-/*
-===============
-R_LevelInit
-===============
-*/
-void R_LevelInit(void) {
+void R_LevelInit() {
   ConDMsg("Initializing renderer...\n");
 
   Plat_TimestampedLog("Engine::R_LevelInit start.");

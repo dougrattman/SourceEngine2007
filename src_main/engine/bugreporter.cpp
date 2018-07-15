@@ -2432,7 +2432,7 @@ void CEngineBugReporter::InstallBugReportingUI(
     default:
     case IEngineBugReporter::BR_AUTOSELECT: {
       // check
-      bIsPublic = phonehome->IsExternalBuild();
+      bIsPublic = ::IsExternalBuild();
       if (bCanUseInternal) {
         // if command line param specifies internal, use that
         if (CommandLine()->FindParm("-internalbuild")) {

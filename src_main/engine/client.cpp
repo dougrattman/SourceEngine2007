@@ -250,8 +250,6 @@ bool CClientState::SetSignonState(int state, int count) {
           "end.",
           state, mapname);
 
-      phonehome->Message(PhoneHomeMessage::MapStart, mapname);
-
       audiosourcecache->LevelInit(mapname);
 
       // stop recording demo header

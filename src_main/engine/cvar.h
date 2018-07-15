@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#if !defined(CVAR_H)
-#define CVAR_H
+#ifndef SOURCE_ENGINE_CVAR_H_
+#define SOURCE_ENGINE_CVAR_H_
 
 class ConVar;
 class ConCommandBase;
@@ -46,4 +46,4 @@ class CCvarUtilities {
 
 extern CCvarUtilities *cv;
 
-#endif  // CVAR_H
+#endif  // SOURCE_ENGINE_CVAR_H_

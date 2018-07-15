@@ -492,7 +492,6 @@ void CL_ClearState() {
       ch mapname[256];
       CL_SetupMapName(modelloader->GetName(host_state.worldmodel), mapname,
                       sizeof(mapname));
-      phonehome->Message(PhoneHomeMessage::MapEnd, mapname);
     }
     audiosourcecache->LevelShutdown();
     g_ClientDLL->LevelShutdown();

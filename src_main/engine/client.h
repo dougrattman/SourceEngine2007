@@ -37,10 +37,10 @@ struct AddAngle {
 //   The client_state_t structure is wiped completely at every server signon
 //-----------------------------------------------------------------------------
 class CClientState : public CBaseClientState, public CClientFrameManager {
-  typedef struct CustomFile_s {
+  struct CustomFile_t {
     CRC32_t crc;         // file CRC
     unsigned int reqID;  // download request ID
-  } CustomFile_t;
+  };
 
  public:
   CClientState();

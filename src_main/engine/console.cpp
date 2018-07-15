@@ -144,12 +144,12 @@ class CConPanel : public CBasePanel {
 
   float da_default_color[3];
 
-  typedef struct {
+  struct da_notify_t {
     wchar_t szNotify[MAX_NOTIFY_TEXT_LINE];
     float expire;
     float color[3];
     bool fixed_width_font;
-  } da_notify_t;
+  };
 
   da_notify_t da_notify[MAX_DBG_NOTIFY];
   bool m_bDrawDebugAreas;
@@ -672,7 +672,7 @@ int CConPanel::DrawText(vgui::HFont font, int x, int y, wchar_t *fmt, ...) {
   int len;
 
   va_start(argptr, fmt);
-  len = swprintf_s(data, fmt, argptr);
+  swprintf_s(data, fmt, argptr);
   va_end(argptr);
 
   len = DrawColoredText(font, x, y, 255, 255, 255, 255, data);

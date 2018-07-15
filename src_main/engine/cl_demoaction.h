@@ -14,7 +14,7 @@ class CDemoEditorPanel;
 // Purpose: Types of demo actions we can take
 // Actions all have a name and can have a start time/frame to auto start or can
 //  be fired in response to other events
-typedef enum {
+enum DEMOACTION {
   DEMO_ACTION_UNKNOWN = 0,        // error
   DEMO_ACTION_SKIPAHEAD,          // SKip ahead in demo to time/frame
   DEMO_ACTION_STOPPLAYBACK,       // Terminate playback
@@ -44,18 +44,18 @@ typedef enum {
 
   // Must be last
   NUM_DEMO_ACTIONS,
-} DEMOACTION;
+};
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-typedef enum {
+enum DEMOACTIONTIMINGTYPE {
   ACTION_USES_NEITHER = 0,
   ACTION_USES_TICK,
   ACTION_USES_TIME,
 
   NUM_TIMING_TYPES,
-} DEMOACTIONTIMINGTYPE;
+};
 
 //-----------------------------------------------------------------------------
 // Purpose:

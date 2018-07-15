@@ -25,15 +25,15 @@ class CEngineSoundServer : public IEngineSound {
   CEngineSoundServer();
   virtual ~CEngineSoundServer();
 
-  virtual bool PrecacheSound(const char *pSample, bool bPreload,
+  virtual bool PrecacheSound(const ch *pSample, bool bPreload,
                              bool bIsUISound);
-  virtual bool IsSoundPrecached(const char *pSample);
-  virtual void PrefetchSound(const char *pSample);
+  virtual bool IsSoundPrecached(const ch *pSample);
+  virtual void PrefetchSound(const ch *pSample);
 
-  virtual float GetSoundDuration(const char *pSample);
+  virtual float GetSoundDuration(const ch *pSample);
 
   virtual void EmitSound(IRecipientFilter &filter, int iEntIndex, int iChannel,
-                         const char *pSample, float flVolume,
+                         const ch *pSample, float flVolume,
                          float flAttenuation, int iFlags, int iPitch,
                          const Vector *pOrigin, const Vector *pDirection,
                          CUtlVector<Vector> *pUtlVecOrigins,
@@ -41,7 +41,7 @@ class CEngineSoundServer : public IEngineSound {
                          int speakerentity = -1);
 
   virtual void EmitSound(IRecipientFilter &filter, int iEntIndex, int iChannel,
-                         const char *pSample, float flVolume,
+                         const ch *pSample, float flVolume,
                          soundlevel_t iSoundLevel, int iFlags, int iPitch,
                          const Vector *pOrigin, const Vector *pDirection,
                          CUtlVector<Vector> *pUtlVecOrigins,
@@ -55,7 +55,7 @@ class CEngineSoundServer : public IEngineSound {
       CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
       float soundtime = 0.0f, int speakerentity = -1);
 
-  virtual void StopSound(int iEntIndex, int iChannel, const char *pSample);
+  virtual void StopSound(int iEntIndex, int iChannel, const ch *pSample);
 
   virtual void StopAllSounds(bool bClearBuffers);
 
@@ -66,7 +66,7 @@ class CEngineSoundServer : public IEngineSound {
 
   // emit an "ambient" sound that isn't spatialized - specify left/right volume
   // only available on the client, assert on server
-  virtual void EmitAmbientSound(const char *pSample, float flVolume, int iPitch,
+  virtual void EmitAmbientSound(const ch *pSample, float flVolume, int iPitch,
                                 int flags, float soundtime = 0.0f);
 
   virtual float GetDistGainFromSoundLevel(soundlevel_t soundlevel, float dist);
@@ -96,7 +96,7 @@ class CEngineSoundServer : public IEngineSound {
     Warning("Can't call SetVolumeByGuid from server\n");
     return;
   }
-  virtual void PrecacheSentenceGroup(const char *pGroupName) {
+  virtual void PrecacheSentenceGroup(const ch *pGroupName) {
     VOX_PrecacheSentenceGroup(this, pGroupName);
   }
   virtual void NotifyBeginMoviePlayback() { AssertMsg(0, "Not supported"); }
@@ -105,7 +105,7 @@ class CEngineSoundServer : public IEngineSound {
 
  private:
   void EmitSoundInternal(IRecipientFilter &filter, int iEntIndex, int iChannel,
-                         const char *pSample, float flVolume,
+                         const ch *pSample, float flVolume,
                          soundlevel_t iSoundLevel, int iFlags, int iPitch,
                          const Vector *pOrigin, const Vector *pDirection,
                          CUtlVector<Vector> *pUtlVecOrigins,
@@ -126,7 +126,7 @@ CEngineSoundServer::CEngineSoundServer() {}
 CEngineSoundServer::~CEngineSoundServer() {}
 
 // Precache a particular sample
-bool CEngineSoundServer::PrecacheSound(const char *pSample, bool bPreload,
+bool CEngineSoundServer::PrecacheSound(const ch *pSample, bool bPreload,
                                        bool bIsUISound) {
   int i;
 
@@ -147,7 +147,7 @@ bool CEngineSoundServer::PrecacheSound(const char *pSample, bool bPreload,
   return false;
 }
 
-bool CEngineSoundServer::IsSoundPrecached(const char *pSample) {
+bool CEngineSoundServer::IsSoundPrecached(const ch *pSample) {
   if (pSample && TestSoundChar(pSample, CHAR_SENTENCE)) {
     return true;
   }
@@ -160,7 +160,7 @@ bool CEngineSoundServer::IsSoundPrecached(const char *pSample) {
   return true;
 }
 
-void CEngineSoundServer::PrefetchSound(const char *pSample) {
+void CEngineSoundServer::PrefetchSound(const ch *pSample) {
   if (pSample && TestSoundChar(pSample, CHAR_SENTENCE)) {
     return;
   }
@@ -180,7 +180,7 @@ void CEngineSoundServer::PrefetchSound(const char *pSample) {
 
 // Stops a sound
 void CEngineSoundServer::EmitSoundInternal(
-    IRecipientFilter &filter, int iEntIndex, int iChannel, const char *pSample,
+    IRecipientFilter &filter, int iEntIndex, int iChannel, const ch *pSample,
     float flVolume, soundlevel_t iSoundLevel, int iFlags, int iPitch,
     const Vector *pOrigin, const Vector *pDirection,
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
@@ -219,7 +219,7 @@ void CEngineSoundServer::EmitSentenceByIndex(
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
     float soundtime /*= 0.0f*/, int speakerentity /*= -1*/) {
   if (iSentenceIndex >= 0) {
-    char pName[8];
+    ch pName[8];
     Q_snprintf(pName, sizeof(pName), "!%d", iSentenceIndex);
     EmitSoundInternal(filter, iEntIndex, iChannel, pName, flVolume, iSoundLevel,
                       iFlags, iPitch, pOrigin, pDirection, pUtlVecOrigins,
@@ -229,7 +229,7 @@ void CEngineSoundServer::EmitSentenceByIndex(
 
 // Emits a sound
 void CEngineSoundServer::EmitSound(
-    IRecipientFilter &filter, int iEntIndex, int iChannel, const char *pSample,
+    IRecipientFilter &filter, int iEntIndex, int iChannel, const ch *pSample,
     float flVolume, float flAttenuation, int iFlags, int iPitch,
     const Vector *pOrigin, const Vector *pDirection,
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
@@ -241,7 +241,7 @@ void CEngineSoundServer::EmitSound(
 }
 
 void CEngineSoundServer::EmitSound(
-    IRecipientFilter &filter, int iEntIndex, int iChannel, const char *pSample,
+    IRecipientFilter &filter, int iEntIndex, int iChannel, const ch *pSample,
     float flVolume, soundlevel_t iSoundLevel, int iFlags, int iPitch,
     const Vector *pOrigin, const Vector *pDirection,
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
@@ -313,7 +313,7 @@ void CEngineSoundServer::StopAllSounds(bool bClearBuffers) {
   AssertMsg(0, "Not supported");
 }
 
-void CEngineSoundServer::EmitAmbientSound(const char *pSample, float flVolume,
+void CEngineSoundServer::EmitAmbientSound(const ch *pSample, float flVolume,
                                           int iPitch, int flags,
                                           float soundtime /*= 0.0f*/) {
   AssertMsg(0, "Not supported");
@@ -321,7 +321,7 @@ void CEngineSoundServer::EmitAmbientSound(const char *pSample, float flVolume,
 
 // Stops a sound
 void CEngineSoundServer::StopSound(int iEntIndex, int iChannel,
-                                   const char *pSample) {
+                                   const ch *pSample) {
   CEngineRecipientFilter filter;
   filter.AddAllPlayers();
   filter.MakeReliable();
@@ -330,7 +330,7 @@ void CEngineSoundServer::StopSound(int iEntIndex, int iChannel,
             PITCH_NORM, NULL, NULL, NULL, true);
 }
 
-float SV_GetSoundDuration(const char *pSample) {
+float SV_GetSoundDuration(const ch *pSample) {
 #ifdef SWDS
   return 0;  // TODO: make this return a real value (i.e implement an OS
              // independent version of the sound code)
@@ -339,7 +339,7 @@ float SV_GetSoundDuration(const char *pSample) {
 #endif
 }
 
-float CEngineSoundServer::GetSoundDuration(const char *pSample) {
+float CEngineSoundServer::GetSoundDuration(const ch *pSample) {
   return Host_GetSoundDuration(pSample);
 }
 

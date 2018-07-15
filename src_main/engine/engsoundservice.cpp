@@ -43,7 +43,7 @@ class CEngineSoundServices : public ISoundServices {
  public:
   CEngineSoundServices() { m_frameTime = 0; }
 
-  virtual void *LevelAlloc(int nBytes, const char *pszTag) {
+  virtual void *LevelAlloc(int nBytes, const ch *pszTag) {
     return Hunk_AllocName(nBytes, pszTag);
   }
 
@@ -118,19 +118,19 @@ class CEngineSoundServices : public ISoundServices {
 
   // Calls into client .dll with list of close caption tokens to construct a
   // caption out of
-  virtual void EmitSentenceCloseCaption(char const *tokenstream) {
+  virtual void EmitSentenceCloseCaption(ch const *tokenstream) {
     if (g_ClientDLL) {
       g_ClientDLL->EmitSentenceCloseCaption(tokenstream);
     }
   }
 
-  virtual void EmitCloseCaption(char const *captionname, float duration) {
+  virtual void EmitCloseCaption(ch const *captionname, float duration) {
     if (g_ClientDLL) {
       g_ClientDLL->EmitCloseCaption(captionname, duration);
     }
   }
 
-  virtual char const *GetGameDir() { return com_gamedir; }
+  virtual ch const *GetGameDir() { return com_gamedir; }
 
   // If the game is paused, certain audio will pause, too (anything with
   // phoneme/sentence data for now)
@@ -155,17 +155,17 @@ class CEngineSoundServices : public ISoundServices {
       // Read in and parse mapcycle.txt
       int length = g_pFileSystem->Size(resfilehandle);
       if (length > 0) {
-        char *pStart = (char *)new char[length + 1];
+        ch *pStart = (ch *)new ch[length + 1];
         if (pStart &&
             (length == g_pFileSystem->Read(pStart, length, resfilehandle))) {
           pStart[length] = 0;
-          const char *pFileList = pStart;
+          const ch *pFileList = pStart;
 
           while (1) {
             pFileList = COM_Parse(pFileList);
             if (strlen(com_token) <= 0) break;
 
-            char manifest_file[512];
+            ch manifest_file[512];
             Q_snprintf(manifest_file, sizeof(manifest_file), "%s/%s.manifest",
                        AUDIOSOURCE_CACHE_ROOTDIR, com_token);
 
@@ -193,14 +193,14 @@ class CEngineSoundServices : public ISoundServices {
   }
 
   virtual void GetAllSoundFilesInManifest(
-      CUtlRBTree<FileNameHandle_t, int> &list, char const *manifestfile) {
+      CUtlRBTree<FileNameHandle_t, int> &list, ch const *manifestfile) {
     list.RemoveAll();
     CacheSoundsFromResFile(true, list, manifestfile, false);
   }
 
   virtual void GetAllSoundFilesReferencedInReslists(
       CUtlRBTree<FileNameHandle_t, int> &list) {
-    char reslistdir[SOURCE_MAX_PATH];
+    ch reslistdir[SOURCE_MAX_PATH];
     Q_strncpy(reslistdir, MapReslistGenerator().GetResListDirectory(),
               sizeof(reslistdir));
     list.RemoveAll();
@@ -211,14 +211,14 @@ class CEngineSoundServices : public ISoundServices {
       // Read in and parse mapcycle.txt
       int length = g_pFileSystem->Size(resfilehandle);
       if (length > 0) {
-        char *pStart = (char *)new char[length + 1];
+        ch *pStart = (ch *)new ch[length + 1];
         if (pStart &&
             (length == g_pFileSystem->Read(pStart, length, resfilehandle))) {
           pStart[length] = 0;
-          const char *pFileList = pStart;
+          const ch *pFileList = pStart;
 
           while (1) {
-            char resfile[512];
+            ch resfile[512];
 
             pFileList = COM_Parse(pFileList);
             if (strlen(com_token) <= 0) break;
@@ -258,7 +258,7 @@ class CEngineSoundServices : public ISoundServices {
   }
 
   virtual void CacheBuildingUpdateProgress(float percent,
-                                           char const *cachefile) {
+                                           ch const *cachefile) {
     const wchar_t *format =
         g_pVGuiLocalize->Find("Valve_CreatingSpecificSoundCache");
     if (format) {
@@ -287,7 +287,7 @@ class CEngineSoundServices : public ISoundServices {
     return table->GetNumStrings();
   }
 
-  virtual char const *GetPrecachedSound(int index) {
+  virtual ch const *GetPrecachedSound(int index) {
     Assert(sv.IsActive());
 
     INetworkStringTable *table = sv.GetSoundPrecacheTable();
@@ -300,7 +300,7 @@ class CEngineSoundServices : public ISoundServices {
     return EngineVGui()->IsGameUIVisible() || IsGamePaused();
   }
 
-  virtual char const *GetUILanguage() {
+  virtual ch const *GetUILanguage() {
     extern ConVar cl_language;
     return cl_language.GetString();
   }
@@ -310,7 +310,7 @@ class CEngineSoundServices : public ISoundServices {
 
   void CacheSoundsFromResFile(bool quiet,
                               CUtlRBTree<FileNameHandle_t, int> &list,
-                              char const *resfile,
+                              ch const *resfile,
                               bool checkandcleanname = true) {
     if (!g_pFileSystem->FileExists(resfile, "MOD")) {
       Warning("CacheSoundsFromResFile:  Unable to find '%s'\n", resfile);
@@ -324,11 +324,11 @@ class CEngineSoundServices : public ISoundServices {
       // Read in and parse mapcycle.txt
       int length = g_pFileSystem->Size(resfilehandle);
       if (length > 0) {
-        char *pStart = (char *)new char[length + 1];
+        ch *pStart = (ch *)new ch[length + 1];
         if (pStart &&
             (length == g_pFileSystem->Read(pStart, length, resfilehandle))) {
           pStart[length] = 0;
-          const char *pFileList = pStart;
+          const ch *pFileList = pStart;
 
           while (1) {
             pFileList = COM_Parse(pFileList);
@@ -340,7 +340,7 @@ class CEngineSoundServices : public ISoundServices {
                 // skip past the game/mod directory
                 // "hl2/sound/player/footstep.wav"
                 Q_FixSlashes(com_token);  // "hl2\sound\player\footstep.wav"
-                const char *pName = com_token;
+                const ch *pName = com_token;
                 while (pName[0] && pName[0] != CORRECT_PATH_SEPARATOR) {
                   pName++;
                 }  // "\sound\player\footstep.wav"
@@ -373,7 +373,7 @@ class CEngineSoundServices : public ISoundServices {
   }
 
   virtual void OnSoundStarted(int guid, StartSoundParams_t &params,
-                              char const *soundname) {
+                              ch const *soundname) {
     VPROF("OnSoundStarted");
 
     if (!toolframework->IsToolRecording() || params.suppressrecording) return;
@@ -406,7 +406,7 @@ class CEngineSoundServices : public ISoundServices {
   }
 
   virtual void OnSoundStopped(int guid, int soundsource, int channel,
-                              char const *soundname) {
+                              ch const *soundname) {
     // NOTE: At the moment, if we don't receive a StartSound message but we do
     // receive a StopSound message, the StopSound message is ignored. In a
     // perfect world, if the StartSound message was not sent, a StopSound

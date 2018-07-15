@@ -393,9 +393,6 @@
     <ClCompile Include="sys_getmodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sys_mainwind.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="testscriptmgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -824,6 +821,9 @@
     </ClCompile>
     <ClCompile Include="audio\private\snd_dev_xaudio.cpp">
       <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="sys_mainwind.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

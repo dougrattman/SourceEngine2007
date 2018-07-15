@@ -13,9 +13,9 @@
 
 CHLTVTestSystem *hltvtest = NULL;
 
-CHLTVTestSystem::CHLTVTestSystem(void) {}
+CHLTVTestSystem::CHLTVTestSystem() {}
 
-CHLTVTestSystem::~CHLTVTestSystem(void) { StopsTest(); }
+CHLTVTestSystem::~CHLTVTestSystem() { StopsTest(); }
 
 void CHLTVTestSystem::RunFrame() {
   FOR_EACH_VEC(m_Servers, iServer) { m_Servers[iServer]->RunFrame(); }

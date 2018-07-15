@@ -59,7 +59,7 @@ CHLTVClient::CHLTVClient(int slot, CBaseServer *pServer) {
 
 CHLTVClient::~CHLTVClient() {}
 
-bool CHLTVClient::SendSignonData(void) {
+bool CHLTVClient::SendSignonData() {
   // check class table CRCs
   if (m_nSendtableCRC != SendTable_GetCRC()) {
     Disconnect("Server uses different class tables");
@@ -220,7 +220,7 @@ bool CHLTVClient::ExecuteStringCommand(const char *pCommandString) {
   return true;
 }
 
-bool CHLTVClient::ShouldSendMessages(void) {
+bool CHLTVClient::ShouldSendMessages() {
   if (!IsActive()) {
     // during signon behave like normal client
     return CBaseClient::ShouldSendMessages();
@@ -254,7 +254,7 @@ bool CHLTVClient::ShouldSendMessages(void) {
   return bSendMessage;
 }
 
-void CHLTVClient::SpawnPlayer(void) {
+void CHLTVClient::SpawnPlayer() {
   // set view entity
 
   SVC_SetView setView(m_pHLTV->m_nViewEntity);

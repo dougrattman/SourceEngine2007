@@ -1,8 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#if !defined(HOST_SAVERESTORE_H)
-#define HOST_SAVERESTORE_H
+#ifndef HOST_SAVERESTORE_H_
+#define HOST_SAVERESTORE_H_
 
+#include "base/include/base_types.h"
 #include "tier1/KeyValues.h"
 #include "tier1/interface.h"
 
@@ -10,34 +11,39 @@ class CSaveRestoreData;
 
 the_interface ISaveRestore {
  public:
-  virtual void Init(void) = 0;
-  virtual void Shutdown(void) = 0;
+  virtual void Init() = 0;
+  virtual void Shutdown() = 0;
+
   virtual void OnFrameRendered() = 0;
-  virtual bool SaveFileExists(const char *pName) = 0;
-  virtual bool LoadGame(const char *pName) = 0;
-  virtual char *GetSaveDir(void) = 0;
-  virtual void ClearSaveDir(void) = 0;
-  virtual void RequestClearSaveDir(void) = 0;
-  virtual int LoadGameState(char const *level, bool createPlayers) = 0;
-  virtual void LoadAdjacentEnts(const char *pOldLevel,
-                                const char *pLandmarkName) = 0;
-  virtual const char *FindRecentSave(char *pNameBuf, int nameBufLen) = 0;
+  virtual bool SaveFileExists(const ch *pName) = 0;
+  virtual bool LoadGame(const ch *pName) = 0;
+
+  virtual ch *GetSaveDir() = 0;
+  virtual void ClearSaveDir() = 0;
+  virtual void RequestClearSaveDir() = 0;
+
+  virtual int LoadGameState(ch const *level, bool createPlayers) = 0;
+  virtual void LoadAdjacentEnts(const ch *pOldLevel,
+                                const ch *pLandmarkName) = 0;
+
+  virtual const ch *FindRecentSave(ch * pNameBuf, int nameBufLen) = 0;
   virtual void ForgetRecentSave() = 0;
+
   virtual int SaveGameSlot(
-      const char *pSaveName, const char *pSaveComment,
-      bool onlyThisLevel = false, bool bSetMostRecent = true,
-      const char *pszDestMap = NULL, const char *pszLandmark = NULL) = 0;
-  virtual bool SaveGameState(bool bTransition, CSaveRestoreData ** = NULL,
+      const ch *pSaveName, const ch *pSaveComment, bool onlyThisLevel = false,
+      bool bSetMostRecent = true, const ch *pszDestMap = nullptr,
+      const ch *pszLandmark = nullptr) = 0;
+  virtual bool SaveGameState(bool bTransition, CSaveRestoreData ** = nullptr,
                              bool bOpenContainer = true,
                              bool bIsAutosaveOrDangerous = false) = 0;
-  virtual int IsValidSave(void) = 0;
+  virtual int IsValidSave() = 0;
   virtual void Finish(CSaveRestoreData * save) = 0;
 
-  virtual void RestoreClientState(char const *fileName, bool adjacent) = 0;
-  virtual void RestoreAdjacenClientState(char const *map) = 0;
-  virtual int GetMostRecentElapsedMinutes(void) = 0;
-  virtual int GetMostRecentElapsedSeconds(void) = 0;
-  virtual int GetMostRecentElapsedTimeSet(void) = 0;
+  virtual void RestoreClientState(ch const *fileName, bool adjacent) = 0;
+  virtual void RestoreAdjacenClientState(ch const *map) = 0;
+  virtual int GetMostRecentElapsedMinutes() = 0;
+  virtual int GetMostRecentElapsedSeconds() = 0;
+  virtual int GetMostRecentElapsedTimeSet() = 0;
   virtual void SetMostRecentElapsedMinutes(const int min) = 0;
   virtual void SetMostRecentElapsedSeconds(const int sec) = 0;
 
@@ -47,15 +53,11 @@ the_interface ISaveRestore {
 
   virtual void AutoSaveDangerousIsSafe() = 0;
 
-  virtual char const *GetMostRecentlyLoadedFileName() = 0;
-  virtual char const *GetSaveFileName() = 0;
-
-  virtual bool IsXSave(void) = 0;
-  virtual void SetIsXSave(bool bState) = 0;
+  virtual ch const *GetMostRecentlyLoadedFileName() = 0;
+  virtual ch const *GetSaveFileName() = 0;
 
   virtual void FinishAsyncSave() = 0;
-  virtual bool StorageDeviceValid() = 0;
-  virtual void SetMostRecentSaveGame(const char *lpszFilename) = 0;
+  virtual void SetMostRecentSaveGame(const ch *lpszFilename) = 0;
 
   virtual bool IsSaveInProgress() = 0;
 };
@@ -65,4 +67,4 @@ void SaveFreeMemory(void *pSaveMem);
 
 extern ISaveRestore *saverestore;
 
-#endif  // HOST_SAVERESTORE_H
+#endif  // HOST_SAVERESTORE_H_

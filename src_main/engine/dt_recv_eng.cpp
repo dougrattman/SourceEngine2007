@@ -202,11 +202,10 @@ static bool MatchRecvPropsToSendProps_R(CUtlRBTree<MatchingProp_t, u16> &lookup,
 // ------------------------------------------------------------------------------------
 // // Interface functions.
 // ------------------------------------------------------------------------------------
-// //
-bool RecvTable_Init(RecvTable **pTables, int nTables) {
+bool RecvTable_Init(RecvTable **pTables, usize nTables) {
   SETUP_VISIT();
 
-  for (int i = 0; i < nTables; i++) {
+  for (usize i = 0; i < nTables; i++) {
     RECVPROP_VISIT(pTables[i],
                    {
                      if (pTable->IsInMainList()) return;
@@ -220,7 +219,6 @@ bool RecvTable_Init(RecvTable **pTables, int nTables) {
                      pTable->SetInMainList(true);
                      g_RecvTables.AddToTail(pTable);
                    },
-
                    {});
   }
 

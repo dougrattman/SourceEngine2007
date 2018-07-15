@@ -174,7 +174,7 @@ class CPropCullStack : public CDatatableStack {
   int m_nOutProps;
 
   int m_NewProxyProps[MAX_DATATABLE_PROPS + 1];
-  int m_nNewProxyProps;
+  usize m_nNewProxyProps;
 };
 
 // -----------------------------------------------------------------------------

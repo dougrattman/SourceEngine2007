@@ -118,10 +118,9 @@ void CDispInfo::TestAddDecalTri(int iIndexStart, u16 decalHandle,
   decal_t *pDecal = pDispDecal->m_pDecal;
 
   // If the decal is too far away from the plane of this triangle, reject it.
-  u16 tempIndices[3] = {
-      m_MeshReader.Index(iIndexStart + 0) - m_iVertOffset,
-      m_MeshReader.Index(iIndexStart + 1) - m_iVertOffset,
-      m_MeshReader.Index(iIndexStart + 2) - m_iVertOffset};
+  u16 tempIndices[3] = {m_MeshReader.Index(iIndexStart + 0) - m_iVertOffset,
+                        m_MeshReader.Index(iIndexStart + 1) - m_iVertOffset,
+                        m_MeshReader.Index(iIndexStart + 2) - m_iVertOffset};
 
   const Vector &v0 = m_MeshReader.Position(tempIndices[0]);
   const Vector &v1 = m_MeshReader.Position(tempIndices[1]);
@@ -179,23 +178,6 @@ void CDispInfo::TestAddDecalTri(int iIndexStart, u16 decalHandle,
       pFragment->m_pVerts[iVert].m_ctCoords = pClipped[iVert].m_ctCoords;
       pFragment->m_pVerts[iVert].m_cLMCoords = pClipped[iVert].m_cLMCoords;
     }
-    /*
-                    static int three = 0;
-                    static int total = 0;
-
-                    total++;
-                    if( outCount == 3 )
-                    {
-                            three++;
-                    }
-
-                    //if( )
-                    {
-                            ch buffer[256];
-                            sprintf(buffer, "Verts: 3:%i 4+:%i (%i)\n",three,
-       total, sizeof(CDecalVert)); Msg(buffer);
-                    }
-                    */
     pFragment->m_pDecal = pDecal;
     pFragment->m_nVerts = outCount;
     pDispDecal->m_nVerts += pFragment->m_nVerts;
@@ -209,10 +191,9 @@ void CDispInfo::TestAddDecalTri(int iIndexStart, u16 decalHandle,
 // //
 void CDispInfo::TestAddDecalTri(int iIndexStart, u16 decalHandle,
                                 CDispShadowDecal *pDecal) {
-  u16 tempIndices[3] = {
-      m_MeshReader.Index(iIndexStart + 0) - m_iVertOffset,
-      m_MeshReader.Index(iIndexStart + 1) - m_iVertOffset,
-      m_MeshReader.Index(iIndexStart + 2) - m_iVertOffset};
+  u16 tempIndices[3] = {m_MeshReader.Index(iIndexStart + 0) - m_iVertOffset,
+                        m_MeshReader.Index(iIndexStart + 1) - m_iVertOffset,
+                        m_MeshReader.Index(iIndexStart + 2) - m_iVertOffset};
 #ifndef SWDS
   // Setup verts.
   Vector vPositions[3] = {GetOverlayPos(&m_MeshReader, tempIndices[0]),

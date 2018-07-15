@@ -14,6 +14,7 @@
 #include "server.h"
 #include "sv_main.h"
 #include "tier1/convar.h"
+
 #ifdef OS_POSIX
 #include <wctype.h>
 #endif
@@ -25,22 +26,18 @@
 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Singleton CCvarUtilities
-//-----------------------------------------------------------------------------
 static CCvarUtilities g_CvarUtilities;
 CCvarUtilities *cv = &g_CvarUtilities;
 
-//-----------------------------------------------------------------------------
 // Purpose: Update clients/server when FCVAR_REPLICATED etc vars change
-//-----------------------------------------------------------------------------
-static void ConVarNetworkChangeCallback(IConVar *pConVar, const char *pOldValue,
-                                        float flOldValue) {
-  ConVarRef var(pConVar);
-  if (!pOldValue) {
-    if (var.GetFloat() == flOldValue) return;
+static void ConVarNetworkChangeCallback(IConVar *con_var, const char *old_value,
+                                        f32 old_value_f32) {
+  ConVarRef var(con_var);
+
+  if (!old_value) {
+    if (var.GetFloat() == old_value_f32) return;
   } else {
-    if (!Q_strcmp(var.GetString(), pOldValue)) return;
+    if (!Q_strcmp(var.GetString(), old_value)) return;
   }
 
   if (var.IsFlagSet(FCVAR_USERINFO)) {
@@ -73,24 +70,22 @@ static void ConVarNetworkChangeCallback(IConVar *pConVar, const char *pOldValue,
 
   // Force changes down to clients (if running server)
   if (var.IsFlagSet(FCVAR_REPLICATED) && sv.IsActive()) {
-    SV_ReplicateConVarChange(static_cast<ConVar *>(pConVar), var.GetString());
+    SV_ReplicateConVarChange(static_cast<ConVar *>(con_var), var.GetString());
   }
 }
 
-//-----------------------------------------------------------------------------
 // Implementation of the ICvarQuery interface
-//-----------------------------------------------------------------------------
 class CCvarQuery : public CBaseAppSystem<ICvarQuery> {
  public:
-  virtual bool Connect(CreateInterfaceFn factory) {
-    ICvar *pCVar = (ICvar *)factory(CVAR_INTERFACE_VERSION, 0);
-    if (!pCVar) return false;
+  bool Connect(CreateInterfaceFn factory) override {
+    ICvar *c_var = (ICvar *)factory(CVAR_INTERFACE_VERSION, 0);
+    if (!c_var) return false;
 
-    pCVar->InstallCVarQuery(this);
+    c_var->InstallCVarQuery(this);
     return true;
   }
 
-  virtual InitReturnVal_t Init() {
+  InitReturnVal_t Init() override {
     // If the value has changed, notify clients/server based on ConVar flags.
     // NOTE: this will only happen for non-FCVAR_NEVER_AS_STRING vars.
     // Also, this happened in SetDirect for older clients that don't have the
@@ -99,42 +94,41 @@ class CCvarQuery : public CBaseAppSystem<ICvarQuery> {
     return INIT_OK;
   }
 
-  virtual void Shutdown() {
+  void Shutdown() override {
     g_pCVar->RemoveGlobalChangeCallback(ConVarNetworkChangeCallback);
   }
 
-  virtual void *QueryInterface(const char *pInterfaceName) {
-    if (!Q_stricmp(pInterfaceName, CVAR_QUERY_INTERFACE_VERSION))
-      return (ICvarQuery *)this;
-    return NULL;
+  void *QueryInterface(const char *pInterfaceName) override {
+    if (!_stricmp(pInterfaceName, CVAR_QUERY_INTERFACE_VERSION))
+      return implicit_cast<ICvarQuery *>(this);
+
+    return nullptr;
   }
 
   // Purpose: Returns true if the commands can be aliased to one another
   //  Either game/client .dll shared with engine,
   //  or game and client dll shared and marked FCVAR_REPLICATED
-  virtual bool AreConVarsLinkable(const ConVar *child, const ConVar *parent) {
+  bool AreConVarsLinkable(const ConVar *child, const ConVar *parent) override {
     // Both parent and child must be marked replicated for this to work
-    bool repchild = child->IsFlagSet(FCVAR_REPLICATED);
-    bool repparent = parent->IsFlagSet(FCVAR_REPLICATED);
+    const bool is_replicated_child = child->IsFlagSet(FCVAR_REPLICATED);
+    const bool is_replicated_parent = parent->IsFlagSet(FCVAR_REPLICATED);
 
     char sz[512];
 
-    if (repchild && repparent) {
+    if (is_replicated_child && is_replicated_parent) {
       // Never on protected vars
       if (child->IsFlagSet(FCVAR_PROTECTED) ||
           parent->IsFlagSet(FCVAR_PROTECTED)) {
-        Q_snprintf(sz, sizeof(sz),
-                   "FCVAR_REPLICATED can't also be FCVAR_PROTECTED (%s)\n",
-                   child->GetName());
+        sprintf_s(sz, "FCVAR_REPLICATED can't also be FCVAR_PROTECTED (%s)\n",
+                  child->GetName());
         ConMsg(sz);
         return false;
       }
 
       // Only on ConVars
       if (child->IsCommand() || parent->IsCommand()) {
-        Q_snprintf(sz, sizeof(sz),
-                   "FCVAR_REPLICATED not valid on ConCommands (%s)\n",
-                   child->GetName());
+        sprintf_s(sz, "FCVAR_REPLICATED not valid on ConCommands (%s)\n",
+                  child->GetName());
         ConMsg(sz);
         return false;
       }
@@ -143,20 +137,20 @@ class CCvarQuery : public CBaseAppSystem<ICvarQuery> {
       // the engine
       if (child->IsFlagSet(FCVAR_GAMEDLL) &&
           !parent->IsFlagSet(FCVAR_CLIENTDLL)) {
-        Q_snprintf(sz, sizeof(sz),
-                   "For FCVAR_REPLICATED, ConVar must be defined in client and "
-                   "game .dlls (%s)\n",
-                   child->GetName());
+        sprintf_s(sz,
+                  "For FCVAR_REPLICATED, ConVar must be defined in client and "
+                  "game .dlls (%s)\n",
+                  child->GetName());
         ConMsg(sz);
         return false;
       }
 
       if (child->IsFlagSet(FCVAR_CLIENTDLL) &&
           !parent->IsFlagSet(FCVAR_GAMEDLL)) {
-        Q_snprintf(sz, sizeof(sz),
-                   "For FCVAR_REPLICATED, ConVar must be defined in client and "
-                   "game .dlls (%s)\n",
-                   child->GetName());
+        sprintf_s(sz,
+                  "For FCVAR_REPLICATED, ConVar must be defined in client and "
+                  "game .dlls (%s)\n",
+                  child->GetName());
         ConMsg(sz);
         return false;
       }
@@ -166,25 +160,25 @@ class CCvarQuery : public CBaseAppSystem<ICvarQuery> {
     }
 
     // Otherwise need both to allow linkage
-    if (repchild || repparent) {
-      Q_snprintf(sz, sizeof(sz),
-                 "Both ConVars must be marked FCVAR_REPLICATED for linkage to "
-                 "work (%s)\n",
-                 child->GetName());
+    if (is_replicated_child || is_replicated_parent) {
+      sprintf_s(sz,
+                "Both ConVars must be marked FCVAR_REPLICATED for linkage to "
+                "work (%s)\n",
+                child->GetName());
       ConMsg(sz);
       return false;
     }
 
     if (parent->IsFlagSet(FCVAR_CLIENTDLL)) {
-      Q_snprintf(sz, sizeof(sz), "Parent cvar in client.dll not allowed (%s)\n",
-                 child->GetName());
+      sprintf_s(sz, "Parent cvar in client.dll not allowed (%s)\n",
+                child->GetName());
       ConMsg(sz);
       return false;
     }
 
     if (parent->IsFlagSet(FCVAR_GAMEDLL)) {
-      Q_snprintf(sz, sizeof(sz), "Parent cvar in server.dll not allowed (%s)\n",
-                 child->GetName());
+      sprintf_s(sz, "Parent cvar in server.dll not allowed (%s)\n",
+                child->GetName());
       ConMsg(sz);
       return false;
     }
@@ -193,20 +187,13 @@ class CCvarQuery : public CBaseAppSystem<ICvarQuery> {
   }
 };
 
-//-----------------------------------------------------------------------------
-// Singleton
-//-----------------------------------------------------------------------------
 static CCvarQuery s_CvarQuery;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CCvarQuery, ICvarQuery,
                                   CVAR_QUERY_INTERFACE_VERSION, s_CvarQuery);
 
-//-----------------------------------------------------------------------------
-//
 // CVar utilities begins here
-//
-//-----------------------------------------------------------------------------
-static bool IsAllSpaces(const wchar_t *str) {
-  const wchar_t *p = str;
+static bool IsAllSpaces(const wch *str) {
+  const wch *p = str;
   while (p && *p) {
     if (!iswspace(*p)) return false;
 
@@ -216,30 +203,23 @@ static bool IsAllSpaces(const wchar_t *str) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *var -
-//			*value -
-//-----------------------------------------------------------------------------
 void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
-  const char *pszValue;
   char szNew[1024];
 
   // Bail early if we're trying to set a FCVAR_USERINFO cvar on a dedicated
   // server
   if (var->IsFlagSet(FCVAR_USERINFO)) {
-    if (sv.IsDedicated()) {
-      return;
-    }
+    if (sv.IsDedicated()) return;
   }
 
-  pszValue = value;
+  const char *pszValue = value;
   // This cvar's string must only contain printable characters.
   // Strip out any other crap.
   // We'll fill in "empty" if nothing is left
   if (var->IsFlagSet(FCVAR_PRINTABLEONLY)) {
-    wchar_t unicode[512];
-    size_t converted_chars_num;
+    wch unicode[512];
+    usize converted_chars_num;
+
 #ifndef SWDS
     if (sv.IsDedicated()) {
       // Dedicated servers don't have g_pVGuiLocalize, so fall back
@@ -250,12 +230,13 @@ void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
 #else
     mbstowcs(&converted_chars_num, unicode, pszValue, std::size(unicode));
 #endif
-    wchar_t newUnicode[512];
+
+    wch newUnicode[512];
     // Clear out new string
     newUnicode[0] = L'\0';
 
-    const wchar_t *pS = unicode;
-    wchar_t *pD = newUnicode;
+    const wch *pS = unicode;
+    wch *pD = newUnicode;
 
     // Step through the string, only copying back in characters that are
     // printable
@@ -276,7 +257,7 @@ void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
       wcscpy_s(newUnicode, L"#empty");
     }
 
-    size_t converted_chars_num2;
+    usize converted_chars_num2;
 #ifndef SWDS
     if (sv.IsDedicated()) {
       wcstombs_s(&converted_chars_num2, szNew, newUnicode, sizeof(szNew));
@@ -291,26 +272,19 @@ void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
   }
 
   if (var->IsFlagSet(FCVAR_NEVER_AS_STRING)) {
-    var->SetValue((float)atof(pszValue));
+    var->SetValue((f32)atof(pszValue));
   } else {
     var->SetValue(pszValue);
   }
 }
-
-//-----------------------------------------------------------------------------
-// Purpose:
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
 
 // If you are changing this, please take a look at IsValidToggleCommand()
 bool CCvarUtilities::IsCommand(const CCommand &args) {
   int c = args.ArgC();
   if (c == 0) return false;
 
-  ConVar *v;
-
   // check variables
-  v = g_pCVar->FindVar(args[0]);
+  ConVar *v = g_pCVar->FindVar(args[0]);
   if (!v) return false;
 
   // NOTE: Not checking for 'HIDDEN' here so we can actually set hidden convars
@@ -389,13 +363,14 @@ bool CCvarUtilities::IsCommand(const CCommand &args) {
   // except for surrounding quotes
   char remaining[1024];
   const char *pArgS = args.ArgS();
-  int nLen = Q_strlen(pArgS);
+  isize nLen = strlen(pArgS);
   bool bIsQuoted = pArgS[0] == '\"';
+
   if (!bIsQuoted) {
-    Q_strncpy(remaining, args.ArgS(), sizeof(remaining));
+    strcpy_s(remaining, args.ArgS());
   } else {
     --nLen;
-    Q_strncpy(remaining, &pArgS[1], sizeof(remaining));
+    strcpy_s(remaining, &pArgS[1]);
   }
 
   // Now strip off any trailing spaces
@@ -419,10 +394,8 @@ bool CCvarUtilities::IsCommand(const CCommand &args) {
 
 // This is a band-aid copied directly from IsCommand().
 bool CCvarUtilities::IsValidToggleCommand(const char *cmd) {
-  ConVar *v;
-
   // check variables
-  v = g_pCVar->FindVar(cmd);
+  ConVar *v = g_pCVar->FindVar(cmd);
   if (!v) {
     ConMsg("%s is not a valid cvar\n", cmd);
     return false;
@@ -496,14 +469,8 @@ bool CCvarUtilities::IsValidToggleCommand(const char *cmd) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *f -
-//-----------------------------------------------------------------------------
 void CCvarUtilities::WriteVariables(CUtlBuffer &buff) {
-  const ConCommandBase *var;
-
-  for (var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
+  for (auto *var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
     if (var->IsCommand()) continue;
 
     bool archive =
@@ -598,23 +565,17 @@ static void PrintListHeader(FileHandle_t &f) {
   char csvflagstr[1024];
   csvflagstr[0] = 0;
 
-  for (usize i = 0; i < std::size(g_ConVarFlags); ++i) {
+  for (ConVarFlags_t &entry : g_ConVarFlags) {
     char csvf[64];
 
-    ConVarFlags_t &entry = g_ConVarFlags[i];
-    Q_snprintf(csvf, sizeof(csvf), "\"%s\",", entry.desc);
-    Q_strncat(csvflagstr, csvf, sizeof(csvflagstr), COPY_ALL_CHARACTERS);
+    sprintf_s(csvf, "\"%s\",", entry.desc);
+    strcat_s(csvflagstr, csvf);
   }
 
   g_pFileSystem->FPrintf(f, "\"%s\",\"%s\",%s,\"%s\"\n", "Name", "Value",
                          csvflagstr, "Help Text");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *var -
-//			*f -
-//-----------------------------------------------------------------------------
 static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
   char flagstr[128];
   char csvflagstr[1024];
@@ -622,8 +583,8 @@ static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
   flagstr[0] = 0;
   csvflagstr[0] = 0;
 
-  size_t c = std::size(g_ConVarFlags);
-  for (size_t i = 0; i < c; ++i) {
+  usize c = std::size(g_ConVarFlags);
+  for (usize i = 0; i < c; ++i) {
     char fl[32];
     char csvf[64];
 
@@ -697,19 +658,15 @@ static bool ConCommandBaseLessFunc(const ConCommandBase *const &lhs,
   if (*left == '-' || *left == '+') left++;
   if (*right == '-' || *right == '+') right++;
 
-  return (Q_stricmp(left, right) < 0);
+  return (_stricmp(left, right) < 0);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Output : void CCvar::CvarList_f
-//-----------------------------------------------------------------------------
 void CCvarUtilities::CvarList(const CCommand &args) {
-  const ConCommandBase *var;   // Temporary Pointer to cvars
-  int iArgs;                   // Argument count
-  const char *partial = NULL;  // Partial cvar to search for...
-                               // E.eg
-  int ipLen = 0;               // Length of the partial cvar
+  const ConCommandBase *var;      // Temporary Pointer to cvars
+  int iArgs;                      // Argument count
+  const char *partial = nullptr;  // Partial cvar to search for...
+                                  // E.eg
+  int ipLen = 0;                  // Length of the partial cvar
 
   FileHandle_t f = FILESYSTEM_INVALID_HANDLE;  // FilePointer for logging
   bool bLogging = false;
@@ -724,7 +681,8 @@ void CCvarUtilities::CvarList(const CCommand &args) {
 
   if (!Q_strcasecmp(args[1], "log") && iArgs >= 3) {
     char fn[256];
-    Q_snprintf(fn, sizeof(fn), "%s", args[2]);
+    sprintf_s(fn, "%s", args[2]);
+
     f = g_pFileSystem->Open(fn, "wb");
     if (f) {
       bLogging = true;
@@ -768,9 +726,8 @@ void CCvarUtilities::CvarList(const CCommand &args) {
     sorted.Insert(var);
   }
 
-  if (bLogging) {
-    PrintListHeader(f);
-  }
+  if (bLogging) PrintListHeader(f);
+
   for (int i = sorted.FirstInorder(); i != sorted.InvalidIndex();
        i = sorted.NextInorder(i)) {
     var = sorted[i];
@@ -789,48 +746,32 @@ void CCvarUtilities::CvarList(const CCommand &args) {
     ConMsg("--------------\n%3i total convars/concommands\n", sorted.Count());
   }
 
-  if (bLogging) {
-    g_pFileSystem->Close(f);
-  }
+  if (bLogging) g_pFileSystem->Close(f);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  :
-// Output : int
-//-----------------------------------------------------------------------------
 int CCvarUtilities::CountVariablesWithFlags(int flags) {
   int i = 0;
-  const ConCommandBase *var;
 
-  for (var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
+  for (auto *var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
     if (var->IsCommand()) continue;
 
-    if (var->IsFlagSet(flags)) {
-      i++;
-    }
+    if (var->IsFlagSet(flags)) i++;
   }
 
   return i;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CCvarUtilities::CvarHelp(const CCommand &args) {
-  const char *search;
-  const ConCommandBase *var;
-
   if (args.ArgC() != 2) {
     ConMsg("Usage:  help <cvarname>\n");
     return;
   }
 
   // Get name of var to find
-  search = args[1];
+  const char *search = args[1];
 
   // Search for it
-  var = g_pCVar->FindCommandBase(search);
+  const ConCommandBase *var = g_pCVar->FindCommandBase(search);
   if (!var) {
     ConMsg("help:  no cvar or command named %s\n", search);
     return;
@@ -840,31 +781,22 @@ void CCvarUtilities::CvarHelp(const CCommand &args) {
   ConVar_PrintDescription(var);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CCvarUtilities::CvarDifferences(const CCommand &args) {
-  const ConCommandBase *var;
-
   // Loop through vars and print out findings
-  for (var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
+  for (auto *var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
     if (var->IsCommand()) continue;
     if (var->IsFlagSet(FCVAR_DEVELOPMENTONLY) || var->IsFlagSet(FCVAR_HIDDEN))
       continue;
 
-    if (!Q_stricmp(((ConVar *)var)->GetDefault(), ((ConVar *)var)->GetString()))
+    if (!_stricmp(((ConVar *)var)->GetDefault(), ((ConVar *)var)->GetString()))
       continue;
 
     ConVar_PrintDescription((ConVar *)var);
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Toggles a cvar on/off, or cycles through a set of values
-//-----------------------------------------------------------------------------
 void CCvarUtilities::CvarToggle(const CCommand &args) {
-  int i;
-
   int c = args.ArgC();
   if (c < 2) {
     ConMsg("Usage:  toggle <cvarname> [value1] [value2] [value3]...\n");
@@ -882,6 +814,7 @@ void CCvarUtilities::CvarToggle(const CCommand &args) {
     var->SetValue(!var->GetBool());
     ConVar_PrintDescription(var);
   } else {
+    int i;
     // look for the current value in the command arguments
     for (i = 2; i < c; i++) {
       if (!Q_strcmp(var->GetString(), args[i])) break;
@@ -909,21 +842,20 @@ void CCvarUtilities::CvarFindFlags_f(const CCommand &args) {
     for (usize i = 0; i < std::size(g_ConVarFlags); i++) {
       ConMsg("   - %s\n", g_ConVarFlags[i].desc);
     }
+
     return;
   }
 
   // Get substring to find
   const char *search = args[1];
-  const ConCommandBase *var;
 
   // Loop through vars and print out findings
-  for (var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
+  for (auto *var = g_pCVar->GetCommands(); var; var = var->GetNext()) {
     if (var->IsFlagSet(FCVAR_DEVELOPMENTONLY) || var->IsFlagSet(FCVAR_HIDDEN))
       continue;
 
     for (usize i = 0; i < std::size(g_ConVarFlags); i++) {
       if (!var->IsFlagSet(g_ConVarFlags[i].bit)) continue;
-
       if (!V_stristr(g_ConVarFlags[i].desc, search)) continue;
 
       ConVar_PrintDescription(var);
@@ -931,46 +863,27 @@ void CCvarUtilities::CvarFindFlags_f(const CCommand &args) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Hook to command
-//-----------------------------------------------------------------------------
 CON_COMMAND(findflags, "Find concommands by flags.") {
   cv->CvarFindFlags_f(args);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Hook to command
-//-----------------------------------------------------------------------------
 CON_COMMAND(cvarlist, "Show the list of convars/concommands.") {
   cv->CvarList(args);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Print help text for cvar
-//-----------------------------------------------------------------------------
 CON_COMMAND(help, "Find help about a convar/concommand.") {
   cv->CvarHelp(args);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND(differences,
             "Show all convars which are not at their default values.") {
   cv->CvarDifferences(args);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND(toggle,
             "Toggles a convar on or off, or cycles through a set of values.") {
   cv->CvarToggle(args);
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: Send the cvars to VXConsole
-//-----------------------------------------------------------------------------
-#if defined(_X360)
-CON_COMMAND(getcvars, "") { g_pCVar->PublishToVXConsole(); }
-#endif

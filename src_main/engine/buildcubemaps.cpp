@@ -120,9 +120,7 @@ static void TakeCubemapSnapshot(const Vector &origin, const ch *pFileNameBase,
   view.height = (float)screenBufSize;
 
   const ch *pExtension = ".tga";
-  if (bPFM) {
-    pExtension = ".pfm";
-  }
+  if (bPFM) pExtension = ".pfm";
 
   Shader_BeginRendering();
 

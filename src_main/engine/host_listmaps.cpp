@@ -55,7 +55,7 @@ class CMapListItem {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CMapListItem::CMapListItem(void) {
+CMapListItem::CMapListItem() {
   m_nValid = PENDING;
   m_lFileTimestamp = 0L;
 }
@@ -70,7 +70,7 @@ void CMapListItem::SetValid(int valid) { m_nValid = valid; }
 // Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-int CMapListItem::GetValid(void) const { return m_nValid; }
+int CMapListItem::GetValid() const { return m_nValid; }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -82,7 +82,7 @@ void CMapListItem::SetFileTimestamp(long ts) { m_lFileTimestamp = ts; }
 // Purpose:
 // Output : long
 //-----------------------------------------------------------------------------
-long CMapListItem::GetFileTimestamp(void) const { return m_lFileTimestamp; }
+long CMapListItem::GetFileTimestamp() const { return m_lFileTimestamp; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Check whether this map file has changed related to the passed in
@@ -162,12 +162,12 @@ class CMapListManager {
 // Singleton manager object
 static CMapListManager g_MapListMgr;
 
-void Host_UpdateMapList(void) { g_MapListMgr.Think(); }
+void Host_UpdateMapList() { g_MapListMgr.Think(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CMapListManager::CMapListManager(void) {
+CMapListManager::CMapListManager() {
   m_flLastRefreshTime = -1.0f;
   m_bDirty = false;
 }
@@ -175,18 +175,18 @@ CMapListManager::CMapListManager(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CMapListManager::~CMapListManager(void) { ClearList(); }
+CMapListManager::~CMapListManager() { ClearList(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMapListManager::Think(void) {}
+void CMapListManager::Think() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: TODO(d.rattman):  Refresh doesn't notice maps that have been deleted... oh
 // well
 //-----------------------------------------------------------------------------
-void CMapListManager::RefreshList(void) {
+void CMapListManager::RefreshList() {
   if (m_flLastRefreshTime == -1.0f) {
     BuildList();
     return;
@@ -245,7 +245,7 @@ void CMapListManager::RefreshList(void) {
 // Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CMapListManager::GetMapCount(void) const { return m_Items.Count(); }
+int CMapListManager::GetMapCount() const { return m_Items.Count(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -274,7 +274,7 @@ char const *CMapListManager::GetMapName(int index) const {
 //-----------------------------------------------------------------------------
 // Purpose: Wipe the list
 //-----------------------------------------------------------------------------
-void CMapListManager::ClearList(void) {
+void CMapListManager::ClearList() {
   m_Items.Purge();
   m_bDirty = false;
 }
@@ -282,7 +282,7 @@ void CMapListManager::ClearList(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Rebuild the entire list
 //-----------------------------------------------------------------------------
-void CMapListManager::BuildList(void) {
+void CMapListManager::BuildList() {
   ClearList();
 
   // Search the directory structure.

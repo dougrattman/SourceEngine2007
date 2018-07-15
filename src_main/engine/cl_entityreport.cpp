@@ -31,7 +31,7 @@ enum {
 //-----------------------------------------------------------------------------
 // Purpose: Data about an entity
 //-----------------------------------------------------------------------------
-typedef struct {
+struct ENTITYBITS {
   // Bits used for last message
   int bits;
   // Rolling average of bits used
@@ -46,7 +46,7 @@ typedef struct {
   float effectfinishtime;
   // If event was deletion, remember client class for a little bit
   ClientClass *deletedclientclass;
-} ENTITYBITS;
+};
 
 // List of entities we are keeping data bout
 static ENTITYBITS s_EntityBits[MAX_EDICTS];

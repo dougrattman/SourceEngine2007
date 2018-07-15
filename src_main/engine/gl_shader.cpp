@@ -4,81 +4,64 @@
 
 #include "gl_shader.h"
 
-#include "common.h"
-#include "const.h"
-#include "decal_private.h"
-#include "editor_sendcommand.h"
-#include "enginestats.h"
-#include "filesystem.h"
-#include "gl_cvars.h"
-#include "gl_lightmap.h"
-#include "gl_matsysiface.h"
-#include "gl_model_private.h"
-#include "iregistry.h"
-#include "ivideomode.h"
 #include "materialproxyfactory.h"
-#include "materialsystem/idebugtextureinfo.h"
-#include "materialsystem/imaterialsystemhardwareconfig.h"
-#include "materialsystem/materialsystem_config.h"
-#include "modes.h"
-#include "r_local.h"
-#include "sys_dll.h"
+#include "materialsystem/imaterialsystem.h"
+#include "sysexternal.h"
 #include "tier0/include/icommandline.h"
-#include "tier1/strtools.h"
 #include "tier2/tier2.h"
-#include "traceinit.h"
-#include "vmodes.h"
 
-#ifndef HWND
-#define HWND int
-#endif
-
-#include "igame.h"
-
- 
 #include "tier0/include/memdbgon.h"
 
+namespace {
 static CMaterialProxyFactory s_MaterialProxyFactory;
 
 // Connects to other
-static void Shader_ConnectOtherMatSysInterfaces() {
+bool Shader_ConnectTheRest() {
   // NOTE: These two interfaces have been connected in the tier2 library
   if (!g_pMaterialSystemHardwareConfig) {
     Shader_Disconnect();
-    Sys_Error(
-        "Could not get the material system hardware config interface! (2)");
+    Sys_Error("Connection Material System Hardware Config failure.");
+    return false;
   }
 
   if (!g_pMaterialSystemDebugTextureInfo) {
     Shader_Disconnect();
-    Sys_Error("Could not get the debug texture info interface!");
-  }
-}
-
-// Connect to interfaces we need
-bool Shader_Connect(bool bSetProxyFactory) {
-  if (!materials) return false;
-
-  int nAdapter = CommandLine()->ParmValue("-adapter", 0);
-  int nModeFlags = MATERIAL_INIT_ALLOCATE_FULLSCREEN_TEXTURE;
-  if (CommandLine()->FindParm("-ref")) {
-    nModeFlags |= MATERIAL_INIT_REFERENCE_RASTERIZER;
+    Sys_Error("Connection Material System Debug Texture Info failure.");
+    return false;
   }
 
-  materials->SetAdapter(nAdapter, nModeFlags);
-  if (bSetProxyFactory)
-    materials->SetMaterialProxyFactory(&s_MaterialProxyFactory);
-
-  Shader_ConnectOtherMatSysInterfaces();
-  return g_pMaterialSystemHardwareConfig && g_pMaterialSystemDebugTextureInfo;
+  return true;
 }
+}  // namespace
 
 // Connect to interfaces we need
+bool Shader_Connect(bool do_set_proxy_factory) {
+  if (materials) {
+    const int adapter_idx{CommandLine()->ParmValue("-adapter", 0)};
+    int material_mode_flags = MATERIAL_INIT_ALLOCATE_FULLSCREEN_TEXTURE;
+
+    if (CommandLine()->FindParm("-ref")) {
+      material_mode_flags |= MATERIAL_INIT_REFERENCE_RASTERIZER;
+    }
+
+    materials->SetAdapter(adapter_idx, material_mode_flags);
+
+    if (do_set_proxy_factory) {
+      materials->SetMaterialProxyFactory(&s_MaterialProxyFactory);
+    }
+
+    return Shader_ConnectTheRest();
+  }
+
+  return false;
+}
+
 void Shader_Disconnect() {}
 
 #ifndef SWDS
 void Shader_SwapBuffers() {
   assert(materials);
+
   materials->SwapBuffers();
 }
 

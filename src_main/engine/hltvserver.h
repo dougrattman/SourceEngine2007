@@ -3,6 +3,7 @@
 #ifndef HLTVSERVER_H
 #define HLTVSERVER_H
 
+#include "base/include/base_types.h"
 #include "baseserver.h"
 #include "clientframe.h"
 #include "convar.h"
@@ -61,7 +62,7 @@ class CDeltaEntityCache {
   ~CDeltaEntityCache();
 
   void SetTick(int nTick, int nMaxEntities);
-  unsigned char *FindDeltaBits(int nEntityIndex, int nDeltaTick, int &nBits);
+  u8 *FindDeltaBits(int nEntityIndex, int nDeltaTick, int &nBits);
   void AddDeltaBits(int nEntityIndex, int nDeltaTick, int nBits,
                     bf_write *pBuffer);
   void Flush();
@@ -70,8 +71,8 @@ class CDeltaEntityCache {
   int m_nTick;         // current tick
   int m_nMaxEntities;  // max entities = length of cache
   int m_nCacheSize;
-  DeltaEntityEntry_s
-      *m_Cache[MAX_EDICTS];  // array of pointers to delta entries
+  // array of pointers to delta entries
+  DeltaEntityEntry_s *m_Cache[MAX_EDICTS];
 };
 
 class CGameClient;
@@ -91,96 +92,90 @@ class CHLTVServer : public IGameEventListener2,
 
  public:  // CBaseServer interface:
   void Init(bool bIsDedicated);
-  void Shutdown(void);
-  void Clear(void);
-  bool IsHLTV(void) const { return true; };
-  bool IsMultiplayer(void) const { return true; };
+  void Shutdown();
+  void Clear();
+  bool IsHLTV() const { return true; };
+  bool IsMultiplayer() const { return true; };
   void FillServerInfo(SVC_ServerInfo &serverinfo);
-  void GetNetStats(float &avgIn, float &avgOut);
+  void GetNetStats(f32 &avgIn, f32 &avgOut);
   int GetChallengeType(netadr_t &adr);
-  const char *GetName(void) const;
-  const char *GetPassword() const;
+  const ch *GetName() const;
+  const ch *GetPassword() const;
   IClient *ConnectClient(netadr_t &adr, int protocol, int challenge,
-                         int authProtocol, const char *name,
-                         const char *password, const char *hashedCDkey,
-                         int cdKeyLen);
+                         int authProtocol, const ch *name, const ch *password,
+                         const ch *hashedCDkey, int cdKeyLen);
 
  public:
   void FireGameEvent(IGameEvent *event);
 
  public:  // IHLTVServer interface:
-  IServer *GetBaseServer(void);
-  IHLTVDirector *GetDirector(void);
-  int GetHLTVSlot(void);      // return entity index-1 of HLTV in game
-  float GetOnlineTime(void);  // seconds since broadcast started
+  IServer *GetBaseServer();
+  IHLTVDirector *GetDirector();
+  int GetHLTVSlot();    // return entity index-1 of HLTV in game
+  f32 GetOnlineTime();  // seconds since broadcast started
   void GetLocalStats(int &proxies, int &slots, int &clients);
   void GetGlobalStats(int &proxies, int &slots, int &clients);
   void GetRelayStats(int &proxies, int &slots, int &clients);
 
-  bool IsMasterProxy(void);  // true, if this is the HLTV master proxy
+  bool IsMasterProxy();  // true, if this is the HLTV master proxy
   bool IsTVRelay();  // true if we're running a relay (i.e. this is the opposite
                      // of IsMasterProxy()).
-  bool IsDemoPlayback(void);  // true if this is a HLTV demo
+  bool IsDemoPlayback();  // true if this is a HLTV demo
 
-  const netadr_t *GetRelayAddress(void);  // returns relay address
+  const netadr_t *GetRelayAddress();  // returns relay address
 
   void BroadcastEvent(IGameEvent *event);
 
  public:  // IDemoPlayer interface
   CDemoFile *GetDemoFile();
-  int GetPlaybackTick(void);
-  int GetTotalTicks(void);
+  int GetPlaybackTick();
+  int GetTotalTicks();
 
-  bool StartPlayback(const char *filename, bool bAsTimeDemo);
+  bool StartPlayback(const ch *filename, bool bAsTimeDemo);
 
-  bool IsPlayingBack(void);     // true if demo loaded and playing back
-  bool IsPlaybackPaused(void);  // true if playback paused
-  bool IsPlayingTimeDemo(void) {
-    return false;
-  }  // true if playing back in timedemo mode
-  bool IsSkipping(void) {
-    return false;
-  };  // true, if demo player skiiping trough packets
-  bool CanSkipBackwards(void) {
-    return true;
-  }  // true if demoplayer can skip backwards
+  bool IsPlayingBack();     // true if demo loaded and playing back
+  bool IsPlaybackPaused();  // true if playback paused
+  // true if playing back in timedemo mode
+  bool IsPlayingTimeDemo() { return false; }
+  // true, if demo player skiiping trough packets
+  bool IsSkipping() { return false; };
+  // true if demoplayer can skip backwards
+  bool CanSkipBackwards() { return true; }
 
-  void SetPlaybackTimeScale(float timescale);  // sets playback timescale
-  float GetPlaybackTimeScale(void);            // get playback timescale
+  void SetPlaybackTimeScale(f32 timescale);  // sets playback timescale
+  f32 GetPlaybackTimeScale();                // get playback timescale
 
-  void PausePlayback(float seconds){};
+  void PausePlayback(f32 seconds){};
   void SkipToTick(int tick, bool bRelative, bool bPause){};
   void ResumePlayback(void){};
   void StopPlayback(void){};
   void InterpolateViewpoint(){};
-  netpacket_t *ReadPacket(void) { return NULL; }
+  netpacket_t *ReadPacket() { return nullptr; }
 
   void ResetDemoInterpolation(void){};
 
  public:
-  void StartMaster(CGameClient *client);   // start HLTV server as master proxy
-  void ConnectRelay(const char *address);  // connect to other HLTV proxy
-  void StartDemo(const char *filename);    // starts playing back a demo file
-  void StartRelay(void);                   // start HLTV server as relay proxy
+  void StartMaster(CGameClient *client);  // start HLTV server as master proxy
+  void ConnectRelay(const ch *address);   // connect to other HLTV proxy
+  void StartDemo(const ch *filename);     // starts playing back a demo file
+  void StartRelay();                      // start HLTV server as relay proxy
   bool SendNetMsg(INetMessage &msg, bool bForceReliable = false);
   void RunFrame();
   void SetMaxClients(int number);
-  void Changelevel(void);
+  void Changelevel();
 
   void UserInfoChanged(int nClientIndex);
   void SendClientMessages(bool bSendSnapshots);
-  CClientFrame *AddNewFrame(
-      CClientFrame *pFrame);  // add new frame, returns HLTV's copy
-  void SignonComplete(void);
-  void LinkInstanceBaselines(void);
-  void BroadcastEventLocal(
-      IGameEvent *event,
-      bool bReliable);  // broadcast event but not to relay proxies
-  void BroadcastLocalChat(
-      const char *pszChat,
-      const char *pszGroup);  // broadcast event but not to relay proxies
-  void BroadcastLocalTitle(
-      CHLTVClient *client = NULL);  // NULL = broadcast to all
+  // add new frame, returns HLTV's copy
+  CClientFrame *AddNewFrame(CClientFrame *pFrame);
+  void SignonComplete();
+  void LinkInstanceBaselines();
+  // broadcast event but not to relay proxies
+  void BroadcastEventLocal(IGameEvent *event, bool bReliable);
+  // broadcast event but not to relay proxies
+  void BroadcastLocalChat(const ch *pszChat, const ch *pszGroup);
+  // nullptr = broadcast to all
+  void BroadcastLocalTitle(CHLTVClient *client = nullptr);
   bool DispatchToRelay(CHLTVClient *pClient);
   bf_write *GetBuffer(int nBuffer);
   CClientFrame *GetDeltaFrame(int nTick);
@@ -194,9 +189,9 @@ class CHLTVServer : public IGameEventListener2,
 
  private:
   CBaseClient *CreateNewClient(int slot);
-  void UpdateTick(void);
-  void UpdateStats(void);
-  void InstallStringTables(void);
+  void UpdateTick();
+  void UpdateStats();
+  void InstallStringTables();
   void RestoreTick(int tick);
   void EntityPVSCheck(CClientFrame *pFrame);
   void InitClientRecvTables();
@@ -204,13 +199,11 @@ class CHLTVServer : public IGameEventListener2,
   void ReadCompeleteDemoFile();
   void ResyncDemoClock();
 
-  // Vector		GetOriginFromPackedEntity(PackedEntity* pe);
-
  public:
-  CGameClient *m_MasterClient;  // if != NULL, this is the master HLTV
+  CGameClient *m_MasterClient;  // if != nullptr, this is the master HLTV
   CHLTVClientState m_ClientState;
-  CHLTVDemoRecorder
-      m_DemoRecorder;          // HLTV demo object for recording and playback
+  // HLTV demo object for recording and playback
+  CHLTVDemoRecorder m_DemoRecorder;
   CGameServer *m_Server;       // pointer to source server (sv.)
   IHLTVDirector *m_Director;   // HTLV director exported by game.dll
   int m_nFirstTick;            // first known server tick;
@@ -218,16 +211,16 @@ class CHLTVServer : public IGameEventListener2,
   CHLTVFrame *m_CurrentFrame;  // current delayed HLTV frame
   int m_nViewEntity;           // the current entity HLTV is tracking
   int m_nPlayerSlot;           // slot of HLTV client on game server
-  CHLTVFrame
-      m_HLTVFrame;  // all incoming messages go here until Snapshot is made
+  // all incoming messages go here until Snapshot is made
+  CHLTVFrame m_HLTVFrame;
 
   bool m_bSignonState;  // true if connecting to server
-  float m_flStartTime;
-  float m_flFPS;                // FPS the proxy is running;
+  f32 m_flStartTime;
+  f32 m_flFPS;                  // FPS the proxy is running;
   int m_nGameServerMaxClients;  // max clients on game server
-  float m_fNextSendUpdateTime;  // time to send next HLTV status messages
+  f32 m_fNextSendUpdateTime;    // time to send next HLTV status messages
   RecvTable *m_pRecvTables[MAX_DATATABLES];
-  int m_nRecvTables;
+  usize m_nRecvTables;
   Vector m_vPVSOrigin;
   bool m_bMasterOnlyMode;
 
@@ -247,10 +240,10 @@ class CHLTVServer : public IGameEventListener2,
   democmdinfo_t m_LastCmdInfo;
   bool m_bPlayingBack;
   bool m_bPlaybackPaused;  // true if demo is paused right now
-  float m_flPlaybackRateModifier;
+  f32 m_flPlaybackRateModifier;
   int m_nSkipToTick;  // skip to tick ASAP, -1 = off
 };
 
-extern CHLTVServer *hltv;  // The global HLTV server/object. NULL on xbox.
+extern CHLTVServer *hltv;  // The global HLTV server/object. nullptr on xbox.
 
 #endif  // HLTVSERVER_H

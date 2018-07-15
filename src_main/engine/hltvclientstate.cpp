@@ -23,14 +23,13 @@
 #include "sv_main.h"
 #include "tier1/UtlLinkedList.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // copy message data from in to out buffer
-#define CopyDataInToOut(msg)                            \
+#define CopyDataInToOut(msg)                                   \
   int size = SOURCE_PAD_NUMBER(Bits2Bytes(msg->m_nLength), 4); \
-  uint8_t *buffer = (byte *)stackalloc(size);           \
-  msg->m_DataIn.ReadBits(buffer, msg->m_nLength);       \
+  u8 *buffer = stack_alloc<u8>(size);                          \
+  msg->m_DataIn.ReadBits(buffer, msg->m_nLength);              \
   msg->m_DataOut.StartWriting(buffer, size, msg->m_nLength);
 
 static void HLTV_Callback_InstanceBaseline(void *object,
@@ -43,7 +42,7 @@ static void HLTV_Callback_InstanceBaseline(void *object,
   pHLTV->LinkInstanceBaselines();
 }
 
-extern CUtlLinkedList<CRecvDecoder *, unsigned short> g_RecvDecoders;
+extern CUtlLinkedList<CRecvDecoder *, u16> g_RecvDecoders;
 
 extern ConVar tv_autorecord;
 static ConVar tv_autoretry(
@@ -249,7 +248,7 @@ bool CHLTVClientState::SetSignonState(int state, int count) {
   return true;
 }
 
-void CHLTVClientState::SendClientInfo(void) {
+void CHLTVClientState::SendClientInfo() {
   CLC_ClientInfo info;
 
   info.m_nSendTableCRC = SendTable_GetCRC();
@@ -392,7 +391,7 @@ bool CHLTVClientState::ProcessClassInfo(SVC_ClassInfo *msg) {
   return true;
 }
 
-void CHLTVClientState::PacketEnd(void) {
+void CHLTVClientState::PacketEnd() {
   // did we get a snapshot with this packet ?
   if (m_pNewClientFrame) {
     // if so, add a new frame to HLTV
@@ -439,7 +438,7 @@ bool CHLTVClientState::ProcessVoiceInit(SVC_VoiceInit *msg) {
 
 bool CHLTVClientState::ProcessVoiceData(SVC_VoiceData *msg) {
   int size = SOURCE_PAD_NUMBER(Bits2Bytes(msg->m_nLength), 4);
-  uint8_t *buffer = (byte *)stackalloc(size);
+  u8 *buffer = stack_alloc<u8>(size);
   msg->m_DataIn.ReadBits(buffer, msg->m_nLength);
   msg->m_DataOut = buffer;
 
@@ -704,7 +703,7 @@ void CHLTVClientState::ReadDeltaEnt(CEntityReadInfo &u) {
   } else {
     // store as normal
     pToPackedEntity->AllocAndCopyPadded(packedData,
-                                        writeBuf.GetNumBytesWritten());  //-V614
+                                        writeBuf.GetNumBytesWritten());
   }
 
   u.m_pTo->last_entity = u.m_nNewEntity;

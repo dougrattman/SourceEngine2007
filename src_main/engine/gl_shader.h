@@ -3,20 +3,13 @@
 #ifndef GL_SHADER_H
 #define GL_SHADER_H
 
-void Shader_BeginRendering();
-bool Shader_Connect(bool bSetProxyFactory);
-void Shader_Disconnect();
-void Shader_SwapBuffers();
-
 #include "mathlib/vector.h"
 #include "tier1/convar.h"
 
 extern Vector modelorg;
 extern VMatrix g_BrushToWorldMatrix;
 
-//
 // screen size info
-//
 class IMaterial;
 extern IMaterial* g_materialEmpty;
 
@@ -61,5 +54,10 @@ extern ConVar mat_fullbright;
 extern ConVar mat_drawflat;
 extern ConVar mat_reversedepth;
 extern ConVar mat_norendering;
+
+bool Shader_Connect(bool do_set_proxy_factory);
+void Shader_Disconnect();
+void Shader_SwapBuffers();
+void Shader_BeginRendering();
 
 #endif  // GL_SHADER_H

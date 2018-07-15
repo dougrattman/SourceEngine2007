@@ -63,8 +63,10 @@ static void AddPlaneToList(CUtlVector<cplane_t> &list, const Vector &normal,
 
 static void PlaneList(int leafIndex, model_t *model,
                       CUtlVector<cplane_t> &planeList) {
-  if (!model || !model->brush.pShared || !model->brush.pShared->nodes)
+  if (!model || !model->brush.pShared || !model->brush.pShared->nodes) {
     Sys_Error("PlaneList: bad model");
+    return;
+  }
 
   mleaf_t *pLeaf = &model->brush.pShared->leafs[leafIndex];
   mnode_t *pNode = pLeaf->parent;

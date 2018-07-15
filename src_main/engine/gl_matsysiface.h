@@ -71,12 +71,12 @@ struct materiallist_t {
 struct surfacesortgroup_t {
   short listHead;
   short listTail;
-  unsigned short vertexCount;
+  u16 vertexCount;
   short groupListIndex;
-  unsigned short vertexCountNoDetail;
-  unsigned short indexCountNoDetail;
-  unsigned short triangleCount;
-  unsigned short surfaceCount;
+  u16 vertexCountNoDetail;
+  u16 indexCountNoDetail;
+  u16 triangleCount;
+  u16 surfaceCount;
 };
 
 class CMSurfaceSortList {

@@ -35,7 +35,6 @@ extern ConVar developer;
 #include <crtdbg.h>
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifndef SWDS
@@ -92,7 +91,7 @@ CON_COMMAND_F(mat_edit,
   if (args.ArgC() < 2) {
     pMaterial = GetMaterialAtCrossHair();
   } else {
-    const char *pMaterialName = args[1];
+    const ch *pMaterialName = args[1];
     pMaterial =
         materials->FindMaterial(pMaterialName, "edited materials", false);
   }
@@ -137,10 +136,10 @@ CON_COMMAND_F(mat_crosshair_edit,
   if (!pMaterial) {
     ConMsg("no/bad material\n");
   } else {
-    char chResolveName[256] = {0}, chResolveNameArg[256] = {0};
+    ch chResolveName[256] = {0}, chResolveNameArg[256] = {0};
     Q_snprintf(chResolveNameArg, sizeof(chResolveNameArg) - 1,
                "materials/%s.vmt", pMaterial->GetName());
-    char const *szResolvedName = g_pFileSystem->RelativePathToFullPath(
+    ch const *szResolvedName = g_pFileSystem->RelativePathToFullPath(
         chResolveNameArg, "game", chResolveName, sizeof(chResolveName) - 1);
     if (p4) {
       CP4AutoEditAddFile autop4(szResolvedName);
@@ -163,12 +162,12 @@ CON_COMMAND_F(mat_crosshair_explorer,
   if (!pMaterial) {
     ConMsg("no/bad material\n");
   } else {
-    char chResolveName[256] = {0}, chResolveNameArg[256] = {0};
+    ch chResolveName[256] = {0}, chResolveNameArg[256] = {0};
     Q_snprintf(chResolveNameArg, sizeof(chResolveNameArg) - 1,
                "materials/%s.vmt", pMaterial->GetName());
-    char const *szResolvedName = g_pFileSystem->RelativePathToFullPath(
+    ch const *szResolvedName = g_pFileSystem->RelativePathToFullPath(
         chResolveNameArg, "game", chResolveName, sizeof(chResolveName) - 1);
-    char params[256];
+    ch params[256];
     Q_snprintf(params, sizeof(params) - 1, "/E,/SELECT,%s", szResolvedName);
     vgui::system()->ShellExecuteEx("open", "explorer.exe", params);
   }
@@ -280,7 +279,7 @@ static bool LightmapLess(const SurfaceHandle_t &surfID1,
 #endif
 }
 
-void MaterialSystem_RegisterLightmapSurfaces(void) {
+void MaterialSystem_RegisterLightmapSurfaces() {
   SurfaceHandle_t surfID = SURFACE_HANDLE_INVALID;
 
   materials->BeginLightmapAllocation();
@@ -332,7 +331,7 @@ static void TestBumpSanity(SurfaceHandle_t surfID) {
   }
 }
 
-void MaterialSytsem_DoBumpWarnings(void) {
+void MaterialSytsem_DoBumpWarnings() {
   int sortID;
   IMaterial *pPrevMaterial = NULL;
 
@@ -357,21 +356,12 @@ void MaterialSytsem_DoBumpWarnings(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-static void GenerateTexCoordsForPrimVerts(void) {
+static void GenerateTexCoordsForPrimVerts() {
   int j, k, l;
   for (int surfaceIndex = 0; surfaceIndex < host_state.worldbrush->numsurfaces;
        surfaceIndex++) {
     SurfaceHandle_t surfID = SurfaceHandleFromIndex(surfaceIndex);
-    /*
-                    if( pSurf->numPrims > 0 )
-                    {
-                            ConMsg( "pSurf %d has %d prims (normal: %f %f %f
-       dist: %f)\n", ( int )i, ( int )pSurf->numPrims, pSurf->plane->normal[0],
-       pSurf->plane->normal[1], pSurf->plane->normal[2], pSurf->plane->dist );
-                            ConMsg( "\tfirst primID: %d\n", ( int
-       )pSurf->firstPrimID );
-                    }
-    */
+
     for (j = 0; j < MSurf_NumPrims(surfID); j++) {
       mprimitive_t *pPrim;
       assert(MSurf_FirstPrimID(surfID) + j <
@@ -474,7 +464,7 @@ int __cdecl SortMapCompareFunc(const void *pElem0, const void *pElem1) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void MaterialSystem_CreateSortinfo(void) {
+void MaterialSystem_CreateSortinfo() {
   Assert(!materialSortInfoArray);
 
   int nSortIDs = materials->GetNumSortIDs();
@@ -615,8 +605,8 @@ void BuildMSurfacePrimVerts(worldbrushdata_t *pBrushData, mprimitive_t *prim,
                             CMeshBuilder &builder, SurfaceHandle_t surfID) {
   Vector tVect;
   bool negate = false;
-  // TODO(d.rattman): For some reason, normals are screwed up on water surfaces.  Revisit
-  // this once we have normals started in primverts.
+  // TODO(d.rattman): For some reason, normals are screwed up on water surfaces.
+  // Revisit this once we have normals started in primverts.
   if (MSurf_Flags(surfID) & SURFDRAW_TANGENTSPACE) {
     negate = TangentSpaceSurfaceSetup(surfID, tVect);
   }
@@ -644,7 +634,7 @@ void BuildMSurfacePrimVerts(worldbrushdata_t *pBrushData, mprimitive_t *prim,
 void BuildMSurfacePrimIndices(worldbrushdata_t *pBrushData, mprimitive_t *prim,
                               CMeshBuilder &builder) {
   for (int i = 0; i < prim->indexCount; i++) {
-    unsigned short primIndex = pBrushData->primindices[prim->firstIndex + i];
+    u16 primIndex = pBrushData->primindices[prim->firstIndex + i];
     builder.Index(primIndex - prim->firstVert);
     builder.AdvanceIndex();
   }
@@ -688,7 +678,7 @@ void BuildBrushModelVertexArray(worldbrushdata_t *pBrushData,
     //			// bump maps appear left to right in lightmap page
     // memory, calculate
     //			// the offset for the width of a single map. The pixel
-    //shader will use
+    // shader will use
     //			// this to compute the actual texture coordinates
     //			builder.TexCoord2f( 2, ctx.m_BumpSTexCoordOffset, 0.0f
     //);
@@ -810,7 +800,7 @@ void CMSurfaceSortList::AddSurfaceToTail(msurface2_t *pSurface, int sortGroup,
   if (pGroup->listTail != m_list.InvalidIndex()) {
     // existing block
     pList = &m_list[pGroup->listTail];
-    if (pList->count >= SOURCE_ARRAYSIZE(pList->pSurfaces)) {
+    if (pList->count >= std::size(pList->pSurfaces)) {
       prevIndex = pGroup->listTail;
       // no space in existing block
       pList = NULL;
@@ -852,14 +842,14 @@ msurface2_t *CMSurfaceSortList::GetSurfaceAtHead(
 
 void CMSurfaceSortList::GetSurfaceListForGroup(
     CUtlVector<msurface2_t *> &list, const surfacesortgroup_t &group) const {
-  MSL_FOREACH_SURFACE_IN_GROUP_BEGIN(*this, group, surfID) {
-    list.AddToTail(surfID);
+  MSL_FOREACH_SURFACE_IN_GROUP_BEGIN(*this, group, surfID) { 
+    list.AddToTail(surfID); 
   }
   MSL_FOREACH_SURFACE_IN_GROUP_END()
 }
 
 #ifndef SWDS
-IMaterial *GetMaterialAtCrossHair(void) {
+IMaterial *GetMaterialAtCrossHair() {
   Vector endPoint;
   Vector lightmapColor;
 
@@ -906,40 +896,18 @@ void DebugDrawLightmapAtCrossHair() {
   IMaterial *pMaterial;
   int lightmapPageSize[2];
 
-  if (s_CrossHairSurfID == nullptr) {
-    return;
-  }
+  if (s_CrossHairSurfID == nullptr) return;
+
   materials->GetLightmapPageSize(
       materialSortInfoArray[MSurf_MaterialSortID(s_CrossHairSurfID)]
           .lightmapPageID,
       &lightmapPageSize[0], &lightmapPageSize[1]);
+
   pMaterial = MSurf_TexInfo(s_CrossHairSurfID)->material;
-  //	pMaterial->GetLowResColorSample( textureS, textureT, baseColor );
+
   DrawLightmapPage(
       materialSortInfoArray[MSurf_MaterialSortID(s_CrossHairSurfID)]
           .lightmapPageID);
-
-#if 0
-	int i;
-	for( i = 0; i < 2; i++ )
-	{
-		xy[i] = 
-			( ( float )pCrossHairSurf->offsetIntoLightmapPage[i] / ( float )lightmapPageSize[i] ) +
-			lightmapCoord[i] * ( pCrossHairSurf->lightmapExtents[i] / ( float )lightmapPageSize[i] );
-	}
-
-	materials->Bind( g_materialWireframe );
-	IMesh* pMesh = materials->GetDynamicMesh( g_materialWireframe );
-	
-	CMeshBuilder meshBuilder;
-	meshBuilder.Begin( pMesh, MATERIAL_QUAD, 1 );
-
-	meshBuilder.Position3f( 
-	meshBuilder.AdvanceVertex();
-
-	meshBuilder.End();
-	pMesh->Draw();
-#endif
 }
 
 void ReleaseMaterialSystemObjects();

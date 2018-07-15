@@ -28,19 +28,18 @@ class CFrameSnapshotEntry {
 };
 
 // HLTV needs some more data per entity
-class CHLTVEntityData {
- public:
+struct CHLTVEntityData {
   f32 origin[3];  // entity position
-  unsigned int
-      m_nNodeCluster;  // if (1<<31) is set it's a node, otherwise a cluster
+  // if (1<<31) is set it's a node, otherwise a cluster
+  unsigned int m_nNodeCluster;
 };
 
-typedef struct {
+struct UnpackedDataCache_t {
   PackedEntity* pEntity;             // original packed entity
   int counter;                       // increaseing counter to find LRU entries
   int bits;                          // uncompressed data length in bits
   char data[MAX_PACKEDENTITY_DATA];  // uncompressed data cache
-} UnpackedDataCache_t;
+};
 
 //-----------------------------------------------------------------------------
 // Purpose: For all entities, stores whether the entity existed and what frame
@@ -74,7 +73,7 @@ class CFrameSnapshot {
 
   // This list holds the entities that are in use and that also aren't entities
   // for inactive clients.
-  unsigned short* m_pValidEntities;
+  u16* m_pValidEntities;
   int m_nValidEntities;
 
   // Additional HLTV info
@@ -150,7 +149,7 @@ class CFrameSnapshotManager {
  private:
   void DeleteFrameSnapshot(CFrameSnapshot* pSnapshot);
 
-  CUtlLinkedList<CFrameSnapshot*, unsigned short> m_FrameSnapshots;
+  CUtlLinkedList<CFrameSnapshot*, u16> m_FrameSnapshots;
   CClassMemoryPool<PackedEntity> m_PackedEntitiesPool;
   CUtlFixedLinkedList<PackedEntity*> m_PackedEntities;
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: master for refresh, status bar, console, chat, notify, etc
 
@@ -27,33 +27,24 @@
 #include "toolframework/itoolframework.h"
 #include "vgui_baseui_interface.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // In other C files.
-extern bool V_CheckGamma(void);
-extern void V_RenderView(void);
-extern void V_RenderVGuiOnly(void);
+extern bool V_CheckGamma();
+extern void V_RenderView();
+extern void V_RenderVGuiOnly();
 
 bool scr_initialized;  // ready to draw
 bool scr_disabled_for_loading;
 bool scr_drawloading;
 int scr_nextdrawtick;  // A hack to let things settle on reload/reconnect
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void SCR_Init(void) { scr_initialized = true; }
+void SCR_Init() { scr_initialized = true; }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void SCR_Shutdown(void) { scr_initialized = false; }
+void SCR_Shutdown() { scr_initialized = false; }
 
-//-----------------------------------------------------------------------------
 // Purpose: starts loading
-//-----------------------------------------------------------------------------
-void SCR_BeginLoadingPlaque(void) {
+void SCR_BeginLoadingPlaque() {
   if (!scr_drawloading) {
     // make sure game UI is allowed to show (gets disabled if chat window is up)
     EngineVGui()->SetNotAllowedToShowGameUI(false);
@@ -74,9 +65,7 @@ void SCR_BeginLoadingPlaque(void) {
     SCR_CenterStringOff();
 
     // NULL HudText clears HudMessage system
-    if (g_ClientDLL) {
-      g_ClientDLL->HudText(NULL);
-    }
+    if (g_ClientDLL) g_ClientDLL->HudText(nullptr);
 
     // let the UI know we're starting loading
     EngineVGui()->OnLevelLoadingStarted();
@@ -98,18 +87,14 @@ void SCR_BeginLoadingPlaque(void) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: finished loading
-//-----------------------------------------------------------------------------
-void SCR_EndLoadingPlaque(void) {
+void SCR_EndLoadingPlaque() {
   if (scr_drawloading) {
     // let the UI know we're finished
     EngineVGui()->OnLevelLoadingFinished();
     S_OnLoadScreen(false);
   } else if (gfExtendedError) {
-    if (IsPC()) {
-      EngineVGui()->ShowErrorMessage();
-    }
+    EngineVGui()->ShowErrorMessage();
   }
 
   g_pMatchmaking->OnLevelLoadingFinished();
@@ -118,47 +103,24 @@ void SCR_EndLoadingPlaque(void) {
   scr_drawloading = false;
 }
 
-//-----------------------------------------------------------------------------
-// Places TCR required defective media message and halts
-//-----------------------------------------------------------------------------
-#ifdef _XBOX
-void SCR_FatalDiskError() {
-  EngineVGui()->OnDiskError();
-  while (1) {
-    // run the minimal frame to update and paint
-    EngineVGui()->Simulate();
-    V_RenderVGuiOnly();
-  }
-}
-#endif
-
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void SCR_CenterPrint(char *str) {
+void SCR_CenterPrint(ch *str) {
   if (!centerprint) return;
 
   centerprint->ColorPrint(255, 255, 255, 0, str);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void SCR_CenterStringOff(void) {
+void SCR_CenterStringOff() {
   if (!centerprint) return;
 
   centerprint->Clear();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 inline void SCR_ShowVCRPlaybackAmount() {
   if (VCRGetMode() != VCR_Playback || !g_bShowVCRPlaybackDisplay) return;
 
   con_nprint_t info;
   info.index = 20;
-  info.time_to_live = 0.01;
+  info.time_to_live = 0.01f;
   info.color[0] = info.color[1] = info.color[2] = 1;
   info.fixed_width_font = false;
 
@@ -180,12 +142,9 @@ inline void SCR_ShowVCRPlaybackAmount() {
   Con_NXPrintf(&info, "'q' to quit");
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: This is called every frame, and can also be called explicitly to
-// flush
-//  text to the screen.
-//-----------------------------------------------------------------------------
-void SCR_UpdateScreen(void) {
+// flush text to the screen.
+void SCR_UpdateScreen() {
   R_StudioCheckReinitLightingCache();
 
   // Always force the Gamma Table to be rebuilt. Otherwise,

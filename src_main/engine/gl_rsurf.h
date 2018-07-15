@@ -103,7 +103,7 @@ void TangentSpaceComputeBasis(Vector &tangentS, Vector &tangentT,
 inline void BuildIndicesForSurface(CMeshBuilder &meshBuilder,
                                    SurfaceHandle_t surfID) {
   int nSurfTriangleCount = MSurf_VertCount(surfID) - 2;
-  unsigned short startVert = MSurf_VertBufferIndex(surfID);
+  u16 startVert = MSurf_VertBufferIndex(surfID);
   Assert(startVert != 0xFFFF);
 
   // NOTE: This switch appears to help performance
@@ -125,7 +125,7 @@ inline void BuildIndicesForSurface(CMeshBuilder &meshBuilder,
       break;
 
     default: {
-      for (unsigned short v = 0; v < nSurfTriangleCount; ++v) {
+      for (u16 v = 0; v < nSurfTriangleCount; ++v) {
         meshBuilder.FastIndex(startVert);
         meshBuilder.FastIndex(startVert + v + 1);
         meshBuilder.FastIndex(startVert + v + 2);
@@ -140,7 +140,7 @@ inline void BuildIndicesForWorldSurface(CMeshBuilder &meshBuilder,
   if (SurfaceHasPrims(surfID)) {
     mprimitive_t *pPrim = &pData->primitives[MSurf_FirstPrimID(surfID, pData)];
     Assert(pPrim->vertCount == 0);
-    unsigned short startVert = MSurf_VertBufferIndex(surfID);
+    u16 startVert = MSurf_VertBufferIndex(surfID);
     Assert(pPrim->indexCount == ((MSurf_VertCount(surfID) - 2) * 3));
 
     for (int primIndex = 0; primIndex < pPrim->indexCount; primIndex++) {
@@ -157,7 +157,7 @@ inline void BuildIndicesForWorldSurface(CMeshBuilder &meshBuilder,
 inline void BuildIndicesForSurface(CIndexBufferBuilder &indexBufferBuilder,
                                    SurfaceHandle_t surfID) {
   int nSurfTriangleCount = MSurf_VertCount(surfID) - 2;
-  unsigned short startVert = MSurf_VertBufferIndex(surfID);
+  u16 startVert = MSurf_VertBufferIndex(surfID);
   Assert(startVert != 0xFFFF);
 
   // NOTE: This switch appears to help performance
@@ -197,7 +197,7 @@ inline void BuildIndicesForSurface(CIndexBufferBuilder &indexBufferBuilder,
       break;
 
     default: {
-      for (unsigned short v = 0; v < nSurfTriangleCount; ++v) {
+      for (u16 v = 0; v < nSurfTriangleCount; ++v) {
         indexBufferBuilder.FastIndex(startVert);
         Warning("BuildIndicesForSurface: indexBufferBuilder.FastIndex( %d )\n",
                 (int)(startVert));
@@ -218,7 +218,7 @@ inline void BuildIndicesForWorldSurface(CIndexBufferBuilder &indexBufferBuilder,
   if (SurfaceHasPrims(surfID)) {
     mprimitive_t *pPrim = &pData->primitives[MSurf_FirstPrimID(surfID, pData)];
     Assert(pPrim->vertCount == 0);
-    unsigned short startVert = MSurf_VertBufferIndex(surfID);
+    u16 startVert = MSurf_VertBufferIndex(surfID);
     Assert(pPrim->indexCount == ((MSurf_VertCount(surfID) - 2) * 3));
 
     for (int primIndex = 0; primIndex < pPrim->indexCount; primIndex++) {

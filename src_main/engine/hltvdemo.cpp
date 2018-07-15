@@ -125,7 +125,7 @@ void CHLTVDemoRecorder::StopRecording() {
 
 CDemoFile *CHLTVDemoRecorder::GetDemoFile() { return &m_DemoFile; }
 
-int CHLTVDemoRecorder::GetRecordingTick(void) {
+int CHLTVDemoRecorder::GetRecordingTick() {
   return host_tickcount - m_nStartTick;
 }
 

@@ -39,7 +39,7 @@ struct mvertex_t {
 
 // !!! if this is changed, it must be changed in asm_draw.h too !!!
 struct medge_t {
-  unsigned short v[2];
+  u16 v[2];
   //	unsigned int	cachededgeoffset;
 };
 
@@ -57,8 +57,8 @@ struct mtexinfo_t {
   Vector4D lightmapVecsLuxelsPerWorldUnits[2];
   float luxelsPerWorldUnit;
   float worldUnitsPerLuxel;
-  unsigned short flags;         // SURF_ flags.
-  unsigned short texinfoFlags;  // TEXINFO_ flags.
+  u16 flags;         // SURF_ flags.
+  u16 texinfoFlags;  // TEXINFO_ flags.
   IMaterial *material;
 
   mtexinfo_t(mtexinfo_t const &src) {
@@ -87,8 +87,8 @@ struct mnode_t {
   cplane_t *plane;
   mnode_t *children[2];
 
-  unsigned short firstsurface;
-  unsigned short numsurfaces;
+  u16 firstsurface;
+  u16 numsurfaces;
 };
 
 struct mleaf_t {
@@ -108,15 +108,14 @@ struct mleaf_t {
   short cluster;
   short leafWaterDataID;
 
-  unsigned short firstmarksurface;
-  unsigned short nummarksurfaces;
+  u16 firstmarksurface;
+  u16 nummarksurfaces;
 
   short nummarknodesurfaces;
   short unused;
 
-  unsigned short dispListStart;  // index into displist of first displacement
-  unsigned short
-      dispCount;  // number of displacements in the list for this leaf
+  u16 dispListStart;  // index into displist of first displacement
+  u16 dispCount;      // number of displacements in the list for this leaf
 };
 
 struct mleafwaterdata_t {
@@ -133,18 +132,18 @@ struct mcubemapsample_t {
       size;  // default (mat_envmaptgasize) if 0, 1<<(size-1) otherwise.
 };
 
-typedef struct mportal_s {
-  unsigned short *vertList;
+struct mportal_t {
+  u16 *vertList;
   int numportalverts;
   cplane_t *plane;
-  unsigned short cluster[2];
+  u16 cluster[2];
   //	int 	visframe;
-} mportal_t;
+};
 
-typedef struct mcluster_s {
-  unsigned short *portalList;
+struct mcluster_t {
+  u16 *portalList;
   int numportals;
-} mcluster_t;
+};
 
 struct mmodel_t {
   Vector mins, maxs;
@@ -156,10 +155,10 @@ struct mmodel_t {
 
 struct mprimitive_t {
   int type;
-  unsigned short firstIndex;
-  unsigned short indexCount;
-  unsigned short firstVert;
-  unsigned short vertCount;
+  u16 firstIndex;
+  u16 indexCount;
+  u16 firstVert;
+  u16 vertCount;
 };
 
 struct mprimvert_t {
@@ -222,14 +221,14 @@ struct worldbrushdata_t {
   int *occludervertindices;
 
   int numvertnormalindices;  // These index vertnormals.
-  unsigned short *vertnormalindices;
+  u16 *vertnormalindices;
 
   int numvertnormals;
   Vector *vertnormals;
 
   int numnodes;
   mnode_t *nodes;
-  unsigned short *m_LeafMinDistToWater;
+  u16 *m_LeafMinDistToWater;
 
   int numtexinfo;
   mtexinfo_t *texinfo;
@@ -254,7 +253,7 @@ struct worldbrushdata_t {
   bool unloadedlightmaps;
 
   int numvertindices;
-  unsigned short *vertindices;
+  u16 *vertindices;
 
   int nummarksurfaces;
   SurfaceHandle_t *marksurfaces;
@@ -274,7 +273,7 @@ struct worldbrushdata_t {
   mprimvert_t *primverts;
 
   int numprimindices;
-  unsigned short *primindices;
+  u16 *primindices;
 
   int m_nAreas;
   darea_t *m_pAreas;
@@ -289,7 +288,7 @@ struct worldbrushdata_t {
   int m_nCubemapSamples;
 
   int m_nDispInfoReferences;
-  unsigned short *m_pDispInfoReferences;
+  u16 *m_pDispInfoReferences;
 
   mleafambientindex_t *m_pLeafAmbient;
   mleafambientlighting_t *m_pAmbientSamples;
@@ -301,10 +300,10 @@ struct worldbrushdata_t {
 	mcluster_t	*clusters;
 
 	int numportalverts;
-	unsigned short *portalverts;
+	u16 *portalverts;
 
 	int numclusterportals;
-	unsigned short *clusterportals;
+	u16 *clusterportals;
 #endif
 };
 // only models with type "mod_brush" have this data
@@ -312,8 +311,8 @@ struct brushdata_t {
   worldbrushdata_t *pShared;
   int firstmodelsurface, nummodelsurfaces;
 
-  unsigned short renderHandle;
-  unsigned short firstnode;
+  u16 renderHandle;
+  u16 firstnode;
 };
 
 // only models with type "mod_sprite" have this data
@@ -415,15 +414,15 @@ struct msurface1_t {
                             // surfaces
 
   struct {
-    unsigned short numPrims;
-    unsigned short firstPrimID;  // index into primitive list if numPrims > 0
+    u16 numPrims;
+    u16 firstPrimID;  // index into primitive list if numPrims > 0
   } prims;
 };
 
 #pragma pack(1)
 struct msurfacenormal_t {
   unsigned int firstvertnormal;
-  //	unsigned short	firstvertnormal;
+  //	u16	firstvertnormal;
   // TODO(d.rattman): Should I just point to the leaf here since it has this
   // data?????????????
   //	short fogVolumeID; // -1 if not in fog
@@ -463,7 +462,7 @@ struct msurfacelighting_t {
 };
 
 const int WORLD_DECAL_HANDLE_INVALID = 0xFFFF;
-typedef unsigned short WorldDecalHandle_t;
+typedef u16 WorldDecalHandle_t;
 
 #pragma pack(1)
 // NOTE: 32-bytes.  Aligned/indexed often
@@ -476,22 +475,22 @@ struct msurface2_t {
   int firstvertindex;  // look up in model->vertindices[] (only uses 17-18
                        // bits?)
   WorldDecalHandle_t decals;
-  ShadowDecalHandle_t m_ShadowDecals;  // unsigned short
+  ShadowDecalHandle_t m_ShadowDecals;  // u16
   OverlayFragmentHandle_t
       m_nFirstOverlayFragment;  // First overlay fragment on the surface (short)
   short materialSortID;
-  unsigned short vertBufferIndex;
+  u16 vertBufferIndex;
 
-  unsigned short m_bDynamicShadowsEnabled : 1;  // Can this surface receive
-                                                // dynamic shadows?
-  unsigned short texinfo : 15;
+  u16 m_bDynamicShadowsEnabled : 1;  // Can this surface receive
+                                     // dynamic shadows?
+  u16 texinfo : 15;
 
   IDispInfo *pDispInfo;  // displacement map information
   int visframe;          // should be drawn when node is crossed
 };
 #pragma pack()
 
-inline unsigned short MSurf_AreDynamicShadowsEnabled(SurfaceHandle_t surfID) {
+inline u16 MSurf_AreDynamicShadowsEnabled(SurfaceHandle_t surfID) {
   return surfID->m_bDynamicShadowsEnabled;
 }
 
@@ -670,8 +669,8 @@ inline short& MSurf_CachedDLight( SurfaceHandle_t surfID, worldbrushdata_t
 }
 */
 
-inline unsigned short MSurf_NumPrims(
-    SurfaceHandle_t surfID, worldbrushdata_t *pData = host_state.worldbrush) {
+inline u16 MSurf_NumPrims(SurfaceHandle_t surfID,
+                          worldbrushdata_t *pData = host_state.worldbrush) {
   if (SurfaceHasDispInfo(surfID) || !SurfaceHasPrims(surfID)) return 0;
 
   int surfaceIndex = MSurf_Index(surfID, pData);
@@ -680,8 +679,8 @@ inline unsigned short MSurf_NumPrims(
   return pData->surfaces1[surfaceIndex].prims.numPrims;
 }
 
-inline unsigned short MSurf_FirstPrimID(
-    SurfaceHandle_t surfID, worldbrushdata_t *pData = host_state.worldbrush) {
+inline u16 MSurf_FirstPrimID(SurfaceHandle_t surfID,
+                             worldbrushdata_t *pData = host_state.worldbrush) {
   if (SurfaceHasDispInfo(surfID)) return 0;
   int surfaceIndex = MSurf_Index(surfID, pData);
   //	ASSERT_SURF_VALID( surfID );
@@ -702,7 +701,7 @@ inline IDispInfo *MSurf_DispInfo(
   return surfID->pDispInfo;
 }
 
-// inline unsigned short &MSurf_FirstVertNormal( SurfaceHandle_t surfID,
+// inline u16 &MSurf_FirstVertNormal( SurfaceHandle_t surfID,
 // worldbrushdata_t *pData = host_state.worldbrush )
 inline unsigned int &MSurf_FirstVertNormal(
     SurfaceHandle_t surfID, worldbrushdata_t *pData = host_state.worldbrush) {
@@ -714,7 +713,7 @@ inline unsigned int &MSurf_FirstVertNormal(
   return pData->surfacenormals[surfaceIndex].firstvertnormal;
 }
 
-inline unsigned short &MSurf_VertBufferIndex(SurfaceHandle_t surfID) {
+inline u16 &MSurf_VertBufferIndex(SurfaceHandle_t surfID) {
   return surfID->vertBufferIndex;
 }
 

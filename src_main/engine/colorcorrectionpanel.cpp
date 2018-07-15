@@ -55,7 +55,7 @@ class CPrecisionSlider : public vgui::Slider {
   DECLARE_CLASS_SIMPLE(CPrecisionSlider, vgui::Slider);
 
  public:
-  CPrecisionSlider(Panel *parent, const char *panelName);
+  CPrecisionSlider(Panel *parent, const ch *panelName);
   ~CPrecisionSlider();
 
   virtual void SetValue(int value, bool bTriggerChangeMessage = true);
@@ -81,7 +81,7 @@ class CPrecisionSlider : public vgui::Slider {
 //-----------------------------------------------------------------------------
 // Constructor
 //-----------------------------------------------------------------------------
-CPrecisionSlider::CPrecisionSlider(Panel *parent, const char *panelName)
+CPrecisionSlider::CPrecisionSlider(Panel *parent, const ch *panelName)
     : BaseClass(parent, panelName) {
   m_pTextEntry = new vgui::TextEntry(this, "PrecisionEditPanel");
   m_pTextEntry->SendNewLine(true);
@@ -135,7 +135,7 @@ void CPrecisionSlider::GetTrackRect(int &x, int &y, int &w, int &h) {
 void CPrecisionSlider::SetValue(int value, bool bTriggerChangeMessage) {
   BaseClass::SetValue(value, bTriggerChangeMessage);
 
-  char szValueString[256];
+  ch szValueString[256];
   sprintf_s(szValueString, "%d", _value);
   m_pTextEntry->SetText(szValueString);
 }
@@ -152,7 +152,7 @@ void CPrecisionSlider::SetEnabled(bool state) {
 // Handle updates from the text entry field
 //-----------------------------------------------------------------------------
 void CPrecisionSlider::OnTextNewLine(KeyValues *data) {
-  char buf[256];
+  ch buf[256];
   m_pTextEntry->GetText(buf, 256);
 
   int value;
@@ -196,7 +196,7 @@ enum ColorCorrectionTool_t {
   DEFAULT_CC_TOOL = CC_TOOL_NONE,
 };
 
-static const char *s_pColorCorrectionToolNames[CC_TOOL_COUNT] = {
+static const ch *s_pColorCorrectionToolNames[CC_TOOL_COUNT] = {
     "No Tool Active",    "Curves Tool", "Levels Tool",
     "Selected HSV Tool", "Lookup Tool", "Color Balance Tool",
 };
@@ -282,8 +282,8 @@ the_interface IColorOperation {
   // Causes the operation to be deleted
   virtual void Release() = 0;
 
-  virtual const char *GetName() = 0;
-  virtual void SetName(const char *pName) = 0;
+  virtual const ch *GetName() = 0;
+  virtual void SetName(const ch *pName) = 0;
 
   virtual IColorOperation *Clone() = 0;
 
@@ -423,7 +423,7 @@ class CColorCorrectionUIChildPanel : public vgui::Frame {
   DECLARE_CLASS_SIMPLE(CColorCorrectionUIChildPanel, vgui::Frame);
 
  public:
-  CColorCorrectionUIChildPanel(vgui::Panel *parent, const char *name)
+  CColorCorrectionUIChildPanel(vgui::Panel *parent, const ch *name)
       : BaseClass(parent, name) {}
 
   ~CColorCorrectionUIChildPanel() {}
@@ -478,8 +478,8 @@ class CCurvesColorOperation : public IColorOperation {
   virtual void Apply(const Vector &inRGB, Vector &outRGB);
   virtual void Release() { delete this; }
 
-  virtual const char *GetName() { return m_pName; }
-  virtual void SetName(const char *pName) { Q_strcpy(m_pName, pName); }
+  virtual const ch *GetName() { return m_pName; }
+  virtual void SetName(const ch *pName) { Q_strcpy(m_pName, pName); }
 
   virtual IColorOperation *Clone();
 
@@ -545,7 +545,7 @@ class CCurvesColorOperation : public IColorOperation {
   CUtlSortVector<Vector, CurvesLessFunc> m_ControlPoints;
   float m_flBlendFactor;
 
-  char m_pName[256];
+  ch m_pName[256];
 
   bool m_bEnable;
 };
@@ -740,7 +740,7 @@ IColorOperation *CCurvesColorOperation::Clone() {
   pClone->m_nChannelMask = m_nChannelMask;
   pClone->m_ControlPoints = m_ControlPoints;
   pClone->m_flBlendFactor = m_flBlendFactor;
-  Q_memcpy(pClone->m_pName, m_pName, sizeof(char) * 256);
+  Q_memcpy(pClone->m_pName, m_pName, sizeof(ch) * 256);
   pClone->m_bEnable = m_bEnable;
 
   return pClone;
@@ -754,7 +754,7 @@ class CColorCurvesEditPanel : public CCurveEditorPanel {
 
  public:
   // constructor
-  CColorCurvesEditPanel(vgui::Panel *pParent, const char *pName);
+  CColorCurvesEditPanel(vgui::Panel *pParent, const ch *pName);
   ~CColorCurvesEditPanel();
 
   // Sets the color curves operation to edit
@@ -778,7 +778,7 @@ class CColorCurvesEditPanel : public CCurveEditorPanel {
 // constructor, destructor
 //-----------------------------------------------------------------------------
 CColorCurvesEditPanel::CColorCurvesEditPanel(vgui::Panel *pParent,
-                                             const char *pName)
+                                             const ch *pName)
     : BaseClass(pParent, pName) {
   m_pCurvesOp = NULL;
   SetVisible(false);
@@ -860,7 +860,7 @@ class CColorCurvesUIPanel : public CColorCorrectionUIChildPanel {
   // Command issued
   virtual void OnMessage(const KeyValues *params, vgui::VPANEL fromPanel);
 
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
  private:
   enum {
@@ -883,10 +883,10 @@ class CColorCurvesUIPanel : public CColorCorrectionUIChildPanel {
   CColorCurvesEditPanel *m_pCurveEditor;
   CCurvesColorOperation *m_pColorOp;
 
-  static const char *s_pColorMaskLabel[COLOR_MASK_TYPE_COUNT];
+  static const ch *s_pColorMaskLabel[COLOR_MASK_TYPE_COUNT];
 };
 
-const char *CColorCurvesUIPanel::s_pColorMaskLabel
+const ch *CColorCurvesUIPanel::s_pColorMaskLabel
     [CColorCurvesUIPanel::COLOR_MASK_TYPE_COUNT] = {"RGB", "Red", "Green",
                                                     "Blue"};
 
@@ -939,7 +939,7 @@ void CColorCurvesUIPanel::OnMessage(const KeyValues *params,
   }
 }
 
-void CColorCurvesUIPanel::OnCommand(const char *command) {
+void CColorCurvesUIPanel::OnCommand(const ch *command) {
   BaseClass::OnCommand(command);
 
   if (!Q_stricmp("BlendFactorUpdate", command)) {
@@ -1012,8 +1012,8 @@ class CLevelsColorOperation : public IColorOperation {
   virtual void Apply(const Vector &inRGB, Vector &outRGB);
   virtual void Release() { delete this; }
 
-  virtual const char *GetName() { return m_pName; }
-  virtual void SetName(const char *pName) { Q_strcpy(m_pName, pName); }
+  virtual const ch *GetName() { return m_pName; }
+  virtual void SetName(const ch *pName) { Q_strcpy(m_pName, pName); }
 
   virtual ColorCorrectionTool_t ToolID() { return CC_TOOL_LEVELS; }
 
@@ -1065,7 +1065,7 @@ class CLevelsColorOperation : public IColorOperation {
 
   bool m_bEnable;
 
-  char m_pName[256];
+  ch m_pName[256];
 
   CColorOperationList *m_pOpList;
 };
@@ -1236,7 +1236,7 @@ IColorOperation *CLevelsColorOperation::Clone() {
 
   pClone->m_pOpList = m_pOpList;
 
-  Q_memcpy(pClone->m_pName, m_pName, sizeof(char) * 256);
+  Q_memcpy(pClone->m_pName, m_pName, sizeof(ch) * 256);
 
   return pClone;
 }
@@ -1258,7 +1258,7 @@ class CColorHistogramPanel : public vgui::Panel {
   };
 
   // constructor
-  CColorHistogramPanel(vgui::Panel *pParent, const char *pName,
+  CColorHistogramPanel(vgui::Panel *pParent, const ch *pName,
                        CLevelsColorOperation *pOp);
   ~CColorHistogramPanel();
 
@@ -1287,7 +1287,7 @@ class CColorHistogramPanel : public vgui::Panel {
 // constructor, destructor
 //-----------------------------------------------------------------------------
 CColorHistogramPanel::CColorHistogramPanel(vgui::Panel *pParent,
-                                           const char *pName,
+                                           const ch *pName,
                                            CLevelsColorOperation *pOp)
     : BaseClass(pParent, pName) {
   for (int i = 0; i < 256; ++i) {
@@ -1370,7 +1370,7 @@ void CColorHistogramPanel::ComputeHistogram(Rect_t &srcRect,
 //-----------------------------------------------------------------------------
 // This paints the grid behind the curves
 //-----------------------------------------------------------------------------
-void CColorHistogramPanel::PaintBackground(void) {
+void CColorHistogramPanel::PaintBackground() {
   int w, h;
   GetSize(w, h);
 
@@ -1396,7 +1396,7 @@ void CColorHistogramPanel::PaintBackground(void) {
 //-----------------------------------------------------------------------------
 // Sets the color curves operation to edit
 //-----------------------------------------------------------------------------
-void CColorHistogramPanel::Paint(void) {
+void CColorHistogramPanel::Paint() {
   int w, h;
   GetSize(w, h);
 
@@ -1436,7 +1436,7 @@ class CColorSlider : public vgui::Panel {
 
  public:
   // constructor
-  CColorSlider(vgui::Panel *pParent, const char *pName, int nKnobCount);
+  CColorSlider(vgui::Panel *pParent, const ch *pName, int nKnobCount);
   ~CColorSlider();
 
   // Painting
@@ -1476,7 +1476,7 @@ class CColorSlider : public vgui::Panel {
 //-----------------------------------------------------------------------------
 // constructor
 //-----------------------------------------------------------------------------
-CColorSlider::CColorSlider(vgui::Panel *pParent, const char *pName,
+CColorSlider::CColorSlider(vgui::Panel *pParent, const ch *pName,
                            int nKnobCount)
     : BaseClass(pParent, pName) {
   m_nKnobCount = nKnobCount;
@@ -1695,7 +1695,7 @@ class CColorLevelsUIPanel : public CColorCorrectionUIChildPanel {
   // Command issued
   virtual void OnMessage(const KeyValues *params, vgui::VPANEL fromPanel);
 
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
   // Reads the uncorrected image + generates a hisogram
   virtual void ReadUncorrectedImage(Rect_t *pSrcRect,
@@ -1733,10 +1733,10 @@ class CColorLevelsUIPanel : public CColorCorrectionUIChildPanel {
   CColorSlider *m_pInputLevelSlider;
   CColorSlider *m_pOutputLevelSlider;
 
-  static const char *s_pColorMaskLabel[COLOR_MASK_TYPE_COUNT];
+  static const ch *s_pColorMaskLabel[COLOR_MASK_TYPE_COUNT];
 };
 
-const char *CColorLevelsUIPanel::s_pColorMaskLabel
+const ch *CColorLevelsUIPanel::s_pColorMaskLabel
     [CColorLevelsUIPanel::COLOR_MASK_TYPE_COUNT] = {"RGB", "Red", "Green",
                                                     "Blue"};
 
@@ -1828,7 +1828,7 @@ void CColorLevelsUIPanel::OnMessage(const KeyValues *params,
   }
 }
 
-void CColorLevelsUIPanel::OnCommand(const char *command) {
+void CColorLevelsUIPanel::OnCommand(const ch *command) {
   BaseClass::OnCommand(command);
 
   if (!Q_stricmp("BlendFactorUpdate", command)) {
@@ -1922,8 +1922,8 @@ class CSelectedHSVOperation : public IColorOperation {
   virtual void Apply(const Vector &inRGB, Vector &outRGB);
   virtual void Release() { delete this; }
 
-  virtual const char *GetName() { return m_pName; }
-  virtual void SetName(const char *pName) { Q_strcpy(m_pName, pName); }
+  virtual const ch *GetName() { return m_pName; }
+  virtual void SetName(const ch *pName) { Q_strcpy(m_pName, pName); }
 
   virtual ColorCorrectionTool_t ToolID() { return CC_TOOL_SELECTED_HSV; }
 
@@ -1983,7 +1983,7 @@ class CSelectedHSVOperation : public IColorOperation {
 
   bool m_bEnable;
 
-  char m_pName[256];
+  ch m_pName[256];
 };
 
 //-----------------------------------------------------------------------------
@@ -2261,7 +2261,7 @@ IColorOperation *CSelectedHSVOperation::Clone() {
 
   pClone->m_pOpList = m_pOpList;
 
-  Q_memcpy(pClone->m_pName, m_pName, sizeof(char) * 256);
+  Q_memcpy(pClone->m_pName, m_pName, sizeof(ch) * 256);
 
   return pClone;
 }
@@ -2273,7 +2273,7 @@ class CFullScreenSelectionPanel : public vgui::Panel {
   DECLARE_CLASS_SIMPLE(CFullScreenSelectionPanel, vgui::Panel);
 
  public:
-  CFullScreenSelectionPanel(const char *pName, CSelectedHSVOperation *pOp,
+  CFullScreenSelectionPanel(const ch *pName, CSelectedHSVOperation *pOp,
                             vgui::Panel *pParent);
   ~CFullScreenSelectionPanel();
 
@@ -2290,7 +2290,7 @@ class CFullScreenSelectionPanel : public vgui::Panel {
   bool m_bMouseDown;
 };
 
-CFullScreenSelectionPanel::CFullScreenSelectionPanel(const char *pName,
+CFullScreenSelectionPanel::CFullScreenSelectionPanel(const ch *pName,
                                                      CSelectedHSVOperation *pOp,
                                                      vgui::Panel *pParent)
     : BaseClass(pParent, pName) {
@@ -2356,7 +2356,7 @@ class CUncorrectedImagePanel : public CProceduralTexturePanel {
 
  public:
   // constructor
-  CUncorrectedImagePanel(vgui::Panel *pParent, const char *pName);
+  CUncorrectedImagePanel(vgui::Panel *pParent, const ch *pName);
   ~CUncorrectedImagePanel();
 
   virtual void RegenerateTextureBits(ITexture *pTexture,
@@ -2380,7 +2380,7 @@ class CUncorrectedImagePanel : public CProceduralTexturePanel {
 // constructor
 //-----------------------------------------------------------------------------
 CUncorrectedImagePanel::CUncorrectedImagePanel(vgui::Panel *pParent,
-                                               const char *pName)
+                                               const ch *pName)
     : BaseClass(pParent, pName) {
   m_bMouseDown = false;
   SetMouseInputEnabled(true);
@@ -2519,7 +2519,7 @@ class CSelectedHSVUIPanel : public CColorCorrectionUIChildPanel {
   // Command issued
   virtual void OnMessage(const KeyValues *params, vgui::VPANEL fromPanel);
 
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
   virtual void Init();
   virtual void Shutdown();
@@ -2571,14 +2571,14 @@ class CSelectedHSVUIPanel : public CColorCorrectionUIChildPanel {
 
   bool m_bSelectionEnable;
 
-  static const char
+  static const ch
       *s_pSelectionMethodNames[CSelectedHSVOperation::SELECTION_METHOD_COUNT];
 };
 
 //-----------------------------------------------------------------------------
 // If you add a selection method, add it to the string list
 //-----------------------------------------------------------------------------
-const char *CSelectedHSVUIPanel::s_pSelectionMethodNames
+const ch *CSelectedHSVUIPanel::s_pSelectionMethodNames
     [CSelectedHSVOperation::SELECTION_METHOD_COUNT] = {
         "Select None",
         "Select All",
@@ -2820,7 +2820,7 @@ void CSelectedHSVUIPanel::OnMessage(const KeyValues *params, VPANEL fromPanel) {
   }
 }
 
-void CSelectedHSVUIPanel::OnCommand(const char *command) {
+void CSelectedHSVUIPanel::OnCommand(const ch *command) {
   BaseClass::OnCommand(command);
 
   if (!Q_stricmp("BlendFactorUpdate", command)) {
@@ -2855,8 +2855,8 @@ class CColorLookupOperation : public IColorOperation {
   virtual void Apply(const Vector &inRGB, Vector &outRGB);
   virtual void Release() { delete this; }
 
-  virtual const char *GetName() { return m_pName; }
-  virtual void SetName(const char *pName) { Q_strcpy(m_pName, pName); }
+  virtual const ch *GetName() { return m_pName; }
+  virtual void SetName(const ch *pName) { Q_strcpy(m_pName, pName); }
 
   virtual ColorCorrectionTool_t ToolID() { return CC_TOOL_LOOKUP; }
 
@@ -2866,7 +2866,7 @@ class CColorLookupOperation : public IColorOperation {
   virtual void SetEnabled(bool bEnable) { m_bEnable = bEnable; }
 
   // Load a lookup table from file pFilename
-  void LoadLookupTable(const char *pFilename);
+  void LoadLookupTable(const ch *pFilename);
 
   // Get the floating point color values at a lookup cell
   void GetLookupValue(int r, int g, int b, Vector &out);
@@ -2877,7 +2877,7 @@ class CColorLookupOperation : public IColorOperation {
   virtual float GetBlendFactor() { return m_flBlendFactor; }
 
   bool IsFileLoaded() { return m_LookupTable; }
-  const char *GetFilename() { return m_pFilename; }
+  const ch *GetFilename() { return m_pFilename; }
 
  private:
   // Set the resolution of the lookup table, deletes any active data
@@ -2886,7 +2886,7 @@ class CColorLookupOperation : public IColorOperation {
   // Deletes any active lookup data
   void DeleteLookupTableData();
 
-  char m_pFilename[SOURCE_MAX_PATH];
+  ch m_pFilename[SOURCE_MAX_PATH];
 
   int m_Resolution;
   color24 *m_LookupTable;
@@ -2895,7 +2895,7 @@ class CColorLookupOperation : public IColorOperation {
 
   bool m_bEnable;
 
-  char m_pName[256];
+  ch m_pName[256];
 };
 
 //-----------------------------------------------------------------------------
@@ -2993,7 +2993,7 @@ void CColorLookupOperation::SetBlendFactor(float flBlend) {
 //-----------------------------------------------------------------------------
 // Loads a lookup table from file pFilename
 //-----------------------------------------------------------------------------
-void CColorLookupOperation::LoadLookupTable(const char *pFilename) {
+void CColorLookupOperation::LoadLookupTable(const ch *pFilename) {
   FileHandle_t file_handle = g_pFileSystem->Open(pFilename, "rb");
   if (!file_handle) return;
 
@@ -3042,13 +3042,13 @@ void CColorLookupOperation::DeleteLookupTableData() {
 IColorOperation *CColorLookupOperation::Clone() {
   CColorLookupOperation *pClone = new CColorLookupOperation;
 
-  Q_memcpy(pClone->m_pFilename, m_pFilename, sizeof(char) * SOURCE_MAX_PATH);
+  Q_memcpy(pClone->m_pFilename, m_pFilename, sizeof(ch) * SOURCE_MAX_PATH);
 
   pClone->m_Resolution = m_Resolution;
   pClone->m_flBlendFactor = m_flBlendFactor;
   pClone->m_bEnable = m_bEnable;
 
-  Q_memcpy(pClone->m_pName, m_pName, sizeof(char) * 256);
+  Q_memcpy(pClone->m_pName, m_pName, sizeof(ch) * 256);
 
   pClone->m_LookupTable =
       new color24[m_Resolution * m_Resolution * m_Resolution];
@@ -3081,7 +3081,7 @@ class CColorLookupUIPanel : public CColorCorrectionUIChildPanel {
 
   // Command issued
   virtual void OnMessage(const KeyValues *params, vgui::VPANEL fromPanel);
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
  private:
   MESSAGE_FUNC_CHARPTR(OnFileSelected, "FileSelected", fullpath);
@@ -3139,7 +3139,7 @@ void CColorLookupUIPanel::OnMessage(const KeyValues *params,
   }
 }
 
-void CColorLookupUIPanel::OnCommand(const char *command) {
+void CColorLookupUIPanel::OnCommand(const ch *command) {
   if (!Q_strcasecmp(command, "LoadLookup")) {
     FileOpenDialog *open_dialog = new FileOpenDialog(this, "File Open", true);
     open_dialog->AddActionSignalTarget(this);
@@ -3162,7 +3162,7 @@ void CColorLookupUIPanel::ResetBlendFactorSlider() {
   m_pBlendFactorSlider->SetValue(flBlend * 255.0f);
 }
 
-void CColorLookupUIPanel::OnFileSelected(const char *filename) {
+void CColorLookupUIPanel::OnFileSelected(const ch *filename) {
   m_pLookupOp->LoadLookupTable(filename);
 
   SetButtonText();
@@ -3195,8 +3195,8 @@ class CColorBalanceOperation : public IColorOperation {
   virtual void Apply(const Vector &inRGB, Vector &outRGB);
   virtual void Release() { delete this; }
 
-  virtual const char *GetName() { return m_pName; }
-  virtual void SetName(const char *pName) { Q_strcpy(m_pName, pName); }
+  virtual const ch *GetName() { return m_pName; }
+  virtual void SetName(const ch *pName) { Q_strcpy(m_pName, pName); }
 
   virtual ColorCorrectionTool_t ToolID() { return CC_TOOL_BALANCE; }
 
@@ -3263,7 +3263,7 @@ class CColorBalanceOperation : public IColorOperation {
 
   bool m_bEnable;
 
-  char m_pName[256];
+  ch m_pName[256];
 };
 
 //-----------------------------------------------------------------------------
@@ -3577,11 +3577,11 @@ IColorOperation *CColorBalanceOperation::Clone() {
   Q_memcpy(pClone->m_HighlightsAddTransfer, m_HighlightsAddTransfer,
            sizeof(float) * 256);
 
-  Q_memcpy(pClone->m_pRedLookup, m_pRedLookup, sizeof(char) * 256);
-  Q_memcpy(pClone->m_pGreenLookup, m_pGreenLookup, sizeof(char) * 256);
-  Q_memcpy(pClone->m_pBlueLookup, m_pBlueLookup, sizeof(char) * 256);
+  Q_memcpy(pClone->m_pRedLookup, m_pRedLookup, sizeof(ch) * 256);
+  Q_memcpy(pClone->m_pGreenLookup, m_pGreenLookup, sizeof(ch) * 256);
+  Q_memcpy(pClone->m_pBlueLookup, m_pBlueLookup, sizeof(ch) * 256);
 
-  Q_memcpy(pClone->m_pName, m_pName, sizeof(char) * 256);
+  Q_memcpy(pClone->m_pName, m_pName, sizeof(ch) * 256);
 
   return pClone;
 }
@@ -3610,7 +3610,7 @@ class CColorBalanceUIPanel : public CColorCorrectionUIChildPanel {
   // Command issued
   virtual void OnMessage(const KeyValues *params, vgui::VPANEL fromPanel);
 
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
   ColorBalanceMode_t GetCurrentMode();
 
@@ -3719,7 +3719,7 @@ void CColorBalanceUIPanel::OnMessage(const KeyValues *params,
   }
 }
 
-void CColorBalanceUIPanel::OnCommand(const char *command) {
+void CColorBalanceUIPanel::OnCommand(const ch *command) {
   BaseClass::OnCommand(command);
 
   if (!Q_stricmp("BlendFactorUpdate", command)) {
@@ -3881,7 +3881,7 @@ class CNewOperationDialog : public vgui::Frame {
   CNewOperationDialog(vgui::Panel *parent, CColorOperationList *pOpList);
   ~CNewOperationDialog();
 
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
  private:
   void PopulateControls();
@@ -3911,7 +3911,7 @@ CNewOperationDialog::CNewOperationDialog(vgui::Panel *parent,
 
 CNewOperationDialog::~CNewOperationDialog() {}
 
-void CNewOperationDialog::OnCommand(const char *command) {
+void CNewOperationDialog::OnCommand(const ch *command) {
   if (!Q_stricmp(command, "Create")) {
     int nSelectedItem = m_pOperationType->GetActiveItem();
 
@@ -3937,7 +3937,7 @@ void CNewOperationDialog::OnCommand(const char *command) {
     }
 
     if (m_pName->GetTextLength() > 0) {
-      char buf[256];
+      ch buf[256];
       m_pName->GetText(buf, 256);
       newOp->SetName(buf);
     }
@@ -3967,7 +3967,7 @@ class COperationListPanel : public vgui::ListPanel {
   DECLARE_CLASS_SIMPLE(COperationListPanel, vgui::ListPanel);
 
  public:
-  COperationListPanel(vgui::Panel *parent, const char *pName);
+  COperationListPanel(vgui::Panel *parent, const ch *pName);
   ~COperationListPanel();
 
   MESSAGE_FUNC_PARAMS(OnTextNewLine, "TextNewLine", data);
@@ -3987,7 +3987,7 @@ class COperationListPanel : public vgui::ListPanel {
   int m_nEditItem;
 };
 
-COperationListPanel::COperationListPanel(vgui::Panel *parent, const char *pName)
+COperationListPanel::COperationListPanel(vgui::Panel *parent, const ch *pName)
     : BaseClass(parent, pName) {
   m_pNameEditPanel = 0;
   m_nEditItem = -1;
@@ -4099,7 +4099,7 @@ void COperationListPanel::OnMouseDoublePressed(MouseCode code) {
 }
 
 void COperationListPanel::OnTextNewLine(KeyValues *data) {
-  char newName[256];
+  ch newName[256];
   m_pNameEditPanel->GetText(newName, 256);
 
   if (m_nEditItem != -1) {
@@ -4136,7 +4136,7 @@ class CColorOperationListPanel : public vgui::EditablePanel {
 
   CColorOperationList *GetOperationList();
 
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
   virtual void OnThink();
 
@@ -4307,7 +4307,7 @@ void CColorOperationListPanel::OnCheckButtonChecked(KeyValues *data) {
   }
 }
 
-void CColorOperationListPanel::OnCommand(const char *command) {
+void CColorOperationListPanel::OnCommand(const ch *command) {
   if (!Q_stricmp(command, "NewOperation")) {
     if (!m_pNewDialog) {
       m_pNewDialog = new CNewOperationDialog(this, &m_OperationList);
@@ -4474,7 +4474,7 @@ void CColorOperationListPanel::OnKeyCodeTyped(KeyCode code) {
   BaseClass::OnKeyCodeTyped(code);
 }
 
-void CColorOperationListPanel::OnFileSelected(const char *pFilename) {
+void CColorOperationListPanel::OnFileSelected(const ch *pFilename) {
   FileHandle_t file_handle = g_pFileSystem->Open(pFilename, "wb");
 
   colorcorrection->LockLookup(m_CCHandle);
@@ -4577,7 +4577,7 @@ class CColorCorrectionUIPanel : public vgui::Frame {
   ~CColorCorrectionUIPanel();
 
   // Command issued
-  virtual void OnCommand(const char *command);
+  virtual void OnCommand(const ch *command);
 
   virtual void Activate();
 
@@ -4690,7 +4690,7 @@ void CColorCorrectionUIPanel::UpdateColorCorrection() {
 //-----------------------------------------------------------------------------
 void CColorCorrectionUIPanel::Activate() { BaseClass::Activate(); }
 
-void CColorCorrectionUIPanel::OnCommand(char const *command) {
+void CColorCorrectionUIPanel::OnCommand(ch const *command) {
   BaseClass::OnCommand(command);
 
   if (!Q_stricmp("EnableColorCorrection", command)) {
@@ -4807,7 +4807,7 @@ class CColorCorrectionTools : public IColorCorrectionTools {
 static CColorCorrectionTools g_ColorCorrectionTools;
 IColorCorrectionTools *colorcorrectiontools = &g_ColorCorrectionTools;
 
-void CColorCorrectionTools::Init(void) {
+void CColorCorrectionTools::Init() {
   if (g_pColorCorrectionUI) {
     g_pColorCorrectionUI->Init();
   }
@@ -4816,7 +4816,7 @@ void CColorCorrectionTools::Init(void) {
       new BGRA8888_t[g_nPreviewImageWidth * g_nPreviewImageHeight];
 }
 
-void CColorCorrectionTools::Shutdown(void) {
+void CColorCorrectionTools::Shutdown() {
   if (g_pColorCorrectionUI) {
     g_pColorCorrectionUI->Shutdown();
   }

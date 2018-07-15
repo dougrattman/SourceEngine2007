@@ -30,7 +30,7 @@ class DecodeInfo : public CRecvProxyData {
                                              // point to this.
 };
 
-typedef struct {
+struct PropTypeFns {
   // Encode a value.
   // pStruct : points at the base structure
   // pVar    : holds data in the correct type (ie: PropVirtualsInt will have
@@ -71,7 +71,7 @@ typedef struct {
   // value
   bool (*IsEncodedZero)(const SendProp *pProp, bf_read *p);
   void (*SkipProp)(const SendProp *pProp, bf_read *p);
-} PropTypeFns;
+};
 
 extern PropTypeFns g_PropTypeFns[DPT_NUMSendPropTypes];
 

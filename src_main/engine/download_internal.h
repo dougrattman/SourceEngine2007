@@ -6,7 +6,6 @@
 #ifndef DOWNLOAD_INTERNAL_H
 #define DOWNLOAD_INTERNAL_H
 
-//--------------------------------------------------------------------------------------------------------------
 /**
  * -------------------
  * Download overview:
@@ -99,12 +98,8 @@
 
 enum {
   BufferSize = 256
-};  ///< BufferSize is used extensively within the download system to size char
-    ///< buffers.
-
-#if defined(_X360)
-typedef LPVOID HINTERNET;
-#endif
+};  //< BufferSize is used extensively within the download system to size char
+    //< buffers.
 
 //--------------------------------------------------------------------------------------------------------------
 /**
@@ -112,15 +107,15 @@ typedef LPVOID HINTERNET;
  */
 enum HTTPStatus {
   HTTP_CONNECTING =
-      0,  ///< This is set in the main thread before the download thread starts.
-  HTTP_FETCH,    ///< The download thread sets this when it starts reading data.
-  HTTP_DONE,     ///< The download thread sets this if it has read all the data
-                 ///< successfully.
-  HTTP_ABORTED,  ///< The download thread sets this if it aborts because it's
-                 ///< RequestContext::shouldStop has been set.
-  HTTP_ERROR  ///< The download thread sets this if there is an error connecting
-              ///< or downloading.  Partial data may be present, so the main
-              ///< thread can check.
+      0,  //< This is set in the main thread before the download thread starts.
+  HTTP_FETCH,    //< The download thread sets this when it starts reading data.
+  HTTP_DONE,     //< The download thread sets this if it has read all the data
+                 //< successfully.
+  HTTP_ABORTED,  //< The download thread sets this if it aborts because it's
+                 //< RequestContext::shouldStop has been set.
+  HTTP_ERROR  //< The download thread sets this if there is an error connecting
+              //< or downloading.  Partial data may be present, so the main
+              //< thread can check.
 };
 
 //--------------------------------------------------------------------------------------------------------------
@@ -131,17 +126,16 @@ enum HTTPError {
   HTTP_ERROR_NONE = 0,
   HTTP_ERROR_ZERO_LENGTH_FILE,
   HTTP_ERROR_CONNECTION_CLOSED,
-  HTTP_ERROR_INVALID_URL,       ///< InternetCrackUrl failed
-  HTTP_ERROR_INVALID_PROTOCOL,  ///< URL didn't start with http:// or https://
+  HTTP_ERROR_INVALID_URL,       //< InternetCrackUrl failed
+  HTTP_ERROR_INVALID_PROTOCOL,  //< URL didn't start with http:// or https://
   HTTP_ERROR_CANT_BIND_SOCKET,
   HTTP_ERROR_CANT_CONNECT,
-  HTTP_ERROR_NO_HEADERS,  ///< Cannot read HTTP headers
+  HTTP_ERROR_NO_HEADERS,  //< Cannot read HTTP headers
   HTTP_ERROR_FILE_NONEXISTENT,
   HTTP_ERROR_MAX
 };
 
-//--------------------------------------------------------------------------------------------------------------
-typedef struct {
+struct RequestContext {
   /**
    * The main thread sets this when it wants to abort the download,
    * or it is done reading data from a finished download.
@@ -154,25 +148,25 @@ typedef struct {
    */
   bool threadDone;
 
-  bool bIsBZ2;  ///< true if the file is a .bz2 file that should be uncompressed
-                ///< at the end of the download.  Set and used by main thread.
-  bool bAsHTTP;  ///< true if downloaded via HTTP and not ingame protocol.  Set
-                 ///< and used by main thread
-  unsigned int nRequestID;  ///< request ID for ingame download
+  bool bIsBZ2;   //< true if the file is a .bz2 file that should be uncompressed
+                 //< at the end of the download.  Set and used by main thread.
+  bool bAsHTTP;  //< true if downloaded via HTTP and not ingame protocol.  Set
+                 //< and used by main thread
+  unsigned int nRequestID;  //< request ID for ingame download
 
-  HTTPStatus status;  ///< Download thread status
-  DWORD fetchStatus;  ///< Detailed status info for the download
-  HTTPError error;    ///< Detailed error info
+  HTTPStatus status;  //< Download thread status
+  DWORD fetchStatus;  //< Detailed status info for the download
+  HTTPError error;    //< Detailed error info
 
-  char baseURL[BufferSize];   ///< Base URL (including http://).  Set by main
-                              ///< thread.
-  char basePath[BufferSize];  ///< Base path for the mod in the filesystem.  Set
-                              ///< by main thread.
-  char gamePath[BufferSize];  ///< Game path to be appended to base URL.  Set by
-                              ///< main thread.
-  char serverURL[BufferSize];  ///< Server URL (IP:port, loopback, etc).  Set by
-                               ///< main thread, and used for HTTP Referer
-                               ///< header.
+  char baseURL[BufferSize];    //< Base URL (including http://).  Set by main
+                               //< thread.
+  char basePath[BufferSize];   //< Base path for the mod in the filesystem.  Set
+                               //< by main thread.
+  char gamePath[BufferSize];   //< Game path to be appended to base URL.  Set by
+                               //< main thread.
+  char serverURL[BufferSize];  //< Server URL (IP:port, loopback, etc).  Set by
+                               //< main thread, and used for HTTP Referer
+                               //< header.
 
   /**
    * The file's timestamp, as returned in the HTTP Last-Modified header.
@@ -180,9 +174,9 @@ typedef struct {
    */
   char cachedTimestamp[BufferSize];
 
-  DWORD nBytesTotal;    ///< Total bytes in the file
-  DWORD nBytesCurrent;  ///< Current bytes downloaded
-  DWORD nBytesCached;   ///< Amount of data present in cacheData.
+  DWORD nBytesTotal;    //< Total bytes in the file
+  DWORD nBytesCurrent;  //< Current bytes downloaded
+  DWORD nBytesCached;   //< Amount of data present in cacheData.
 
   /**
    * Buffer for the full file data.  Allocated/deleted by the download thread
@@ -198,12 +192,10 @@ typedef struct {
   unsigned char *cacheData;
 
   // Used purely by the download thread - internal data -------------------
-  HINTERNET hOpenResource;  ///< Handle created by InternetOpen
-  HINTERNET hDataResource;  ///< Handle created by InternetOpenUrl
+  HINTERNET hOpenResource;  //< Handle created by InternetOpen
+  HINTERNET hDataResource;  //< Handle created by InternetOpenUrl
+};
 
-} RequestContext;
-
-//--------------------------------------------------------------------------------------------------------------
 unsigned int SOURCE_STDCALL DownloadThread(void *voidPtr);
 
 #endif  // DOWNLOAD_INTERNAL_H

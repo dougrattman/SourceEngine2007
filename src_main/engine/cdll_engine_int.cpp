@@ -403,7 +403,7 @@ class CEngineClient : public IVEngineClient {
   //-----------------------------------------------------------------------------
   virtual int GetPlayerForUserID(int userID);
 #if !defined(NO_VOICE)
-  virtual struct IVoiceTweak_s *GetVoiceTweakAPI(void);
+  virtual struct IVoiceTweak *GetVoiceTweakAPI();
 #endif
   virtual void EngineStats_BeginFrame(void);
   virtual void EngineStats_EndFrame(void);
@@ -938,7 +938,7 @@ int CEngineClient::GetPlayerForUserID(int userID) {
 }
 
 #if !defined(NO_VOICE)
-struct IVoiceTweak_s *CEngineClient::GetVoiceTweakAPI() {
+struct IVoiceTweak *CEngineClient::GetVoiceTweakAPI() {
   return &g_VoiceTweakAPI;
 }
 #endif
@@ -1244,7 +1244,7 @@ ClientClass *ClientDLL_GetAllClasses() {
 static void ClientDLL_InitRecvTableMgr() {
   // Register all the receive tables.
   RecvTable *pRecvTables[MAX_DATATABLES];
-  int nRecvTables = 0;
+  usize nRecvTables = 0;
   for (ClientClass *pCur = ClientDLL_GetAllClasses(); pCur;
        pCur = pCur->m_pNext) {
     ErrorIfNot(nRecvTables < std::size(pRecvTables),

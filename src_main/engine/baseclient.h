@@ -43,10 +43,10 @@ class CNetworkStatTrace {
 class CBaseClient : public IGameEventListener2,
                     public IClient,
                     public IClientMessageHandler {
-  typedef struct CustomFile_s {
+  struct CustomFile_t {
     CRC32_t crc;         // file CRC
     unsigned int reqID;  // download request ID
-  } CustomFile_t;
+  };
 
  public:
   CBaseClient();
@@ -65,8 +65,8 @@ class CBaseClient : public IGameEventListener2,
   const ch *GetFriendsName() const { return m_FriendsName; }
   void UpdateName(const ch *pszDefault);
 
-  virtual void Connect(const ch *szName, int nUserID,
-                       INetChannel *pNetChannel, bool bFakePlayer);
+  virtual void Connect(const ch *szName, int nUserID, INetChannel *pNetChannel,
+                       bool bFakePlayer);
   virtual void Inactivate(void);
   virtual void Reconnect(void);
   virtual void Disconnect(const ch *reason, ...);
@@ -92,12 +92,8 @@ class CBaseClient : public IGameEventListener2,
   virtual bool IsConnected() const {
     return m_nSignonState >= SIGNONSTATE_CONNECTED;
   };
-  virtual bool IsSpawned() const {
-    return m_nSignonState >= SIGNONSTATE_NEW;
-  };
-  virtual bool IsActive() const {
-    return m_nSignonState == SIGNONSTATE_FULL;
-  };
+  virtual bool IsSpawned() const { return m_nSignonState >= SIGNONSTATE_NEW; };
+  virtual bool IsActive() const { return m_nSignonState == SIGNONSTATE_FULL; };
   virtual bool IsFakeClient() const { return m_bFakePlayer; };
   virtual bool IsHLTV() const { return m_bIsHLTV; }
   virtual bool IsHearingClient(int index) const { return false; };
@@ -161,7 +157,7 @@ class CBaseClient : public IGameEventListener2,
   // entity index of this client (different from clientSlot+1 in HLTV mode):
   int m_nEntityIndex;
 
-  int m_UserID;                         // identifying number on server
+  int m_UserID;                       // identifying number on server
   ch m_Name[MAX_PLAYER_NAME_LENGTH];  // for printing to other people
   ch m_GUID[SIGNED_GUID_LEN + 1];     // the clients CD key
 

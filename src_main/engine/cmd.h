@@ -16,19 +16,19 @@
 class CCommand;
 class ConCommandBase;
 
-typedef enum {
+enum ECmdExecutionMarker {
   eCmdExecutionMarker_Enable_FCVAR_SERVER_CAN_EXECUTE = 'a',
   eCmdExecutionMarker_Disable_FCVAR_SERVER_CAN_EXECUTE = 'b',
 
   eCmdExecutionMarker_Enable_FCVAR_CLIENTCMD_CAN_EXECUTE = 'c',
   eCmdExecutionMarker_Disable_FCVAR_CLIENTCMD_CAN_EXECUTE = 'd'
-} ECmdExecutionMarker;
+};
 
 //-----------------------------------------------------------------------------
 // Initialization, shutdown of the command buffer
 //-----------------------------------------------------------------------------
 void Cbuf_Init();
-void Cbuf_Shutdown(void);
+void Cbuf_Shutdown();
 
 //-----------------------------------------------------------------------------
 // Clears the command buffer

@@ -40,7 +40,7 @@ class CBuildHierarchyStruct {
   int m_nExcludeProps;
 
   const SendProp *m_pDatatableProps[MAX_TOTAL_SENDTABLE_PROPS];
-  int m_nDatatableProps;
+  usize m_nDatatableProps;
 
   const SendProp *m_pProps[MAX_TOTAL_SENDTABLE_PROPS];
   unsigned char m_PropProxyIndices[MAX_TOTAL_SENDTABLE_PROPS];

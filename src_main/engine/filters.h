@@ -5,18 +5,18 @@
 
 #include "userid.h"
 
-typedef struct {
+struct ipfilter_t {
   unsigned mask;
   unsigned compare;
   float banEndTime;  // 0 for permanent ban
   float banTime;
-} ipfilter_t;
+};
 
-typedef struct {
+struct userfilter_t {
   USERID_t userid;
   float banEndTime;
   float banTime;
-} userfilter_t;
+};
 
 #define MAX_IPFILTERS 32768
 #define MAX_USERFILTERS 32768

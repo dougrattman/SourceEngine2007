@@ -1042,9 +1042,9 @@ void BlendSubNeighbors(CCoreDispInfo **ppListBase, int nListSize) {
 // Output : int
 //-----------------------------------------------------------------------------
 template <size_t neighbors_size>
-int GetAllNeighbors(const CCoreDispInfo *pDisp,
+size_t GetAllNeighbors(const CCoreDispInfo *pDisp,
                     int (&iNeighbors)[neighbors_size]) {
-  int nNeighbors = 0;
+  size_t nNeighbors = 0;
 
   // Check corner neighbors.
   for (int iCorner = 0; iCorner < 4; iCorner++) {
@@ -1082,7 +1082,7 @@ void BlendCorners(CCoreDispInfo **ppListBase, int nListSize) {
     CCoreDispInfo *pDisp = ppListBase[iDisp];
 
     int iNeighbors[512];
-    int nNeighbors = GetAllNeighbors(pDisp, iNeighbors);
+    usize nNeighbors = GetAllNeighbors(pDisp, iNeighbors);
 
     // Make sure we have room for all the neighbors.
     nbCornerVerts.RemoveAll();
@@ -1101,7 +1101,7 @@ void BlendCorners(CCoreDispInfo **ppListBase, int nListSize) {
       Vector vAvgTanS;
       pDisp->GetTangentS(iCornerVert, vAvgTanS);
 
-      for (int iNeighbor = 0; iNeighbor < nNeighbors; iNeighbor++) {
+      for (usize iNeighbor = 0; iNeighbor < nNeighbors; iNeighbor++) {
         int iNBListIndex = iNeighbors[iNeighbor];
         CCoreDispInfo *pNeighbor = ppListBase[iNBListIndex];
 
@@ -1123,7 +1123,7 @@ void BlendCorners(CCoreDispInfo **ppListBase, int nListSize) {
       VectorNormalize(vAvgTanS);
       UpdateTangentSpace(pDisp, iCornerVert, vAverage, vAvgTanS);
 
-      for (int iNeighbor = 0; iNeighbor < nNeighbors; iNeighbor++) {
+      for (usize iNeighbor = 0; iNeighbor < nNeighbors; iNeighbor++) {
         int iNBListIndex = iNeighbors[iNeighbor];
         if (nbCornerVerts[iNeighbor] == -1) continue;
 

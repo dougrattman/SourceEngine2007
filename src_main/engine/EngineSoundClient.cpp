@@ -23,15 +23,15 @@ class CEngineSoundClient : public IEngineSound {
   CEngineSoundClient();
   virtual ~CEngineSoundClient();
 
-  virtual bool PrecacheSound(const char *pSample, bool bPreload,
+  virtual bool PrecacheSound(const ch *pSample, bool bPreload,
                              bool bIsUISound);
-  virtual bool IsSoundPrecached(const char *pSample);
-  virtual void PrefetchSound(const char *pSample);
+  virtual bool IsSoundPrecached(const ch *pSample);
+  virtual void PrefetchSound(const ch *pSample);
 
-  virtual float GetSoundDuration(const char *pSample);
+  virtual float GetSoundDuration(const ch *pSample);
 
   virtual void EmitSound(IRecipientFilter &filter, int iEntIndex, int iChannel,
-                         const char *pSample, float flVolume,
+                         const ch *pSample, float flVolume,
                          float flAttenuation, int iFlags, int iPitch,
                          const Vector *pOrigin, const Vector *pDirection,
                          CUtlVector<Vector> *pUtlVecOrigins,
@@ -39,7 +39,7 @@ class CEngineSoundClient : public IEngineSound {
                          int speakerentity = -1);
 
   virtual void EmitSound(IRecipientFilter &filter, int iEntIndex, int iChannel,
-                         const char *pSample, float flVolume,
+                         const ch *pSample, float flVolume,
                          soundlevel_t iSoundLevel, int iFlags, int iPitch,
                          const Vector *pOrigin, const Vector *pDirection,
                          CUtlVector<Vector> *pUtlVecOrigins,
@@ -53,7 +53,7 @@ class CEngineSoundClient : public IEngineSound {
       CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
       float soundtime = 0.0f, int speakerentity = -1);
 
-  virtual void StopSound(int iEntIndex, int iChannel, const char *pSample);
+  virtual void StopSound(int iEntIndex, int iChannel, const ch *pSample);
 
   virtual void StopAllSounds(bool bClearBuffers);
 
@@ -61,7 +61,7 @@ class CEngineSoundClient : public IEngineSound {
   virtual void SetPlayerDSP(IRecipientFilter &filter, int dspType,
                             bool fastReset);
 
-  virtual void EmitAmbientSound(const char *pSample, float flVolume, int iPitch,
+  virtual void EmitAmbientSound(const ch *pSample, float flVolume, int iPitch,
                                 int flags, float soundtime = 0.0f);
 
   virtual float GetDistGainFromSoundLevel(soundlevel_t soundlevel, float dist);
@@ -76,13 +76,13 @@ class CEngineSoundClient : public IEngineSound {
   // Retrieves list of all active sounds
   virtual void GetActiveSounds(CUtlVector<SndInfo_t> &sndlist);
 
-  virtual void PrecacheSentenceGroup(const char *pGroupName);
+  virtual void PrecacheSentenceGroup(const ch *pGroupName);
   virtual void NotifyBeginMoviePlayback();
   virtual void NotifyEndMoviePlayback();
 
  private:
   void EmitSoundInternal(IRecipientFilter &filter, int iEntIndex, int iChannel,
-                         const char *pSample, float flVolume,
+                         const ch *pSample, float flVolume,
                          soundlevel_t iSoundLevel, int iFlags, int iPitch,
                          const Vector *pOrigin, const Vector *pDirection,
                          CUtlVector<Vector> *pUtlVecOrigins,
@@ -103,7 +103,7 @@ CEngineSoundClient::CEngineSoundClient() {}
 CEngineSoundClient::~CEngineSoundClient() {}
 
 // Precache a particular sample
-bool CEngineSoundClient::PrecacheSound(const char *pSample, bool bPreload,
+bool CEngineSoundClient::PrecacheSound(const ch *pSample, bool bPreload,
                                        bool bIsUISound) {
   CSfxTable *pTable = S_PrecacheSound(pSample);
   if (pTable) {
@@ -116,11 +116,11 @@ bool CEngineSoundClient::PrecacheSound(const char *pSample, bool bPreload,
   return false;
 }
 
-void CEngineSoundClient::PrefetchSound(const char *pSample) {
+void CEngineSoundClient::PrefetchSound(const ch *pSample) {
   S_PrefetchSound(pSample, true);
 }
 
-bool CEngineSoundClient::IsSoundPrecached(const char *pSample) {
+bool CEngineSoundClient::IsSoundPrecached(const ch *pSample) {
   if (pSample && TestSoundChar(pSample, CHAR_SENTENCE)) {
     return true;
   }
@@ -132,7 +132,7 @@ bool CEngineSoundClient::IsSoundPrecached(const char *pSample) {
 
 // Actually does the work of emitting a sound
 void CEngineSoundClient::EmitSoundInternal(
-    IRecipientFilter &filter, int iEntIndex, int iChannel, const char *pSample,
+    IRecipientFilter &filter, int iEntIndex, int iChannel, const ch *pSample,
     float flVolume, soundlevel_t iSoundLevel, int iFlags, int iPitch,
     const Vector *pOrigin, const Vector *pDirection,
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
@@ -237,7 +237,7 @@ void CEngineSoundClient::EmitSentenceByIndex(
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePosition,
     float soundtime /*= 0.0f*/, int speakerentity /*= -1*/) {
   if (iSentenceIndex >= 0) {
-    char pName[8];
+    ch pName[8];
     Q_snprintf(pName, sizeof(pName), "!%d", iSentenceIndex);
     EmitSoundInternal(filter, iEntIndex, iChannel, pName, flVolume, iSoundLevel,
                       iFlags, iPitch, pOrigin, pDirection, pUtlVecOrigins,
@@ -247,7 +247,7 @@ void CEngineSoundClient::EmitSentenceByIndex(
 
 // Emits a sound
 void CEngineSoundClient::EmitSound(
-    IRecipientFilter &filter, int iEntIndex, int iChannel, const char *pSample,
+    IRecipientFilter &filter, int iEntIndex, int iChannel, const ch *pSample,
     float flVolume, float flAttenuation, int iFlags, int iPitch,
     const Vector *pOrigin, const Vector *pDirection,
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
@@ -259,7 +259,7 @@ void CEngineSoundClient::EmitSound(
 }
 
 void CEngineSoundClient::EmitSound(
-    IRecipientFilter &filter, int iEntIndex, int iChannel, const char *pSample,
+    IRecipientFilter &filter, int iEntIndex, int iChannel, const ch *pSample,
     float flVolume, soundlevel_t iSoundLevel, int iFlags, int iPitch,
     const Vector *pOrigin, const Vector *pDirection,
     CUtlVector<Vector> *pUtlVecOrigins, bool bUpdatePositions,
@@ -287,7 +287,7 @@ void CEngineSoundClient::EmitSound(
 
 // Stops a sound
 void CEngineSoundClient::StopSound(int iEntIndex, int iChannel,
-                                   const char *pSample) {
+                                   const ch *pSample) {
   CEngineSingleUserFilter filter(cl.m_nPlayerSlot + 1);
   EmitSound(filter, iEntIndex, iChannel, pSample, 0, SNDLVL_NONE, SND_STOP,
             PITCH_NORM, NULL, NULL, NULL, true);
@@ -307,7 +307,7 @@ void CEngineSoundClient::SetPlayerDSP(IRecipientFilter &filter, int dspType,
   }
 }
 
-void CEngineSoundClient::EmitAmbientSound(const char *pSample, float flVolume,
+void CEngineSoundClient::EmitAmbientSound(const ch *pSample, float flVolume,
                                           int iPitch, int flags,
                                           float soundtime /*= 0.0f*/) {
   float delay = 0.0f;
@@ -342,7 +342,7 @@ float CEngineSoundClient::GetDistGainFromSoundLevel(soundlevel_t soundlevel,
   return S_GetGainFromSoundLevel(soundlevel, dist);
 }
 
-float CEngineSoundClient::GetSoundDuration(const char *pSample) {
+float CEngineSoundClient::GetSoundDuration(const ch *pSample) {
   return AudioSource_GetSoundDuration(pSample);
 }
 
@@ -368,7 +368,7 @@ void CEngineSoundClient::SetVolumeByGuid(int guid, float fvol) {
   S_SetVolumeByGuid(guid, fvol);
 }
 
-void CEngineSoundClient::PrecacheSentenceGroup(const char *pGroupName) {
+void CEngineSoundClient::PrecacheSentenceGroup(const ch *pGroupName) {
   VOX_PrecacheSentenceGroup(this, pGroupName);
 }
 

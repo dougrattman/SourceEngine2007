@@ -13,12 +13,12 @@ class SendTable;
 extern bool g_bServerDTIEnabled;
 
 // Types of things it times.
-typedef enum {
+enum ServerDTITimerType {
   SERVERDTI_CALCDELTA = 0,
   SERVERDTI_ENCODE,
   SERVERDTI_SHOULDTRANSMIT,
   SERVERDTI_WRITE_DELTA_PROPS
-} ServerDTITimerType;
+};
 
 // ------------------------------------------------------------------------------------------
 // // Instrumentation functions.

@@ -57,7 +57,7 @@ int r_dlightactive;
 R_AnimateLight
 ==================
 */
-void R_AnimateLight(void) {
+void R_AnimateLight() {
   INetworkStringTable *table = cl.m_pLightStyleTable;
 
   if (!table) return;
@@ -68,7 +68,7 @@ void R_AnimateLight(void) {
 
   for (int j = 0; j < MAX_LIGHTSTYLES; j++) {
     int length;
-    const char *lightstyle = (const char *)table->GetStringUserData(j, &length);
+    const ch *lightstyle = (const ch *)table->GetStringUserData(j, &length);
     length--;
 
     if (!lightstyle || !lightstyle[0]) {
@@ -269,7 +269,7 @@ void R_MarkDLightsOnSurface(mnode_t *pNode) {
 R_PushDlights
 =============
 */
-void R_PushDlights(void) {
+void R_PushDlights() {
   R_MarkDLightsOnSurface(host_state.worldbrush->nodes);
   MarkDLightsOnStaticProps();
 }

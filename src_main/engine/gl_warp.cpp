@@ -14,7 +14,6 @@
 #include "tier2/tier2.h"
 #include "zone.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define SQRT3INV (0.57735f)  // a little less than 1 / sqrt(3)
@@ -68,13 +67,8 @@ static int gFakePlaneType[6] = {1, -1, 2, -2, 3, -3};
 // int g_skybox_upFaceVerts[4] = { 6, 2, 1, 5 };
 // int g_skybox_downFaceVerts[4] = { 3, 7, 4, 0 };
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void R_UnloadSkys() {
-  int i;
-
-  for (i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; i++) {
     if (skyboxMaterials[i]) {
       skyboxMaterials[i]->DecrementReferenceCount();
       skyboxMaterials[i] = NULL;
@@ -82,24 +76,18 @@ void R_UnloadSkys() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *name -
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
-bool R_LoadNamedSkys(const char *skyname) {
-  char name[MAX_OSPATH];
+bool R_LoadNamedSkys(const ch *skyname) {
+  ch name[MAX_OSPATH];
   IMaterial *skies[6];
   bool success = true;
-  const char *skyboxsuffix[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
+  const ch *skyboxsuffix[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
 
   bool bUseDx8Skyboxes =
       (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() < 90);
   for (int i = 0; i < 6; i++) {
     skies[i] = NULL;
     if (bUseDx8Skyboxes) {
-      Q_snprintf(name, sizeof(name), "skybox/%s_dx80%s", skyname,
-                 skyboxsuffix[i]);
+      sprintf_s(name, "skybox/%s_dx80%s", skyname, skyboxsuffix[i]);
       skies[i] = materials->FindMaterial(name, TEXTURE_GROUP_SKYBOX, false);
       if (IsErrorMaterial(skies[i])) {
         skies[i] = NULL;
@@ -107,7 +95,7 @@ bool R_LoadNamedSkys(const char *skyname) {
     }
 
     if (skies[i] == NULL) {
-      Q_snprintf(name, sizeof(name), "skybox/%s%s", skyname, skyboxsuffix[i]);
+      sprintf_s(name, "skybox/%s%s", skyname, skyboxsuffix[i]);
       skies[i] = materials->FindMaterial(name, TEXTURE_GROUP_SKYBOX);
     }
     if (!IsErrorMaterial(skies[i])) continue;
@@ -116,9 +104,7 @@ bool R_LoadNamedSkys(const char *skyname) {
     break;
   }
 
-  if (!success) {
-    return false;
-  }
+  if (!success) return false;
 
   // Increment references
   for (int i = 0; i < 6; i++) {
@@ -137,17 +123,14 @@ bool R_LoadNamedSkys(const char *skyname) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void R_LoadSkys() {
   bool success = true;
 
-  char requestedsky[128];
+  ch requestedsky[128];
 
   ConVarRef skyname("sv_skyname");
   if (skyname.IsValid()) {
-    Q_strncpy(requestedsky, skyname.GetString(), sizeof(requestedsky));
+    strcpy_s(requestedsky, skyname.GetString());
   } else {
     ConDMsg("Unable to find skyname ConVar!!!\n");
     return;
@@ -159,7 +142,7 @@ void R_LoadSkys() {
     success = false;
 
     // See if user requested other than the default
-    if (Q_stricmp(requestedsky, "sky_urb01")) {
+    if (_stricmp(requestedsky, "sky_urb01")) {
       // Try the default
       skyname.SetValue("sky_urb01");
 
@@ -177,16 +160,11 @@ void R_LoadSkys() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void MakeSkyVec(float s, float t, int axis, float zFar, Vector &position,
                 Vector2D &texCoord) {
   Vector v, b;
   int j, k;
-  float width;
-
-  width = zFar * SQRT3INV;
+  float width = zFar * SQRT3INV;
 
   if (s < -1)
     s = -1;
@@ -235,7 +213,6 @@ void MakeSkyVec(float s, float t, int axis, float zFar, Vector &position,
 void R_DrawSkyBox(float zFar, int nDrawFlags /*= 0x3F*/) {
   VPROF("R_DrawSkyBox");
 
-  int i;
   Vector normal;
 
   if (!r_drawskybox.GetInt() || !mat_loadtextures.GetInt()) {
@@ -244,7 +221,7 @@ void R_DrawSkyBox(float zFar, int nDrawFlags /*= 0x3F*/) {
 
   CMatRenderContextPtr pRenderContext(materials);
 
-  for (i = 0; i < 6; i++, nDrawFlags >>= 1) {
+  for (int i = 0; i < 6; i++, nDrawFlags >>= 1) {
     // Don't draw this panel of the skybox if the flag isn't set:
     if (!(nDrawFlags & 1)) continue;
 
