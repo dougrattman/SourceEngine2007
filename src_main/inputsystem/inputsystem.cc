@@ -20,7 +20,7 @@ CInputSystem::CInputSystem() {
   m_nLastPollTick = m_nLastSampleTick = m_StartupTimeTick = 0;
   m_ChainedWndProc = 0;
   m_hAttachedHWnd = 0;
-  m_hEvent = NULL;
+  m_hEvent = nullptr;
   m_bEnabled = true;
   m_bPumpEnabled = true;
   m_bIsPolling = false;
@@ -32,13 +32,13 @@ CInputSystem::CInputSystem() {
   m_bXController = false;
   static_assert((MAX_JOYSTICKS + 7) >> 3 << sizeof(u16));
 
-  m_pXInputDLL = NULL;
+  m_pXInputDLL = nullptr;
 }
 
 CInputSystem::~CInputSystem() {
   if (m_pXInputDLL) {
     Sys_UnloadModule(m_pXInputDLL);
-    m_pXInputDLL = NULL;
+    m_pXInputDLL = nullptr;
   }
 }
 
@@ -50,7 +50,7 @@ InitReturnVal_t CInputSystem::Init() {
   m_StartupTimeTick = GetTickCount();
   m_uiMouseWheel = RegisterWindowMessage("MSWHEEL_ROLLMSG");
 
-  m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+  m_hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
   if (!m_hEvent) return INIT_FAILED;
 
   ButtonCode_InitKeyTranslationTable();
@@ -58,9 +58,7 @@ InitReturnVal_t CInputSystem::Init() {
 
   joy_xcontroller_found.SetValue(0);
   m_pXInputDLL = Sys_LoadModule("XInput1_4.dll");
-  if (m_pXInputDLL) {
-    InitializeXDevices();
-  }
+  if (m_pXInputDLL) InitializeXDevices();
 
   if (!m_nJoystickCount) {
     // Didn't find any XControllers. See if we can find other joysticks.
@@ -75,9 +73,9 @@ InitReturnVal_t CInputSystem::Init() {
 
 // Shutdown.
 void CInputSystem::Shutdown() {
-  if (m_hEvent != NULL) {
+  if (m_hEvent != nullptr) {
     CloseHandle(m_hEvent);
-    m_hEvent = NULL;
+    m_hEvent = nullptr;
   }
 
   BaseClass::Shutdown();
@@ -98,8 +96,9 @@ static LRESULT CALLBACK InputSystemWindowProc(HWND hwnd, UINT uMsg,
 }
 
 // Hooks input listening up to a window.
-void CInputSystem::AttachToWindow(void *hWnd) {
-  Assert(m_hAttachedHWnd == 0);
+void CInputSystem::AttachToWindow(HWND hWnd) {
+  Assert(m_hAttachedHWnd == nullptr);
+
   if (m_hAttachedHWnd) {
     Warning(
         "CInputSystem::AttachToWindow: Cannot attach to two windows at "
@@ -108,9 +107,9 @@ void CInputSystem::AttachToWindow(void *hWnd) {
   }
 
   m_ChainedWndProc =
-      reinterpret_cast<WNDPROC>(GetWindowLongPtr((HWND)hWnd, GWLP_WNDPROC));
-  SetWindowLongPtr((HWND)hWnd, GWLP_WNDPROC, (LONG_PTR)InputSystemWindowProc);
-  m_hAttachedHWnd = (HWND)hWnd;
+      reinterpret_cast<WNDPROC>((LONG_PTR)GetWindowLongPtr(hWnd, GWLP_WNDPROC));
+  SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)InputSystemWindowProc);
+  m_hAttachedHWnd = hWnd;
 
   // New window, clear input state
   ClearInputState();
@@ -126,10 +125,10 @@ void CInputSystem::DetachFromWindow() {
 
   if (m_ChainedWndProc) {
     SetWindowLongPtr(m_hAttachedHWnd, GWLP_WNDPROC, (LONG_PTR)m_ChainedWndProc);
-    m_ChainedWndProc = 0;
+    m_ChainedWndProc = nullptr;
   }
 
-  m_hAttachedHWnd = 0;
+  m_hAttachedHWnd = nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -265,8 +264,8 @@ void CInputSystem::ProcessEvent(UINT uMsg, WPARAM wParam, LPARAM lParam) {
   // To prevent subtle input timing bugs, all button events must be fed
   // through the window proc once per frame, same as the keyboard and mouse.
   HWND hWnd = GetFocus();
-  WNDPROC windowProc =
-      reinterpret_cast<WNDPROC>(GetWindowLongPtr(hWnd, GWLP_WNDPROC));
+  auto windowProc =
+      reinterpret_cast<WNDPROC>((LONG_PTR)GetWindowLongPtr(hWnd, GWLP_WNDPROC));
   if (windowProc) {
     windowProc(hWnd, uMsg, wParam, lParam);
   }
@@ -321,7 +320,7 @@ void CInputSystem::PollInputState() {
   if (m_bPumpEnabled) {
     // Poll mouse + keyboard
     MSG msg;
-    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
       if (msg.message == WM_QUIT) {
         PostEvent(IE_Quit, m_nLastSampleTick);
         break;
@@ -463,7 +462,7 @@ void CInputSystem::PostUserEvent(const InputEvent_t &event) {
 inline LRESULT CInputSystem::ChainWindowMessage(HWND hwnd, UINT uMsg,
                                                 WPARAM wParam, LPARAM lParam) {
   if (m_ChainedWndProc)
-    return CallWindowProc(m_ChainedWndProc, hwnd, uMsg, wParam, lParam);
+    return CallWindowProcW(m_ChainedWndProc, hwnd, uMsg, wParam, lParam);
 
   // TODO(d.rattman): This comment is lifted from vguimatsurface;
   // may not apply in future when the system is completed.

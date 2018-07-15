@@ -11,13 +11,16 @@
 
 #include "appframework/iappsystemgroup.h"
 #include "base/include/base_types.h"
+#include "base/include/macros.h"
+
+SOURCE_FORWARD_DECLARE_HANDLE(HINSTANCE);
 
 // Gets the application instance.
-void *GetAppInstance();
+HINSTANCE GetAppInstance();
 
 // Sets the application instance, should only be used if you're not calling
 // AppMain.
-void SetAppInstance(void *instance);
+void SetAppInstance(HINSTANCE instance);
 
 // Main entry point for the application.
 i32 AppMain(void *instance, void *prev_instance, const ch *cmd_line,

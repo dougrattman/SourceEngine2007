@@ -44,7 +44,7 @@ void CInputSystem::InitializeJoysticks() {
   MMRESULT mmr;
   for (int i = 0; i < nMaxJoysticks; i++) {
     JOYINFOEX ji;
-    Q_memset(&ji, 0, sizeof(ji));
+    memset(&ji, 0, sizeof(ji));
     ji.dwSize = sizeof(ji);
     ji.dwFlags = JOY_RETURNCENTERED;
     mmr = joyGetPosEx(i, &ji);
@@ -53,7 +53,7 @@ void CInputSystem::InitializeJoysticks() {
     // get the capabilities of the selected joystick
     // abort startup if command fails
     JOYCAPS jc;
-    Q_memset(&jc, 0, sizeof(jc));
+    memset(&jc, 0, sizeof(jc));
     mmr = joyGetDevCaps(i, &jc, sizeof(jc));
     if (mmr != JOYERR_NOERROR) continue;
 

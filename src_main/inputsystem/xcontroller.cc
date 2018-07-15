@@ -26,13 +26,13 @@
 #define XBX_STICK_SMALL_THRESHOLD ((int)(0.20f * XBX_MAX_STICKSAMPLE_LEFT))
 
 // Threshold for counting analog movement as a button press
-#define JOYSTICK_ANALOG_BUTTON_THRESHOLD XBX_MAX_STICKSAMPLE_LEFT * 0.4f
+#define JOYSTICK_ANALOG_BUTTON_THRESHOLD (XBX_MAX_STICKSAMPLE_LEFT * 0.4f)
 
 // Xbox key translation
-typedef struct {
+struct xInputToXKey_t {
   int xinput;
   int xkey;
-} xInputToXKey_t;
+};
 
 xInputToXKey_t g_digitalXKeyTable[] = {
     {XINPUT_GAMEPAD_DPAD_UP, XK_BUTTON_UP},
@@ -51,7 +51,6 @@ xInputToXKey_t g_digitalXKeyTable[] = {
     {XINPUT_GAMEPAD_Y, XK_BUTTON_Y},
 };
 
-#if !defined(_X360)
 typedef DWORD(WINAPI* XInputGetState_t)(
     DWORD dwUserIndex,    // [in] Index of the gamer associated with the device
     XINPUT_STATE* pState  // [out] Receives the current state
@@ -76,23 +75,14 @@ XInputGetCapabilities_t PC_XInputGetCapabilities;
 #define XINPUTGETSTATE PC_XInputGetState
 #define XINPUTSETSTATE PC_XInputSetState
 #define XINPUTGETCAPABILITIES PC_XInputGetCapabilities
-#else
-#define XINPUTGETSTATE XInputGetState
-#define XINPUTSETSTATE XInputSetState
-#define XINPUTGETCAPABILITIES XInputGetCapabilities
-#endif
 
 //-----------------------------------------------------------------------------
 //	Purpose: Initialize all Xbox controllers
 //-----------------------------------------------------------------------------
 void CInputSystem::InitializeXDevices() {
-  int i;
-  xdevice_t* pXDevice;
-
   // assume no joystick
   m_nJoystickCount = 0;
 
-#if !defined(_X360)
   PC_XInputGetState =
       (XInputGetState_t)GetProcAddress((HMODULE)m_pXInputDLL, "XInputGetState");
   PC_XInputSetState =
@@ -101,14 +91,11 @@ void CInputSystem::InitializeXDevices() {
       (HMODULE)m_pXInputDLL, "XInputGetCapabilities");
   if (!PC_XInputGetState || !PC_XInputSetState || !PC_XInputGetCapabilities)
     return;
-#endif
 
   // query gamepads
-  pXDevice = m_XDevices;
-  for (i = 0; i < XUSER_MAX_COUNT; ++i, ++pXDevice) {
+  xdevice_t* pXDevice = m_XDevices;
+  for (u32 i = 0; i < XUSER_MAX_COUNT; ++i, ++pXDevice) {
     OpenXDevice(pXDevice, i);
-    // Msg( "UserID %d: %s\n", i+1, pXDevice->userId != INVALID_USER_ID ?
-    // "GamePad" : "???" );
   }
 }
 

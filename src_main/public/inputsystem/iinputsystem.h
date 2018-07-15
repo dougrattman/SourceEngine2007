@@ -4,11 +4,14 @@
 #define SOURCE_INPUTSYSTEM_IINPUTSYSTEM_H_
 
 #include "appframework/IAppSystem.h"
-#include "tier0/include/platform.h"
+#include "base/include/base_types.h"
+#include "base/include/macros.h"
 
 #include "inputsystem/AnalogCode.h"
 #include "inputsystem/ButtonCode.h"
 #include "inputsystem/InputEnums.h"
+
+SOURCE_FORWARD_DECLARE_HANDLE(HWND);
 
 // Main interface for input. This is a low-level interface.
 the_interface IInputSystem : public IAppSystem {
@@ -16,7 +19,7 @@ the_interface IInputSystem : public IAppSystem {
   // Attach, detach input system from a particular window
   // This window should be the root window for the application
   // Only 1 window should be attached at any given time.
-  virtual void AttachToWindow(void *hWnd) = 0;
+  virtual void AttachToWindow(HWND hWnd) = 0;
   virtual void DetachFromWindow() = 0;
 
   // Enables/disables input. PollInputState will not update current

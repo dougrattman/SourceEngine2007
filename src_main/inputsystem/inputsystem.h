@@ -1,13 +1,14 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef INPUTSYSTEM_H
-#define INPUTSYSTEM_H
+#ifndef SOURCE_INPUTSYSTEM_INPUTSYSTEM_H_
+#define SOURCE_INPUTSYSTEM_INPUTSYSTEM_H_
 
 #include "base/include/windows/windows_light.h"
 
 #include <Xinput.h>
 #include <mmsystem.h>
 #include <zmouse.h>
+
 #include "bitvec.h"
 #include "inputsystem/analogcode.h"
 #include "inputsystem/buttoncode.h"
@@ -17,14 +18,11 @@
 #include "tier2/tier2.h"
 #include "xbox/xboxstubs.h"
 
-//-----------------------------------------------------------------------------
 // Implementation of the input system
-//-----------------------------------------------------------------------------
 class CInputSystem : public CTier2AppSystem<IInputSystem> {
-  typedef CTier2AppSystem<IInputSystem> BaseClass;
+  using BaseClass = CTier2AppSystem<IInputSystem>;
 
  public:
-  // Constructor, destructor
   CInputSystem();
   virtual ~CInputSystem();
 
@@ -33,7 +31,7 @@ class CInputSystem : public CTier2AppSystem<IInputSystem> {
   virtual void Shutdown();
 
   // Inherited from IInputSystem
-  virtual void AttachToWindow(void *hWnd);
+  virtual void AttachToWindow(HWND hWnd);
   virtual void DetachFromWindow();
   virtual void EnableInput(bool bEnable);
   virtual void EnableMessagePump(bool bEnable);
@@ -271,4 +269,4 @@ class CInputSystem : public CTier2AppSystem<IInputSystem> {
   CSysModule *m_pXInputDLL;
 };
 
-#endif  // INPUTSYSTEM_H
+#endif  // SOURCE_INPUTSYSTEM_INPUTSYSTEM_H_
