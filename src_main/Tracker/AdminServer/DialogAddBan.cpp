@@ -13,9 +13,6 @@
 
 using namespace vgui;
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-//-----------------------------------------------------------------------------
 CDialogAddBan::CDialogAddBan(vgui::Panel *parent)
     : Frame(parent, "DialogAddBan") {
   SetSize(320, 200);
@@ -33,9 +30,9 @@ CDialogAddBan::CDialogAddBan(vgui::Panel *parent)
 
   m_pTimeTextEntry = new TextEntry(this, "TimeTextEntry");
   m_pTimeCombo = new ComboBox(this, "TimeCombo", 3, false);
-  int defaultItem = m_pTimeCombo->AddItem("#Add_Ban_Period_Minutes", NULL);
-  m_pTimeCombo->AddItem("#Add_Ban_Period_Hours", NULL);
-  m_pTimeCombo->AddItem("#Add_Ban_Period_Days", NULL);
+  int defaultItem = m_pTimeCombo->AddItem("#Add_Ban_Period_Minutes", nullptr);
+  m_pTimeCombo->AddItem("#Add_Ban_Period_Hours", nullptr);
+  m_pTimeCombo->AddItem("#Add_Ban_Period_Days", nullptr);
   m_pTimeCombo->ActivateItem(defaultItem);
 
   LoadControlSettings("Admin\\DialogAddBan.res", "PLATFORM");
@@ -47,16 +44,11 @@ CDialogAddBan::CDialogAddBan(vgui::Panel *parent)
   MoveToCenterOfScreen();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Destructor
-//-----------------------------------------------------------------------------
 CDialogAddBan::~CDialogAddBan() {}
 
-//-----------------------------------------------------------------------------
 // Purpose: initializes the dialog and brings it to the foreground
-//-----------------------------------------------------------------------------
-void CDialogAddBan::Activate(const char *type, const char *player,
-                             const char *authid) {
+void CDialogAddBan::Activate(const ch *type, const ch *player,
+                             const ch *authid) {
   m_cType = type;
 
   m_pOkayButton->SetAsDefaultButton(true);
@@ -73,24 +65,16 @@ void CDialogAddBan::Activate(const char *type, const char *player,
   BaseClass::Activate();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Sets the text of a labell by name
-//-----------------------------------------------------------------------------
-void CDialogAddBan::SetLabelText(const char *textEntryName, const char *text) {
+void CDialogAddBan::SetLabelText(const ch *textEntryName, const ch *text) {
   Label *entry = dynamic_cast<Label *>(FindChildByName(textEntryName));
-  if (entry) {
-    entry->SetText(text);
-  }
+  if (entry) entry->SetText(text);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Sets the text of a labell by name
-//-----------------------------------------------------------------------------
-void CDialogAddBan::SetTextEntry(const char *textEntryName, const char *text) {
+void CDialogAddBan::SetTextEntry(const ch *textEntryName, const ch *text) {
   TextEntry *entry = dynamic_cast<TextEntry *>(FindChildByName(textEntryName));
-  if (entry) {
-    entry->SetText(text);
-  }
+  if (entry) entry->SetText(text);
 }
 
 bool CDialogAddBan::IsIPCheck() {
@@ -98,23 +82,14 @@ bool CDialogAddBan::IsIPCheck() {
   int dotCount = 0;
   m_pIDTextEntry->GetText(buf, sizeof(buf) - 1);
 
-  for (unsigned int i = 0; i < strlen(buf); i++) {
-    if (buf[i] == '.') {
-      dotCount++;
-    }
+  for (usize i = 0; i < strlen(buf); i++) {
+    if (buf[i] == '.') dotCount++;
   }
 
-  if (dotCount > 0) {
-    return true;
-  } else {
-    return false;
-  }
+  return dotCount > 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void CDialogAddBan::OnCommand(const char *command) {
+void CDialogAddBan::OnCommand(const ch *command) {
   bool bClose = false;
 
   if (!_stricmp(command, "Okay")) {
@@ -162,34 +137,24 @@ void CDialogAddBan::OnCommand(const char *command) {
         bClose = true;
       }
     }
-
   } else if (!_stricmp(command, "Close")) {
     bClose = true;
   } else {
     BaseClass::OnCommand(command);
   }
 
-  if (bClose) {
-    Close();
-  }
+  if (bClose) Close();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CDialogAddBan::PerformLayout() { BaseClass::PerformLayout(); }
 
-//-----------------------------------------------------------------------------
 // Purpose: deletes the dialog on close
-//-----------------------------------------------------------------------------
 void CDialogAddBan::OnClose() {
   BaseClass::OnClose();
   MarkForDeletion();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: called when the perm/temp ban time radio buttons are pressed
-//-----------------------------------------------------------------------------
 void CDialogAddBan::OnButtonToggled(Panel *panel) {
   if (panel == m_pPermBanRadio) {
     m_pTimeTextEntry->SetEnabled(false);

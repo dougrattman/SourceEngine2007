@@ -13,9 +13,6 @@
 
 using namespace vgui;
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-//-----------------------------------------------------------------------------
 CDialogCvarChange::CDialogCvarChange(vgui::Panel *parent)
     : Frame(parent, "DialogCvarChange") {
   SetSize(320, 200);
@@ -36,22 +33,15 @@ CDialogCvarChange::CDialogCvarChange(vgui::Panel *parent)
   MoveToCenterOfScreen();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Destructor
-//-----------------------------------------------------------------------------
 CDialogCvarChange::~CDialogCvarChange() {}
 
-//-----------------------------------------------------------------------------
 // Purpose: Hides value text
-//-----------------------------------------------------------------------------
 void CDialogCvarChange::MakePassword() {
   m_pCvarEntry->SetTextHidden(true);
   m_bAddCvarText = false;  // this isn't asking about a cvar
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: initializes the dialog and brings it to the foreground
-//-----------------------------------------------------------------------------
 void CDialogCvarChange::Activate(const char *cvarName, const char *curValue,
                                  const char *type, const char *question) {
   m_pCvarLabel->SetText(cvarName);
@@ -78,20 +68,14 @@ void CDialogCvarChange::Activate(const char *cvarName, const char *curValue,
   BaseClass::Activate();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Sets the text of a labell by name
-//-----------------------------------------------------------------------------
 void CDialogCvarChange::SetLabelText(const char *textEntryName,
                                      const char *text) {
   Label *entry = dynamic_cast<Label *>(FindChildByName(textEntryName));
-  if (entry) {
-    entry->SetText(text);
-  }
+  if (entry) entry->SetText(text);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Handles button presses
-//-----------------------------------------------------------------------------
 void CDialogCvarChange::OnCommand(const char *command) {
   bool bClose = false;
 
@@ -114,14 +98,10 @@ void CDialogCvarChange::OnCommand(const char *command) {
     BaseClass::OnCommand(command);
   }
 
-  if (bClose) {
-    Close();
-  }
+  if (bClose) Close();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: deletes the dialog on close
-//-----------------------------------------------------------------------------
 void CDialogCvarChange::OnClose() {
   BaseClass::OnClose();
   MarkForDeletion();

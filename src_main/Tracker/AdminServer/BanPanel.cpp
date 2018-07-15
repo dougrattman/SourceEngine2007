@@ -22,9 +22,6 @@
 
 using namespace vgui;
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-//-----------------------------------------------------------------------------
 CBanPanel::CBanPanel(vgui::Panel *parent, const char *name)
     : PropertyPage(parent, name) {
   m_pBanListPanel = new ListPanel(this, "BanList");
@@ -53,17 +50,14 @@ CBanPanel::CBanPanel(vgui::Panel *parent, const char *name)
   LoadControlSettings("Admin/BanPanel.res", "PLATFORM");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Destructor
-//-----------------------------------------------------------------------------
 CBanPanel::~CBanPanel() {}
 
-//-----------------------------------------------------------------------------
 // Purpose: Activates the page
-//-----------------------------------------------------------------------------
 void CBanPanel::OnPageShow() {
   BaseClass::OnPageShow();
+
   OnItemSelected();
+
   if (!m_bPageViewed) {
     m_bPageViewed = true;
     // force update on first page view
@@ -71,37 +65,30 @@ void CBanPanel::OnPageShow() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Requests new data set from server
-//-----------------------------------------------------------------------------
 void CBanPanel::OnResetData() {
   RemoteServer().RequestValue(this, "banlist");
   // update once every 5 minutes
   m_flUpdateTime = (float)system()->GetFrameTime() + (60 * 5.0f);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Checks to see if the page data should be refreshed
-//-----------------------------------------------------------------------------
 void CBanPanel::OnThink() {
   if (m_flUpdateTime < system()->GetFrameTime()) {
     OnResetData();
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Wrap g_pVGuiLocalize->Find() and not return NULL
-//-----------------------------------------------------------------------------
+// Purpose: Wrap g_pVGuiLocalize->Find() and not return nullptr
 static const wchar_t *LocalizeFind(const char *identifier,
                                    const wchar_t *defaultText) {
   const wchar_t *str = g_pVGuiLocalize->Find(identifier);
   if (!str) str = defaultText;
+
   return str;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Received response from server containing data
-//-----------------------------------------------------------------------------
 void CBanPanel::OnServerDataResponse(const char *value, const char *response) {
   // build the list
   if (!_stricmp(value, "banlist")) {
@@ -138,14 +125,13 @@ void CBanPanel::OnServerDataResponse(const char *value, const char *response) {
       // move to the next item
       response = (const char *)strchr(response, '\n');
       if (!response) break;
+
       response++;
     }
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Refreshes the list on the user hitting F5
-//-----------------------------------------------------------------------------
 void CBanPanel::OnKeyCodeTyped(vgui::KeyCode code) {
   if (code == KEY_F5) {
     OnResetData();
@@ -154,9 +140,7 @@ void CBanPanel::OnKeyCodeTyped(vgui::KeyCode code) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: opens context menu (user right clicked on a server)
-//-----------------------------------------------------------------------------
 void CBanPanel::OnOpenContextMenu(int row) {
   /* CONTEXT MENU CODE TEMPORARILY DISABLED UNTIL VERIFIED AS WORKING
   if (m_pBanListPanel->IsVisible() && m_pBanListPanel->IsCursorOver()
@@ -174,25 +158,22 @@ void CBanPanel::OnOpenContextMenu(int row) {
   */
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Manually adds a new ban
-//-----------------------------------------------------------------------------
 void CBanPanel::AddBan() {
   CDialogAddBan *box = new CDialogAddBan(this);
+
   box->AddActionSignalTarget(this);
   box->Activate("addban", "", "");
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: prompts the user to remove an existing ban
-//-----------------------------------------------------------------------------
 void CBanPanel::RemoveBan() {
   int itemID = m_pBanListPanel->GetSelectedItem(0);
   if (itemID == -1) return;
 
   // ask the user whether or not they want to remove the ban
   KeyValues *kv = m_pBanListPanel->GetItem(itemID);
-  if (kv != NULL) {
+  if (kv != nullptr) {
     // build the message
     wchar_t id[256];
     g_pVGuiLocalize->ConvertANSIToUnicode(kv->GetString("id"), id, sizeof(id));
@@ -211,15 +192,13 @@ void CBanPanel::RemoveBan() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: change the time length of a ban
-//-----------------------------------------------------------------------------
 void CBanPanel::ChangeBan() {
   int itemID = m_pBanListPanel->GetSelectedItem(0);
   if (itemID == -1) return;
 
   KeyValues *kv = m_pBanListPanel->GetItem(itemID);
-  if (kv != NULL) {
+  if (kv != nullptr) {
     char timeText[20];
     float time = kv->GetFloat("time");
     sprintf_s(timeText, "%0.2f", time);
@@ -233,9 +212,7 @@ void CBanPanel::ChangeBan() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Removes the specified ban
-//-----------------------------------------------------------------------------
 void CBanPanel::RemoveBanByID(const char *id) {
   Assert(id && *id);
   if (!id || !*id) return;
@@ -256,9 +233,7 @@ void CBanPanel::RemoveBanByID(const char *id) {
   OnResetData();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Changes a ban
-//-----------------------------------------------------------------------------
 void CBanPanel::ChangeBanTimeByID(const char *id, const char *newtime) {
   Assert(id && *id);
   if (!id || !*id) return;
@@ -283,9 +258,7 @@ void CBanPanel::ChangeBanTimeByID(const char *id, const char *newtime) {
   OnResetData();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Changes a ban
-//-----------------------------------------------------------------------------
 void CBanPanel::OnCvarChangeValue(KeyValues *kv) {
   const char *idText = kv->GetString("player", "");
   const char *durationText = kv->GetString("value", "0");
@@ -293,9 +266,7 @@ void CBanPanel::OnCvarChangeValue(KeyValues *kv) {
   ChangeBanTimeByID(idText, durationText);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: called when a row on the list panel is selected.
-//-----------------------------------------------------------------------------
 void CBanPanel::OnItemSelected() {
   int itemID = m_pBanListPanel->GetSelectedItem(0);
   if (itemID == -1) {
@@ -307,9 +278,7 @@ void CBanPanel::OnItemSelected() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Asks the user for the ban file to import
-//-----------------------------------------------------------------------------
 void CBanPanel::ImportBanList() {
   // Pop up the dialog
   FileOpenDialog *pFileDialog =
@@ -320,9 +289,7 @@ void CBanPanel::ImportBanList() {
   pFileDialog->Activate();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: When a file is selected print out its full path in the debugger
-//-----------------------------------------------------------------------------
 void CBanPanel::OnFileSelected(const char *fullpath) {
   char line[255];
   TokenLine tok;
@@ -350,10 +317,8 @@ void CBanPanel::OnFileSelected(const char *fullpath) {
   if (f) fclose(f);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: returns true if the id string is an IP address, false if it's a WON
 // or STEAM ID
-//-----------------------------------------------------------------------------
 bool CBanPanel::IsIPAddress(const char *id) {
   int s1, s2, s3, s4;
   return 4 == sscanf_s(id, "%d.%d.%d.%d", &s1, &s2, &s3, &s4);

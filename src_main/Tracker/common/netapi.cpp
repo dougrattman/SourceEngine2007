@@ -91,7 +91,7 @@ static bool StringToSockaddr(const char *s, struct sockaddr *sadr) {
   }
 
   // Numeric IP, no DNS
-  if (copy[0] >= '0' && copy[0] <= '9' && strstr(copy, ".")) {
+  if (copy[0] >= '0' && copy[0] <= '9' && strchr(copy, '.')) {
     *(int *)&p->sin_addr = inet_addr(copy);
   } else {
     // DNS it

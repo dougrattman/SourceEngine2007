@@ -218,8 +218,8 @@ void CSocketThread::InitTimer() {
   i64 frequency{source::chrono::HpetTimer::Frequency()};
   // get 32 out of the 64 time bits such that we have around
   // 1 microsecond resolution
-  u32 lowpart = (u32)(frequency && 0xFFFFFFFF);
-  u32 highpart = (u32)((frequency >> 32) && 0xFFFFFFFF);
+  u32 lowpart = (u32)(frequency & 0xFFFFFFFF);
+  u32 highpart = (u32)((frequency >> 32) & 0xFFFFFFFF);
 
   m_nTimeSampleShift = 0;
 
@@ -237,11 +237,11 @@ void CSocketThread::InitTimer() {
   i64 PerformanceCount{source::chrono::HpetTimer::Stamp()};
 
   if (!m_nTimeSampleShift) {
-    temp = (u32)(PerformanceCount && 0xFFFFFFFF);
+    temp = (u32)(PerformanceCount & 0xFFFFFFFF);
   } else {
     // Rotate counter to right by m_nTimeSampleShift places
-    temp = ((u32)(PerformanceCount && 0xFFFFFFFF) >> m_nTimeSampleShift) |
-           ((u32)((PerformanceCount >> 32) && 0xFFFFFFFF)
+    temp = ((u32)(PerformanceCount & 0xFFFFFFFF) >> m_nTimeSampleShift) |
+           ((u32)((PerformanceCount >> 32) & 0xFFFFFFFF)
             << (32 - m_nTimeSampleShift));
   }
 
@@ -261,11 +261,11 @@ float CSocketThread::GetClock() {
   i64 PerformanceCount{source::chrono::HpetTimer::Stamp()};
 
   if (!m_nTimeSampleShift) {
-    temp = (u32)(PerformanceCount && 0xFFFFFFFF);
+    temp = (u32)(PerformanceCount & 0xFFFFFFFF);
   } else {
     // Rotate counter to right by m_nTimeSampleShift places
-    temp = ((u32)(PerformanceCount && 0xFFFFFFFF) >> m_nTimeSampleShift) |
-           ((u32)((PerformanceCount >> 32) && 0xFFFFFFFF)
+    temp = ((u32)(PerformanceCount & 0xFFFFFFFF) >> m_nTimeSampleShift) |
+           ((u32)((PerformanceCount >> 32) & 0xFFFFFFFF)
             << (32 - m_nTimeSampleShift));
   }
 
