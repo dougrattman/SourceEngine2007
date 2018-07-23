@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CNetworkStringTableItem::CNetworkStringTableItem(void) {
+CNetworkStringTableItem::CNetworkStringTableItem() {
   m_pUserData = NULL;
   m_nUserDataLength = 0;
   m_nTickChanged = 0;
@@ -22,7 +22,7 @@ CNetworkStringTableItem::CNetworkStringTableItem(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CNetworkStringTableItem::~CNetworkStringTableItem(void) {
+CNetworkStringTableItem::~CNetworkStringTableItem() {
 #ifndef SHARED_NET_STRING_TABLES
   if (m_pChangeList) {
     // free changelist and elements
@@ -42,7 +42,7 @@ CNetworkStringTableItem::~CNetworkStringTableItem(void) {
 }
 
 #ifndef SHARED_NET_STRING_TABLES
-void CNetworkStringTableItem::EnableChangeHistory(void) {
+void CNetworkStringTableItem::EnableChangeHistory() {
   if (m_pChangeList) return;  // already enabled
 
   m_pChangeList = new CUtlVector<itemchange_s>;

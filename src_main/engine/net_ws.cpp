@@ -75,19 +75,19 @@ void NET_ClearQueuedPacketsForChannel(INetChannel *chan);
 
 #define DEF_LOOPBACK_SIZE 2048
 
-typedef struct {
+struct netsocket_t {
   int nPort;        // UDP/TCP use same port number
   bool bListening;  // true if TCP port is listening
   int hUDP;         // handle to UDP socket from socket()
   int hTCP;         // handle to TCP socket from socket()
-} netsocket_t;
+};
 
-typedef struct {
+struct pendingsocket_t {
   int newsock;  // handle of new socket
   int netsock;  // handle of listen socket
   float time;
   netadr_t addr;
-} pendingsocket_t;
+};
 
 #include "tier0/include/memdbgoff.h"
 
@@ -104,23 +104,23 @@ struct loopback_t {
 DEFINE_FIXEDSIZE_ALLOCATOR(loopback_t, 2, CMemoryPool::GROW_SLOW);
 
 // Split long packets.  Anything over 1460 is failing on some routers
-typedef struct {
+struct LONGPACKET {
   int currentSequence;
   int splitCount;
   int totalSize;
   int nExpectedSplitSize;
-  char buffer[NET_MAX_MESSAGE];  // This has to be big enough to hold the
-                                 // largest message
-} LONGPACKET;
+  // This has to be big enough to hold the largest message
+  char buffer[NET_MAX_MESSAGE];
+};
 
 // Use this to pick apart the network stream, must be packed
 #pragma pack(1)
-typedef struct {
+struct SPLITPACKET {
   int netID;
   int sequenceNumber;
   int packetID : 16;
   int nSplitSize : 16;
-} SPLITPACKET;
+};
 #pragma pack()
 
 #define MIN_USER_MAXROUTABLE_SIZE 576  // ( X.25 Networks )
@@ -323,7 +323,7 @@ bool NET_StringToSockaddr(const char *s, struct sockaddr *sadr) {
   return true;
 }
 
-int NET_GetLastError(void) {
+int NET_GetLastError() {
 #if defined(_WIN32)
   net_error = WSAGetLastError();
 #else
@@ -842,7 +842,7 @@ NET_AdjustLag
 
 ==============================
 */
-void NET_AdjustLag(void) {
+void NET_AdjustLag() {
   static double s_LastTime = 0;
 
   // Bound time step
@@ -1367,7 +1367,7 @@ netpacket_t *NET_GetPacket(int sock, uint8_t *scratch) {
   return &inpacket;
 }
 
-void NET_ProcessPending(void) {
+void NET_ProcessPending() {
   AUTO_LOCK_FM(s_PendingSockets);
   for (int i = 0; i < s_PendingSockets.Count(); i++) {
     pendingsocket_t *psock = &s_PendingSockets[i];
@@ -2088,7 +2088,7 @@ void NET_OutOfBandPrintf(int sock, const netadr_t &adr, const char *format,
 NET_CloseAllSockets
 ====================
 */
-void NET_CloseAllSockets(void) {
+void NET_CloseAllSockets() {
   // shut down any existing and open sockets
   for (int i = 0; i < net_sockets.Count(); i++) {
     if (net_sockets[i].nPort) {
@@ -2116,7 +2116,7 @@ void NET_CloseAllSockets(void) {
 NET_FlushAllSockets
 ====================
 */
-void NET_FlushAllSockets(void) {
+void NET_FlushAllSockets() {
   // drain any packets that my still lurk in our incoming queue
   char data[2048];
   struct sockaddr from;
@@ -2173,7 +2173,7 @@ static void OpenSocketInternal(int nModule, int nSetPort, int nDefaultPort,
 NET_OpenSockets
 ====================
 */
-void NET_OpenSockets(void) {
+void NET_OpenSockets() {
   const int nProtocol = IPPROTO_UDP;
 
   OpenSocketInternal(NS_SERVER, hostport.GetInt(), PORT_SERVER, "server",
@@ -2225,7 +2225,7 @@ NET_GetLocalAddress
 Returns the servers' ip address as a string.
 ================
 */
-void NET_GetLocalAddress(void) {
+void NET_GetLocalAddress() {
   net_local_adr.Clear();
 
   if (net_noip) {
@@ -2258,9 +2258,9 @@ NET_IsConfigured
 Is winsock ip initialized?
 ====================
 */
-bool NET_IsMultiplayer(void) { return net_multiplayer; }
+bool NET_IsMultiplayer() { return net_multiplayer; }
 
-bool NET_IsDedicated(void) { return net_dedicated; }
+bool NET_IsDedicated() { return net_dedicated; }
 
 /*
 ====================
@@ -2338,7 +2338,7 @@ A single player game will only use the loopback code
 ====================
 */
 
-void NET_Config(void) {
+void NET_Config() {
   // free anything
   NET_CloseAllSockets();  // close all UDP/TCP sockets
 
@@ -2697,11 +2697,9 @@ bool NET_BufferToBufferCompress(char *dest, unsigned int *destLen, char *source,
   if (pbOut && uCompressedLen > 0 && uCompressedLen <= *destLen) {
     Q_memcpy(dest, pbOut, uCompressedLen);
     *destLen = uCompressedLen;
-    free(pbOut);
+    heap_free(pbOut);
   } else {
-    if (pbOut) {
-      free(pbOut);
-    }
+    heap_free(pbOut);
     Q_memcpy(dest, source, sourceLen);
     *destLen = sourceLen;
     return false;

@@ -30,7 +30,6 @@
 #include "utldict.h"
 #include "vgui_baseui_interface.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -122,8 +121,7 @@ CPropFadeUIPanel::CPropFadeUIPanel(vgui::Panel *parent)
     : BaseClass(parent, "PropFadeUIPanel") {
   m_pVisualization =
       new ComboBox(this, "VisualizeMode", VISUALIZE_TYPE_COUNT, false);
-  int i;
-  for (i = 0; i < PERF_TOOL_COUNT; i++) {
+  for (int i = 0; i < VISUALIZE_TYPE_COUNT; i++) {
     m_pVisualization->AddItem(s_pFadeVisualizeLabel[i], NULL);
   }
   m_pVisualization->AddActionSignalTarget(this);

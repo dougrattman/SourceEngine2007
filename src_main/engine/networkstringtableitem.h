@@ -23,7 +23,7 @@ class CNetworkStringTableItem {
   void EnableChangeHistory(void);
   void UpdateChangeList(int tick, int length, const void *userData);
   int RestoreTick(int tick);
-  inline int GetTickCreated(void) const { return m_nTickCreated; }
+  inline int GetTickCreated() const { return m_nTickCreated; }
 #endif
 
   bool SetUserData(int tick, int length, const void *userdata);
@@ -32,7 +32,7 @@ class CNetworkStringTableItem {
 
   // Used by server only
   // void SetTickCount( int count ) ;
-  inline int GetTickChanged(void) const { return m_nTickChanged; }
+  inline int GetTickChanged() const { return m_nTickChanged; }
 
  public:
   unsigned char *m_pUserData;

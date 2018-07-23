@@ -12,11 +12,11 @@
 
 #include "tier0/include/memdbgon.h"
 
-ConVar net_queued_packet_thread("net_queued_packet_thread", "1", 0,
+ConVar net_queued_packet_thread{"net_queued_packet_thread", "1", 0,
                                 "Use a high priority thread to send queued "
                                 "packets out instead of sending them each "
-                                "frame.");
-ConVar net_queue_trace("net_queue_trace", "0", 0);
+                                "frame."};
+ConVar net_queue_trace{"net_queue_trace", "0", 0};
 
 class CQueuedPacketSender : public CThread, public IQueuedPacketSender {
  public:
@@ -25,49 +25,47 @@ class CQueuedPacketSender : public CThread, public IQueuedPacketSender {
 
   // IQueuedPacketSender
 
-  virtual bool Setup();
-  virtual void Shutdown();
-  virtual bool IsRunning() { return CThread::IsAlive(); }
+  bool Setup() override;
+  void Shutdown() override;
+  bool IsRunning() override { return CThread::IsAlive(); }
 
-  virtual void ClearQueuedPacketsForChannel(INetChannel *pChan);
-  virtual void QueuePacket(INetChannel *pChan, SOCKET s, const char FAR *buf,
-                           int len, const struct sockaddr FAR *to, int tolen,
-                           uint32_t msecDelay);
+  void ClearQueuedPacketsForChannel(INetChannel *pChan) override;
+  void QueuePacket(INetChannel *pChan, SOCKET s, const char FAR *buf, int len,
+                   const struct sockaddr FAR *to, int tolen,
+                   u32 msecDelay) override;
 
  private:
   // CThread Overrides
-  virtual bool Start(unsigned int nBytesStack = 0);
-  virtual int Run();
+  bool Start(u32 nBytesStack = 0) override;
+  int Run() override;
 
  private:
-  class CQueuedPacket {
-   public:
-    uint32_t m_unSendTime;
-    const void *m_pChannel;  // We don't actually use the channel
-    SOCKET m_Socket;
-    CUtlVector<char> to;  // sockaddr
-    CUtlVector<char> buf;
+  struct QueuedPacket {
+    u32 UnsendTime;
+    const void *Channel;  // We don't actually use the channel
+    SOCKET Socket;
+    CUtlVector<char> To;  // sockaddr
+    CUtlVector<char> Buffer;
 
     // We want the list sorted in ascending order, so note that we return >
     // rather than <
-    static bool LessFunc(CQueuedPacket *const &lhs, CQueuedPacket *const &rhs) {
-      return lhs->m_unSendTime > rhs->m_unSendTime;
+    static bool LessFunc(QueuedPacket *const &lhs, QueuedPacket *const &rhs) {
+      return lhs->UnsendTime > rhs->UnsendTime;
     }
   };
 
-  CUtlPriorityQueue<CQueuedPacket *> m_QueuedPackets;
-  CThreadMutex m_QueuedPacketsCS;
-  CThreadEvent m_hThreadEvent;
-  volatile bool m_bThreadShouldExit;
+  CUtlPriorityQueue<QueuedPacket *> queued_packets_;
+  CThreadMutex queued_packets_mutex_;
+  CThreadEvent thread_Event_;
+  volatile bool should_thread_exit_;
 };
 
 static CQueuedPacketSender g_QueuedPacketSender;
 IQueuedPacketSender *g_pQueuedPackedSender = &g_QueuedPacketSender;
 
 CQueuedPacketSender::CQueuedPacketSender()
-    : m_QueuedPackets(0, 0, CQueuedPacket::LessFunc) {
-  m_bThreadShouldExit = false;
-}
+    : queued_packets_{0, 0, QueuedPacket::LessFunc},
+      should_thread_exit_{false} {}
 
 CQueuedPacketSender::~CQueuedPacketSender() { Shutdown(); }
 
@@ -76,71 +74,74 @@ bool CQueuedPacketSender::Setup() { return Start(); }
 bool CQueuedPacketSender::Start(unsigned nBytesStack) {
   Shutdown();
 
-  if (CThread::Start(nBytesStack)) {
-    // Ahhh the perfect cross-platformness of the threads library.
-#ifdef _WIN32
+  const bool is_started{CThread::Start(nBytesStack)};
+
+  if (is_started) {
+  // Ahhh the perfect cross-platformness of the threads library.
+#ifdef OS_WIN
     SetPriority(THREAD_PRIORITY_HIGHEST);
 #elif OS_POSIX
-    // SetPriority( PRIORITY_MAX );
+  // SetPriority( PRIORITY_MAX );
 #endif
-    m_bThreadShouldExit = false;
-    return true;
-  } else {
-    return false;
+
+    should_thread_exit_ = false;
   }
+
+  return is_started;
 }
 
 void CQueuedPacketSender::Shutdown() {
   if (!IsAlive()) return;
 
-  m_bThreadShouldExit = true;
-  m_hThreadEvent.Set();
+  should_thread_exit_ = true;
+  thread_Event_.Set();
 
   Join();  // Wait for the thread to exit.
 
-  while (m_QueuedPackets.Count() > 0) {
-    delete m_QueuedPackets.ElementAtHead();
-    m_QueuedPackets.RemoveAtHead();
+  while (queued_packets_.Count() > 0) {
+    delete queued_packets_.ElementAtHead();
+    queued_packets_.RemoveAtHead();
   }
-  m_QueuedPackets.Purge();
+
+  queued_packets_.Purge();
 }
 
-void CQueuedPacketSender::ClearQueuedPacketsForChannel(INetChannel *pChan) {
-  m_QueuedPacketsCS.Lock();
+void CQueuedPacketSender::ClearQueuedPacketsForChannel(INetChannel *channel) {
+  queued_packets_mutex_.Lock();
 
-  for (int i = m_QueuedPackets.Count() - 1; i >= 0; i--) {
-    CQueuedPacket *p = m_QueuedPackets.Element(i);
-    if (p->m_pChannel == pChan) {
-      m_QueuedPackets.RemoveAt(i);
+  for (int i = queued_packets_.Count() - 1; i >= 0; i--) {
+    QueuedPacket *p = queued_packets_.Element(i);
+
+    if (p->Channel == channel) {
+      queued_packets_.RemoveAt(i);
       delete p;
     }
   }
 
-  m_QueuedPacketsCS.Unlock();
+  queued_packets_mutex_.Unlock();
 }
 
 void CQueuedPacketSender::QueuePacket(INetChannel *pChan, SOCKET s,
                                       const char FAR *buf, int len,
                                       const struct sockaddr FAR *to, int tolen,
-                                      uint32_t msecDelay) {
-  m_QueuedPacketsCS.Lock();
+                                      u32 msecDelay) {
+  queued_packets_mutex_.Lock();
 
   // We'll pull all packets we should have sent by now and send them out right
   // away
-  uint32_t msNow = Plat_MSTime();
+  const u32 now_milliseconds{Plat_MSTime()};
+  const int max_queued_packets{1024};
 
-  int nMaxQueuedPackets = 1024;
-  if (m_QueuedPackets.Count() < nMaxQueuedPackets) {
+  if (queued_packets_.Count() < max_queued_packets) {
     // Add this packet to the queue.
-    CQueuedPacket *pPacket = new CQueuedPacket;
-    pPacket->m_unSendTime = msNow + msecDelay;
-    pPacket->m_Socket = s;
-    pPacket->m_pChannel = pChan;
-    pPacket->buf.CopyArray((char *)buf, len);
-    pPacket->to.CopyArray((char *)to, tolen);
-    m_QueuedPackets.Insert(pPacket);
+    auto *packet = new QueuedPacket{now_milliseconds + msecDelay, pChan, s};
+    packet->To.CopyArray((char *)to, tolen);
+    packet->Buffer.CopyArray((char *)buf, len);
+
+    queued_packets_.Insert(packet);
   } else {
     static int nWarnings = 5;
+
     if (--nWarnings > 0) {
       Warning(
           "CQueuedPacketSender: num queued packets >= nMaxQueuedPackets. Not "
@@ -149,9 +150,8 @@ void CQueuedPacketSender::QueuePacket(INetChannel *pChan, SOCKET s,
   }
 
   // Tell the thread that we have a queued packet.
-  m_hThreadEvent.Set();
-
-  m_QueuedPacketsCS.Unlock();
+  thread_Event_.Set();
+  queued_packets_mutex_.Unlock();
 }
 
 extern int NET_SendToImpl(SOCKET s, const char FAR *buf, int len,
@@ -160,38 +160,38 @@ extern int NET_SendToImpl(SOCKET s, const char FAR *buf, int len,
 
 int CQueuedPacketSender::Run() {
   // Normally TT_INFINITE but we wakeup every 50ms just in case.
-  uint32_t waitIntervalNoPackets = 50;
-  uint32_t waitInterval = waitIntervalNoPackets;
-  while (1) {
-    if (m_hThreadEvent.Wait(waitInterval)) {
+  const u32 waitIntervalNoPackets{50};
+  u32 waitInterval{waitIntervalNoPackets};
+
+  while (true) {
+    if (thread_Event_.Wait(waitInterval)) {
       // Someone signaled the thread. Either we're being told to exit or
       // we're being told that a packet was just queued.
-      if (m_bThreadShouldExit) return 0;
+      if (should_thread_exit_) return 0;
     }
 
     // Assume nothing to do and that we'll sleep again
     waitInterval = waitIntervalNoPackets;
 
     // OK, now send a packet.
-    m_QueuedPacketsCS.Lock();
+    queued_packets_mutex_.Lock();
 
     // We'll pull all packets we should have sent by now and send them out right
     // away
-    uint32_t msNow = Plat_MSTime();
+    const u32 now_milliseconds{Plat_MSTime()};
+    const bool do_trace{net_queue_trace.GetInt() ==
+                        NET_QUEUED_PACKET_THREAD_DEBUG_VALUE};
 
-    bool bTrace =
-        net_queue_trace.GetInt() == NET_QUEUED_PACKET_THREAD_DEBUG_VALUE;
+    while (queued_packets_.Count() > 0) {
+      QueuedPacket *packet = queued_packets_.ElementAtHead();
 
-    while (m_QueuedPackets.Count() > 0) {
-      CQueuedPacket *pPacket = m_QueuedPackets.ElementAtHead();
-      if (pPacket->m_unSendTime > msNow) {
+      if (packet->UnsendTime > now_milliseconds) {
         // Sleep until next we need this packet
-        waitInterval = pPacket->m_unSendTime - msNow;
-        if (bTrace) {
-          char sz[256];
-          Q_snprintf(sz, sizeof(sz), "SQ:  sleeping for %u msecs at %f\n",
-                     waitInterval, Plat_FloatTime());
-          Warning(sz);
+        waitInterval = packet->UnsendTime - now_milliseconds;
+
+        if (do_trace) {
+          Warning("SQ:  sleeping for %u msecs at %f\n", waitInterval,
+                  Plat_FloatTime());
         }
         break;
       }
@@ -199,29 +199,28 @@ int CQueuedPacketSender::Run() {
       // If it's a bot, don't do anything. Note: we DO want this code deep here
       // because bots only try to send packets when sv_stressbots is set, in
       // which case we want it to act as closely as a real player as possible.
-      sockaddr_in *pInternetAddr = (sockaddr_in *)pPacket->to.Base();
-#ifdef _WIN32
+      sockaddr_in *pInternetAddr = (sockaddr_in *)packet->To.Base();
+
+#ifdef OS_WIN
       if (pInternetAddr->sin_addr.S_un.S_addr != 0
 #else
       if (pInternetAddr->sin_addr.s_addr != 0
 #endif
           && pInternetAddr->sin_port != 0) {
-        if (bTrace) {
-          char sz[256];
-          Q_snprintf(sz, sizeof(sz), "SQ:  sending %d bytes at %f\n",
-                     pPacket->buf.Count(), Plat_FloatTime());
-          Warning(sz);
+        if (do_trace) {
+          Warning("SQ:  sending %d bytes at %f\n", packet->Buffer.Count(),
+                  Plat_FloatTime());
         }
 
-        NET_SendToImpl(pPacket->m_Socket, pPacket->buf.Base(),
-                       pPacket->buf.Count(), (sockaddr *)pPacket->to.Base(),
-                       pPacket->to.Count(), -1);
+        NET_SendToImpl(packet->Socket, packet->Buffer.Base(),
+                       packet->Buffer.Count(), (sockaddr *)packet->To.Base(),
+                       packet->To.Count(), -1);
       }
 
-      delete pPacket;
-      m_QueuedPackets.RemoveAtHead();
+      delete packet;
+      queued_packets_.RemoveAtHead();
     }
 
-    m_QueuedPacketsCS.Unlock();
+    queued_packets_mutex_.Unlock();
   }
 }

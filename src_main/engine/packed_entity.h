@@ -131,12 +131,7 @@ inline int PackedEntity::GetNumBytes() const { return Bits2Bytes(m_nBits); }
 
 inline void *PackedEntity::GetData() { return m_pData; }
 
-inline void PackedEntity::FreeData() {
-  if (m_pData) {
-    free(m_pData);
-    m_pData = NULL;
-  }
-}
+inline void PackedEntity::FreeData() { heap_free(m_pData); }
 
 inline void PackedEntity::SetChangeFrameList(IChangeFrameList *pList) {
   Assert(!m_pChangeFrameList);

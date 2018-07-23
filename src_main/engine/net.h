@@ -155,12 +155,12 @@ void NET_WriteStringCmd(const char *cmd, bf_write *buf);
 // Address conversion
 bool NET_StringToAdr(const char *s, netadr_t *a);
 // Convert from host to network uint8_t ordering
-unsigned short NET_HostToNetShort(unsigned short us_in);
+u16 NET_HostToNetShort(u16 us_in);
 // and vice versa
-unsigned short NET_NetToHostShort(unsigned short us_in);
+u16 NET_NetToHostShort(u16 us_in);
 
 // Find out what port is mapped to a local socket
-unsigned short NET_GetUDPPort(int socket);
+u16 NET_GetUDPPort(int socket);
 
 // add/remove extra sockets for testing
 int NET_AddExtraSocket(int port);
@@ -178,11 +178,11 @@ bool NET_BufferToBufferDecompress(char *dest, unsigned int *destLen,
 //============================================================================
 
 // Message data
-typedef struct {
+struct flowstats_t {
   // Size of message sent/received
   int size;
   // Time that message was sent/received
   float time;
-} flowstats_t;
+};
 
 #endif  // !NET_H

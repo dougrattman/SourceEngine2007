@@ -480,6 +480,7 @@ static inline void SV_WriteEnterPVS(CEntityWriteInfo &u) {
     Host_Error(
         "SV_CreatePacketEntities: GetEntServerClass failed for ent %d.\n",
         u.m_nNewEntity);
+    return;
   }
 
   TRACE_PACKET(("  SV Enter Class %s\n", pClass->m_pNetworkName));

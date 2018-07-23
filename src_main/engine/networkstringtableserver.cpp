@@ -39,7 +39,7 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CNetworkStringTableContainer,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void SV_CreateNetworkStringTables(void) {
+void SV_CreateNetworkStringTables() {
   // Remove any existing tables
   s_NetworkStringTableServer.RemoveAllTables();
 
@@ -58,4 +58,4 @@ void SV_CreateNetworkStringTables(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void SV_PrintStringTables(void) { s_NetworkStringTableServer.Dump(); }
+void SV_PrintStringTables() { s_NetworkStringTableServer.Dump(); }

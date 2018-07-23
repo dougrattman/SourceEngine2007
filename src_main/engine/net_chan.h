@@ -30,7 +30,7 @@
 
 class CNetChan : public INetChannel {
  private:  // netchan structurs
-  typedef struct dataFragments_s {
+  struct dataFragments_t {
     FileHandle_t file;               // open file handle
     char filename[MAX_OSPATH];       // filename
     char *buffer;                    // if NULL it's a file
@@ -43,7 +43,7 @@ class CNetChan : public INetChannel {
     int numFragments;                // number of total fragments
     int ackedFragments;              // number of fragments send & acknowledged
     int pendingFragments;  // number of fragments send, but not acknowledged yet
-  } dataFragments_t;
+  };
 
   struct subChannel_s {
     int startFraggment[MAX_STREAMS];
@@ -77,11 +77,11 @@ class CNetChan : public INetChannel {
     int choked;         // number of previously chocked packets
     int dropped;
     float m_flInterpolationAmount;
-    unsigned short msggroups[INetChannelInfo::TOTAL];  // received bytes for
-                                                       // each message group
+    u16 msggroups[INetChannelInfo::TOTAL];  // received bytes for
+                                            // each message group
   } netframe_t;
 
-  typedef struct {
+  struct netflow_t {
     float nextcompute;       // Time when we should recompute k/sec data
     float avgbytespersec;    // average bytes/sec
     float avgpacketspersec;  // average packets/sec
@@ -94,7 +94,7 @@ class CNetChan : public INetChannel {
     int currentindex;        // current frame index
     netframe_t frames[NET_FRAMES_BACKUP];  // frame history
     netframe_t *currentframe;              // current frame
-  } netflow_t;
+  };
 
  public:
   CNetChan();

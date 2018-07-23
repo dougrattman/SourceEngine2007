@@ -5,6 +5,8 @@
 #ifndef OVERLAY_H
 #define OVERLAY_H
 
+#include "base/include/base_types.h"
+
 // This is a workaround for the fact that we get massive decal flicker
 // when looking at a decal at a glancing angle while standing right next to it.
 #define OVERLAY_AVOID_FLICKER_NORMAL_OFFSET 0.1f
@@ -12,7 +14,7 @@
 //-----------------------------------------------------------------------------
 // Overlay fragments
 //-----------------------------------------------------------------------------
-typedef unsigned short OverlayFragmentHandle_t;
+typedef u16 OverlayFragmentHandle_t;
 
 enum { OVERLAY_FRAGMENT_INVALID = (OverlayFragmentHandle_t)~0 };
 

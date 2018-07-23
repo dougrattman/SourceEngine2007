@@ -23,7 +23,7 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CNetworkStringTableContainer,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CL_PrintStringTables(void) {
+void CL_PrintStringTables() {
   if (cl.m_StringTableContainer) {
     cl.m_StringTableContainer->Dump();
   }

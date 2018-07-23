@@ -193,7 +193,7 @@ bool CSession::CreateSession() {
     flags |= XSESSION_CREATE_HOST;
   }
 
-  if (flags & XSESSION_CREATE_USES_ARBITRATION) {
+  if (flags == XSESSION_CREATE_USES_ARBITRATION) {
     m_bIsArbitrated = true;
   }
 

@@ -30,16 +30,16 @@ int r_visframecount = 0;
 //  for that origin and the current one, so we can tell when vis is dirty and
 //  needs to be recomputed
 //-----------------------------------------------------------------------------
-typedef struct {
+struct VISCLUSTER {
   Vector origin;
   int viewcluster;
   int oldviewcluster;
-} VISCLUSTER;
+};
 
 //-----------------------------------------------------------------------------
 // Purpose: Stores info for updating vis data for the map
 //-----------------------------------------------------------------------------
-typedef struct {
+struct VISINFO {
   // Number of relevant vis clusters
   int nClusters;
   // Last number ( if != nClusters, recompute vis )
@@ -50,7 +50,7 @@ typedef struct {
   byte rgCurrentVis[MAX_MAP_LEAFS / 8];
   bool bSkyVisible;
   bool bForceFullSky;
-} VISINFO;
+};
 
 static VISINFO vis;
 
@@ -334,7 +334,7 @@ void Map_VisSetup(model_t *worldmodel, int visorigincount,
 //-----------------------------------------------------------------------------
 // Purpose: Clear / reset vis data
 //-----------------------------------------------------------------------------
-void Map_VisClear(void) {
+void Map_VisClear() {
   vis.nClusters = 1;
   vis.oldnClusters = 1;
   for (int i = 0; i < MAX_VIS_LEAVES; i++) {
@@ -349,13 +349,13 @@ void Map_VisClear(void) {
 // Purpose: Returns the current vis bitfield
 // Output : byte
 //-----------------------------------------------------------------------------
-uint8_t *Map_VisCurrent(void) { return vis.rgCurrentVis; }
+uint8_t *Map_VisCurrent() { return vis.rgCurrentVis; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the first viewcluster ( usually it's the only )
 // Output : int
 //-----------------------------------------------------------------------------
-int Map_VisCurrentCluster(void) {
+int Map_VisCurrentCluster() {
   // BUGBUG: The client DLL can hit this assert during a level transition
   // because the temporary entities do visibility calculations during the
   // wrong part of the frame loop (i.e. before a view has been set up!)

@@ -707,12 +707,6 @@ CON_COMMAND(banid, "Add a user ID to the ban list.") {
     }
   }
 
-  if (!id) {
-    // Should never occur!!!
-    ConMsg("SV_BanId_f:  id == NULL\n");
-    return;
-  }
-
   // See if it's in the list already
   for (i = 0; i < g_UserFilters.Count(); i++) {
     // We're just updating an existing id

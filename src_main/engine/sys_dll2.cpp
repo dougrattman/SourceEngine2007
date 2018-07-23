@@ -150,9 +150,7 @@ void Sys_ShowProgressTicks(char *specialProgressMsg) {
 
 void ClearIOStates() {
 #ifndef SWDS
-  if (g_ClientDLL) {
-    g_ClientDLL->IN_ClearStates();
-  }
+  if (g_ClientDLL) g_ClientDLL->IN_ClearStates();
 #endif
 }
 
@@ -332,8 +330,7 @@ class CModAppSystemGroup : public CAppSystemGroup {
         if (_stricmp(list[i].m_pInterfaceName, interfaceName)) {
           Error(
               "Game and client .dlls requesting different versions '%s' vs. "
-              "'%s' "
-              "from '%s'\n",
+              "'%s' from '%s'\n",
               list[i].m_pInterfaceName, interfaceName, moduleName);
         }
         return true;
@@ -398,34 +395,44 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     // Store off the app system factory...
     g_AppSystemFactory = factory;
 
-    if (!BaseClass::Connect(factory)) return false;
+    bool is_connected{BaseClass::Connect(factory)};
 
-    g_pFileSystem = g_pFullFileSystem;
-    if (!g_pFileSystem) return false;
-
-    g_pFileSystem->SetWarningFunc(Warning);
-
-    if (!Shader_Connect(true)) return false;
-
-    g_pPhysics = (IPhysics *)factory(VPHYSICS_INTERFACE_VERSION, nullptr);
-
-    avi = (IAvi *)factory(AVI_INTERFACE_VERSION, nullptr);
-    if (!avi) return false;
-
-    bik = (IBik *)factory(BIK_INTERFACE_VERSION, nullptr);
-    if (!bik) return false;
-
-    if (!g_pStudioRender || !g_pDataCache || !g_pPhysics || !g_pMDLCache ||
-        !g_pMatSystemSurface || !g_pInputSystem) {
-      Warning("Engine wasn't able to acquire required interfaces!\n");
-      return false;
+    if (is_connected) {
+      g_pFileSystem = g_pFullFileSystem;
+      is_connected = g_pFileSystem != nullptr;
     }
 
-    g_pHammer = (IHammer *)factory(INTERFACEVERSION_HAMMER, nullptr);
+    if (is_connected) {
+      g_pFileSystem->SetWarningFunc(Warning);
+      is_connected = Shader_Connect(true);
+    }
 
-    ConnectMDLCacheNotify();
+    if (is_connected) {
+      g_pPhysics = (IPhysics *)factory(VPHYSICS_INTERFACE_VERSION, nullptr);
+      is_connected = g_pPhysics != nullptr;
+    }
 
-    return true;
+    if (is_connected) {
+      avi = (IAvi *)factory(AVI_INTERFACE_VERSION, nullptr);
+      is_connected = avi != nullptr;
+    }
+
+    if (is_connected) {
+      bik = (IBik *)factory(BIK_INTERFACE_VERSION, nullptr);
+      is_connected = bik != nullptr;
+    }
+
+    if (is_connected && g_pStudioRender && g_pDataCache &&
+        g_pMDLCache && g_pMatSystemSurface && g_pInputSystem) {
+      g_pHammer = (IHammer *)factory(INTERFACEVERSION_HAMMER, nullptr);
+
+      ConnectMDLCacheNotify();
+
+      return true;
+    }
+
+    Warning("Engine Connect wasn't able to acquire required interfaces.\n");
+    return false;
   }
 
   void Disconnect() override {
@@ -454,26 +461,28 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   // Init, shutdown
   InitReturnVal_t Init() override {
     InitReturnVal_t nRetVal = BaseClass::Init();
-    if (nRetVal != INIT_OK) return nRetVal;
 
-    is_running_simulation_ = false;
+    if (nRetVal == INIT_OK) {
+      is_running_simulation_ = false;
 
-    // This creates the videomode singleton object, it doesn't depend on the
-    // registry
-    VideoMode_Create();
+      // This creates the videomode singleton object, it doesn't depend on the
+      // registry
+      VideoMode_Create();
 
-    // Initialize the editor hwnd to render into
-    editor_hwnd_ = nullptr;
+      // Initialize the editor hwnd to render into
+      editor_hwnd_ = nullptr;
 
-    // One-time setup
-    // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into
-    // the launcher or the launcher code should be merged into the engine into
-    // the code in OnStartup/OnShutdown
-    if (!OnStartup(startup_info_.m_pInstance, startup_info_.m_pInitialMod)) {
-      return HandleSetModeError();
+      // One-time setup
+      // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into
+      // the launcher or the launcher code should be merged into the engine into
+      // the code in OnStartup/OnShutdown
+      nRetVal =
+          OnStartup(startup_info_.m_pInstance, startup_info_.m_pInitialMod)
+              ? INIT_OK
+              : HandleSetModeError();
     }
 
-    return INIT_OK;
+    return nRetVal;
   }
 
   void Shutdown() override {
@@ -521,7 +530,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     if (!InEditMode()) return;
 
     // Detach input from the previous editor window
-    game->InputDetachFromGameWindow();
+    game->DetachInputFromWindow();
 
     editor_hwnd_ = hWnd;
     videomode->SetGameWindow(editor_hwnd_);
@@ -554,13 +563,13 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
       eng->SetNextState(IEngine::DLL_PAUSED);
 
       // Detach input from the previous editor window
-      game->InputDetachFromGameWindow();
+      game->DetachInputFromWindow();
     } else {
       eng->SetNextState(IEngine::DLL_ACTIVE);
 
       // Start accepting input from the new window
       // TODO(d.rattman): What if the attachment fails?
-      game->InputAttachToGameWindow();
+      game->AttachInputToWindow();
     }
   }
 
@@ -655,7 +664,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
 
   // One-time setup, based on the initially selected mod
   // TODO(d.rattman): This should move into the launcher!
-  bool OnStartup(void *pInstance, const char *pStartupModName) {
+  bool OnStartup(HINSTANCE instance, const char *pStartupModName) {
     // This fixes a bug on certain machines where the input will
     // stop coming in for about 1 second when someone hits a key.
     // (true means to disable priority boost)
@@ -666,9 +675,9 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     // Try to create the window
     Plat_TimestampedLog("Engine::CEngineAPI::OnStartup: game->Init");
 
-    // This has to happen before CreateGameWindow to set up the instance
+    // This has to happen before CreateWindow to set up the instance
     // for use by the code that creates the window
-    if (!game->Init(pInstance)) goto onStartupError;
+    if (!game->Init(instance)) goto onStartupError;
 
     // Try to create the window
     Plat_TimestampedLog("Engine::CEngineAPI::OnStartup: videomode->Init");
@@ -747,7 +756,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     COM_StringFree(host_parms.game);
 
     // Stop accepting input from the window
-    game->InputDetachFromGameWindow();
+    game->DetachInputFromWindow();
 
     TRACESHUTDOWN(DevShotGenerator_Shutdown());
     TRACESHUTDOWN(MapReslistGenerator_Shutdown());
@@ -973,9 +982,9 @@ class CDedicatedServerAPI : public CTier3AppSystem<IDedicatedServerAPI> {
     g_AppSystemFactory = nullptr;
   }
 
-  void *QueryInterface(const char *pInterfaceName) override {
+  void *QueryInterface(const char *interface_name) override {
     // Loading the engine DLL mounts *all* engine interfaces
-    return Sys_GetFactoryThis()(pInterfaceName, nullptr);
+    return Sys_GetFactoryThis()(interface_name, nullptr);
   }
 
   bool ModInit(ModInfo_t &info) override {
@@ -1014,32 +1023,27 @@ class CDedicatedServerAPI : public CTier3AppSystem<IDedicatedServerAPI> {
   }
 
   void ModShutdown() override {
-    if (dedicated_server_) {
-      delete dedicated_server_;
-      dedicated_server_ = nullptr;
-    }
+    delete dedicated_server_;
+    dedicated_server_ = nullptr;
 
     g_AppSystemFactory = nullptr;
 
     // Unload GL, Sound, etc.
     eng->Unload();
-
     // Shut down memory, etc.
     game->Shutdown();
-
     materials->ModShutdown();
+
     TRACESHUTDOWN(COM_ShutdownFileSystem());
   }
 
   bool RunFrame() override {
     // Bail if someone wants to quit.
-    if (eng->GetQuitting() != IEngine::QUIT_NOTQUITTING) {
-      return false;
-    }
-
+    const bool should_continue{eng->GetQuitting() == IEngine::QUIT_NOTQUITTING};
     // Run engine frame
-    eng->Frame();
-    return true;
+    if (should_continue) eng->Frame();
+
+    return should_continue;
   }
 
   void AddConsoleText(const ch *text) override { Cbuf_AddText(text); }
@@ -1095,8 +1099,8 @@ class CGameUIFuncs : public IGameUIFuncs {
     cl.SetFriendsID(friendsID, friendsName);
   }
 
-  std::tuple<i32, i32> GetDesktopResolution() const override {
-    i32 width, height;
+  std::tuple<u32, u32> GetDesktopResolution() const override {
+    u32 width, height;
     std::tie(width, height, std::ignore) = game->GetDesktopInfo();
 
     return {width, height};

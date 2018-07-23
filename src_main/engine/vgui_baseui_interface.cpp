@@ -1670,20 +1670,6 @@ void VGui_ActivateMouse() {
     return;
   }
 
-  /*
-  //
-  // MIKE AND ALFRED: these panels should expose whether they want mouse input
-  or not and
-  // CalculateMouseVisible will take them into account.
-  //
-  // If showing game ui, make sure nothing else is hooking it
-  if ( Base().IsGameUIVisible() || Base().IsDebugSystemVisible() )
-  {
-          g_ClientDLL->IN_DeactivateMouse();
-          return;
-  }
-  */
-
   if (vgui::surface()->IsCursorLocked() && !g_bTextMode) {
     g_ClientDLL->IN_ActivateMouse();
   } else {

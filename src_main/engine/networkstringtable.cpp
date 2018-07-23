@@ -244,7 +244,7 @@ int CNetworkStringTable::GetUserDataSizeBits() const {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CNetworkStringTable::~CNetworkStringTable(void) {
+CNetworkStringTable::~CNetworkStringTable() {
   delete[] m_pszTableName;
   delete m_pItems;
   delete m_pItemsClientSide;
@@ -253,7 +253,7 @@ CNetworkStringTable::~CNetworkStringTable(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CNetworkStringTable::DeleteAllStrings(void) {
+void CNetworkStringTable::DeleteAllStrings() {
   m_pItems->Purge();
   if (m_pItemsClientSide) {
     m_pItemsClientSide->Purge();
@@ -278,19 +278,19 @@ CNetworkStringTableItem *CNetworkStringTable::GetItem(int i) {
 // Purpose: Returns the table identifier
 // Output : TABLEID
 //-----------------------------------------------------------------------------
-TABLEID CNetworkStringTable::GetTableId(void) const { return m_id; }
+TABLEID CNetworkStringTable::GetTableId() const { return m_id; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the max size of the table
 // Output : int
 //-----------------------------------------------------------------------------
-int CNetworkStringTable::GetMaxStrings(void) const { return m_nMaxEntries; }
+int CNetworkStringTable::GetMaxStrings() const { return m_nMaxEntries; }
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns a table, by name
 // Output : const char
 //-----------------------------------------------------------------------------
-const char *CNetworkStringTable::GetTableName(void) const {
+const char *CNetworkStringTable::GetTableName() const {
   return m_pszTableName;
 }
 
@@ -298,7 +298,7 @@ const char *CNetworkStringTable::GetTableName(void) const {
 // Purpose: Returns the number of bits needed to encode an entry index
 // Output : int
 //-----------------------------------------------------------------------------
-int CNetworkStringTable::GetEntryBits(void) const { return m_nEntryBits; }
+int CNetworkStringTable::GetEntryBits() const { return m_nEntryBits; }
 
 void CNetworkStringTable::SetTick(int tick_count) {
   Assert(tick_count >= m_nTickCount);
@@ -924,7 +924,7 @@ const void *CNetworkStringTable::GetStringUserData(int stringNumber,
 // Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CNetworkStringTable::GetNumStrings(void) const { return m_pItems->Count(); }
+int CNetworkStringTable::GetNumStrings() const { return m_pItems->Count(); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -941,7 +941,7 @@ int CNetworkStringTable::FindStringIndex(char const *string) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CNetworkStringTable::Dump(void) {
+void CNetworkStringTable::Dump() {
   ConMsg("Table %s\n", GetTableName());
   ConMsg("  %i/%i items\n", GetNumStrings(), GetMaxStrings());
   for (int i = 0; i < GetNumStrings(); i++) {
@@ -981,7 +981,7 @@ bool CNetworkStringTable::WriteBaselines(SVC_CreateStringTable &msg,
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CNetworkStringTableContainer::CNetworkStringTableContainer(void) {
+CNetworkStringTableContainer::CNetworkStringTableContainer() {
   m_bAllowCreation = false;
   m_bLocked = true;
   m_nTickCount = 0;
@@ -991,7 +991,7 @@ CNetworkStringTableContainer::CNetworkStringTableContainer(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CNetworkStringTableContainer::~CNetworkStringTableContainer(void) {
+CNetworkStringTableContainer::~CNetworkStringTableContainer() {
   RemoveAllTables();
 }
 
@@ -1099,7 +1099,7 @@ INetworkStringTable *CNetworkStringTableContainer::GetTable(
   return m_Tables[stringTable];
 }
 
-int CNetworkStringTableContainer::GetNumTables(void) const {
+int CNetworkStringTableContainer::GetNumTables() const {
   return m_Tables.Count();
 }
 
@@ -1264,7 +1264,7 @@ void CNetworkStringTableContainer::SetTick(int tick_count) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CNetworkStringTableContainer::RemoveAllTables(void) {
+void CNetworkStringTableContainer::RemoveAllTables() {
   while (m_Tables.Count() > 0) {
     CNetworkStringTable *table = m_Tables[0];
     m_Tables.Remove(0);
@@ -1275,7 +1275,7 @@ void CNetworkStringTableContainer::RemoveAllTables(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CNetworkStringTableContainer::Dump(void) {
+void CNetworkStringTableContainer::Dump() {
   for (int i = 0; i < m_Tables.Count(); i++) {
     m_Tables[i]->Dump();
   }

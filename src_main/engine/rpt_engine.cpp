@@ -98,6 +98,7 @@ CON_COMMAND_F(rpt_password, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
 
   bool bWasEnabled = RPTServer().HasPassword();
   ch buf[255];
+  buf[0] = '\0';
   if (args.ArgC() == 1) {
     if (!bWasEnabled) return;
 

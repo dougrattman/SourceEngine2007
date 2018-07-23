@@ -1623,12 +1623,6 @@ void CGameServer::ReloadWhitelist(const char *pMapName) {
   // Don't do sv_pure stuff in SP games.
   if (GetMaxClients() <= 1) return;
 
-  // Get rid of the old whitelist.
-  if (m_pPureServerWhitelist) {
-    m_pPureServerWhitelist->Release();
-    m_pPureServerWhitelist = NULL;
-  }
-
   // Don't use the whitelist if sv_pure is not set.
   if (g_sv_pure_mode == 0) return;
 

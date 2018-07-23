@@ -520,7 +520,7 @@ void CNetChan::Setup(int sock, netadr_t *adr, const char *name,
   m_MessageHandler->ConnectionStart(this);
 }
 
-void CNetChan::ResetStreaming(void) {
+void CNetChan::ResetStreaming() {
   m_SteamType = STREAM_CMD_NONE;
   m_StreamLength = 0;
   m_StreamReceived = 0;
@@ -555,7 +555,7 @@ bool CNetChan::StartStreaming(unsigned int challengeNr) {
 
 void CNetChan::SetChallengeNr(unsigned int chnr) { m_ChallengeNr = chnr; }
 
-unsigned int CNetChan::GetChallengeNr(void) const { return m_ChallengeNr; }
+unsigned int CNetChan::GetChallengeNr() const { return m_ChallengeNr; }
 
 void CNetChan::GetSequenceData(int &nOutSequenceNr, int &nInSequenceNr,
                                int &nOutSequenceNrAck) {
@@ -673,7 +673,7 @@ bool CNetChan::CanPacket() const {
   return m_fClearTime < net_time;
 }
 
-bool CNetChan::IsPlayback(void) const {
+bool CNetChan::IsPlayback() const {
 #if !defined(SWDS) && !defined(_XBOX)
   return demoplayer->IsPlayingBack();
 #else
@@ -681,7 +681,7 @@ bool CNetChan::IsPlayback(void) const {
 #endif
 }
 
-void CNetChan::FlowReset(void) {
+void CNetChan::FlowReset() {
   Q_memset(m_DataFlow, 0, sizeof(m_DataFlow));
   Q_memset(m_MsgStats, 0, sizeof(m_MsgStats));
 }
@@ -828,7 +828,7 @@ void CNetChan::FlowUpdate(int flow, int addbytes) {
   }
 }
 
-void CNetChan::SetChoked(void) {
+void CNetChan::SetChoked() {
   m_nOutSequenceNr++;  // sends to be done since move command use sequence
                        // number
   m_nChokedPackets++;
@@ -1010,7 +1010,7 @@ bool CNetChan::CreateFragmentsFromFile(const char *filename, int stream,
   return true;
 }
 
-void CNetChan::SendTCPData(void) {
+void CNetChan::SendTCPData() {
   if (m_WaitingList[FRAG_NORMAL_STREAM].Count() == 0)
     return;  // nothing in line
 
@@ -1257,7 +1257,7 @@ void CNetChan::UpdateSubChannels() {
   for (i = 0; i < MAX_STREAMS; i++) {
     if (m_WaitingList[i].Count() <= 0) continue;
 
-    dataFragments_s *data = m_WaitingList[i][0];  // get head
+    dataFragments_t *data = m_WaitingList[i][0];  // get head
 
     if (data->asTCP) continue;
 
@@ -1344,7 +1344,7 @@ inline unsigned short BufferToShortChecksum(const void *pvData, size_t nSize) {
 
 #endif
 
-// #define MIN_ROUTABLE_TESTING
+  // #define MIN_ROUTABLE_TESTING
 
 #if defined(_DEBUG) || defined(MIN_ROUTABLE_TESTING)
 static ConVar net_minroutable("net_minroutable", "16", 0,
@@ -1731,7 +1731,7 @@ bool CNetChan::ProcessMessages(bf_read &buf) {
   return true;  // ok fine
 }
 
-void CNetChan::ProcessPlayback(void) {
+void CNetChan::ProcessPlayback() {
 #if !defined(SWDS) && !defined(_XBOX)
   netpacket_t *packet;
 
@@ -2187,7 +2187,7 @@ bool CNetChan::SendReliableAcknowledge(int seqnr) {
                         header.GetNumBytesWritten(), 0) > 0;
 }
 
-bool CNetChan::ProcessStream(void) {
+bool CNetChan::ProcessStream() {
   char cmd;
   char headerBuf[512];
 
@@ -2321,7 +2321,7 @@ bool CNetChan::ProcessStream(void) {
 
 int CNetChan::GetDataRate() const { return m_Rate; }
 
-bool CNetChan::HasPendingReliableData(void) {
+bool CNetChan::HasPendingReliableData() {
   return (m_StreamReliable.GetNumBitsWritten() > 0) ||
          (m_WaitingList[FRAG_NORMAL_STREAM].Count() > 0) ||
          (m_WaitingList[FRAG_FILE_STREAM].Count() > 0);
@@ -2334,9 +2334,7 @@ float CNetChan::GetTimeConnected() const {
 
 const netadr_t &CNetChan::GetRemoteAddress() const { return remote_address; }
 
-INetChannelHandler *CNetChan::GetMsgHandler(void) const {
-  return m_MessageHandler;
-}
+INetChannelHandler *CNetChan::GetMsgHandler() const { return m_MessageHandler; }
 
 bool CNetChan::IsTimedOut() const {
   if (m_Timeout == -1.0f)
@@ -2399,7 +2397,7 @@ int CNetChan::GetSequenceNr(int flow) const {
   return 0;
 }
 
-int CNetChan::GetBufferSize(void) const { return NET_FRAMES_BACKUP; }
+int CNetChan::GetBufferSize() const { return NET_FRAMES_BACKUP; }
 
 bool CNetChan::IsValidPacket(int flow, int frame_number) const {
   return m_DataFlow[flow].frames[frame_number & NET_FRAMES_MASK].valid;
@@ -2448,7 +2446,7 @@ float CNetChan::GetAvgLatency(int flow) const {
 
 float CNetChan::GetAvgLoss(int flow) const { return m_DataFlow[flow].avgloss; }
 
-float CNetChan::GetTime(void) const { return net_time; }
+float CNetChan::GetTime() const { return net_time; }
 
 bool CNetChan::GetStreamProgress(int flow, int *received, int *total) const {
   (*total) = 0;

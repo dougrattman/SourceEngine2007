@@ -35,7 +35,7 @@ static ConVar r_overlayfademax("r_overlayfademax", "2000.0f");
 //-----------------------------------------------------------------------------
 // Structures used to represent the overlay
 //-----------------------------------------------------------------------------
-typedef unsigned short OverlayFragmentList_t;
+typedef u16 OverlayFragmentList_t;
 
 enum {
   OVERLAY_FRAGMENT_LIST_INVALID = (OverlayFragmentList_t)~0,
@@ -71,7 +71,7 @@ struct moverlayfragment_t {
   SurfaceHandle_t m_SurfId;  // Surface Id
   int m_iOverlay;            // Overlay Id
   OverlayFragmentHandle_t m_hNextRender;
-  unsigned short m_nMaterialSortID;
+  u16 m_nMaterialSortID;
   CUtlVector<overlayvert_t> m_aPrimVerts;
 };
 
@@ -151,7 +151,7 @@ class COverlayMgr : public IOverlayMgr {
  private:
   // Create, destroy material sort order ids...
   int GetMaterialSortID(IMaterial *pMaterial, int nLightmapPage);
-  void CleanupMaterial(unsigned short nSortOrder);
+  void CleanupMaterial(u16 nSortOrder);
 
   moverlay_t *GetOverlay(int iOverlay);
   moverlayfragment_t *GetOverlayFragment(OverlayFragmentHandle_t iFragment);
@@ -210,10 +210,10 @@ class COverlayMgr : public IOverlayMgr {
   // Structures used to assign sort order handles
   struct RenderQueueInfo_t {
     OverlayFragmentHandle_t m_hFirstFragment;
-    unsigned short
+    u16
         m_nNextRenderQueue;  // Index of next queue that has stuff to render
-    unsigned short m_nVertexCount;
-    unsigned short m_nIndexCount;
+    u16 m_nVertexCount;
+    u16 m_nIndexCount;
   };
 
   struct RenderQueueHead_t {
@@ -222,24 +222,24 @@ class COverlayMgr : public IOverlayMgr {
 
     RenderQueueInfo_t m_Queue[MAX_MAT_SORT_GROUPS];
 
-    unsigned short m_nRefCount;
+    u16 m_nRefCount;
   };
 
   // First render queue to render
-  unsigned short m_nFirstRenderQueue[MAX_MAT_SORT_GROUPS];
+  u16 m_nFirstRenderQueue[MAX_MAT_SORT_GROUPS];
 
   // Used to assign sort order handles
-  CUtlLinkedList<RenderQueueHead_t, unsigned short> m_RenderQueue;
+  CUtlLinkedList<RenderQueueHead_t, u16> m_RenderQueue;
 
   // All overlays
   CUtlVector<moverlay_t> m_aOverlays;
 
   // List of all overlay fragments. prev/next links point to the next fragment
   // on a *surface*
-  CUtlLinkedList<moverlayfragment_t, unsigned short, true> m_aFragments;
+  CUtlLinkedList<moverlayfragment_t, u16, true> m_aFragments;
 
   // Used to find all fragments associated with a particular overlay
-  CUtlLinkedList<OverlayFragmentHandle_t, unsigned short, true>
+  CUtlLinkedList<OverlayFragmentHandle_t, u16, true>
       m_OverlayFragments;
 
   // Fade parameters.
@@ -252,7 +252,7 @@ class COverlayMgr : public IOverlayMgr {
 // Singleton accessor
 //-----------------------------------------------------------------------------
 static COverlayMgr g_OverlayMgr;
-IOverlayMgr *OverlayMgr(void) { return &g_OverlayMgr; }
+IOverlayMgr *OverlayMgr() { return &g_OverlayMgr; }
 
 //-----------------------------------------------------------------------------
 // Constructor
@@ -322,7 +322,7 @@ void COverlayMgr::UnloadOverlays() {
 int COverlayMgr::GetMaterialSortID(IMaterial *pMaterial, int nLightmapPage) {
   // Search the sort order handles for an enumeration id match (means materials
   // + lightmaps match)
-  unsigned short i;
+  u16 i;
   for (i = m_RenderQueue.Head(); i != m_RenderQueue.InvalidIndex();
        i = m_RenderQueue.Next(i)) {
     // Found a match, lets increment the refcount of this sort order id
@@ -355,7 +355,7 @@ int COverlayMgr::GetMaterialSortID(IMaterial *pMaterial, int nLightmapPage) {
   return i;
 }
 
-void COverlayMgr::CleanupMaterial(unsigned short nSortOrder) {
+void COverlayMgr::CleanupMaterial(u16 nSortOrder) {
   RenderQueueHead_t &renderQueue = m_RenderQueue[nSortOrder];
 
 #ifdef _DEBUG
@@ -920,7 +920,7 @@ void COverlayMgr::Surf_CreateFragments(moverlay_t *pOverlay,
 //-----------------------------------------------------------------------------
 // Creates fragments from the overlays loaded in from file
 //-----------------------------------------------------------------------------
-void COverlayMgr::CreateFragments(void) {
+void COverlayMgr::CreateFragments() {
   int nOverlayCount = m_aOverlays.Count();
   for (int iOverlay = 0; iOverlay < nOverlayCount; ++iOverlay) {
     moverlay_t *pOverlay = &m_aOverlays.Element(iOverlay);
@@ -1001,7 +1001,7 @@ void COverlayMgr::CreateFragments(void) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void COverlayMgr::ReSortMaterials(void) {
+void COverlayMgr::ReSortMaterials() {
 #ifndef SWDS
   // Clear the old render queue.
   m_RenderQueue.Purge();

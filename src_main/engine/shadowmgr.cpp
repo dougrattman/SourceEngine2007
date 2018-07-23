@@ -779,9 +779,8 @@ inline ShadowVertex_t* CShadowMgr::AllocateVertices(ShadowVertexCache_t& cache,
   }
 
   cache.m_Count = count;
-  if (count > 0) {
-    cache.m_pVerts = new ShadowVertex_t[count];
-  }
+  if (count > 0) cache.m_pVerts = new ShadowVertex_t[count];
+  
   cache.m_CachedVerts = m_LargeVertexList.InvalidIndex();
   return cache.m_pVerts;
 }

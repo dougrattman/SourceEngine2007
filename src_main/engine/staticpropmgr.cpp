@@ -1461,7 +1461,6 @@ void CStaticPropMgr::GetAllStaticPropsInOBB(
   if (pOutput == NULL) return;
 
   Vector vAABBMins = ptOrigin, vAABBMaxs = ptOrigin;
-  Vector ptAABBExtents[8];
 
   Vector ptOBBExtents[8];
   for (int counter = 0; counter != 8; ++counter) {

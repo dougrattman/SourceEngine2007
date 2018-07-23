@@ -862,8 +862,7 @@ class CEdgeList {
 
   class EdgeLess {
    public:
-    bool Less(const unsigned short &src1, const unsigned short &src2,
-              void *pCtx);
+    bool Less(const u16 &src1, const u16 &src2, void *pCtx);
   };
 
   static int __cdecl SurfCompare(const void *elem1, const void *elem2);
@@ -874,8 +873,8 @@ class CEdgeList {
 
   // List of all edges
   EdgeList_t m_Edges;
-  CUtlSortVector<unsigned short, EdgeLess> m_OrigSortIndices;
-  CUtlVector<unsigned short> m_SortIndices;
+  CUtlSortVector<u16, EdgeLess> m_OrigSortIndices;
+  CUtlVector<u16> m_SortIndices;
   Edge_t m_StartTerminal;
   Edge_t m_EndTerminal;
 
@@ -905,8 +904,7 @@ class CEdgeList {
 //-----------------------------------------------------------------------------
 // Used to sort the edge list
 //-----------------------------------------------------------------------------
-bool CEdgeList::EdgeLess::Less(const unsigned short &src1,
-                               const unsigned short &src2, void *pCtx) {
+bool CEdgeList::EdgeLess::Less(const u16 &src1, const u16 &src2, void *pCtx) {
   EdgeList_t *pEdgeList = (EdgeList_t *)pCtx;
 
   const Edge_t &e1 = pEdgeList->Element(src1);
@@ -1162,7 +1160,7 @@ void CEdgeList::CullSmallOccluders() {
     flMinScreenArea = OcclusionSystem()->MinOccluderArea() * 0.02f;
   }
 
-  bool *bUseSurface = (bool *)stackalloc(nSurfCount * sizeof(bool));
+  bool *bUseSurface = stack_alloc<bool>(nSurfCount);
   memset(bUseSurface, 0, nSurfCount * sizeof(bool));
 
   int i;
@@ -1699,9 +1697,8 @@ void CEdgeList::ReduceActiveList(CWingedEdgeList &newEdgeList) {
   }
 
   Edge_t *pEdgeCrossings[MAX_EDGE_CROSSINGS];
-  ReduceInfo_t *pBuf[2];
-  pBuf[0] = (ReduceInfo_t *)stackalloc(nEdgeCount * sizeof(ReduceInfo_t));
-  pBuf[1] = (ReduceInfo_t *)stackalloc(nEdgeCount * sizeof(ReduceInfo_t));
+  ReduceInfo_t *pBuf[2]{stack_alloc<ReduceInfo_t>(nEdgeCount),
+                        stack_alloc<ReduceInfo_t>(nEdgeCount)};
   m_nPrevReduceCount = m_nNewReduceCount = 0;
   int nIndex = 0;
 
@@ -2159,11 +2156,9 @@ void COcclusionSystem::AddPolygonToEdgeList(CEdgeList &edgeList,
   // that we project each vert exactly once)
   int nMaxClipVerts = (nCount * 4);
   int nClipCount, nClipCount1;
-  Vector **ppClipVertex =
-      (Vector **)stackalloc(nMaxClipVerts * sizeof(Vector *));
-  Vector **ppClipVertex1 =
-      (Vector **)stackalloc(nMaxClipVerts * sizeof(Vector *));
-  Vector *pVecProjectedVertex = (Vector *)stackalloc(nCount * sizeof(Vector));
+  Vector **ppClipVertex = stack_alloc<Vector *>(nMaxClipVerts);
+  Vector **ppClipVertex1 = stack_alloc<Vector *>(nMaxClipVerts);
+  Vector *pVecProjectedVertex = stack_alloc<Vector>(nCount);
 
   int k;
   for (k = 0; k < nCount; ++k) {
@@ -2284,10 +2279,8 @@ void COcclusionSystem::RecomputeOccluderEdgeList() {
         continue;
 
       // Clip to the near plane (has to be done in world space)
-      Vector **ppSurfVerts =
-          (Vector **)stackalloc((nVertexCount) * sizeof(Vector *));
-      Vector **ppClipVerts =
-          (Vector **)stackalloc((nVertexCount * 2) * sizeof(Vector *));
+      Vector **ppSurfVerts = stack_alloc<Vector *>(nVertexCount);
+      Vector **ppClipVerts = stack_alloc<Vector *>(nVertexCount * 2);
       for (k = 0; k < nVertexCount; ++k) {
         int nVertIndex = pIndices[nFirstVertexIndex + k];
         ppSurfVerts[k] = &(pVertices[nVertIndex].position);

@@ -7,11 +7,12 @@
 static const char *g_SvPure2_ProtectedDirs[] = {"sound", "models", "materials"};
 
 static bool IsProtectedBySvPure2(const char *pFilename) {
+  usize len1{strlen(pFilename)};
   for (usize i = 0; i < std::size(g_SvPure2_ProtectedDirs); i++) {
     const char *pProtectedDir = g_SvPure2_ProtectedDirs[i];
     usize len = strlen(pProtectedDir);
 
-    if (strlen(pFilename) < len + 1) return false;
+    if (len1 < len + 1) return false;
 
     char tempStr[512];
     Assert(len < std::size(tempStr));
