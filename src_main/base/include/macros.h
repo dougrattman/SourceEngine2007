@@ -151,6 +151,18 @@ constexpr inline bool IsPowerOfTwo(T value) {
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
                                                   std::is_unsigned_v<T>>>
+constexpr inline u8 LowWord(T value) {
+  return static_cast<u16>(static_cast<uintptr_t>(value) & 0xFFFF);
+}
+
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
+                                                  std::is_unsigned_v<T>>>
+constexpr inline u8 HighWord(T value) {
+  return static_cast<u8>((static_cast<uintptr_t>(value) >> 16) & 0xFFFF);
+}
+
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
+                                                  std::is_unsigned_v<T>>>
 constexpr inline u8 LowByte(T value) {
   return static_cast<u8>(static_cast<usize>(value) & 0xFF);
 }
