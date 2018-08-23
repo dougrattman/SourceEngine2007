@@ -715,7 +715,7 @@ void CBIKMaterial::DestroyVideoStream() {
   }
 }
 
-// Implementation of IAvi
+// Implementation of IBik
 class CBik : public IBik {
  public:
   CBik() {}

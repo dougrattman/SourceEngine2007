@@ -1,17 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// The copyright to the contents herein is the property of Valve, L.L.C.
-// The contents may be used and/or copied only with the written permission of
-// Valve, L.L.C., or in accordance with the terms and conditions stipulated in
-// the agreement/contract under which the contents have been supplied.
 
 #ifndef SOURCE_AVI_IBIK_H_
 #define SOURCE_AVI_IBIK_H_
 
 #include "appframework/IAppSystem.h"
-
-struct BGR888_t;
-class IMaterial;
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
 
 // Parameters for creating a new BINK
 struct BIKParams_t {
@@ -58,40 +52,33 @@ enum { BIKMATERIAL_INVALID = (BIKMaterial_t)~0 };
 // Main AVI interface
 #define BIK_INTERFACE_VERSION "VBik001"
 
-class IBik : public IAppSystem {
- public:
+src_interface IBik : public IAppSystem {
   // Create/destroy a BINK material (a materialsystem IMaterial)
-  virtual BIKMaterial_t CreateMaterial(const char *pMaterialName,
-                                       const char *pFileName,
-                                       const char *pPathID) = 0;
-  virtual void DestroyMaterial(BIKMaterial_t hMaterial) = 0;
+  virtual BIKMaterial_t CreateMaterial(const ch *name, const ch *file_name,
+                                       const ch *path_id) = 0;
+  virtual void DestroyMaterial(BIKMaterial_t m) = 0;
 
   // Update the frame (if necessary)
-  virtual bool Update(BIKMaterial_t hMaterial) = 0;
+  virtual bool Update(BIKMaterial_t m) = 0;
 
   // Gets the IMaterial associated with an BINK material
-  virtual IMaterial *GetMaterial(BIKMaterial_t hMaterial) = 0;
+  virtual the_interface IMaterial *GetMaterial(BIKMaterial_t m) = 0;
 
   // Returns the max texture coordinate of the BINK
-  virtual void GetTexCoordRange(BIKMaterial_t hMaterial, float *pMaxU,
-                                float *pMaxV) = 0;
+  virtual void GetTexCoordRange(BIKMaterial_t m, f32 *max_u, f32 *max_v) = 0;
 
   // Returns the frame size of the BINK (stored in a subrect of the material
   // itself)
-  virtual void GetFrameSize(BIKMaterial_t hMaterial, int *pWidth,
-                            int *pHeight) = 0;
-
+  virtual void GetFrameSize(BIKMaterial_t m, i32 *width, i32 *height) = 0;
   // Returns the frame rate of the BINK
-  virtual int GetFrameRate(BIKMaterial_t hMaterial) = 0;
-
+  virtual int GetFrameRate(BIKMaterial_t m) = 0;
   // Returns the total frame count of the BINK
-  virtual int GetFrameCount(BIKMaterial_t hMaterial) = 0;
-
+  virtual int GetFrameCount(BIKMaterial_t m) = 0;
   // Sets the frame for an BINK material (use instead of SetTime)
-  virtual void SetFrame(BIKMaterial_t hMaterial, float flFrame) = 0;
+  virtual void SetFrame(BIKMaterial_t m, f32 frame) = 0;
 
   // Sets the direct sound device that Bink will decode to
-  virtual bool SetDirectSoundDevice(void *pDevice) = 0;
+  virtual bool SetDirectSoundDevice(void *device) = 0;
 };
 
 #endif  // SOURCE_AVI_IBIK_H_

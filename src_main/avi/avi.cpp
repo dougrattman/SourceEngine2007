@@ -15,6 +15,7 @@
 #include "tier3/tier3.h"
 #include "vtf/vtf.h"
 
+#include "base/include/windows/scoped_device_context.h"
 #include "base/include/windows/windows_light.h"
 
 #include <vfw.h>
@@ -279,9 +280,8 @@ void CAviFile::CreateVideoStreams(const AVIParams_t &params, void *hWnd) {
   }
 
   // Create a compatible DC
-  HDC hdcscreen = GetDC(GetDesktopWindow());
-  m_memdc = CreateCompatibleDC(hdcscreen);
-  ReleaseDC(GetDesktopWindow(), hdcscreen);
+  source::windows::ScopedDeviceContext dc{GetDesktopWindow()};
+  m_memdc = dc.CreateCompatibleDC();
 
   // Set up a DIBSection for the screen
   m_bih->biWidth = params.m_nWidth;
@@ -627,9 +627,8 @@ void CAVIMaterial::CreateVideoStream() {
   m_nCurrentSample = AVIStreamStart(m_pAVIStream);
 
   // Create a compatible DC
-  HDC hdcscreen = GetDC(GetDesktopWindow());
-  m_memdc = CreateCompatibleDC(hdcscreen);
-  ReleaseDC(GetDesktopWindow(), hdcscreen);
+  source::windows::ScopedDeviceContext dc{GetDesktopWindow()};
+  m_memdc = dc.CreateCompatibleDC();
 
   // Set up a DIBSection for the screen
   m_bih = &m_bi.bmiHeader;

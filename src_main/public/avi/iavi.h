@@ -1,17 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// The copyright to the contents herein is the property of Valve, L.L.C.
-// The contents may be used and/or copied only with the written permission of
-// Valve, L.L.C., or in accordance with the terms and conditions stipulated in
-// the agreement/contract under which the contents have been supplied.
 
 #ifndef SOURCE_AVI_IAVI_H_
 #define SOURCE_AVI_IAVI_H_
 
 #include "appframework/IAppSystem.h"
-
-struct BGR888_t;
-class IMaterial;
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
 
 // Parameters for creating a new AVI
 struct AVIParams_t {
@@ -27,8 +21,8 @@ struct AVIParams_t {
     m_pPathID[0] = 0;
   }
 
-  char m_pFileName[256];
-  char m_pPathID[256];
+  ch m_pFileName[256];
+  ch m_pPathID[256];
 
   // fps = m_nFrameRate / m_nFrameScale
   // for integer framerates, set framerate to the fps, and framescale to 1
@@ -48,58 +42,52 @@ struct AVIParams_t {
 };
 
 // Handle to an AVI
-typedef unsigned short AVIHandle_t;
-enum { AVIHANDLE_INVALID = (AVIHandle_t)~0 };
+using AVIHandle_t = u16;
+constexpr inline AVIHandle_t AVIHANDLE_INVALID = (AVIHandle_t)~0;
 
 // Handle to an AVI material
-typedef unsigned short AVIMaterial_t;
-enum { AVIMATERIAL_INVALID = (AVIMaterial_t)~0 };
+using AVIMaterial_t = u16;
+constexpr inline AVIHandle_t AVIMATERIAL_INVALID = (AVIMaterial_t)~0;
 
 // Main AVI interface
 #define AVI_INTERFACE_VERSION "VAvi001"
 
-class IAvi : public IAppSystem {
- public:
+src_interface IAvi : public IAppSystem {
   // Necessary to call this before any other AVI interface methods
-  virtual void SetMainWindow(void *hWnd) = 0;
+  virtual void SetMainWindow(void *hwnd) = 0;
 
   // Start/stop recording an AVI
   virtual AVIHandle_t StartAVI(const AVIParams_t &params) = 0;
-  virtual void FinishAVI(AVIHandle_t handle) = 0;
+  virtual void FinishAVI(AVIHandle_t h) = 0;
 
   // Add frames to an AVI
-  virtual void AppendMovieSound(AVIHandle_t h, short *buf, size_t bufsize) = 0;
-  virtual void AppendMovieFrame(AVIHandle_t h, const BGR888_t *pRGBData) = 0;
+  virtual void AppendMovieSound(AVIHandle_t h, i16 * buffer, usize size) = 0;
+  virtual void AppendMovieFrame(AVIHandle_t h,
+                                const struct BGR888_t *rgb_data) = 0;
 
   // Create/destroy an AVI material (a materialsystem IMaterial)
-  virtual AVIMaterial_t CreateAVIMaterial(const char *pMaterialName,
-                                          const char *pFileName,
-                                          const char *pPathID) = 0;
-  virtual void DestroyAVIMaterial(AVIMaterial_t hMaterial) = 0;
+  virtual AVIMaterial_t CreateAVIMaterial(const ch *name, const ch *file_name,
+                                          const ch *path_id) = 0;
+  virtual void DestroyAVIMaterial(AVIMaterial_t m) = 0;
 
   // Sets the time for an AVI material
-  virtual void SetTime(AVIMaterial_t hMaterial, float flTime) = 0;
+  virtual void SetTime(AVIMaterial_t m, float time) = 0;
 
   // Gets the IMaterial associated with an AVI material
-  virtual IMaterial *GetMaterial(AVIMaterial_t hMaterial) = 0;
+  virtual the_interface IMaterial *GetMaterial(AVIMaterial_t m) = 0;
 
   // Returns the max texture coordinate of the AVI
-  virtual void GetTexCoordRange(AVIMaterial_t hMaterial, float *pMaxU,
-                                float *pMaxV) = 0;
+  virtual void GetTexCoordRange(AVIMaterial_t m, f32 * max_u, f32 * max_v) = 0;
 
   // Returns the frame size of the AVI (stored in a subrect of the material
   // itself)
-  virtual void GetFrameSize(AVIMaterial_t hMaterial, int *pWidth,
-                            int *pHeight) = 0;
-
+  virtual void GetFrameSize(AVIMaterial_t m, i32 * width, i32 * height) = 0;
   // Returns the frame rate of the AVI
-  virtual int GetFrameRate(AVIMaterial_t hMaterial) = 0;
-
+  virtual int GetFrameRate(AVIMaterial_t m) = 0;
   // Returns the total frame count of the AVI
-  virtual int GetFrameCount(AVIMaterial_t hMaterial) = 0;
-
+  virtual int GetFrameCount(AVIMaterial_t m) = 0;
   // Sets the frame for an AVI material (use instead of SetTime)
-  virtual void SetFrame(AVIMaterial_t hMaterial, float flFrame) = 0;
+  virtual void SetFrame(AVIMaterial_t m, f32 frame) = 0;
 };
 
 #endif  // SOURCE_AVI_IAVI_H_

@@ -7,7 +7,7 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{ce53b3ce-8ef6-4444-a1d9-0e7c011799ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Interface">
+    <Filter Include="Includes">
       <UniqueIdentifier>{f5342e72-e87c-4797-ab6d-3b0215954c89}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -24,6 +24,9 @@
     <ClCompile Include="..\public\materialsystem\material_system_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bink_media_player.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avi.h">
@@ -33,10 +36,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\public\avi\iavi.h">
-      <Filter>Interface</Filter>
+      <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\avi\ibik.h">
-      <Filter>Interface</Filter>
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ibink_media_player.h">
+      <Filter>Includes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
