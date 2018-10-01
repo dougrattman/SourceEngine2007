@@ -82,7 +82,6 @@
 #define BUG_REPOSITORY_URL "\\\\fileserver\\bugs"
 #define REPOSITORY_VALIDATION_FILE "info.txt"
 
-#define BUG_REPORTER_OLD_DLLNAME "bugreporter"
 #define BUG_REPORTER_DLLNAME "bugreporter_filequeue"
 #define BUG_REPORTER_PUBLIC_DLLNAME "bugreporter_public"
 
@@ -107,7 +106,7 @@ static ConVar bugreporter_uploadasync("bugreporter_uploadasync", "0",
 
 using namespace vgui;
 
-unsigned long GetRam() {
+u64 GetRam() {
   MEMORYSTATUSEX stat;
   GlobalMemoryStatusEx(&stat);
   return (stat.ullTotalPhys / (1024 * 1024));
@@ -117,12 +116,6 @@ const char *GetInternalBugReporterDLL() {
   char const *bug_reporter_dll{nullptr};
   if (CommandLine()->CheckParm("-bugreporterdll", &bug_reporter_dll))
     return bug_reporter_dll;
-
-  char *gamedir = strrchr(com_gamedir, '\\') + 1;
-  if (!_stricmp(gamedir, "hl2") || !_stricmp(gamedir, "ep2") ||
-      !_stricmp(gamedir, "episodic")) {
-    return BUG_REPORTER_OLD_DLLNAME;
-  }
 
   return BUG_REPORTER_DLLNAME;
 }
@@ -142,7 +135,6 @@ void DisplaySystemVersion(char *osversion, size_t maxlen) {
 
   switch (osvi.dwPlatformId) {
     case VER_PLATFORM_WIN32_NT:
-
       if (osvi.dwMajorVersion == HIBYTE(_WIN32_WINNT_WIN10) &&
           osvi.dwMinorVersion == LOBYTE(_WIN32_WINNT_WIN10)) {
         if (osvi.wProductType == VER_NT_WORKSTATION) {
@@ -165,54 +157,6 @@ void DisplaySystemVersion(char *osversion, size_t maxlen) {
       strcat_s(osversion, maxlen, "N/A ");
       break;
   }
-}
-
-static int GetNumberForMap() {
-  if (!host_state.worldmodel) return 1;
-
-  char mapname[256];
-  CL_SetupMapName(modelloader->GetName(host_state.worldmodel), mapname,
-                  sizeof(mapname));
-
-  KeyValues *resfilekeys = new KeyValues("mapnumber");
-
-  if (resfilekeys->LoadFromFile(g_pFileSystem,
-                                "scripts/bugreport_mapnumber.txt", "GAME")) {
-    KeyValues *entry = resfilekeys->GetFirstSubKey();
-
-    while (entry) {
-      if (!_stricmp(entry->GetName(), mapname)) {
-        int map_number = entry->GetInt() + 1;
-        resfilekeys->deleteThis();
-
-        return map_number;  //-V773
-      }
-
-      entry = entry->GetNextKey();
-    }
-  }
-
-  resfilekeys->deleteThis();
-
-  char szNameCopy[128];
-
-  const char *pszResult = strrchr(mapname, '_');
-  // I don't know where the number of this map is, if there even is one.
-  if (!pszResult) return 1;
-
-  strcpy_s(szNameCopy, pszResult + 1);
-  if (!*szNameCopy) return 1;
-
-  //	in case we can't use char.h, this will do the same thing
-  char *pcEndOfName = szNameCopy;
-  while (*pcEndOfName != 0) {
-    if (*pcEndOfName < '0' || *pcEndOfName > '9') *pcEndOfName = 0;
-    pcEndOfName++;
-  }
-
-  // add 1 because pvcs has 0 as the first map number, not 1 (and it is not
-  // 0-based).
-  return atoi(szNameCopy) + 1;
 }
 
 // Purpose: Generic dialog for displaying animating steam progress logo used
@@ -623,9 +567,6 @@ CBugUIPanel::CBugUIPanel(bool bIsPublic, vgui::Panel *parent)
 
   if (m_bIsPublic) {
     LoadControlSettings("Resource\\BugUIPanel_Public.res");
-  } else if (!V_strcasecmp(V_UnqualifiedFileName(m_sDllName),
-                           BUG_REPORTER_OLD_DLLNAME)) {
-    LoadControlSettings("Resource\\BugUIPanel.res");
   } else {
     LoadControlSettings("Resource\\BugUIPanel_Filequeue.res");
   }
@@ -907,13 +848,7 @@ void CBugUIPanel::OnTakeSnapshot() {
 
   SetVisible(false);
 
-  // Internal reports at 100% quality .jpg
   int quality = 100;
-
-  if (m_pBugReporter && m_pBugReporter->IsPublicUI()) {
-    quality = 40;
-  }
-
   Cbuf_AddText(va("jpeg \"%s\" %i\n", m_szScreenShotName, quality));
 }
 
@@ -979,28 +914,25 @@ void CBugUIPanel::OnChooseVMFFolder() {
 void CBugUIPanel::OnChooseArea(vgui::Panel *panel) {
   if (panel != m_pGameArea) return;
 
-  if (Q_strcmp(BUG_REPORTER_OLD_DLLNAME, GetInternalBugReporterDLL())) {
-    int area_index = m_pGameArea->GetActiveItem();
-    int c = m_pBugReporter->GetLevelCount(area_index);
-    int item = -1;
-    const char *currentLevel =
-        cl.IsActive() ? cl.m_szLevelNameShort : "console";
+  int area_index = m_pGameArea->GetActiveItem();
+  int c = m_pBugReporter->GetLevelCount(area_index);
+  int item = -1;
+  const char *currentLevel = cl.IsActive() ? cl.m_szLevelNameShort : "console";
 
-    m_pMapNumber->DeleteAllItems();
+  m_pMapNumber->DeleteAllItems();
 
-    for (int i = 0; i < c; i++) {
-      const char *level = m_pBugReporter->GetLevel(area_index, i);
-      int id = m_pMapNumber->AddItem(level, NULL);
-      if (!Q_strcmp(currentLevel, level)) {
-        item = id;
-      }
+  for (int i = 0; i < c; i++) {
+    const char *level = m_pBugReporter->GetLevel(area_index, i);
+    int id = m_pMapNumber->AddItem(level, NULL);
+    if (!Q_strcmp(currentLevel, level)) {
+      item = id;
     }
+  }
 
-    if (item >= 0) {
-      m_pMapNumber->ActivateItem(item);
-    } else {
-      m_pMapNumber->ActivateItemByRow(0);
-    }
+  if (item >= 0) {
+    m_pMapNumber->ActivateItem(item);
+  } else {
+    m_pMapNumber->ActivateItemByRow(0);
   }
 }
 
@@ -1113,32 +1045,23 @@ void CBugUIPanel::Activate() {
     if (iArea != 0) m_pGameArea->ActivateItem(iArea);
   }
 
-  if (!Q_strcmp(BUG_REPORTER_OLD_DLLNAME, GetInternalBugReporterDLL())) {
-    if (m_pMapNumber->GetItemCount() != 0) {
-      m_pMapNumber->SetVisible(false);
-      int iMapNumber = GetNumberForMap();
-      if (iMapNumber != 0) m_pMapNumber->ActivateItem(iMapNumber);
+  int c = m_pMapNumber->GetItemCount();
+  const char *currentLevel = cl.IsActive() ? cl.m_szLevelNameShort : "console";
+  int item = -1;
+
+  for (int i = 0; i < c; i++) {
+    int id = m_pMapNumber->GetItemIDFromRow(i);
+    char level[256];
+    m_pMapNumber->GetItemText(id, level, sizeof(level));
+    if (!Q_strcmp(currentLevel, level)) {
+      item = id;
     }
+  }
+
+  if (item >= 0) {
+    m_pMapNumber->ActivateItem(item);
   } else {
-    int c = m_pMapNumber->GetItemCount();
-    const char *currentLevel =
-        cl.IsActive() ? cl.m_szLevelNameShort : "console";
-    int item = -1;
-
-    for (int i = 0; i < c; i++) {
-      int id = m_pMapNumber->GetItemIDFromRow(i);
-      char level[256];
-      m_pMapNumber->GetItemText(id, level, sizeof(level));
-      if (!Q_strcmp(currentLevel, level)) {
-        item = id;
-      }
-    }
-
-    if (item >= 0) {
-      m_pMapNumber->ActivateItem(item);
-    } else {
-      m_pMapNumber->ActivateItemByRow(0);
-    }
+    m_pMapNumber->ActivateItemByRow(0);
   }
 
   if (cl.IsActive()) {
@@ -1683,7 +1606,7 @@ void CBugUIPanel::OnSubmit() {
     char gd[256];
     Q_FileBase(com_gamedir, gd, sizeof(gd));
     buginfo.Printf("GameDirectory:  %s\n", gd);
-    buginfo.Printf("Ram:  %i\n", GetRam());
+    buginfo.Printf("Ram:  %ull\n", GetRam());
     buginfo.Printf("CPU:  %i\n", (int)fFrequency);
     buginfo.Printf("Processor:  %s\n", pi.m_szProcessorID);
     buginfo.Printf("DXLevel:  %d\n", nDxLevel);
@@ -2177,17 +2100,6 @@ void CBugUIPanel::PopulateControls() {
 
   int area_index = GetArea();
   m_pGameArea->ActivateItem(area_index);
-
-  if (!Q_strcmp(BUG_REPORTER_OLD_DLLNAME, GetInternalBugReporterDLL())) {
-    m_pMapNumber->DeleteAllItems();
-
-    c = m_pBugReporter->GetMapNumberCount();
-    for (i = 0; i < c; i++) {
-      m_pMapNumber->AddItem(m_pBugReporter->GetMapNumber(i), NULL);
-    }
-
-    m_pMapNumber->ActivateItem(GetNumberForMap());
-  }
 }
 
 char const *CBugUIPanel::GetSubmitter() {
@@ -2370,17 +2282,16 @@ static CBugUIPanel *g_pBugUI = NULL;
 
 class CEngineBugReporter : public IEngineBugReporter {
  public:
-  virtual void Init(void);
-  virtual void Shutdown(void);
+  void Init() override;
+  void Shutdown() override;
 
-  virtual void InstallBugReportingUI(vgui::Panel *parent,
-                                     IEngineBugReporter::BR_TYPE type);
-  virtual bool ShouldPause() const;
+  void InstallBugReportingUI(vgui::Panel *parent,
+                             BugReporterSource type) override;
+  bool ShouldPause() const override;
 
-  virtual bool IsVisible()
-      const;  //< true iff the bug panel is active and on screen right now
+  bool IsVisible() const override;
 
-  void Restart(IEngineBugReporter::BR_TYPE type);
+  void Restart(BugReporterSource type);
 
  private:
   PHandle m_ParentPanel;
@@ -2395,12 +2306,12 @@ CON_COMMAND(_bugreporter_restart, "Restarts bug reporter .dll") {
     return;
   }
 
-  IEngineBugReporter::BR_TYPE type = IEngineBugReporter::BR_PUBLIC;
+  BugReporterSource type = BugReporterSource::kPublic;
 
   if (!Q_stricmp(args.Arg(1), "internal")) {
-    type = IEngineBugReporter::BR_INTERNAL;
+    type = BugReporterSource::KInternal;
   } else if (!Q_stricmp(args.Arg(1), "autoselect")) {
-    type = IEngineBugReporter::BR_AUTOSELECT;
+    type = BugReporterSource::kAutoSelect;
   }
 
   g_BugReporter.Restart(type);
@@ -2415,22 +2326,29 @@ void CEngineBugReporter::Shutdown() {
   }
 }
 
-void CEngineBugReporter::InstallBugReportingUI(
-    vgui::Panel *parent, IEngineBugReporter::BR_TYPE type) {
+void CEngineBugReporter::InstallBugReportingUI(vgui::Panel *parent,
+                                               BugReporterSource type) {
   if (g_pBugUI) return;
 
   bool bIsPublic = true;
 
-  char fn[512];
+  char fn[SOURCE_MAX_PATH];
   sprintf_s(fn, "%s.dll", GetInternalBugReporterDLL());
   bool bCanUseInternal = g_pFileSystem->FileExists(fn, "EXECUTABLE_PATH");
 
   switch (type) {
-    case IEngineBugReporter::BR_PUBLIC:
+    case BugReporterSource::kPublic:
       // Nothing
       break;
+
+    case BugReporterSource::KInternal: {
+      if (bCanUseInternal) {
+        bIsPublic = false;
+      }
+    } break;
+
     default:
-    case IEngineBugReporter::BR_AUTOSELECT: {
+    case BugReporterSource::kAutoSelect: {
       // check
       bIsPublic = ::IsExternalBuild();
       if (bCanUseInternal) {
@@ -2438,12 +2356,6 @@ void CEngineBugReporter::InstallBugReportingUI(
         if (CommandLine()->FindParm("-internalbuild")) {
           bIsPublic = false;
         }
-      }
-    } break;
-
-    case IEngineBugReporter::BR_INTERNAL: {
-      if (bCanUseInternal) {
-        bIsPublic = false;
       }
     } break;
   }
@@ -2454,12 +2366,12 @@ void CEngineBugReporter::InstallBugReportingUI(
   m_ParentPanel = parent;
 }
 
-void CEngineBugReporter::Restart(IEngineBugReporter::BR_TYPE type) {
+void CEngineBugReporter::Restart(BugReporterSource type) {
   Shutdown();
   Msg("Changing to bugreporter(%s)\n",
-      (type == IEngineBugReporter::BR_AUTOSELECT)
+      (type == BugReporterSource::kAutoSelect)
           ? ("autoselect")
-          : ((type == IEngineBugReporter::BR_PUBLIC) ? "public" : "valve"));
+          : ((type == BugReporterSource::kPublic) ? "public" : "valve"));
   InstallBugReportingUI(m_ParentPanel, type);
 }
 
@@ -2486,8 +2398,8 @@ CON_COMMAND_F(bug, "Show/hide the bug reporting UI.", FCVAR_DONTRECORD) {
   EngineVGui()->ActivateGameUI();
 
   g_pBugUI->Activate();
-
   g_pBugUI->ParseDefaultParams();
+
   if (args.ArgC() > 1) {
     g_pBugUI->ParseCommands(args);
   }
@@ -2525,7 +2437,7 @@ int CBugUIPanel::GetArea() {
     }
 
     char szDirectory[SOURCE_MAX_PATH];
-    Q_memmove(szDirectory, pszAreaDir, iDirLength);
+    memmove(szDirectory, pszAreaDir, iDirLength);
     szDirectory[iDirLength] = 0;
 
     if (pszAreaDir && pszAreaPrefix) {
