@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "idedicated_os.h"
 
@@ -11,9 +11,9 @@
 #include "materialsystem/imaterialsystem.h"
 #include "vgui/IVGui.h"
 #include "vgui/vguihelpers.h"
-#include "vphysics_interface.h"
+#include "vphysics/include/vphysics_interface.h"
 
-#include "console/TextConsoleWin32.h"
+#include "console/textconsolewin32.h"
 #include "console/conproc.h"
 
 extern CTextConsoleWin32 console;

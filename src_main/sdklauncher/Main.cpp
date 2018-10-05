@@ -121,12 +121,12 @@ void ShutdownMessageWindow() {
   ::UnregisterClass("VConfig_Window", ::GetModuleHandle(NULL));
 }
 
-SpewRetval_t SDKLauncherSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
+DbgReturn SDKLauncherSpewOutputFunc(DbgLevel spewType, char const *pMsg) {
 #ifdef _WIN32
   OutputDebugString(pMsg);
 #endif
 
-  if (spewType == SPEW_ERROR) {
+  if (spewType == kDbgLevelError) {
     // In Windows vgui mode, make a message box or they won't ever see the
     // error.
 #ifdef _WIN32
@@ -138,15 +138,15 @@ SpewRetval_t SDKLauncherSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
 #error "Implement me"
 #endif
 
-    return SPEW_ABORT;
+    return kDbgAbort;
   }
-  if (spewType == SPEW_ASSERT) {
+  if (spewType == kDbgLevelAssert) {
     if (CommandLine()->FindParm("-noassert") == 0)
-      return SPEW_DEBUGGER;
+      return kDbgBreak;
     else
-      return SPEW_CONTINUE;
+      return kDbgContinue;
   }
-  return SPEW_CONTINUE;
+  return kDbgContinue;
 }
 
 const char *GetSDKLauncherBinDirectory() {
@@ -491,7 +491,7 @@ DEFINE_WINDOWED_STEAM_APPLICATION_OBJECT(CSDKLauncherApp);
 // The application object
 //-----------------------------------------------------------------------------
 bool CSDKLauncherApp::Create() {
-  SpewOutputFunc(SDKLauncherSpewOutputFunc);
+  SetDbgOutputCallback(SDKLauncherSpewOutputFunc);
 
   AppSystemInfo_t appSystems[] = {
       {"inputsystem.dll", INPUTSYSTEM_INTERFACE_VERSION},

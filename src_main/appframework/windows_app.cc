@@ -18,39 +18,39 @@
 
 HINSTANCE s_HInstance;
 
-SpewRetval_t WinAppDefaultSpewFunc(SpewType_t spewType, ch const *pMsg) {
+DbgReturn WinAppDefaultSpewFunc(DbgLevel spewType, ch const *pMsg) {
   Plat_DebugString(pMsg);
   switch (spewType) {
-    case SPEW_MESSAGE:
-    case SPEW_WARNING:
-    case SPEW_LOG:
-      return SPEW_CONTINUE;
+    case kDbgLevelMessage:
+    case kDbgLevelWarning:
+    case kDbgLevelLog:
+      return kDbgContinue;
 
-    case SPEW_ASSERT:
-    case SPEW_ERROR:
+    case kDbgLevelAssert:
+    case kDbgLevelError:
     default:
-      return SPEW_DEBUGGER;
+      return kDbgBreak;
   }
 }
 
-SpewRetval_t ConsoleAppDefaultSpewFunc(SpewType_t spewType, ch const *pMsg) {
+DbgReturn ConsoleAppDefaultSpewFunc(DbgLevel spewType, ch const *pMsg) {
   printf("%s", pMsg);
   Plat_DebugString(pMsg);
 
   switch (spewType) {
-    case SPEW_MESSAGE:
-    case SPEW_WARNING:
-    case SPEW_LOG:
-      return SPEW_CONTINUE;
+    case kDbgLevelMessage:
+    case kDbgLevelWarning:
+    case kDbgLevelLog:
+      return kDbgContinue;
 
-    case SPEW_ASSERT:
-    case SPEW_ERROR:
+    case kDbgLevelAssert:
+    case kDbgLevelError:
     default:
-      return SPEW_DEBUGGER;
+      return kDbgBreak;
   }
 }
 
-SpewOutputFunc_t g_DefaultSpewFunc = WinAppDefaultSpewFunc;
+DbgOutputFn g_DefaultSpewFunc = WinAppDefaultSpewFunc;
 
 // HACK: Since I don't want to refit vgui yet...
 HINSTANCE GetAppInstance() { return s_HInstance; }

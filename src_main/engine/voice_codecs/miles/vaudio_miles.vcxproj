@@ -146,7 +146,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "mss$(PlatformArchitecture)" "mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
       <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -201,7 +201,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "mss$(PlatformArchitecture)" "mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
       <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -224,6 +224,7 @@
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
       <ConformanceMode>false</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <CustomBuildStep>
       <Command>
@@ -252,7 +253,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "mss$(PlatformArchitecture)" "mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
       <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -276,6 +277,7 @@
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
       <ConformanceMode>false</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <CustomBuildStep>
       <Command>
@@ -303,7 +305,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "mss$(PlatformArchitecture)" "mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
       <Message>Publishing '$(TargetName)' artifact(s) to devtools/bin...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

@@ -127,7 +127,7 @@ class MilesVoiceCodec : public IFrameEncoder {
       S32 bytes_requested,  // # of bytes requested by ASI codec
       S32 offset  // If not -1, application should seek to this point in stream
   ) {
-    MilesVoiceCodec *pThis = (MilesVoiceCodec *)user;
+    MilesVoiceCodec *pThis = (MilesVoiceCodec *)(uintptr_t)user;
     Assert(pThis && offset == -1);
 
     // Figure out how many samples we can safely give it.

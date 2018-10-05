@@ -15,7 +15,7 @@
 #include "tier0/include/platform.h"
 #include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/lzmaDecoder.h"
 #include "tier1/strtools.h"
 #include "tier1/utlbuffer.h"
@@ -85,7 +85,7 @@ void CParticleSystemDictionary::DestroyExistingElement(CDmxElement *pElement) {
     if (m_ParticleNameMap.Defined(pParticleSystemName)) {
       CParticleSystemDefinition *pDef = m_ParticleNameMap[pParticleSystemName];
       delete pDef;
-      m_ParticleNameMap[pParticleSystemName] = NULL;
+      m_ParticleNameMap[pParticleSystemName] = nullptr;
     }
     return;
   }
@@ -111,7 +111,7 @@ CParticleSystemDefinition *CParticleSystemDictionary::AddParticleSystem(
     CDmxElement *pParticleSystem) {
   if (Q_stricmp(pParticleSystem->GetTypeString(),
                 "DmeParticleSystemDefinition"))
-    return NULL;
+    return nullptr;
 
   DestroyExistingElement(pParticleSystem);
 
@@ -149,14 +149,14 @@ ParticleSystemHandle_t CParticleSystemDictionary::FindParticleSystemHandle(
 CParticleSystemDefinition *CParticleSystemDictionary::FindParticleSystem(
     ParticleSystemHandle_t h) {
   if (h == UTL_INVAL_SYMBOL || h >= m_ParticleNameMap.GetNumStrings())
-    return NULL;
+    return nullptr;
   return m_ParticleNameMap[h];
 }
 
 CParticleSystemDefinition *CParticleSystemDictionary::FindParticleSystem(
     const char *pName) {
   if (m_ParticleNameMap.Defined(pName)) return m_ParticleNameMap[pName];
-  return NULL;
+  return nullptr;
 }
 
 CParticleSystemDefinition *CParticleSystemDictionary::FindParticleSystem(
@@ -166,7 +166,7 @@ CParticleSystemDefinition *CParticleSystemDictionary::FindParticleSystem(
     if (IsUniqueIdEqual(m_ParticleIdMap[i]->GetId(), id))
       return m_ParticleIdMap[i];
   }
-  return NULL;
+  return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -181,12 +181,12 @@ class CChildOperatorDefinition : public IParticleOperatorDefinition {
  public:
   virtual const char *GetName() const {
     Assert(0);
-    return NULL;
+    return nullptr;
   }
   virtual CParticleOperatorInstance *CreateInstance(
       const DmObjectId_t &id) const {
     Assert(0);
-    return NULL;
+    return nullptr;
   }
   //	virtual void DestroyInstance( CParticleOperatorInstance *pInstance )
   // const { Assert(0); }
@@ -460,7 +460,7 @@ IMaterial *CParticleSystemDefinition::GetMaterial() {
   // NOTE: This has to be this way to ensure we don't load every freaking
   // material @ startup
   Assert(IsPrecached());
-  if (!IsPrecached()) return NULL;
+  if (!IsPrecached()) return nullptr;
   return m_Material;
 }
 
@@ -558,7 +558,7 @@ CDmxElement *CParticleSystemDefinition::Write() {
   return pElement;
 }
 
-void CParticleSystemDefinition::SetupContextData(void) {
+void CParticleSystemDefinition::SetupContextData() {
   // calcuate sizes and offsets for context data
   CUtlVector<CParticleOperatorInstance *> *olists[] = {
       &m_Operators, &m_Renderers,       &m_Initializers,
@@ -603,7 +603,7 @@ CUtlVector<CParticleOperatorInstance *>
       return &m_Constraints;
     default:
       Assert(0);
-      return NULL;
+      return nullptr;
   }
 }
 
@@ -613,13 +613,13 @@ CUtlVector<CParticleOperatorInstance *>
 CParticleOperatorInstance *CParticleSystemDefinition::FindOperatorById(
     ParticleFunctionType_t type, const DmObjectId_t &id) {
   CUtlVector<CParticleOperatorInstance *> *pVec = GetOperatorList(type);
-  if (!pVec) return NULL;
+  if (!pVec) return nullptr;
 
   int nCount = pVec->Count();
   for (int i = 0; i < nCount; ++i) {
     if (IsUniqueIdEqual(id, pVec->Element(i)->GetId())) return pVec->Element(i);
   }
-  return NULL;
+  return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -722,7 +722,7 @@ CParticleCollection::CParticleCollection() {
   static_assert((MAX_RANDOM_FLOATS & (MAX_RANDOM_FLOATS - 1)) == 0);
   static_assert(sizeof(s_pRandomFloats) / sizeof(float) >= MAX_RANDOM_FLOATS);
 
-  m_pNextDef = m_pPrevDef = NULL;
+  m_pNextDef = m_pPrevDef = nullptr;
   m_nUniqueParticleId = 0;
   m_nRandomQueryCount = 0;
   m_bIsScrubbable = false;
@@ -732,7 +732,7 @@ CParticleCollection::CParticleCollection() {
   m_bIsTwoPass = false;
   m_bUsesPowerOfTwoFrameBufferTexture = false;
   m_bUsesFullFrameBufferTexture = false;
-  m_pRenderOp = NULL;
+  m_pRenderOp = nullptr;
   m_nControlPointReadMask = 0;
 
   m_flLastMinDistSqr = m_flLastMaxDistSqr = 0.0f;
@@ -757,9 +757,9 @@ CParticleCollection::CParticleCollection() {
   m_nPerParticleUpdatedAttributeMask = 0;
   m_nPerParticleInitializedAttributeMask = 0;
   m_nPerParticleReadInitialAttributeMask = 0;
-  m_pParticleMemory = NULL;
-  m_pParticleInitialMemory = NULL;
-  m_pConstantMemory = NULL;
+  m_pParticleMemory = nullptr;
+  m_pParticleInitialMemory = nullptr;
+  m_pConstantMemory = nullptr;
   m_nActiveParticles = 0;
   m_nPaddedActiveParticles = 0;
   m_flCurTime = 0.0f;
@@ -767,23 +767,23 @@ CParticleCollection::CParticleCollection() {
   m_flDt = 0.0f;
   m_flPreviousDt = 0.05f;
   m_nParticleFlags = PCFLAGS_FIRST_FRAME;
-  m_pOperatorContextData = NULL;
-  m_pNext = m_pPrev = NULL;
+  m_pOperatorContextData = nullptr;
+  m_pNext = m_pPrev = nullptr;
   m_nRandomSeed = 0;
-  m_pDef = NULL;
+  m_pDef = nullptr;
   m_nAllocatedParticles = 0;
   m_nMaxAllowedParticles = 0;
   m_bDormant = false;
   m_bEmissionStopped = false;
 
   m_nNumParticlesToKill = 0;
-  m_pParticleKillList = NULL;
+  m_pParticleKillList = nullptr;
   m_nHighestCP = 0;
   memset(m_pCollisionCacheData, 0, sizeof(m_pCollisionCacheData));
-  m_pParent = NULL;
+  m_pParent = nullptr;
 }
 
-CParticleCollection::~CParticleCollection(void) {
+CParticleCollection::~CParticleCollection() {
   UnlinkFromDefList();
 
   m_Children.Purge();
@@ -801,7 +801,7 @@ CParticleCollection::~CParticleCollection(void) {
     MemAlloc_FreeAligned(m_pOperatorContextData);
   }
 
-  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_pCollisionCacheData); i++) {
+  for (usize i = 0; i < std::size(m_pCollisionCacheData); i++) {
     if (m_pCollisionCacheData[i]) {
       delete m_pCollisionCacheData[i];
     }
@@ -828,7 +828,7 @@ void CParticleCollection::Init(CParticleSystemDefinition *pDef, float flDelay,
   if (m_bIsScrubbable) {
     m_nRandomSeed = nRandomSeed;
   } else {
-    m_nRandomSeed = (int)this;
+    m_nRandomSeed = (int)(intptr_t)this;
 #ifndef _DEBUG
     m_nRandomSeed += Plat_MSTime();
 #endif
@@ -929,15 +929,12 @@ void CParticleCollection::Init(CParticleSystemDefinition *pDef, float flDelay,
 // Used by client code
 //-----------------------------------------------------------------------------
 bool CParticleCollection::Init(CParticleSystemDefinition *pDef) {
-  if (!pDef)  // || !pDef->IsPrecached() )
-  {
+  if (!pDef || !pDef->IsPrecached()) {
     Warning("Particlelib: Missing precache for particle system type \"%s\"!\n",
             pDef ? pDef->GetName() : "unknown");
     CParticleSystemDefinition *pErrorDef =
         g_pParticleSystemMgr->FindParticleSystem("error");
-    if (pErrorDef) {
-      pDef = pErrorDef;
-    }
+    if (pErrorDef) pDef = pErrorDef;
   }
 
   Init(pDef, 0.0f, 0);
@@ -963,7 +960,7 @@ bool CParticleCollection::Init(const char *pParticleSystemName) {
 void CParticleCollection::LinkIntoDefList() {
   Assert(!m_pPrevDef && !m_pNextDef);
 
-  m_pPrevDef = NULL;
+  m_pPrevDef = nullptr;
   m_pNextDef = m_pDef->m_pFirstCollection;
   m_pDef->m_pFirstCollection = this;
   if (m_pNextDef) {
@@ -994,7 +991,7 @@ void CParticleCollection::UnlinkFromDefList() {
     m_pNextDef->m_pPrevDef = m_pPrevDef;
   }
 
-  m_pNextDef = m_pPrevDef = NULL;
+  m_pNextDef = m_pPrevDef = nullptr;
 
 #ifdef _DEBUG
   CParticleCollection *pCollection = m_pDef->FirstCollection();
@@ -1101,7 +1098,7 @@ void CParticleCollection::InitStorage(CParticleSystemDefinition *pDef) {
       }
     } else {
       // Catch errors where code is reading data it didn't request
-      m_pParticleInitialAttributes[bit] = NULL;
+      m_pParticleInitialAttributes[bit] = nullptr;
       m_nParticleInitialFloatStrides[bit] = 0;
     }
   }
@@ -1155,7 +1152,7 @@ bool CParticleCollection::SystemContainsParticlesWithBoolSet(
   return false;
 }
 
-void CParticleCollection::LabelTextureUsage(void) {
+void CParticleCollection::LabelTextureUsage() {
   if (m_pDef) {
     m_bUsesPowerOfTwoFrameBufferTexture =
         m_pDef->UsesPowerOfTwoFrameBufferTexture();
@@ -1241,19 +1238,19 @@ int CParticleCollection::GetRendererCount() const {
 }
 
 CParticleOperatorInstance *CParticleCollection::GetRenderer(int i) {
-  return IsValid() ? m_pDef->m_Renderers[i] : NULL;
+  return IsValid() ? m_pDef->m_Renderers[i] : nullptr;
 }
 
 void *CParticleCollection::GetRendererContext(int i) {
   return IsValid() ? m_pOperatorContextData + m_pDef->m_nRenderersCtxOffsets[i]
-                   : NULL;
+                   : nullptr;
 }
 
 //-----------------------------------------------------------------------------
 // Visualize operators (for editing/debugging)
 //-----------------------------------------------------------------------------
 void CParticleCollection::VisualizeOperator(const DmObjectId_t *pOpId) {
-  m_pRenderOp = NULL;
+  m_pRenderOp = nullptr;
   if (!pOpId || !m_pDef) return;
 
   m_pRenderOp = m_pDef->FindOperatorById(FUNCTION_EMITTER, *pOpId);
@@ -1317,7 +1314,7 @@ void CParticleCollection::Restart() {
 
   // Update all children
   CParticleCollection *pChild;
-  for (i = 0, pChild = m_Children.m_pHead; pChild != NULL;
+  for (i = 0, pChild = m_Children.m_pHead; pChild != nullptr;
        pChild = pChild->m_pNext, i++) {
     // Remove any delays from the time (otherwise we're offset by it oddly)
     pChild->Restart();
@@ -1477,7 +1474,7 @@ void CParticleCollection::SkipToTime(float t) {
     CParticleCollection *pChild;
 
     // Update all children
-    for (i = 0, pChild = m_Children.m_pHead; pChild != NULL;
+    for (i = 0, pChild = m_Children.m_pHead; pChild != nullptr;
          pChild = pChild->m_pNext, i++) {
       // Remove any delays from the time (otherwise we're offset by it oddly)
       pChild->SkipToTime(t - m_pDef->m_Children[i].m_flDelay);
@@ -1695,7 +1692,7 @@ void CParticleCollection::Simulate(float dt) {
   for (CParticleCollection *i = m_Children.m_pHead; i; i = i->m_pNext) {
     LoanKillListTo(i);  // re-use the allocated kill list for the children
     i->Simulate(dt);
-    i->m_pParticleKillList = NULL;
+    i->m_pParticleKillList = nullptr;
   }
 
   if (bAttachedKillList) g_pParticleSystemMgr->DetachKillList(this);
@@ -1884,9 +1881,7 @@ void CParticleCollection::GetControlPointTransformAtTime(
       m_ControlPoints[nControlPoint].m_RightVector);
 }
 
-int CParticleCollection::GetHighestControlPoint(void) const {
-  return m_nHighestCP;
-}
+int CParticleCollection::GetHighestControlPoint() const { return m_nHighestCP; }
 
 //-----------------------------------------------------------------------------
 // Returns the render bounds
@@ -1919,7 +1914,7 @@ void CParticleCollection::BloatBoundsUsingControlPoint() {
 //-----------------------------------------------------------------------------
 // Recomputes the bounds
 //-----------------------------------------------------------------------------
-void CParticleCollection::RecomputeBounds(void) {
+void CParticleCollection::RecomputeBounds() {
   if (m_nActiveParticles == 0.0f) {
     m_bBoundsValid = false;
     m_MinBounds.Init(FLT_MAX, FLT_MAX, FLT_MAX);
@@ -2008,7 +2003,7 @@ void CParticleCollection::RecomputeBounds(void) {
 //-----------------------------------------------------------------------------
 // Is the particle system finished emitting + all its particles are dead?
 //-----------------------------------------------------------------------------
-bool CParticleCollection::IsFinished(void) {
+bool CParticleCollection::IsFinished() {
   if (!m_pDef) return true;
   if (m_nParticleFlags & PCFLAGS_FIRST_FRAME) return false;
   if (m_nActiveParticles) return false;
@@ -2169,9 +2164,9 @@ void CParticleCollection::MoveParticle(int nInitialIndex, int nNewIndex) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Kill List processing.
-//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  // Kill List processing.
+  //-----------------------------------------------------------------------------
 
 #define THREADED_PARTICLES 1
 
@@ -2185,7 +2180,7 @@ void CParticleSystemMgr::DetachKillList(CParticleCollection *pParticles) {
     // find which it is
     for (usize i = 0; i < std::size(g_pKillBuffers); i++) {
       if (g_pKillBuffers[i] == pParticles->m_pParticleKillList) {
-        pParticles->m_pParticleKillList = NULL;
+        pParticles->m_pParticleKillList = nullptr;
         g_nKillBufferInUse[i] = 0;  // no need to interlock
         return;
       }
@@ -2222,11 +2217,11 @@ void CParticleSystemMgr::AttachKillList(CParticleCollection *pParticles) {
 }
 void CParticleCollection::DetachKillList(CParticleCollection *pParticles) {
   Assert(pParticles->m_nNumParticlesToKill == 0);
-  pParticles->m_pParticleKillList = NULL;
+  pParticles->m_pParticleKillList = nullptr;
 }
 #endif
 
-void CParticleCollection::ApplyKillList(void) {
+void CParticleCollection::ApplyKillList() {
   int nLeftInKillList = m_nNumParticlesToKill;
   if (nLeftInKillList == 0) return;
 
@@ -2353,21 +2348,23 @@ static CDefaultParticleSystemQuery s_DefaultParticleSystemQuery;
 // Constructor
 //-----------------------------------------------------------------------------
 CParticleSystemMgr::CParticleSystemMgr()
-// m_SheetList( DefLessFunc( ITexture * ) )
+    : m_VisualizedOperatorId{}  // m_SheetList( DefLessFunc( ITexture * ) )
 {
+  m_pParticleSystemDictionary = nullptr;
+  m_pVisualizedParticles = nullptr;
   m_pQuery = &s_DefaultParticleSystemQuery;
+  m_pShadowDepthMaterial = nullptr;
+  m_flLastSimulationTime = 0.0f;
   m_bDidInit = false;
   m_bUsingDefaultQuery = true;
   m_bShouldLoadSheets = true;
-  m_pParticleSystemDictionary = NULL;
   m_nNumFramesMeasured = 0;
-  m_flLastSimulationTime = 0.0f;
 }
 
 CParticleSystemMgr::~CParticleSystemMgr() {
   if (m_pParticleSystemDictionary) {
     delete m_pParticleSystemDictionary;
-    m_pParticleSystemDictionary = NULL;
+    m_pParticleSystemDictionary = nullptr;
   }
   FlushAllSheets();
 }
@@ -2391,7 +2388,7 @@ bool CParticleSystemMgr::Init(IParticleSystemQuery *pQuery) {
     // NOTE: This is for the editor only
     AddParticleOperator(FUNCTION_CHILDREN, &s_ChildOperatorDefinition);
 
-    m_pShadowDepthMaterial = NULL;
+    m_pShadowDepthMaterial = nullptr;
     if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() >= 90) {
       KeyValues *pVMTKeyValues = new KeyValues("DepthWrite");
       pVMTKeyValues->SetInt("$no_fullbright", 1);
@@ -2448,7 +2445,7 @@ void CParticleSystemMgr::UncacheAllParticleSystems() {
 static const char *s_pParticleFieldNames[MAX_PARTICLE_ATTRIBUTES] = {
     "Position",       // XYZ, 0
     "Life Duration",  // LIFE_DURATION, 1 );
-    NULL,             // PREV_XYZ is for internal use only
+    nullptr,          // PREV_XYZ is for internal use only
     "Radius",         // RADIUS, 3 );
 
     "Roll",        // ROTATION, 4 );
@@ -2463,28 +2460,28 @@ static const char *s_pParticleFieldNames[MAX_PARTICLE_ATTRIBUTES] = {
 
     "Yaw",                // YAW, 12 );
     "Sequence Number 1",  // SEQUENCE_NUMBER1, 13 );
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
 };
 
 const char *CParticleSystemMgr::GetParticleFieldName(int nParticleField) const {
@@ -2729,7 +2726,7 @@ const char *CParticleSystemMgr::GetParticleSystemNameFromIndex(
   return pDef ? pDef->GetName() : "Unknown";
 }
 
-int CParticleSystemMgr::GetParticleSystemCount(void) {
+int CParticleSystemMgr::GetParticleSystemCount() {
   return m_pParticleSystemDictionary->NameCount();
 }
 
@@ -2738,14 +2735,14 @@ int CParticleSystemMgr::GetParticleSystemCount(void) {
 //-----------------------------------------------------------------------------
 CParticleCollection *CParticleSystemMgr::CreateParticleCollection(
     const char *pParticleSystemName, float flDelay, int nRandomSeed) {
-  if (!pParticleSystemName) return NULL;
+  if (!pParticleSystemName) return nullptr;
 
   CParticleSystemDefinition *pDef =
       m_pParticleSystemDictionary->FindParticleSystem(pParticleSystemName);
   if (!pDef) {
     Warning("Attempted to create unknown particle system type %s\n",
             pParticleSystemName);
-    return NULL;
+    return nullptr;
   }
 
   CParticleCollection *pParticleCollection = new CParticleCollection;
@@ -2755,7 +2752,7 @@ CParticleCollection *CParticleSystemMgr::CreateParticleCollection(
 
 CParticleCollection *CParticleSystemMgr::CreateParticleCollection(
     const DmObjectId_t &id, float flDelay, int nRandomSeed) {
-  if (!IsUniqueIdValid(id)) return NULL;
+  if (!IsUniqueIdValid(id)) return nullptr;
 
   CParticleSystemDefinition *pDef =
       m_pParticleSystemDictionary->FindParticleSystem(id);
@@ -2763,7 +2760,7 @@ CParticleCollection *CParticleSystemMgr::CreateParticleCollection(
     char pBuf[256];
     UniqueIdToString(id, pBuf, sizeof(pBuf));
     Warning("Attempted to create unknown particle system id %s\n", pBuf);
-    return NULL;
+    return nullptr;
   }
 
   CParticleCollection *pParticleCollection = new CParticleCollection;
@@ -2779,7 +2776,7 @@ bool CParticleSystemMgr::IsParticleSystemDefined(const DmObjectId_t &id) {
 
   CParticleSystemDefinition *pDef =
       m_pParticleSystemDictionary->FindParticleSystem(id);
-  return (pDef != NULL);
+  return (pDef != nullptr);
 }
 
 //--------------------------------------------------------------------------------
@@ -2790,7 +2787,7 @@ bool CParticleSystemMgr::IsParticleSystemDefined(const char *pName) {
 
   CParticleSystemDefinition *pDef =
       m_pParticleSystemDictionary->FindParticleSystem(pName);
-  return (pDef != NULL);
+  return (pDef != nullptr);
 }
 
 //--------------------------------------------------------------------------------
@@ -2830,11 +2827,11 @@ void CParticleSystemMgr::ShouldLoadSheets(bool bLoadSheets) {
 //--------------------------------------------------------------------------------
 CSheet *CParticleSystemMgr::FindOrLoadSheet(char const *pszFname,
                                             ITexture *pTexture) {
-  if (!m_bShouldLoadSheets) return NULL;
+  if (!m_bShouldLoadSheets) return nullptr;
 
   if (m_SheetList.Defined(pszFname)) return m_SheetList[pszFname];
 
-  CSheet *pNewSheet = NULL;
+  CSheet *pNewSheet = nullptr;
 
   size_t numBytes;
   void const *pSheet = pTexture->GetResourceData(VTF_RSRC_SHEET, &numBytes);
@@ -2849,7 +2846,7 @@ CSheet *CParticleSystemMgr::FindOrLoadSheet(char const *pszFname,
 }
 
 CSheet *CParticleSystemMgr::FindOrLoadSheet(IMaterial *pMaterial) {
-  if (!pMaterial) return NULL;
+  if (!pMaterial) return nullptr;
 
   bool bFoundVar = false;
   IMaterialVar *pVar = pMaterial->FindVar("$basetexture", &bFoundVar, true);
@@ -2859,24 +2856,17 @@ CSheet *CParticleSystemMgr::FindOrLoadSheet(IMaterial *pMaterial) {
     if (pTex && !pTex->IsError()) return FindOrLoadSheet(pTex->GetName(), pTex);
   }
 
-  return NULL;
+  return nullptr;
 }
 
-void CParticleSystemMgr::FlushAllSheets(void) {
-  // 	for( int i = 0, iEnd = m_SheetList.Count(); i < iEnd; i++ )
-  // 	{
-  // 		delete m_SheetList.Element(i);
-  // 	}
-  //
-  // 	m_SheetList.RemoveAll();
-
+void CParticleSystemMgr::FlushAllSheets() {
   m_SheetList.PurgeAndDeleteElements();
 }
 
 //-----------------------------------------------------------------------------
 // Render cache
 //-----------------------------------------------------------------------------
-void CParticleSystemMgr::ResetRenderCache(void) {
+void CParticleSystemMgr::ResetRenderCache() {
   int nCount = m_RenderCache.Count();
   for (int i = 0; i < nCount; ++i) {
     m_RenderCache[i].m_ParticleCollections.RemoveAll();
@@ -2983,7 +2973,7 @@ void CParticleSystemMgr::BuildBatchList(int iRenderCache,
   }
 }
 
-void CParticleSystemMgr::DumpProfileInformation(void) {
+void CParticleSystemMgr::DumpProfileInformation() {
 #if MEASURE_PARTICLE_PERF
   FileHandle_t fh = g_pFullFileSystem->Open("particle_profile.csv", "w");
   g_pFullFileSystem->FPrintf(fh, "numframes,%d\n", m_nNumFramesMeasured);
@@ -2998,7 +2988,7 @@ void CParticleSystemMgr::DumpProfileInformation(void) {
                                  p->m_nMaxParticles);
   }
   g_pFullFileSystem->FPrintf(fh, "\n\nopname, total time, max time\n");
-  for (usize i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
+  for (usize i = 0; i < std::size(m_ParticleOperators); i++) {
     for (int j = 0; j < m_ParticleOperators[i].Count(); j++) {
       float flmax = m_ParticleOperators[i][j]->MaximumRecordedExecutionTime();
       float fltotal = m_ParticleOperators[i][j]->TotalRecordedExecutionTime();
@@ -3021,7 +3011,7 @@ void CParticleSystemMgr::CommitProfileInformation(bool bCommit) {
       if (bCommit) p->m_flTotalSimTime += p->m_flUncomittedTotalSimTime;
       p->m_flUncomittedTotalSimTime = 0.;
     }
-    for (usize i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
+    for (usize i = 0; i < std::size(m_ParticleOperators); i++) {
       for (int j = 0; j < m_ParticleOperators[i].Count(); j++) {
         if (bCommit)
           m_ParticleOperators[i][j]->m_flTotalExecutionTime +=
@@ -3099,7 +3089,7 @@ void IParticleSystemQuery::GetRandomPointsOnControllingObjectHitBox(
     CParticleCollection *pParticles, int nControlPointNumber, int nNumPtsOut,
     float flBBoxScale, int nNumTrysToGetAPointInsideTheModel, Vector *pPntsOut,
     Vector vecDirectionalBias, Vector *pHitBoxRelativeCoordOut,
-    int *pHitBoxIndexOut) {
+    int *pHitBoxIndexOut) const {
   for (int i = 0; i < nNumPtsOut; i++) {
     pPntsOut[i] = pParticles->m_ControlPoints[nControlPointNumber].m_Position;
     if (pHitBoxRelativeCoordOut) pHitBoxRelativeCoordOut[i].Init();

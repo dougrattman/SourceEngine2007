@@ -454,7 +454,7 @@ call ..\devtools\bin\vsign.bat -noforcewritable ..\..\game\bin\$(TargetFileName)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\ConfigManager.cpp" />
+    <ClCompile Include="..\common\configmanager.cpp" />
     <ClCompile Include="..\common\SourceAppInfo.cpp" />
     <ClCompile Include="..\public\filesystem_init.cc" />
     <ClCompile Include="..\public\registry.cpp" />
@@ -481,7 +481,7 @@ call ..\devtools\bin\vsign.bat -noforcewritable ..\..\game\bin\$(TargetFileName)
     <ClCompile Include="SDKLauncherDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\ConfigManager.h" />
+    <ClInclude Include="..\common\configmanager.h" />
     <ClInclude Include="..\public\filesystem_init.h" />
     <ClInclude Include="..\public\tier1\interface.h" />
     <ClInclude Include="configs.h" />

@@ -6,7 +6,7 @@
 #include "filesystem.h"
 #include "studio.h"
 #include "tier0/include/platform.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/strtools.h"
 #include "tier2/fileutils.h"
 #include "tier2/renderutils.h"
@@ -53,11 +53,11 @@
 class C_OP_BasicMovement : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_BasicMovement);
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_PREV_XYZ_MASK | PARTICLE_ATTRIBUTE_XYZ_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -163,20 +163,17 @@ void C_OP_BasicMovement::Operate(CParticleCollection *pParticles,
   int ctr = pParticles->m_nPaddedActiveParticles;
   FourVectors *pAccIn = PerParticleForceAccumulator;
   do {
-    fltx4 accFactorX = MulSIMD(pAccIn->x, DtSquared);
-    fltx4 accFactorY = MulSIMD(pAccIn->y, DtSquared);
-    fltx4 accFactorZ = MulSIMD(pAccIn->z, DtSquared);
+    fltx4 accX = MulSIMD(pAccIn->x, DtSquared);
+    fltx4 accY = MulSIMD(pAccIn->y, DtSquared);
+    fltx4 accZ = MulSIMD(pAccIn->z, DtSquared);
 
     // we will write prev xyz, and swap prev and cur at the end
     prev_xyz->x = AddSIMD(
-        xyz->x,
-        AddSIMD(accFactorX, MulSIMD(adj_dt, SubSIMD(xyz->x, prev_xyz->x))));
+        xyz->x, AddSIMD(accX, MulSIMD(adj_dt, SubSIMD(xyz->x, prev_xyz->x))));
     prev_xyz->y = AddSIMD(
-        xyz->y,
-        AddSIMD(accFactorY, MulSIMD(adj_dt, SubSIMD(xyz->y, prev_xyz->y))));
+        xyz->y, AddSIMD(accY, MulSIMD(adj_dt, SubSIMD(xyz->y, prev_xyz->y))));
     prev_xyz->z = AddSIMD(
-        xyz->z,
-        AddSIMD(accFactorZ, MulSIMD(adj_dt, SubSIMD(xyz->z, prev_xyz->z))));
+        xyz->z, AddSIMD(accZ, MulSIMD(adj_dt, SubSIMD(xyz->z, prev_xyz->z))));
     CHECKSYSTEM(pParticles);
     ++prev_xyz;
     ++xyz;
@@ -251,16 +248,16 @@ void C_OP_BasicMovement::Operate(CParticleCollection *pParticles,
 class C_OP_FadeAndKill : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_FadeAndKill);
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_ALPHA_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK;
   }
 
-  uint32_t GetReadInitialAttributes(void) const {
+  uint32_t GetReadInitialAttributes() const {
     return PARTICLE_ATTRIBUTE_ALPHA_MASK;
   }
 
@@ -385,17 +382,17 @@ void C_OP_FadeAndKill::Operate(CParticleCollection *pParticles,
 class C_OP_FadeIn : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_FadeIn);
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_ALPHA_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK |
            PARTICLE_ATTRIBUTE_PARTICLE_ID_MASK;
   }
 
-  uint32_t GetReadInitialAttributes(void) const {
+  uint32_t GetReadInitialAttributes() const {
     return PARTICLE_ATTRIBUTE_ALPHA_MASK;
   }
 
@@ -474,17 +471,17 @@ void C_OP_FadeIn::Operate(CParticleCollection *pParticles, float flStrength,
 class C_OP_FadeOut : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_FadeOut);
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_ALPHA_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK |
            PARTICLE_ATTRIBUTE_PARTICLE_ID_MASK;
   }
 
-  uint32_t GetReadInitialAttributes(void) const {
+  uint32_t GetReadInitialAttributes() const {
     return PARTICLE_ATTRIBUTE_ALPHA_MASK;
   }
 
@@ -579,9 +576,9 @@ void C_OP_FadeOut::Operate(CParticleCollection *pParticles, float flStrength,
 class C_OP_OscillateScalar : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_OscillateScalar);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nField; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nField; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK |
            PARTICLE_ATTRIBUTE_PARTICLE_ID_MASK;
@@ -721,9 +718,9 @@ void C_OP_OscillateScalar::Operate(CParticleCollection *pParticles,
 class C_OP_OscillateVector : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_OscillateVector);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nField; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nField; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK |
            PARTICLE_ATTRIBUTE_PARTICLE_ID_MASK;
@@ -909,9 +906,9 @@ void C_OP_OscillateVector::Operate(CParticleCollection *pParticles,
 class C_OP_RemapScalar : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_RemapScalar);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nFieldOutput; }
 
-  uint32_t GetReadAttributes(void) const { return 1 << m_nFieldInput; }
+  uint32_t GetReadAttributes() const { return 1 << m_nFieldInput; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -961,12 +958,14 @@ void C_OP_RemapScalar::Operate(CParticleCollection *pParticles,
 //-----------------------------------------------------------------------------
 // noise Operator
 //-----------------------------------------------------------------------------
+MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
+MSVC_DISABLE_WARNING(4324)
 class C_OP_Noise : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_Noise);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nFieldOutput; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -976,6 +975,7 @@ class C_OP_Noise : public CParticleOperatorInstance {
   float m_flOutputMax;
   fltx4 m_fl4NoiseScale;
 };
+MSVC_END_WARNING_OVERRIDE_SCOPE()
 
 DEFINE_PARTICLE_OPERATOR(C_OP_Noise, "Noise Scalar", OPERATOR_GENERIC);
 
@@ -1019,12 +1019,14 @@ void C_OP_Noise::Operate(CParticleCollection *pParticles, float flStrength,
 //-----------------------------------------------------------------------------
 // vector noise Operator
 //-----------------------------------------------------------------------------
+MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
+MSVC_DISABLE_WARNING(4324)
 class C_OP_VectorNoise : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_VectorNoise);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nFieldOutput; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -1034,6 +1036,7 @@ class C_OP_VectorNoise : public CParticleOperatorInstance {
   Vector m_vecOutputMax;
   fltx4 m_fl4NoiseScale;
 };
+MSVC_END_WARNING_OVERRIDE_SCOPE()
 
 DEFINE_PARTICLE_OPERATOR(C_OP_VectorNoise, "Noise Vector", OPERATOR_GENERIC);
 
@@ -1092,9 +1095,9 @@ void C_OP_VectorNoise::Operate(CParticleCollection *pParticles,
 class C_OP_Decay : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_Decay);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK;
   }
@@ -1151,9 +1154,9 @@ class C_OP_Cull : public CParticleOperatorInstance {
 
   DECLARE_PARTICLE_OPERATOR(C_OP_Cull);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK |
            PARTICLE_ATTRIBUTE_PARTICLE_ID_MASK;
@@ -1214,12 +1217,12 @@ class CGeneralSpin : public CParticleOperatorInstance {
  protected:
   virtual int GetAttributeToSpin(void) const = 0;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     if (m_nSpinRateDegrees != 0.0) return (1 << GetAttributeToSpin());
     return 0;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK;
   }
@@ -1319,11 +1322,9 @@ class CSpinUpdateBase : public CParticleOperatorInstance {
   virtual int GetAttributeToSpin(void) const = 0;
   virtual int GetSpinSpeedAttribute(void) const = 0;
 
-  uint32_t GetWrittenAttributes(void) const {
-    return (1 << GetAttributeToSpin());
-  }
+  uint32_t GetWrittenAttributes() const { return (1 << GetAttributeToSpin()); }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return (1 << GetAttributeToSpin()) | (1 << GetSpinSpeedAttribute()) |
            PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
   }
@@ -1358,7 +1359,7 @@ void CSpinUpdateBase::Operate(CParticleCollection *pParticles, float flStrength,
 class C_OP_Spin : public CGeneralSpin {
   DECLARE_PARTICLE_OPERATOR(C_OP_Spin);
 
-  int GetAttributeToSpin(void) const { return PARTICLE_ATTRIBUTE_ROTATION; }
+  int GetAttributeToSpin() const { return PARTICLE_ATTRIBUTE_ROTATION; }
 };
 
 DEFINE_PARTICLE_OPERATOR(C_OP_Spin, "Rotation Spin Roll", OPERATOR_GENERIC);
@@ -1372,11 +1373,9 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_Spin)
 class C_OP_SpinUpdate : public CSpinUpdateBase {
   DECLARE_PARTICLE_OPERATOR(C_OP_SpinUpdate);
 
-  virtual int GetAttributeToSpin(void) const {
-    return PARTICLE_ATTRIBUTE_ROTATION;
-  }
+  virtual int GetAttributeToSpin() const { return PARTICLE_ATTRIBUTE_ROTATION; }
 
-  virtual int GetSpinSpeedAttribute(void) const {
+  virtual int GetSpinSpeedAttribute() const {
     return PARTICLE_ATTRIBUTE_ROTATION_SPEED;
   }
 };
@@ -1389,7 +1388,7 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_SpinUpdate)
 class C_OP_SpinYaw : public CGeneralSpin {
   DECLARE_PARTICLE_OPERATOR(C_OP_SpinYaw);
 
-  int GetAttributeToSpin(void) const { return PARTICLE_ATTRIBUTE_YAW; }
+  int GetAttributeToSpin() const { return PARTICLE_ATTRIBUTE_YAW; }
 };
 
 DEFINE_PARTICLE_OPERATOR(C_OP_SpinYaw, "Rotation Spin Yaw", OPERATOR_GENERIC);
@@ -1406,15 +1405,15 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_SpinYaw)
 class C_OP_InterpolateRadius : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_InterpolateRadius);
 
-  uint32_t GetReadInitialAttributes(void) const {
+  uint32_t GetReadInitialAttributes() const {
     return PARTICLE_ATTRIBUTE_RADIUS_MASK;
   }
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_RADIUS_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK;
   }
@@ -1552,15 +1551,15 @@ void C_OP_InterpolateRadius::Operate(CParticleCollection *pParticles,
 class C_OP_ColorInterpolate : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_ColorInterpolate);
 
-  uint32_t GetReadInitialAttributes(void) const {
+  uint32_t GetReadInitialAttributes() const {
     return PARTICLE_ATTRIBUTE_TINT_RGB_MASK;
   }
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_TINT_RGB_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK;
   }
@@ -1704,11 +1703,11 @@ class C_OP_PositionLock : public CParticleOperatorInstance {
   float m_flRange;
   bool m_bLockRot;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_PREV_XYZ_MASK | PARTICLE_ATTRIBUTE_XYZ_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK |
            PARTICLE_ATTRIBUTE_PARTICLE_ID_MASK;
@@ -1723,7 +1722,7 @@ class C_OP_PositionLock : public CParticleOperatorInstance {
         0, std::min(MAX_PARTICLE_CONTROL_POINTS - 1, m_nControlPointNumber));
   }
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(C_OP_PositionLockContext_t);
   }
 
@@ -1875,7 +1874,7 @@ void C_OP_PositionLock::Operate(CParticleCollection *pParticles,
 
   FourVectors v4Delta;
   v4Delta.DuplicateVector(vDelta);
-  int nContext = GetSIMDRandContext();
+  usize nContext = GetSIMDRandContext();
 
   FourVectors v4ControlPoint;
   v4ControlPoint.DuplicateVector(vecControlPoint);
@@ -2021,15 +2020,15 @@ class C_OP_ControlpointLight : public CParticleOperatorInstance {
 
   DECLARE_PARTICLE_OPERATOR(C_OP_ControlpointLight);
 
-  uint32_t GetReadInitialAttributes(void) const {
+  uint32_t GetReadInitialAttributes() const {
     return PARTICLE_ATTRIBUTE_TINT_RGB_MASK;
   }
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_TINT_RGB_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   virtual uint64_t GetReadControlPointMask() const {
     return (1ULL << m_nControlPoint1) | (1ULL << m_nControlPoint2) |
@@ -2443,9 +2442,9 @@ class C_OP_SetChildControlPoints : public CParticleOperatorInstance {
   int m_nNumControlPoints;
   int m_nFirstSourcePoint;
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -2501,11 +2500,11 @@ class C_OP_SetControlPointPositions : public CParticleOperatorInstance {
   Vector m_vecCP1Pos, m_vecCP2Pos, m_vecCP3Pos, m_vecCP4Pos;
   int m_nHeadLocation;
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
-  bool ShouldRunBeforeEmitters(void) const { return true; }
+  bool ShouldRunBeforeEmitters() const { return true; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -2574,11 +2573,11 @@ class C_OP_DampenToCP : public CParticleOperatorInstance {
   int m_nControlPointNumber;
   float m_flRange, m_flScale;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK |
            PARTICLE_ATTRIBUTE_LIFE_DURATION_MASK |
            PARTICLE_ATTRIBUTE_PARTICLE_ID_MASK;
@@ -2653,10 +2652,10 @@ void C_OP_DampenToCP::Operate(CParticleCollection *pParticles, float flStrength,
 class C_OP_DistanceBetweenCPs : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_DistanceBetweenCPs);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nFieldOutput; }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
-  uint32_t GetReadInitialAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetReadAttributes() const { return 0; }
+  uint32_t GetReadInitialAttributes() const { return 1 << m_nFieldOutput; }
 
   virtual uint64_t GetReadControlPointMask() const {
     return (1ULL << m_nStartCP) | (1ULL << m_nEndCP);
@@ -2764,11 +2763,11 @@ void C_OP_DistanceBetweenCPs::Operate(CParticleCollection *pParticles,
 class C_OP_DistanceToCP : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_DistanceToCP);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nFieldOutput; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
-  uint32_t GetReadInitialAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetReadInitialAttributes() const { return 1 << m_nFieldOutput; }
 
   virtual uint64_t GetReadControlPointMask() const {
     return (1ULL << m_nStartCP) | (1ULL << m_nEndCP);
@@ -2889,15 +2888,15 @@ class C_OP_SetControlPointToPlayer : public CParticleOperatorInstance {
 
   Vector m_vecCP1Pos;
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   void InitParams(CParticleSystemDefinition *pDef, CDmxElement *pElement) {
     m_nCP1 = std::max(0, std::min(MAX_PARTICLE_CONTROL_POINTS - 1, m_nCP1));
   }
 
-  bool ShouldRunBeforeEmitters(void) const { return true; }
+  bool ShouldRunBeforeEmitters() const { return true; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -2941,11 +2940,11 @@ class C_OP_PerParticleEmitter : public CParticleOperatorInstance {
   float m_flStartTime;
   float m_flEmissionDuration;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ | PARTICLE_ATTRIBUTE_PREV_XYZ;
   }
 
@@ -3137,11 +3136,11 @@ class C_OP_LockToBone : public CParticleOperatorInstance {
   float m_flLifeTimeFadeStart;
   float m_flLifeTimeFadeEnd;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     int ret = PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK |
               PARTICLE_ATTRIBUTE_HITBOX_RELATIVE_XYZ_MASK |
               PARTICLE_ATTRIBUTE_HITBOX_INDEX_MASK;
@@ -3264,9 +3263,9 @@ class C_OP_PlaneCull : public CParticleOperatorInstance {
 
   DECLARE_PARTICLE_OPERATOR(C_OP_PlaneCull);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   virtual uint64_t GetReadControlPointMask() const {
     return (1ULL << m_nPlaneControlPoint);
@@ -3328,15 +3327,15 @@ class C_OP_SetControlPointToCenter : public CParticleOperatorInstance {
 
   Vector m_vecCP1Pos;
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   void InitParams(CParticleSystemDefinition *pDef, CDmxElement *pElement) {
     m_nCP1 = std::max(0, std::min(MAX_PARTICLE_CONTROL_POINTS - 1, m_nCP1));
   }
 
-  bool ShouldRunBeforeEmitters(void) const { return true; }
+  bool ShouldRunBeforeEmitters() const { return true; }
 
   virtual void Operate(CParticleCollection *pParticles, float flStrength,
                        void *pContext) const;
@@ -3379,11 +3378,11 @@ class C_OP_VelocityMatchingForce : public CParticleOperatorInstance {
     float m_flAvgSpeed;
   };
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
@@ -3395,7 +3394,7 @@ class C_OP_VelocityMatchingForce : public CParticleOperatorInstance {
     pCtx->m_flAvgSpeed = 0;
   }
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(VelocityMatchingForceContext_t);
   }
 
@@ -3474,11 +3473,11 @@ class C_OP_OrientTo2dDirection : public CParticleOperatorInstance {
   float m_flRotOffset;
   float m_flSpinStrength;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_ROTATION_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
@@ -3585,11 +3584,11 @@ class C_OP_MaintainSequentialPath : public CParticleOperatorInstance {
   float m_flCohesionStrength;
   struct CPathParameters m_PathParams;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   virtual uint64_t GetReadControlPointMask() const {
     uint64_t nStartMask = (1ULL << m_PathParams.m_nStartControlPointNumber) - 1;
@@ -3615,7 +3614,7 @@ class C_OP_MaintainSequentialPath : public CParticleOperatorInstance {
     m_PathParams.ClampControlPointIndices();
   }
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(SequentialPositionContext_t);
   }
 
@@ -3726,9 +3725,9 @@ void C_OP_MaintainSequentialPath::Operate(CParticleCollection *pParticles,
 class C_OP_RemapDotProductToScalar : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_RemapDotProductToScalar);
 
-  uint32_t GetWrittenAttributes(void) const { return 1 << m_nFieldOutput; }
+  uint32_t GetWrittenAttributes() const { return 1 << m_nFieldOutput; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK;
   }
 
@@ -3837,7 +3836,7 @@ void C_OP_RemapDotProductToScalar::Operate(CParticleCollection *pParticles,
   }
 }
 
-void AddBuiltInParticleOperators(void) {
+void AddBuiltInParticleOperators() {
   REGISTER_PARTICLE_OPERATOR(FUNCTION_OPERATOR, C_OP_BasicMovement);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_OPERATOR, C_OP_Decay);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_OPERATOR, C_OP_FadeAndKill);

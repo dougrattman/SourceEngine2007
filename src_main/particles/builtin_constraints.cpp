@@ -8,22 +8,19 @@
 #include "mathlib/halton.h"
 #include "particles_internal.h"
 #include "tier0/include/platform.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/strtools.h"
 #include "tier2/fileutils.h"
 #include "tier2/tier2.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class C_OP_ConstrainDistance : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_ConstrainDistance);
 
-  uint32_t GetWrittenAttributes(void) const {
-    return PARTICLE_ATTRIBUTE_XYZ_MASK;
-  }
+  uint32_t GetWrittenAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   bool EnforceConstraint(int nStartBlock, int nEndBlock,
                          CParticleCollection *pParticles, void *pContext) const;
@@ -58,7 +55,7 @@ static void CHECKSYSTEM(CParticleCollection *pParticles) {
 bool C_OP_ConstrainDistance::EnforceConstraint(int nStartBlock, int nNumBlocks,
                                                CParticleCollection *pParticles,
                                                void *pContext) const {
-  size_t nStride;
+  usize nStride;
   FourVectors *pXYZ =
       pParticles->Get4VAttributePtrForWrite(PARTICLE_ATTRIBUTE_XYZ, &nStride);
   pXYZ += nStride * nStartBlock;
@@ -133,11 +130,9 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_ConstrainDistance)
 class C_OP_ConstrainDistanceToPath : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_ConstrainDistanceToPath);
 
-  uint32_t GetWrittenAttributes(void) const {
-    return PARTICLE_ATTRIBUTE_XYZ_MASK;
-  }
+  uint32_t GetWrittenAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
   }
 
@@ -312,11 +307,9 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_ConstrainDistanceToPath)
 class C_OP_PlanarConstraint : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_PlanarConstraint);
 
-  uint32_t GetWrittenAttributes(void) const {
-    return PARTICLE_ATTRIBUTE_XYZ_MASK;
-  }
+  uint32_t GetWrittenAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_RADIUS_MASK;
   }
 
@@ -444,17 +437,15 @@ void CWorldCollideContextData::CalculatePlanes(CParticleCollection *pParticles,
 class C_OP_WorldCollideConstraint : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_WorldCollideConstraint);
 
-  uint32_t GetWrittenAttributes(void) const {
-    return PARTICLE_ATTRIBUTE_XYZ_MASK;
-  }
+  uint32_t GetWrittenAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_RADIUS_MASK;
   }
 
   virtual uint64_t GetReadControlPointMask() const { return 1ULL << 0; }
 
-  size_t GetRequiredContextBytes() const {
+  usize GetRequiredContextBytes() const {
     return sizeof(CWorldCollideContextData);
   }
 
@@ -519,11 +510,9 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_WorldCollideConstraint)
 class C_OP_WorldTraceConstraint : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_WorldTraceConstraint);
 
-  uint32_t GetWrittenAttributes(void) const {
-    return PARTICLE_ATTRIBUTE_XYZ_MASK;
-  }
+  uint32_t GetWrittenAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_RADIUS_MASK;
   }
 
@@ -536,7 +525,7 @@ class C_OP_WorldTraceConstraint : public CParticleOperatorInstance {
   float m_flRadiusScale;
   float m_flCpMovementTolerance;
 
-  virtual bool IsFinalConstaint(void) const {
+  virtual bool IsFinalConstaint() const {
     return (m_flBounceAmount != 0.) || (m_flSlideAmount != 0.);
   }
 
@@ -785,7 +774,7 @@ DMXELEMENT_UNPACK_FIELD("control point movement distance tolerance", "5", float,
                         m_flCpMovementTolerance)
 END_PARTICLE_OPERATOR_UNPACK(C_OP_WorldTraceConstraint)
 
-void AddBuiltInParticleConstraints(void) {
+void AddBuiltInParticleConstraints() {
   REGISTER_PARTICLE_OPERATOR(FUNCTION_CONSTRAINT, C_OP_ConstrainDistance);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_CONSTRAINT, C_OP_PlanarConstraint);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_CONSTRAINT, C_OP_WorldCollideConstraint);

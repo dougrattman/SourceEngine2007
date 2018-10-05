@@ -1,13 +1,13 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "psheet.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 
 #include "tier0/include/memdbgon.h"
 
-CSheet::CSheet(void) {
+CSheet::CSheet() {
   memset(m_pSamples, 0, sizeof(m_pSamples));
   memset(m_bClamp, 0, sizeof(m_bClamp));
 }

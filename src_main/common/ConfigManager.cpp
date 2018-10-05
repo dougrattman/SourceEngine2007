@@ -1,12 +1,13 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "ConfigManager.h"
+#include "configmanager.h"
 
 #include <fcntl.h>
 #include <io.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <cstdio>
+
 #include "KeyValues.h"
 #include "SourceAppInfo.h"
 #include "UtlBuffer.h"

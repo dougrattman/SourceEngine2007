@@ -145,7 +145,7 @@ class HtmlWindow : public vgui::IHTML, vgui::IHTMLEvents {
   UINT mouse_msg;  // used to enumerate mouse functions to child windows, see
                    // EnunChildProc()
   bool m_bVisible;
-  long m_hIEWndProc;
+  LONG_PTR m_hIEWndProc;
 };
 
 #endif  // SOURCE_VGUI_HTMLWINDOW_H_

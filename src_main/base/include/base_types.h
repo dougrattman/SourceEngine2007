@@ -34,7 +34,7 @@ using isize = std::ptrdiff_t;
 
 // These strict synonyms are for floating point types.
 using f32 = float;
-static_assert(sizeof(f32) == 4,
+static_assert(sizeof(f32) == 4, //-V112
               "f32 should be 4 bytes length. "
               "Please, define 4 bytes float for your platform in "
               "base/include/base_types.h.");

@@ -347,8 +347,10 @@ class CJobThread : public CWorkerThread {
 
 MSVC_END_WARNING_OVERRIDE_SCOPE()
 
-CGlobalThreadPool g_ThreadPool;
-IThreadPool *g_pThreadPool = &g_ThreadPool;
+JOB_INTERFACE IThreadPool *GetGlobalThreadPool() {
+  static CGlobalThreadPool pool;
+  return &pool;
+}
 
 // CThreadPool
 CThreadPool::CThreadPool() : m_nIdleThreads(0), m_nJobs(0), m_nSuspend(0) {}
@@ -365,7 +367,7 @@ int CThreadPool::SuspendExecution() {
 
   // If not already suspended
   if (m_nSuspend == 0) {
-  // Make sure state is correct
+    // Make sure state is correct
 #ifdef _DEBUG
     int curCount = m_Threads[0]->Suspend();
     m_Threads[0]->Resume();
@@ -741,7 +743,7 @@ void CThreadPool::Distribute(bool bDistribute, int *pAffinityTable) {
             }
           }
           ThreadSetAffinity((ThreadHandle_t)m_Threads[i]->GetThreadHandle(),
-                            1 << iProc);
+                            (uintptr_t)1 << iProc);
         }
       } else {
         // distribution is from affinity table
@@ -801,7 +803,7 @@ CJob *CThreadPool::GetDummyJob() {
 
 #elif defined(OS_POSIX)
 
-IThreadPool *g_pThreadPool = nullptr;
+IThreadPool *GetGlobalThreadPool() = nullptr;
 
 JOB_INTERFACE IThreadPool *CreateThreadPool() {
   // No threadpool implementation on Linux yet. We -should- be able to use 99%

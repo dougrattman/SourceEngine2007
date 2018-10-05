@@ -140,7 +140,7 @@ constexpr inline auto CLEARBITS(T& bit_vector, Y bits) {
 }
 
 template <typename T, typename Y>
-constexpr inline auto FBitSet(const T &bit_vector, Y bit) {
+constexpr inline auto FBitSet(const T& bit_vector, Y bit) {
   return bit_vector & bit;
 }
 
@@ -149,16 +149,41 @@ constexpr inline bool IsPowerOfTwo(T value) {
   return (value & (value - 1)) == 0;
 }
 
-template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
-                                                  std::is_unsigned_v<T>>>
-constexpr inline u8 LowWord(T value) {
-  return static_cast<u16>(static_cast<uintptr_t>(value) & 0xFFFF);
+constexpr inline u64 MakeQword(u32 high, u32 low) {
+  return static_cast<u64>((implicit_cast<u64>(high) << 32) |  //-V112
+                          implicit_cast<u64>(low));           //-V112
 }
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
                                                   std::is_unsigned_v<T>>>
-constexpr inline u8 HighWord(T value) {
-  return static_cast<u8>((static_cast<uintptr_t>(value) >> 16) & 0xFFFF);
+constexpr inline u32 LowDword(T value) {
+  return static_cast<u32>(static_cast<u64>(value) &
+                          static_cast<u64>(0xFFFFFFFF));  //-V112
+}
+
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
+                                                  std::is_unsigned_v<T>>>
+constexpr inline u32 HighDword(T value) {
+  return static_cast<u32>((static_cast<u64>(value) >> 32) &  //-V112
+                          static_cast<u64>(0xFFFFFFFF));     //-V112
+}
+
+constexpr inline u32 MakeDword(u16 high, u16 low) {
+  return static_cast<u32>((implicit_cast<u32>(high) << 16) |  //-V112
+                          implicit_cast<u32>(low));           //-V112
+}
+
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
+                                                  std::is_unsigned_v<T>>>
+constexpr inline u16 LowWord(T value) {
+  return static_cast<u16>(static_cast<usize>(value) &
+                          static_cast<usize>(0xFFFF));
+}
+
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&
+                                                  std::is_unsigned_v<T>>>
+constexpr inline u16 HighWord(T value) {
+  return static_cast<u16>((static_cast<usize>(value) >> 16) & 0xFFFF);
 }
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> &&

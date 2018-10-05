@@ -10,7 +10,7 @@
 #include "psheet.h"
 #include "tier0/include/platform.h"
 #include "tier0/include/vprof.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/strtools.h"
 #include "tier2/beamsegdraw.h"
 #include "tier2/fileutils.h"
@@ -55,9 +55,9 @@ static SheetSequenceSample_t s_DefaultSheetSequence = {
 class C_OP_RenderPoints : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_RenderPoints);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   virtual void Render(IMatRenderContext *pRenderContext,
                       CParticleCollection *pParticles, void *pContext) const;
@@ -95,8 +95,8 @@ void C_OP_RenderPoints::Render(IMatRenderContext *pRenderContext,
     nParticles -= nParticlesInBatch;
     for (int i = 0; i < nParticlesInBatch; i++) {
       int hParticle = (--pRenderList)->m_nIndex;
-      int nIndex = (hParticle / 4) * xyz_stride;
-      int nOffset = hParticle & 0x3;
+      usize nIndex = (hParticle / 4) * xyz_stride;
+      usize nOffset = hParticle & 0x3;
       meshBuilder.Position3f(SubFloat(xyz[nIndex], nOffset),
                              SubFloat(xyz[nIndex + 1], nOffset),
                              SubFloat(xyz[nIndex + 2], nOffset));
@@ -178,7 +178,7 @@ class C_OP_RenderSprites : public C_OP_RenderPoints {
     unsigned int m_nOrientationVarToken;
   };
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(C_OP_RenderSpritesContext_t);
   }
 
@@ -189,7 +189,7 @@ class C_OP_RenderSprites : public C_OP_RenderPoints {
     pCtx->m_nOrientationVarToken = 0;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_ROTATION_MASK |
            PARTICLE_ATTRIBUTE_RADIUS_MASK | PARTICLE_ATTRIBUTE_TINT_RGB_MASK |
            PARTICLE_ATTRIBUTE_ALPHA_MASK |
@@ -391,7 +391,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardCameraFacing(
       unsigned char ac = FastFToC(a);
       if (ac == 0) continue;
 
-      int nColorIndex = nGroup * rgb_stride;
+      usize nColorIndex = nGroup * rgb_stride;
       float r = SubFloat(pRGB[nColorIndex], nOffset);
       float g = SubFloat(pRGB[nColorIndex + 1], nOffset);
       float b = SubFloat(pRGB[nColorIndex + 2], nOffset);
@@ -406,7 +406,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardCameraFacing(
 
       float rad = SubFloat(pRadius[nGroup * rad_stride], nOffset);
 
-      int nXYZIndex = nGroup * xyz_stride;
+      usize nXYZIndex = nGroup * xyz_stride;
       Vector vecWorldPos(SubFloat(xyz[nXYZIndex], nOffset),
                          SubFloat(xyz[nXYZIndex + 1], nOffset),
                          SubFloat(xyz[nXYZIndex + 2], nOffset));
@@ -493,7 +493,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardZRotating(
   unsigned char ac = FastFToC(a);
   if (ac == 0) return;
 
-  int nColorIndex = nGroup * info.m_nRGBStride;
+  usize nColorIndex = nGroup * info.m_nRGBStride;
   float r = SubFloat(info.m_pRGB[nColorIndex], nOffset);
   float g = SubFloat(info.m_pRGB[nColorIndex + 1], nOffset);
   float b = SubFloat(info.m_pRGB[nColorIndex + 2], nOffset);
@@ -512,7 +512,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardZRotating(
   float ca = (float)cos(-rot);
   float sa = (float)sin(-rot);
 
-  int nXYZIndex = nGroup * info.m_nXYZStride;
+  usize nXYZIndex = nGroup * info.m_nXYZStride;
   Vector vecWorldPos(SubFloat(info.m_pXYZ[nXYZIndex], nOffset),
                      SubFloat(info.m_pXYZ[nXYZIndex + 1], nOffset),
                      SubFloat(info.m_pXYZ[nXYZIndex + 2], nOffset));
@@ -662,7 +662,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardOriented(
   unsigned char ac = FastFToC(a);
   if (ac == 0) return;
 
-  int nColorIndex = nGroup * info.m_nRGBStride;
+  usize nColorIndex = nGroup * info.m_nRGBStride;
   float r = SubFloat(info.m_pRGB[nColorIndex], nOffset);
   float g = SubFloat(info.m_pRGB[nColorIndex + 1], nOffset);
   float b = SubFloat(info.m_pRGB[nColorIndex + 2], nOffset);
@@ -681,7 +681,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardOriented(
   float ca = (float)cos(-rot);
   float sa = (float)sin(-rot);
 
-  int nXYZIndex = nGroup * info.m_nXYZStride;
+  usize nXYZIndex = nGroup * info.m_nXYZStride;
   Vector vecWorldPos(SubFloat(info.m_pXYZ[nXYZIndex], nOffset),
                      SubFloat(info.m_pXYZ[nXYZIndex + 1], nOffset),
                      SubFloat(info.m_pXYZ[nXYZIndex + 2], nOffset));
@@ -825,7 +825,7 @@ void C_OP_RenderSprites::RenderSpriteCard(CMeshBuilder &meshBuilder,
   int nGroup = hParticle / 4;
   int nOffset = hParticle & 0x3;
 
-  int nColorIndex = nGroup * info.m_nRGBStride;
+  usize nColorIndex = nGroup * info.m_nRGBStride;
   float r = SubFloat(info.m_pRGB[nColorIndex], nOffset);
   float g = SubFloat(info.m_pRGB[nColorIndex + 1], nOffset);
   float b = SubFloat(info.m_pRGB[nColorIndex + 2], nOffset);
@@ -844,7 +844,7 @@ void C_OP_RenderSprites::RenderSpriteCard(CMeshBuilder &meshBuilder,
   float rot = SubFloat(info.m_pRot[nGroup * info.m_nRotStride], nOffset);
   float yaw = SubFloat(info.m_pYaw[nGroup * info.m_nYawStride], nOffset);
 
-  int nXYZIndex = nGroup * info.m_nXYZStride;
+  usize nXYZIndex = nGroup * info.m_nXYZStride;
   float x = SubFloat(info.m_pXYZ[nXYZIndex], nOffset);
   float y = SubFloat(info.m_pXYZ[nXYZIndex + 1], nOffset);
   float z = SubFloat(info.m_pXYZ[nXYZIndex + 2], nOffset);
@@ -954,7 +954,7 @@ void C_OP_RenderSprites::RenderTwoSequenceSpriteCard(CMeshBuilder &meshBuilder,
   int nGroup = hParticle / 4;
   int nOffset = hParticle & 0x3;
 
-  int nColorIndex = nGroup * info.m_nRGBStride;
+  usize nColorIndex = nGroup * info.m_nRGBStride;
   float r = SubFloat(info.m_pRGB[nColorIndex], nOffset);
   float g = SubFloat(info.m_pRGB[nColorIndex + 1], nOffset);
   float b = SubFloat(info.m_pRGB[nColorIndex + 2], nOffset);
@@ -973,7 +973,7 @@ void C_OP_RenderSprites::RenderTwoSequenceSpriteCard(CMeshBuilder &meshBuilder,
   float rot = SubFloat(info.m_pRot[nGroup * info.m_nRotStride], nOffset);
   float yaw = SubFloat(info.m_pYaw[nGroup * info.m_nYawStride], nOffset);
 
-  int nXYZIndex = nGroup * info.m_nXYZStride;
+  usize nXYZIndex = nGroup * info.m_nXYZStride;
   float x = SubFloat(info.m_pXYZ[nXYZIndex], nOffset);
   float y = SubFloat(info.m_pXYZ[nXYZIndex + 1], nOffset);
   float z = SubFloat(info.m_pXYZ[nXYZIndex + 2], nOffset);
@@ -1246,7 +1246,7 @@ struct SpriteTrailRenderInfo_t : public SpriteRenderInfo_t {
   const fltx4 *m_pLength;
 
   const fltx4 *m_pCreationTime;
-  size_t m_nCreationTimeStride;
+  // size_t m_nCreationTimeStride;
 
   void Init(CParticleCollection *pParticles, int nVertexOffset,
             float flAgeScale, CSheet *pSheet) {
@@ -1264,11 +1264,11 @@ struct SpriteTrailRenderInfo_t : public SpriteRenderInfo_t {
 class C_OP_RenderSpritesTrail : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_RenderSpritesTrail);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
   void InitParams(CParticleSystemDefinition *pDef, CDmxElement *pElement) {}
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK |
            PARTICLE_ATTRIBUTE_RADIUS_MASK | PARTICLE_ATTRIBUTE_TINT_RGB_MASK |
            PARTICLE_ATTRIBUTE_ALPHA_MASK |
@@ -1341,7 +1341,7 @@ void C_OP_RenderSpritesTrail::RenderSpriteTrail(CMeshBuilder &meshBuilder,
   if (ac == 0) return;
 
   // Setup our colors
-  int nColorIndex = nGroup * info.m_nRGBStride;
+  usize nColorIndex = nGroup * info.m_nRGBStride;
   float r = SubFloat(info.m_pRGB[nColorIndex], nOffset);
   float g = SubFloat(info.m_pRGB[nColorIndex + 1], nOffset);
   float b = SubFloat(info.m_pRGB[nColorIndex + 2], nOffset);
@@ -1372,7 +1372,7 @@ void C_OP_RenderSpritesTrail::RenderSpriteTrail(CMeshBuilder &meshBuilder,
   const SequenceSampleTextureCoords_t *pSample0 =
       &(pSample->m_TextureCoordData[0]);
 
-  int nCreationTimeIndex = nGroup * info.m_nCreationTimeStride;
+  usize nCreationTimeIndex = nGroup * info.m_nCreationTimeStride;
   float flAge =
       info.m_pParticles->m_flCurTime -
       SubFloat(info.m_pCreationTimeStamp[nCreationTimeIndex], nOffset);
@@ -1380,14 +1380,14 @@ void C_OP_RenderSpritesTrail::RenderSpriteTrail(CMeshBuilder &meshBuilder,
   float flLengthScale =
       (flAge >= m_flLengthFadeInTime) ? 1.0 : (flAge / m_flLengthFadeInTime);
 
-  int nXYZIndex = nGroup * info.m_nXYZStride;
+  usize nXYZIndex = nGroup * info.m_nXYZStride;
   Vector vecWorldPos(SubFloat(info.m_pXYZ[nXYZIndex], nOffset),
                      SubFloat(info.m_pXYZ[nXYZIndex + 1], nOffset),
                      SubFloat(info.m_pXYZ[nXYZIndex + 2], nOffset));
   Vector vecViewPos = vecWorldPos;
 
   // Get our screenspace last position
-  int nPrevXYZIndex = nGroup * info.m_nPrevXYZStride;
+  usize nPrevXYZIndex = nGroup * info.m_nPrevXYZStride;
   Vector vecPrevWorldPos(SubFloat(info.m_pPrevXYZ[nPrevXYZIndex], nOffset),
                          SubFloat(info.m_pPrevXYZ[nPrevXYZIndex + 1], nOffset),
                          SubFloat(info.m_pPrevXYZ[nPrevXYZIndex + 2], nOffset));
@@ -1558,8 +1558,8 @@ struct RopeRenderInfo_t {
     int nGroup = hParticle / 4;
     int nOffset = hParticle & 0x3;
 
-    int nXYZIndex = nGroup * m_nXYZStride;
-    int nColorIndex = nGroup * m_nRGBStride;
+    usize nXYZIndex = nGroup * m_nXYZStride;
+    usize nColorIndex = nGroup * m_nRGBStride;
     seg.m_vPos.Init(SubFloat(m_pXYZ[nXYZIndex], nOffset),
                     SubFloat(m_pXYZ[nXYZIndex + 1], nOffset),
                     SubFloat(m_pXYZ[nXYZIndex + 2], nOffset));
@@ -1578,9 +1578,9 @@ struct RenderRopeContext_t {
 class C_OP_RenderRope : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_RenderRope);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_RADIUS_MASK |
            PARTICLE_ATTRIBUTE_TINT_RGB_MASK | PARTICLE_ATTRIBUTE_ALPHA_MASK;
   }
@@ -1589,7 +1589,7 @@ class C_OP_RenderRope : public CParticleOperatorInstance {
                                      void *pContext) const {
     RenderRopeContext_t *pCtx =
         reinterpret_cast<RenderRopeContext_t *>(pContext);
-    pCtx->m_flRenderedRopeLength = false;
+    pCtx->m_flRenderedRopeLength = 0.0f;
     float *pSubdivList = (float *)(pCtx + 1);
     for (int iSubdiv = 0; iSubdiv < m_nSubdivCount; iSubdiv++) {
       pSubdivList[iSubdiv] = (float)iSubdiv / (float)m_nSubdivCount;
@@ -1602,7 +1602,7 @@ class C_OP_RenderRope : public CParticleOperatorInstance {
                 m_flTexelSizeInUnits);
   }
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(RenderRopeContext_t) + m_nSubdivCount * sizeof(float);
   }
 
@@ -1938,8 +1938,8 @@ void C_OP_RenderRope::RenderUnsorted(CParticleCollection *pParticles,
     vecCatmullRom[0] = vecCatmullRom[1];
   } else {
     int nGroup = (nFirstParticle - 1) / 4;
-    int nOffset = (nFirstParticle - 1) & 0x3;
-    int nXYZIndex = nGroup * info.m_nXYZStride;
+    usize nOffset = (nFirstParticle - 1) & 0x3;
+    usize nXYZIndex = nGroup * info.m_nXYZStride;
     vecCatmullRom[0].Init(SubFloat(info.m_pXYZ[nXYZIndex], nOffset),
                           SubFloat(info.m_pXYZ[nXYZIndex + 1], nOffset),
                           SubFloat(info.m_pXYZ[nXYZIndex + 2], nOffset));
@@ -1959,8 +1959,8 @@ void C_OP_RenderRope::RenderUnsorted(CParticleCollection *pParticles,
       vecCatmullRom[(i + 1) & 0x3] = seg[nCurr].m_vPos;
       if (hParticle != info.m_pParticles->m_nActiveParticles - 1) {
         int nGroup = (hParticle + 1) / 4;
-        int nOffset = (hParticle + 1) & 0x3;
-        int nXYZIndex = nGroup * info.m_nXYZStride;
+        usize nOffset = (hParticle + 1) & 0x3;
+        usize nXYZIndex = nGroup * info.m_nXYZStride;
         vecCatmullRom[(i + 2) & 0x3].Init(
             SubFloat(info.m_pXYZ[nXYZIndex], nOffset),
             SubFloat(info.m_pXYZ[nXYZIndex + 1], nOffset),
@@ -2015,9 +2015,9 @@ class C_OP_RenderBlobs : public CParticleOperatorInstance {
   float m_cutoffRadius;
   float m_renderRadius;
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   virtual void Render(IMatRenderContext *pRenderContext,
                       CParticleCollection *pParticles, void *pContext) const;
@@ -2108,11 +2108,11 @@ class C_OP_RenderScreenVelocityRotate : public CParticleOperatorInstance {
   float m_flRotateRateDegrees;
   float m_flForwardDegrees;
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_ROTATION_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const {
+  uint32_t GetReadAttributes() const {
     return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_PREV_XYZ_MASK |
            PARTICLE_ATTRIBUTE_ROTATION_MASK;
   }
@@ -2167,7 +2167,7 @@ void C_OP_RenderScreenVelocityRotate::Render(IMatRenderContext *pRenderContext,
     int nGroup = (hParticle / 4);
     int nOffset = hParticle & 0x3;
 
-    int nXYZIndex = nGroup * xyz_stride;
+    usize nXYZIndex = nGroup * xyz_stride;
     Vector vecWorldPos(SubFloat(xyz[nXYZIndex], nOffset),
                        SubFloat(xyz[nXYZIndex + 1], nOffset),
                        SubFloat(xyz[nXYZIndex + 2], nOffset));
@@ -2176,7 +2176,7 @@ void C_OP_RenderScreenVelocityRotate::Render(IMatRenderContext *pRenderContext,
 
     if (!IsFinite(vecViewPos.x)) continue;
 
-    int nPrevXYZIndex = nGroup * prev_xyz_stride;
+    usize nPrevXYZIndex = nGroup * prev_xyz_stride;
     Vector vecPrevWorldPos(SubFloat(prev_xyz[nPrevXYZIndex], nOffset),
                            SubFloat(prev_xyz[nPrevXYZIndex + 1], nOffset),
                            SubFloat(prev_xyz[nPrevXYZIndex + 2], nOffset));
@@ -2193,7 +2193,7 @@ void C_OP_RenderScreenVelocityRotate::Render(IMatRenderContext *pRenderContext,
 //-----------------------------------------------------------------------------
 // Installs renderers
 //-----------------------------------------------------------------------------
-void AddBuiltInParticleRenderers(void) {
+void AddBuiltInParticleRenderers() {
 #ifdef _DEBUG
   REGISTER_PARTICLE_OPERATOR(FUNCTION_RENDERER, C_OP_RenderPoints);
 #endif

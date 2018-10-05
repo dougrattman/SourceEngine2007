@@ -9,7 +9,7 @@
 #include "tier0/include/icommandline.h"
 #include "filesystem_tools.h"
 #include "sdklauncher_main.h"
-#include "ConfigManager.h"
+#include "configmanager.h"
 #include "KeyValues.h"
 
 #include <io.h>

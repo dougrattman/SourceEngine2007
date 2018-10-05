@@ -17,7 +17,7 @@
 #include "tier0/include/icommandline.h"
 #include "vgui/isurface.h"
 #include "vgui/ivgui.h"
-#include "vphysics_interface.h"
+#include "vphysics/include/vphysics_interface.h"
 #include "vstdlib/cvar.h"
 
 // Indicates to hybrid graphics systems to prefer the discrete part by default.
@@ -35,19 +35,145 @@ __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
-// The application object
-class CHammerApp : public CAppSystemGroup {
+namespace {
+DbgReturn HammerOnDebugEvent(DbgLevel type, char const *message) {
+  if (type == kDbgLevelAssert) return kDbgBreak;
+
+  if (type == kDbgLevelError || type == kDbgLevelWarning) {
+    MessageBox(nullptr, message, "Awesome Hammer - Error", MB_OK | MB_ICONSTOP);
+    return kDbgAbort;
+  }
+
+  return kDbgContinue;
+}
+}  // namespace
+
+// Hammer app.
+class HammerApp : public CAppSystemGroup {
  public:
-  // Methods of IApplication
-  bool Create() override;
-  bool PreInit() override;
-  int Main() override;
-  void PostShutdown() override;
-  void Destroy() override;
+  // Create all singleton systems.
+  bool Create() override {
+    // Save some memory so engine/hammer isn't so painful
+    CommandLine()->AppendParm("-disallowhwmorph", nullptr);
+
+    // Add in the cvar factory
+    const AppModule_t cvar_module = LoadModule(VStdLib_GetICVarFactory());
+    ICvar *cvar_system = AddSystem<ICvar>(cvar_module, CVAR_INTERFACE_VERSION);
+    if (!cvar_system) return false;
+
+    bool is_steam;
+    char filesystem_dll_path[SOURCE_MAX_PATH];
+    if (FileSystem_GetFileSystemDLLName(filesystem_dll_path,
+                                        std::size(filesystem_dll_path),
+                                        is_steam) != FS_OK)
+      return false;
+
+    FileSystem_SetupSteamInstallPath();
+
+    const AppModule_t filesystem_module = LoadModule(filesystem_dll_path);
+    file_system_ =
+        AddSystem<IFileSystem>(filesystem_module, FILESYSTEM_INTERFACE_VERSION);
+
+    AppSystemInfo_t app_systems[] = {
+        {"materialsystem.dll", MATERIAL_SYSTEM_INTERFACE_VERSION},
+        {"inputsystem.dll", INPUTSYSTEM_INTERFACE_VERSION},
+        {"studiorender.dll", STUDIO_RENDER_INTERFACE_VERSION},
+        {"vphysics.dll", VPHYSICS_INTERFACE_VERSION},
+        {"datacache.dll", DATACACHE_INTERFACE_VERSION},
+        {"datacache.dll", MDLCACHE_INTERFACE_VERSION},
+        {"datacache.dll", STUDIO_DATA_CACHE_INTERFACE_VERSION},
+        {"vguimatsurface.dll", VGUI_SURFACE_INTERFACE_VERSION},
+        {"vgui2.dll", VGUI_IVGUI_INTERFACE_VERSION},
+        {"hammer_dll.dll", INTERFACEVERSION_HAMMER},
+        {"", ""}  // Required to terminate the list
+    };
+
+    if (!AddSystems(app_systems)) return false;
+
+    // Connect to interfaces loaded in AddSystems that we need locally
+    material_system_ =
+        FindSystem<IMaterialSystem>(MATERIAL_SYSTEM_INTERFACE_VERSION);
+    hammer_ = FindSystem<IHammer>(INTERFACEVERSION_HAMMER);
+    data_cache_ = FindSystem<IDataCache>(DATACACHE_INTERFACE_VERSION);
+    input_system_ = FindSystem<IInputSystem>(INPUTSYSTEM_INTERFACE_VERSION);
+
+    // This has to be done before connection.
+    material_system_->SetShaderAPI("shaderapidx9.dll");
+
+    return true;
+  }
+
+  // Init, shutdown
+  bool PreInit() override {
+    SetDbgOutputCallback(HammerOnDebugEvent);
+
+    if (!hammer_->InitSessionGameConfig(GetVProjectCmdLineValue())) {
+      return false;
+    }
+
+    bool is_done = false;
+    do {
+      CFSSteamSetupInfo steam_info;
+      steam_info.m_pDirectoryName = hammer_->GetDefaultModFullPath();
+      steam_info.m_bOnlyUseDirectoryName = true;
+      steam_info.m_bToolsMode = true;
+      steam_info.m_bSetSteamDLLPath = true;
+      steam_info.m_bSteam = file_system_->IsSteam();
+
+      if (FileSystem_SetupSteamEnvironment(steam_info) != FS_OK) {
+        MessageBoxW(nullptr, L"Failed to setup Steam environment.",
+                    L"Awesome Hammer - Error", MB_OK | MB_ICONSTOP);
+        return false;
+      }
+
+      CFSMountContentInfo fs_info;
+      fs_info.m_bToolsMode = true;
+      fs_info.m_pDirectoryName = steam_info.m_GameInfoPath;
+      fs_info.m_pFileSystem = file_system_;
+
+      if (!fs_info.m_pDirectoryName) {
+        Error("Hammer PreInit: no %s or %s specified.",
+              source::tier0::command_line_switches::kDefaultGamePath,
+              source::tier0::command_line_switches::kGamePath);
+        return false;
+      }
+
+      if (FileSystem_MountContent(fs_info) == FS_OK) {
+        is_done = true;
+      } else {
+        MessageBox(nullptr, FileSystem_GetLastErrorString(),
+                   "Awesome Hammer - Warning", MB_OK | MB_ICONEXCLAMATION);
+
+        if (hammer_->RequestNewConfig() == REQUEST_QUIT) return false;
+      }
+
+      FileSystem_AddSearchPath_Platform(fs_info.m_pFileSystem,
+                                        steam_info.m_GameInfoPath);
+    } while (!is_done);
+
+    // Required to run through the editor
+    material_system_->EnableEditorMaterials();
+
+    // needed for VGUI model rendering
+    material_system_->SetAdapter(0, MATERIAL_INIT_ALLOCATE_FULLSCREEN_TEXTURE);
+
+    return true;
+  }
+
+  // main application
+  int Main() override { return hammer_->MainLoop(); }
+
+  void PostShutdown() override {}
+
+  void Destroy() override {
+    file_system_ = nullptr;
+    material_system_ = nullptr;
+    data_cache_ = nullptr;
+    hammer_ = nullptr;
+    input_system_ = nullptr;
+  }
 
  private:
-  int MainLoop();
-
   IHammer *hammer_;
   IMaterialSystem *material_system_;
   IFileSystem *file_system_;
@@ -55,136 +181,8 @@ class CHammerApp : public CAppSystemGroup {
   IInputSystem *input_system_;
 };
 
+namespace {
 // Define the application object
-CHammerApp g_HammerApp;
-DEFINE_WINDOWED_APPLICATION_OBJECT_GLOBALVAR(g_HammerApp);
-
-// Create all singleton systems
-bool CHammerApp::Create() {
-  // Save some memory so engine/hammer isn't so painful
-  CommandLine()->AppendParm("-disallowhwmorph", nullptr);
-
-  // Add in the cvar factory
-  const AppModule_t cvar_module = LoadModule(VStdLib_GetICVarFactory());
-  ICvar *cvar_system = AddSystem<ICvar>(cvar_module, CVAR_INTERFACE_VERSION);
-  if (!cvar_system) return false;
-
-  bool is_steam;
-  char filesystem_dll_path[SOURCE_MAX_PATH];
-  if (FileSystem_GetFileSystemDLLName(filesystem_dll_path,
-                                      std::size(filesystem_dll_path),
-                                      is_steam) != FS_OK)
-    return false;
-
-  FileSystem_SetupSteamInstallPath();
-
-  const AppModule_t filessytem_module = LoadModule(filesystem_dll_path);
-  file_system_ =
-      AddSystem<IFileSystem>(filessytem_module, FILESYSTEM_INTERFACE_VERSION);
-
-  AppSystemInfo_t app_systems[] = {
-      {"materialsystem.dll", MATERIAL_SYSTEM_INTERFACE_VERSION},
-      {"inputsystem.dll", INPUTSYSTEM_INTERFACE_VERSION},
-      {"studiorender.dll", STUDIO_RENDER_INTERFACE_VERSION},
-      {"vphysics.dll", VPHYSICS_INTERFACE_VERSION},
-      {"datacache.dll", DATACACHE_INTERFACE_VERSION},
-      {"datacache.dll", MDLCACHE_INTERFACE_VERSION},
-      {"datacache.dll", STUDIO_DATA_CACHE_INTERFACE_VERSION},
-      {"vguimatsurface.dll", VGUI_SURFACE_INTERFACE_VERSION},
-      {"vgui2.dll", VGUI_IVGUI_INTERFACE_VERSION},
-      {"hammer_dll.dll", INTERFACEVERSION_HAMMER},
-      {"", ""}  // Required to terminate the list
-  };
-
-  if (!AddSystems(app_systems)) return false;
-
-  // Connect to interfaces loaded in AddSystems that we need locally
-  material_system_ =
-      FindSystem<IMaterialSystem>(MATERIAL_SYSTEM_INTERFACE_VERSION);
-  hammer_ = FindSystem<IHammer>(INTERFACEVERSION_HAMMER);
-  data_cache_ = FindSystem<IDataCache>(DATACACHE_INTERFACE_VERSION);
-  input_system_ = FindSystem<IInputSystem>(INPUTSYSTEM_INTERFACE_VERSION);
-
-  // This has to be done before connection.
-  material_system_->SetShaderAPI("shaderapidx9.dll");
-
-  return true;
-}
-
-void CHammerApp::Destroy() {
-  file_system_ = nullptr;
-  material_system_ = nullptr;
-  data_cache_ = nullptr;
-  hammer_ = nullptr;
-  input_system_ = nullptr;
-}
-
-SpewRetval_t HammerSpewFunc(SpewType_t type, char const *pMsg) {
-  if (type == SPEW_ASSERT) {
-    return SPEW_DEBUGGER;
-  }
-
-  if (type == SPEW_ERROR || type == SPEW_WARNING) {
-    MessageBox(nullptr, pMsg, "Awesome Hammer - Error", MB_OK | MB_ICONSTOP);
-    return SPEW_ABORT;
-  }
-
-  return SPEW_CONTINUE;
-}
-
-// Init, shutdown
-bool CHammerApp::PreInit() {
-  SpewOutputFunc(HammerSpewFunc);
-  if (!hammer_->InitSessionGameConfig(GetVProjectCmdLineValue())) return false;
-
-  bool bDone = false;
-  do {
-    CFSSteamSetupInfo steamInfo;
-    steamInfo.m_pDirectoryName = hammer_->GetDefaultModFullPath();
-    steamInfo.m_bOnlyUseDirectoryName = true;
-    steamInfo.m_bToolsMode = true;
-    steamInfo.m_bSetSteamDLLPath = true;
-    steamInfo.m_bSteam = file_system_->IsSteam();
-    if (FileSystem_SetupSteamEnvironment(steamInfo) != FS_OK) {
-      MessageBox(nullptr, "Failed to setup steam environment.",
-                 "Awesome Hammer - Error", MB_OK | MB_ICONSTOP);
-      return false;
-    }
-
-    CFSMountContentInfo fsInfo;
-    fsInfo.m_pFileSystem = file_system_;
-    fsInfo.m_bToolsMode = true;
-    fsInfo.m_pDirectoryName = steamInfo.m_GameInfoPath;
-    if (!fsInfo.m_pDirectoryName) {
-      Error(
-          "FileSystem_LoadFileSystemModule: no -defaultgamedir or -game "
-          "specified.");
-    }
-
-    if (FileSystem_MountContent(fsInfo) == FS_OK) {
-      bDone = true;
-    } else {
-      MessageBox(nullptr, FileSystem_GetLastErrorString(),
-                 "Awesome Hammer - Warning", MB_OK | MB_ICONEXCLAMATION);
-
-      if (hammer_->RequestNewConfig() == REQUEST_QUIT) return false;
-    }
-
-    FileSystem_AddSearchPath_Platform(fsInfo.m_pFileSystem,
-                                      steamInfo.m_GameInfoPath);
-
-  } while (!bDone);
-
-  // Required to run through the editor
-  material_system_->EnableEditorMaterials();
-
-  // needed for VGUI model rendering
-  material_system_->SetAdapter(0, MATERIAL_INIT_ALLOCATE_FULLSCREEN_TEXTURE);
-
-  return true;
-}
-
-void CHammerApp::PostShutdown() {}
-
-// main application
-int CHammerApp::Main() { return hammer_->MainLoop(); }
+HammerApp hammer_app;
+}  // namespace
+DEFINE_WINDOWED_APPLICATION_OBJECT_GLOBALVAR(hammer_app);

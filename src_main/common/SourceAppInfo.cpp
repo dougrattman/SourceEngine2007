@@ -27,9 +27,7 @@ static SourceAppInfo_t s_SteamAppInfo[] = {
     {"Team Fortress 2", "tf", 440, k_App_TF2},
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: return the short string name used for this language by SteamUI
-//-----------------------------------------------------------------------------
 const char *GetAppFullName(ESourceApp eSourceApp) {
   static_assert(std::size(s_SteamAppInfo) == k_App_MAX);
   if (s_SteamAppInfo[eSourceApp].m_ESourceApp == eSourceApp) {
@@ -40,9 +38,7 @@ const char *GetAppFullName(ESourceApp eSourceApp) {
   return s_SteamAppInfo[0].m_pchFullName;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: return the short string name used for this language by SteamUI
-//-----------------------------------------------------------------------------
 const char *GetAppModName(ESourceApp eSourceApp) {
   static_assert(std::size(s_SteamAppInfo) == k_App_MAX);
   if (s_SteamAppInfo[eSourceApp].m_ESourceApp == eSourceApp) {
@@ -53,9 +49,7 @@ const char *GetAppModName(ESourceApp eSourceApp) {
   return s_SteamAppInfo[0].m_pchModName;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: return the short string name used for this language by SteamUI
-//-----------------------------------------------------------------------------
 const int GetAppSteamAppId(ESourceApp eSourceApp) {
   static_assert(std::size(s_SteamAppInfo) == k_App_MAX);
   if (s_SteamAppInfo[eSourceApp].m_ESourceApp == eSourceApp) {

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Model loading and caching.
 
@@ -26,7 +26,7 @@
 #include "tier1/utlmap.h"
 #include "tier2/fileutils.h"
 #include "vcollide.h"
-#include "vphysics_interface.h"
+#include "vphysics/include/vphysics_interface.h"
 
 #ifdef _RETAIL
 #define NO_LOG_MDLCACHE 1
@@ -594,11 +594,11 @@ void CMDLCache::Disconnect() {
 //-----------------------------------------------------------------------------
 void *CMDLCache::QueryInterface(const char *pInterfaceName) {
   if (!Q_strncmp(pInterfaceName, STUDIO_DATA_CACHE_INTERFACE_VERSION,
-                 strlen(STUDIO_DATA_CACHE_INTERFACE_VERSION) + 1))
+                 std::size(STUDIO_DATA_CACHE_INTERFACE_VERSION)))
     return (IStudioDataCache *)this;
 
   if (!Q_strncmp(pInterfaceName, MDLCACHE_INTERFACE_VERSION,
-                 strlen(MDLCACHE_INTERFACE_VERSION) + 1))
+                 std::size(MDLCACHE_INTERFACE_VERSION)))
     return (IMDLCache *)this;
 
   return NULL;

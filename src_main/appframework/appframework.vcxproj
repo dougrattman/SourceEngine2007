@@ -114,6 +114,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <PreLinkEvent />
     <Lib>
@@ -149,6 +150,7 @@
       <TreatWarningAsError>
       </TreatWarningAsError>
       <ConformanceMode>true</ConformanceMode>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <PreLinkEvent />
     <Lib>

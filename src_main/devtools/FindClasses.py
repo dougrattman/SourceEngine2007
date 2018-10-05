@@ -1,7 +1,7 @@
 
 
 # Assuming all functions begin with ')' followed by '{', just find the matching brace and
-# add a line with 'g_pVCR->SyncToken("<random string here>");'
+# add a line with 'GetVCR()->SyncToken("<random string here>");'
 
 import dlexer
 import sys

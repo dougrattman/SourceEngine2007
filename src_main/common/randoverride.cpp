@@ -12,7 +12,6 @@
 #endif
 
 void __cdecl srand(unsigned int) {}
-
 int __cdecl rand() { return RandomInt(0, 0x7fff); }
 
 #endif  // !_STATIC_LINKED || _SHARED_LIB

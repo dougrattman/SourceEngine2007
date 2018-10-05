@@ -42,10 +42,10 @@
     <ClCompile Include="console\textconsole.cpp">
       <Filter>Source Files\Console</Filter>
     </ClCompile>
-    <ClCompile Include="console\TextConsoleWin32.cpp">
+    <ClCompile Include="console\textconsolewin32.cpp">
       <Filter>Source Files\Console</Filter>
     </ClCompile>
-    <ClCompile Include="vgui\CreateMultiplayerGameServerPage.cpp">
+    <ClCompile Include="vgui\createmultiplayergameserverpage.cpp">
       <Filter>Source Files\VGUI</Filter>
     </ClCompile>
     <ClCompile Include="vgui\MainPanel.cpp">
@@ -112,10 +112,10 @@
     <ClInclude Include="console\textconsole.h">
       <Filter>Header Files\console</Filter>
     </ClInclude>
-    <ClInclude Include="console\TextConsoleUnix.h">
+    <ClInclude Include="console\textconsoleunix.h">
       <Filter>Header Files\console</Filter>
     </ClInclude>
-    <ClInclude Include="console\TextConsoleWin32.h">
+    <ClInclude Include="console\textconsolewin32.h">
       <Filter>Header Files\console</Filter>
     </ClInclude>
     <ClInclude Include="vgui\CreateMultiplayerGameServerPage.h">

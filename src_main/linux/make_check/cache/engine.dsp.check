@@ -3741,7 +3741,7 @@ SOURCE=..\Public\ienginevgui.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\igame.h
+SOURCE=.\imain_window.h
 # End Source File
 # Begin Source File
 

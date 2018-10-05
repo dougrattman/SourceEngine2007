@@ -23,12 +23,12 @@
 // Purpose: Warning/Msg call back through this API
 // Input  : type - 
 //			*pMsg - 
-// Output : SpewRetval_t
+// Output : DbgReturn
 //-----------------------------------------------------------------------------
-SpewRetval_t SpewFunc( SpewType_t type, char const *pMsg )
+DbgReturn SpewFunc( DbgLevel type, char const *pMsg )
 {	
 	OutputDebugString( pMsg );
-	return SPEW_CONTINUE;
+	return kDbgContinue;
 }
 
 
@@ -67,7 +67,7 @@ DEFINE_WINDOWED_STEAM_APPLICATION_OBJECT( CInputTestApp );
 //-----------------------------------------------------------------------------
 bool CInputTestApp::Create()
 {
-	SpewOutputFunc( SpewFunc );
+	SetDbgOutputCallback( SpewFunc );
 
 	AppSystemInfo_t appSystems[] = 
 	{

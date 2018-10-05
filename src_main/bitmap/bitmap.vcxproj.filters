@@ -33,7 +33,7 @@
     <ClCompile Include="float_cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImageByteSwap.cpp">
+    <ClCompile Include="image_byte_swap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imageformat.cpp">

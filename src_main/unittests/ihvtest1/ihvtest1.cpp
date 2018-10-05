@@ -23,7 +23,7 @@
 #include "appframework/appframework.h"
 #include "datacache\idatacache.h"
 #include "datacache\imdlcache.h"
-#include "vphysics_interface.h"
+#include "vphysics/include/vphysics_interface.h"
 #include "FileSystem.h"
 #include "IStudioRender.h"
 #include "studio.h"
@@ -34,10 +34,6 @@
 #include "tier0/include/vprof.h"
 #include "tier1/tier1.h"
 #include "optimize.h"
-#if defined( _X360 )
-#include "xbox\xbox_console.h"
-#include "xbox\xbox_win32stubs.h"
-#endif
 
 //-----------------------------------------------------------------------------
 // Main system interfaces
@@ -325,26 +321,26 @@ static void CalcWindowSize( int desiredRenderingWidth, int desiredRenderingHeigh
 //-----------------------------------------------------------------------------
 // Spew function!
 //-----------------------------------------------------------------------------
-SpewRetval_t IHVTestSpewFunc( SpewType_t spewType, char const *pMsg )
+DbgReturn IHVTestSpewFunc( DbgLevel spewType, char const *pMsg )
 {
 	g_bInError = true;
 
 	OutputDebugString( pMsg );
 	switch( spewType )
 	{
-	case SPEW_MESSAGE:
-	case SPEW_WARNING:
-	case SPEW_LOG:
+	case kDbgLevelMessage:
+	case kDbgLevelWarning:
+	case kDbgLevelLog:
 		OutputDebugString( pMsg );
 		g_bInError = false;
-		return SPEW_CONTINUE;
+		return kDbgContinue;
 
-	case SPEW_ASSERT:
-	case SPEW_ERROR:
+	case kDbgLevelAssert:
+	case kDbgLevelError:
 	default:
 		::MessageBox( NULL, pMsg, "Error!", MB_OK );
 		g_bInError = false;
-		return SPEW_DEBUGGER;
+		return kDbgBreak;
 	}
 }
 
@@ -352,25 +348,25 @@ SpewRetval_t IHVTestSpewFunc( SpewType_t spewType, char const *pMsg )
 //-----------------------------------------------------------------------------
 // Spew function to write to ihvtest_vprof.txt
 //-----------------------------------------------------------------------------
-SpewRetval_t IHVTestVProfSpewFunc( SpewType_t spewType, char const *pMsg )
+DbgReturn IHVTestVProfSpewFunc( DbgLevel spewType, char const *pMsg )
 {
 	g_bInError = true;
 
 	switch( spewType )
 	{
-	case SPEW_MESSAGE:
-	case SPEW_WARNING:
-	case SPEW_LOG:
+	case kDbgLevelMessage:
+	case kDbgLevelWarning:
+	case kDbgLevelLog:
 		fprintf( g_IHVTestFP, "%s", pMsg );
 		g_bInError = false;
-		return SPEW_CONTINUE;
+		return kDbgContinue;
 
-	case SPEW_ASSERT:
-	case SPEW_ERROR:
+	case kDbgLevelAssert:
+	case kDbgLevelError:
 	default:
 		::MessageBox( NULL, pMsg, "Error!", MB_OK );
 		g_bInError = false;
-		return SPEW_DEBUGGER;
+		return kDbgBreak;
 	}
 }
 
@@ -1190,12 +1186,12 @@ void CIHVTestApp::RenderFrame( void )
 	g_pMaterialSystem->SwapBuffers();
 
 #ifdef USE_VPROF
-	g_VProfCurrentProfile.MarkFrame();
+	GetVProfile().MarkFrame();
 	static bool bBeenHere = false;
 	if( !bBeenHere )
 	{
 		bBeenHere = true;
-		g_VProfCurrentProfile.Reset();
+		GetVProfile().Reset();
 	}
 #endif
 	currentFrame++;
@@ -1457,7 +1453,7 @@ void CIHVTestApp::PostShutdown()
 //-----------------------------------------------------------------------------
 int CIHVTestApp::Main()
 {
-	SpewOutputFunc( IHVTestSpewFunc );
+	SetDbgOutputCallback( IHVTestSpewFunc );
 		    
 	if ( !SetupStudioRender() )
 	{
@@ -1480,7 +1476,7 @@ extern void Sys_InitFloatTime( void ); //garymcthack
 	VTResume();
 #endif
 #ifdef USE_VPROF
-	g_VProfCurrentProfile.Start();
+	GetVProfile().Start();
 #endif
 
 	bool m_bExitMainLoop = false;
@@ -1491,15 +1487,15 @@ extern void Sys_InitFloatTime( void ); //garymcthack
 	}
 
 #ifdef USE_VPROF
-	g_VProfCurrentProfile.Stop();
+	GetVProfile().Stop();
 #endif
 	g_IHVTestFP = fopen( "ihvtest_vprof.txt", "w" );
 #ifdef USE_VPROF
-	SpewOutputFunc( IHVTestVProfSpewFunc );
-	g_VProfCurrentProfile.OutputReport( VPRT_SUMMARY );
-	g_VProfCurrentProfile.OutputReport( VPRT_HIERARCHY_TIME_PER_FRAME_AND_COUNT_ONLY );
+	SetDbgOutputCallback( IHVTestVProfSpewFunc );
+	GetVProfile().OutputReport( VPRT_SUMMARY );
+	GetVProfile().OutputReport( VPRT_HIERARCHY_TIME_PER_FRAME_AND_COUNT_ONLY );
 	fclose( g_IHVTestFP );
-	SpewOutputFunc( IHVTestSpewFunc );
+	SetDbgOutputCallback( IHVTestSpewFunc );
 #endif
 #if USE_VTUNE
 	VTPause();

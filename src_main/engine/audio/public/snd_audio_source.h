@@ -218,7 +218,7 @@ class IAudioSourceCache {
 
 extern IAudioSourceCache *audiosourcecache;
 
-SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(ResourceMemHandle);
 
 typedef int StreamHandle_t;
 enum { INVALID_STREAM_HANDLE = (StreamHandle_t)~0 };
@@ -241,7 +241,7 @@ the_interface IAsyncWavDataCache {
   virtual void Shutdown() = 0;
 
   // implementation that treats file as monolithic
-  virtual memhandle_t AsyncLoadCache(ch const *filename, int datasize,
+  virtual ResourceMemHandle AsyncLoadCache(ch const *filename, int datasize,
                                      int startpos,
                                      bool bIsPrefetch = false) = 0;
   virtual void PrefetchCache(ch const *filename, int datasize,
@@ -250,18 +250,18 @@ the_interface IAsyncWavDataCache {
                                   int startpos, void *buffer, int bufsize,
                                   int copystartpos, int bytestocopy,
                                   bool *pbPostProcessed) = 0;
-  virtual bool CopyDataIntoMemory(memhandle_t & handle, ch const *filename,
+  virtual bool CopyDataIntoMemory(ResourceMemHandle & handle, ch const *filename,
                                   int datasize, int startpos, void *buffer,
                                   int bufsize, int copystartpos,
                                   int bytestocopy, bool *pbPostProcessed) = 0;
-  virtual bool IsDataLoadCompleted(memhandle_t handle, bool *pIsValid) = 0;
-  virtual void RestartDataLoad(memhandle_t * pHandle, const ch *pFilename,
+  virtual bool IsDataLoadCompleted(ResourceMemHandle handle, bool *pIsValid) = 0;
+  virtual void RestartDataLoad(ResourceMemHandle * pHandle, const ch *pFilename,
                                int dataSize, int startpos) = 0;
-  virtual bool GetDataPointer(memhandle_t & handle, ch const *filename,
+  virtual bool GetDataPointer(ResourceMemHandle & handle, ch const *filename,
                               int datasize, int startpos, void **pData,
                               int copystartpos, bool *pbPostProcessed) = 0;
-  virtual void SetPostProcessed(memhandle_t handle, bool proc) = 0;
-  virtual void Unload(memhandle_t handle) = 0;
+  virtual void SetPostProcessed(ResourceMemHandle handle, bool proc) = 0;
+  virtual void Unload(ResourceMemHandle handle) = 0;
 
   // alternate multi-buffer streaming implementation
   virtual StreamHandle_t OpenStreamedLoad(
@@ -274,7 +274,7 @@ the_interface IAsyncWavDataCache {
   virtual bool IsStreamedDataReady(StreamHandle_t hStream) = 0;
   virtual void MarkBufferDiscarded(BufferHandle_t hBuffer) = 0;
   virtual void *GetStreamedDataPointer(StreamHandle_t hStream, bool bSync) = 0;
-  virtual bool IsDataLoadInProgress(memhandle_t handle) = 0;
+  virtual bool IsDataLoadInProgress(ResourceMemHandle handle) = 0;
   virtual void Flush() = 0;
 };
 

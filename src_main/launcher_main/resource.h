@@ -4,4 +4,4 @@
 
 #define IDI_MAIN 101
 
-#define HALFLIFE_VER_FILEDESCRIPTION_STR "Awesome Half-Life 2 launcher"
+#define HALFLIFE_VER_FILEDESCRIPTION_STR "Half-Life 2 | Portal"

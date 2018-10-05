@@ -293,10 +293,10 @@ void CDmxElement::UnpackIntoStructure(
       if (!pUnpack->m_pDefaultString) continue;
 
       // Convert the default string into the target
-      int nLen = Q_strlen(pUnpack->m_pDefaultString);
+      usize nLen = strlen(pUnpack->m_pDefaultString);
       if (nLen != 0) {
-        CUtlBuffer buf{pUnpack->m_pDefaultString, nLen,
-                       CUtlBuffer::READ_ONLY | CUtlBuffer::TEXT_BUFFER};
+        CUtlBuffer buf(pUnpack->m_pDefaultString, nLen,
+                       CUtlBuffer::READ_ONLY | CUtlBuffer::TEXT_BUFFER);
         temp.Unserialize(pUnpack->m_AttributeType, buf);
       } else {
         temp.SetValueFromString(pUnpack->m_pDefaultString);

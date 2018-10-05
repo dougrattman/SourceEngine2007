@@ -6,7 +6,7 @@
 
 #include "filesystem.h"
 #include "tier0/include/platform.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/strtools.h"
 #include "tier2/fileutils.h"
 #include "tier2/tier2.h"
@@ -27,11 +27,11 @@ struct InstantaneousEmitterContext_t {
 class C_OP_InstantaneousEmitter : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_InstantaneousEmitter);
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   virtual uint64_t GetReadControlPointMask() const {
     if (m_nScaleControlPoint >= 0) return (1ULL << m_nScaleControlPoint);
@@ -115,7 +115,7 @@ class C_OP_InstantaneousEmitter : public CParticleOperatorInstance {
     pCtx->m_bReadScaleFactor = false;
   }
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(InstantaneousEmitterContext_t);
   }
 
@@ -228,11 +228,11 @@ bool g_bDontMakeSkipToTimeTakeForever = false;
 class C_OP_ContinuousEmitter : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_ContinuousEmitter);
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   virtual void InitParams(CParticleSystemDefinition *pDef,
                           CDmxElement *pElement) {
@@ -371,7 +371,7 @@ class C_OP_ContinuousEmitter : public CParticleOperatorInstance {
     }
   }
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(ContinuousEmitterContext_t);
   }
 
@@ -530,11 +530,11 @@ struct NoiseEmitterContext_t {
 class C_OP_NoiseEmitter : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_NoiseEmitter);
 
-  uint32_t GetWrittenAttributes(void) const {
+  uint32_t GetWrittenAttributes() const {
     return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
   }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   virtual void InitParams(CParticleSystemDefinition *pDef,
                           CDmxElement *pElement) {
@@ -623,7 +623,7 @@ class C_OP_NoiseEmitter : public CParticleOperatorInstance {
     pCtx->m_nTotalEmittedSoFar = 0;
   }
 
-  size_t GetRequiredContextBytes(void) const {
+  size_t GetRequiredContextBytes() const {
     return sizeof(NoiseEmitterContext_t);
   }
 
@@ -833,7 +833,7 @@ uint32_t C_OP_NoiseEmitter::Emit(CParticleCollection *pParticles,
   return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
 }
 
-void AddBuiltInParticleEmitters(void) {
+void AddBuiltInParticleEmitters() {
   REGISTER_PARTICLE_OPERATOR(FUNCTION_EMITTER, C_OP_ContinuousEmitter);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_EMITTER, C_OP_InstantaneousEmitter);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_EMITTER, C_OP_NoiseEmitter);

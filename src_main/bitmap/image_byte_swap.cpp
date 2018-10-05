@@ -67,8 +67,7 @@ void PreConvertSwapImageData(u8 *pImageData, int nImageSize,
                              ImageFormat imageFormat, int width, int stride) {
   Assert(IsFormatValidForConversion(imageFormat));
 
-  // running as a win32 tool, data is in expected order
-  // for conversion code
+  // running as a win32 tool, data is in expected order for conversion code
 }
 
 // Swaps image bytes for use on a big endian platform. This is used after the

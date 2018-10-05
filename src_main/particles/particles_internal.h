@@ -1,13 +1,12 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: sheet code for particles and other sprite functions
-//
-//===========================================================================//
 
-#ifndef PARTICLES_INTERNAL_H
-#define PARTICLES_INTERNAL_H
+#ifndef SOURCE_PARTICLES_PARTICLES_INTERNAL_H_
+#define SOURCE_PARTICLES_PARTICLES_INTERNAL_H_
 
-#include "tier1/UtlStringMap.h"
+#include "base/include/base_types.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 
@@ -18,8 +17,8 @@
 #define COLLISION_MODE_INITIAL_TRACE_DOWN 2
 
 struct CWorldCollideContextData {
-  int m_nActivePlanes;
-  float m_flLastUpdateTime;
+  i32 m_nActivePlanes;
+  f32 m_flLastUpdateTime;
   Vector m_vecLastUpdateOrigin;
 
   FourVectors m_PointOnPlane[MAX_WORLD_PLANAR_CONSTRAINTS];
@@ -32,10 +31,10 @@ struct CWorldCollideContextData {
   void operator delete(void *p, int nBlockUse, const char *pFileName,
                        int nLine);
 
-  void CalculatePlanes(CParticleCollection *pParticles, int nCollisionMode,
-                       int nCollisionGroupNumber,
-                       Vector const *pCpOffset = NULL,
-                       float flMovementTolerance = 0.);
+  void CalculatePlanes(CParticleCollection *pParticles, i32 nCollisionMode,
+                       i32 nCollisionGroupNumber,
+                       Vector const *pCpOffset = nullptr,
+                       f32 flMovementTolerance = 0.0f);
 };
 
-#endif  // PARTICLES_INTERNAL_H
+#endif  // SOURCE_PARTICLES_PARTICLES_INTERNAL_H_

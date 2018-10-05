@@ -114,6 +114,7 @@
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <PreLinkEvent />
     <Lib>
@@ -147,6 +148,7 @@
       <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <ConformanceMode>true</ConformanceMode>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <PreLinkEvent />
     <Lib>
@@ -232,7 +234,7 @@
     <ClCompile Include="float_bm4.cpp" />
     <ClCompile Include="float_bm_bilateral_filter.cpp" />
     <ClCompile Include="float_cube.cpp" />
-    <ClCompile Include="ImageByteSwap.cpp" />
+    <ClCompile Include="image_byte_swap.cpp" />
     <ClCompile Include="imageformat.cpp" />
     <ClCompile Include="psd.cpp" />
     <ClCompile Include="resample.cpp" />

@@ -495,14 +495,14 @@ bool ResampleRGBA8888(const ResampleInfo_t &info) {
     return true;
   }
 
-  // fixme: has to be power of two for now.
+  // FIXME: has to be power of two for now.
   if (!IsPowerOfTwo(info.m_nSrcWidth) || !IsPowerOfTwo(info.m_nSrcHeight) ||
       !IsPowerOfTwo(info.m_nSrcDepth) || !IsPowerOfTwo(info.m_nDestWidth) ||
       !IsPowerOfTwo(info.m_nDestHeight) || !IsPowerOfTwo(info.m_nDestDepth)) {
     return false;
   }
 
-  // fixme: can only downsample for now.
+  // FIXME: can only downsample for now.
   if ((info.m_nSrcWidth < info.m_nDestWidth) ||
       (info.m_nSrcHeight < info.m_nDestHeight) ||
       (info.m_nSrcDepth < info.m_nDestDepth)) {

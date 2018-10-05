@@ -102,11 +102,11 @@ typedef void(STEAM_CALL *KeyValueIteratorCallback_t)(const char *Key,
 **
 ******************************************************************************/
 
-typedef unsigned int SteamHandle_t;
+typedef uintptr_t SteamHandle_t;
 
 typedef void *SteamUserIDTicketValidationHandle_t;
 
-typedef unsigned int SteamCallHandle_t;
+typedef uintptr_t SteamCallHandle_t;
 
 #if defined(_MSC_VER)
 typedef unsigned __int64 SteamUnsigned64_t;

@@ -11,7 +11,7 @@
 #include "base/include/windows/windows_light.h"
 #endif
 
-#include "deps/miles/include/MSS.H"
+#include "deps/miles/include/mss.h"
 
 class MilesProviderCache {
  public:
@@ -60,9 +60,6 @@ class ASISTRUCT {
   HATTRIB POSITION;
 
  private:
-  void Clear();
-
- private:
   ASI_STREAM_OPEN ASI_stream_open;
   ASI_STREAM_PROCESS ASI_stream_process;
   ASI_STREAM_CLOSE ASI_stream_close;
@@ -72,6 +69,9 @@ class ASISTRUCT {
 
   HASISTREAM m_stream;
   MilesProviderCache *m_pProvider;
+
+  
+  void Clear();
 };
 
 extern void IncrementRefMiles();

@@ -200,12 +200,12 @@ void CMatSystemSurface::Disconnect() {
 void *CMatSystemSurface::QueryInterface(const char *pInterfaceName) {
   // We also implement the IMatSystemSurface interface
   if (!Q_strncmp(pInterfaceName, MAT_SYSTEM_SURFACE_INTERFACE_VERSION,
-                 Q_strlen(MAT_SYSTEM_SURFACE_INTERFACE_VERSION) + 1))
+                 std::size(MAT_SYSTEM_SURFACE_INTERFACE_VERSION)))
     return (IMatSystemSurface *)this;
 
   // We also implement the IMatSystemSurface interface
   if (!Q_strncmp(pInterfaceName, VGUI_SURFACE_INTERFACE_VERSION,
-                 Q_strlen(VGUI_SURFACE_INTERFACE_VERSION) + 1))
+                 std::size(VGUI_SURFACE_INTERFACE_VERSION)))
     return (vgui::ISurface *)this;
 
   return BaseClass::QueryInterface(pInterfaceName);
@@ -1615,10 +1615,11 @@ void CMatSystemSurface::DrawGetTextPos(int &x, int &y) {
 //-----------------------------------------------------------------------------
 void CMatSystemSurface::DrawUnicodeString(
     const wchar_t *pString, FontDrawType_t drawType /*= FONT_DRAW_DEFAULT */) {
-  wchar_t ch;
+  wchar_t ch = *pString++;
 
-  while ((ch = *pString++)) {
+  while (ch) {
     DrawUnicodeChar(ch);
+    ch = *pString++;
   }
 }
 

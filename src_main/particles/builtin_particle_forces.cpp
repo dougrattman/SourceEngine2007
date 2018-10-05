@@ -4,7 +4,7 @@
 
 #include "filesystem.h"
 #include "tier0/include/platform.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/strtools.h"
 #include "tier2/fileutils.h"
 #include "tier2/tier2.h"
@@ -21,9 +21,9 @@
 class C_OP_RandomForce : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_RandomForce);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   virtual void AddForces(FourVectors *pAccumulatedForces,
                          CParticleCollection *pParticles, int nBlocks,
@@ -40,7 +40,7 @@ void C_OP_RandomForce::AddForces(FourVectors *pAccumulatedForces,
   box_min.DuplicateVector(m_MinForce * flStrength);
   box_max.DuplicateVector(m_MaxForce * flStrength);
   box_max -= box_min;
-  int nContext = GetSIMDRandContext();
+  usize nContext = GetSIMDRandContext();
   for (int i = 0; i < nBlocks; i++) {
     pAccumulatedForces->x =
         AddSIMD(pAccumulatedForces->x,
@@ -66,9 +66,9 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_RandomForce)
 class C_OP_TwistAroundAxis : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_TwistAroundAxis);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
+  uint32_t GetReadAttributes() const { return PARTICLE_ATTRIBUTE_XYZ_MASK; }
 
   virtual void AddForces(FourVectors *pAccumulatedForces,
                          CParticleCollection *pParticles, int nBlocks,
@@ -129,9 +129,9 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_TwistAroundAxis)
 class C_OP_AttractToControlPoint : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_AttractToControlPoint);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   virtual void AddForces(FourVectors *pAccumulatedForces,
                          CParticleCollection *pParticles, int nBlocks,
@@ -190,9 +190,9 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_AttractToControlPoint)
 class C_OP_LennardJonesForce : public CParticleOperatorInstance {
   DECLARE_PARTICLE_OPERATOR(C_OP_LennardJonesForce);
 
-  uint32_t GetWrittenAttributes(void) const { return 0; }
+  uint32_t GetWrittenAttributes() const { return 0; }
 
-  uint32_t GetReadAttributes(void) const { return 0; }
+  uint32_t GetReadAttributes() const { return 0; }
 
   void InitParams(CParticleSystemDefinition *pDef, CDmxElement *pElement) {
     // m_pParticleCache = new ParticleCache(m_fInteractionRadius);
@@ -480,7 +480,7 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_LennardJonesForce)
 
 #endif
 
-void AddBuiltInParticleForceGenerators(void) {
+void AddBuiltInParticleForceGenerators() {
   REGISTER_PARTICLE_OPERATOR(FUNCTION_FORCEGENERATOR, C_OP_RandomForce);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_FORCEGENERATOR, C_OP_TwistAroundAxis);
   REGISTER_PARTICLE_OPERATOR(FUNCTION_FORCEGENERATOR,

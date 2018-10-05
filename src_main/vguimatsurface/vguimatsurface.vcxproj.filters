@@ -101,7 +101,7 @@
     <ClInclude Include="..\common\vgui_surfacelib\FontManager.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\vgui\HtmlWindow.h">
+    <ClInclude Include="..\common\vgui\htmlwindow.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\public\appframework\IAppSystem.h">

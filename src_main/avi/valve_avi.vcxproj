@@ -113,6 +113,7 @@
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -136,7 +137,7 @@
     <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw$(PlatformArchitecture)" "binkw$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
     <Manifest />
     <Manifest>
@@ -166,6 +167,7 @@
       <DisableSpecificWarnings>4100;4244</DisableSpecificWarnings>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <ConformanceMode>true</ConformanceMode>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -188,7 +190,7 @@
     <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw$(PlatformArchitecture)" "binkw$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
     <Manifest />
     <Manifest>
@@ -248,7 +250,7 @@
     <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw$(PlatformArchitecture)" "binkw$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
     <Manifest />
     <Manifest>
@@ -306,7 +308,7 @@
     <Bscmake />
     <PostBuildEvent>
       <Message>Publishing '$(TargetName)' artifact(s) to game/bin...</Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw$(PlatformArchitecture)" "binkw$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
     </PostBuildEvent>
     <Manifest />
     <Manifest>

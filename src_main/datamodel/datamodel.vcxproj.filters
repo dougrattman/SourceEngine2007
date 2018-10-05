@@ -4,14 +4,8 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{c1321528-ff2a-4b8c-b2ad-4b428ec5defc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{773d0c08-3cb6-409f-9f9c-4f364d8e118a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{292af076-2a73-4986-b923-435784593ac5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="external">
-      <UniqueIdentifier>{dc40ebac-cd48-4fdd-85cd-a4f50500b8f9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Link Libraries">
       <UniqueIdentifier>{e2133855-e2b7-4309-861c-dbfec56161e4}</UniqueIdentifier>
@@ -104,33 +98,6 @@
     <ClInclude Include="undomanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\tier0\basetypes.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\commonmacros.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\dbg.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\fasttimer.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\appframework\IAppSystem.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\interface.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\platform.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\protected_things.h">
-      <Filter>external</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\string_t.h">
-      <Filter>external</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\datamodel\attributeflags.h">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -152,11 +119,6 @@
     <ClInclude Include="..\public\datamodel\idmattribute.h">
       <Filter>Interface</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="datamodel.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\lib\common\parsifal.lib">

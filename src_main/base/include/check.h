@@ -50,4 +50,16 @@
     std::exit(exit_code);                              \
   }
 
+// Checks |condition|, if not, then print condition and
+// exit_code via |exit_code_lazy|() to stderr and exit process with
+// |exit_code_lazy|().  Process is terminated via std::exit call.
+#define CHECK_LAZY_EXIT(condition, exit_code_lazy)     \
+  assert(condition);                                   \
+  if (!(condition)) {                                  \
+    const auto exit_code = exit_code_lazy();           \
+    fprintf_s(stderr, "%s failed (%d).", (#condition), \
+              implicit_cast<int>(exit_code));          \
+    std::exit(exit_code);                              \
+  }
+
 #endif  // BASE_INCLUDE_CHECK_H_

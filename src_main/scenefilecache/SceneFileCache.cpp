@@ -38,8 +38,7 @@ class CSceneFileCache : public CBaseAppSystem<ISceneFileCache> {
   virtual void Reload();
 
   virtual size_t GetSceneBufferSize(char const *pFilename);
-  virtual bool GetSceneData(char const *pFilename, uint8_t *buf,
-                            size_t bufsize);
+  virtual bool GetSceneData(char const *pFilename, u8 *buf, size_t bufsize);
 
   // alternate resident image implementation
   virtual bool GetSceneCachedData(char const *pFilename,
@@ -52,7 +51,7 @@ class CSceneFileCache : public CBaseAppSystem<ISceneFileCache> {
   // contains all the compiled VCDs single i/o read at startup to mount the
   // image
   int FindSceneInImage(const char *pSceneName);
-  bool GetSceneDataFromImage(const char *pSceneName, int iIndex, uint8_t *pData,
+  bool GetSceneDataFromImage(const char *pSceneName, int iIndex, u8 *pData,
                              size_t *pLength);
 
  private:
@@ -111,7 +110,7 @@ size_t CSceneFileCache::GetSceneBufferSize(char const *pFilename) {
   return returnSize;
 }
 
-bool CSceneFileCache::GetSceneData(char const *pFilename, uint8_t *buf,
+bool CSceneFileCache::GetSceneData(char const *pFilename, u8 *buf,
                                    size_t bufsize) {
   Assert(pFilename);
   Assert(buf);
@@ -140,9 +139,9 @@ bool CSceneFileCache::GetSceneCachedData(char const *pFilename,
 
   // get scene summary
   SceneImageEntry_t *pEntries =
-      (SceneImageEntry_t *)((uint8_t *)pHeader + pHeader->nSceneEntryOffset);
+      (SceneImageEntry_t *)((u8 *)pHeader + pHeader->nSceneEntryOffset);
   SceneImageSummary_t *pSummary =
-      (SceneImageSummary_t *)((uint8_t *)pHeader +
+      (SceneImageSummary_t *)((u8 *)pHeader +
                               pEntries[iScene].nSceneSummaryOffset);
 
   pData->sceneId = iScene;
@@ -153,16 +152,16 @@ bool CSceneFileCache::GetSceneCachedData(char const *pFilename,
 }
 
 short CSceneFileCache::GetSceneCachedSound(int iScene, int iSound) {
-  SceneImageHeader_t *pHeader = (SceneImageHeader_t *)m_SceneImageFile.Base();
+  SceneImageHeader_t *pHeader = m_SceneImageFile.Base<SceneImageHeader_t>();
   if (!pHeader || iScene < 0 || iScene >= pHeader->nNumScenes) {
     // huh?, image file not present or bad index
     return -1;
   }
 
   SceneImageEntry_t *pEntries =
-      (SceneImageEntry_t *)((uint8_t *)pHeader + pHeader->nSceneEntryOffset);
+      (SceneImageEntry_t *)((u8 *)pHeader + pHeader->nSceneEntryOffset);
   SceneImageSummary_t *pSummary =
-      (SceneImageSummary_t *)((uint8_t *)pHeader +
+      (SceneImageSummary_t *)((u8 *)pHeader +
                               pEntries[iScene].nSceneSummaryOffset);
   if (iSound < 0 || iSound >= pSummary->numSounds) {
     // bad index
@@ -174,7 +173,7 @@ short CSceneFileCache::GetSceneCachedSound(int iScene, int iSound) {
 }
 
 const char *CSceneFileCache::GetSceneString(short stringId) {
-  SceneImageHeader_t *pHeader = (SceneImageHeader_t *)m_SceneImageFile.Base();
+  SceneImageHeader_t *pHeader = m_SceneImageFile.Base<SceneImageHeader_t>();
   if (!pHeader || stringId < 0 || stringId >= pHeader->nNumStrings) {
     // huh?, image file not present, or index bad
     return NULL;
@@ -187,13 +186,11 @@ const char *CSceneFileCache::GetSceneString(short stringId) {
 //  Returns -1 if not found, otherwise [0..n] index.
 //-----------------------------------------------------------------------------
 int CSceneFileCache::FindSceneInImage(const char *pSceneName) {
-  auto *header = static_cast<SceneImageHeader_t *>(m_SceneImageFile.Base());
-  if (!header) {
-    return -1;
-  }
+  auto *header = m_SceneImageFile.Base<SceneImageHeader_t>();
+  if (!header) return -1;
 
   auto *entries = reinterpret_cast<SceneImageEntry_t *>(
-      reinterpret_cast<uint8_t *>(header) + header->nSceneEntryOffset);
+      reinterpret_cast<u8 *>(header) + header->nSceneEntryOffset);
 
   char clean_name[SOURCE_MAX_PATH];
   strcpy_s(clean_name, pSceneName);
@@ -234,53 +231,54 @@ int CSceneFileCache::FindSceneInImage(const char *pSceneName) {
 //-----------------------------------------------------------------------------
 //  Returns true if success, false otherwise. Caller must free ouput scene data
 //-----------------------------------------------------------------------------
-bool CSceneFileCache::GetSceneDataFromImage(const char *pFileName, int iScene,
-                                            uint8_t *pSceneData,
-                                            size_t *pSceneLength) {
-  SceneImageHeader_t *pHeader = (SceneImageHeader_t *)m_SceneImageFile.Base();
-  if (!pHeader || iScene < 0 || iScene >= pHeader->nNumScenes) {
-    if (pSceneData) {
-      *pSceneData = NULL;
-    }
-    if (pSceneLength) {
-      *pSceneLength = 0;
-    }
+bool CSceneFileCache::GetSceneDataFromImage(const char *file_name, int scene_no,
+                                            u8 *scene_data,
+                                            size_t *scene_size) {
+  SceneImageHeader_t *img_header = m_SceneImageFile.Base<SceneImageHeader_t>();
+
+  if (!img_header || scene_no < 0 || scene_no >= img_header->nNumScenes) {
+    if (scene_data) *scene_data = NULL;
+    if (scene_size) *scene_size = 0;
+
     return false;
   }
 
   SceneImageEntry_t *pEntries =
-      (SceneImageEntry_t *)((uint8_t *)pHeader + pHeader->nSceneEntryOffset);
-  unsigned char *pData =
-      (unsigned char *)pHeader + pEntries[iScene].nDataOffset;
+      (SceneImageEntry_t *)((u8 *)img_header + img_header->nSceneEntryOffset);
+  u8 *pData = (u8 *)img_header + pEntries[scene_no].nDataOffset;
   LZMA lzma;
-  bool bIsCompressed;
-  bIsCompressed = lzma.IsCompressed(pData);
+  bool bIsCompressed = lzma.IsCompressed(pData);
+
   if (bIsCompressed) {
     usize originalSize = lzma.GetActualSize(pData);
-    if (pSceneData) {
-      usize nMaxLen = *pSceneLength;
+
+    if (scene_data) {
+      usize nMaxLen = *scene_size;
+
       if (originalSize <= nMaxLen) {
-        lzma.Uncompress(pData, pSceneData, nMaxLen);
+        lzma.Uncompress(pData, scene_data, nMaxLen);
       } else {
-        u8 *pOutputData = (u8 *)malloc(originalSize);
+        u8 *pOutputData = heap_alloc<u8>(originalSize);
+
         lzma.Uncompress(pData, pOutputData, originalSize);
-        V_memcpy(pSceneData, pOutputData, nMaxLen);
+        memcpy(scene_data, pOutputData, nMaxLen);
+
         heap_free(pOutputData);
       }
     }
-    if (pSceneLength) {
-      *pSceneLength = originalSize;
-    }
+
+    if (scene_size) *scene_size = originalSize;
   } else {
-    if (pSceneData) {
+    if (scene_data) {
       size_t nCountToCopy =
-          std::min(*pSceneLength, (size_t)pEntries[iScene].nDataLength);
-      memcpy(pSceneData, pData, nCountToCopy);
+          std::min(*scene_size, (size_t)pEntries[scene_no].nDataLength);
+
+      memcpy(scene_data, pData, nCountToCopy);
     }
-    if (pSceneLength) {
-      *pSceneLength = (size_t)pEntries[iScene].nDataLength;
-    }
+
+    if (scene_size) *scene_size = pEntries[scene_no].nDataLength;
   }
+
   return true;
 }
 

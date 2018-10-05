@@ -3,7 +3,7 @@
 #ifndef SOURCE_MDLLIB_STRIPINFO_H_
 #define SOURCE_MDLLIB_STRIPINFO_H_
 
-#include "UtlSortVector.h"
+#include "utlsortvector.h"
 #include "mdllib/mdllib.h"
 #include "mdllib_utils.h"
 

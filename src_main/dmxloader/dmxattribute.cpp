@@ -51,25 +51,26 @@ static size_t s_pAttributeSize[AT_TYPE_COUNT] = {
 // make sure that the attribute data type sizes are what we think they are to
 // choose the right allocator
 //-----------------------------------------------------------------------------
-struct CSizeTest {
-  CSizeTest() {
-    // test internal value attribute sizes
-    static_assert(sizeof(int) == 4);
-    static_assert(sizeof(float) == 4);
-    static_assert(sizeof(bool) <= 4);
-    static_assert(sizeof(Color) == 4);
-    static_assert(sizeof(Vector2D) == 8);
-    static_assert(sizeof(Vector) == 12);
-    static_assert(sizeof(Vector4D) == 16);
-    static_assert(sizeof(QAngle) == 12);
-    static_assert(sizeof(Quaternion) == 16);
-    static_assert(sizeof(VMatrix) == 64);
-    static_assert(sizeof(CUtlString) == 16);
-    static_assert(sizeof(CUtlBinaryBlock) == 16);
-    static_assert(sizeof(DmObjectId_t) == 16);
-  };
-};
-static CSizeTest g_sizeTest;
+static_assert(sizeof(int) == 4);
+static_assert(sizeof(float) == 4);
+static_assert(sizeof(bool) <= 4);
+static_assert(sizeof(Color) == 4);
+static_assert(sizeof(Vector2D) == 8);
+static_assert(sizeof(Vector) == 12);
+static_assert(sizeof(Vector4D) == 16);
+static_assert(sizeof(QAngle) == 12);
+static_assert(sizeof(Quaternion) == 16);
+static_assert(sizeof(VMatrix) == 64);
+#if defined(ARCH_CPU_X86)
+static_assert(sizeof(CUtlString) == 16);
+static_assert(sizeof(CUtlBinaryBlock) == 16);
+#elif defined(ARCH_CPU_X86_64)
+static_assert(sizeof(CUtlString) == 24);
+static_assert(sizeof(CUtlBinaryBlock) == 24);
+#else
+#error Please, specify expected dmx attribute size at dmxatribute.cpp
+#endif
+static_assert(sizeof(DmObjectId_t) == 16);
 
 //-----------------------------------------------------------------------------
 // Returns attribute name for type
@@ -139,7 +140,7 @@ CDmxAttribute::~CDmxAttribute() { FreeDataMemory(); }
 //-----------------------------------------------------------------------------
 // Returns the size of the variables storing the various attribute types
 //-----------------------------------------------------------------------------
-int CDmxAttribute::AttributeDataSize(DmAttributeType_t type) {
+usize CDmxAttribute::AttributeDataSize(DmAttributeType_t type) {
   return s_pAttributeSize[type];
 }
 
@@ -156,7 +157,7 @@ void CDmxAttribute::AllocateDataMemory(DmAttributeType_t type) {
 #define DESTRUCT_ARRAY(_dataType)                                \
                                                                  \
   case CDmAttributeInfo<CUtlVector<_dataType> >::ATTRIBUTE_TYPE: \
-    Destroy((CUtlVector<_dataType> *)m_pData);                  \
+    Destroy((CUtlVector<_dataType> *)m_pData);                   \
     break;
 
 void CDmxAttribute::FreeDataMemory() {
@@ -476,7 +477,7 @@ void CDmxAttribute::SetValue(const void *pBuffer, size_t nLen) {
 
 // Untyped method for setting used by unpack
 void CDmxAttribute::SetValue(DmAttributeType_t type, const void *pSrc,
-                             int nLen) {
+                             usize nLen) {
   if (m_Type != type) {
     AllocateDataMemory(type);
   }
@@ -543,7 +544,7 @@ void CDmxAttribute::SetValueFromString(const char *pValue) {
       break;
 
     default: {
-      int nLen = pValue ? Q_strlen(pValue) : 0;
+      usize nLen = pValue ? strlen(pValue) : 0;
       if (nLen == 0) {
         // Can be called on empty attribute, so allocate memory.
         AllocateDataMemory(GetType());

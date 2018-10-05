@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dedicated_steam_app.h"
 
@@ -14,21 +14,21 @@
 #include "vgui/vguihelpers.h"
 
 #if defined(OS_WIN)
-#include "console/TextConsoleWin32.h"
+#include "console/textconsolewin32.h"
 CTextConsoleWin32 console;
 #else
-#include "console/TextConsoleUnix.h"
+#include "console/textconsoleunix.h"
 CTextConsoleUnix console;
 #endif
 
-SpewRetval_t DedicatedSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
+DbgReturn DedicatedSpewOutputFunc(DbgLevel spewType, char const *pMsg) {
   DedicatedOs()->Printf("%s", pMsg);
 
 #ifdef _WIN32
   Plat_DebugString(pMsg);
 #endif
 
-  if (spewType == SPEW_ERROR) {
+  if (spewType == kDbgLevelError) {
   // In Windows vgui mode, make a message box or they won't ever see the
   // error.
 #ifdef _WIN32
@@ -44,22 +44,22 @@ SpewRetval_t DedicatedSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
 #error "Implement me"
 #endif
 
-    return SPEW_ABORT;
+    return kDbgAbort;
   }
 
-  if (spewType == SPEW_ASSERT) {
-    if (CommandLine()->FindParm("-noassert") == 0) return SPEW_DEBUGGER;
+  if (spewType == kDbgLevelAssert) {
+    if (CommandLine()->FindParm("-noassert") == 0) return kDbgBreak;
 
-    return SPEW_CONTINUE;
+    return kDbgContinue;
   }
 
-  return SPEW_CONTINUE;
+  return kDbgContinue;
 }
 
 // Instantiate all main libraries.
 bool DedicatedSteamApp::Create() {
   // Hook the debug output stuff (override the spew func in the appframework).
-  SpewOutputFunc(DedicatedSpewOutputFunc);
+  SetDbgOutputCallback(DedicatedSpewOutputFunc);
 
   // Added the dedicated exports module for the engine to grab
   AppModule_t dedicatedModule = LoadModule(Sys_GetFactoryThis());

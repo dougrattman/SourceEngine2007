@@ -119,6 +119,7 @@
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -181,6 +182,7 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <ConformanceMode>true</ConformanceMode>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -364,7 +366,6 @@
     <ClCompile Include="key_values_system.cc" />
     <ClCompile Include="process_utils.cc" />
     <ClCompile Include="random.cc" />
-    <ClCompile Include="vcover.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\vstdlib\cvar.h" />
@@ -373,7 +374,6 @@
     <ClInclude Include="..\public\vstdlib\jobthread.h" />
     <ClInclude Include="..\public\vstdlib\pch_vstdlib.h" />
     <ClInclude Include="..\public\vstdlib\random.h" />
-    <ClInclude Include="..\public\vstdlib\vcover.h" />
     <ClInclude Include="..\public\vstdlib\vstdlib.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

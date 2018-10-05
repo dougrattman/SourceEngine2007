@@ -42,7 +42,7 @@ struct SheetSequenceSample_t {
 
   float m_fBlendFactor;
 
-  void CopyFirstFrameToOthers(void) {
+  void CopyFirstFrameToOthers() {
     // for old format files only supporting one image per frame
     for (int i = 1; i < MAX_IMAGES_PER_FRAME_IN_MEMORY; i++) {
       m_TextureCoordData[i] = m_TextureCoordData[0];

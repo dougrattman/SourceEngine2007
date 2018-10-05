@@ -109,6 +109,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +140,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -256,6 +258,18 @@
     <ProjectReference Include="..\vstdlib\vstdlib.vcxproj">
       <Project>{7477716c-91c5-47d1-9821-61c61c066e8c}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\collision_set.h" />
+    <ClInclude Include="include\constraints.h" />
+    <ClInclude Include="include\friction.h" />
+    <ClInclude Include="include\object_hash.h" />
+    <ClInclude Include="include\performance.h" />
+    <ClInclude Include="include\player_controller.h" />
+    <ClInclude Include="include\stats.h" />
+    <ClInclude Include="include\vehicles.h" />
+    <ClInclude Include="include\virtualmesh.h" />
+    <ClInclude Include="include\vphysics_interface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

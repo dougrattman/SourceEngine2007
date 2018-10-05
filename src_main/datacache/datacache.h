@@ -20,7 +20,7 @@ class CDataCacheSection;
 
 struct DataCacheItemData_t {
   const void *pItemData;
-  unsigned size;
+  usize size;
   DataCacheClientID_t clientId;
   CDataCacheSection *pSection;
 };
@@ -37,14 +37,14 @@ struct DataCacheItem_t : DataCacheItemData_t {
   static DataCacheItem_t *CreateResource(const DataCacheItemData_t &data) {
     return new DataCacheItem_t(data);
   }
-  static unsigned int EstimatedSize(const DataCacheItemData_t &data) {
+  static usize EstimatedSize(const DataCacheItemData_t &data) {
     return data.size;
   }
   void DestroyResource();
   DataCacheItem_t *GetData() { return this; }
-  unsigned int Size() { return size; }
+  usize Size() { return size; }
 
-  memhandle_t hLRU;
+  ResourceMemHandle hLRU;
   DataCacheItem_t *pNextFrameLocked[DC_MAX_THREADS_FRAMELOCKED];
 
   DECLARE_FIXEDSIZE_ALLOCATOR_MT(DataCacheItem_t);
@@ -158,11 +158,11 @@ class CDataCacheSection : public IDataCacheSection {
   virtual DataCacheHandle_t DoFind(DataCacheClientID_t clientId);
   virtual void OnRemove(DataCacheClientID_t clientId) {}
 
-  memhandle_t GetFirstUnlockedItem();
-  memhandle_t GetFirstLockedItem();
-  memhandle_t GetNextItem(memhandle_t);
-  DataCacheItem_t *AccessItem(memhandle_t hCurrent);
-  bool DiscardItem(memhandle_t hItem, DataCacheNotificationType_t type);
+  ResourceMemHandle GetFirstUnlockedItem();
+  ResourceMemHandle GetFirstLockedItem();
+  ResourceMemHandle GetNextItem(ResourceMemHandle);
+  DataCacheItem_t *AccessItem(ResourceMemHandle hCurrent);
+  bool DiscardItem(ResourceMemHandle hItem, DataCacheNotificationType_t type);
   bool DiscardItemData(DataCacheItem_t *pItem,
                        DataCacheNotificationType_t type);
   void NoteAdd(int size);
@@ -290,15 +290,15 @@ class CDataCache : public CTier3AppSystem<IDataCache> {
 
   //-----------------------------------------------------
 
-  DataCacheItem_t *AccessItem(memhandle_t hCurrent);
+  DataCacheItem_t *AccessItem(ResourceMemHandle hCurrent);
 
   bool IsInFlush() { return m_bInFlush; }
   int FindSectionIndex(const char *pszSection);
 
   // Utilities used by the data cache report
-  void OutputItemReport(memhandle_t hItem);
-  static bool SortMemhandlesBySizeLessFunc(const memhandle_t &lhs,
-                                           const memhandle_t &rhs);
+  void OutputItemReport(ResourceMemHandle hItem);
+  static bool SortMemhandlesBySizeLessFunc(const ResourceMemHandle &lhs,
+                                           const ResourceMemHandle &rhs);
 
   //-----------------------------------------------------
 
@@ -315,7 +315,7 @@ extern CDataCache g_DataCache;
 
 //-----------------------------------------------------------------------------
 
-inline DataCacheItem_t *CDataCache::AccessItem(memhandle_t hCurrent) {
+inline DataCacheItem_t *CDataCache::AccessItem(ResourceMemHandle hCurrent) {
   return m_LRU.GetResource_NoLockNoLRUTouch(hCurrent);
 }
 
@@ -325,7 +325,7 @@ inline IDataCache *CDataCacheSection::GetSharedCache() {
   return m_pSharedCache;
 }
 
-inline DataCacheItem_t *CDataCacheSection::AccessItem(memhandle_t hCurrent) {
+inline DataCacheItem_t *CDataCacheSection::AccessItem(ResourceMemHandle hCurrent) {
   return m_pSharedCache->AccessItem(hCurrent);
 }
 

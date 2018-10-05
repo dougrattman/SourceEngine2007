@@ -2,8 +2,8 @@
 //
 // Purpose: generates 4 random numbers in the range 0..1 quickly, using SIMD
 
-#include <cfloat>  // Needed for FLT_EPSILON
 #include <memory.h>
+#include <cfloat>  // Needed for FLT_EPSILON
 #include <cmath>
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
@@ -16,16 +16,17 @@
 // see knuth volume 3 for insight.
 
 class SIMDRandStreamContext {
-  fltx4 m_RandY[55];
-  fltx4 *m_pRand_J, *m_pRand_K;
+  fltx4 rand_y_[55];
+  fltx4 *rand_j_, *rand_k_;
 
  public:
   void Seed(u32 seed) {
-    m_pRand_J = m_RandY + 23;
-    m_pRand_K = m_RandY + 54;
-    for (int i = 0; i < 55; i++) {
+    rand_j_ = rand_y_ + 23;
+    rand_k_ = rand_y_ + 54;
+
+    for (auto &rand_y : rand_y_) {
       for (int j = 0; j < 4; j++) {
-        SubFloat(m_RandY[i], j) = (seed >> 16) / 65536.0;
+        SubFloat(rand_y, j) = (seed >> 16) / 65536.0f;
         seed = (seed + 1) * 3141592621u;
       }
     }
@@ -33,39 +34,38 @@ class SIMDRandStreamContext {
 
   inline fltx4 RandSIMD() {
     // ret= rand[k]+rand[j]
-    fltx4 retval = AddSIMD(*m_pRand_K, *m_pRand_J);
+    fltx4 retval = AddSIMD(*rand_k_, *rand_j_);
 
     // if ( ret>=1.0) ret-=1.0
     fltx4 overflow_mask = CmpGeSIMD(retval, Four_Ones);
     retval = SubSIMD(retval, AndSIMD(Four_Ones, overflow_mask));
 
-    *m_pRand_K = retval;
+    *rand_k_ = retval;
 
     // update pointers w/ wrap-around
-    if (--m_pRand_J < m_RandY) m_pRand_J = m_RandY + 54;
-    if (--m_pRand_K < m_RandY) m_pRand_K = m_RandY + 54;
+    if (--rand_j_ < rand_y_) rand_j_ = rand_y_ + 54;
+    if (--rand_k_ < rand_y_) rand_k_ = rand_y_ + 54;
 
     return retval;
   }
 };
 
-#define MAX_SIMULTANEOUS_RANDOM_STREAMS 32
+constexpr inline usize MAX_SIMULTANEOUS_RANDOM_STREAMS{32};
 
 static SIMDRandStreamContext
     s_SIMDRandContexts[MAX_SIMULTANEOUS_RANDOM_STREAMS];
-
 static volatile int s_nRandContextsInUse[MAX_SIMULTANEOUS_RANDOM_STREAMS];
 
 void SeedRandSIMD(u32 seed) {
-  for (int i = 0; i < MAX_SIMULTANEOUS_RANDOM_STREAMS; i++)
+  for (u32 i = 0; i < MAX_SIMULTANEOUS_RANDOM_STREAMS; i++)
     s_SIMDRandContexts[i].Seed(seed + i);
 }
 
-fltx4 RandSIMD(int nContextIndex) {
+fltx4 RandSIMD(usize nContextIndex) {
   return s_SIMDRandContexts[nContextIndex].RandSIMD();
 }
 
-int GetSIMDRandContext() {
+usize GetSIMDRandContext() {
   for (;;) {
     for (usize i = 0; i < std::size(s_SIMDRandContexts); i++) {
       if (!s_nRandContextsInUse[i])  // available?
@@ -81,7 +81,7 @@ int GetSIMDRandContext() {
   }
 }
 
-void ReleaseSIMDRandContext(int nContext) {
+void ReleaseSIMDRandContext(usize nContext) {
   s_nRandContextsInUse[nContext] = 0;
 }
 

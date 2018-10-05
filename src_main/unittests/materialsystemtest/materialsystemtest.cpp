@@ -30,17 +30,17 @@
 // Purpose: Warning/Msg call back through this API
 // Input  : type - 
 //			*pMsg - 
-// Output : SpewRetval_t
+// Output : DbgReturn
 //-----------------------------------------------------------------------------
-SpewRetval_t SpewFunc( SpewType_t type, const char *pMsg )
+DbgReturn SpewFunc( DbgLevel type, const char *pMsg )
 {
 	if ( Plat_IsInDebugSession() )
 	{
 		OutputDebugString( pMsg );
-		if ( type == SPEW_ASSERT )
-			return SPEW_DEBUGGER;
+		if ( type == kDbgLevelAssert )
+			return kDbgBreak;
 	}
-	return SPEW_CONTINUE;
+	return kDbgContinue;
 }
 
 
@@ -94,7 +94,7 @@ DEFINE_WINDOWED_STEAM_APPLICATION_OBJECT( CMaterialSystemTestApp );
 //-----------------------------------------------------------------------------
 bool CMaterialSystemTestApp::Create()
 {
-	SpewOutputFunc( SpewFunc );
+	SetDbgOutputCallback( SpewFunc );
 
 	AppSystemInfo_t appSystems[] = 
 	{

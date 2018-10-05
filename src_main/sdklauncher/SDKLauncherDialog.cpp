@@ -28,7 +28,7 @@
 #include "CreateModWizard.h"
 #include "filesystem_tools.h"
 #include "min_footprint_files.h"
-#include "ConfigManager.h"
+#include "configmanager.h"
 #include "filesystem_tools.h"
 #include "steam.h"
 #include <iregistry.h>

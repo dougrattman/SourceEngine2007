@@ -13,7 +13,7 @@
 #include "movieobjects/dmematerial.h"
 #include "movieobjects/dmemesh.h"
 #include "movieobjects/dmemodel.h"
-#include "tier1/UtlStringMap.h"
+#include "tier1/utlstringmap.h"
 #include "tier1/characterset.h"
 #include "tier2/tier2.h"
 

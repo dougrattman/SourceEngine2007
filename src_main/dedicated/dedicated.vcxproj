@@ -124,6 +124,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ConformanceMode>true</ConformanceMode>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -179,6 +180,7 @@
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <ConformanceMode>true</ConformanceMode>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>HALFLIFE_VER_INTERNALNAME_STR=\"$(TargetName)\";HALFLIFE_VER_ORIGINALFILENAME_STR=\"$(TargetFileName)\";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -346,7 +348,7 @@
     <ClCompile Include="..\public\zip_utils.cpp" />
     <ClCompile Include="console\conproc.cpp" />
     <ClCompile Include="console\textconsole.cpp" />
-    <ClCompile Include="console\TextConsoleWin32.cpp" />
+    <ClCompile Include="console\textconsolewin32.cpp" />
     <ClCompile Include="dedicated_exports.cc" />
     <ClCompile Include="dedicated_steam_app.cc" />
     <ClCompile Include="dedicated_steam_application.cc" />
@@ -364,7 +366,7 @@
       <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Async</ExceptionHandling>
       <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Async</ExceptionHandling>
     </ClCompile>
-    <ClCompile Include="vgui\CreateMultiplayerGameServerPage.cpp" />
+    <ClCompile Include="vgui\createmultiplayergameserverpage.cpp" />
     <ClCompile Include="vgui\MainPanel.cpp" />
     <ClCompile Include="vgui\vguihelpers.cpp" />
   </ItemGroup>
@@ -404,8 +406,8 @@
     <ClInclude Include="..\public\idedicatedexports.h" />
     <ClInclude Include="console\conproc.h" />
     <ClInclude Include="console\textconsole.h" />
-    <ClInclude Include="console\TextConsoleUnix.h" />
-    <ClInclude Include="console\TextConsoleWin32.h" />
+    <ClInclude Include="console\textconsoleunix.h" />
+    <ClInclude Include="console\textconsolewin32.h" />
     <ClInclude Include="dedicated_common.h" />
     <ClInclude Include="dedicated_steam_app.h" />
     <ClInclude Include="dedicated_filesystem.h" />

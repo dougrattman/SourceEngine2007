@@ -11,8 +11,8 @@
 #include "tier3/tier3.h"
 
 class IDataCacheSection;
-SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);
-typedef memhandle_t DataCacheHandle_t;
+SOURCE_FORWARD_DECLARE_HANDLE(ResourceMemHandle);
+typedef ResourceMemHandle DataCacheHandle_t;
 
 // Console commands
 extern ConVar developer;

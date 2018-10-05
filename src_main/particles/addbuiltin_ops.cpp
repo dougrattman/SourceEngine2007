@@ -2,16 +2,14 @@
 
 #include "particles/particles.h"
 
-// Forward declarations
+void AddBuiltInParticleOperators();
+void AddBuiltInParticleRenderers();
+void AddBuiltInParticleInitializers();
+void AddBuiltInParticleEmitters();
+void AddBuiltInParticleForceGenerators();
+void AddBuiltInParticleConstraints();
 
-void AddBuiltInParticleOperators(void);
-void AddBuiltInParticleRenderers(void);
-void AddBuiltInParticleInitializers(void);
-void AddBuiltInParticleEmitters(void);
-void AddBuiltInParticleForceGenerators(void);
-void AddBuiltInParticleConstraints(void);
-
-void CParticleSystemMgr::AddBuiltinSimulationOperators(void) {
+void CParticleSystemMgr::AddBuiltinSimulationOperators() {
   static bool s_DidAddSim = false;
   if (!s_DidAddSim) {
     s_DidAddSim = true;
@@ -23,7 +21,7 @@ void CParticleSystemMgr::AddBuiltinSimulationOperators(void) {
   }
 }
 
-void CParticleSystemMgr::AddBuiltinRenderingOperators(void) {
+void CParticleSystemMgr::AddBuiltinRenderingOperators() {
   static bool s_DidAddRenderers = false;
   if (!s_DidAddRenderers) {
     s_DidAddRenderers = true;

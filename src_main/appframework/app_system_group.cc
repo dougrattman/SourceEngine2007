@@ -12,7 +12,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-extern SpewOutputFunc_t g_DefaultSpewFunc;
+extern DbgOutputFn g_DefaultSpewFunc;
 
 CAppSystemGroup::CAppSystemGroup(CAppSystemGroup *parent_app_system_group)
     : m_SystemDict{false, 0, 16},
@@ -58,7 +58,7 @@ AppModule_t CAppSystemGroup::LoadModule(const ch *module_name) {
 
 AppModule_t CAppSystemGroup::LoadModule(CreateInterfaceFn factory) {
   if (!factory) {
-    Warning("AppFramework: Unable to load module %s!\n", factory);
+    Warning("AppFramework: Unable to load module, null factory!\n");
     return APP_MODULE_INVALID;
   }
 
@@ -381,7 +381,7 @@ destroy:
   // By default, direct dbg reporting...
   // Have to do this because the spew func may point to a module which is being
   // unloaded
-  SpewOutputFunc(g_DefaultSpewFunc);
+  SetDbgOutputCallback(g_DefaultSpewFunc);
 
   UnloadAllModules();
 

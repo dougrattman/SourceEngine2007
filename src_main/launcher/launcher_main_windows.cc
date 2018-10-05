@@ -33,33 +33,33 @@
 #include "tier0/include/memdbgon.h"
 
 namespace {
-// Spew function.
-SpewRetval_t LauncherSpewFunc(_In_ SpewType_t spew_type,
+// Debug function.
+DbgReturn LauncherDbg(_In_ DbgLevel spew_type,
                               _In_z_ ch const *message) {
   OutputDebugStringA(message);
 
   switch (spew_type) {
-    case SPEW_MESSAGE:
-    case SPEW_LOG:
+    case kDbgLevelMessage:
+    case kDbgLevelLog:
       fprintf(stdout, "%s", message);
-      return SPEW_CONTINUE;
+      return kDbgContinue;
 
-    case SPEW_WARNING:
+    case kDbgLevelWarning:
       fprintf(stderr, "%s", message);
-      if (!_stricmp(GetSpewOutputGroup(), "init")) {
+      if (!_stricmp(GetDbgOutputGroup(), "init")) {
         MessageBoxA(nullptr, message, "Awesome Launcher - Warning",
                     MB_OK | MB_ICONWARNING);
       }
-      return SPEW_CONTINUE;
+      return kDbgContinue;
 
-    case SPEW_ASSERT:
+    case kDbgLevelAssert:
       fprintf(stderr, "%s", message);
       if (!ShouldUseNewAssertDialog())
         MessageBoxA(nullptr, message, "Awesome Launcher - Assert",
                     MB_OK | MB_ICONWARNING);
-      return SPEW_DEBUGGER;
+      return kDbgBreak;
 
-    case SPEW_ERROR:
+    case kDbgLevelError:
     default:
       fprintf(stderr, "%s", message);
       MessageBoxA(nullptr, message, "Awesome Launcher - Error",
@@ -418,7 +418,7 @@ SOURCE_API_EXPORT source::windows::windows_errno_code LauncherMain(
   }
 
   SetAppInstance(instance);
-  SpewOutputFunc(LauncherSpewFunc);
+  SetDbgOutputCallback(LauncherDbg);
 
   // Dump memory leaks if needed.
   ScopedMemoryLeakDumper scoped_memory_leak_dumper{

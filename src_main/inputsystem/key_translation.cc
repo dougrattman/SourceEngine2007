@@ -137,58 +137,6 @@ static const char *s_pButtonCodeName[] = {
     "MWHEELUP",    // MOUSE_WHEEL_UP
     "MWHEELDOWN",  // MOUSE_WHEEL_DOWN
 
-#if defined(_X360)
-    "A_BUTTON",  // JOYSTICK_FIRST_BUTTON
-    "B_BUTTON",
-    "X_BUTTON",
-    "Y_BUTTON",
-    "L_SHOULDER",
-    "R_SHOULDER",
-    "BACK",
-    "START",
-    "STICK1",
-    "STICK2",
-    "JOY11",
-    "JOY12",
-    "JOY13",
-    "JOY14",
-    "JOY15",
-    "JOY16",
-    "JOY17",
-    "JOY18",
-    "JOY19",
-    "JOY20",
-    "JOY21",
-    "JOY22",
-    "JOY23",
-    "JOY24",
-    "JOY25",
-    "JOY26",
-    "JOY27",
-    "JOY28",
-    "JOY29",
-    "JOY30",
-    "JOY31",
-    "JOY32",  // JOYSTICK_LAST_BUTTON
-
-    "UP",  // JOYSTICK_FIRST_POV_BUTTON
-    "RIGHT",
-    "DOWN",
-    "LEFT",  // JOYSTICK_LAST_POV_BUTTON
-
-    "S1_RIGHT",  // JOYSTICK_FIRST_AXIS_BUTTON
-    "S1_LEFT",
-    "S1_DOWN",
-    "S1_UP",
-    "L_TRIGGER",
-    "R_TRIGGER",
-    "S2_RIGHT",
-    "S2_LEFT",
-    "S2_DOWN",
-    "S2_UP",  // JOYSTICK_LAST_AXIS_BUTTON
-    "V AXIS POS",
-    "V AXIS NEG",
-#else
     "JOY1",  // JOYSTICK_FIRST_BUTTON
     "JOY2", "JOY3", "JOY4", "JOY5", "JOY6", "JOY7", "JOY8", "JOY9", "JOY10",
     "JOY11", "JOY12", "JOY13", "JOY14", "JOY15", "JOY16", "JOY17", "JOY18",
@@ -204,7 +152,6 @@ static const char *s_pButtonCodeName[] = {
     "X AXIS NEG", "Y AXIS POS", "Y AXIS NEG", "Z AXIS POS", "Z AXIS NEG",
     "R AXIS POS", "R AXIS NEG", "U AXIS POS", "U AXIS NEG", "V AXIS POS",
     "V AXIS NEG",  // JOYSTICK_LAST_AXIS_BUTTON
-#endif
 };
 
 static const char *s_pAnalogCodeName[] = {
@@ -295,10 +242,8 @@ static ButtonCode_t s_pScanToButtonCode_QWERTY[128] = {
 static ButtonCode_t s_pScanToButtonCode[128];
 
 void ButtonCode_InitKeyTranslationTable() {
-  static_assert(sizeof(s_pButtonCodeName) / sizeof(const char *) ==
-                BUTTON_CODE_LAST);
-  static_assert(sizeof(s_pAnalogCodeName) / sizeof(const char *) ==
-                ANALOG_CODE_LAST);
+  static_assert(std::size(s_pButtonCodeName) == BUTTON_CODE_LAST);
+  static_assert(std::size(s_pAnalogCodeName) == ANALOG_CODE_LAST);
 
   // set virtual key translation table
   memset(s_pVirtualKeyToButtonCode, KEY_NONE,
@@ -444,11 +389,11 @@ void ButtonCode_InitKeyTranslationTable() {
 }
 
 ButtonCode_t ButtonCode_VirtualKeyToButtonCode(int keyCode) {
-  if (keyCode < 0 || keyCode >= sizeof(s_pVirtualKeyToButtonCode) /
-                                    sizeof(s_pVirtualKeyToButtonCode[0])) {
+  if (keyCode < 0 || keyCode >= std::size(s_pVirtualKeyToButtonCode)) {
     Assert(false);
     return KEY_NONE;
   }
+
   return s_pVirtualKeyToButtonCode[keyCode];
 }
 
@@ -457,8 +402,7 @@ int ButtonCode_ButtonCodeToVirtualKey(ButtonCode_t code) {
 }
 
 ButtonCode_t ButtonCode_XKeyToButtonCode(int nPort, int keyCode) {
-  if (keyCode < 0 ||
-      keyCode >= sizeof(s_pXKeyTrans) / sizeof(s_pXKeyTrans[0])) {
+  if (keyCode < 0 || keyCode >= std::size(s_pXKeyTrans)) {
     Assert(false);
     return KEY_NONE;
   }
@@ -485,11 +429,9 @@ ButtonCode_t ButtonCode_XKeyToButtonCode(int nPort, int keyCode) {
 // Convert back + forth between ButtonCode/AnalogCode + strings
 const char *ButtonCode_ButtonCodeToString(ButtonCode_t code,
                                           bool bXController) {
-#if !defined(_X360)
   if (bXController && code >= JOYSTICK_FIRST_BUTTON &&
       code <= JOYSTICK_LAST_AXIS_BUTTON)
     return s_pXControllerButtonCodeNames[code - JOYSTICK_FIRST_BUTTON];
-#endif
 
   return s_pButtonCodeName[code];
 }
@@ -603,7 +545,7 @@ void ButtonCode_UpdateScanCodeLayout() {
       if (code != KEY_NONE && code != KEY_BACKQUOTE &&
           (IsAlphaNumeric(code) || IsPunctuation(code))) {
         // get it's virtual key based on the old layout
-        int vk = ::MapVirtualKeyEx(i, 1, englishKb);
+        int vk = ::MapVirtualKeyEx((UINT)i, 1, englishKb);
 
         // turn in into a scancode on the new layout
         int newScanCode = ::MapVirtualKeyEx(vk, 0, currentKb);

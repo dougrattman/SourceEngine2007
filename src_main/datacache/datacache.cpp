@@ -175,9 +175,9 @@ bool CDataCacheSection::AddEx(DataCacheClientID_t clientId,
 
   DataCacheItemData_t itemData = {pItemData, size, clientId, this};
 
-  memhandle_t hMem = m_LRU.CreateResource(itemData, true);
+  ResourceMemHandle hMem = m_LRU.CreateResource(itemData, true);
 
-  Assert(hMem != (memhandle_t)0 && hMem != (memhandle_t)DC_INVALID_HANDLE);
+  Assert(hMem != (ResourceMemHandle)0 && hMem != (ResourceMemHandle)DC_INVALID_HANDLE);
 
   AccessItem(hMem)->hLRU = hMem;
 
@@ -224,7 +224,7 @@ DataCacheHandle_t CDataCacheSection::Find(DataCacheClientID_t clientId) {
 //---------------------------------------------------------
 DataCacheHandle_t CDataCacheSection::DoFind(DataCacheClientID_t clientId) {
   AUTO_LOCK(m_mutex);
-  memhandle_t hCurrent;
+  ResourceMemHandle hCurrent;
 
   hCurrent = GetFirstUnlockedItem();
 
@@ -260,7 +260,7 @@ DataCacheRemoveResult_t CDataCacheSection::Remove(DataCacheHandle_t handle,
   VPROF("CDataCacheSection::Remove");
 
   if (handle != DC_INVALID_HANDLE) {
-    memhandle_t lruHandle = (memhandle_t)handle;
+    ResourceMemHandle lruHandle = (ResourceMemHandle)handle;
     if (m_LRU.LockCount(lruHandle) > 0) {
       return DC_LOCKED;
     }
@@ -290,7 +290,7 @@ DataCacheRemoveResult_t CDataCacheSection::Remove(DataCacheHandle_t handle,
 //
 //-----------------------------------------------------------------------------
 bool CDataCacheSection::IsPresent(DataCacheHandle_t handle) {
-  return (m_LRU.GetResource_NoLockNoLRUTouch((memhandle_t)handle) != NULL);
+  return (m_LRU.GetResource_NoLockNoLRUTouch((ResourceMemHandle)handle) != NULL);
 }
 
 //-----------------------------------------------------------------------------
@@ -302,9 +302,9 @@ void *CDataCacheSection::Lock(DataCacheHandle_t handle) {
   if (mem_force_flush.GetBool() && !g_iDontForceFlush) Flush();
 
   if (handle != DC_INVALID_HANDLE) {
-    DataCacheItem_t *pItem = m_LRU.LockResource((memhandle_t)handle);
+    DataCacheItem_t *pItem = m_LRU.LockResource((ResourceMemHandle)handle);
     if (pItem) {
-      if (m_LRU.LockCount((memhandle_t)handle) == 1) {
+      if (m_LRU.LockCount((ResourceMemHandle)handle) == 1) {
         NoteLock(pItem->size);
       }
       return const_cast<void *>(pItem->pItemData);
@@ -322,13 +322,13 @@ int CDataCacheSection::Unlock(DataCacheHandle_t handle) {
 
   int iNewLockCount = 0;
   if (handle != DC_INVALID_HANDLE) {
-    AssertMsg(AccessItem((memhandle_t)handle) != NULL,
+    AssertMsg(AccessItem((ResourceMemHandle)handle) != NULL,
               "Attempted to unlock nonexistent cache entry");
     unsigned nBytesUnlocked = 0;
     m_mutex.Lock();
-    iNewLockCount = m_LRU.UnlockResource((memhandle_t)handle);
+    iNewLockCount = m_LRU.UnlockResource((ResourceMemHandle)handle);
     if (iNewLockCount == 0) {
-      nBytesUnlocked = AccessItem((memhandle_t)handle)->size;
+      nBytesUnlocked = AccessItem((ResourceMemHandle)handle)->size;
     }
     m_mutex.Unlock();
     if (nBytesUnlocked) {
@@ -367,7 +367,7 @@ void *CDataCacheSection::Get(DataCacheHandle_t handle, bool bFrameLock) {
     if (bFrameLock && IsFrameLocking()) return FrameLock(handle);
 
     AUTO_LOCK(m_mutex);
-    DataCacheItem_t *pItem = m_LRU.GetResource_NoLock((memhandle_t)handle);
+    DataCacheItem_t *pItem = m_LRU.GetResource_NoLock((ResourceMemHandle)handle);
     if (pItem) {
       return const_cast<void *>(pItem->pItemData);
     }
@@ -387,7 +387,7 @@ void *CDataCacheSection::GetNoTouch(DataCacheHandle_t handle, bool bFrameLock) {
 
     AUTO_LOCK(m_mutex);
     DataCacheItem_t *pItem =
-        m_LRU.GetResource_NoLockNoLRUTouch((memhandle_t)handle);
+        m_LRU.GetResource_NoLockNoLRUTouch((ResourceMemHandle)handle);
     if (pItem) {
       return const_cast<void *>(pItem->pItemData);
     }
@@ -436,7 +436,7 @@ void *CDataCacheSection::FrameLock(DataCacheHandle_t handle) {
   void *pResult = NULL;
   FrameLock_t *pFrameLock = m_ThreadFrameLock.Get();
   if (pFrameLock) {
-    DataCacheItem_t *pItem = m_LRU.LockResource((memhandle_t)handle);
+    DataCacheItem_t *pItem = m_LRU.LockResource((ResourceMemHandle)handle);
 
     if (pItem) {
       int iThread = pFrameLock->m_iThread;
@@ -447,7 +447,7 @@ void *CDataCacheSection::FrameLock(DataCacheHandle_t handle) {
       }
 
       pResult = const_cast<void *>(pItem->pItemData);
-      m_LRU.UnlockResource((memhandle_t)handle);
+      m_LRU.UnlockResource((ResourceMemHandle)handle);
     }
   }
 
@@ -494,21 +494,21 @@ int *CDataCacheSection::GetFrameUnlockCounterPtr() {
 // Purpose: Lock management, not for the feint of heart
 //-----------------------------------------------------------------------------
 int CDataCacheSection::GetLockCount(DataCacheHandle_t handle) {
-  return m_LRU.LockCount((memhandle_t)handle);
+  return m_LRU.LockCount((ResourceMemHandle)handle);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 int CDataCacheSection::BreakLock(DataCacheHandle_t handle) {
-  return m_LRU.BreakLock((memhandle_t)handle);
+  return m_LRU.BreakLock((ResourceMemHandle)handle);
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Explicitly mark an item as "recently used"
 //-----------------------------------------------------------------------------
 bool CDataCacheSection::Touch(DataCacheHandle_t handle) {
-  m_LRU.TouchResource((memhandle_t)handle);
+  m_LRU.TouchResource((ResourceMemHandle)handle);
   return true;
 }
 
@@ -516,7 +516,7 @@ bool CDataCacheSection::Touch(DataCacheHandle_t handle) {
 // Purpose: Explicitly mark an item as "least recently used".
 //-----------------------------------------------------------------------------
 bool CDataCacheSection::Age(DataCacheHandle_t handle) {
-  m_LRU.MarkAsStale((memhandle_t)handle);
+  m_LRU.MarkAsStale((ResourceMemHandle)handle);
   return true;
 }
 
@@ -532,8 +532,8 @@ unsigned CDataCacheSection::Flush(bool bUnlockedOnly, bool bNotify) {
   DataCacheNotificationType_t notificationType =
       (bNotify) ? DC_FLUSH_DISCARD : DC_NONE;
 
-  memhandle_t hCurrent;
-  memhandle_t hNext;
+  ResourceMemHandle hCurrent;
+  ResourceMemHandle hNext;
 
   unsigned nBytesFlushed = 0;
   unsigned nBytesCurrent = 0;
@@ -579,8 +579,8 @@ unsigned CDataCacheSection::Purge(unsigned nBytes) {
   unsigned nBytesPurged = 0;
   unsigned nBytesCurrent = 0;
 
-  memhandle_t hCurrent = GetFirstUnlockedItem();
-  memhandle_t hNext;
+  ResourceMemHandle hCurrent = GetFirstUnlockedItem();
+  ResourceMemHandle hNext;
 
   while (hCurrent != INVALID_MEMHANDLE && nBytes > 0) {
     hNext = GetNextItem(hCurrent);
@@ -605,8 +605,8 @@ unsigned CDataCacheSection::PurgeItems(unsigned nItems) {
 
   unsigned nPurged = 0;
 
-  memhandle_t hCurrent = GetFirstUnlockedItem();
-  memhandle_t hNext;
+  ResourceMemHandle hCurrent = GetFirstUnlockedItem();
+  ResourceMemHandle hNext;
 
   while (hCurrent != INVALID_MEMHANDLE && nItems) {
     hNext = GetNextItem(hCurrent);
@@ -635,7 +635,7 @@ void CDataCacheSection::OutputReport(DataCacheReportType_t reportType) {
 //-----------------------------------------------------------------------------
 void CDataCacheSection::UpdateSize(DataCacheHandle_t handle,
                                    unsigned int nNewSize) {
-  DataCacheItem_t *pItem = m_LRU.LockResource((memhandle_t)handle);
+  DataCacheItem_t *pItem = m_LRU.LockResource((ResourceMemHandle)handle);
   if (!pItem) {
     // If it's gone from memory, size is already irrelevant
     return;
@@ -653,18 +653,18 @@ void CDataCacheSection::UpdateSize(DataCacheHandle_t handle,
       m_pSharedCache->EnsureCapacity(bytesAdded);
     }
 
-    m_LRU.NotifySizeChanged((memhandle_t)handle, oldSize, nNewSize);
+    m_LRU.NotifySizeChanged((ResourceMemHandle)handle, oldSize, nNewSize);
     NoteSizeChanged(oldSize, nNewSize);
   }
 
-  m_LRU.UnlockResource((memhandle_t)handle);
+  m_LRU.UnlockResource((ResourceMemHandle)handle);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-memhandle_t CDataCacheSection::GetFirstUnlockedItem() {
-  memhandle_t hCurrent;
+ResourceMemHandle CDataCacheSection::GetFirstUnlockedItem() {
+  ResourceMemHandle hCurrent;
 
   hCurrent = m_LRU.GetFirstUnlocked();
 
@@ -677,8 +677,8 @@ memhandle_t CDataCacheSection::GetFirstUnlockedItem() {
   return INVALID_MEMHANDLE;
 }
 
-memhandle_t CDataCacheSection::GetFirstLockedItem() {
-  memhandle_t hCurrent;
+ResourceMemHandle CDataCacheSection::GetFirstLockedItem() {
+  ResourceMemHandle hCurrent;
 
   hCurrent = m_LRU.GetFirstLocked();
 
@@ -691,7 +691,7 @@ memhandle_t CDataCacheSection::GetFirstLockedItem() {
   return INVALID_MEMHANDLE;
 }
 
-memhandle_t CDataCacheSection::GetNextItem(memhandle_t hCurrent) {
+ResourceMemHandle CDataCacheSection::GetNextItem(ResourceMemHandle hCurrent) {
   hCurrent = m_LRU.GetNext(hCurrent);
 
   while (hCurrent != INVALID_MEMHANDLE) {
@@ -703,7 +703,7 @@ memhandle_t CDataCacheSection::GetNextItem(memhandle_t hCurrent) {
   return INVALID_MEMHANDLE;
 }
 
-bool CDataCacheSection::DiscardItem(memhandle_t hItem,
+bool CDataCacheSection::DiscardItem(ResourceMemHandle hItem,
                                     DataCacheNotificationType_t type) {
   DataCacheItem_t *pItem = AccessItem(hItem);
   if (DiscardItemData(pItem, type)) {
@@ -1032,7 +1032,7 @@ void CDataCache::OutputReport(DataCacheReportType_t reportType,
 
   float percent = 100.0f * (float)bytesUsed / (float)bytesTotal;
 
-  CUtlVector<memhandle_t> lruList, lockedlist;
+  CUtlVector<ResourceMemHandle> lruList, lockedlist;
 
   m_LRU.GetLockHandleList(lockedlist);
   m_LRU.GetLRUHandleList(lruList);
@@ -1047,7 +1047,7 @@ void CDataCache::OutputReport(DataCacheReportType_t reportType,
   }
 
   if (reportType == DC_DETAIL_REPORT) {
-    CUtlRBTree<memhandle_t, int> sortedbysize(0, 0,
+    CUtlRBTree<ResourceMemHandle, int> sortedbysize(0, 0,
                                               SortMemhandlesBySizeLessFunc);
     for (int i = 0; i < lockedlist.Count(); ++i) {
       if (!pSection || AccessItem(lockedlist[i])->pSection == pSection)
@@ -1123,7 +1123,7 @@ void CDataCache::OutputReport(DataCacheReportType_t reportType,
 
 //-------------------------------------
 
-void CDataCache::OutputItemReport(memhandle_t hItem) {
+void CDataCache::OutputItemReport(ResourceMemHandle hItem) {
   AUTO_LOCK(m_mutex);
   DataCacheItem_t *pItem = m_LRU.GetResource_NoLockNoLRUTouch(hItem);
   if (!pItem) return;
@@ -1157,8 +1157,8 @@ int CDataCache::FindSectionIndex(const char *pszSection) {
 //-----------------------------------------------------------------------------
 // Sorting utility used by the data cache report
 //-----------------------------------------------------------------------------
-bool CDataCache::SortMemhandlesBySizeLessFunc(const memhandle_t &lhs,
-                                              const memhandle_t &rhs) {
+bool CDataCache::SortMemhandlesBySizeLessFunc(const ResourceMemHandle &lhs,
+                                              const ResourceMemHandle &rhs) {
   DataCacheItem_t *pItem1 = g_DataCache.m_LRU.GetResource_NoLockNoLRUTouch(lhs);
   DataCacheItem_t *pItem2 = g_DataCache.m_LRU.GetResource_NoLockNoLRUTouch(rhs);
 

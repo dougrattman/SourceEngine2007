@@ -1,18 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// CTextConsoleUnix.cpp: Unix implementation of the TextConsole class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #ifndef _WIN32
 
 
-#include "TextConsoleUnix.h"
+#include "textconsoleunix.h"
 
 // un-needed include...
 //#include "resource.h"

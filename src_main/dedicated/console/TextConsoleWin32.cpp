@@ -1,8 +1,8 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 // CTextConsoleWin32.cpp: Win32 implementation of the TextConsole class.
 
-#include "TextConsoleWin32.h"
+#include "textconsolewin32.h"
 #include "tier0/include/dbg.h"
 
 #ifdef _WIN32

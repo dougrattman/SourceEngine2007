@@ -13,39 +13,39 @@
 HINSTANCE s_HInstance;
 
 // Default spec function.
-SpewRetval_t LinuxAppDefaultSpewFunc(SpewType_t spew_type,
+DbgReturn LinuxAppDefaultSpewFunc(DbgLevel spew_type,
                                      char const *message) {
   fprintf(stderr, "%s", message);
   switch (spew_type) {
-    case SPEW_MESSAGE:
-    case SPEW_WARNING:
-    case SPEW_LOG:
-      return SPEW_CONTINUE;
+    case kDbgLevelMessage:
+    case kDbgLevelWarning:
+    case kDbgLevelLog:
+      return kDbgContinue;
 
-    case SPEW_ASSERT:
-    case SPEW_ERROR:
+    case kDbgLevelAssert:
+    case kDbgLevelError:
     default:
-      return SPEW_DEBUGGER;
+      return kDbgBreak;
   }
 }
 
-SpewRetval_t ConsoleAppDefaultSpewFunc(SpewType_t spew_type,
+DbgReturn ConsoleAppDefaultSpewFunc(DbgLevel spew_type,
                                        char const *message) {
   printf("%s", message);
   switch (spew_type) {
-    case SPEW_MESSAGE:
-    case SPEW_WARNING:
-    case SPEW_LOG:
-      return SPEW_CONTINUE;
+    case kDbgLevelMessage:
+    case kDbgLevelWarning:
+    case kDbgLevelLog:
+      return kDbgContinue;
 
-    case SPEW_ASSERT:
-    case SPEW_ERROR:
+    case kDbgLevelAssert:
+    case kDbgLevelError:
     default:
-      return SPEW_DEBUGGER;
+      return kDbgBreak;
   }
 }
 
-SpewOutputFunc_t g_DefaultSpewFunc = LinuxAppDefaultSpewFunc;
+DbgOutputFn g_DefaultSpewFunc = LinuxAppDefaultSpewFunc;
 
 // HACK: Since I don't want to refit vgui yet...
 void *GetAppInstance() { return s_HInstance; }

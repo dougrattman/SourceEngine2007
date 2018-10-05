@@ -33,9 +33,6 @@
     <ClCompile Include="random.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vcover.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\vstdlib\cvar.h">
@@ -51,9 +48,6 @@
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\vstdlib\random.h">
-      <Filter>Includes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\vstdlib\vcover.h">
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\vstdlib\vstdlib.h">

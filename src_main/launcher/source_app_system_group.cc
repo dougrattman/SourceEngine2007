@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "source_app_system_group.h"
 
@@ -11,6 +11,7 @@
 #include "appframework/IAppSystemGroup.h"
 #include "avi/iavi.h"
 #include "avi/ibik.h"
+#include "avi/include/ibink_media_player.h"
 #include "base/include/chrono.h"
 #include "base/include/windows/scoped_com_initializer.h"
 #include "datacache/idatacache.h"
@@ -29,7 +30,7 @@
 #include "tier3/tier3.h"
 #include "vgui/ISurface.h"
 #include "vgui/IVGui.h"
-#include "vphysics_interface.h"
+#include "vphysics/include/vphysics_interface.h"
 #include "vstdlib/iprocessutils.h"
 
 #include "iresource_listing_writer.h"
@@ -70,9 +71,9 @@ bool SourceAppSystemGroup::Create() {
             {"vphysics.dll", VPHYSICS_INTERFACE_VERSION},
             {"valve_avi.dll", AVI_INTERFACE_VERSION},
             {"valve_avi.dll", BIK_INTERFACE_VERSION},
+            {"valve_avi.dll", source::kValveAviBinkMediaFactoryInterfaceVersion},
             // NOTE: This has to occur before vgui2.dll so it replaces vgui2's
-            // surface
-            // implementation
+            // surface implementation
             {"vguimatsurface.dll", VGUI_SURFACE_INTERFACE_VERSION},
             {"vgui2.dll", VGUI_IVGUI_INTERFACE_VERSION},
             {"engine.dll", VENGINE_LAUNCHER_API_VERSION},

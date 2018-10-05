@@ -70,7 +70,7 @@ CRITICAL_SECTION g_SpewCS;
 bool g_bSpewCSInitted = false;
 bool g_bSuppressPrintfOutput = false;
 
-SpewRetval_t CmdLib_SpewOutputFunc( SpewType_t type, char const *pMsg )
+DbgReturn CmdLib_SpewOutputFunc( DbgLevel type, char const *pMsg )
 {
 	// Hopefully two threads won't call this simultaneously right at the start!
 	if ( !g_bSpewCSInitted )
@@ -80,24 +80,24 @@ SpewRetval_t CmdLib_SpewOutputFunc( SpewType_t type, char const *pMsg )
 	}
 
 	WORD old;
-	SpewRetval_t retVal;
+	DbgReturn retVal;
 	
 	EnterCriticalSection( &g_SpewCS );
 	{
-		if (( type == SPEW_MESSAGE ) || (type == SPEW_LOG ))
+		if (( type == kDbgLevelMessage ) || (type == kDbgLevelLog ))
 		{
 			old = SetConsoleTextColor( 1, 1, 1, 0 );
-			retVal = SPEW_CONTINUE;
+			retVal = kDbgContinue;
 		}
-		else if( type == SPEW_WARNING )
+		else if( type == kDbgLevelWarning )
 		{
 			old = SetConsoleTextColor( 1, 1, 0, 1 );
-			retVal = SPEW_CONTINUE;
+			retVal = kDbgContinue;
 		}
-		else if( type == SPEW_ASSERT )
+		else if( type == kDbgLevelAssert )
 		{
 			old = SetConsoleTextColor( 1, 0, 0, 1 );
-			retVal = SPEW_DEBUGGER;
+			retVal = kDbgBreak;
 
 #ifdef MPI
 			// VMPI workers don't want to bring up dialogs and suchlike.			
@@ -108,23 +108,23 @@ SpewRetval_t CmdLib_SpewOutputFunc( SpewType_t type, char const *pMsg )
 			}
 #endif
 		}
-		else if( type == SPEW_ERROR )
+		else if( type == kDbgLevelError )
 		{
 			old = SetConsoleTextColor( 1, 0, 0, 1 );
-			retVal = SPEW_ABORT; // doesn't matter.. we exit below so we can return an errorlevel (which dbg.dll doesn't do).
+			retVal = kDbgAbort; // doesn't matter.. we exit below so we can return an errorlevel (which dbg.dll doesn't do).
 		}
 		else
 		{
 			old = SetConsoleTextColor( 1, 1, 1, 1 );
-			retVal = SPEW_CONTINUE;
+			retVal = kDbgContinue;
 		}
 
-		if ( !g_bSuppressPrintfOutput || type == SPEW_ERROR )
+		if ( !g_bSuppressPrintfOutput || type == kDbgLevelError )
 			printf( "%s", pMsg );
 
 		OutputDebugString( pMsg );
 		
-		if ( type == SPEW_ERROR )
+		if ( type == kDbgLevelError )
 		{
 			printf( "\n" );
 			OutputDebugString( "\n" );
@@ -134,7 +134,7 @@ SpewRetval_t CmdLib_SpewOutputFunc( SpewType_t type, char const *pMsg )
 	}
 	LeaveCriticalSection( &g_SpewCS );
 
-	if ( type == SPEW_ERROR )
+	if ( type == kDbgLevelError )
 	{
 		CmdLib_Exit( 1 );
 	}
@@ -148,7 +148,7 @@ void InstallSpewFunction()
 	setvbuf( stdout, NULL, _IONBF, 0 );
 	setvbuf( stderr, NULL, _IONBF, 0 );
 
-	SpewOutputFunc( CmdLib_SpewOutputFunc );
+	SetDbgOutputCallback( CmdLib_SpewOutputFunc );
 	GetInitialColors();
 }
 

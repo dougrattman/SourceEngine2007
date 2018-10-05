@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dedicated_os.h"
 
@@ -14,7 +14,7 @@
 
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "conproc.h"
-#include "console/TextConsoleUnix.h"
+#include "console/textconsoleunix.h"
 #include "datacache/idatacache.h"
 #include "datacache/imdlcache.h"
 #include "engine_hlds_api.h"
@@ -30,7 +30,7 @@
 #include "tier1/checksum_md5.h"
 #include "tier1/interface.h"
 #include "tier1/strtools.h"
-#include "vphysics_interface.h"
+#include "vphysics/include/vphysics_interface.h"
 
 extern CTextConsoleUnix console;
 

@@ -33,14 +33,14 @@ ISoundSystem *g_pSoundSystem;
 //-----------------------------------------------------------------------------
 // Standard spew functions
 //-----------------------------------------------------------------------------
-static SpewRetval_t SoundTestOutputFunc( SpewType_t spewType, char const *pMsg )
+static DbgReturn SoundTestOutputFunc( DbgLevel spewType, char const *pMsg )
 {
 	printf( pMsg );
 	fflush( stdout );
 
-	if (spewType == SPEW_ERROR)
-		return SPEW_ABORT;
-	return (spewType == SPEW_ASSERT) ? SPEW_DEBUGGER : SPEW_CONTINUE; 
+	if (spewType == kDbgLevelError)
+		return kDbgAbort;
+	return (spewType == kDbgLevelAssert) ? kDbgBreak : kDbgContinue; 
 }
 
 
@@ -81,7 +81,7 @@ DEFINE_WINDOWED_STEAM_APPLICATION_OBJECT_GLOBALVAR( CSoundTestApp, s_SoundTestAp
 //-----------------------------------------------------------------------------
 bool CSoundTestApp::Create()
 {
-	SpewOutputFunc( SoundTestOutputFunc );
+	SetDbgOutputCallback( SoundTestOutputFunc );
 
 	// Add in the cvar factory
 	AppModule_t cvarModule = LoadModule( VStdLib_GetICVarFactory() );

@@ -1094,14 +1094,6 @@ Valve’s obligations to provide such notices:
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   """
 
-- PVCS Tracker Toolkit API 400005, located at src_main/deps/trktool, is 
-  licensed as follows:
-  """
-    Copyright 1992-1999 Merant, Inc.  All rights reserved.
-
-    PVCS Tracker Toolkit API
-  """
-
 - Xzip/XUnzip 1.3, located at src_main/deps/libxzip and src_main/deps/libxunzip,
   are licensed as follows:
   """
