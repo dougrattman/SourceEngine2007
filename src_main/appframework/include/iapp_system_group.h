@@ -1,24 +1,24 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: Defines a group of app systems that all have the same lifetime that
-// need to be connected/initialized, etc. in a well-defined order.
+// Defines a group of app systems that all have the same lifetime that need to
+// be connected/initialized, etc. in a well-defined order.
 
-#ifndef SOURCE_APPFRAMEWORK_IAPPSYSTEMGROUP_H_
-#define SOURCE_APPFRAMEWORK_IAPPSYSTEMGROUP_H_
+#ifndef SOURCE_APPFRAMEWORK_INCLUDE_IAPP_SYSTEM_GROUP_H_
+#define SOURCE_APPFRAMEWORK_INCLUDE_IAPP_SYSTEM_GROUP_H_
 
 #ifdef _WIN32
 #pragma once
 #endif
 
 #include <type_traits>
-#include "appframework/iappsystem.h"
 #include "base/include/base_types.h"
+#include "include/iapp_system.h"
 #include "tier0/include/basetypes.h"
 #include "tier1/interface.h"
 #include "tier1/utldict.h"
 #include "tier1/utlvector.h"
 
-class IAppSystem;
+src_interface IAppSystem;
 class CSysModule;
 class IBaseInterface;
 class IFileSystem;
@@ -241,4 +241,4 @@ using SuggestGameInfoDirFn_t =
 SuggestGameInfoDirFn_t SetSuggestGameInfoDirFn(
     SuggestGameInfoDirFn_t suggest_game_info_dir_func);
 
-#endif  // SOURCE_APPFRAMEWORK_IAPPSYSTEMGROUP_H_
+#endif  // SOURCE_APPFRAMEWORK_INCLUDE_IAPP_SYSTEM_GROUP_H_

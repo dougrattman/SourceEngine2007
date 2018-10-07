@@ -1,9 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: The application objects for apps that use tier3.
+// The application objects for apps that use tier3.
 
-#ifndef SOURCE_APPFRAMEWORK_TIER3APP_H_
-#define SOURCE_APPFRAMEWORK_TIER3APP_H_
+#ifndef SOURCE_APPFRAMEWORK_INCLUDE_TIER3_APP_H_
+#define SOURCE_APPFRAMEWORK_INCLUDE_TIER3_APP_H_
 
 #ifdef _WIN32
 #pragma once
@@ -11,7 +11,7 @@
 
 #include "base/include/base_types.h"
 
-#include "appframework/tier2app.h"
+#include "include/tier2_app.h"
 #include "tier3/tier3.h"
 #include "vgui_controls/Controls.h"
 
@@ -91,4 +91,4 @@ class CVguiDmSteamApp : public CTier3DmSteamApp {
   }
 };
 
-#endif  // SOURCE_APPFRAMEWORK_TIER3APP_H_
+#endif  // SOURCE_APPFRAMEWORK_INCLUDE_TIER3_APP_H_

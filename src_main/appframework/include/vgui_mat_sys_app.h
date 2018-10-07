@@ -1,17 +1,18 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: Material editor.
+// Vgui material system app.
 
-#ifndef SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
-#define SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
+#ifndef SOURCE_APPFRAMEWORK_INCLUDE_VGUI_MAT_SYS_APP_H_
+#define SOURCE_APPFRAMEWORK_INCLUDE_VGUI_MAT_SYS_APP_H_
 
 #ifdef _WIN32
 #pragma once
 #endif
 
 #include "base/include/base_types.h"
+#include "base/include/macros.h"
 
-#include "appframework/tier3app.h"
+#include "include/tier3_app.h"
 
 SOURCE_FORWARD_DECLARE_HANDLE(HWND);
 
@@ -59,4 +60,4 @@ class CVguiMatSysApp : public CVguiSteamApp {
   i32 m_nHeight;
 };
 
-#endif  // SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
+#endif  // SOURCE_APPFRAMEWORK_INCLUDE_VGUI_MAT_SYS_APP_H_

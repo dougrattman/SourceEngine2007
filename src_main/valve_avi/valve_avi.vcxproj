@@ -332,10 +332,9 @@
     <ClCompile Include="bink_media_player.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\public\avi\iavi.h" />
-    <ClInclude Include="..\public\avi\ibik.h" />
-    <ClInclude Include="..\public\pixelwriter.h" />
     <ClInclude Include="avi.h" />
+    <ClInclude Include="include\iavi.h" />
+    <ClInclude Include="include\ibik.h" />
     <ClInclude Include="include\ibink_media_player.h" />
   </ItemGroup>
   <ItemGroup>

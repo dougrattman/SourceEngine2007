@@ -4,8 +4,8 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{deeff3a6-540e-43c3-a995-ffab3ab54f80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Interface">
-      <UniqueIdentifier>{aaad6d5c-a50f-4116-b46e-741b88e6962a}</UniqueIdentifier>
+    <Filter Include="Include">
+      <UniqueIdentifier>{b943baf3-7a73-4e22-af03-56aa0d4b953e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -23,23 +23,23 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\public\appframework\AppFramework.h">
-      <Filter>Interface</Filter>
+    <ClInclude Include="include\app_framework.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\appframework\IAppSystem.h">
-      <Filter>Interface</Filter>
+    <ClInclude Include="include\iapp_system.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\appframework\IAppSystemGroup.h">
-      <Filter>Interface</Filter>
+    <ClInclude Include="include\iapp_system_group.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\appframework\tier2app.h">
-      <Filter>Interface</Filter>
+    <ClInclude Include="include\tier2_app.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\appframework\tier3app.h">
-      <Filter>Interface</Filter>
+    <ClInclude Include="include\tier3_app.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\appframework\VguiMatSysApp.h">
-      <Filter>Interface</Filter>
+    <ClInclude Include="include\vgui_mat_sys_app.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

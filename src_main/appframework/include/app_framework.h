@@ -1,15 +1,15 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: An application framework.
+// An application framework.
 
-#ifndef SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
-#define SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
+#ifndef SOURCE_APPFRAMEWORK_INCLUDE_APP_FRAMEWORK_H_
+#define SOURCE_APPFRAMEWORK_INCLUDE_APP_FRAMEWORK_H_
 
 #ifdef _WIN32
 #pragma once
 #endif
 
-#include "appframework/iappsystemgroup.h"
+#include "iapp_system_group.h"
 #include "base/include/base_types.h"
 #include "base/include/macros.h"
 
@@ -101,4 +101,4 @@ class CSteamApplication : public CAppSystemGroup {
   static CSteamApplication __s_SteamApplicationObject(&__s_ApplicationObject); \
   DEFINE_CONSOLE_APPLICATION_OBJECT_GLOBALVAR(__s_SteamApplicationObject)
 
-#endif  // SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
+#endif  // SOURCE_APPFRAMEWORK_INCLUDE_APP_FRAMEWORK_H_

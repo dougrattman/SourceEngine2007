@@ -2,8 +2,8 @@
 //
 // Purpose: An application framework.
 
-#include "appframework/AppFramework.h"
-#include "appframework/IAppSystemGroup.h"
+#include "include/app_framework.h"
+#include "appframework/include/iapp_system_group.h"
 #include "filesystem.h"
 #include "filesystem_init.h"
 #include "tier0/include/dbg.h"

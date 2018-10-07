@@ -1,17 +1,10 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// The copyright to the contents herein is the property of Valve, L.L.C.
-// The contents may be used and/or copied only with the written permission of
-// Valve, L.L.C., or in accordance with the terms and conditions stipulated in
-// the agreement/contract under which the contents have been supplied.
 
-#include "base/include/windows/windows_light.h"
-#include "build/include/build_config.h"
-
-#include "appframework/vguimatsysapp.h"
+#include "include/vgui_mat_sys_app.h"
 
 #include "FileSystem.h"
 #include "VGuiMatSurface/IMatSystemSurface.h"
+#include "base/include/windows/windows_light.h"
 #include "filesystem_init.h"
 #include "inputsystem/iinputsystem.h"
 #include "materialsystem/IMaterialSystem.h"

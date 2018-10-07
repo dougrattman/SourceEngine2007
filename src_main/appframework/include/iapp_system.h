@@ -1,9 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: An application framework.
+// An application system.
 
-#ifndef SOURCE_APPFRAMEWORK_IAPPSYSTEM_H_
-#define SOURCE_APPFRAMEWORK_IAPPSYSTEM_H_
+#ifndef SOURCE_APPFRAMEWORK_INCLUDE_IAPP_SYSTEM_H_
+#define SOURCE_APPFRAMEWORK_INCLUDE_IAPP_SYSTEM_H_
 
 #ifdef _WIN32
 #pragma once
@@ -23,8 +23,7 @@ enum InitReturnVal_t {
   INIT_LAST_VAL,
 };
 
-the_interface IAppSystem {
- public:
+src_interface IAppSystem {
   // Here's where the app systems get to learn about each other.
   virtual bool Connect(CreateInterfaceFn factory) = 0;
   virtual void Disconnect() = 0;
@@ -39,9 +38,8 @@ the_interface IAppSystem {
 };
 
 // Helper empty implementation of an IAppSystem.
-template <class IInterface>
-class CBaseAppSystem : public IInterface {
- public:
+template <typename TAppSystem>
+struct CBaseAppSystem : public TAppSystem {
   // Here's where the app systems get to learn about each other.
   virtual bool Connect(CreateInterfaceFn factory) { return true; }
   virtual void Disconnect() {}
@@ -56,11 +54,11 @@ class CBaseAppSystem : public IInterface {
 };
 
 // Helper implementation of an IAppSystem for tier0.
-template <class IInterface>
-class CTier0AppSystem : public CBaseAppSystem<IInterface> {
+template <typename TAppSystem>
+class CTier0AppSystem : public CBaseAppSystem<TAppSystem> {
  public:
-  CTier0AppSystem(bool is_primary_app_system = true)
-      : m_bIsPrimaryAppSystem{is_primary_app_system} {}
+  CTier0AppSystem(bool is_primary_system = true)
+      : is_primary_system_{is_primary_system} {}
 
  protected:
   // NOTE: a single DLL may have multiple AppSystems it's trying to expose. If
@@ -70,10 +68,10 @@ class CTier0AppSystem : public CBaseAppSystem<IInterface> {
 
   // NOTE: We don't do this as a virtual function to avoid having to up the
   // version on all interfaces.
-  bool IsPrimaryAppSystem() const { return m_bIsPrimaryAppSystem; }
+  bool IsPrimaryAppSystem() const { return is_primary_system_; }
 
  private:
-  const bool m_bIsPrimaryAppSystem;
+  const bool is_primary_system_;
 };
 
-#endif  // SOURCE_APPFRAMEWORK_IAPPSYSTEM_H_
+#endif  // SOURCE_APPFRAMEWORK_INCLUDE_IAPP_SYSTEM_H_

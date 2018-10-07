@@ -1,9 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef SOURCE_AVI_IBIK_H_
-#define SOURCE_AVI_IBIK_H_
+#ifndef SOURCE_VALVE_AVI_INCLUDE_IBIK_H_
+#define SOURCE_VALVE_AVI_INCLUDE_IBIK_H_
 
-#include "appframework/IAppSystem.h"
+#include "appframework/include/iapp_system.h"
 #include "base/include/base_types.h"
 #include "base/include/compiler_specific.h"
 
@@ -81,4 +81,4 @@ src_interface IBik : public IAppSystem {
   virtual bool SetDirectSoundDevice(void *device) = 0;
 };
 
-#endif  // SOURCE_AVI_IBIK_H_
+#endif  // SOURCE_VALVE_AVI_INCLUDE_IBIK_H_

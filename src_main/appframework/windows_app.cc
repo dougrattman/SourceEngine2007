@@ -4,11 +4,11 @@
 
 #include "build/include/build_config.h"
 
-#include "appframework/appframework.h"
-#include "appframework/iappsystemgroup.h"
 #include "base/include/windows/windows_light.h"
 #include "filesystem.h"
 #include "filesystem_init.h"
+#include "include/app_framework.h"
+#include "include/iapp_system_group.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
 #include "tier1/interface.h"
@@ -123,8 +123,8 @@ bool CSteamApplication::Create() {
   FileSystem_SetErrorMode(FS_ERRORMODE_AUTO);
 
   ch pFileSystemDLL[SOURCE_MAX_PATH];
-  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, std::size(pFileSystemDLL), m_bSteam) !=
-      FS_OK)
+  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, std::size(pFileSystemDLL),
+                                      m_bSteam) != FS_OK)
     return false;
 
   FileSystem_SetupSteamInstallPath();

@@ -7,7 +7,7 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{ce53b3ce-8ef6-4444-a1d9-0e7c011799ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Includes">
+    <Filter Include="Include">
       <UniqueIdentifier>{f5342e72-e87c-4797-ab6d-3b0215954c89}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -32,17 +32,14 @@
     <ClInclude Include="avi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\pixelwriter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\avi\iavi.h">
-      <Filter>Includes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\avi\ibik.h">
-      <Filter>Includes</Filter>
-    </ClInclude>
     <ClInclude Include="include\ibink_media_player.h">
-      <Filter>Includes</Filter>
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\iavi.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ibik.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,15 +1,15 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: The application object for apps that use tier2.
+// The application object for apps that use tier2.
 
-#ifndef SOURCE_APPFRAMEWORK_TIER2APP_H_
-#define SOURCE_APPFRAMEWORK_TIER2APP_H_
+#ifndef SOURCE_APPFRAMEWORK_INCLUDE_TIER2_APP_H_
+#define SOURCE_APPFRAMEWORK_INCLUDE_TIER2_APP_H_
 
 #ifdef _WIN32
 #pragma once
 #endif
 
-#include "appframework/AppFramework.h"
+#include "app_framework.h"
 #include "base/include/base_types.h"
 #include "tier1/convar.h"
 #include "tier2/tier2dm.h"
@@ -53,4 +53,4 @@ class CTier2DmSteamApp : public CTier2SteamApp {
   }
 };
 
-#endif  // SOURCE_APPFRAMEWORK_TIER2APP_H_
+#endif  // SOURCE_APPFRAMEWORK_INCLUDE_TIER2_APP_H_

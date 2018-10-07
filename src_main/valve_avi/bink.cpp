@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "avi/ibik.h"
+#include "include/ibik.h"
 
 #include "deps/bink/bink.h"
 #include "filesystem.h"

@@ -3,9 +3,9 @@
 // Purpose: Defines a group of app systems that all have the same lifetime
 // that need to be connected/initialized, etc. in a well-defined order
 
-#include "appframework/iappsystemgroup.h"
+#include "include/iapp_system_group.h"
 
-#include "appframework/iappsystem.h"
+#include "include/iapp_system.h"
 #include "filesystem.h"
 #include "filesystem_init.h"
 #include "tier1/interface.h"

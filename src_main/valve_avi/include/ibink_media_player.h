@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef SOURCE_AVI_INCLUDE_IBINK_MEDIA_PLAYER_H_
-#define SOURCE_AVI_INCLUDE_IBINK_MEDIA_PLAYER_H_
+#ifndef SOURCE_VALVE_AVI_INCLUDE_IBINK_MEDIA_PLAYER_H_
+#define SOURCE_VALVE_AVI_INCLUDE_IBINK_MEDIA_PLAYER_H_
 
 #ifdef _WIN32
 #pragma once
@@ -9,7 +9,7 @@
 
 #include <memory>
 #include <tuple>
-#include "appframework/IAppSystem.h"
+#include "appframework/include/iapp_system.h"
 #include "base/include/base_types.h"
 #include "base/include/macros.h"
 #include "tier1/interface.h"
@@ -52,4 +52,4 @@ src_interface IBinkMediaFactory : public IAppSystem {
 };
 }  // namespace source
 
-#endif  // SOURCE_AVI_INCLUDE_IBINK_MEDIA_PLAYER_H_
+#endif  // SOURCE_VALVE_AVI_INCLUDE_IBINK_MEDIA_PLAYER_H_

@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "avi/iavi.h"
+#include "include/iavi.h"
 
 #include "avi.h"
 #include "filesystem.h"
